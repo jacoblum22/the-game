@@ -46,33 +46,61 @@ def score_save(path: Path, findings_dir: Path | None = None) -> dict[str, Any]:
     # [spec 033 R11] leaks, costly asks and mood changes come from the turn judge's cached verdicts (no keyword check)
     judged = turn_judge.cached(path)
     refusals = [r for d in dm for r in d.get("refusals") or []]
-    # fights: conflict_start .. conflict_end boundaries by turn; an exchange is a player turn inside a fight
-    marks = db.execute("select turn_id, json_extract(payload,'$.boundary') from events where type='boundary_marked' "
-                       "and json_extract(payload,'$.boundary') in ('conflict_start','conflict_end','round') "
-                       "order by seq").fetchall()
-    order = list(turns)  # insertion order is turn order
+    # [spec 033 P9] fights: conflict_start .. conflict_end by turn, a start a take-back reverted left out (its writes_reverted
+    # covers the same turn's `conflict` meta_set or the mark itself). An exchange is a turn inside a live fight with a
+    # `round` mark when the save has any, else one where a roll RESOLVED (a `frame_resolved` whose frame was not voided):
+    # a pause, a menu answer or a /fix note is not one. A fight that ended with no foe call or foe line was ended by the
+    # PC's blow.
+    rows = db.execute("select seq, turn_id, type, payload from events where type in ('boundary_marked', 'writes_reverted', "
+                      "'frame_resolved') or (type='meta_set' and json_extract(payload,'$.key') in ('conflict','rolls_voided')) "
+                      "order by seq").fetchall()
+    reverted: set[int] = set()
+    voided: set[str] = set()
+    for _, _, typ, raw in rows:
+        p = json.loads(raw)
+        if typ == "writes_reverted":
+            reverted |= set(p.get("reverted") or [])
+        elif typ == "meta_set" and p.get("key") == "rolls_voided":
+            voided = set(p.get("value") or [])
+    resolved = {t for _, t, typ, raw in rows if typ == "frame_resolved" and json.loads(raw).get("frame_id") not in voided}
+    rounds = {t for _, t, typ, raw in rows if typ == "boundary_marked" and json.loads(raw).get("boundary") == "round"}
+    meta_at: dict[str, int] = {}  # the last `conflict` meta_set seen, by turn
+    starts_by_turn: dict[str, int] = {}
+    ends_by_turn: dict[str, int] = {}
+    starts_n = 0
+    for seq, t, typ, raw in rows:
+        p = json.loads(raw)
+        if typ == "meta_set" and p.get("key") == "conflict":
+            meta_at[t] = seq
+        elif typ == "boundary_marked" and p.get("boundary") == "conflict_start":
+            if seq not in reverted and meta_at.get(t) not in reverted:
+                starts_by_turn[t] = starts_by_turn.get(t, 0) + 1
+                starts_n += 1
+        elif typ == "boundary_marked" and p.get("boundary") == "conflict_end":
+            ends_by_turn[t] = ends_by_turn.get(t, 0) + 1
+
+    def foe_acted(t: str) -> bool:
+        w = ((json.loads(turns[t][1] or "{}").get("screen") or {}).get("dm_tools") or {}).get("world", {})
+        return bool(w.get("foe_turns") or w.get("foe_calls") or FOE_LINE.search(turns[t][2] or ""))
+
     fight: set[str] = set()
-    live = False
-    for t in order:
-        starts = [b for tt, b in marks if tt == t]
-        if "conflict_start" in starts:
-            live = True
-        if live:
+    ended_by_pc = 0
+    cur: list[str] | None = None
+    for t in turns:  # insertion order is turn order
+        if starts_by_turn.get(t):
+            cur = cur if cur is not None else []
+        if cur is not None:
+            cur.append(t)
             fight.add(t)
-        if "conflict_end" in starts:
-            live = False
-    # [spec 032 trap 1] an exchange is a turn with a `round` boundary when the save marks rounds; a /fix note or a
-    # menu answer inside a conflict is not one. Saves with no round marks keep the old count (every input in it).
-    rounds = {t for t, b in marks if b == "round" and t in turns}
-    if rounds:
-        fight = fight & rounds
-    foe_turns = sum(len(((json.loads(turns[t][1] or "{}").get("screen") or {}).get("dm_tools") or {}).get("world", {})
-                        .get("foe_turns", [])) or bool(FOE_LINE.search(turns[t][2] or "")) for t in fight)
+        if ends_by_turn.get(t) and cur is not None:
+            ended_by_pc += not any(foe_acted(x) for x in cur)
+            cur = None
+    exchanges = fight & (rounds or resolved)
+    foe_turns = sum(foe_acted(t) for t in fight)
     adv = [json.loads(p) for (p,) in db.execute("select payload from events where type='time_advanced'")]
     last = adv[-1]["to"] if adv else {}
     # [spec 032 trap 1] "told" = the said lines the DM listed (`screen.dm_tools.said`, else the record's `said`), not events
     told = sum(len(d.get("said") or json.loads(turns[t][1] or "{}").get("said") or []) for t, d in zip(turns, dm, strict=True))
-    starts_n = sum(1 for _, b in marks if b == "conflict_start")
     db.close()
     fix = None
     if findings_dir is not None:
@@ -87,7 +115,7 @@ def score_save(path: Path, findings_dir: Path | None = None) -> dict[str, Any]:
             "prose_refusals": sum(PROSE_ONLY in str(r.get("why", "")) for r in refusals),
             "judged": judged, "judged_turns": len({k.split("|")[0] for k in judged}),
             "fights": starts_n,
-            "fight_exchanges": len(fight), "foe_turns": foe_turns,
+            "fight_exchanges": len(exchanges), "foe_turns": foe_turns, "pc_blow_fights": ended_by_pc,
             "time_moved": any(a["from"].get("hour") != a["to"].get("hour") or a["from"].get("day") != a["to"].get("day")
                               for a in adv),
             "interval_moved": any(a["from"].get("interval") != a["to"].get("interval") for a in adv), "last_time": f"d{last.get('day')} h{last.get('hour')} i{last.get('interval')}",
@@ -131,7 +159,8 @@ def table(rows: list[dict[str, Any]]) -> str:
            col("C7 leaks (judge, flagged turns)", lambda a: str(_judged(a, "leak", "leaked"))),
            col("pronoun slips / absent person speaks (judge)",
                lambda a: f"{_judged(a, 'pronoun', 'slip')} / {_judged(a, 'absent', 'absent_speaks')}"),
-           col("C8 fights / exchanges / foe turns", lambda a: f"{_sum(a, 'fights')} / {_sum(a, 'fight_exchanges')} / {_sum(a, 'foe_turns')}"),
+           col("C8 fights / exchanges / foe turns (fights ended by the PC's blow)",
+               lambda a: f"{_sum(a, 'fights')} / {_sum(a, 'fight_exchanges')} / {_sum(a, 'foe_turns')} ({_sum(a, 'pc_blow_fights')})"),
            col("C8/C10 refused tool calls (aimed at prose-only)", lambda a: f"{_sum(a, 'refusals')} ({_sum(a, 'prose_refusals')})"),
            col("C9 saves where hour/day moved, interval moved / 'told' rows",
                lambda a: f"{sum(r['time_moved'] for r in a)}, {sum(r['interval_moved'] for r in a)} of {len(a)} / {_sum(a, 'told')}")]

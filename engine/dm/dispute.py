@@ -41,7 +41,7 @@ from engine import ids
 from engine.dm.fixer import Investigation, investigate, name, pc_of, sheet, turn_no
 from engine.dm.oof import FIX_HINT, OofBlock, note_block, when_words
 from engine.resolve.rulings import RulingRecord, log_ruling
-from engine.store.db import REVERTIBLE, TAKE_BACK_EXTRA, Rejected, Store, Transaction
+from engine.store.db import REVERTIBLE, TAKE_BACK_EXTRA, Rejected, Store, Transaction, is_mode_switch
 from engine.store.events import WORLD, Event
 from engine.store.projection import WorldState, project
 
@@ -202,7 +202,7 @@ def _rewind(ctx: Any, tx: Transaction, from_seq: int, reason: str) -> list[int]:
     take_back = from_seq <= scene.started_seq
     kinds = REVERTIBLE | TAKE_BACK_EXTRA if take_back else REVERTIBLE
     done = set(tx.state.reverted)
-    seqs = [e.seq for e in ctx.store.events(since=from_seq - 1) if e.type in kinds and e.seq not in done
+    seqs = [e.seq for e in ctx.store.events(since=from_seq - 1) if (e.type in kinds or is_mode_switch(e)) and e.seq not in done
             and e.seq is not None and e.source != "correction"]  # the ledger and earlier corrections stay
     if not seqs:
         return []
