@@ -17,3 +17,19 @@ LEAD DUE / WITNESS NEEDED use. Open: WATCH keeps "?" census notes (scene_facts, 
 no longer matter to the strict test; footing with no opponent writes a hold with no holder (S3 default `restrained`);
 reach weapons (a spear at close) are not allowed; a companion target has no band test; `covered_by_effect` sees only
 condition effects; the tools path never sets `asks`.
+- P6 (981abb5): strict guard: 62 DENY all raise; allow-list STRICT, 110 P / 58 F / 11 S, no pending; guarded test
+  modules run under Guard(raise) (`tests/engine/conftest.py`, `tests/guard/games_033.py`); reach fixture gone (`engage`).
+- Live check 1 (`live-check-1.md`): 0 fights in 4 persona games; melee refused for unrecorded bands; position fields
+  swapped; duplicate creature. Name leak traced (`trace-name-mixup.md`): `oof.changed_line` showed a rolled name the PC
+  never learned; fixed (display_name).
+- R2-M2 (DL-06-42) + P8 (e6606e8), owner ruling 2026-10-11 "Field on attacks": `propose_roll.starts_fight`
+  (""/yes/no) and `fight_to`; blank with no fight on starts it via `_fight` before the reach check
+  (`_attack_starts_fight`), default the weapon's first band, logged `not_chosen:fight.starts`/`fight.to`; ignored when
+  the target is already in a live fight; a newcomer joins as `change fight` joins one. An unrecorded band takes the
+  first reachable band (`not_chosen:position`); only a recorded band out of reach refuses. `_position` refuses
+  who==what, a non-party `what`, a bad `to`, each with one exact example. `new_npc name` = the short name the DM will
+  use (`not_chosen:name`); result says "Use npc.<id> for them from now on." dm.md 799 words.
+26. `_fight` tells a joined newcomer "already in the fight (or cannot be a foe)" (wording only). A companion target gets
+    the band default but never starts a fight. Any dm-tools path change: `py -3.12 -m tests.guard.census reached` (13 min).
+27. Follow-ups: the fixer's entity view should show `name_known: false`; reach weapons (spear at close).
+

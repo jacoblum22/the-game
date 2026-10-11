@@ -23,7 +23,7 @@ from tests.engine.test_dm_tools import in_turn, npc_here, to_play
 BASE = {"tool": "propose_roll", "goal": "Do it", "verb": "verb.strike", "target": "", "as": "none", "how": "",
         "attribute": "", "difficulty": "", "why_uncertain": "", "stakes": "risky", "nonlethal": False, "force": "none",
         "weapon": "", "reads": False, "approach": "plain", "fail_cost": "none", "fail_on": "", "change_kind": "none",
-        "change_what": "", "change_whom": ""}
+        "change_what": "", "change_whom": "", "starts_fight": "no", "fight_to": ""}  # [owner ruling 2026-10-11]: "no" = one blow
 
 
 def fixed(degree: str) -> Callable[..., RollResult]:
@@ -98,12 +98,12 @@ def test_no_band_is_guessed_from_the_words_of_a_move(tmp_path: Path, monkeypatch
 
 
 @pytest.mark.parametrize("verb", ["verb.strike", "verb.grapple"])
-def test_a_strike_or_grapple_writes_no_band_and_starts_no_fight(tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+def test_a_strike_or_grapple_that_says_no_writes_no_band_and_starts_no_fight(tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
                                                                  verb: str) -> None:
     game, npc, pc = play(tmp_path, monkeypatch, {"verb": verb, "change_kind": "harm" if verb == "verb.strike" else "none"})
     st = game.store.state
     assert conflict._band(st, pc, npc) == "engaged" == conflict._band(st, npc, pc)  # as the DM left it: nothing written
-    assert not conflict.record(st) and not conflict.active(st)  # only the DM's `change fight` starts one
+    assert not conflict.record(st) and not conflict.active(st)  # `starts_fight` no: a single blow (tests/engine/test_spec033_p8.py)
 
 
 def test_the_dm_fight_start_is_unchanged(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

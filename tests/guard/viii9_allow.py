@@ -135,6 +135,7 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
     },
     "engine.dm.turn": {
         "_rest:words:REST_WORDS": ("P", "enum or table of code ids"),
+        "_wake:words:time.clock.ROUNDS": ("P", "enum or table of code ids (the interval's length in rounds)"),
     },
     "engine.gen._seed_lib": {
         "slug:re:sub": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),

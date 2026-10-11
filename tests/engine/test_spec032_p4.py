@@ -234,8 +234,8 @@ def test_f16_f21_an_npc_or_a_creature_turns_on_the_pc_and_the_foe_strikes_in_the
 
 def test_f11_the_fighter_save_replayed_offers_the_roll_and_code_starts_no_fight(tmp_path: Path) -> None:
     """The saved fighter turns 9 and 12 (REFUSED, no fight, `conflict_start_boundaries == 0` in the old save): on the
-    code, the same call offers the roll and the answer resolves it. [spec 033 R2 A4: only the DM's `change fight`
-    starts a fight, so the attack no longer starts one and no foe answers.]"""
+    code, the same call offers the roll and the answer resolves it. [spec 033 R2 A4: the attack starts no fight when
+    the DM says `starts_fight` no (owner ruling 2026-10-11, roll() says it); blank starts one: test_spec033_p8.py.]"""
     fx = json.loads(FIX.read_text(encoding="utf-8"))
     assert fx["conflict_start_boundaries"] == 0  # what the old code did
     game, model = play(tmp_path)

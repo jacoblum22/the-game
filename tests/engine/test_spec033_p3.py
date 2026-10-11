@@ -419,15 +419,14 @@ def test_a_melee_attack_on_a_target_not_engaged_is_refused_naming_the_move(tmp_p
     npc, pc = npc_here(game), pc_id(game.store.state) or ""
 
     def go(ctx: Any, t: Any, tx: Any) -> list[str]:
-        out = [dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "verb": "verb.strike"})]  # no band recorded
-        conflict._set_band(tx, pc, npc, "near", "t")
-        out += [dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "verb": v, "force": "push"})
+        conflict._set_band(tx, pc, npc, "near", "t")  # a RECORDED band out of reach (an unrecorded one takes engaged, P8)
+        return [dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "verb": v, "force": "push"})
                 for v in ("verb.strike", "verb.grapple", "verb.force")]
-        return out
 
     outs = in_turn(game, go)
-    assert all(o.startswith("REFUSED") and "not in reach" in o and "change` position" in o and "move_to" in o for o in outs)
-    assert "no position is recorded" in outs[0] and "near to the character" in outs[1]
+    ex = f"change kind=position who=pc to=engaged what={npc}"
+    assert all(o.startswith("REFUSED") and "not in reach" in o and ex in o and "move_to" in o for o in outs)
+    assert "near to the character" in outs[0]
 
 
 def test_a_stated_engaged_position_lets_the_attack_through_and_a_move_roll_is_never_refused(tmp_path: Path) -> None:
@@ -436,7 +435,7 @@ def test_a_stated_engaged_position_lets_the_attack_through_and_a_move_roll_is_ne
 
     def go(ctx: Any, t: Any, tx: Any) -> list[str]:
         return [dm_tools._position(ctx, t, {"who": "pc", "what": npc, "to": "engaged"}),
-                dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "verb": "verb.strike"})]
+                dm_tools._propose_roll(ctx, t, {**BASE, "target": npc, "verb": "verb.strike", "starts_fight": "no"})]
 
     moved, strike = in_turn(game, go)
     assert moved.startswith("done") and strike.startswith("ROLL OFFERED")

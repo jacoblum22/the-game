@@ -21,4 +21,4 @@ CASES: dict[str, tuple[str, ...]] = {
 # also guarded: the older dm-tools games (the 032 cases and engine tests), which must stay clean too
 GUARDED: tuple[str, ...] = (*CASES, "test_spec033_p1", "test_spec033_guard", "test_dm_tools", "test_spec032_cases",
                             "test_spec032_engine", "test_spec032_p3", "test_spec032_p4", "test_spec032_p5a",
-                            "test_spec032_p5b", "test_spec032_p6", "test_spec032_p8b")
+                            "test_spec032_p5b", "test_spec032_p6", "test_spec032_p8b", "test_spec033_p8")

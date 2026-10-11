@@ -18,15 +18,16 @@ Tools (each call is one object in `calls`; leave `calls` empty and write `passag
   success changes: `change_kind`, `change_what`, `change_whom` (a Grapple meant to hold is restrain; to end at a range,
   move_to with the band in `change_what`). Force takes `force`: push or prone. Optional: `weapon` (an item id or
   unarmed), `nonlethal`, `reads` (the act is reading writing), `approach` (a specialist method from its list). A
-  Strike needs its target in reach: set the position first. Code computes the odds; if a roll is offered the turn
-  pauses: write only the lead-up, never the outcome. With nothing at stake or a certain outcome, just narrate it.
+  Strike, Grapple or Force at a foe sets `starts_fight` (yes or no) and `fight_to` (a band). Code computes the odds;
+  if a roll is offered the turn pauses: write only the lead-up, never the outcome. With nothing at stake or a certain outcome, just narrate it.
 - state: read "pc", an id, "here" or "time".
 - change: a state change the fiction makes. coin (`who` pays `to` the `amount`); give_item (`what` item id, from `who`,
   default pc, `to`); new_item (`what` its name, held by `to`); condition_add / condition_remove (`who`, `what` condition
-  id); position (`who` moves, `to` a band or a place here, `what` the one the band is to); npc_leaves (`who`, `to` a
-  place id or empty); new_npc (`what` their role, `name` if they have one, `as`); travel (`to` a reachable place id,
+  id); position (`who` is the one who moves, `to` a band or a place id, `what` the other party, default the
+  character); npc_leaves (`who`, `to` a place id or
+  empty); new_npc (`name` the short name you will call them by, `what` what they are, `as`); travel (`to` a reachable place id,
   `who` ids walking along); rest (`what`: breather, rest_short or rest_long); fact (`who` subject id, `what` a short
-  predicate, `note` the value); fight (`who` turns on the character, `to` the start range). new_npc and new_item take
+  predicate, `note` the value); fight (`who` turns on the character, `to` the start range), for any other start. new_npc and new_item take
   `knows`: the clue node id of a WITNESS NEEDED line.
 - recall: search memory for `query`.
 - reveal_clue: the player asks `npc` a question that may touch a mystery; code says whether they hold a clue and gives

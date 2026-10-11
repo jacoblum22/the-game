@@ -133,3 +133,10 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [ ] T082 `turn_judge` over the three saves; the orchestrator or owner fills 20 hand verdicts per measure.
 - [ ] T083 Guard hits from the live JSONL (must be 0).
 - [ ] T084 `implementation-results-P7.md`, verdict and gate table first, against SC5.
+
+## P8 fixes from live check 1 (Sonnet; lane `engine/dm/dm_tools.py`, `dm.md`, `engine/llm/offline.py`, tests) [owner ruling 2026-10-11]
+- [x] T090 `propose_roll` `starts_fight` / `fight_to`: a Strike, Grapple or Force at an able npc/adversary starts the fight through `_fight` before the reach check; a live fight with the target in it ignores both; defaults `not_chosen:fight.starts`, `not_chosen:fight.to`.
+- [x] T091 Reach: an unrecorded band takes the weapon's first band (`not_chosen:position`); a recorded band out of reach is refused with one exact `change kind=position` call.
+- [x] T092 `_position` refuses who==what, a `what` that is not pc or an entity id, and a `to` that is neither a band nor a place id, each with one example; plain schema descriptions.
+- [x] T093 `new_npc` `name` = the short name; `not_chosen:name`; result ends "Use <id> for them from now on."
+- [x] T094 dm.md (at most 800 words), offline `_dm`, tests (`test_spec033_p8.py`), dmtools replay re-recorded, `reached.txt` regenerated.
