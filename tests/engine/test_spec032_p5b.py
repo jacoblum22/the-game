@@ -92,12 +92,12 @@ def test_j1_j7_each_question_kind_is_filed_as_told(tmp_path: Path, kind: str) ->
     assert tr.screen["dm_tools"]["said"][0]["speaker"] == npc and not tr.screen["dm_tools"]["told_dropped"]
 
 
-@pytest.mark.parametrize("why", ["dead", "absent", "unknown"])
+@pytest.mark.parametrize("why", ["dead", "absent"])  # [P8a] an unknown speaker is a new walk-on (test_spec032_p8a)
 def test_j8_a_speaker_who_is_dead_absent_or_unknown_is_dropped_and_logged(tmp_path: Path, why: str) -> None:
     game, _ = to_play(tmp_path)
     npc, st = npc_here(game), game.store.state
     away = next(i for i, e in st.entities.items() if e.kind == "npc" and i not in cast_present(st))
-    who = {"dead": npc, "absent": away, "unknown": "the ghost of nobody"}[why]
+    who = {"dead": npc, "absent": away}[why]
     words = "I saw the smoke from the hill at dawn."
 
     def kill(ctx: Any, t: Any, tx: Any) -> None:
@@ -107,7 +107,7 @@ def test_j8_a_speaker_who_is_dead_absent_or_unknown_is_dropped_and_logged(tmp_pa
     stats = told(game, [{"npc": who, "words": words}], passage_of(game, npc, words), setup=kill)
     assert not records(game) and not stats["said"]
     assert len(stats["told_dropped"]) == 1 and stats["told_dropped"][0]["words"] == words
-    assert {"dead": "dead", "absent": "not here", "unknown": "no one on record"}[why] in stats["told_dropped"][0]["why"]
+    assert {"dead": "dead", "absent": "not here"}[why] in stats["told_dropped"][0]["why"]
 
 
 def test_j9_the_same_line_twice_is_one_record(tmp_path: Path) -> None:

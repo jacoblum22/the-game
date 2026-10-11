@@ -163,3 +163,11 @@ Runs only after P1-P6 are merged into one branch. Edits `evals/`, `specs/`, and 
 | P5 | P4 | C | Sonnet | 35-55 | P6 |
 | P6 | P3 | F | **Opus** | 40-70 | P4, P5 |
 | P7 | P1-P6 | E+G | Sonnet | 40-70 | none |
+
+## P8a - The people and things the DM names (after the held-out run; lane: `_party`, `_told`, travel in `dm_tools.py`)
+
+- [x] P8a.1 Cases P1-P15 written first (`cases.md` section P8a): the 15 verbs x person/creature/thing, invented ids, said speakers, a companion across 2 travels.
+- [x] P8a.2 `_party`: an id-shaped name is the DM naming someone new (the `new_npc` alias, else its words); a verb's target kinds are read from `basic_verbs.yaml` (`target_kinds`, replaces `PERSON_VERBS`); an object/feature target is never refused.
+- [x] P8a.3 `_told`: a role-phrase or invented-id speaker present in the passage is made a walk-on; dead/elsewhere speakers still dropped.
+- [x] P8a.4 `travel` takes `who` (the DM names who walks along); `ANIMAL` knows compound beast words (wolfhound, sheepdog).
+- [x] P8a.5 `dm.md` updated; only `offline_seed11_dmtools` re-recorded. Tests `tests/engine/test_spec032_p8a.py` (68).

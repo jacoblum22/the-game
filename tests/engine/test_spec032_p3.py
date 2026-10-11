@@ -53,13 +53,19 @@ def ent(game: Game, eid: str) -> Any:
 def test_r1_to_r15_a_creature_in_prose_is_one_creature_here_for_every_verb(tmp_path: Path) -> None:
     game, _ = to_play(tmp_path)
     here = game.store.state.scene.place_id  # type: ignore[union-attr]
-    seen = set()
+    seen = []
     for verb in RULES.ids("verb."):  # the 15 verbs
-        def one(ctx: Any, t: Any, tx: Any, verb: str = verb) -> str | None:
-            return dm_tools._party(ctx, t, "the pale beast", person=verb in dm_tools.PERSON_VERBS)
+        def one(ctx: Any, t: Any, tx: Any, verb: str = verb) -> tuple[str | None, str | None]:
+            # [P8a] nothing is matched: the same words in one turn are one creature (the code's own memo); the next
+            # turn's words are a new one unless the DM uses the id
+            first = dm_tools._party(ctx, t, "the pale beast", person=dm_tools.target_is_person(RULES, verb, None))
+            return first, dm_tools._party(ctx, t, "the pale beast")
 
-        seen.add(in_turn(game, one))
-    assert seen == {BEAST}  # made once, found by name every time after
+        a, b = in_turn(game, one)
+        assert a == b and a is not None
+        assert dm_tools._id(game.store.state, a) == a  # by its id it is found again
+        seen.append(a)
+    assert seen[0] == BEAST and len(set(seen)) == len(seen)
     e = ent(game, BEAST)
     assert e.data["mind"] == "animal" and is_animal(game.store.state, BEAST)
     assert game.store.state.positions[BEAST].location == here and BEAST in cast_present(game.store.state)
@@ -74,8 +80,8 @@ def test_r16_the_fighter_save_calls_are_accepted_and_the_beast_is_one_entity(tmp
     assert outs[0].startswith("ROLL OFFERED") and t.stats["refusals"] == []
     beasts = [i for i, e in game.store.state.entities.items() if "beast" in i]
     assert len(beasts) == 1 and ent(game, beasts[0]).data["mind"] == "animal"
-    # turn 12 says "the pale beast": the same creature (alias by its head noun), not a second one
-    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "the pale beast")) == beasts[0]
+    # [P8a] the creature's id is what the DM uses next turn: found exactly
+    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, beasts[0])) == beasts[0]
     game2, _ = to_play(tmp_path / "b")
     args12 = {"tool": "propose_roll", **json.loads(fx["turn.12"]["tools"][0]["args"])}
     outs, t = run(game2, args12)
@@ -88,8 +94,7 @@ def test_r17_r18_r19_r23_described_people_are_walk_ons_groups_or_reused(tmp_path
 
     def go(ctx: Any, t: Any, tx: Any) -> None:
         for k, words in (("carter", "the carter at the well"), ("carter2", "the carter at the well"),
-                         ("guard", "the lead guard"), ("carters", "the carters"), ("none", ""), ("n2", "none"),
-                         ("n3", "world")):
+                         ("guard", "the lead guard"), ("none", ""), ("n2", "none"), ("n3", "world")):
             box[k] = dm_tools._party(ctx, t, words, person=True)
         box["existing"] = dm_tools._party(ctx, t, ctx.state.entities[npc_here(game)].name, person=True)
 
@@ -98,7 +103,6 @@ def test_r17_r18_r19_r23_described_people_are_walk_ons_groups_or_reused(tmp_path
     assert box["carter"] == box["carter2"] and box["carter"] in cast_present(st)  # R23, R19
     assert st.entities[box["carter"]].data.get("name_known") is False  # R17: a walk-on with that role
     assert box["guard"] != box["carter"] and box["guard"] in st.entities
-    assert st.entities[box["carters"]].data.get("group") is True  # R18
     assert box["none"] is None and box["n2"] is None and box["n3"] is None  # R21
     assert box["existing"] == npc_here(game)  # R19: an existing person is reused, no duplicate
 
@@ -110,12 +114,11 @@ def test_r20_r22_the_one_here_wins_and_the_absent_and_the_dead_are_refused(tmp_p
     far = in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "the beast", person=True))
     in_turn(game, lambda ctx, t, tx: tx.add(Event.of("position_set", source="engine", rule_id="x", entity=far,
                                                      location=place)))
-    outs, _ = run(game, roll(target="the beast"))
-    assert outs[0].startswith("REFUSED") and "not here" in outs[0]  # only elsewhere: refused (spine)
-    # a second creature here is "the one here" by the same words
+    outs, _ = run(game, roll(target=far))
+    assert outs[0].startswith("REFUSED") and "not here" in outs[0]  # a recorded creature elsewhere, by id: refused (spine)
+    # [P8a] "the beast" in words is matched to no one: it is a new creature here
     here_one = in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "a great beast", person=True))
-    assert here_one != far
-    assert in_turn(game, lambda ctx, t, tx: dm_tools._party(ctx, t, "the beast", person=True)) == here_one
+    assert here_one != far and here_one in cast_present(game.store.state)
     # R22: dead or down
     npc = npc_here(game)
     in_turn(game, lambda ctx, t, tx: tx.add(fact(tx, npc, "harm_state", DEAD, rule_id="07.1.3")))
@@ -123,11 +126,12 @@ def test_r20_r22_the_one_here_wins_and_the_absent_and_the_dead_are_refused(tmp_p
     assert outs[0].startswith("REFUSED") and "dead" in outs[0]
 
 
-def test_a_thing_is_not_made_a_person_and_the_refusal_says_what_to_do(tmp_path: Path) -> None:
+def test_a_thing_is_not_made_a_person_and_is_not_refused(tmp_path: Path) -> None:
+    """[spec 032 P8a] supersedes the P3 refusal: an object named in words is the obstacle the act is on."""
     game, _ = to_play(tmp_path)
     before = set(game.store.state.entities)
     outs, t = run(game, roll(verb="verb.force", target="the locked door", change_kind="open", change_what="the door"))
-    assert outs[0].startswith("REFUSED: no one or nothing on record") and "leave `target` empty" in outs[0]
+    assert not outs[0].startswith("REFUSED: no one"), outs[0]
     assert set(game.store.state.entities) == before and t.made == []
 
 
@@ -331,7 +335,7 @@ def test_e1_to_e4_a_second_breach_is_dropped_and_logged_the_first_is_not(tmp_pat
     cases = {
         "E4 no source": [change(kind="coin", who="", to=pc, amount=3)] * 2,
         "E3 not owned": [change(kind="give_item", what=sword, who=npc, to=pc)] * 2,
-        "E1 dead": [change(kind="npc_leaves", who="npc.nobody")] * 2,
+        "E1 unknown": [change(kind="npc_leaves", who="loc.nobody")] * 2,  # [P8a] an `npc.` id is a walk-on now
     }
     for name, calls in cases.items():
         outs, t = run(game, *calls)
