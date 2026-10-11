@@ -26,7 +26,7 @@ compiled_from:
 - file: 05-abilities-focus-magic.md
   sha256_16: bb246f09d5c2cded
 - file: 06-conflict.md
-  sha256_16: 00934f747ce72d5f
+  sha256_16: f6b74db235b37ed4
 - file: 07-harm-recovery-death.md
   sha256_16: c3700341e6dedf9d
 - file: 08-items-loot-crafting.md
