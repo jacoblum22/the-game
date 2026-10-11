@@ -125,10 +125,6 @@ ALLOW: dict[str, dict[str, tuple[str, str]]] = {
     "engine.gen._seed_lib": {
         "slug:re:sub": ("P", "parses a code-made string (cost DSL, rule atom, table range, id, slug, list of ids)"),
     },
-    "engine.gen.hooks": {
-        "_Builder.entry:re:sub": ("F", "template fill of generated lead text"),
-        "_Tok.fill:re:sub": ("F", "template fill of generated lead text"),
-    },
     "engine.gen.npc": {
     },
     "engine.harm.apply": {

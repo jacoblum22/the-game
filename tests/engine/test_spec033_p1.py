@@ -182,10 +182,10 @@ def test_change_position_writes_a_band_or_a_place(tmp_path: Path) -> None:
         assert got["default_other"].startswith("done")
 
 
-def test_end_game_is_not_available_yet(tmp_path: Path) -> None:
+def test_end_game_asks_the_player_to_confirm(tmp_path: Path) -> None:  # wired by P5; see test_spec033_p5.py
     game, _ = to_play(tmp_path)
     out = in_turn(game, lambda ctx, t, tx: dm_tools.tool(ctx, t, {"tool": "end_game", "why": "the player is done"}))
-    assert out.startswith("not available yet")
+    assert out.startswith("ASKED")
 
 
 # ------------------------------------------------------------------------------------------- offline DM

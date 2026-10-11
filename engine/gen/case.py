@@ -338,6 +338,18 @@ def mark_found(tx: Any, case_id: str, node_id: str, placement_id: str | None = N
     tx.add(meta(CASES, allc, "15.9.5"))
 
 
+def short_of_sources(state: Any) -> list[tuple[str, int, str]]:  # rule: 15.9.4
+    """[spec 033 P5] The read-only half of the audit: (node id, live placements, the node's fact) for every unfound
+    necessary node with fewer than `MIN_LIVE` live placements. Nothing is placed; the dm-tools DM is told."""
+    out = []
+    for c in cases(state).values():
+        for n in c["nodes"]:
+            live = sum(_live(state, p) for p in n["placements"])
+            if n.get("necessary") and not n.get("found") and live < MIN_LIVE:
+                out.append((n["id"], live, str(n.get("fact") or "")))
+    return out
+
+
 def audit_cases(tx: Any, emit: Any = None) -> list[str]:  # rule: 15.9.4
     """h.15.placement_audit for reduced cases: every unfound necessary node keeps `MIN_LIVE` live placements; below
     that the reserve is placed (a new witness in the haven), then a PR-15-7 generic placement. `emit` stages events
@@ -431,5 +443,5 @@ def _copy(c: Rec) -> Rec:
     return copy.deepcopy(c)
 
 
-__all__ = ["CASES", "MIN_LIVE", "about_line", "audit_cases", "case_covering", "case_for_question", "cases", "mark_found", "pointer",
-           "reduced_case", "story_option", "validate_case", "world_rec", "write_seeded"]
+__all__ = ["CASES", "MIN_LIVE", "about_line", "audit_cases", "case_covering", "case_for_question", "cases", "mark_found",
+           "pointer", "reduced_case", "short_of_sources", "story_option", "validate_case", "world_rec", "write_seeded"]

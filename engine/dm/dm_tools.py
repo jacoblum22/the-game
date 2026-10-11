@@ -912,8 +912,20 @@ def _end_scene(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
 
 
 def _end_game(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:
-    """Stub until spec 033 P5 opens the retirement confirmation (11.13.1)."""
-    return "not available yet: ending the character's story is not wired in this build; carry on."
+    """[spec 033 R9] The DM ends the character's story when the player asks in the fiction: code opens the same
+    confirmation `/retire` does (11.13.1). The player answers it; nothing is retired until they do."""
+    from engine.dm.ending import ending_due, open_retire
+
+    st = ctx.state
+    if not t.rec.pc or ending_due(st):
+        return "REFUSED: the character's story has already ended"
+    if st.open_pause() is not None:
+        return "REFUSED: a question is open to the player; the story cannot end under it"
+    open_retire(ctx.need_tx())
+    t.paused = True
+    t.stats.setdefault("end_game", []).append(str(c.get("why") or "")[:160])
+    return ("ASKED: the player is asked to confirm retiring the character. The turn pauses here: write only a short "
+            "closing line, never the ending itself.")
 
 
 def _position(ctx: TurnContext, t: Turn, c: dict[str, Any]) -> str:

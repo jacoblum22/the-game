@@ -107,16 +107,16 @@ Phases, lanes, models and waves: `plan.md` section 5. Cases: `cases.md` (C1-C12)
 - [ ] T046 Tests C4, C5 (answer-turn side); DENY (`foe_beat`, `foes_act`) to `raise`; HANDOFF-P3.md.
 
 ## P5 leads, witnesses, retire (Sonnet, W3 parallel with P3, lane per plan 5)
-- [ ] T050 `pacing.lead_candidates` (read-only) and the bookkeeping half of `inject_lead` (lower trigger, reset
+- [x] T050 `pacing.lead_candidates` (read-only) and the bookkeeping half of `inject_lead` (lower trigger, reset
   streak, log) as its own function.
-- [ ] T051 `dm_world._lead` tells (C6); `inject_lead` unreached.
-- [ ] T052 `gen/case.short_of_sources` (read-only half of `audit_cases`); the h15 hook skips `audit_cases` under
+- [x] T051 `dm_world._lead` tells (C6); `inject_lead` unreached.
+- [x] T052 `gen/case.short_of_sources` (read-only half of `audit_cases`); the h15 hook skips `audit_cases` under
   dm-tools.
-- [ ] T053 `dm_world._witness`: WITNESS NEEDED once per node (meta `told_short`), at scene end and after travel.
-- [ ] T054 Tests C6, C7 (the `knows` placement path is P4's; test it end to end here).
-- [ ] T055 `game._submit` under dm-tools: exact `/retire`; `dm_tools._end_game` opens `ask_retire`; menu answers by id
+- [x] T053 `dm_world._witness`: WITNESS NEEDED once per node (meta `told_short`), at scene end and after travel.
+- [x] T054 Tests C6, C7 (the `knows` placement path is P4's; test it end to end here).
+- [x] T055 `game._submit` under dm-tools: exact `/retire`; `dm_tools._end_game` opens `ask_retire`; menu answers by id
   or number (C10). `tests/e2e/driver.py` `retire_and_continue` uses `/retire` for dm-tools games.
-- [ ] T056 DENY (`inject_lead`, `audit_cases`, `is_retire` under dm-tools) to `raise`; HANDOFF-P5.md.
+- [x] T056 DENY (`inject_lead`, `audit_cases`, `is_retire` under dm-tools) to `raise`; HANDOFF-P5.md.
 
 ## P6 guard strict and gates (Sonnet, W4, lane `tests/guard/` plus fixes for guard hits)
 - [ ] T070 Assemble `games_033.py` from the phases' game functions; every `cases.md` row runs under the guard.

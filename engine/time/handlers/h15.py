@@ -27,9 +27,11 @@ HANDLERS = (
 @handler("h.15.placement_audit")
 def placement_audit(ctx: Any) -> HandlerResult | None:  # rule: 15.9.4
     """At scene end: every unfound necessary node of a reduced case keeps two live placements (reserve, then
-    PR-15-7)."""
+    PR-15-7). A dm-tools game places nothing: the DM is told of a shortfall (`dm_world._witness`, constitution VIII.9)."""
     from engine.gen.case import audit_cases
 
+    if (ctx.tx.state.game.config if ctx.tx.state.game else {}).get("engine") == "dm-tools":
+        return None
     placed = audit_cases(ctx.tx, emit=ctx.emit)
     return HandlerResult(summary="; ".join(placed)) if placed else None
 

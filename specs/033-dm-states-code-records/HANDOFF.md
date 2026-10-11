@@ -98,4 +98,12 @@ Guard traps for every phase:
 22. Foes named in a fight or roll need `"as": "creature"` (else a person walk-on); re-found only by id or exact name.
     `mood`, `reveal_clue`, `travel who` have no `as`: unknown words there make a they walk-on (logged). A made-up id
     (npc.hal) is aliased for that turn only: a new person next turn unless the DM uses the returned id. Watch in P7.
+- P5 (0765539): `pacing.lead_due` = `lead_candidates` (read-only) + form roll + `lead_bookkeeping`; `dm_world._lead` tells
+  LEAD DUE (nothing added), held under an open pause; `gen/case.short_of_sources`; `dm_world._witness` tells WITNESS
+  NEEDED once per node on a scene change (meta `told_short`); h15 skips `audit_cases` under dm-tools; `/retire` exact
+  (casefold) and `end_game` open the retire confirmation; dm-tools menus answer by id, number or label (`exact=True`).
+  12.8.4 fallback never fires on the tools path. `inject_lead` is pipeline-only.
+23. LEAD/WITNESS told in the same exchange reach the DM through `_reask`; the `_dm_loop` note after `end_game` still says
+    "A roll is now offered" (P3 lane). Live: count how often the DM acts on LEAD DUE / WITNESS NEEDED; a mistyped
+    `knows` id only gets a NOTE. The lead form roll is a logged dice draw even when the DM ignores the lead.
 

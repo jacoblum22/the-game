@@ -69,7 +69,8 @@ DENY: dict[str, Entry] = {
     # P3: the foe's choice (R3)
     _R + "foe_beat": _e("A7 A8 A9", "P3"), "engine.dm.world_step.foes_act": _e("A7 A8 A9", "P3"),
     # P5: leads and witnesses are told, never spawned (R4)
-    "engine.world.pacing.inject_lead": _e("A19", "P5"), "engine.gen.case.audit_cases": _e("A20", "P5"),
+    "engine.world.pacing.inject_lead": _e("A19", "P5", mode="raise"),
+    "engine.gen.case.audit_cases": _e("A20", "P5", mode="raise"),
     # P2b: beat-text decisions (R7), search by id (R10)
     # (`resolve_names` and `_PROPER_RUN` left the list: `recall`'s codex search still lists candidates with them, class S)
     _S + "_STOP": _e("D6", "P2b", mode="raise"), _S + "excluded_by": _e("D6", "P2b", mode="raise"),
@@ -91,8 +92,8 @@ DENY: dict[str, Entry] = {
     _T + "_BEYOND": _r("D38"), _T + "_OWN_WILL": _r("D38"), _T + "_case_route": _r("D38"), _T + "_FIGURE": _r("D39"),
     _T + "_place_there": _r("D39 A25"),
     # P5: retire by `/retire` or the DM (R9); runs in the game shell, so its scope is the whole submit
-    "engine.dm.ending._RETIRE": _e("D43", "P5", scope="shell"),
-    "engine.dm.ending.is_retire": _e("D43", "P5", scope="shell"),
+    "engine.dm.ending._RETIRE": _e("D43", "P5", mode="raise", scope="shell"),
+    "engine.dm.ending.is_retire": _e("D43", "P5", mode="raise", scope="shell"),
 }
 
 # Census only: recorded when reached, never denied. value = what the census expects it to be (S search, F format,

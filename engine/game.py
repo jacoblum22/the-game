@@ -484,6 +484,7 @@ class Game:
         return self._after_seed(self.seed_flow.start())
 
     def _submit(self, message: str) -> Response:
+        from engine.dm import dm_tools
         from engine.dm.creation import CreationFlow
         from engine.dm.ending import (
             answer_ending,
@@ -493,7 +494,10 @@ class Game:
             is_retire,
             present_ending,
             retire_choice,
+            retire_command,
         )
+
+        tools = dm_tools.enabled(self.ctx)
         first = self._settle_pending()
         if first is not None and first.phase == "ending":
             return first
@@ -504,17 +508,24 @@ class Game:
         if flow == "creation":
             return self._after_creation(CreationFlow(self.ctx).submit(message))
         if flow == "ending":
-            choice = ending_choice(message)
+            choice = ending_choice(message, exact=tools)
             if choice is None:
                 menu = present_ending(self.ctx)
                 hint = oof.note_block("Pick one: a new character in this world, a new world, or stop here.")
                 return menu.model_copy(update={"oof_blocks": [hint, *menu.oof_blocks]})
             return self._after_creation(answer_ending(self.ctx, choice))
         if flow == "retire":
-            return self._after_turn(answer_retire(self.ctx, retire_choice(message)))
+            picked = retire_choice(message, exact=tools)
+            if picked is None:  # [spec 033 R9] menu answers are by id or number; other words show the question again
+                rec = st.open_pause()
+                assert rec is not None
+                return present_pause(rec, "play")
+            return self._after_turn(answer_retire(self.ctx, picked))
         if self._pc() is None:
             return self._restart_flow()
-        if is_retire(message) and st.open_pause() is None:
+        if tools and retire_command(message):  # [spec 033 R9] the exact command only; other words go to the DM
+            return self._merge(first, ask_retire(self.ctx, withdraw=True))
+        if not tools and is_retire(message) and st.open_pause() is None:
             return self._merge(first, ask_retire(self.ctx))
         out = self._engine().play_turn(self.ctx, message)
         return self._merge(first, self._after_turn(out.response))

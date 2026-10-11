@@ -6,7 +6,8 @@ outcomes as plain words; it gives no orders and calls no model.
 In the pipeline's order (engine/dm/world_step.py, reused, not rebuilt): the foes answer (`foes_act`: the conflict's
 own foe turn, harm by code), the exchange costs its mode's time (`beat_time`, or one `beat_cost` for an exchange with
 no beat), the beat counter and dead air move, clocks that ticked give their omens, raised triggers give their warnings,
-and a raised lead injection is written (`inject_lead`). Scene ends are the DM's call (the `end_scene` tool): nothing
+a raised lead injection is told (LEAD DUE; code writes none, spec 033 P5), and a shortfall of clue sources is told
+once per node (WITNESS NEEDED). Scene ends are the DM's call (the `end_scene` tool): nothing
 here cuts a scene. [owner ruling 2026-10-10]
 """
 
@@ -20,8 +21,8 @@ from engine.dm.context import TurnContext
 from engine.time import clock
 from engine.time.clock import beat_cost
 from engine.time.scheduler import advance_time, mark_boundary, set_mode
-from engine.world.common import trigger_raised
-from engine.world.pacing import inject_lead
+from engine.world.common import meta, trigger_raised
+from engine.world.pacing import clock_trace, lead_due
 from engine.world.scenes import note_turn, turn_is_quiet
 
 IDLE = ("refused", "question", "withdrawn")  # 01.3.6: a beat that spends nothing, so no foe answers it and no time passes
@@ -52,6 +53,7 @@ def world_step(ctx: TurnContext, t: Any) -> list[str]:
               for o in rec.omens[n_om:] if o.omen]
     if trigger_raised(ctx.state, LEAD):  # raised at beat_end by the inconclusive streak (12.8.1)
         facts += _lead(ctx, rec)
+    facts += _witness(ctx)
     facts += [n.strip() for n in rec.notes[n_notes:]]
     t.stats["world"]["facts"] += facts
     return facts
@@ -95,15 +97,49 @@ def _up(s: str) -> str:
 
 
 def _lead(ctx: TurnContext, rec: Any) -> list[str]:
+    """12.8.2 / PR-12-3 on the dm-tools path: the DM is told one lead (thread, source id, form) and the counter resets.
+    Code writes no fact, person or document; the DM brings it in with its tools or lets it go. With no thread or source
+    on record it is told so. A pending roll holds it (the world step does not run under an open pause)."""
     try:
-        inj = inject_lead(ctx.time_ctx())
-    except Exception as exc:  # noqa: BLE001 - no eligible source: logged, the counter stays for next time
+        out = lead_due(ctx.time_ctx())
+    except Exception as exc:  # noqa: BLE001 - no PC or no rng: logged, the counter stays for next time
         rec.notes.append(f"lead injection held: {exc}")
         return []
     st = ctx.state
-    names = list(dict.fromkeys(_name(st, i) for i in (inj.thread, inj.source_id) if i in st.entities))  # one line once
-    return [f"A lead arrives, in the form: {inj.form}." + (f" On record with it: {', '.join(names)}." if names else "")
-            + " It is now known to the character; work it into the scene."]
+    if out.source_id is None and out.thread is None:
+        return ["LEAD DUE: the story has stalled, but no open thread or source is on record to build a lead from. "
+                "Bring in a way forward of your own, or hold it."]
+
+    def ref(i: str) -> str:
+        return f"{_name(st, i)} ({i})" if i in st.entities else str(i)
+
+    trace = clock_trace(st, out.source_id) if out.source_id in st.clocks else None
+    return ["LEAD DUE: " + "; ".join(x for x in (f"thread {ref(out.thread)}" if out.thread else "",
+                                                 f"source {ref(out.source_id)}" if out.source_id else "",
+                                                 f"form: {out.form}", f"its omen now: {trace}" if trace else "") if x)
+            + ". Nothing was added to the world. Bring it in with your own tools (a walk-on with `knows`, "
+            "`reveal_clue`, a fact), or hold it."]
+
+
+def _witness(ctx: TurnContext) -> list[str]:
+    """15.9.4 on the dm-tools path: a necessary clue node with fewer than two live sources is told to the DM once per
+    shortfall, when a scene opens (a scene end or travel). Code places nothing: the DM puts a witness or document on
+    it with `new_npc` / `new_item` `knows: <node id>` (which takes the node's reserve)."""
+    from engine.gen.case import short_of_sources
+
+    tx, st = ctx.need_tx(), ctx.state
+    scene = st.scene.scene_id if st.scene else None
+    seen = st.meta.get("witness_scene")
+    if scene is None or scene == seen:
+        return []
+    short = short_of_sources(st)
+    told = [n for n in (st.meta.get("told_short") or []) if n in {s[0] for s in short}]  # a node that recovered resets
+    new = [s for s in short if s[0] not in told]
+    tx.add(meta("witness_scene", scene, "15.9.4"))
+    tx.add(meta("told_short", told + [s[0] for s in new], "15.9.4"))
+    return [f"WITNESS NEEDED: the answer '{fact}' (clue node {nid}) has {live} live source(s), fewer than 2. Nothing was "
+            f"added to the world. Bring in a witness or a document of your own with `new_npc` / `new_item` and "
+            f"`knows: {nid}`, or hold it." for nid, live, fact in new]
 
 
 def time_jumped(ctx: TurnContext) -> bool:
