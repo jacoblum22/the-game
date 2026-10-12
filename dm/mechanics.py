@@ -373,7 +373,7 @@ def status(s: dict[str, Any]) -> str:
         lines.append("Spell slots: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in s["spell_slots"].items()))
     sc = s.get("spellcasting") or {}
     if sc.get("prepared") is not None:
-        lines.append("Prepared spells: " + ", ".join(sc.get("always_prepared", []) + sc["prepared"]))
+        lines.append("Prepared spells: " + (", ".join(sc.get("always_prepared", []) + sc["prepared"]) or "none"))
     if sc.get("spellbook"):
         lines.append("Spellbook: " + ", ".join(sc["spellbook"]))
     if s.get("resources"):

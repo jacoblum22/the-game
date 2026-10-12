@@ -29,7 +29,13 @@ CASTING = {  # class: (ability, how spells are chosen)
     "bard": ("CHA", "known"), "sorcerer": ("CHA", "known"), "warlock": ("CHA", "known"),
     "cleric": ("WIS", "prepared"), "druid": ("WIS", "prepared"), "wizard": ("INT", "spellbook"),
 }
+HALF_CASTING = {"paladin": ("CHA", "prepared"), "ranger": ("WIS", "known")}  # their spellcasting starts at 2nd level
+CASTERS = CASTING | HALF_CASTING
 SPELLBOOK_SIZE = 6  # wizard: six 1st-level wizard spells
+BOOK_GAIN = 2  # wizard: two wizard spells added to the spellbook at every level after 1st
+SECRETS = 2  # bard Magical Secrets ("Choose two spells from any class") and Lore's Additional Magical Secrets ("two spells")
+TOME_CANTRIPS = 3  # Pact of the Tome: "choose three cantrips from any class's spell list"
+ALWAYS_PREPARED = {"cleric": "domain", "paladin": "oath", "druid": "circle"}  # the subclass spells that are always prepared
 RACE_CANTRIPS = {"infernal-legacy": ("thaumaturgy", "CHA")}  # tiefling: Thaumaturgy at 1st level
 SUBCLASS_PROFS = {"life": ["heavy-armor"]}  # Life Domain: Bonus Proficiency
 # The SRD Acolyte's gear the dataset leaves out: a prayer book or prayer wheel, 5 sticks of incense, vestments.
@@ -44,8 +50,8 @@ ENEMY_LANGUAGE_ID = f"feature.{ENEMY_FEATURE}.language"
 ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
 ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
                     "(such as gnolls and orcs), as a list of two names")
-RECORD_KEYS = {"hp", "asi", "choices", "cantrips", "spells", "replace", "arcanum"}  # a level record's fields
-SPELL_KEYS = ("cantrips", "spells", "replace", "arcanum")
+SPELL_KEYS = ("cantrips", "spells", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
+RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS}  # a level record's fields
 # The class table repeats a feature under a new name as it improves (Bardic Inspiration d6, d8, ...): only the newest
 # is shown, with the choices made at every stage. The "-improvement-N" entries are placeholders for subclass features.
 FAMILIES = [
@@ -90,12 +96,21 @@ def signed(n: int) -> str:
 
 # ---------- what has to be chosen ----------
 
+# The Levels data leaves out the Circle of the Land druid's choice of land (2nd level) and its Circle Spells (3rd, 5th,
+# 7th and 9th level); the Features table has them.
+LEVEL_GAPS = {("land", 2): "circle-of-the-land", ("land", 3): "circle-spells-1", ("land", 5): "circle-spells-2",
+              ("land", 7): "circle-spells-3", ("land", 9): "circle-spells-4"}
+
+
 def level_features(cls: str, level: int) -> list[dict[str, Any]]:
     """The features the class and its (only SRD) subclass give at exactly this level."""
     L = srd.table("Levels")
     sc = srd.table("Classes")[cls]["subclasses"][0]["index"]
     rows = [L[f"{cls}-{level}"]] + ([L[f"{sc}-{level}"]] if f"{sc}-{level}" in L else [])
-    return [srd.ref(f) for row in rows for f in row["features"]]
+    out = [srd.ref(f) for row in rows for f in row["features"]]
+    if gap := LEVEL_GAPS.get((sc, level)):
+        out.append(srd.table("Features")[gap])
+    return out
 
 
 def has_asi(cls: str, level: int) -> bool:
@@ -105,7 +120,7 @@ def has_asi(cls: str, level: int) -> bool:
 
 def parts(race: str, cls: str, level: int = 1) -> dict[str, Any]:
     """Everything the data gives a character of this race and class at `level`: "level" is the class table row,
-    "level1" the first row (the spell rules are level 1 until slice 2), "gained" every (level, feature) so far."""
+    "level1" the first row, "gained" every (level, feature) so far."""
     r = srd.find("Races", race)
     c = srd.find("Classes", cls)
     sub = srd.table("Subraces")[r["subraces"][0]["index"]] if r["subraces"] else None
@@ -165,27 +180,88 @@ def choices_for(race: str, cls: str) -> list[tuple[str, str, dict[str, Any]]]:
     return out
 
 
-def spell_rules(race: str, cls: str, scores: dict[str, int] | None = None) -> dict[str, Any] | None:
-    p = parts(race, cls)
+def slots_at(cls: str, level: int) -> dict[str, int]:
+    """The class table's spell slots at this level, by spell level ({"1": 4, "2": 2}); a warlock has one level only."""
+    sc = srd.table("Levels")[f"{cls}-{level}"].get("spellcasting") or {}
+    return {str(k): sc[f"spell_slots_level_{k}"] for k in range(1, 10) if sc.get(f"spell_slots_level_{k}")}
+
+
+def max_spell_level(cls: str, level: int) -> int:
+    """The highest spell level the class can cast at this level (0: no spell slots yet)."""
+    return max(map(int, slots_at(cls, level)), default=0)
+
+
+def subclass_spells(sub: dict[str, Any] | None, level: int, land: str | None = None) -> list[str]:
+    """The subclass's spells (indexes) whose prerequisites are met at this class level: Life domain, Devotion oath,
+    Fiend expanded list, and the Circle of the Land spells of the chosen land (a Features index, or None)."""
+    out: list[str] = []
+    for s in (sub or {}).get("spells", []):
+        pre = s["prerequisites"]
+        if (all(q["type"] != "level" or int(q["index"].rsplit("-", 1)[1]) <= level for q in pre)
+                and all(q["type"] != "feature" or q["index"] == land for q in pre) and s["spell"]["index"] not in out):
+            out.append(s["spell"]["index"])
+    return out
+
+
+def spell_pool(cls: str, low: int, high: int, extra: list[str] | None = None) -> list[str]:
+    """Indexes of the class's spells of spell level low..high (0 is cantrips), plus `extra` (a subclass's expanded
+    list) of those levels."""
+    return [i for i, s in srd.table("Spells").items() if low <= s["level"] <= high
+            and (any(c["index"] == cls for c in s["classes"]) or i in (extra or []))]
+
+
+def spell_rules(race: str, cls: str, scores: dict[str, int] | None = None, level: int = 1,
+                land: str | None = None) -> dict[str, Any] | None:
+    """How the class casts at this level: its ability, how spells are chosen, how many it has, its slots. None before
+    the class has spell slots (a paladin or ranger at 1st level) or if it is not a spellcaster. `land` is the Circle of
+    the Land druid's chosen land (a Features index)."""
+    p = parts(race, cls, level)
     c = p["class"]["index"]
-    if c not in CASTING:
+    slots = slots_at(c, level) if c in CASTERS else {}
+    if not slots:
         return None
-    sc = p["level"].get("spellcasting") or {}
-    ability, how = CASTING[c]
-    extra = [s["spell"]["index"] for s in (p["subclass"] or {}).get("spells", [])
-             if any(q["index"] == f"{c}-1" for q in s["prerequisites"])]
-    rules: dict[str, Any] = {"ability": ability, "how": how, "cantrips": sc.get("cantrips_known", 0), "class": c}
+    sc = p["level"]["spellcasting"]
+    ability, how = CASTERS[c]
+    extra = subclass_spells(p["subclass"], level, land)
+    bonus = 1 if any(f["index"] == "bonus-cantrip" for f in p["features"]) else 0  # Land druid: "one additional druid cantrip"
+    rules: dict[str, Any] = {"ability": ability, "how": how, "cantrips": sc.get("cantrips_known", 0) + bonus, "class": c,
+                             "level": level, "slots": slots, "max_level": max(map(int, slots))}
     if how == "known":
         rules["known"] = sc.get("spells_known", 0)
     if how == "spellbook":
-        rules["spellbook"] = SPELLBOOK_SIZE
+        rules["spellbook"] = SPELLBOOK_SIZE + BOOK_GAIN * (level - 1)
     if how in ("prepared", "spellbook") and scores:
-        rules["prepared"] = max(1, mod(scores[ability]) + 1)
-    if p["subclass"] and p["subclass"]["index"] == "life":
-        rules["always_prepared"] = extra  # domain spells: always prepared, not counted
+        # ability modifier + class level (cleric, druid, wizard) or half the paladin level rounded down; minimum of one
+        rules["prepared"] = max(1, mod(scores[ability]) + (level // 2 if c == "paladin" else level))
+    if how == "prepared" and extra:
+        rules["always_prepared"] = extra  # domain, oath and circle spells: always prepared, not counted
         extra = []
     rules["expanded"] = extra  # e.g. the Fiend's expanded spell list
     return rules
+
+
+def level_spell_needs(cls: str, level: int) -> dict[str, Any]:
+    """What the record of a level above 1 has to say about spells, from the class table and the features gained then:
+    "cantrips"/"spells" = how many to learn, "secrets" = Magical Secrets spells (from any class), "replace" = may
+    swap a known spell, "arcanum" = the spell level of the Mystic Arcanum gained (0: none), "mastery"/"signature" =
+    Wizard 18/20, "max_level" = the highest spell level castable then. Empty for a class that never casts."""
+    if cls not in CASTERS:
+        return {}
+    L = srd.table("Levels")
+    sp, before = L[f"{cls}-{level}"].get("spellcasting") or {}, L[f"{cls}-{level - 1}"].get("spellcasting") or {}
+    feats = {f["index"] for f in level_features(cls, level)}
+    how = CASTERS[cls][1]
+    # Magical Secrets (10th, 14th, 18th): "included in the number in the Spells Known column"; Lore's Additional Magical
+    # Secrets (6th): "don't count against the number of bard spells you know"
+    counted = SECRETS if any(i.startswith("magical-secrets") for i in feats) else 0
+    extra = SECRETS if "additional-magical-secrets" in feats else 0
+    arcanum = next((int(m.group(1)) for i in feats if (m := re.match(r"mystic-arcanum-(\d)", i))), 0)
+    return {"cantrips": sp.get("cantrips_known", 0) - before.get("cantrips_known", 0) + (1 if "bonus-cantrip" in feats else 0),
+            "spells": BOOK_GAIN if how == "spellbook" else
+            sp.get("spells_known", 0) - before.get("spells_known", 0) - counted if how == "known" else 0,
+            "secrets": counted + extra, "secrets_counted": counted, "replace": how == "known", "arcanum": arcanum,
+            "mastery": "spell-mastery" in feats, "signature": "signature-spell" in feats,
+            "max_level": max_spell_level(cls, level)}
 
 
 # ---------- building ----------
@@ -255,10 +331,7 @@ def _check_record(rec: dict[str, Any], level: int, c: dict[str, Any], errs: list
         errs.append(f"{pre}asi: missing (this level grants Ability Score Improvement)")
     elif "asi" in rec and not asi:
         errs.append(f"{pre}asi: this level does not grant Ability Score Improvement")
-    if any(k in rec for k in SPELL_KEYS) and "spellcasting" not in srd.table("Levels")[f"{c['index']}-1"]:
-        errs.append(f"{pre}{', '.join(k for k in SPELL_KEYS if k in rec)}: a {c['name'].lower()} has no spells")
-    # slice 2: for casters the spell fields (cantrips, spells, replace, arcanum) are checked and applied here
-    return got
+    return got  # the spell fields are checked by _spells
 
 
 def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict[str, Any]] | None = None,
@@ -322,14 +395,17 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
     if scores:
         for x in bonuses:
             scores[x["bonus"]] += x["n"]
+    scores1 = dict(scores)  # the scores at 1st level: the prepared list chosen then is checked against them
 
     # the levels after 1st: hit points, Ability Score Improvement and the choices of the features gained
     hp_rolls: list[int] = []
     asi_log: list[str] = []
     pre_of: dict[str, str] = {}  # the error prefix of each later-level choice id
+    level_chosen: list[dict[str, Any]] = []  # what each level's choices granted
     for i, rec in enumerate(levels):
         level = i + 2
         pre = f"level {level}: "
+        level_chosen.append({})
         if (got := _check_record(rec, level, c, errs)) is not None:
             hp_rolls.append(got)
         if "asi" in rec and has_asi(c["index"], level):
@@ -343,6 +419,7 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
             continue
         got_chosen, got_granted = _check_sets(level_sets(c["index"], level), rec_picks, pre, errs)
         picks |= rec_picks
+        level_chosen[-1] = got_chosen
         chosen |= got_chosen
         pre_of |= {cid: pre for cid in got_chosen}
         granted += got_granted
@@ -426,8 +503,8 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
             if nm.strip().casefold() in by_name:
                 items[by_name[nm.strip().casefold()]] += q
 
-    # spells (slice 2: level-aware casting; today the level-1 casting whatever the level)
-    spells = _spells(ch, r["index"], c["index"], scores, chosen, errs)
+    # spells: the level-1 casting, then each level's record
+    spells = _spells(ch, r["index"], c["index"], scores, scores1, chosen, level_chosen, levels, errs)
 
     if errs:
         return None, errs
@@ -455,47 +532,207 @@ def _owned_prof(prof_ids: set[str]) -> set[str]:
     return owned
 
 
-def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], chosen: dict[str, Any],
+def _ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def _check_names(key: str, names: Any, n: int, allowed: set[str], label: str, errs: list[str], atmost: bool = False,
+                 taken: set[str] | None = None, have: str = "known") -> list[str]:
+    """Spell names the player gave: exactly n (1 to n if `atmost`), each an SRD spell in `allowed` (`label` finishes
+    "X is not ..."), none twice and none in `taken` ("X is already <have>"). Returns the valid ones, as indexes."""
+    if not isinstance(names, list) or not (1 <= len(names) <= n if atmost else len(names) == n):
+        errs.append(f"{key}: choose " + (f"1 to {n} (the most you can prepare)" if atmost else f"exactly {n}"))
+        return []
+    out, seen = [], []
+    for nm in names:
+        try:
+            s = srd.spell(nm)
+        except Bad:
+            errs.append(f"{key}: no SRD spell {nm!r}")
+            continue
+        seen.append(s["index"])
+        if s["index"] in (taken or ()):
+            errs.append(f"{key}: {s['name']} is already {have}")
+        elif s["index"] not in allowed:
+            errs.append(f"{key}: {s['name']} is not {label}")
+        else:
+            out.append(s["index"])
+    if len(set(seen)) != len(seen):
+        errs.append(f"{key}: a spell is listed twice")
+    return out
+
+
+def _is_spell(name: str) -> bool:
+    try:
+        srd.spell(name)
+    except Bad:
+        return False
+    return True
+
+
+def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], scores1: dict[str, int],
+            chosen: dict[str, Any], level_chosen: list[dict[str, Any]], levels: list[dict[str, Any]],
             errs: list[str]) -> dict[str, Any] | None:
-    rules = spell_rules(race, cls, scores or None)
+    """The character's spells at level 1 + len(levels): the level-1 choices (cantrips, spells, prepared) checked against
+    the 1st-level class text, then each level record's spell fields (`_level_spells`)."""
+    rules1 = spell_rules(race, cls, scores1 or None)
     given = {k: ch.get(k) for k in ("cantrips", "spells", "prepared") if ch.get(k)}
-    if not rules:
+    st: dict[str, Any] = {"cantrips": [], "known": [], "spellbook": [], "prepared": [], "secrets": [], "arcanum": {},
+                          "tome": [], "mastery": [], "signature": []}
+    if cls not in CASTERS:
         if given:
             errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
+        for i, rec in enumerate(levels):
+            if keys := [k for k in SPELL_KEYS if rec.get(k)]:
+                errs.append(f"level {i + 2}: {', '.join(keys)}: a {srd.table('Classes')[cls]['name'].lower()} has no spells")
         return None
+    if not rules1:  # a paladin or ranger: the first spells come with the 2nd level
+        if given:
+            errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
+    else:
+        def level1(level: int) -> set[str]:
+            return set(spell_pool(cls, level, level, rules1["expanded"]))
 
-    def check(key: str, names: Any, n: int, level: int, pool: list[str] | None = None, atmost: bool = False) -> list[str]:
-        if not isinstance(names, list) or not (1 <= len(names) <= n if atmost else len(names) == n):
-            errs.append(f"{key}: choose " + (f"1 to {n} (the most you can prepare)" if atmost else f"exactly {n}"))
-            return []
-        allowed = pool if pool is not None else [s["index"] for s in srd.class_spells(cls, level, rules["expanded"])]
-        out = []
-        for nm in names:
-            try:
-                s = srd.spell(nm)
-            except Bad:
-                errs.append(f"{key}: no SRD spell {nm!r}")
-                continue
-            if s["index"] not in allowed:
-                errs.append(f"{key}: {s['name']} is not a level-{level} {cls} spell"
-                            + (" in the spellbook" if pool is not None else ""))
-            out.append(s["index"])
-        if len(set(out)) != len(out):
-            errs.append(f"{key}: a spell is listed twice")
-        return out
-
-    out: dict[str, Any] = {"rules": rules, "cantrips": check("cantrips", ch.get("cantrips"), rules["cantrips"], 0)}
+        st["cantrips"] = _check_names("cantrips", ch.get("cantrips"), rules1["cantrips"], level1(0),
+                                      f"a level-0 {cls} spell", errs)
+        if rules1["how"] == "known":
+            st["known"] = _check_names("spells", ch.get("spells"), rules1["known"], level1(1), f"a level-1 {cls} spell", errs)
+        elif rules1["how"] == "spellbook":
+            st["spellbook"] = _check_names("spells", ch.get("spells"), rules1["spellbook"], level1(1),
+                                           f"a level-1 {cls} spell", errs)
+            if "prepared" in rules1:
+                st["prepared"] = _check_names("prepared", ch.get("prepared"), rules1["prepared"], set(st["spellbook"]),
+                                              f"a level-1 {cls} spell in the spellbook", errs, atmost=True)
+        elif "prepared" in rules1:
+            if ch.get("spells"):
+                errs.append(f"spells: a {cls} prepares spells from the whole class list; use prepared")
+            st["prepared"] = _check_names("prepared", ch.get("prepared"), rules1["prepared"], level1(1),
+                                          f"a level-1 {cls} spell", errs, atmost=True)
+    for i, rec in enumerate(levels):
+        _level_spells(rec, i + 2, cls, st, errs, level_chosen[i])
+    land = next((g["index"] for g in chosen.get("feature.circle-of-the-land", [])), None)
+    rules = spell_rules(race, cls, scores or None, 1 + len(levels), land)
+    if not rules:
+        return None
+    out: dict[str, Any] = {"rules": rules, "cantrips": st["cantrips"], "secrets": st["secrets"], "arcanum": st["arcanum"],
+                           "tome": st["tome"], "mastery": st["mastery"], "signature": st["signature"]}
     if rules["how"] == "known":
-        out["known"] = check("spells", ch.get("spells"), rules["known"], 1)
-    elif rules["how"] == "spellbook":
-        out["spellbook"] = check("spells", ch.get("spells"), rules["spellbook"], 1)
-        if "prepared" in rules:
-            out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1, out["spellbook"], atmost=True)
-    elif "prepared" in rules:
-        if ch.get("spells"):
-            errs.append(f"spells: a {cls} prepares spells from the whole class list; use prepared")
-        out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1, atmost=True)
+        out["known"] = st["known"]
+    if rules["how"] == "spellbook":
+        out["spellbook"] = st["spellbook"]
+    if rules["how"] in ("spellbook", "prepared"):
+        out["prepared"] = st["prepared"]  # the list chosen at 1st level; the live list belongs to the long rests
     return out
+
+
+def _level_spells(rec: dict[str, Any], L: int, cls: str, st: dict[str, Any], errs: list[str],
+                  picked: dict[str, Any]) -> None:
+    """Check the spell fields of the record of level L against the class text and apply them to `st`, the spells so far.
+    `picked` is what the level's feature choices granted (Pact of the Tome gives cantrips)."""
+    pre = f"level {L}: "
+    need = level_spell_needs(cls, L)
+    top, how = need["max_level"], CASTERS[cls][1]
+    sub = srd.table("Subclasses")[srd.table("Classes")[cls]["subclasses"][0]["index"]]
+    extra = subclass_spells(sub, L) if how == "known" else []  # the Fiend's expanded spell list
+    spells = srd.table("Spells")
+    prior = list(st["known"])
+
+    def holds() -> set[str]:
+        return set(st["known"]) | set(st["cantrips"])
+
+    # Cantrips Known column (a Land druid's Bonus Cantrip is one more at 2nd level)
+    if need["cantrips"]:
+        st["cantrips"] += _check_names(f"{pre}cantrips", rec.get("cantrips"), need["cantrips"], set(spell_pool(cls, 0, 0)),
+                                       f"a {cls} cantrip", errs, taken=holds())
+    elif rec.get("cantrips"):
+        errs.append(f"{pre}cantrips: no new cantrips at this level (the Cantrips Known column doesn't go up)")
+
+    # new spells: known casters learn the rise of the Spells Known column (spell level no higher than their slots);
+    # a wizard adds two wizard spells to the spellbook
+    if how == "spellbook":
+        st["spellbook"] += _check_names(f"{pre}spells", rec.get("spells"), need["spells"], set(spell_pool(cls, 1, top)),
+                                        f"a wizard spell of level 1 to {top}", errs, taken=set(st["spellbook"]),
+                                        have="in the spellbook")
+    elif need["spells"]:
+        st["known"] += _check_names(f"{pre}spells", rec.get("spells"), need["spells"], set(spell_pool(cls, 1, top, extra)),
+                                    f"a {cls} spell of level 1 to {top}", errs, taken=holds())
+    elif rec.get("spells"):
+        errs.append(f"{pre}spells: " + (
+            f"a {cls} prepares spells from the whole class list, so there are no spells to learn" if how == "prepared" else
+            "no new spells known at this level" + (" (the new Spells Known are the Magical Secrets: use secrets)"
+                                                   if need["secrets_counted"] else " (the Spells Known column doesn't go up)")))
+
+    # Magical Secrets: two spells "from any class" of a level you can cast "or a cantrip", bard spells for you
+    if need["secrets"]:
+        names = _check_names(f"{pre}secrets", rec.get("secrets"), need["secrets"],
+                             {i for i, s in spells.items() if s["level"] <= top}, f"a spell of level {top} or lower",
+                             errs, taken=holds())
+        st["known"] += names
+        st["secrets"] += names
+    elif rec.get("secrets"):
+        errs.append(f"{pre}secrets: only bards get Magical Secrets (Lore bards at 6th level, every bard at 10th, 14th and "
+                    "18th), and not at this level")
+
+    # replacing one known spell when a level is gained (bard, ranger, sorcerer, warlock)
+    if rec.get("replace"):
+        rep = rec["replace"]
+        if not need["replace"]:
+            errs.append(f"{pre}replace: a {cls} doesn't replace known spells (only bards, rangers, sorcerers and warlocks)")
+        elif not (isinstance(rep, dict) and set(rep) == {"from", "to"} and all(isinstance(v, str) for v in rep.values())):
+            errs.append(f'{pre}replace: {{"from": "<a spell you know>", "to": "<a {cls} spell>"}}')
+        elif not _is_spell(rep["from"]) or not _is_spell(rep["to"]):
+            errs.append(f"{pre}replace: no SRD spell {rep['from'] if not _is_spell(rep['from']) else rep['to']!r}")
+        else:
+            old, new = srd.spell(rep["from"]), srd.spell(rep["to"])
+            if old["index"] not in prior:
+                errs.append(f"{pre}replace: {old['name']} is not one of the spells you know "
+                            f"({', '.join(spells[i]['name'] for i in prior) or 'none yet'})")
+            elif new["index"] not in spell_pool(cls, 1, top, extra):
+                errs.append(f"{pre}replace: {new['name']} is not a {cls} spell of level 1 to {top}")
+            elif new["index"] in holds():
+                errs.append(f"{pre}replace: {new['name']} is already known")
+            else:
+                st["known"][st["known"].index(old["index"])] = new["index"]
+
+    # Mystic Arcanum: one spell of the arcanum's level from the warlock list
+    if need["arcanum"]:
+        lv, name = need["arcanum"], rec.get("arcanum")
+        if not isinstance(name, str) or not _is_spell(name):
+            errs.append(f"{pre}arcanum: the name of one {_ordinal(lv)}-level {cls} spell (Mystic Arcanum)")
+        elif (s := srd.spell(name))["index"] not in spell_pool(cls, lv, lv, extra):
+            errs.append(f"{pre}arcanum: {s['name']} is not a {_ordinal(lv)}-level {cls} spell")
+        else:
+            st["arcanum"][str(lv)] = s["index"]
+    elif rec.get("arcanum"):
+        errs.append(f"{pre}arcanum: Mystic Arcanum comes to a warlock at 11th, 13th, 15th and 17th level")
+
+    # Pact of the Tome: "choose three cantrips from any class's spell list"
+    if any(g.get("index") == "pact-of-the-tome" for g in picked.get("feature.pact-boon", [])):
+        st["tome"] += _check_names(f"{pre}tome", rec.get("tome"), TOME_CANTRIPS, {i for i, s in spells.items() if s["level"] == 0},
+                                   "a cantrip", errs)
+    elif rec.get("tome"):
+        errs.append(f"{pre}tome: only when Pact of the Tome is chosen at this level (three cantrips from any class)")
+
+    # Wizard: Spell Mastery "Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook";
+    # Signature Spell "Choose two 3rd-level wizard spells in your spellbook"
+    for key, levels_wanted, feature in (("mastery", [1, 2], "Spell Mastery"), ("signature", [3, 3], "Signature Spell")):
+        if not need[key]:
+            if rec.get(key):
+                errs.append(f"{pre}{key}: only a wizard at {'18th' if key == 'mastery' else '20th'} level ({feature})")
+            continue
+        names, book = rec.get(key), set(st["spellbook"])
+        wanted = " and ".join(f"a {_ordinal(n)}-level wizard spell" for n in levels_wanted) if key == "mastery" \
+            else "two 3rd-level wizard spells"
+        if not (isinstance(names, list) and len(names) == 2 and all(isinstance(x, str) and _is_spell(x) for x in names)):
+            errs.append(f"{pre}{key}: {wanted} that are in your spellbook, as a list of two names")
+            continue
+        found = [srd.spell(x) for x in names]
+        if sorted(s["level"] for s in found) != levels_wanted or len({s["index"] for s in found}) != 2:
+            errs.append(f"{pre}{key}: {feature} needs {wanted}, not {' and '.join(s['name'] for s in found)}")
+        elif missing := [s["name"] for s in found if s["index"] not in book]:
+            errs.append(f"{pre}{key}: {', '.join(missing)} must be in your spellbook")
+        else:
+            st[key] = [s["index"] for s in found]
 
 
 def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, int], M: dict[str, int], prof: int,
@@ -604,31 +841,49 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         rules = spells["rules"]
         a = rules["ability"]
         dc, atk = 8 + prof + M[a], prof + M[a]
-        cantrips = [srd.table("Spells")[s]["name"] for s in spells["cantrips"]]
+        SP = srd.table("Spells")
+        cantrips = [SP[s]["name"] for s in spells["cantrips"]]
         spellcasting = {"ability": a, "save_dc": dc, "attack_bonus": atk, "cantrips": cantrips, "class": c["index"],
-                        "max_level": 1}
+                        "max_level": rules["max_level"]}
         for key in ("known", "spellbook", "prepared"):
             if key in spells:
-                spellcasting[key] = [srd.table("Spells")[s]["name"] for s in spells[key]]
-        if rules.get("always_prepared"):
-            spellcasting["always_prepared"] = [srd.table("Spells")[s]["name"] for s in rules["always_prepared"]]
+                spellcasting[key] = [SP[s]["name"] for s in spells[key]]
+        always = list(rules.get("always_prepared", [])) + spells["signature"]  # Signature Spell: always prepared
+        if always:
+            spellcasting["always_prepared"] = [SP[s]["name"] for s in always]
         if "prepared" in rules:
             spellcasting["prepare_count"] = rules["prepared"]
             spellcasting["prepare_from"] = "spellbook" if rules["how"] == "spellbook" else "class"
+        if spells["secrets"]:
+            spellcasting["magical_secrets"] = [SP[s]["name"] for s in spells["secrets"]]  # bard spells for you, any class
+        if spells["arcanum"]:
+            spellcasting["arcanum"] = {lv: SP[s]["name"] for lv, s in spells["arcanum"].items()}  # spell level: spell
+        if spells["tome"]:
+            spellcasting["tome_cantrips"] = [SP[s]["name"] for s in spells["tome"]]
+        if spells["mastery"]:
+            spellcasting["spell_mastery"] = [SP[s]["name"] for s in spells["mastery"]]
+        if spells["signature"]:
+            spellcasting["signature_spells"] = [SP[s]["name"] for s in spells["signature"]]
+        classname = c["name"].lower()
         spellcasting["notes"] = {
-            "known": "Spells known are fixed until a level-up.",
-            "prepared": f"Prepare up to {rules.get('prepared')} spells from the whole {c['name'].lower()} list after a long rest"
-                        + (" (domain spells are always prepared and don't count)." if rules.get("always_prepared") else "."),
+            "known": "Spells known are fixed until a level-up." + (
+                " Pact Magic: all your spell slots are the same level (the slot level on the sheet); a spell of a lower "
+                "level is cast with such a slot, at the slot's level. Your slots come back on a short or long rest."
+                if classname == "warlock" else ""),
+            "prepared": f"Prepare up to {rules.get('prepared')} spells from the whole {classname} list after a long rest"
+                        + (f" ({ALWAYS_PREPARED[c['index']]} spells are always prepared and don't count)."
+                           if rules.get("always_prepared") else ".")
+                        + ("" if spells.get("prepared") else " None are prepared yet: prepare them when a long rest "
+                           "finishes."),
             "spellbook": f"Prepare up to {rules.get('prepared')} spells from the spellbook after a long rest. Ritual Casting: "
                          "a ritual spell in the spellbook can be cast as a ritual (10 minutes longer, no slot), prepared "
                          "or not.",
         }[rules["how"]]
-        # slice 2: spell slots, cantrips and spells known for levels above 1 (this is the level-1 casting, whatever N is)
-        n = (p["level1"].get("spellcasting") or {}).get("spell_slots_level_1", 0)
-        if n:
-            slots["1"] = {"max": n, "left": n, "recharge": "short" if c["index"] == "warlock" else "long"}
-        for s in spells["cantrips"]:
-            line = _cantrip(srd.table("Spells")[s], dc, atk)
+        for lv, n in rules["slots"].items():  # the class table's slots at this level; Pact Magic comes back on a short rest
+            slots[lv] = {"max": n, "left": n, "recharge": "short" if c["index"] == "warlock" else "long"}
+        every = list(dict.fromkeys(spells["cantrips"] + spells["tome"] + [s for s in spells["secrets"] if SP[s]["level"] == 0]))
+        for s in every:
+            line = _cantrip(SP[s], dc, atk, N)
             if line:
                 attacks.append(line)
     extra_cantrips = []
@@ -689,6 +944,8 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         features.append("Ability Score Improvements taken: " + "; ".join(asi_log) + ".")
     features.append(f"{b['feature']['name']} ({b['name']}): {' '.join(b['feature']['desc'])}")
     resources.update(_resources(feat_ids, trait_ids, cs, N, M))
+    for sp in (spells or {}).get("signature", []):  # "you can cast each of them once at 3rd level without expending a spell slot"
+        resources[f"Signature Spell: {srd.table('Spells')[sp]['name']}"] = {"max": 1, "left": 1, "recharge": "short"}
 
     langs = [x["name"] for x in r["languages"]] + [srd.table("Languages")[g["index"]]["name"]
                                                    for got in chosen.values() for g in got if g.get("kind") == "Languages"]
@@ -866,11 +1123,12 @@ def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, s
     return line
 
 
-def _cantrip(s: dict[str, Any], dc: int, atk: int) -> str:  # slice 2: damage_at_character_level for levels above 1
+def _cantrip(s: dict[str, Any], dc: int, atk: int, level: int = 1) -> str:
+    """A damage cantrip's line at this character level (damage_at_character_level in the data)."""
     dmg = s.get("damage") or {}
     if isinstance(dmg, list):
         dmg = dmg[0] if dmg else {}
-    lvl = (dmg.get("damage_at_character_level") or {}).get("1")
+    lvl = _at_level(dmg.get("damage_at_character_level") or {}, level)
     if not lvl:
         return ""
     dtype = (dmg.get("damage_type") or {}).get("name", "").lower()
@@ -880,7 +1138,11 @@ def _cantrip(s: dict[str, Any], dc: int, atk: int) -> str:  # slice 2: damage_at
         how = f"{s['dc']['dc_type']['name']} save DC {dc}"
     else:
         how = "automatic"
-    return f"{s['name']} (cantrip): {how}, {lvl} {dtype}, range {s['range']}"
+    beams = ""
+    if s["index"] == "eldritch-blast":  # "two beams at 5th level, three beams at 11th level, and four beams at 17th level"
+        n = 1 + (level >= 5) + (level >= 11) + (level >= 17)
+        beams = f" per beam, {n} beams, each with its own attack roll" if n > 1 else ""
+    return f"{s['name']} (cantrip): {how}, {lvl} {dtype}{beams}, range {s['range']}"
 
 
 def _grant_name(g: dict[str, Any]) -> str:

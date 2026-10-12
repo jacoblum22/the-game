@@ -60,9 +60,54 @@ def character(race: str, cls: str, shift: int = 0) -> dict[str, Any]:
     return ch
 
 
+def _names(indexes: list[str]) -> list[str]:
+    return [srd.table("Spells")[i]["name"] for i in indexes]
+
+
+def spell_fields(cls: str, level: int, sheet: dict[str, Any], rec: dict[str, Any]) -> dict[str, Any]:
+    """The spell fields a level record needs: the first valid spells, highest spell level first. `sheet` is the
+    character one level lower; a known caster also replaces its first spell on every even level."""
+    need = create.level_spell_needs(cls, level)
+    if not need:
+        return {}
+    sc, top, S = sheet.get("spellcasting") or {}, need["max_level"], srd.table("Spells")
+    have = set(sc.get("cantrips", []) + sc.get("known", []) + sc.get("spellbook", []))
+
+    def take(source: str, n: int, low: int, high: int, avoid: set[str]) -> list[str]:
+        pool = _names(create.spell_pool(source, low, high))
+        out = [x for x in sorted(pool, key=lambda x: -S[srd.spell(x)["index"]]["level"]) if x not in avoid][:n]
+        assert len(out) == n, (cls, level, source)
+        return out
+
+    out: dict[str, Any] = {}
+    if need["cantrips"]:
+        out["cantrips"] = take(cls, need["cantrips"], 0, 0, have)
+    if need["spells"]:
+        out["spells"] = take(cls, need["spells"], 1, top, have)
+    if need["secrets"]:  # Magical Secrets: spells of another class
+        out["secrets"] = take("cleric", need["secrets"], 0, top, have | set(out.get("spells", [])))
+    if need["replace"] and level % 2 == 0 and sc.get("known"):
+        out["replace"] = {"from": sc["known"][0], "to": take(cls, 1, 1, top, have | set(out.get("spells", [])))[0]}
+    if need["arcanum"]:
+        out["arcanum"] = take(cls, 1, need["arcanum"], need["arcanum"], set())[0]
+    choice = rec.get("choices", {}).get("feature.pact-boon")
+    if choice and any(g.get("index") == "pact-of-the-tome" for g in srd.resolve(
+            next(cs for cid, _, cs in create.level_sets(cls, level) if cid == "feature.pact-boon"), choice, "")):
+        out["tome"] = take("wizard", create.TOME_CANTRIPS, 0, 0, set())
+    if need["mastery"] or need["signature"]:
+        book = sc["spellbook"] + out["spells"]
+        by = lambda lv: [x for x in book if S[srd.spell(x)["index"]]["level"] == lv]
+        if need["mastery"]:
+            out["mastery"] = [by(1)[0], by(2)[0]]
+        if need["signature"]:
+            out["signature"] = by(3)[:2]
+    return out
+
+
 def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None) -> list[dict[str, Any]]:
     """Level records for levels 2..upto: fixed hit points, the two highest scores below 20 for each Ability Score
-    Improvement, expertise in the first skills the character is proficient in, other choices shifted until one builds."""
+    Improvement, expertise in the first skills the character is proficient in, the first valid spells, other choices
+    shifted until one builds."""
     cls = srd.find("Classes", ch["class"])["index"]
     levels: list[dict[str, Any]] = []
     for level in range(2, upto + 1):
@@ -78,6 +123,7 @@ def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None) 
         for shift in range(60):
             rec["choices"] = {cid: proficient[:cs["choose"]] if "expertise" in cid else pick(cs, shift + i)
                               for i, (cid, _, cs) in enumerate(sets)}
+            rec = {k: v for k, v in rec.items() if k not in create.SPELL_KEYS} | spell_fields(cls, level, sheet, rec)
             built, errs = create.build(ch, rolled, levels + [rec])
             if built:
                 break

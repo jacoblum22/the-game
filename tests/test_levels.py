@@ -6,8 +6,9 @@ from functools import cache
 import pytest
 
 from dm import create, srd
+from dm import mechanics as m
 from tests.autochar import auto_levels, build_any
-from tests.test_create import BRAKKA, ranger
+from tests.test_create import BRAKKA, HILDA, WREN, ranger
 
 FIXED = {"hp": "fixed"}
 BG = {"background.languages": ["Giant", "Goblin"], "background.equipment.1": ["Amulet"],
@@ -295,8 +296,9 @@ def test_no_fighting_style_or_metamagic_twice() -> None:
     first = levels[1]["choices"]["feature.metamagic-1"]  # level 3: two options; level 10 adds "another one"
     other = next(o for o in ("Metamagic: Quickened Spell", "Metamagic: Subtle Spell") if o not in first)
     until9 = levels[:8]
-    assert "chosen twice" in problems(until9 + [{"hp": "fixed", "choices": {"feature.metamagic-2": [first[0]]}}], sorc)
-    s10 = built(sorc, until9 + [{"hp": "fixed", "choices": {"feature.metamagic-2": [other]}}])
+    level10 = levels[8]  # the sorcerer's own spells for the level, with other Metamagic picks
+    assert "chosen twice" in problems(until9 + [level10 | {"choices": {"feature.metamagic-2": [first[0]]}}], sorc)
+    s10 = built(sorc, until9 + [level10 | {"choices": {"feature.metamagic-2": [other]}}])
     assert sum(f.startswith("Metamagic:") and "CHOSEN" in f for f in s10["features"]) == 1  # one line, every stage's picks
     assert f"{first[0]}, {first[1]}. CHOSEN: {other}." in "".join(s10["features"])
 
@@ -368,13 +370,438 @@ def test_every_feature_of_the_level_is_on_the_sheet(cls: str) -> None:
                 assert any(x.startswith(f["name"] + ":") for x in s["features"]), (n, f["name"])
 
 
+# ---------- spellcasting ----------
+
+def rec(**kw: object) -> dict:
+    """A level record with fixed hit points and the given fields."""
+    return {"hp": "fixed"} | kw
+
+
+def sc(sheet: dict) -> dict:
+    return sheet["spellcasting"]
+
+
+def slot_table(sheet: dict) -> dict[str, tuple[int, int, str]]:
+    return {k: (v["max"], v["left"], v["recharge"]) for k, v in sheet["spell_slots"].items()}
+
+
+def without(record: dict, *keys: str) -> dict:
+    return {k: v for k, v in record.items() if k not in keys}
+
+
+# Wren: elf wizard, INT 15 + 1 (High Elf) = 16 (+3), CON 13 (+1), d6. Level 1 HP 6 + 1 = 7; each fixed level 4 + 1 = 5.
+WREN_LEVELS = [
+    rec(spells=["Thunderwave", "Identify"]),                                          # 2: spellbook 6 + 2
+    rec(spells=["Invisibility", "Misty Step"]),                                       # 3: 2nd-level slots: 2nd-level spells
+    rec(asi={"INT": 2}, cantrips=["Ray of Frost"], spells=["Hold Person", "Web"]),    # 4: INT 18 (+4); the 4th cantrip
+    rec(spells=["Fireball", "Fly"]),                                                  # 5: 3rd-level slots: 3rd-level spells
+]
+
+
+def test_wizard_to_3_and_5() -> None:
+    s1 = built(WREN, [])
+    assert sc(s1)["max_level"] == 1 and "Fire Bolt (cantrip): +5 spell attack, 1d10 fire" in "".join(s1["attacks"])
+    s3 = built(WREN, WREN_LEVELS[:2])
+    # Wizard table at 3: four 1st-level and two 2nd-level slots
+    assert slot_table(s3) == {"1": (4, 4, "long"), "2": (2, 2, "long")} and sc(s3)["max_level"] == 2
+    assert (s3["level"], s3["hp"]["max"], s3["proficiency_bonus"]) == (3, 17, 2)  # 7 + 2 x 5
+    # spellbook 6 + 2 + 2 = 10; prepare INT 3 + wizard level 3 = 6; DC 8 + 2 + 3 = 13, attack 2 + 3 = +5
+    assert len(sc(s3)["spellbook"]) == 10 and sc(s3)["spellbook"][-2:] == ["Invisibility", "Misty Step"]
+    assert (sc(s3)["prepare_count"], sc(s3)["save_dc"], sc(s3)["attack_bonus"]) == (6, 13, 5)
+    assert sc(s3)["prepared"] == WREN["prepared"]  # the list chosen at 1st level; changing it takes a long rest
+    assert sc(s3)["cantrips"] == ["Fire Bolt", "Mage Hand", "Light"]
+    assert "Fire Bolt (cantrip): +5 spell attack, 1d10 fire" in "".join(s3["attacks"])  # still 1d10 below level 5
+    assert sc(s3)["racial_cantrips"] == ["Prestidigitation (High Elf, INT)"]
+
+    s5 = built(WREN, WREN_LEVELS)
+    # slots at 5: 4 / 3 / 2; INT 18 (+4), proficiency 3: DC 8 + 3 + 4 = 15, attack +7; prepare 4 + 5 = 9; spellbook 6 + 4 x 2 = 14
+    assert slot_table(s5) == {"1": (4, 4, "long"), "2": (3, 3, "long"), "3": (2, 2, "long")} and sc(s5)["max_level"] == 3
+    assert (sc(s5)["prepare_count"], sc(s5)["save_dc"], sc(s5)["attack_bonus"], len(sc(s5)["spellbook"])) == (9, 15, 7, 14)
+    assert "Fire Bolt (cantrip): +7 spell attack, 2d10 fire" in "".join(s5["attacks"])  # 2d10 from 5th level
+    assert sc(s5)["cantrips"] == ["Fire Bolt", "Mage Hand", "Light", "Ray of Frost"]
+    assert "Ray of Frost (cantrip): +7 spell attack, 2d8 cold" in "".join(s5["attacks"])
+    assert "Fireball" in sc(s5)["spellbook"] and s5["resources"]["Arcane Recovery"]["max"] == 1
+    assert s5["build"]["levels"] == WREN_LEVELS
+
+
+def test_a_wizard_prepares_and_copies_spells_up_to_the_highest_slot_level() -> None:
+    s5 = built(WREN, WREN_LEVELS)
+    nine = ["Fireball", "Fly", "Web", "Hold Person", "Shield", "Sleep", "Misty Step", "Magic Missile", "Mage Armor"]
+    w, _ = m.change_pc(s5, {"long_rest": True, "prepare_spells": nine})
+    assert w["spellcasting"]["prepared"] == nine
+    with pytest.raises(m.Refused, match="prepare 1 to 9"):
+        m.change_pc(w, {"long_rest": True, "prepare_spells": [*nine, "Thunderwave"]})
+    with pytest.raises(m.Refused, match="level 4"):
+        m.change_pc(w, {"spellbook_add": ["Dimension Door"]})  # no 4th-level slots yet
+    w, _ = m.change_pc(w, {"spellbook_add": ["Haste"]})
+    assert w["spellcasting"]["spellbook"][-1] == "Haste"
+    with pytest.raises(m.Refused, match="level 1-2"):
+        m.change_pc(built(WREN, WREN_LEVELS[:2]), {"spellbook_add": ["Haste"]})
+
+
+def test_wizard_refusals() -> None:
+    first = WREN_LEVELS[0]["spells"]
+    assert "level 2: spells: choose exactly 2" in problems([rec(spells=["Thunderwave"])], WREN)
+    assert "level 2: spells: choose exactly 2" in problems([rec(spells=[*first, "Sleep"])], WREN)
+    assert "level 2: spells: choose exactly 2" in problems([rec()], WREN)
+    # not above the highest spell level there are slots for (1st at wizard level 2, 2nd at level 3)
+    assert "level 2: spells: Invisibility is not a wizard spell of level 1 to 1" in problems(
+        [rec(spells=["Thunderwave", "Invisibility"])], WREN)
+    assert "level 3: spells: Fireball is not a wizard spell of level 1 to 2" in problems(
+        [WREN_LEVELS[0], rec(spells=["Fireball", "Misty Step"])], WREN)
+    assert "level 2: spells: Cure Wounds is not a wizard spell" in problems([rec(spells=["Thunderwave", "Cure Wounds"])], WREN)
+    assert "level 2: spells: Sleep is already in the spellbook" in problems([rec(spells=["Thunderwave", "Sleep"])], WREN)
+    assert "level 2: spells: a spell is listed twice" in problems([rec(spells=["Thunderwave", "Thunderwave"])], WREN)
+    assert "level 2: spells: no SRD spell 'Zork'" in problems([rec(spells=["Thunderwave", "Zork"])], WREN)
+    assert "level 2: cantrips: no new cantrips at this level" in problems([rec(spells=first, cantrips=["Light"])], WREN)
+    ray = rec(asi={"INT": 2}, spells=["Web", "Hold Person"])
+    assert "level 4: cantrips: choose exactly 1" in problems([*WREN_LEVELS[:2], ray], WREN)
+    assert "level 4: cantrips: Fire Bolt is already known" in problems([*WREN_LEVELS[:2], ray | {"cantrips": ["Fire Bolt"]}], WREN)
+    assert "level 4: cantrips: Cure Wounds is not a wizard cantrip" in problems([*WREN_LEVELS[:2], ray | {"cantrips": ["Cure Wounds"]}], WREN)
+    assert "level 2: replace: a wizard doesn't replace known spells" in problems(
+        [rec(spells=first, replace={"from": "Sleep", "to": "Shield"})], WREN)
+    assert "level 2: secrets: only bards get Magical Secrets" in problems([rec(spells=first, secrets=["Shield", "Sleep"])], WREN)
+    assert "level 2: arcanum: Mystic Arcanum comes to a warlock" in problems([rec(spells=first, arcanum="Fly")], WREN)
+    assert "level 2: tome: only when Pact of the Tome" in problems([rec(spells=first, tome=["Light"] * 3)], WREN)
+    both = problems([rec(spells=["Thunderwave"]), rec(spells=["Fireball", "Fly"])], WREN)  # every problem at once
+    assert "level 2: spells: choose exactly 2" in both and "level 3: spells: Fireball is not" in both
+    # the prepared list chosen at 1st level is checked against the 1st-level spellbook
+    assert "prepared: Fireball is not a level-1 wizard spell in the spellbook" in problems(WREN_LEVELS[:2], WREN | {"prepared": ["Fireball"]})
+
+
+def test_wizard_spell_mastery_and_signature_spells() -> None:
+    ch, levels = _auto("wizard")
+    s17 = built(ch, levels[:16])
+    assert len(sc(s17)["spellbook"]) == 6 + 2 * 16  # two spells at each of 16 levels
+    # 18th level, Spell Mastery: "Choose a 1st-level wizard spell and a 2nd-level wizard spell that are in your spellbook"
+    l18, first_two = levels[16], levels[16]["mastery"]
+    s18 = built(ch, levels[:17])
+    assert sc(s18)["spell_mastery"] == first_two and [srd.spell(x)["level"] for x in first_two] == [1, 2]
+    low, high = first_two
+    assert "level 18: mastery: Spell Mastery needs a 1st-level wizard spell and a 2nd-level wizard spell" in problems(
+        [*levels[:16], l18 | {"mastery": [low, low]}], ch)
+    assert "level 18: mastery: Spell Mastery needs" in problems([*levels[:16], l18 | {"mastery": ["Fireball", high]}], ch)
+    assert "level 18: mastery: a 1st-level wizard spell and a 2nd-level" in problems([*levels[:16], l18 | {"mastery": [low]}], ch)
+    assert "level 18: mastery: a 1st-level wizard spell and a 2nd-level" in problems([*levels[:16], without(l18, "mastery")], ch)
+    book = sc(s18)["spellbook"]
+    missing = next(s["name"] for s in srd.table("Spells").values() if s["level"] == 2 and s["name"] not in book
+                   and any(c["index"] == "wizard" for c in s["classes"]))
+    assert f"level 18: mastery: {missing} must be in your spellbook" in problems([*levels[:16], l18 | {"mastery": [low, missing]}], ch)
+    assert "level 17: mastery: only a wizard at 18th level" in problems([*levels[:15], levels[15] | {"mastery": first_two}], ch)
+    # 20th level, Signature Spell: "Choose two 3rd-level wizard spells in your spellbook as your signature spells. You always
+    # have these spells prepared, they don't count against the number of spells you have prepared"
+    s20 = built(ch, levels)
+    sig = sc(s20)["signature_spells"]
+    assert len(sig) == 2 and set(sig) <= set(sc(s20)["always_prepared"]) and all(srd.spell(x)["level"] == 3 for x in sig)
+    assert {k: v for k, v in s20["resources"].items() if k.startswith("Signature")} == {
+        f"Signature Spell: {x}": {"max": 1, "left": 1, "recharge": "short"} for x in sig}
+    assert "level 20: signature: Signature Spell needs two 3rd-level wizard spells" in problems(
+        [*levels[:18], levels[18] | {"signature": [sig[0], "Shield"]}], ch)
+    assert "level 20: signature: two 3rd-level wizard spells that are in your spellbook" in problems(
+        [*levels[:18], without(levels[18], "signature")], ch)
+    assert "level 19: signature: only a wizard at 20th level" in problems([*levels[:17], levels[17] | {"signature": sig}], ch)
+    w, _ = m.change_pc(s20, {"long_rest": True, "prepare_spells": [*sig, book[0]]})
+    assert w["spellcasting"]["prepared"] == [book[0]]  # the signature spells are not counted or listed as prepared
+
+
+def test_cleric_with_the_life_domain_to_3_and_5() -> None:
+    # Hilda: WIS 15 + 1 = 16 (+3), CON 14 + 2 = 16 (+3), dwarf, d8: level 1 HP 8 + 3 + 1 = 12; each fixed level 5 + 3 + 1 = 9
+    s3 = built(HILDA, [FIXED, FIXED])
+    assert s3["hp"]["max"] == 30 and s3["resources"]["Channel Divinity"] == {"max": 1, "left": 1, "recharge": "short"}
+    # the SRD's example: a 3rd-level cleric has four 1st-level and two 2nd-level slots; "With a Wisdom of 16 ... six spells"
+    assert slot_table(s3) == {"1": (4, 4, "long"), "2": (2, 2, "long")}
+    assert (sc(s3)["prepare_count"], sc(s3)["max_level"], sc(s3)["save_dc"]) == (6, 2, 13)  # DC 8 + 2 + 3
+    # domain spells are always prepared and don't count: Bless, Cure Wounds (1st level); Lesser Restoration, Spiritual Weapon (3rd)
+    assert sc(s3)["always_prepared"] == ["Bless", "Cure Wounds", "Lesser Restoration", "Spiritual Weapon"]
+    assert sc(s3)["prepared"] == HILDA["prepared"] and "domain spells are always prepared" in sc(s3)["notes"]
+    assert sc(built(HILDA, [FIXED]))["always_prepared"] == ["Bless", "Cure Wounds"]
+    s5 = built(HILDA, [FIXED, FIXED, rec(asi={"WIS": 2}, cantrips=["Light"]), FIXED])  # level 4: WIS 18 (+4), a 4th cantrip
+    assert sc(s5)["always_prepared"][4:] == ["Beacon of Hope", "Revivify"] and sc(s5)["prepare_count"] == 4 + 5
+    assert slot_table(s5) == {"1": (4, 4, "long"), "2": (3, 3, "long"), "3": (2, 2, "long")} and len(sc(s5)["cantrips"]) == 4
+    w, _ = m.change_pc(s3, {"long_rest": True, "prepare_spells": ["Aid", "Hold Person", "Guiding Bolt", "Healing Word",
+                                                                    "Shield of Faith", "Sanctuary"]})
+    assert len(w["spellcasting"]["prepared"]) == 6
+    with pytest.raises(m.Refused, match="level 1-2"):
+        m.change_pc(s3, {"long_rest": True, "prepare_spells": ["Spirit Guardians"]})  # 3rd-level spell at cleric level 3
+    assert "level 3: spells: a cleric prepares spells from the whole class list" in problems([FIXED, rec(spells=["Bless"])], HILDA)
+    assert "level 3: replace: a cleric doesn't replace" in problems([FIXED, rec(replace={"from": "Bless", "to": "Aid"})], HILDA)
+    assert "level 4: cantrips: choose exactly 1" in problems([FIXED, FIXED, rec(asi={"WIS": 2})], HILDA)
+
+
+SORC = human("sorcerer", [8, 14, 13, 10, 12, 15], **{
+    "class.proficiencies.1": ["Arcana", "Deception"], "feature.dragon-ancestor": ["a"], "class.equipment.1": ["a"],
+    "class.equipment.2": ["a"], "class.equipment.3": ["a"]}) | {
+    "cantrips": ["Fire Bolt", "Light", "Mage Hand", "Prestidigitation"], "spells": ["Burning Hands", "Sleep"]}
+META = {"feature.metamagic-1": ["Metamagic: Quickened Spell", "Metamagic: Subtle Spell"]}
+
+
+def test_sorcerer_to_3_with_a_replacement() -> None:
+    # CHA 15 + 1 = 16 (+3), CON 13 + 1 = 14 (+2), d6, Draconic Resilience +1 per level: level 1 HP 6 + 2 + 1 = 9; each fixed level 4 + 2 + 1 = 7
+    s1 = built(SORC, [])
+    assert (s1["hp"]["max"], slot_table(s1), sc(s1)["known"]) == (9, {"1": (2, 2, "long")}, ["Burning Hands", "Sleep"])
+    levels = [rec(spells=["Shield"]),                                                                  # 2: known 3
+              rec(spells=["Misty Step"], replace={"from": "Sleep", "to": "Magic Missile"}, choices=META)]  # 3: known 4
+    s2, s3 = built(SORC, levels[:1]), built(SORC, levels)
+    assert sc(s2)["known"] == ["Burning Hands", "Sleep", "Shield"] and slot_table(s2) == {"1": (3, 3, "long")}
+    # Sorcerer table at 3: 4 cantrips, 4 spells known, slots 4 / 2
+    assert sc(s3)["known"] == ["Burning Hands", "Magic Missile", "Shield", "Misty Step"]  # Sleep swapped out in place
+    assert slot_table(s3) == {"1": (4, 4, "long"), "2": (2, 2, "long")} and len(sc(s3)["cantrips"]) == 4
+    assert s3["hp"]["max"] == 23 and (sc(s3)["save_dc"], sc(s3)["attack_bonus"]) == (13, 5)  # 9 + 2 x 7; 8 + 2 + 3; 2 + 3
+    assert "prepare_count" not in sc(s3) and s3["resources"]["Sorcery Points"]["max"] == 3
+    # a replacement at 2nd level of a spell known since 1st, with the new spell alongside
+    swap = built(SORC, [rec(spells=["Shield"], replace={"from": "Burning Hands", "to": "Thunderwave"})])
+    assert sc(swap)["known"] == ["Thunderwave", "Sleep", "Shield"]
+    third = rec(spells=["Misty Step"], choices=META)
+    for bad, why in (({"from": "Fireball", "to": "Shield"}, "Fireball is not one of the spells you know"),
+                     ({"from": "Sleep", "to": "Burning Hands"}, "Burning Hands is already known"),
+                     ({"from": "Sleep", "to": "Cure Wounds"}, "Cure Wounds is not a sorcerer spell of level 1 to 2"),
+                     ({"from": "Sleep", "to": "Fireball"}, "Fireball is not a sorcerer spell of level 1 to 2"),
+                     ({"from": "Sleep", "to": "Fire Bolt"}, "Fire Bolt is not a sorcerer spell of level 1 to 2"),
+                     ({"from": "Sleep"}, 'replace: {"from"'), ("Sleep", 'replace: {"from"'),
+                     ({"from": "Zork", "to": "Shield"}, "no SRD spell 'Zork'")):
+        assert why in problems([levels[0], third | {"replace": bad}], SORC), bad
+    assert "level 2: spells: choose exactly 1" in problems([rec()], SORC)
+    assert "level 2: spells: choose exactly 1" in problems([rec(spells=["Shield", "Mage Armor"])], SORC)
+    assert "level 2: spells: Misty Step is not a sorcerer spell of level 1 to 1" in problems([rec(spells=["Misty Step"])], SORC)
+    assert "level 2: cantrips: no new cantrips" in problems([rec(spells=["Shield"], cantrips=["Light"])], SORC)
+    assert "level 4: cantrips: choose exactly 1" in problems([*levels, rec(asi={"CHA": 2}, spells=["Fly"])], SORC)  # fifth cantrip
+    assert "level 4: spells: Fly is not a sorcerer spell of level 1 to 2" in problems(
+        [*levels, rec(asi={"CHA": 2}, spells=["Fly"], cantrips=["Ray of Frost"])], SORC)
+
+
+LOCK = human("warlock", [8, 14, 13, 10, 12, 15], **{
+    "class.proficiencies.1": ["Arcana", "Deception"], "class.equipment.1": ["a"], "class.equipment.2": ["a"],
+    "class.equipment.3": ["a"], "class.equipment.4": ["Dagger"]}) | {
+    "cantrips": ["Eldritch Blast", "Minor Illusion"], "spells": ["Charm Person", "Hellish Rebuke"]}
+TOME = {"feature.pact-boon": ["Pact of the Tome"]}
+LOCK_LEVELS = [
+    rec(spells=["Comprehend Languages"]),                                              # 2: known 3; two 1st-level slots
+    rec(spells=["Misty Step"], choices=TOME, tome=["Guidance", "Sacred Flame", "Light"]),  # 3: known 4; two 2nd-level slots
+    rec(asi={"CHA": 2}, cantrips=["Chill Touch"], spells=["Scorching Ray"]),           # 4: CHA 18 (+4); 3 cantrips; known 5
+    rec(spells=["Fireball"]),                                                          # 5: known 6; two 3rd-level slots
+]
+
+
+def test_warlock_pact_magic_to_5() -> None:
+    # Warlock table: 1st level one 1st-level slot; 2nd two 1st-level; 3rd two 2nd-level; 5th two 3rd-level slots
+    assert slot_table(built(LOCK, [])) == {"1": (1, 1, "short")}
+    assert slot_table(built(LOCK, LOCK_LEVELS[:1])) == {"1": (2, 2, "short")}
+    s3 = built(LOCK, LOCK_LEVELS[:2])
+    assert slot_table(s3) == {"2": (2, 2, "short")} and sc(s3)["max_level"] == 2 and len(sc(s3)["known"]) == 4
+    assert sc(s3)["tome_cantrips"] == ["Guidance", "Sacred Flame", "Light"] and len(sc(s3)["cantrips"]) == 2
+    s5 = built(LOCK, LOCK_LEVELS)
+    # CHA 15 + 1 + 2 = 18 (+4), proficiency 3: DC 8 + 3 + 4 = 15, attack +7
+    assert slot_table(s5) == {"3": (2, 2, "short")} and sc(s5)["max_level"] == 3
+    assert (sc(s5)["save_dc"], sc(s5)["attack_bonus"]) == (15, 7)
+    assert sc(s5)["known"] == ["Charm Person", "Hellish Rebuke", "Comprehend Languages", "Misty Step", "Scorching Ray", "Fireball"]
+    assert sc(s5)["cantrips"] == ["Eldritch Blast", "Minor Illusion", "Chill Touch"]  # Fireball and Scorching Ray: Fiend's list
+    text = "".join(s5["attacks"])
+    assert "Eldritch Blast (cantrip): +7 spell attack, 1d10 force per beam, 2 beams" in text  # "two beams at 5th level"
+    assert "Sacred Flame (cantrip): DEX save DC 15, 2d8 radiant" in text and "Chill Touch (cantrip): +7 spell attack, 2d8 necrotic" in text
+    assert "Eldritch Blast (cantrip): +6 spell attack, 1d10 force, range" in "".join(built(LOCK, LOCK_LEVELS[:3])["attacks"])  # 1 beam
+    assert "prepare_count" not in sc(s5) and "short or long rest" in sc(s5)["notes"]
+    # pact slots come back on a short rest
+    w, _ = m.change_pc(s5, {"spend_slot": 3})
+    assert w["spell_slots"]["3"]["left"] == 1
+    w, _ = m.change_pc(w, {"short_rest": True})
+    assert w["spell_slots"]["3"]["left"] == 2
+    # a spell must be of a level no higher than the slot level ("Slot Level column"); the Fiend's list adds to the choices
+    four = rec(asi={"CHA": 2}, cantrips=["Chill Touch"])
+    assert "level 4: spells: Fireball is not a warlock spell of level 1 to 2" in problems(
+        [*LOCK_LEVELS[:2], four | {"spells": ["Fireball"]}], LOCK)
+    assert "level 5: spells: Magic Missile is not a warlock spell of level 1 to 3" in problems(
+        [*LOCK_LEVELS[:3], rec(spells=["Magic Missile"])], LOCK)
+    assert "level 2: spells: Misty Step is not a warlock spell of level 1 to 1" in problems([rec(spells=["Misty Step"])], LOCK)
+    assert "Burning Hands" in sc(built(LOCK, [rec(spells=["Burning Hands"])]))["known"]  # the Fiend's list, 1st level
+    # Pact of the Tome: "choose three cantrips from any class's spell list", only when it is the pact chosen
+    third = LOCK_LEVELS[1]
+    assert "level 3: tome: choose exactly 3" in problems([LOCK_LEVELS[0], third | {"tome": ["Guidance"]}], LOCK)
+    assert "level 3: tome: Fireball is not a cantrip" in problems([LOCK_LEVELS[0], third | {"tome": ["Guidance", "Light", "Fireball"]}], LOCK)
+    assert "level 3: tome: choose exactly 3" in problems([LOCK_LEVELS[0], without(third, "tome")], LOCK)
+    assert "level 3: tome: only when Pact of the Tome" in problems(
+        [LOCK_LEVELS[0], third | {"choices": {"feature.pact-boon": ["Pact of the Chain"]}}], LOCK)
+    assert has(built(LOCK, [LOCK_LEVELS[0], without(third, "tome") | {"choices": {"feature.pact-boon": ["Pact of the Chain"]}}]),
+               "Pact of the Chain")
+
+
+def test_warlock_mystic_arcanum_at_11_13_15_17() -> None:
+    ch, levels = _auto("warlock")
+    s11, s17 = built(ch, levels[:10]), built(ch, levels[:16])
+    assert list(sc(s11)["arcanum"]) == ["6"] and list(sc(s17)["arcanum"]) == ["6", "7", "8", "9"]
+    assert [srd.spell(v)["level"] for v in sc(s17)["arcanum"].values()] == [6, 7, 8, 9]
+    # Warlock table at 11: three 5th-level slots, 11 spells known (the arcanum spells are not among them)
+    assert slot_table(s11) == {"5": (3, 3, "short")} and len(sc(s11)["known"]) == 11
+    assert s11["resources"]["Mystic Arcanum (6th level)"] == {"max": 1, "left": 1, "recharge": "long"}
+    r11 = levels[9]
+    assert "level 11: arcanum: the name of one 6th-level warlock spell" in problems([*levels[:9], without(r11, "arcanum")], ch)
+    assert "level 11: arcanum: Fireball is not a 6th-level warlock spell" in problems([*levels[:9], r11 | {"arcanum": "Fireball"}], ch)
+    assert "level 11: arcanum: Etherealness is not a 6th-level warlock spell" in problems(
+        [*levels[:9], r11 | {"arcanum": "Etherealness"}], ch)
+    assert "level 12: arcanum: Mystic Arcanum comes to a warlock at 11th, 13th, 15th and 17th level" in problems(
+        [*levels[:10], levels[10] | {"arcanum": "Circle of Death"}], ch)
+
+
+PAL = human("paladin", [15, 10, 13, 8, 12, 14], **{
+    "class.proficiencies.1": ["Athletics", "Intimidation"], "class.equipment.1": [{"option": "a", "picks": ["Longsword"]}],
+    "class.equipment.2": ["a"], "class.equipment.3": ["a"], "class.equipment.4": ["Amulet"]})
+STYLE = {"feature.paladin-fighting-style": ["Defense"]}
+
+
+def test_paladin_casts_from_level_2() -> None:
+    # STR 16, CON 14, CHA 14 + 1 = 15 (+2). No spells at 1st level.
+    assert "spellcasting" not in built(PAL, []) and "spell_slots" not in built(PAL, [])
+    levels = [rec(choices=STYLE), FIXED, rec(asi={"STR": 2}), FIXED]
+    s2 = built(PAL, levels[:1])
+    assert slot_table(s2) == {"1": (2, 2, "long")} and sc(s2)["max_level"] == 1 and sc(s2)["cantrips"] == []
+    # prepare: CHA +2 + half of level 2 = 1 -> 3; DC 8 + 2 + 2 = 12; attack +4; no list yet: it is made when a long rest ends
+    assert (sc(s2)["prepare_count"], sc(s2)["save_dc"], sc(s2)["attack_bonus"], sc(s2)["prepared"]) == (3, 12, 4, [])
+    assert "None are prepared yet" in sc(s2)["notes"]
+    w, _ = m.change_pc(s2, {"long_rest": True, "prepare_spells": ["Bless", "Cure Wounds", "Shield of Faith"]})
+    assert w["spellcasting"]["prepared"] == ["Bless", "Cure Wounds", "Shield of Faith"]
+    with pytest.raises(m.Refused, match="prepare 1 to 3"):
+        m.change_pc(s2, {"long_rest": True, "prepare_spells": ["Bless", "Cure Wounds", "Shield of Faith", "Heroism"]})
+    with pytest.raises(m.Refused, match="level 1-1"):
+        m.change_pc(s2, {"long_rest": True, "prepare_spells": ["Aid"]})
+    # Oath of Devotion at 3: Protection from Evil and Good, Sanctuary, always prepared; still 3 to prepare (half of 3 = 1)
+    s3 = built(PAL, levels[:2])
+    assert sc(s3)["always_prepared"] == ["Protection from Evil and Good", "Sanctuary"] and sc(s3)["prepare_count"] == 3
+    s5 = built(PAL, levels)
+    assert s5["level"] == 5
+    # the SRD's example: a 5th-level paladin has four 1st-level and two 2nd-level slots; "With a Charisma of 14 ... four spells"
+    assert slot_table(s5) == {"1": (4, 4, "long"), "2": (2, 2, "long")} and sc(s5)["prepare_count"] == 2 + 2
+    assert sc(s5)["always_prepared"][2:] == ["Lesser Restoration", "Zone of Truth"] and sc(s5)["max_level"] == 2
+    assert "oath spells are always prepared" in sc(s5)["notes"]
+    assert "level 2: spells: a paladin prepares spells from the whole class list" in problems([rec(choices=STYLE, spells=["Bless"])], PAL)
+    assert "level 2: cantrips: no new cantrips" in problems([rec(choices=STYLE, cantrips=["Light"])], PAL)
+    assert "level 2: replace: a paladin doesn't replace" in problems([rec(choices=STYLE, replace={"from": "Bless", "to": "Aid"})], PAL)
+
+
+def test_ranger_casts_from_level_2() -> None:
+    base = ranger()
+    assert "spellcasting" not in built(base, [])
+    auto = auto_levels(base, 5)
+    first = without(auto[0], "spells", "replace") | {"spells": ["Hunter's Mark", "Cure Wounds"]}
+    r2 = built(base, [first])
+    # Ranger table at 2: two spells known, two 1st-level slots; no cantrips
+    assert sc(r2)["known"] == ["Hunter's Mark", "Cure Wounds"] and slot_table(r2) == {"1": (2, 2, "long")}
+    assert sc(r2)["cantrips"] == [] and "prepare_count" not in sc(r2) and sc(r2)["max_level"] == 1
+    assert (sc(r2)["save_dc"], sc(r2)["attack_bonus"]) == (10, 2)  # WIS 10 + 1 = 11 (+0): DC 8 + 2 + 0, attack 2 + 0
+    assert "level 2: spells: choose exactly 2" in problems([without(first, "spells") | {"spells": ["Hunter's Mark"]}], base)
+    assert "level 2: spells: Bless is not a ranger spell" in problems([first | {"spells": ["Hunter's Mark", "Bless"]}], base)
+    assert "level 2: spells: Pass Without Trace is not a ranger spell of level 1 to 1" in problems(
+        [first | {"spells": ["Hunter's Mark", "Pass Without Trace"]}], base)
+    assert "level 2: replace: Hunter's Mark is not one of the spells you know (none yet)" in problems(
+        [first | {"replace": {"from": "Hunter's Mark", "to": "Jump"}}], base)
+    assert "level 2: cantrips: no new cantrips" in problems([first | {"cantrips": ["Light"]}], base)
+    # 3rd level: one more known, three 1st-level slots; 5th level: four 1st-level and two 2nd-level slots, 4 known
+    r3 = built(base, [first, auto[1] | {"spells": ["Longstrider"]}])
+    assert sc(r3)["known"][-1] == "Longstrider" and len(sc(r3)["known"]) == 3 and slot_table(r3) == {"1": (3, 3, "long")}
+    r5 = built(base, [first, auto[1] | {"spells": ["Longstrider"]}, without(auto[2], "replace", "spells"),
+                      without(auto[3], "replace") | {"spells": ["Pass Without Trace"]}])  # records for levels 2 to 5
+    assert len(sc(r5)["known"]) == 4 and slot_table(r5) == {"1": (4, 4, "long"), "2": (2, 2, "long")}
+    # a ranger replaces too: Hunter's Mark for Jump when gaining a level
+    swapped = built(base, [first, auto[1] | {"spells": ["Longstrider"], "replace": {"from": "Hunter's Mark", "to": "Jump"}}])
+    assert sc(swapped)["known"] == ["Jump", "Cure Wounds", "Longstrider"]
+
+
+def test_bard_magical_secrets() -> None:
+    ch, levels = _auto("bard")
+    s5, s6, s9, s10, s18 = (built(ch, levels[: n - 1]) for n in (5, 6, 9, 10, 18))
+    assert len(sc(s5)["known"]) == 8                                    # Bard table at 5
+    # Lore bard 6th level, Additional Magical Secrets: two spells that "don't count against the number of bard spells you know"
+    assert len(sc(s6)["known"]) == 9 + 2 and len(sc(s6)["magical_secrets"]) == 2
+    assert len(sc(s9)["known"]) == 12 + 2 and len(sc(s9)["magical_secrets"]) == 2
+    # 10th level, Magical Secrets: the table goes 12 -> 14 and the two chosen "are included in the number in the Spells Known column"
+    assert len(sc(s10)["known"]) == 14 + 2 and len(sc(s10)["magical_secrets"]) == 4
+    assert slot_table(s10) == {"1": (4, 4, "long"), "2": (3, 3, "long"), "3": (3, 3, "long"), "4": (3, 3, "long"),
+                               "5": (2, 2, "long")} and sc(s10)["max_level"] == 5 and len(sc(s10)["cantrips"]) == 4
+    assert len(sc(s18)["known"]) == 22 + 2 and len(sc(built(ch, levels[:17]))["magical_secrets"]) == 8  # 2 + 2 + 2 + 2 by 18th
+    r10, before = levels[8], levels[:8]
+    s = built(ch, [*before, r10 | {"secrets": ["Fireball", "Cone of Cold"]}])  # a 3rd-level and a 5th-level spell of other classes
+    assert sc(s)["magical_secrets"][-2:] == ["Fireball", "Cone of Cold"] and {"Fireball", "Cone of Cold"} <= set(sc(s)["known"])
+    assert "level 10: secrets: Chain Lightning is not a spell of level 5 or lower" in problems(
+        [*before, r10 | {"secrets": ["Fireball", "Chain Lightning"]}], ch)
+    assert "level 10: secrets: choose exactly 2" in problems([*before, r10 | {"secrets": ["Fireball"]}], ch)
+    assert "level 10: secrets: choose exactly 2" in problems([*before, without(r10, "secrets")], ch)
+    taken = sc(s9)["known"][4]
+    assert f"level 10: secrets: {taken} is already known" in problems([*before, r10 | {"secrets": ["Fireball", taken]}], ch)
+    assert "level 10: spells: no new spells known at this level (the new Spells Known are the Magical Secrets" in problems(
+        [*before, r10 | {"spells": ["Bane"]}], ch)
+    # "or a cantrip": it counts as a bard spell known, not as a bard cantrip
+    c = built(ch, [*before, r10 | {"secrets": ["Fireball", "Fire Bolt"]}])
+    assert "Fire Bolt" in sc(c)["known"] and "Fire Bolt" not in sc(c)["cantrips"] and "Fire Bolt (cantrip)" in "".join(c["attacks"])
+    for n in (2, 4, 5, 9, 11, 17):  # only where the class table names them: Lore 6th, every bard 10th, 14th and 18th
+        wrong = [*levels[: n - 2], levels[n - 2] | {"secrets": ["Fireball", "Cone of Cold"]}]
+        assert f"level {n}: secrets: only bards get Magical Secrets" in problems(wrong, ch)
+    assert "level 6: secrets: choose exactly 2" in problems([*levels[:4], without(levels[4], "secrets")], ch)
+    assert "level 6: secrets: Cone of Cold is not a spell of level 3 or lower" in problems(
+        [*levels[:4], levels[4] | {"secrets": ["Fireball", "Cone of Cold"]}], ch)
+    # replacing a bard spell: "choose one of the bard spells you know and replace it with another spell from the bard spell list"
+    known3 = sc(built(ch, levels[:2]))["known"]
+    assert "level 3: replace: Fireball is not a bard spell of level 1 to 2" in problems(
+        [levels[0], without(levels[1], "replace") | {"replace": {"from": known3[0], "to": "Fireball"}}], ch)
+
+
+def test_druid_land_circle_spells_and_bonus_cantrip() -> None:
+    ch, levels = _auto("druid")
+    s1, s2, s3 = built(ch, []), built(ch, levels[:1]), built(ch, levels[:2])
+    assert len(sc(s1)["cantrips"]) == 2 and len(sc(s2)["cantrips"]) == 3  # Bonus Cantrip: "one additional druid cantrip"
+    assert "Circle of the Land" in "".join(s2["features"]) and "always_prepared" not in sc(s2)
+    assert "level 2: cantrips: choose exactly 1" in problems([without(levels[0], "cantrips")], ch)
+    # Circle Spells by the land: arctic Hold Person + Spike Growth at 3rd level, forest Barkskin + Spider Climb
+    arctic = levels[0] | {"choices": {"feature.circle-of-the-land": ["Circle of the Land: Arctic"]}}
+    forest = levels[0] | {"choices": {"feature.circle-of-the-land": ["Circle of the Land: Forest"]}}
+    assert sc(built(ch, [arctic, levels[1]]))["always_prepared"] == ["Hold Person", "Spike Growth"]
+    assert sc(built(ch, [forest, levels[1]]))["always_prepared"] == ["Barkskin", "Spider Climb"]
+    assert "circle spells are always prepared" in sc(s3)["notes"]
+    s9 = built(ch, [forest, *levels[1:8]])
+    assert sc(s9)["always_prepared"] == ["Barkskin", "Spider Climb", "Call Lightning", "Plant Growth", "Divination",
+                                         "Freedom of Movement", "Commune With Nature", "Tree Stride"]
+    assert slot_table(s9)["5"] == (1, 1, "long") and sc(s9)["prepare_count"] == max(1, create.mod(s9["scores"]["WIS"]) + 9)
+    assert "Circle Spells" in "".join(s9["features"]) and "CHOSEN" in next(f for f in s9["features"] if f.startswith("Circle of the Land"))
+
+
+def test_cantrip_damage_and_breath_weapon_follow_the_character_level() -> None:
+    # Fire Bolt: 1d10 at 1st level, 2d10 at 5th, 3d10 at 11th, 4d10 at 17th
+    ch, levels = _auto("sorcerer")
+    for n, dice in ((1, "1d10"), (4, "1d10"), (5, "2d10"), (10, "2d10"), (11, "3d10"), (16, "3d10"), (17, "4d10")):
+        bolt = next(a for a in built(ch, levels[: n - 1])["attacks"] if a.startswith("Fire Bolt"))
+        assert f", {dice} fire," in bolt, n
+    # Dragonborn breath weapon: 2d6, 3d6 at 6th, 4d6 at 11th, 5d6 at 16th level; save DC 8 + CON modifier + proficiency bonus
+    dch = build_any("dragonborn", "fighter")[0]["build"]["choices"]
+    dlevels = auto_levels(dch, 16)
+    for n, dice in ((1, "2d6"), (5, "2d6"), (6, "3d6"), (10, "3d6"), (11, "4d6"), (15, "4d6"), (16, "5d6")):
+        s = built(dch, dlevels[: n - 1])
+        line = next(f for f in s["features"] if ": breath weapon" in f)
+        assert f"{8 + create.mod(s['scores']['CON']) + s['proficiency_bonus']}, {dice} " in line, n
+
+
 @pytest.mark.parametrize("cls", ["bard", "cleric", "druid", "paladin", "ranger", "sorcerer", "warlock", "wizard"])
-def test_casters_still_build_at_every_level(cls: str) -> None:
-    # slice 2 gives them their spells; until then the level-1 casting stays and nothing crashes
+def test_every_caster_builds_at_every_level_by_the_class_table(cls: str) -> None:
     ch, levels = _auto(cls)
-    c = srd.table("Classes")[cls]
+    c, L = srd.table("Classes")[cls], srd.table("Levels")
     for n in range(2, 21):
         s = built(ch, levels[: n - 1])
-        assert s["level"] == n and s["hit_dice"]["max"] == n
+        spell = L[f"{cls}-{n}"]["spellcasting"]
+        assert s["level"] == n and s["hit_dice"]["max"] == n and s["proficiency_bonus"] == L[f"{cls}-{n}"]["prof_bonus"]
         draconic = n if cls == "sorcerer" else 0  # Draconic Resilience: +1 per level
         assert s["hp"]["max"] == c["hit_die"] + (n - 1) * (c["hit_die"] // 2 + 1) + n * create.mod(s["scores"]["CON"]) + draconic
+        got = sc(s)
+        want = {str(k): spell[f"spell_slots_level_{k}"] for k in range(1, 10) if spell.get(f"spell_slots_level_{k}")}
+        assert {k: v["max"] for k, v in s["spell_slots"].items()} == want and got["max_level"] == max(map(int, want))
+        assert all(v["left"] == v["max"] and v["recharge"] == ("short" if cls == "warlock" else "long")
+                   for v in s["spell_slots"].values())
+        assert len(got["cantrips"]) == spell.get("cantrips_known", 0) + (1 if cls == "druid" else 0), n  # Land: Bonus Cantrip
+        lore = 2 if cls == "bard" and n >= 6 else 0  # Additional Magical Secrets don't count against the number known
+        if cls in ("bard", "ranger", "sorcerer", "warlock"):
+            assert len(got["known"]) == spell["spells_known"] + lore, n
+        assert all(srd.spell(x)["level"] <= got["max_level"] for x in got.get("known", []) + got.get("spellbook", []))
+        if cls == "wizard":
+            assert len(got["spellbook"]) == 6 + 2 * (n - 1)
+        if cls in ("cleric", "druid", "wizard"):  # ability modifier + class level
+            ability = {"cleric": "WIS", "druid": "WIS", "wizard": "INT"}[cls]
+            assert got["prepare_count"] == max(1, create.mod(s["scores"][ability]) + n)
+        if cls == "paladin":  # Charisma modifier + half the paladin level, rounded down
+            assert got["prepare_count"] == max(1, create.mod(s["scores"]["CHA"]) + n // 2)
+        assert len(got.get("arcanum", {})) == (sum(n >= lv for lv in (11, 13, 15, 17)) if cls == "warlock" else 0), n
+    assert s["build"]["levels"] == levels and s["level"] == 20
