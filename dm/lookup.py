@@ -7,6 +7,7 @@ words asked for are listed, so the DM can pick one.
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from dm import srd
@@ -143,10 +144,41 @@ def _trait(t: dict[str, Any]) -> str:
     return f"TRAIT {t['name']} ({who}):\n{_lines(t['desc'])}"
 
 
+def _rule(r: dict[str, Any]) -> str:
+    text = f"RULE {r['name']}:\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
+        c["name"] for c in r.get("children", [])))
+    linked = _step_rules(r)
+    if linked:
+        text += "\n\nThe rules sections these steps name, in full:\n\n" + "\n\n".join(_rule(x) for x in linked)
+    return text
+
+
+_STEP = re.compile(r"^\s*\d+\.\s+(.+)$", re.MULTILINE)
+_SMALL = {"a", "an", "and", "or", "the", "of", "to", "in", "on", "with"}
+
+
+def _step_rules(r: dict[str, Any]) -> list[dict[str, Any]]:
+    """A procedure (a section written as numbered steps) comes with every other rules section a step names, in step
+    order, so the rule for each step is in front of the DM when it runs the procedure. A section is named when all
+    its words appear in one step ("Determine surprise" names Surprise). Whole chapters (no text of their own) aren't."""
+    steps = [s.casefold() for s in _STEP.findall(_lines(r.get("desc")))]
+    if not steps:
+        return []
+    found: list[tuple[int, dict[str, Any]]] = []
+    for x in srd.table("Rules").values():
+        words = [w for w in re.findall(r"[a-z']+", x["name"].casefold()) if w not in _SMALL]
+        # ponytail: a one-word plural name ("Spells", a magic-item section) is a plain noun in step text, so it's skipped
+        if not x.get("desc") or x["name"] == r["name"] or not words or (len(words) == 1 and words[0].endswith("s")):
+            continue
+        at = next((i for i, s in enumerate(steps) if all(re.search(rf"\b{re.escape(w)}\b", s) for w in words)), None)
+        if at is not None:
+            found.append((at, x))
+    return [x for _, x in sorted(found, key=lambda f: f[0])]
+
+
 FORMAT = {
     "Spells": _spell, "Monsters": _monster, "Equipment": _equipment, "Features": lambda f: _features([f]), "Traits": _trait,
     "Conditions": lambda c: f"CONDITION {c['name']}:\n{_lines(c['desc'])}",
     "Magic-Items": lambda i: f"MAGIC ITEM {i['name']} ({i['rarity']['name']}):\n{_lines(i['desc'])}",
-    "Rules": lambda r: f"RULE {r['name']}:\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
-        c["name"] for c in r.get("children", []))),
+    "Rules": _rule,
 }

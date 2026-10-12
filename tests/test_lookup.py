@@ -23,3 +23,12 @@ def test_every_entry_formats() -> None:
     for t in L.KINDS.values():
         for x in srd.table(t).values():
             assert L.FORMAT[t](x), (t, x["index"])
+
+
+def test_a_procedure_comes_with_the_rules_its_steps_name() -> None:
+    names = lambda t: [x.split(":")[0] for x in t.split("\n") if x.startswith("RULE ")]
+    assert names(L.lookup("Combat Step by Step")) == ["RULE Combat Step by Step", "RULE Surprise", "RULE The Order of Combat",
+                                                    "RULE Initiative"]
+    assert names(L.lookup("Making an Attack")) == ["RULE Making an Attack", "RULE Attack", "RULE Cover",
+                                                 "RULE Advantage and Disadvantage"]
+    assert names(L.lookup("Surprise")) == ["RULE Surprise"]  # a section without steps comes alone
