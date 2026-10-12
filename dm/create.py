@@ -53,13 +53,7 @@ ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two ra
 SPELL_KEYS = ("cantrips", "spells", "prepared", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
 INVOCATION_KEYS = ("invocations", "replace_invocation", "rituals", "invocation_skills")  # warlock: Eldritch Invocations, from 2nd level
 RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS, *INVOCATION_KEYS}  # a level record's fields
-# The Levels data has the warlock's Invocations Known column wrong at 4th and 6th level (3 and 4); the SRD 5.1 pdf, Warlock
-# table (pp.46-47), has this column, for levels 1 to 20. The data's number is used nowhere.
-INVOCATIONS_KNOWN = [0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
 INVOCATION_PREFIX = "eldritch-invocation-"
-# The Life domain's 7th-level spells are Death Ward and Guardian of Faith (SRD 5.1 pdf, Life Domain Spells table, p.17);
-# the data's list lacks Guardian of Faith.
-SUBCLASS_SPELL_GAPS = {"life": [("guardian-of-faith", 7)]}
 # The invocations that give a spell (the text names it): "at will" = no spell slot; "once" = once using a warlock spell slot,
 # then not again "until you finish a long rest" (a counter on the sheet). Chains of Carceri is at will, but "You must finish
 # a long rest before you can use this invocation on the same creature again": per creature, so no counter.
@@ -241,9 +235,6 @@ def subclass_spells(sub: dict[str, Any] | None, level: int, land: str | None = N
                 and s["spell"]["index"] not in [i for _, i in out]):
             out.append((max((int(q["index"].rsplit("-", 1)[1]) for q in pre if q["type"] == "level"), default=0),
                         s["spell"]["index"]))
-    for idx, at in SUBCLASS_SPELL_GAPS.get((sub or {}).get("index", ""), []):  # in the table's order, by level
-        if at <= level and idx not in [i for _, i in out]:
-            out.insert(next((k for k, (lv, _) in enumerate(out) if lv > at), len(out)), (at, idx))
     return [i for _, i in out]
 
 
@@ -314,7 +305,8 @@ def level_spell_needs(cls: str, level: int) -> dict[str, Any]:
 def invocation_needs(level: int) -> dict[str, int]:
     """What the warlock's record of this level (2 to 20) says about Eldritch Invocations: "learn" = how many new ones (the
     rise of the Invocations Known column), "known" = how many the character knows after the level."""
-    return {"learn": INVOCATIONS_KNOWN[level - 1] - INVOCATIONS_KNOWN[level - 2], "known": INVOCATIONS_KNOWN[level - 1]}
+    known = lambda n: srd.table("Levels")[f"warlock-{n}"]["class_specific"]["invocations_known"]  # pdf-corrected data
+    return {"learn": known(level) - known(level - 1), "known": known(level)}
 
 
 def find_invocation(name: Any) -> dict[str, Any] | None:

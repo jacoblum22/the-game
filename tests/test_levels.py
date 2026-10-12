@@ -827,7 +827,7 @@ def test_every_caster_builds_at_every_level_by_the_class_table(cls: str) -> None
 
 def test_invocations_known_column_is_the_pdfs_not_the_datas() -> None:
     # SRD 5.1 pdf, Warlock table: 2nd-4th 2, 5th-6th 3, 7th-8th 4, 9th-11th 5, 12th-14th 6, 15th-17th 7, 18th-20th 8
-    assert create.INVOCATIONS_KNOWN == [0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
+    assert [create.invocation_needs(n)["known"] for n in range(2, 21)] == [2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
     assert [create.invocation_needs(n)["learn"] for n in range(2, 21)] == [2, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
 
 
