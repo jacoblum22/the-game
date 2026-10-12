@@ -43,7 +43,31 @@
   .event small { display: block; opacity: .8; }
   details summary { cursor: pointer; color: var(--dim); font-size: 13px; }
   pre { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: 14px; line-height: 1.5; }
-  .sheet { border-color: #5a4a35; }
+  .sheet { border-color: #5a4a35; font-size: 15px; padding: 14px; }
+  .sheet .title { font-size: 21px; font-weight: 700; }
+  .sheet .dim, .dim { color: var(--dim); } .small { font-size: 13px; }
+  .sheet h3 { margin: 18px 0 8px; font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase;
+              letter-spacing: .07em; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; }
+  .stat, .ab { background: #2a231b; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; text-align: center; }
+  .lbl { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .06em; }
+  .big { font-size: 22px; font-weight: 700; line-height: 1.2; } .of { font-size: 14px; color: var(--dim); font-weight: 400; }
+  .sm { font-size: 11px; color: var(--dim); line-height: 1.3; }
+  .bar { height: 5px; background: #3a2e24; border-radius: 3px; margin-top: 3px; overflow: hidden; }
+  .bar div { height: 100%; background: var(--red); }
+  .abil { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+  .sv { font-size: 12px; color: var(--dim); margin-top: 2px; } .sv.pro { color: var(--accent); }
+  .row { margin: 5px 0; } .row .k { color: var(--dim); margin-right: 4px; }
+  .row.bad .chip { border-color: var(--red); color: var(--red); } .badtxt { color: var(--red); }
+  .pips { color: var(--accent); letter-spacing: 2px; } .pips .used { color: #5a4a35; }
+  .chip { display: inline-block; margin: 2px 4px 2px 0; padding: 1px 8px; border: 1px solid var(--line); border-radius: 12px;
+          background: #2a231b; font-size: 14px; }
+  .item { margin: 6px 0; }
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; font-size: 14px; }
+  .skills div { display: flex; justify-content: space-between; color: var(--dim); }
+  .skills div.pro { color: var(--text); } .skills .pro b { color: var(--accent); }
+  .feat { margin: 4px 0; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+  .feat summary { color: var(--text); font-size: 15px; } .feat div { margin-top: 4px; color: var(--dim); font-size: 14px; }
   .notice { margin: 16px 0; text-align: center; color: var(--dim); font-size: 14px; }
   .notice.bad { color: var(--red); }
   .thinking { color: var(--dim); font-style: italic; font-size: 15px; margin: 8px 0; }
@@ -151,6 +175,129 @@ function tool(text) {
   return `<div class="event">${esc(head)}${rest}</div>`;
 }
 
+// ---- the /sheet text (dm/play.py sheet_text, then mechanics status and fight_text), laid out by its line labels.
+//      Every line lands somewhere: a line this doesn't know goes under "More". ----
+const ABIL = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
+const pips = (left, max) => max <= 12
+  ? `<span class="pips">${"●".repeat(left)}<span class="used">${"○".repeat(Math.max(0, max - left))}</span></span>`
+  : `<b>${left}/${max}</b>`;
+const splitTop = v => {  // split at ", " but not inside brackets: "Slow (Mire the Mind, once per long rest), Bane (…)"
+  const out = [""]; let depth = 0;
+  for (let i = 0; i < v.length; i++) {
+    const c = v[i];
+    depth += c === "(" ? 1 : c === ")" ? -1 : 0;
+    if (!depth && c === "," && v[i + 1] === " ") { out.push(""); i++; } else out[out.length - 1] += c;
+  }
+  return out;
+};
+const chips = v => splitTop(v).map(x => `<span class="chip">${esc(x)}</span>`).join("");
+const row = (k, v) => `<div class="row"><span class="k">${esc(k)}</span> ${v}</div>`;
+const sec = (title, body) => body ? `<div class="sec"><h3>${title}</h3>${body}</div>` : "";
+function sheetCard(raw) {
+  const kv = {}, attacks = [], features = [], fight = [], loose = [];
+  let list = null, vitals = "", acLine = "", passive = "";
+  const lines = raw.split("\n"), head = lines[0].match(/^(.+?): (.+)$/);
+  for (const l of lines.slice(1)) {
+    if (fight.length || /^(FIGHT, |No fight is on\.)/.test(l)) { fight.push(l); continue; }
+    if (l === "Attacks:" || l === "Features:") { list = l === "Attacks:" ? attacks : features; continue; }
+    if (list && l.startsWith("- ")) { list.push(l.slice(2)); continue; }
+    list = null;
+    let m;
+    if (l.startsWith("HP ")) vitals = l;
+    else if (/^AC \d/.test(l)) acLine = l;
+    else if (l.startsWith("Passive Perception")) passive = l;
+    else if ((m = l.match(/^([A-Z][^:.]{0,70}): (.*)$/))) kv[m[1] === "Features" ? "Uses" : m[1]] = m[2];
+    else if (l.trim()) loose.push(l);
+  }
+  if (!head || !kv.Abilities || !vitals) return `<div class="card sheet"><pre>${esc(raw)}</pre></div>`;
+  const take = k => { const v = kv[k]; delete kv[k]; return v; };
+
+  // the numbers at a glance: HP, AC, speed, proficiency, hit dice, XP
+  const v = vitals.split(" · "), stat = (label, big, small = "") =>
+    `<div class="stat"><div class="lbl">${label}</div><div class="big">${big}</div>${small ? `<div class="sm">${small}</div>` : ""}</div>`;
+  const hp = v[0].match(/^HP (\d+)\/(\d+)(?: \(\+(\d+) temporary\))?/);
+  const ac = (v.find(x => x.startsWith("AC ")) || "").match(/^AC (\d+)(?: \((.*)\))?/);
+  const hd = (v.find(x => x.startsWith("hit dice ")) || "").replace("hit dice ", "");
+  const xp = (v.find(x => x.startsWith("XP ")) || "").replace("XP ", "");
+  const speed = (acLine.match(/speed ([^;]+)/) || [])[1] || "";
+  const prof = (acLine.match(/proficiency bonus (\+\d+)/) || [])[1] || "";
+  const acNote = (acLine.match(/^AC \d+ \((.*?)\); speed/) || [])[1] || "";
+  let top = `<div class="stats">`;
+  if (hp) top += `<div class="stat hp"><div class="lbl">HP</div><div class="big">${hp[1]}<span class="of">/${hp[2]}</span></div>` +
+    `<div class="bar"><div style="width:${Math.min(100, 100 * hp[1] / hp[2])}%"></div></div>` +
+    (hp[3] ? `<div class="sm">+${hp[3]} temporary</div>` : "") + `</div>`;
+  if (ac) top += stat("AC", ac[1], esc(ac[2] || acNote));
+  const sp = speed.match(/^(\d+) ft(?: \((.*)\))?$/);
+  top += (sp ? stat("Speed", sp[1], "ft" + (sp[2] ? ", " + esc(sp[2]) : "")) : stat("Speed", "", esc(speed))) +stat("Prof.", prof) + stat("Hit dice", esc(hd)) + stat("XP", esc(xp));
+  top += `</div>`;
+  const cond = take("Conditions");
+  if (cond && cond !== "none") top += `<div class="row bad">${chips(cond)}</div>`;
+  for (const k of ["Death saves", "Dead", "Stable at 0 HP"]) if (kv[k]) top += row(k, `<span class="badtxt">${esc(take(k))}</span>`);
+
+  // abilities, with their saving throws
+  const saves = {};
+  for (const m of (take("Saving throws") || "").matchAll(/(STR|DEX|CON|INT|WIS|CHA) ([+-]\d+)(\*?)/g)) saves[m[1]] = [m[2], m[3]];
+  let ab = `<div class="abil">`;
+  for (const m of take("Abilities").matchAll(/(STR|DEX|CON|INT|WIS|CHA) (\d+) \(([+-]\d+)\)/g)) {
+    const s = saves[m[1]];
+    ab += `<div class="ab"><div class="lbl">${m[1]}</div><div class="big">${m[3]}</div><div class="sm">${m[2]}</div>` +
+      (s ? `<div class="sv${s[1] ? " pro" : ""}">save ${s[0]}${s[1] ? " ●" : ""}</div>` : "") + `</div>`;
+  }
+  ab += `</div>`;
+
+  // what's left to use: feature uses and spell slots
+  let uses = "";
+  const u = take("Uses");
+  if (u) for (const x of u.split(/, (?=[^,]+ \d+\/\d+ \()/)) {
+    const m = x.match(/^(.*) (\d+)\/(\d+) \((.*)\)$/);
+    uses += m ? `<div class="row"><span class="k">${esc(m[1])}</span> ${pips(+m[2], +m[3])} <span class="dim">${esc(m[4])}</span></div>` : row("", esc(x));
+  }
+  const slots = take("Spell slots");
+  if (slots) for (const m of slots.matchAll(/level (\d+): (\d+)\/(\d+)/g))
+    uses += `<div class="row"><span class="k">Level ${m[1]} slots</span> ${pips(+m[2], +m[3])}</div>`;
+  if (kv["Fiendish Resilience"]) uses += row("Fiendish Resilience", esc(take("Fiendish Resilience")));
+
+  // attacks and spells
+  const named = x => { const m = x.match(/^([^:]+): (.*)$/); return m ? `<div class="item"><b>${esc(m[1])}</b> ${esc(m[2])}</div>` : `<div class="item">${esc(x)}</div>`; };
+  let spells = "";
+  const sc = Object.keys(kv).find(k => k.startsWith("Spellcasting"));
+  if (sc) spells += row(sc.replace("Spellcasting ", "Casting ability "), esc(take(sc)));
+  for (const k of Object.keys(kv)) if (/[Cc]antrip|[Ss]pell|Arcanum|Invocation|ritual|Mastery|Always prepared/.test(k)) { const x = take(k).trim(); if (x) spells += row(k, `<div>${chips(x)}</div>`); }
+  if (spells) spells += loose.splice(0).map(l => `<div class="dim small">${esc(l)}</div>`).join("");
+
+  // skills
+  let skills = "";
+  const sk = take("Skills");
+  if (sk) {
+    skills = `<div class="skills">`;
+    // "Acrobatics +5, … Survival +2 (* proficient, ** expertise) Jack of All Trades: …" or, in older saves, "…; all others …"
+    const legend = sk.indexOf(" (* proficient");
+    const body = legend < 0 ? sk : sk.slice(0, legend), after = legend < 0 ? "" : sk.slice(sk.indexOf(")", legend) + 1).trim();
+    const [list, ...tail] = body.split("; ");
+    if (after) tail.push(after);
+    for (const m of list.matchAll(/([A-Z][A-Za-z ]+?) ([+-]\d+)(\*{0,2})/g))
+      skills += `<div class="${m[3] ? "pro" : ""}"><span>${m[1]}${m[3] === "**" ? " ●●" : m[3] ? " ●" : ""}</span><b>${m[2]}</b></div>`;
+    skills += `</div>` + (tail.length ? `<div class="dim small">${esc(tail.join("; "))}</div>` : "");
+  }
+  if (passive) skills += `<div class="dim small">${esc(passive)}</div>`;
+
+  const feats = features.map(f => {
+    const m = f.match(/^([^:]{1,80}): (.*)$/s);
+    return m ? `<details class="feat"><summary>${esc(m[1])}</summary><div>${esc(m[2])}</div></details>` : `<div class="item">${esc(f)}</div>`;
+  }).join("");
+  const gear = (kv.Money ? row("Money", esc(take("Money"))) : "") + (kv.Items ? `<div class="item">${esc(take("Items"))}</div>` : "");
+  const about = ["Alignment", "Personality", "Appearance"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
+  const prof2 = ["Languages", "Proficiencies"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
+  const more = Object.entries(kv).map(([k, x]) => row(k, esc(x))).join("") + loose.map(l => `<div class="item">${esc(l)}</div>`).join("");
+  const fightOn = fight.length && fight[0] !== "No fight is on.";
+
+  return `<div class="card sheet"><div class="title">${esc(head[1])}</div><div class="dim">${esc(head[2])}</div>` + top +
+    (fightOn ? sec("Fight", `<pre>${esc(fight.join("\n"))}</pre>`) : "") + ab +
+    sec("Uses left", uses) + sec("Attacks", attacks.map(named).join("")) + sec("Spells", spells) + sec("Skills", skills) +
+    sec("Features <span class=\"dim small\">(tap one to read it)</span>", feats) + sec("Equipment", gear) +
+    sec("Languages and proficiencies", prof2) + sec("About", about) + sec("More", more) + `</div>`;
+}
+
 // ---- the whole output, line by line ----
 const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet, \/quit exits\.$/;
 function render(text) {
@@ -158,8 +305,7 @@ function render(text) {
   let html = "", para = [], sheet = null, who = null;
   const flush = () => { if (para.length) html += `<p>${esc(para.join("\n"))}</p>`; para = []; };
   const endSheet = () => {
-    if (sheet) html += `<div class="card sheet"><pre>${esc(sheet.join("\n").trim()
-      .replace("; nobody's yet, next_turn starts the first", ""))}</pre></div>`;
+    if (sheet) html += sheetCard(sheet.join("\n").trim().replace("; nobody's yet, next_turn starts the first", ""));
     sheet = null;
   };
   for (let i = 0; i < lines.length; i++) {
