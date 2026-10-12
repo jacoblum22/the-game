@@ -15,6 +15,7 @@ import socket
 import subprocess
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -27,16 +28,18 @@ proc: subprocess.Popen[bytes] | None = None
 out = ""  # everything the current (or last) game printed
 
 
-def saves() -> list[str]:
+def saves() -> list[dict[str, str]]:
     """Saves that can be continued, newest first (a save that stopped during character creation can't be)."""
-    names = []
+    found = []
     for p in sorted(SAVES.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
         try:
-            if "sheet" in json.loads(p.read_text(encoding="utf-8")):
-                names.append(p.name)
+            data = json.loads(p.read_text(encoding="utf-8"))
         except (OSError, ValueError):
-            pass
-    return names
+            continue
+        if "sheet" in data:
+            when = time.strftime("%b %d, %I:%M %p", time.localtime(p.stat().st_mtime)).replace(" 0", " ")
+            found.append({"file": p.name, "name": data["sheet"]["name"], "when": when})
+    return found
 
 
 def read(p: subprocess.Popen[bytes]) -> None:
@@ -52,7 +55,7 @@ def read(p: subprocess.Popen[bytes]) -> None:
 
 def start(args: list[str]) -> None:
     global proc, out
-    out = f"$ py -m dm.play {' '.join(args)}\n"
+    out = ""
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUNBUFFERED": "1"}
     proc = subprocess.Popen([sys.executable, "-u", "-m", "dm.play", *args], cwd=ROOT, env=env,
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -70,7 +73,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         if self.path == "/":
-            self.reply(PAGE, "text/html; charset=utf-8")
+            self.reply((ROOT / "dm" / "web.html").read_bytes(), "text/html; charset=utf-8")
         elif self.path.startswith("/out"):
             with lock:
                 running = proc is not None and proc.poll() is None
@@ -86,7 +89,7 @@ class Handler(BaseHTTPRequestHandler):
             if self.path == "/start" and not running:
                 if data.get("character") in CHARACTERS:
                     start([data["character"]])
-                elif data.get("save") in saves():  # only names from the list: never an arbitrary path
+                elif data.get("save") in [s["file"] for s in saves()]:  # only names from the list: never an arbitrary path
                     start(["--resume", str(SAVES / data["save"])])
                 else:
                     return self.reply('{"error": "unknown game"}', code=400)
@@ -101,65 +104,6 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, *a: object) -> None:
         pass  # keep the console quiet: polls would flood it
-
-
-PAGE = """<!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Game</title>
-<style>
-  body { margin: 0; background: #111; color: #ddd; font: 15px/1.45 ui-monospace, Consolas, monospace;
-         display: flex; flex-direction: column; height: 100dvh; }
-  #out { flex: 1; overflow-y: auto; padding: 12px 16px; white-space: pre-wrap; word-wrap: break-word; }
-  #start { padding: 12px 16px; border-top: 1px solid #333; }
-  #start button { margin: 4px 4px 4px 0; }
-  form { display: flex; gap: 8px; padding: 8px 16px 12px; border-top: 1px solid #333; }
-  input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 8px; background: #222; color: #eee;
-          border: 1px solid #444; border-radius: 6px; }
-  button { font: inherit; padding: 8px 12px; background: #2a2a2a; color: #eee; border: 1px solid #555;
-           border-radius: 6px; }
-  select { font: inherit; font-size: 16px; max-width: 100%; background: #222; color: #eee; }
-</style></head><body>
-<div id="out"></div>
-<div id="start" hidden>
-  <div>New game:
-    <button onclick="go({character:'fighter'})">Fighter</button><button onclick="go({character:'rogue'})">Rogue</button>
-    <button onclick="go({character:'wizard'})">Wizard</button><button onclick="go({character:'new'})">New</button>
-  </div>
-  <div>Continue: <select id="saves"></select> <button onclick="go({save:saves.value})">Go</button></div>
-</div>
-<form id="form" hidden><input id="line" autocomplete="off" placeholder="type here, or /sheet, /quit">
-  <button>Send</button></form>
-<script>
-const out = document.getElementById("out"), line = document.getElementById("line");
-let shown = null, savesShown = "";
-async function post(path, body) {
-  await fetch(path, {method: "POST", body: JSON.stringify(body)});
-  poll();
-}
-function go(body) { post("/start", body); }
-document.getElementById("form").onsubmit = e => {
-  e.preventDefault();
-  post("/in", {line: line.value});
-  line.value = "";
-};
-async function poll() {
-  let r;
-  try { r = await (await fetch("/out")).json(); } catch { return; }
-  if (r.text !== shown) {
-    const atEnd = out.scrollHeight - out.scrollTop - out.clientHeight < 80;
-    out.textContent = shown = r.text;
-    if (atEnd) out.scrollTop = out.scrollHeight;
-  }
-  document.getElementById("form").hidden = !r.running;
-  document.getElementById("start").hidden = r.running;
-  if (!r.running && r.saves.join() !== savesShown) {
-    savesShown = r.saves.join();
-    saves.innerHTML = r.saves.map(s => `<option>${s}</option>`).join("");
-  }
-}
-poll();
-setInterval(poll, 1500);
-</script></body></html>"""
 
 
 def main() -> None:
