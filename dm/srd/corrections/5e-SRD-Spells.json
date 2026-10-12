@@ -1,0 +1,847 @@
+[
+  {
+    "index": "animal-friendship",
+    "source": "SRD 5.1 p.115 (correction)",
+    "set": {
+      "desc": [
+        "This spell lets you convince a beast that you mean it no harm. Choose a beast that you can see within range. It must see and hear you. If the beast's Intelligence is 4 or higher, the spell fails. Otherwise, the beast must succeed on a wisdom saving throw or be charmed by you for the spell's duration. If you or one of your companions harms the target, the spells ends.",
+        "At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, you can affect one additional beast for each slot level above 1st."
+      ]
+    }
+  },
+  {
+    "index": "antilife-shell",
+    "source": "SRD 5.1 p.116 (correction)",
+    "set": {
+      "range": "Self (10-foot radius)"
+    }
+  },
+  {
+    "index": "antimagic-field",
+    "source": "SRD 5.1 p.117 (correction)",
+    "set": {
+      "range": "Self (10-foot-radius sphere)"
+    }
+  },
+  {
+    "index": "arcane-eye",
+    "source": "SRD 5.1 p.118 (correction)",
+    "set": {
+      "classes": [
+        {
+          "index": "wizard",
+          "name": "Wizard",
+          "url": "/api/2014/classes/wizard"
+        }
+      ]
+    }
+  },
+  {
+    "index": "blight",
+    "source": "SRD 5.1 p.122 (correction)",
+    "set": {
+      "desc": [
+        "Necromantic energy washes over a creature of your choice that you can see within range, draining moisture and vitality from it. The target must make a constitution saving throw. The target takes 8d8 necrotic damage on a failed save, or half as much damage on a successful one. This spell has no effect on undead or constructs.",
+        "If you target a plant creature or a magical plant, it makes the saving throw with disadvantage, and the spell deals maximum damage to it.",
+        "If you target a nonmagical plant that isn't a creature, such as a tree or shrub, it doesn't make a saving throw; it simply withers and dies."
+      ],
+      "higher_level": [
+        "When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d8 for each slot level above 4th."
+      ]
+    }
+  },
+  {
+    "index": "burning-hands",
+    "source": "SRD 5.1 p.123 (correction)",
+    "set": {
+      "range": "Self (15-foot cone)"
+    }
+  },
+  {
+    "index": "color-spray",
+    "source": "SRD 5.1 p.125 (correction)",
+    "set": {
+      "range": "Self (15-foot cone)"
+    }
+  },
+  {
+    "index": "compulsion",
+    "source": "SRD 5.1 p.126 (correction)",
+    "set": {
+      "desc": [
+        "Creatures of your choice that you can see within range and that can hear you must make a wisdom saving throw. A target automatically succeeds on this saving throw if it can't be charmed. On a failed save, a target is affected by this spell. Until the spell ends, you can use a bonus action on each of your turns to designate a direction that is horizontal to you. Each affected target must use as much of its movement as possible to move in that direction on its next turn. It can take its action before it moves. After moving in this way, it can make another Wisdom saving to try to end the effect.",
+        "A target isn't compelled to move into an obviously deadly hazard, such as a fire or pit, but it will provoke opportunity attacks to move in the designated direction."
+      ]
+    }
+  },
+  {
+    "index": "cone-of-cold",
+    "source": "SRD 5.1 p.127 (correction)",
+    "set": {
+      "range": "Self (60-foot cone)"
+    }
+  },
+  {
+    "index": "confusion",
+    "source": "SRD 5.1 p.127 (correction)",
+    "set": {
+      "material": "Three nut shells."
+    }
+  },
+  {
+    "index": "conjure-animals",
+    "source": "SRD 5.1 p.127 (correction)",
+    "set": {
+      "higher_level": [
+        "When you cast this spell using certain higher-level spell slots, you choose one of the summoning options above, and more creatures appear: twice as many with a 5th-level slot, three times as many with a 7th-level slot, and four times as many with a 9th-level slot."
+      ]
+    }
+  },
+  {
+    "index": "contingency",
+    "source": "SRD 5.1 p.130 (correction)",
+    "set": {
+      "desc": [
+        "Choose a spell of 5th level or lower that you can cast, that has a casting time of 1 action, and that can target you. You cast that spell--called the contingent spell--as part of casting contingency, expending spell slots for both, but the contingent spell doesn't come into effect. Instead, it takes effect when a certain circumstance occurs. You describe that circumstance when you cast the two spells. For example, a contingency cast with water breathing might stipulate that water breathing comes into effect when you are engulfed in water or a similar liquid.",
+        "The contingent spell takes effect immediately after the circumstance is met for the first time, whether or not you want it to, and then contingency ends.",
+        "The contingent spell takes effect only on you, even if it can normally target others. You can use only one contingency spell at a time. If you cast this spell again, the effect of another contingency spell on you ends. Also, contingency ends on you if its material component is ever not on your person."
+      ]
+    }
+  },
+  {
+    "index": "control-weather",
+    "source": "SRD 5.1 p.131 (correction)",
+    "set": {
+      "range": "Self (5-mile radius)"
+    }
+  },
+  {
+    "index": "counterspell",
+    "source": "SRD 5.1 p.131 (correction)",
+    "set": {
+      "casting_time": "1 reaction, which you take when you see a creature within 60 feet of you casting a spell"
+    }
+  },
+  {
+    "index": "create-food-and-water",
+    "source": "SRD 5.1 p.131 (correction)",
+    "set": {
+      "classes": [
+        {
+          "index": "cleric",
+          "name": "Cleric",
+          "url": "/api/2014/classes/cleric"
+        },
+        {
+          "index": "paladin",
+          "name": "Paladin",
+          "url": "/api/2014/classes/paladin"
+        }
+      ]
+    }
+  },
+  {
+    "index": "create-or-destroy-water",
+    "source": "SRD 5.1 p.132 (correction)",
+    "set": {
+      "material": "A drop of water if creating water or a few grains of sand if destroying it.",
+      "desc": [
+        "You either create or destroy water.",
+        "***Create Water.*** You create up to 10 gallons of clean water within range in an open container. Alternatively, the water falls as rain in a 30-foot cube within range, extinguishing exposed flames in the area.",
+        "***Destroy Water.*** You destroy up to 10 gallons of water in an open container within range. Alternatively, you destroy fog in a 30-foot cube within range."
+      ]
+    }
+  },
+  {
+    "index": "detect-thoughts",
+    "source": "SRD 5.1 p.135 (correction)",
+    "set": {
+      "material": "A copper piece."
+    }
+  },
+  {
+    "index": "divination",
+    "source": "SRD 5.1 p.136 (correction)",
+    "set": {
+      "classes": [
+        {
+          "index": "cleric",
+          "name": "Cleric",
+          "url": "/api/2014/classes/cleric"
+        }
+      ]
+    }
+  },
+  {
+    "index": "dominate-beast",
+    "source": "SRD 5.1 p.137 (correction)",
+    "set": {
+      "desc": [
+        "You attempt to beguile a beast that you can see within range. It must succeed on a wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw.",
+        "While the beast is charmed, you have a telepathic link with it as long as the two of you are on the same plane of existence. You can use this telepathic link to issue commands to the creature while you are conscious (no action required), which it does its best to obey. You can specify a simple and general course of action, such as \"Attack that creature,\" \"Run over there,\" or \"Fetch that object.\" If the creature completes the order and doesn't receive further direction from you, it defends and preserves itself to the best of its ability.",
+        "You can use your action to take total and precise control of the target. Until the end of your next turn, the creature takes only the actions you choose, and doesn't do anything that you don't allow it to do. During this time, you can also cause the creature to use a reaction, but this requires you to use your own reaction as well. Each time the target takes damage, it makes a new wisdom saving throw against the spell. If the saving throw succeeds, the spell ends."
+      ],
+      "higher_level": [
+        "When you cast this spell with a 5th-level spell slot, the duration is concentration, up to 10 minutes. When you use a 6th-level spell slot, the duration is concentration, up to 1 hour. When you use a spell slot of 7th level or higher, the duration is concentration, up to 8 hours."
+      ]
+    }
+  },
+  {
+    "index": "druidcraft",
+    "source": "SRD 5.1 p.138 (correction)",
+    "set": {
+      "desc": [
+        "Whispering to the spirits of nature, you create one of the following effects within range:",
+        "- You create a tiny, harmless sensory effect that predicts what the weather will be at your location for the next 24 hours. The effect might manifest as a golden orb for clear skies, a cloud for rain, falling snowflakes for snow, and so on. This effect persists for 1 round.",
+        "- You instantly make a flower blossom, a seed pod open, or a leaf bud bloom.",
+        "- You create an instantaneous, harmless sensory effect, such as falling leaves, a puff of wind, the sound of a small animal, or the faint odor of skunk. The effect must fit in a 5-foot cube.",
+        "- You instantly light or snuff out a candle, a torch, or a small campfire."
+      ]
+    }
+  },
+  {
+    "index": "enlarge-reduce",
+    "source": "SRD 5.1 p.140 (correction)",
+    "set": {
+      "material": "A pinch of powdered iron."
+    }
+  },
+  {
+    "index": "entangle",
+    "source": "SRD 5.1 p.140 (correction)",
+    "set": {
+      "desc": [
+        "Grasping weeds and vines sprout from the ground in a 20-foot square starting from a point within range. For the duration, these plants turn the ground in the area into difficult terrain.",
+        "A creature in the area when you cast the spell must succeed on a strength saving throw or be restrained by the entangling plants until the spell ends. A creature restrained by the plants can use its action to make a Strength check against your spell save DC. On a success, it frees itself.",
+        "When the spell ends, the conjured plants wilt away."
+      ]
+    }
+  },
+  {
+    "index": "etherealness",
+    "source": "SRD 5.1 p.140 (correction)",
+    "set": {
+      "duration": "Up to 8 hours"
+    }
+  },
+  {
+    "index": "faerie-fire",
+    "source": "SRD 5.1 p.141 (correction)",
+    "set": {
+      "classes": [
+        {
+          "index": "bard",
+          "name": "Bard",
+          "url": "/api/2014/classes/bard"
+        },
+        {
+          "index": "druid",
+          "name": "Druid",
+          "url": "/api/2014/classes/druid"
+        }
+      ]
+    }
+  },
+  {
+    "index": "fear",
+    "source": "SRD 5.1 p.142 (correction)",
+    "set": {
+      "range": "Self (30-foot cone)"
+    }
+  },
+  {
+    "index": "feather-fall",
+    "source": "SRD 5.1 p.142 (correction)",
+    "set": {
+      "casting_time": "1 reaction, which you take when you or a creature within 60 feet of you falls",
+      "material": "A small feather or piece of down."
+    }
+  },
+  {
+    "index": "find-familiar",
+    "source": "SRD 5.1 p.143 (correction)",
+    "set": {
+      "desc": [
+        "You gain the service of a familiar, a spirit that takes an animal form you choose: bat, cat, crab, frog (toad), hawk, lizard, octopus, owl, poisonous snake, fish (quipper), rat, raven, sea horse, spider, or weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast.",
+        "Your familiar acts independently of you, but it always obeys your commands. In combat, it rolls its own initiative and acts on its own turn. A familiar can't attack, but it can take other actions as normal.",
+        "When the familiar drops to 0 hit points, it disappears, leaving behind no physical form. It reappears after you cast this spell again",
+        "While your familiar is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through your familiar's eyes and hear what it hears until the start of your next turn, gaining the benefits of any special senses that the familiar has. During this time, you are deaf and blind with regard to your own senses.",
+        "As an action, you can temporarily dismiss your familiar. It disappears into a pocket dimension where it awaits your summons. Alternatively, you can dismiss it forever. As an action while it is temporarily dismissed, you can cause it to reappear in any unoccupied space within 30 feet of you.",
+        "You can't have more than one familiar at a time. If you cast this spell while you already have a familiar, you instead cause it to adopt a new form. Choose one of the forms from the above list. Your familiar transforms into the chosen creature.",
+        "Finally, when you cast a spell with a range of touch, your familiar can deliver the spell as if it had cast the spell. Your familiar must be within 100 feet of you, and it must use its reaction to deliver the spell when you cast it. If the spell requires an attack roll, you use your attack modifier for the roll."
+      ]
+    }
+  },
+  {
+    "index": "find-steed",
+    "source": "SRD 5.1 p.143 (correction)",
+    "set": {
+      "desc": [
+        "You summon a spirit that assumes the form of an unusually intelligent, strong, and loyal steed, creating a long-lasting bond with it. Appearing in an unoccupied space within range, the steed takes on a form that you choose: a warhorse, a pony, a camel, an elk, or a mastiff. (Your GM might allow other animals to be summoned as steeds.) The steed has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of its normal type. Additionally, if your steed has an Intelligence of 5 or less, its Intelligence becomes 6, and it gains the ability to understand one language of your choice that you speak.",
+        "Your steed serves you as a mount, both in combat and out, and you have an instinctive bond with it that allows you to fight as a seamless unit. While mounted on your steed, you can make any spell you cast that targets only you also target your steed.",
+        "When the steed drops to 0 hit points, it disappears, leaving behind no physical form. You can also dismiss your steed at any time as an action, causing it to disappear. In either case, casting this spell again summons the same steed, restored to its hit point maximum.",
+        "While your steed is within 1 mile of you, you can communicate with it telepathically.",
+        "You can't have more than one steed bonded by this spell at a time. As an action, you can release the steed from its bond at any time, causing it to disappear."
+      ]
+    }
+  },
+  {
+    "index": "find-the-path",
+    "source": "SRD 5.1 p.143 (correction)",
+    "set": {
+      "duration": "Up to 1 day"
+    }
+  },
+  {
+    "index": "fire-shield",
+    "source": "SRD 5.1 p.144 (correction)",
+    "set": {
+      "material": "A bit of phosphorus or a firefly.",
+      "desc": [
+        "Thin and wispy flames wreathe your body for the duration, shedding bright light in a 10-foot radius and dim light for an additional 10 feet. You can end the spell early by using an action to dismiss it.",
+        "The flames provide you with a warm shield or a chill shield, as you choose. The warm shield grants you resistance to cold damage, and the chill shield grants you resistance to fire damage.",
+        "In addition, whenever a creature within 5 feet of you hits you with a melee attack, the shield erupts with flame. The attacker takes 2d8 fire damage from a warm shield, or 2d8 cold damage from a cold shield."
+      ]
+    }
+  },
+  {
+    "index": "floating-disk",
+    "source": "SRD 5.1 p.146 (correction)",
+    "set": {
+      "desc": [
+        "This spell creates a circular, horizontal plane of force, 3 feet in diameter and 1 inch thick, that floats 3 feet above the ground in an unoccupied space of your choice that you can see within range. The disk remains for the duration, and can hold up to 500 pounds. If more weight is placed on it, the spell ends, and everything on the disk falls to the ground.",
+        "The disk is immobile while you are within 20 feet of it. If you move more than 20 feet away from it, the disk follows you so that it remains within 20 feet of you. It can move across uneven terrain, up or down stairs, slopes and the like, but it can't cross an elevation change of 10 feet or more. For example, the disk can't move across a 10-foot-deep pit, nor could it leave such a pit if it was created at the bottom.",
+        "If you move more than 100 feet from the disk (typically because it can't move around an obstacle to follow you), the spell ends."
+      ]
+    }
+  },
+  {
+    "index": "forbiddance",
+    "source": "SRD 5.1 p.146 (correction)",
+    "set": {
+      "duration": "1 day"
+    }
+  },
+  {
+    "index": "globe-of-invulnerability",
+    "source": "SRD 5.1 p.149 (correction)",
+    "set": {
+      "range": "Self (10-foot radius)"
+    }
+  },
+  {
+    "index": "glyph-of-warding",
+    "source": "SRD 5.1 p.149 (correction)",
+    "set": {
+      "duration": "Until dispelled or triggered"
+    }
+  },
+  {
+    "index": "goodberry",
+    "source": "SRD 5.1 p.150 (correction)",
+    "set": {
+      "desc": [
+        "Up to ten berries appear in your hand and are infused with magic for the duration. A creature can use its action to eat one berry. Eating a berry restores 1 hit point, and the berry provides enough nourishment to sustain a creature for one day.",
+        "The berries lose their potency if they have not been consumed within 24 hours of the casting of this spell."
+      ]
+    }
+  },
+  {
+    "index": "gust-of-wind",
+    "source": "SRD 5.1 p.152 (correction)",
+    "set": {
+      "range": "Self (60-foot line)"
+    }
+  },
+  {
+    "index": "hallow",
+    "source": "SRD 5.1 p.152 (correction)",
+    "set": {
+      "desc": [
+        "You touch a point and infuse an area around it with holy (or unholy) power. The area can have a radius up to 60 feet, and the spell fails if the radius includes an area already under the effect a hallow spell. The affected area is subject to the following effects.",
+        "First, celestials, elementals, fey, fiends, and undead can't enter the area, nor can such creatures charm, frighten, or possess creatures within it. Any creature charmed, frightened, or possessed by such a creature is no longer charmed, frightened, or possessed upon entering the area. You can exclude one or more of those types of creatures from this effect.",
+        "Second, you can bind an extra effect to the area. Choose the effect from the following list, or choose an effect offered by the GM. Some of these effects apply to creatures in the area; you can designate whether the effect applies to all creatures, creatures that follow a specific deity or leader, or creatures of a specific sort, such as orcs or trolls. When a creature that would be affected enters the spell's area for the first time on a turn or starts its turn there, it can make a charisma saving throw. On a success, the creature ignores the extra effect until it leaves the area.",
+        "***Courage.*** Affected creatures can't be frightened while in the area.",
+        "***Darkness.*** Darkness fills the area. Normal light, as well as magical light created by spells of a lower level than the slot you used to cast this spell, can't illuminate the area.",
+        "***Daylight.*** Bright light fills the area. Magical darkness created by spells of a lower level than the slot you used to cast this spell can't extinguish the light.",
+        "***Energy Protection.*** Affected creatures in the area have resistance to one damage type of your choice, except for bludgeoning, piercing, or slashing.",
+        "***Energy Vulnerability.*** Affected creatures in the area have vulnerability to one damage type of your choice, except for bludgeoning, piercing, or slashing.",
+        "***Everlasting Rest.*** Dead bodies interred in the area can't be turned into undead.",
+        "***Extradimensional Interference.*** Affected creatures can't move or travel using teleportation or by extradimensional or interplanar means.",
+        "***Fear.*** Affected creatures are frightened while in the area.",
+        "***Silence.*** No sound can emanate from within the area, and no sound can reach into it.",
+        "***Tongues.*** Affected creatures can communicate with any other creature in the area, even if they don't share a common language."
+      ]
+    }
+  },
+  {
+    "index": "hellish-rebuke",
+    "source": "SRD 5.1 p.154 (correction)",
+    "set": {
+      "casting_time": "1 reaction, which you take in response to being damaged by a creature within 60 feet of you that you can see"
+    }
+  },
+  {
+    "index": "heroism",
+    "source": "SRD 5.1 p.154 (correction)",
+    "set": {
+      "desc": [
+        "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to being frightened and gains temporary hit points equal to your spellcasting ability modifier at the start of each of its turns. When the spell ends, the target loses any remaining temporary hit points from this spell.",
+        "At Higher Levels. When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+      ]
+    }
+  },
+  {
+    "index": "hideous-laughter",
+    "source": "SRD 5.1 p.154 (correction)",
+    "set": {
+      "desc": [
+        "A creature of your choice that you can see within range perceives everything as hilariously funny and falls into fits of laughter if this spell affects it. The target must succeed on a wisdom saving throw or fall prone, becoming incapacitated and unable to stand up for the duration. A creature with an Intelligence score of 4 or less isn't affected.",
+        "At the end of each of its turns, and each time it takes damage, the target can make another wisdom saving throw. The target has advantage on the saving throw if it's triggered by damage. On a success, the spell ends."
+      ]
+    }
+  },
+  {
+    "index": "hold-monster",
+    "source": "SRD 5.1 p.154 (correction)",
+    "set": {
+      "material": "A small, straight piece of iron.",
+      "desc": [
+        "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target."
+      ],
+      "higher_level": [
+        "When you cast this spell using a spell slot of 6th level or higher, you can target one additional creature for each slot level above 5th. The creatures must be within 30 feet of each other when you target them."
+      ]
+    }
+  },
+  {
+    "index": "illusory-script",
+    "source": "SRD 5.1 p.156 (correction)",
+    "set": {
+      "material": "A lead-based ink worth at least 10 gp, which the spell consumes."
+    }
+  },
+  {
+    "index": "legend-lore",
+    "source": "SRD 5.1 p.158 (correction)",
+    "set": {
+      "desc": [
+        "Name or describe a person, place, or object. The spell brings to your mind a brief summary of the significant lore about the thing you named. The lore might consist of current tales, forgotten stories, or even secret lore that has never been widely known. If the thing you named isn't of legendary importance, you gain no information. The more information you already have about the thing, the more precise and detailed the information you receive is.",
+        "The information you learn is accurate but might be couched in figurative language. For example, if you have a mysterious magic axe on hand, the spell might yield this information: \"Woe to the evildoer whose hand touches the axe, for even the haft slices the hand of the evil ones. Only a true Child of Stone, lover and beloved of Moradin, may awaken the true powers of the axe, and only with the sacred word *Rudnogg* on the lips.\""
+      ]
+    }
+  },
+  {
+    "index": "lightning-bolt",
+    "source": "SRD 5.1 p.159 (correction)",
+    "set": {
+      "range": "Self (100-foot line)"
+    }
+  },
+  {
+    "index": "longstrider",
+    "source": "SRD 5.1 p.160 (correction)",
+    "set": {
+      "higher_level": [
+        "When you cast this spell using a spell slot of 2nd level or higher, you can target one additional creature for each slot level above 1st."
+      ]
+    }
+  },
+  {
+    "index": "magic-circle",
+    "source": "SRD 5.1 p.160 (correction)",
+    "set": {
+      "desc": [
+        "You create a 10-foot-radius, 20-foot-tall cylinder of magical energy centered on a point on the ground that you can see within range. Glowing runes appear wherever the cylinder intersects with the floor or other surface.",
+        "Choose one or more of the following types of creatures: celestials, elementals, fey, fiends, or undead. The circle affects a creature of the chosen type in the following ways:",
+        "- The creature can't willingly enter the cylinder by nonmagical means. If the creature tries to use teleportation or interplanar travel to do so, it must first succeed on a charisma saving throw.",
+        "- The creature has disadvantage on attack rolls against targets within the cylinder.",
+        "- Targets within the cylinder can't be charmed, frightened, or possessed by the creature.",
+        "When you cast this spell, you can elect to cause its magic to operate in the reverse direction, preventing a creature of the specified type from leaving the cylinder and protecting targets outside it."
+      ]
+    }
+  },
+  {
+    "index": "magic-mouth",
+    "source": "SRD 5.1 p.161 (correction)",
+    "set": {
+      "material": "A small bit of honeycomb and jade dust worth at least 10 gp, which the spell consumes.",
+      "desc": [
+        "You implant a message within an object in range, a message that is uttered when a trigger condition is met. Choose an object that you can see and that isn't being worn or carried by another creature. Then speak the message, which must be 25 words or less, though it can be delivered over as long as 10 minutes. Finally, determine the circumstance that will trigger the spell to deliver your message.",
+        "When that circumstance occurs, a magical mouth appears on the object and recites the message in your voice and at the same volume you spoke. If the object you chose has a mouth or something that looks like a mouth (for example, the mouth of a statue), the magical mouth appears there so that the words appear to come from the object's mouth.",
+        "When you cast this spell, you can have the spell end after it delivers its message, or it can remain and repeat its message whenever the trigger occurs.",
+        "The triggering circumstance can be as general or as detailed as you like, though it must be based on visual or audible conditions that occur within 30 feet of the object. For example, you could instruct the mouth to speak when any creature moves within 30 feet of the object or when a silver bell rings within 30 feet of it."
+      ]
+    }
+  },
+  {
+    "index": "mass-cure-wounds",
+    "source": "SRD 5.1 p.162 (correction)",
+    "set": {
+      "level": 5,
+      "ritual": false,
+      "school": {
+        "index": "evocation",
+        "name": "Evocation",
+        "url": "/api/2014/magic-schools/evocation"
+      }
+    }
+  },
+  {
+    "index": "mass-heal",
+    "source": "SRD 5.1 p.163 (correction)",
+    "set": {
+      "level": 9,
+      "ritual": false,
+      "school": {
+        "index": "evocation",
+        "name": "Evocation",
+        "url": "/api/2014/magic-schools/evocation"
+      }
+    }
+  },
+  {
+    "index": "meld-into-stone",
+    "source": "SRD 5.1 p.163 (correction)",
+    "set": {
+      "classes": [
+        {
+          "index": "cleric",
+          "name": "Cleric",
+          "url": "/api/2014/classes/cleric"
+        },
+        {
+          "index": "druid",
+          "name": "Druid",
+          "url": "/api/2014/classes/druid"
+        }
+      ]
+    }
+  },
+  {
+    "index": "mending",
+    "source": "SRD 5.1 p.164 (correction)",
+    "set": {
+      "desc": [
+        "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.",
+        "This spell can physically repair a magic item or construct, but the spell can't restore magic to such an object."
+      ]
+    }
+  },
+  {
+    "index": "moonbeam",
+    "source": "SRD 5.1 p.166 (correction)",
+    "set": {
+      "higher_level": [
+        "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d10 for each slot level above 2nd."
+      ]
+    }
+  },
+  {
+    "index": "phantasmal-killer",
+    "source": "SRD 5.1 p.167 (correction)",
+    "set": {
+      "desc": [
+        "You tap into the nightmares of a creature you can see within range and create an illusory manifestation of its deepest fears, visible only to that creature. The target must make a wisdom saving throw. On a failed save, the target becomes frightened for the duration. At the end of each of the target's turns before the spell ends, the target must succeed on a wisdom saving throw or take 4d10 psychic damage. On a successful save, the spell ends."
+      ]
+    }
+  },
+  {
+    "index": "plant-growth",
+    "source": "SRD 5.1 p.169 (correction)",
+    "set": {
+      "casting_time": "1 action or 8 hours"
+    }
+  },
+  {
+    "index": "polymorph",
+    "source": "SRD 5.1 p.169 (correction)",
+    "set": {
+      "desc": [
+        "This spell transforms a creature that you can see within range into a new form. An unwilling creature must make a wisdom saving throw to avoid the effect. The spell has no effect on A shapechanger or a creature with 0 hit points.",
+        "The transformation lasts for the duration, or until the target drops to 0 hit points or dies. The new form can be any beast whose challenge rating is equal to or less than the target's (or the target's level, if it doesn't have a challenge rating). The target's game statistics, including mental ability scores, are replaced by the statistics of the chosen beast. It retains its alignment and personality.",
+        "The target assumes the hit points of its new form. When it reverts to its normal form, the creature returns to the number of hit points it had before it transformed. If it reverts as a result of dropping to 0 hit points, any excess damage carries over to its normal form. As long as the excess damage doesn't reduce the creature's normal form to 0 hit points, it isn't knocked unconscious.",
+        "The creature is limited in the actions it can perform by the nature of its new form, and it can't speak, cast spells, or take any other action that requires hands or speech.",
+        "The target's gear melds into the new form. The creature can't activate, use, wield, or otherwise benefit from any of its equipment."
+      ]
+    }
+  },
+  {
+    "index": "prestidigitation",
+    "source": "SRD 5.1 p.170 (correction)",
+    "set": {
+      "duration": "Up to 1 hour",
+      "desc": [
+        "This spell is a minor magical trick that novice spellcasters use for practice. You create one of the following magical effects within range:",
+        "You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.",
+        "You instantaneously light or snuff out a candle, a torch, or a small campfire.",
+        "You instantaneously clean or soil an object no larger than 1 cubic foot.",
+        "You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.",
+        "You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.",
+        "You create a nonmagical trinket or an illusory image that can fit in your hand and that lasts until the end of your next turn.",
+        "If you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time, and you can dismiss such an effect as an action."
+      ]
+    }
+  },
+  {
+    "index": "prismatic-spray",
+    "source": "SRD 5.1 p.170 (correction)",
+    "set": {
+      "range": "Self (60-foot cone)"
+    }
+  },
+  {
+    "index": "project-image",
+    "source": "SRD 5.1 p.172 (correction)",
+    "set": {
+      "duration": "Up to 1 day"
+    }
+  },
+  {
+    "index": "reincarnate",
+    "source": "SRD 5.1 p.174 (correction)",
+    "set": {
+      "desc": [
+        "You touch a dead humanoid or a piece of a dead humanoid. Provided that the creature has been dead no longer than 10 days, the spell forms a new adult body for it and then calls the soul to enter that body. If the target's soul isn't free or willing to do so, the spell fails.",
+        "The magic fashions a new body for the creature to inhabit, which likely causes the creature's race to change. The GM rolls a d100 and consults the following table to determine what form the creature takes when restored to life, or the GM chooses a form.",
+        "| d100 | Race |",
+        "|---|---|",
+        "| 01-04 | Dragonborn |",
+        "| 05-13 | Dwarf, hill |",
+        "| 14-21 | Dwarf, mountain |",
+        "| 22-25 | Elf, dark |",
+        "| 26-34 | Elf, high |",
+        "| 35-42 | Elf, wood |",
+        "| 43-46 | Gnome, forest |",
+        "| 47-52 | Gnome, rock |",
+        "| 53-56 | Half-elf |",
+        "| 57-60 | Half-orc |",
+        "| 61-68 | Halfling, lightfoot |",
+        "| 69-76 | Halfling, stout |",
+        "| 77-96 | Human |",
+        "| 97-00 | Tiefling |",
+        "The reincarnated creature recalls its former life and experiences. It retains the capabilities it had in its original form, except it exchanges its original race for the new one and changes its racial traits accordingly."
+      ]
+    }
+  },
+  {
+    "index": "revivify",
+    "source": "SRD 5.1 p.175 (correction)",
+    "set": {
+      "level": 3,
+      "ritual": false,
+      "school": {
+        "index": "necromancy",
+        "name": "Necromancy",
+        "url": "/api/2014/magic-schools/necromancy"
+      }
+    }
+  },
+  {
+    "index": "see-invisibility",
+    "source": "SRD 5.1 p.177 (correction)",
+    "set": {
+      "material": "A pinch of talc and a small sprinkling of powdered silver.",
+      "desc": [
+        "For the duration, you see invisible creatures and objects as if they were visible, and you can see into The ethereal Plane. Ethereal creatures and objects appear ghostly and translucent."
+      ]
+    }
+  },
+  {
+    "index": "shatter",
+    "source": "SRD 5.1 p.178 (correction)",
+    "set": {
+      "material": "A chip of mica.",
+      "desc": [
+        "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw.",
+        "A nonmagical object that isn't being worn or carried also takes the damage if it's in the spell's area."
+      ],
+      "higher_level": [
+        "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for each slot level above 2nd."
+      ]
+    }
+  },
+  {
+    "index": "shield",
+    "source": "SRD 5.1 p.179 (correction)",
+    "set": {
+      "casting_time": "1 reaction, which you take when you are hit by an attack or targeted by the magic missile spell"
+    }
+  },
+  {
+    "index": "shillelagh",
+    "source": "SRD 5.1 p.179 (correction)",
+    "set": {
+      "desc": [
+        "The wood of a club or quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a d8. The weapon also becomes magical, if it isn't already. The spell ends if you cast it again or if you let go of the weapon."
+      ]
+    }
+  },
+  {
+    "index": "speak-with-animals",
+    "source": "SRD 5.1 p.181 (correction)",
+    "set": {
+      "desc": [
+        "You gain the ability to comprehend and verbally communicate with beasts for the duration. The knowledge and awareness of many beasts is limited by their intelligence, but at minimum, beasts can give you information about nearby locations and monsters, including whatever they can perceive or have perceived within the past day. You might be able to persuade a beast to perform a small favor for you, at the GM's discretion."
+      ]
+    }
+  },
+  {
+    "index": "speak-with-plants",
+    "source": "SRD 5.1 p.181 (correction)",
+    "set": {
+      "range": "Self (30-foot radius)"
+    }
+  },
+  {
+    "index": "spike-growth",
+    "source": "SRD 5.1 p.182 (correction)",
+    "set": {
+      "desc": [
+        "The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels.",
+        "The transformation of the ground is camouflaged to look natural. Any creature that can't see the area at the time the spell is cast must make a Wisdom (Perception) check against your spell save DC to recognize the terrain as hazardous before entering it."
+      ]
+    }
+  },
+  {
+    "index": "spirit-guardians",
+    "source": "SRD 5.1 p.182 (correction)",
+    "set": {
+      "range": "Self (15-foot radius)"
+    }
+  },
+  {
+    "index": "spiritual-weapon",
+    "source": "SRD 5.1 p.182 (correction)",
+    "set": {
+      "higher_level": [
+        "When you cast this spell using a spell slot of 3rd level or higher, the damage increases by 1d8 for every two slot levels above 2nd."
+      ]
+    }
+  },
+  {
+    "index": "stone-shape",
+    "source": "SRD 5.1 p.183 (correction)",
+    "set": {
+      "material": "Soft clay, which must be worked into roughly the desired shape of the stone object."
+    }
+  },
+  {
+    "index": "sunbeam",
+    "source": "SRD 5.1 p.184 (correction)",
+    "set": {
+      "range": "Self (60-foot line)"
+    }
+  },
+  {
+    "index": "symbol",
+    "source": "SRD 5.1 p.184 (correction)",
+    "set": {
+      "duration": "Until dispelled or triggered",
+      "desc": [
+        "When you cast this spell, you inscribe a harmful glyph either on a surface (such as a section of floor, a wall, or a table) or within an object that can be closed to conceal the glyph (such as a book, a scroll, or a treasure chest). If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place; if the object is moved more than 10 feet from where you cast this spell, the glyph is broken, and the spell ends without being triggered.",
+        "The glyph is nearly invisible, requiring an Intelligence (Investigation) check against your spell save DC to find it.",
+        "You decide what triggers the glyph when you cast the spell. For glyphs inscribed on a surface, the most typical triggers include touching or stepping on the glyph, removing another object covering it, approaching within a certain distance of it, or manipulating the object that holds it. For glyphs inscribed within an object, the most common triggers are opening the object, approaching within a certain distance of it, or seeing or reading the glyph.",
+        "You can further refine the trigger so the spell is activated only under certain circumstances or according to a creature's physical characteristics (such as height or weight), or physical kind (for example, the ward could be set to affect hags or shapechangers). You can also specify creatures that don't trigger the glyph, such as those who say a certain password.",
+        "When you inscribe the glyph, choose one of the options below for its effect. Once triggered, the glyph glows, filling a 60-foot-radius sphere with dim light for 10 minutes, after which time the spell ends. Each creature in the sphere when the glyph activates is targeted by its effect, as is a creature that enters the sphere for the first time on a turn or ends its turn there.",
+        "***Death.*** Each target must make a constitution saving throw, taking 10d10 necrotic damage on a failed save, or half as much damage on a successful save.",
+        "***Discord.*** Each target must make a constitution saving throw. On a failed save, a target bickers and argues with other creatures for 1 minute. During this time, it is incapable of meaningful communication and has disadvantage on attack rolls and ability checks.",
+        "***Fear.*** Each target must make a wisdom saving throw and becomes frightened for 1 minute on a failed save. While frightened, the target drops whatever it is holding and must move at least 30 feet away from the glyph on each of its turns, if able.",
+        "***Hopelessness.*** Each target must make a charisma saving throw. On a failed save, the target is overwhelmed with despair for 1 minute. During this time, it can't attack or target any creature with harmful abilities, spells, or other magical effects.",
+        "***Insanity.*** Each target must make an intelligence saving throw. On a failed save, the target is driven insane for 1 minute. An insane creature can't take actions, can't understand what other creatures say, can't read, and speaks only in gibberish. The GM controls its movement, which is erratic.",
+        "***Pain.*** Each target must make a constitution saving throw and becomes incapacitated with excruciating pain for 1 minute on a failed save.",
+        "***Sleep.*** Each target must make a wisdom saving throw and falls unconscious for 10 minutes on a failed save. A creature awakens if it takes damage or if someone uses an action to shake or slap it awake.",
+        "***Stunning.*** Each target must make a wisdom saving throw and becomes stunned for 1 minute on a failed save."
+      ]
+    }
+  },
+  {
+    "index": "thaumaturgy",
+    "source": "SRD 5.1 p.187 (correction)",
+    "set": {
+      "duration": "Up to 1 minute",
+      "desc": [
+        "You manifest a minor wonder, a sign of supernatural power, within range. You create one of the following magical effects within range:",
+        "- Your voice booms up to three times as loud as normal for 1 minute.",
+        "- You cause flames to flicker, brighten, dim, or change color for 1 minute.",
+        "- You cause harmless tremors in the ground for 1 minute.",
+        "- You create an instantaneous sound that originates from a point of your choice within range, such as a rumble of thunder, the cry of a raven, or ominous whispers.",
+        "- You instantaneously cause an unlocked door or window to fly open or slam shut.",
+        "- You alter the appearance of your eyes for 1 minute.",
+        "If you cast this spell multiple times, you can have up to three of its 1-minute effects active at a time, and you can dismiss such an effect as an action."
+      ]
+    }
+  },
+  {
+    "index": "thunderwave",
+    "source": "SRD 5.1 p.187 (correction)",
+    "set": {
+      "range": "Self (15-foot cube)"
+    }
+  },
+  {
+    "index": "tiny-hut",
+    "source": "SRD 5.1 p.187 (correction)",
+    "set": {
+      "range": "Self (10-foot-radius hemisphere)"
+    }
+  },
+  {
+    "index": "true-polymorph",
+    "source": "SRD 5.1 p.188 (correction)",
+    "set": {
+      "desc": [
+        "Choose one creature or nonmagical object that you can see within range. You transform the creature into a different creature, the creature into an object, or the object into a creature (the object must be neither worn nor carried by another creature). The transformation lasts for the duration, or until the target drops to 0 hit points or dies. If you concentrate on this spell for the full duration, the transformation lasts until it is dispelled.",
+        "this spell has no effect on a shapechanger or a creature with 0 hit points. An unwilling creature can make a wisdom saving throw, and if it succeeds, it isn't affected by this spell.",
+        "***Creature into Creature.*** If you turn a creature into another kind of creature, the new form can be any kind you choose whose challenge rating is equal to or less than the target's (or its level, if the target doesn't have a challenge rating). The target's game statistics, including mental ability scores, are replaced by the statistics of the new form. It retains its alignment and personality.",
+        "The target assumes the hit points of its new form, and when it reverts to its normal form, the creature returns to the number of hit points it had before it transformed. If it reverts as a result of dropping to 0 hit points, any excess damage carries over to its normal form. As long as the excess damage doesn't reduce the creature's normal form to 0 hit points, it isn't knocked unconscious.",
+        "The creature is limited in the actions it can perform by the nature of its new form, and it can't speak, cast spells, or take any other action that requires hands or speech, unless its new form is capable of such actions.",
+        "The target's gear melds into the new form. The creature can't activate, use, wield, or otherwise benefit from any of its equipment.",
+        "***Object into Creature.*** You can turn an object into any kind of creature, as long as the creature's size is no larger than the object's size and the creature's challenge rating is 9 or lower. The creature is friendly to you and your companions. It acts on each of your turns. You decide what action it takes and how it moves. The GM has the creature's statistics and resolves all of its actions and movement.",
+        "If the spell becomes permanent, you no longer control the creature. It might remain friendly to you, depending on how you have treated it.",
+        "***Creature into Object.*** If you turn a creature into an object, it transforms along with whatever it is wearing and carrying into that form. The creature's statistics become those of the object, and the creature has no memory of time spent in this form, after the spell ends and it returns to its normal form."
+      ]
+    }
+  },
+  {
+    "index": "wall-of-fire",
+    "source": "SRD 5.1 p.190 (correction)",
+    "set": {
+      "desc": [
+        "You create a wall of fire on a solid surface within range. You can make the wall up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration.",
+        "When the wall appears, each creature within its area must make a Dexterity saving throw. On a failed save, a creature takes 5d8 fire damage, or half as much damage on a successful save.",
+        "One side of the wall, selected by you when you cast this spell, deals 5d8 fire damage to each creature that ends its turn within 10 feet of that side or inside the wall. A creature takes the same damage when it enters the wall for the first time on a turn or ends its turn there. The other side of the wall deals no damage."
+      ]
+    }
+  },
+  {
+    "index": "water-breathing",
+    "source": "SRD 5.1 p.191 (correction)",
+    "set": {
+      "material": "A short reed or piece of straw.",
+      "desc": [
+        "This spell grants up to ten willing creatures you can see within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration."
+      ]
+    }
+  },
+  {
+    "index": "weird",
+    "source": "SRD 5.1 p.192 (correction)",
+    "set": {
+      "duration": "Up to one minute",
+      "desc": [
+        "Drawing on the deepest fears of a group of creatures, you create illusory creatures in their minds, visible only to them. Each creature in a 30-foot-radius sphere centered on a point of your choice within range must make a wisdom saving throw. On a failed save, a creature becomes frightened for the duration. The illusion calls on the creature's deepest fears, manifesting its worst nightmares as an implacable threat. At the end of each of the frightened creature's turns, it must succeed on a wisdom saving throw or take 4d10 psychic damage. On a successful save, the spell ends for that creature."
+      ]
+    }
+  },
+  {
+    "index": "zone-of-truth",
+    "source": "SRD 5.1 p.193 (correction)",
+    "set": {
+      "desc": [
+        "You create a magical zone that guards against deception in a 15-foot-radius sphere centered on a point of your choice within range. Until the spell ends, a creature that enters the spell's area for the first time on a turn or starts its turn there must make a Charisma saving throw. On a failed save, a creature can't speak a deliberate lie while in the radius. You know whether each creature succeeds or fails on its saving throw.",
+        "An affected creature is aware of the spell and can thus avoid answering questions to which it would normally respond with a lie. Such a creature can be evasive in its answers as long as it remains within the boundaries of the truth."
+      ]
+    }
+  }
+]

@@ -31,6 +31,7 @@ adds these entries to the dataset's (an index that is already in the dataset rai
   - Druid: Beast Shapes table (p.20), Sacred Plants and Wood (p.22)
   - Cleric: Destroy Undead table (p.17)
   - Sorcerer: Flexible Casting, Creating Spell Slots table (p.43); Draconic Ancestry table (p.44)
+- Magic items: `dm/srd/gapfill/5e-SRD-Magic-Items.json` has "Shield, +1, +2, or +3" (p.242), which the dataset lacks
 The SRD's Multiclassing (pp.56-58) and Feats (p.75) sections are left out on purpose: the game doesn't use those
 optional rules (owner, 2026-10-11), and the DM's prompt says so.
 
@@ -54,6 +55,33 @@ that is not in the table, or a dict field that does not exist, raises. The text 
   - Mystic Arcanum (6th to 9th): "6th-level" for "6th- level" (p.48)
 - Classes: Druid Spellcasting Focus, 'see "Equipment"' for "see chapter 5" (p.20); Paladin (p.31) and Wizard (p.52)
   spellcasting text, a space after a hyphen removed
+- Spells (`5e-SRD-Spells.json`, 80 of the 319 spells; pp.105-193): all 319 were compared with the PDF field by field
+  (casting time, range, components and material, duration, text, higher levels, level, school, ritual, class lists;
+  the 7 spells with tables also cell by cell). The corrected values are copied from the PDF text by script, only
+  extraction artefacts repaired. What changed:
+  - Casting time with its trigger: Counterspell, Feather Fall, Hellish Rebuke, Shield; Plant Growth "1 action or 8 hours"
+  - Range with its area ("Self (15-foot cone)" and the like) for 16 self spells; duration for Etherealness,
+    Find the Path, Forbiddance, Glyph of Warding, Prestidigitation, Project Image, Symbol, Thaumaturgy, Weird
+  - Material component: Confusion, Create or Destroy Water, Detect Thoughts, Enlarge/Reduce, Feather Fall, Fire Shield,
+    Hold Monster, Illusory Script, Magic Mouth ("10 gp"), See Invisibility, Shatter, Stone Shape, Water Breathing
+  - Text reworded or with a missing or extra sentence: Blight, Compulsion, Conjure Animals, Contingency, Create or Destroy
+    Water, Dominate Beast (the upcast tiers), Druidcraft, Entangle, Find Familiar, Find Steed, Fire Shield, Floating Disk,
+    Goodberry, Hallow, Heroism, Hideous Laughter, Hold Monster, Legend Lore, Longstrider, Magic Circle, Magic Mouth,
+    Mending, Moonbeam ("1d10"), Phantasmal Killer and Weird ("end of"), Polymorph, Prestidigitation, Reincarnate ("d100"),
+    See Invisibility, Shatter, Shillelagh, Speak with Animals, Spike Growth, Spiritual Weapon, Symbol ("10d10"),
+    Thaumaturgy, True Polymorph, Wall of Fire (a repeated sentence removed), Water Breathing, Zone of Truth
+  - Level, school or class list: Arcane Eye, Create Food and Water, Divination, Faerie Fire, Meld into Stone (classes);
+    Mass Cure Wounds and Mass Heal (evocation), Revivify (necromancy)
+  - Animal Friendship, At Higher Levels (p.115): the dataset lacks it. The PDF's own text is damaged ("one additional
+    beast t level above 1st."); repaired to "one additional beast for each slot level above 1st." by the owner's decision
+    (2026-10-12), the wording of the other spells' upcast lines. The entry has no `higher_level` field, which a
+    correction can't add, so the paragraph is the last entry of `desc` (as is Heroism's, p.154)
+  Left as the dataset has it (formatting only): ability names in lower case in the spell text ("wisdom saving throw"),
+  the material's capital letter and full stop, "25gp" for "25 gp", markdown for run-in headings and tables, bullets
+  as "- ", and "Concentration" kept as the `concentration` flag (the dataset's duration reads "Up to 1 minute").
+- Magic Items (`5e-SRD-Magic-Items.json`): Belt of Dwarvenkind, the bullet "You have darkvision out to a range of 60
+  feet." (p.211); Deck of Many Things, the Avatar of Death stat block (p.217) after the Skull card, and the cards the
+  dataset stops short of: Star, Sun, Talons, Throne, Vizier, The Void (pp.216-217)
 Not corrected: the `aura-improvements` feature (Paladin Aura of Protection levels), which the dataset invented and the
 PDF does not have; and the eldritch invocations' prerequisites, which come from the dataset's `prerequisites` and are
 printed in the PDF's wording by `dm/lookup.py` (checked against pp.48-50).
