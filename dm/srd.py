@@ -27,7 +27,14 @@ class Bad(Exception):
 
 @cache
 def table(name: str) -> dict[str, dict[str, Any]]:
-    return {x["index"]: x for x in json.loads((DIR / f"5e-SRD-{name}.json").read_text(encoding="utf-8"))}
+    out = {x["index"]: x for x in json.loads((DIR / f"5e-SRD-{name}.json").read_text(encoding="utf-8"))}
+    gap = DIR / "gapfill" / f"5e-SRD-{name}.json"  # sections the dataset lacks, typed from the SRD (see SOURCE.md)
+    if gap.exists():
+        for x in json.loads(gap.read_text(encoding="utf-8")):
+            if x["index"] in out:
+                raise ValueError(f"gap-fill {name} entry {x['index']!r} is already in the dataset")
+            out[x["index"]] = x
+    return out
 
 
 def find(name: str, s: str) -> dict[str, Any]:
