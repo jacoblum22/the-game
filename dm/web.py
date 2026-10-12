@@ -53,9 +53,27 @@ def read(p: subprocess.Popen[bytes]) -> None:
         out += f"\n\n[the game ended (exit code {p.returncode})]\n"
 
 
+def history(save: Path) -> str:
+    """The game so far, from the save, in the shape the terminal printed it. Continuing a save prints only the DM's
+    last reply, so that one is left out here."""
+    t = json.loads(save.read_text(encoding="utf-8"))["transcript"]
+    last = max((i for i, e in enumerate(t) if e["kind"] == "dm"), default=-1)
+    text = ""
+    for i, e in enumerate(t):
+        if e["kind"] == "dm" and i != last:
+            text += f"\n{e['text']}\n"
+        elif e["kind"] == "player":
+            text += f"\n> {e['text']}\n"
+        elif e["kind"] == "tool":
+            text += f"  [{e['text']}]\n"
+        elif e["kind"] == "call" and e["tool"] == "roll_ability_scores" and not e["error"]:
+            text += f"  [{e['result']}]\n"
+    return text
+
+
 def start(args: list[str]) -> None:
     global proc, out
-    out = ""
+    out = history(Path(args[1])) if args[0] == "--resume" else ""
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUNBUFFERED": "1"}
     proc = subprocess.Popen([sys.executable, "-u", "-m", "dm.play", *args], cwd=ROOT, env=env,
                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
