@@ -681,3 +681,86 @@ def _find(f: dict[str, Any], name: str) -> dict[str, Any]:
         if c["name"] == name.strip():
             return c
     raise Refused(f"no combatant named {name!r}; in the fight: {', '.join(c['name'] for c in f['order'])}")
+
+
+# ---- the game clock (owner, 2026-10-12): seconds since midnight before Day 1, or None until the DM sets it. The code
+#      only counts: fights (6 seconds a round), rests and the DM's own changes move it. It never decides what the time
+#      means for the story (a torch out, nightfall): the DM reads the clock and the timers and applies the rules. ----
+
+DAY = 24 * 3600
+
+
+def new_clock() -> dict[str, Any]:
+    return {"now": None, "timers": {}}
+
+
+def clock_text(c: dict[str, Any]) -> str:
+    if c["now"] is None:
+        return "Time: not set (set it with change_time)"
+    lines = [f"Time: {when(c['now'])}"]
+    if c["timers"]:
+        lines.append("Timers: " + "; ".join(f"{n}: " + (f"{span(end - c['now'])} left" if end > c["now"] else
+                                                        "ends now" if end == c["now"] else f"ran out {span(c['now'] - end)} ago")
+                                            for n, end in c["timers"].items()))
+    return "\n".join(lines)
+
+
+def when(t: int) -> str:
+    """Day 1, 5:40 PM (seconds shown only when there are some, as in a fight)."""
+    h, rest = divmod(t % DAY, 3600)
+    mi, s = divmod(rest, 60)
+    return f"Day {t // DAY + 1}, {(h - 1) % 12 + 1}:{mi:02d}" + (f":{s:02d}" if s else "") + (" AM" if h < 12 else " PM")
+
+
+def span(sec: int) -> str:
+    parts = [(sec // 86400, "day"), (sec % 86400 // 3600, "hour"), (sec % 3600 // 60, "minute"), (sec % 60, "second")]
+    return " ".join(f"{n} {u}{'s' if n != 1 else ''}" for n, u in parts if n) or "0 seconds"
+
+
+def advance(c: dict[str, Any], sec: int) -> dict[str, Any]:
+    """The clock `sec` later; an unset clock stays unset."""
+    return c if c["now"] is None or not sec else {**c, "now": c["now"] + sec}
+
+
+def _secs(a: dict[str, Any]) -> int:
+    return (a.get("days") or 0) * DAY + (a.get("hours") or 0) * 3600 + (a.get("minutes") or 0) * 60 + (a.get("seconds") or 0)
+
+
+def change_time(c: dict[str, Any], a: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    """set {day, time "17:40"}, advance {days, hours, minutes, seconds}, add_timer {name, + the same}, remove_timer."""
+    c = copy.deepcopy(c)
+    out = []
+    if st := a.get("set"):
+        m_ = re.fullmatch(r"(\d{1,2}):(\d{2})", str(st.get("time", "")).strip())
+        day = st.get("day") or 1
+        if not m_ or int(m_[1]) > 23 or int(m_[2]) > 59 or not isinstance(day, int) or day < 1:
+            raise Refused('set needs a day (1 or more) and a 24-hour time, e.g. {"day": 1, "time": "17:40"}')
+        was = c["now"]
+        c["now"] = (day - 1) * DAY + int(m_[1]) * 3600 + int(m_[2]) * 60
+        if was is not None and c["timers"]:  # the timers keep their time left
+            c["timers"] = {n: end - was + c["now"] for n, end in c["timers"].items()}
+        out.append(f"time set: {when(c['now'])}")
+    if c["now"] is None and any(a.get(k) for k in ("advance", "add_timer", "remove_timer")):
+        raise Refused("the time isn't set yet: set it first")
+    if adv := a.get("advance"):
+        sec = _secs(adv)
+        if sec <= 0:
+            raise Refused("advance needs a positive amount of time")
+        c["now"] += sec
+        out.append(f"{span(sec)} later: {when(c['now'])}")
+    if tm := a.get("add_timer"):
+        name, sec = str(tm.get("name", "")).strip(), _secs(tm)
+        if not name or sec <= 0:
+            raise Refused("add_timer needs a name and a positive duration")
+        if name in c["timers"]:
+            raise Refused(f"there's already a timer named {name!r}: remove it first, or pick another name")
+        c["timers"][name] = c["now"] + sec
+        out.append(f"timer {name}: {span(sec)}")
+    if rm := a.get("remove_timer"):
+        if rm not in c["timers"]:
+            raise Refused(f"no timer named {rm!r}; timers: {', '.join(c['timers']) or 'none'}")
+        del c["timers"][rm]
+        out.append(f"timer {rm} removed")
+    if not out:
+        raise Refused("nothing to change: pass set, advance, add_timer or remove_timer")
+    return c, "; ".join(out)

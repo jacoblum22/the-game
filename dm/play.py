@@ -77,6 +77,7 @@ class Game:
     def __init__(self, data: dict[str, Any], path: Path) -> None:
         self.sheet: dict[str, Any] = data["sheet"]
         self.fight: dict[str, Any] | None = data.get("fight")
+        self.clock: dict[str, Any] = data.get("clock") or m.new_clock()  # saves from before 2026-10-12 have none
         self.session_id: str | None = data.get("session_id")
         self.transcript: list[dict[str, Any]] = data.get("transcript", [])
         self.model: str = data.get("model", MODEL)
@@ -85,7 +86,7 @@ class Game:
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
-        data = {"sheet": self.sheet, "fight": self.fight, "session_id": self.session_id, "model": self.model,
+        data = {"sheet": self.sheet, "fight": self.fight, "clock": self.clock, "session_id": self.session_id, "model": self.model,
                 "cwd": self.cwd, "transcript": self.transcript}
         self.path.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
 
@@ -95,7 +96,7 @@ class Game:
             print(f"  [{text}]")
 
     def status(self) -> str:
-        return m.status(self.sheet) + "\n" + m.fight_text(self.fight, self.sheet)
+        return m.clock_text(self.clock) + "\n" + m.status(self.sheet) + "\n" + m.fight_text(self.fight, self.sheet)
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
@@ -152,6 +153,10 @@ class Game:
         async def change_pc(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
                 self.sheet, lines = m.change_pc(self.sheet, a)
+                rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
+                self.clock = m.advance(self.clock, rest)
+                if rest and self.clock["now"] is not None:
+                    lines.append(f"{m.span(rest)} later: {m.when(self.clock['now'])}")
                 return "; ".join(lines)
             return self.run("sheet", go)
 
@@ -213,23 +218,51 @@ class Game:
               {"type": "object", "properties": {}})
         async def next_turn(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
+                was = self.fight["round"] if self.fight else 0
                 self.fight, text = m.next_turn(self.fight)
+                if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
+                    self.clock = m.advance(self.clock, 6)
                 return text
             return self.run("fight", go)
 
         @tool("end_fight", "End the current fight.", {"type": "object", "properties": {}})
         async def end_fight(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
+                rounds = self.fight["round"] if self.fight else 0
                 self.fight, text = m.end_fight(self.fight)
+                self.clock = m.advance(self.clock, 6)
+                if self.clock["now"] is not None:
+                    text += f" {m.span(rounds * 6)} of fighting; now {m.when(self.clock['now'])}."
                 return text
             return self.run("fight", go)
+
+        _span = {k: _INT for k in ("days", "hours", "minutes", "seconds")}
+
+        @tool("change_time", "The game clock and timers. Set the time once at the start (and to correct it), and move it on "
+              "whenever time passes outside fights and rests (travel, searching, waiting, talking). Fights (6 seconds a "
+              "round, counted as rounds start and when the fight ends), short rests (1 hour) and long rests (8 hours) move it "
+              "by themselves. A timer counts down with the clock, e.g. a torch (1 hour) or a spell's duration; it doesn't "
+              "end anything by itself and stays, shown as run out, until you remove it.",
+              {"type": "object", "properties": {
+                  "set": {"type": "object", "properties": {"day": {"type": "integer", "minimum": 1},
+                                                           "time": {"type": "string", "description": "24-hour, e.g. 17:40"}},
+                          "required": ["time"]},
+                  "advance": {"type": "object", "properties": _span},
+                  "add_timer": {"type": "object", "properties": {"name": {"type": "string", "description": "e.g. Torch (Brakka's)"},
+                                                                 **_span}, "required": ["name"]},
+                  "remove_timer": {"type": "string", "description": "a timer's name, exactly as in the status"}}})
+        async def change_time(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                self.clock, text = m.change_time(self.clock, a)
+                return text
+            return self.run("time", go)
 
         def record(a: dict[str, Any], text: str) -> None:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
             self.save()
 
         return [roll, change_pc, level_up_options, level_up, add_combatants, change_creature, next_turn, end_fight,
-                lookup_tool(record)]
+                change_time, lookup_tool(record)]
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -442,7 +475,7 @@ async def main() -> None:
     opts = dm_options(
         game.cwd, system_prompt=system_prompt(game.sheet), model=game.model, mcp_servers={"dm": server},
         allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "level_up_options", "level_up", "add_combatants",
-                                                 "change_creature", "next_turn", "end_fight", "lookup")],
+                                                 "change_creature", "next_turn", "end_fight", "change_time", "lookup")],
         resume=game.session_id)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
     async with ClaudeSDKClient(options=opts) as client:

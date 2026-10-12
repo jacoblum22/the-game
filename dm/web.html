@@ -181,6 +181,7 @@ function tool(text) {
     return `<div class="event">⚔ Round ${m[1]} · ${esc(m[2])}'s turn${m[3] ? `<small>${esc(m[3])}</small>` : ""}${rest}</div>`;
   if ((m = head.match(/^fight: (.*)$/)))  // the tail is a note to the DM about its next_turn tool
     return `<div class="event">⚔ ${esc(m[1].replace(/\. Nobody has had a turn yet: next_turn starts the first one\.$/, ""))}${rest}</div>`;
+  if ((m = head.match(/^time: (.*)$/))) return `<div class="event">⏳ ${esc(m[1])}${rest}</div>`;
   if ((m = head.match(/^level up: (.*)$/))) return `<div class="event big">⬆ ${esc(m[1])}${rest}</div>`;
   if ((m = head.match(/^built (.*)$/))) return `<div class="event big">✦ Built ${esc(m[1])}${rest}</div>`;
   return `<div class="event">${esc(head)}${rest}</div>`;
@@ -241,6 +242,8 @@ function sheetCard(raw) {
   const sp = speed.match(/^(\d+) ft(?: \((.*)\))?$/);
   top += (sp ? stat("Speed", sp[1], "ft" + (sp[2] ? ", " + esc(sp[2]) : "")) : stat("Speed", "", esc(speed))) +stat("Prof.", prof) + stat("Hit dice", esc(hd)) + stat("XP", esc(xp));
   top += `</div>`;
+  const time = take("Time"), timers = take("Timers");
+  if (time) top += row("Time", esc(time)) + (timers ? row("Timers", timers.split("; ").map(x => `<span class="chip">${esc(x)}</span>`).join("")) : "");
   const cond = take("Conditions");
   if (cond && cond !== "none") top += `<div class="row bad">${chips(cond)}</div>`;
   for (const k of ["Death saves", "Dead", "Stable at 0 HP"]) if (kv[k]) top += row(k, `<span class="badtxt">${esc(take(k))}</span>`);

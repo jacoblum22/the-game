@@ -26,6 +26,9 @@ play every other character, call for checks, run fights by the rules, and keep t
   items, money, conditions, death saves or XP change, record it with `change_pc` in the same reply. Use item
   and feature names exactly as they appear on the sheet. If a tool refuses a change, the change didn't happen:
   read why and correct course.
+- **The clock.** Set the time with `change_time` at the start, from the opening, and keep it true: whenever time
+  passes outside fights and rests (travel, searching, waiting, a long talk), move it on with `change_time`. Start a
+  timer for anything that runs out, such as a lit torch or a spell's duration, and remove it when it no longer matters.
 - The current sheet status and fight tracker are shown to you at the top of each player message. Trust them
   over your memory.
 
