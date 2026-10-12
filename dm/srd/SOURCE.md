@@ -32,13 +32,45 @@ adds these entries to the dataset's (an index that is already in the dataset rai
   - Cleric: Destroy Undead table (p.17)
   - Sorcerer: Flexible Casting, Creating Spell Slots table (p.43); Draconic Ancestry table (p.44)
 - Magic items: `dm/srd/gapfill/5e-SRD-Magic-Items.json` has "Shield, +1, +2, or +3" (p.242), which the dataset lacks
+- Rules sections of the Equipment chapter, taken by script (the SRD's own headings are the names; a section's tables
+  are kept as tables; the item tables and the item descriptions are the equipment entries'): Selling Treasure (p.62);
+  Armor (pp.62-63), Light Armor, Medium Armor, Heavy Armor (p.63), Getting Into and Out of Armor with its table (p.64);
+  Weapons, Weapon Proficiency (p.64), Improvised Weapons, Silvered Weapons (p.65); Container Capacity table (pp.69-70);
+  Equipment Packs (the introduction, p.70), Tools (the introduction, p.70), Mounts and Vehicles (the prose with
+  Barding, Saddles, Vehicle Proficiency, Rowed Vessels, p.71), Trade Goods with its table (p.72), Expenses (p.72),
+  Lifestyle Expenses with its table (pp.72-73; the index is `lifestyle-expenses-equipment` because the dataset's
+  `lifestyle-expenses` is the shorter text from Between Adventures, p.88, and a lookup of the name shows both),
+  Self-Sufficiency (p.73), Food, Drink, and Lodging with its table (pp.73-74), Services with its table (p.74),
+  Spellcasting Services (p.74). Not added, because the dataset has the text: Weapon Properties (the eleven properties
+  are `weapon_property` entries, checked word for word; only the introduction sentence is new), Special Weapons (Lance
+  and Net are in the equipment entries' `special`, checked word for word), Adventuring Gear (item descriptions), the
+  Armor, Weapons, Tools, Mounts and Other Animals, Tack, Harness, and Drawn Vehicles and Waterborne Vehicles tables
+- Weapon property: `dm/srd/gapfill/5e-SRD-Weapon-Properties.json` has Range (p.65), which the dataset lacks (it has a
+  non-SRD "Monk" property instead, which the lookup hides)
+- Rules sections of the Monsters chapter introduction (pp.254-260): Monsters, Size with the Size Categories table,
+  Modifying Creatures, Type, Tags, Alignment, Armor Class, Hit Points with the Hit Dice by Size table, Speed, Burrow,
+  Climb, Fly, Swim, Ability Scores, Saving Throws with the Proficiency Bonus by Challenge Rating table, Skills,
+  Vulnerabilities, Resistances, and Immunities, Senses, Blindsight, Darkvision, Armor, Weapon, and Tool Proficiencies,
+  Tremorsense, Truesight, Languages, Telepathy, Challenge, Experience Points with the Experience Points by Challenge
+  Rating table, Special Traits, Innate Spellcasting, Spellcasting, Psionics, Actions, Melee and Ranged Attacks,
+  Multiattack, Ammunition, Reactions, Limited Usage, Grapple Rules for Monsters, Equipment, Legendary Creatures,
+  Legendary Actions, A Legendary Creature's Lair, Lair Actions, Regional Effects. Where the heading is also an
+  adventuring rule's (Hit Points, Speed, Saving Throws, Skills, Spellcasting, Reactions, Equipment) the index ends in
+  `-monsters` and the name is the same, so a lookup shows both. A table with two blocks side by side in the PDF
+  (Proficiency Bonus by Challenge Rating, Experience Points by Challenge Rating) is one two-column table, the header
+  once
+- Half-Dragon Template with its two tables (pp.320-321), Conditions, the introduction of Appendix PH-A (p.358), and
+  Customizing NPCs from Appendix MM-B (p.395). The PDF's "monster`s attack" (a grave accent, p.358) is left as the PDF
+  has it
 The SRD's Multiclassing (pp.56-58) and Feats (p.75) sections are left out on purpose: the game doesn't use those
 optional rules (owner, 2026-10-11), and the DM's prompt says so.
 
 Corrections: `dm/srd/corrections/5e-SRD-<Table>.json` holds the places where the dataset differs from the SRD 5.1 PDF.
 `dm/srd.py` `table()` applies them after loading and gap-fill. Each is {"index", "source", "set": {path: value}}; a path
 is dotted and may index a list by number ("class_specific.invocations_known", "spellcasting.info.4.desc"). An index
-that is not in the table, or a dict field that does not exist, raises. The text is the PDF's, word for word. Entries
+that is not in the table, or a dict field that does not exist, raises. An entry can also be {"index", "source", "add":
+{field: value}}, which gives the entry a field the dataset lacks (a field that is already there raises). The text is
+the PDF's, word for word. Entries
 (PDF page):
 - Levels: Warlock levels 4 and 6, Invocations Known 2 and 3 (the dataset had 3 and 4) (p.46)
 - Subclasses: Life Domain, Guardian of Faith added to the domain spells at Cleric level 7; the introduction gets the
@@ -82,6 +114,10 @@ that is not in the table, or a dict field that does not exist, raises. The text 
 - Magic Items (`5e-SRD-Magic-Items.json`): Belt of Dwarvenkind, the bullet "You have darkvision out to a range of 60
   feet." (p.211); Deck of Many Things, the Avatar of Death stat block (p.217) after the Skull card, and the cards the
   dataset stops short of: Star, Sun, Talons, Throne, Vizier, The Void (pp.216-217)
+- Monsters (`5e-SRD-Monsters.json`, "add"): the 32 entries with legendary actions (the PDF's 30 stat blocks; the
+  Vampire is three entries here) get `legendary_actions_intro`, the sentence before the options ("The dragon can take 3
+  legendary actions, choosing from the options below. ...", pp.261-353); `dm/lookup.py` prints it under "Legendary
+  actions:"
 Not corrected: the `aura-improvements` feature (Paladin Aura of Protection levels), which the dataset invented and the
 PDF does not have; and the eldritch invocations' prerequisites, which come from the dataset's `prerequisites` and are
 printed in the PDF's wording by `dm/lookup.py` (checked against pp.48-50).

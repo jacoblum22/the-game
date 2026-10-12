@@ -21,7 +21,7 @@ def test_entries() -> None:
 def test_not_found() -> None:
     assert "Rules sections whose text mentions it: Melee Attacks" in L.lookup("grappling")
     assert "Adult Red Dragon (monster)" in L.lookup("red dragon")
-    assert "may not be in the SRD" in L.lookup("beholder")
+    assert "may not be in the SRD" in L.lookup("displacer beast")  # not "beholder": the Type section names beholders
 
 
 def test_every_entry_formats() -> None:

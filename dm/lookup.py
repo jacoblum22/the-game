@@ -147,6 +147,8 @@ def _monster(m: dict[str, Any]) -> str:
                        ("Reactions", "reactions"), ("Legendary actions", "legendary_actions")):
         if m.get(key):
             lines.append(f"{title}:")
+            if key == "legendary_actions" and m.get("legendary_actions_intro"):  # "The dragon can take 3 legendary actions..."
+                lines.append(m["legendary_actions_intro"])
             lines += [f"- {a['name']}{_usage(a)}: {a['desc']}" for a in m[key]]
     return "\n".join(lines)
 
@@ -365,7 +367,8 @@ def _trait(t: dict[str, Any]) -> str:
 def _rule(r: dict[str, Any], linked: bool = True) -> str:
     """One level only: a section brought in by a procedure's steps comes without its own linked sections, so a
     lookup never recurses or chains (a linked section that is itself a procedure still shows its steps)."""
-    text = f"RULE {r['name']}:\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
+    twin = r.get("source") and sum(x["name"] == r["name"] and not x.get("for") for x in srd.table("Rules").values()) > 1
+    text = f"RULE {r['name']}" + (f" ({r['source'].replace(' (gap-fill)', '')})" if twin else "") + ":\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
         c["name"] for c in r.get("children", [])))
     named = _step_rules(r) if linked else []
     if named:

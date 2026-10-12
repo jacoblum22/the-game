@@ -39,7 +39,11 @@ def table(name: str) -> dict[str, dict[str, Any]]:
         for c in json.loads(fix.read_text(encoding="utf-8")):
             if c["index"] not in out:
                 raise ValueError(f"correction for {name} entry {c['index']!r}, which is not in the table")
-            for path, value in c["set"].items():  # "class_specific.invocations_known", "spellcasting.info.4.desc"
+            for field, value in c.get("add", {}).items():  # a field the dataset lacks ("legendary_actions_intro")
+                if field in out[c["index"]]:
+                    raise ValueError(f"correction for {name} entry {c['index']!r}: field {field!r} is already there")
+                out[c["index"]][field] = value
+            for path, value in c.get("set", {}).items():  # "class_specific.invocations_known", "spellcasting.info.4.desc"
                 *head, last = path.split(".")
                 node = out[c["index"]]
                 for k in head:
