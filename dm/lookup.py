@@ -144,12 +144,14 @@ def _trait(t: dict[str, Any]) -> str:
     return f"TRAIT {t['name']} ({who}):\n{_lines(t['desc'])}"
 
 
-def _rule(r: dict[str, Any]) -> str:
+def _rule(r: dict[str, Any], linked: bool = True) -> str:
+    """One level only: a section brought in by a procedure's steps comes without its own linked sections, so a
+    lookup never recurses or chains (a linked section that is itself a procedure still shows its steps)."""
     text = f"RULE {r['name']}:\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
         c["name"] for c in r.get("children", [])))
-    linked = _step_rules(r)
-    if linked:
-        text += "\n\nThe rules sections these steps name, in full:\n\n" + "\n\n".join(_rule(x) for x in linked)
+    named = _step_rules(r) if linked else []
+    if named:
+        text += "\n\nThe rules sections these steps name, in full:\n\n" + "\n\n".join(_rule(x, False) for x in named)
     return text
 
 

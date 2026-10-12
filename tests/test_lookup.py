@@ -32,3 +32,12 @@ def test_a_procedure_comes_with_the_rules_its_steps_name() -> None:
     assert names(L.lookup("Making an Attack")) == ["RULE Making an Attack", "RULE Attack", "RULE Cover",
                                                  "RULE Advantage and Disadvantage"]
     assert names(L.lookup("Surprise")) == ["RULE Surprise"]  # a section without steps comes alone
+
+
+def test_linked_sections_go_one_level_deep_only() -> None:
+    biggest = 0
+    for r in srd.table("Rules").values():
+        text = L.lookup(r["name"], "rule")
+        assert text.count("The rules sections these steps name") <= 1  # linked sections never bring their own
+        biggest = max(biggest, len(text))
+    assert biggest < 12_000, biggest
