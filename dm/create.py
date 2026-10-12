@@ -50,7 +50,7 @@ ENEMY_LANGUAGE_ID = f"feature.{ENEMY_FEATURE}.language"
 ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
 ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
                     "(such as gnolls and orcs), as a list of two names")
-SPELL_KEYS = ("cantrips", "spells", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
+SPELL_KEYS = ("cantrips", "spells", "prepared", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
 RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS}  # a level record's fields
 # The class table repeats a feature under a new name as it improves (Bardic Inspiration d6, d8, ...): only the newest
 # is shown, with the choices made at every stage. The "-improvement-N" entries are placeholders for subclass features.
@@ -244,7 +244,8 @@ def level_spell_needs(cls: str, level: int) -> dict[str, Any]:
     """What the record of a level above 1 has to say about spells, from the class table and the features gained then:
     "cantrips"/"spells" = how many to learn, "secrets" = Magical Secrets spells (from any class), "replace" = may
     swap a known spell, "arcanum" = the spell level of the Mystic Arcanum gained (0: none), "mastery"/"signature" =
-    Wizard 18/20, "max_level" = the highest spell level castable then. Empty for a class that never casts."""
+    Wizard 18/20, "first_list" = the first prepared list is chosen now (a paladin at 2nd level), "max_level" = the
+    highest spell level castable then. Empty for a class that never casts."""
     if cls not in CASTERS:
         return {}
     L = srd.table("Levels")
@@ -261,6 +262,8 @@ def level_spell_needs(cls: str, level: int) -> dict[str, Any]:
             sp.get("spells_known", 0) - before.get("spells_known", 0) - counted if how == "known" else 0,
             "secrets": counted + extra, "secrets_counted": counted, "replace": how == "known", "arcanum": arcanum,
             "mastery": "spell-mastery" in feats, "signature": "signature-spell" in feats,
+            # the SRD only says when the list changes (a long rest), not when the first one is made: at the level-up (owner)
+            "first_list": how == "prepared" and not max_spell_level(cls, level - 1),
             "max_level": max_spell_level(cls, level)}
 
 
@@ -610,7 +613,14 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
                                           f"a level-1 {cls} spell", errs, atmost=True)
     for i, rec in enumerate(levels):
         _level_spells(rec, i + 2, cls, st, errs, level_chosen[i])
-    land = next((g["index"] for g in chosen.get("feature.circle-of-the-land", [])), None)
+        if level_spell_needs(cls, i + 2)["first_list"]:  # no ASI before this level: the 1st-level scores still hold
+            first = spell_rules(race, cls, scores1, i + 2)
+            st["prepared"] = _check_names(f"level {i + 2}: prepared", rec.get("prepared"), first["prepared"],
+                                          set(spell_pool(cls, 1, first["max_level"])),
+                                          f"a {cls} spell of level 1 to {first['max_level']}", errs, atmost=True)
+        elif rec.get("prepared"):
+            errs.append(f"level {i + 2}: prepared: the prepared list changes when a long rest finishes, not at a level-up")
+    land =next((g["index"] for g in chosen.get("feature.circle-of-the-land", [])), None)
     rules = spell_rules(race, cls, scores or None, 1 + len(levels), land)
     if not rules:
         return None
@@ -621,7 +631,7 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
     if rules["how"] == "spellbook":
         out["spellbook"] = st["spellbook"]
     if rules["how"] in ("spellbook", "prepared"):
-        out["prepared"] = st["prepared"]  # the list chosen at 1st level; the live list belongs to the long rests
+        out["prepared"] = st["prepared"]  # the first list (1st level; a paladin's at 2nd); later lists belong to long rests
     return out
 
 
@@ -873,9 +883,7 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
                 if classname == "warlock" else ""),
             "prepared": f"Prepare up to {rules.get('prepared')} spells from the whole {classname} list after a long rest"
                         + (f" ({ALWAYS_PREPARED[c['index']]} spells are always prepared and don't count)."
-                           if rules.get("always_prepared") else ".")
-                        + ("" if spells.get("prepared") else " None are prepared yet: prepare them when a long rest "
-                           "finishes."),
+                           if rules.get("always_prepared") else "."),
             "spellbook": f"Prepare up to {rules.get('prepared')} spells from the spellbook after a long rest. Ritual Casting: "
                          "a ritual spell in the spellbook can be cast as a ritual (10 minutes longer, no slot), prepared "
                          "or not.",

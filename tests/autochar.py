@@ -84,6 +84,8 @@ def spell_fields(cls: str, level: int, sheet: dict[str, Any], rec: dict[str, Any
         out["cantrips"] = take(cls, need["cantrips"], 0, 0, have)
     if need["spells"]:
         out["spells"] = take(cls, need["spells"], 1, top, have)
+    if need["first_list"]:
+        out["prepared"] = take(cls, 1, 1, top, set())
     if need["secrets"]:  # Magical Secrets: spells of another class
         out["secrets"] = take("cleric", need["secrets"], 0, top, have | set(out.get("spells", [])))
     if need["replace"] and level % 2 == 0 and sc.get("known"):

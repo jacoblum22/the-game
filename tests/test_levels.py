@@ -657,12 +657,20 @@ STYLE = {"feature.paladin-fighting-style": ["Defense"]}
 def test_paladin_casts_from_level_2() -> None:
     # STR 16, CON 14, CHA 14 + 1 = 15 (+2). No spells at 1st level.
     assert "spellcasting" not in built(PAL, []) and "spell_slots" not in built(PAL, [])
-    levels = [rec(choices=STYLE), FIXED, rec(asi={"STR": 2}), FIXED]
+    first = ["Bless", "Cure Wounds", "Shield of Faith"]
+    levels = [rec(choices=STYLE, prepared=first), FIXED, rec(asi={"STR": 2}), FIXED]
     s2 = built(PAL, levels[:1])
     assert slot_table(s2) == {"1": (2, 2, "long")} and sc(s2)["max_level"] == 1 and sc(s2)["cantrips"] == []
-    # prepare: CHA +2 + half of level 2 = 1 -> 3; DC 8 + 2 + 2 = 12; attack +4; no list yet: it is made when a long rest ends
-    assert (sc(s2)["prepare_count"], sc(s2)["save_dc"], sc(s2)["attack_bonus"], sc(s2)["prepared"]) == (3, 12, 4, [])
-    assert "None are prepared yet" in sc(s2)["notes"]
+    # prepare: CHA +2 + half of level 2 = 1 -> 3; DC 8 + 2 + 2 = 12; attack +4; the first list is chosen at the level-up (owner)
+    assert (sc(s2)["prepare_count"], sc(s2)["save_dc"], sc(s2)["attack_bonus"], sc(s2)["prepared"]) == (3, 12, 4, first)
+    assert sc(built(PAL, [rec(choices=STYLE, prepared=["Bless"])]))["prepared"] == ["Bless"]  # 1 to 3
+    for bad, why in (([], "prepared: choose 1 to 3"), ([*first, "Heroism"], "prepared: choose 1 to 3"),
+                     (["Aid"], "prepared: Aid is not a paladin spell of level 1 to 1"),
+                     (["Fire Bolt"], "prepared: Fire Bolt is not a paladin spell")):
+        assert f"level 2: {why}" in problems([rec(choices=STYLE, prepared=bad)], PAL), bad
+    assert sc(built(PAL, levels[:2]))["prepared"] == first  # kept at 3rd level
+    assert "level 3: prepared: the prepared list changes when a long rest finishes" in problems(
+        [levels[0], rec(prepared=["Bless"])], PAL)
     w, _ = m.change_pc(s2, {"long_rest": True, "prepare_spells": ["Bless", "Cure Wounds", "Shield of Faith"]})
     assert w["spellcasting"]["prepared"] == ["Bless", "Cure Wounds", "Shield of Faith"]
     with pytest.raises(m.Refused, match="prepare 1 to 3"):
