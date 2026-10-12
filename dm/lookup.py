@@ -1,9 +1,10 @@
 """The DM's rules lookup: the exact SRD 5.1 text for a spell, monster, condition, magic item, piece of equipment,
-rules section, class (without its features), class feature or racial trait, from the dataset in dm/srd/.
+rules section, class (without its features), class feature, racial trait, race, subrace, background, alignment,
+language or weapon property, from the dataset in dm/srd/.
 
 The DM names what it wants. An exact name (case ignored) returns the entry; failing that, a name that differs only in
-apostrophe style, hyphens or a plural "s" does. A name that starts several entries named "Name (...)" returns them all
-("Wild Shape"). Otherwise the names that contain the words asked for are listed, so the DM can pick one.
+apostrophe style, hyphens or a plural "s" does. A name that starts several entries named "Name (...)" or "Name, ..." returns them all
+("Wild Shape", "Werewolf"). Otherwise the names that contain the words asked for are listed, so the DM can pick one.
 """
 
 from __future__ import annotations
@@ -14,7 +15,9 @@ from typing import Any
 from dm import srd
 
 KINDS = {"spell": "Spells", "monster": "Monsters", "condition": "Conditions", "magic_item": "Magic-Items",
-         "equipment": "Equipment", "rule": "Rules", "feature": "Features", "trait": "Traits", "class": "Classes"}
+         "equipment": "Equipment", "rule": "Rules", "feature": "Features", "trait": "Traits", "class": "Classes",
+         "race": "Races", "subrace": "Subraces", "background": "Backgrounds", "alignment": "Alignments",
+         "language": "Languages", "weapon_property": "Weapon-Properties"}
 _KIND_OF = {t: k for k, t in KINDS.items()} | {"Subclasses": "class"}
 _ALSO = {"Classes": ["Subclasses"]}  # a subclass is found along with the classes
 # the SRD's name for each subclass (the dataset's is shorter) and the heading of its spell list
@@ -79,7 +82,7 @@ def _find(tables: list[str], key: str) -> list[tuple[str, dict[str, Any]]]:
         hits = [(t, x) for t, x in every if n in map(_norm, _names(t, x))]
     have = {t for t, _ in hits}
     for t, x in every:
-        if ((t not in have or t == "Features") and " (" in x["name"] and _norm(x["name"].split(" (")[0]) == n
+        if ((t not in have or t == "Features") and _norm(re.split(r" \(|, ", x["name"])[0]) == n
                 and not any(x is h for _, h in hits)):
             hits.append((t, x))
     return hits
@@ -145,25 +148,84 @@ def _monster(m: dict[str, Any]) -> str:
 def _equipment(e: dict[str, Any]) -> str:
     cost = f"{e['cost']['quantity']} {e['cost']['unit']}" if e.get("cost") else "?"
     lines = [f"EQUIPMENT {e['name']} ({e['equipment_category']['name']}): cost {cost}"
-             + (f", weight {e['weight']} lb" if e.get("weight") else "")]
+             + (f", weight {e['weight']} lb" if e.get("weight") else "")
+             + (f", quantity {e['quantity']}" if e.get("quantity") else "")]
     if e.get("damage"):
         rng = e.get("range") or {}
         lines.append(f"{e['category_range']} weapon: {e['damage']['damage_dice']} {e['damage']['damage_type']['name'].lower()}"
                      + (f", two-handed {e['two_handed_damage']['damage_dice']}" if e.get("two_handed_damage") else "")
                      + (f", range {rng['normal']}/{rng['long']}" if rng.get("long") else "")
-                     + "; properties: " + (", ".join(p["name"] for p in e.get("properties", [])) or "none"))
+                     + "; properties: " + (", ".join(p["name"] for p in e.get("properties", [])) or "none")
+                     + (f"; thrown range {e['throw_range']['normal']}/{e['throw_range']['long']}" if e.get("throw_range") else ""))
+    elif e.get("weapon_category"):  # a weapon with no damage (Net)
+        rng = e.get("throw_range") or e.get("range") or {}
+        lines.append(f"{e['category_range']} weapon: no damage; properties: " + ", ".join(p["name"] for p in e.get("properties", []))
+                     + (f"; range {rng['normal']}/{rng['long']}" if rng.get("long") else ""))
+    if e.get("special"):
+        lines.append("Special: " + _lines(e["special"]))
     if e.get("armor_class"):
         ac = e["armor_class"]
-        lines.append(f"{e['armor_category']} armor: AC {ac['base']}"
+        lines.append((f"Shield: AC bonus +{ac['base']}" if e["armor_category"] == "Shield"
+                      else f"{e['armor_category']} armor: AC {ac['base']}")
                      + (" + DEX" + (f" (max {ac['max_bonus']})" if ac.get("max_bonus") is not None else "")
                         if ac["dex_bonus"] else "")
                      + (f"; needs STR {e['str_minimum']}" if e.get("str_minimum") else "")
                      + ("; disadvantage on Stealth" if e.get("stealth_disadvantage") else ""))
+    if e.get("speed"):
+        lines.append(f"Speed {e['speed']['quantity']} {e['speed']['unit']}" + (f"; carrying capacity {e['capacity']}" if e.get("capacity") else ""))
+    elif e.get("capacity"):
+        lines.append(f"Carrying capacity {e['capacity']}")
     if e.get("contents"):
         lines.append("Contains: " + ", ".join(f"{c['quantity']} × {c['item']['name']}" for c in e["contents"]))
     if e.get("desc"):
         lines.append(_lines(e["desc"]))
     return "\n".join(lines)
+
+
+def _bonuses(bs: list[dict[str, Any]]) -> str:
+    return ", ".join(f"{b['ability_score']['name']} {b['bonus']:+d}" for b in bs) or "none"
+
+
+def _race(r: dict[str, Any]) -> str:
+    opt = r.get("ability_bonus_options")
+    pick = lambda o: f"{o['choose']} of: " + ", ".join(f"{b['ability_score']['name']} {b['bonus']:+d}" for b in o["from"]["options"])
+    lines = [f"RACE {r['name']}: {r['size']}, speed {r['speed']} ft.",
+             f"Ability score increase: {_bonuses(r['ability_bonuses'])}" + (f"; choose {pick(opt)}" if opt else ""),
+             f"Age: {r['age']}", f"Alignment: {r['alignment']}", f"Size: {r['size_description']}", f"Languages: {r['language_desc']}"]
+    if r.get("language_options"):
+        lines.append(f"Language choice: {r['language_options']['choose']} of: "
+                     + ", ".join(o["item"]["name"] for o in r["language_options"]["from"]["options"]))
+    lines.append("Traits (look each up as a trait): " + ", ".join(t["name"] for t in r["traits"]))
+    if r.get("subraces"):
+        lines.append("Subraces: " + ", ".join(t["name"] for t in r["subraces"]))
+    return "\n".join(lines)
+
+
+def _subrace(s: dict[str, Any]) -> str:
+    return (f"SUBRACE {s['name']} ({s['race']['name']}): {_lines(s['desc'])}\nAbility score increase: {_bonuses(s['ability_bonuses'])}\n"
+            "Traits (look each up as a trait): " + ", ".join(t["name"] for t in s["racial_traits"]))
+
+
+def _background(b: dict[str, Any]) -> str:
+    opts = lambda key: [o.get("string") or o["desc"] for o in b[key]["from"]["options"]]
+    lines = [f"BACKGROUND {b['name']}:", "Skill proficiencies: " + ", ".join(srd.short(p["name"]) for p in b["starting_proficiencies"])]
+    lo = b.get("language_options")
+    if lo:
+        lines.append(f"Languages: choose {lo['choose']}")
+    lines.append("Equipment: " + ", ".join(f"{q['quantity']} × {q['equipment']['name']}" for q in b["starting_equipment"])
+                 + "".join(f"; choose {o['choose']} from {o['from']['equipment_category']['name']}"
+                           for o in b.get("starting_equipment_options", []))
+                 + f"; {b['starting_gold']['quantity']} {b['starting_gold']['unit']}")
+    lines.append(f"Feature: {b['feature']['name']}\n{_lines(b['feature']['desc'])}")
+    for label, key in (("Personality traits", "personality_traits"), ("Ideals", "ideals"), ("Bonds", "bonds"), ("Flaws", "flaws")):
+        if b.get(key):
+            lines.append(f"{label} (choose {b[key]['choose']}):")
+            lines += [f"{i}. {o}" for i, o in enumerate(opts(key), 1)]
+    return "\n".join(lines)
+
+
+def _language(x: dict[str, Any]) -> str:
+    return (f"LANGUAGE {x['name']}: {x['type']}; typical speakers: {', '.join(x['typical_speakers'])}" + (f"; script: {x['script']}" if x.get("script") else ""))
 
 
 def _features(fs: list[dict[str, Any]]) -> str:
@@ -332,5 +394,8 @@ FORMAT = {
     "Spells": _spell, "Monsters": _monster, "Equipment": _equipment, "Features": lambda f: _features([f]), "Traits": _trait,
     "Conditions": lambda c: f"CONDITION {c['name']}:\n{_lines(c['desc'])}",
     "Magic-Items": lambda i: f"MAGIC ITEM {i['name']} ({i['rarity']['name']}):\n{_lines(i['desc'])}",
-    "Rules": _rule, "Classes": _class, "Subclasses": _subclass,
+    "Rules": _rule, "Classes": _class, "Subclasses": _subclass, "Races": _race, "Subraces": _subrace,
+    "Backgrounds": _background, "Languages": _language,
+    "Alignments": lambda a: f"ALIGNMENT {a['name']} ({a['abbreviation']}): {_lines(a['desc'])}",
+    "Weapon-Properties": lambda p: f"WEAPON PROPERTY {p['name']}:\n{_lines(p['desc'])}",
 }

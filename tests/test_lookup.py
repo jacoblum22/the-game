@@ -193,3 +193,31 @@ def test_forgiving_names() -> None:
     assert undead.startswith("RULE Destroy Undead") and "FEATURE Destroy Undead (CR 1/2 or below) / Destroy Undead (CR 1 or below)" in undead
     assert "FEATURE Favored Enemy" in L.lookup("Favored Enemy") and "Bardic Inspiration" in L.lookup("Bardic Inspiration")
     assert L.lookup("Shield").count("SPELL") == 1 and "EQUIPMENT Shield" in L.lookup("Shield")  # exact entries stay as they were
+
+
+def test_equipment_prints_the_dataset_fields_it_has() -> None:
+    assert "thrown range 20/60" in L.lookup("Handaxe")
+    assert "restrained until it is freed" in L.lookup("Net") and "requires two hands to wield when you aren't mounted" in L.lookup("Lance")
+    assert "Speed 60 ft/round; carrying capacity 480 lb." in L.lookup("Horse, riding")
+    assert "Speed 4 mph" in L.lookup("Galley") and "quantity 20" in L.lookup("Arrow")
+    assert "Shield: AC bonus +2" in L.lookup("Shield", "equipment") and "AC 2" not in L.lookup("Shield", "equipment")
+
+
+def test_races_backgrounds_and_the_rest_have_kinds() -> None:
+    dwarf = L.lookup("Dwarf")
+    assert "RACE Dwarf: Medium, speed 25 ft." in dwarf and "CON +2" in dwarf and "Hill Dwarf" in dwarf
+    assert "SUBRACE Hill Dwarf (Dwarf)" in L.lookup("Hill Dwarf") and "WIS +1" in L.lookup("Hill Dwarf")
+    acolyte = L.lookup("Acolyte")  # the background and the monster
+    assert "BACKGROUND Acolyte" in acolyte and "MONSTER Acolyte" in acolyte
+    assert "Shelter of the Faithful" in acolyte and "Personality traits (choose 2)" in acolyte
+    assert L.lookup("Acolyte", "background").count("MONSTER") == 0
+    assert "WEAPON PROPERTY Thrown" in L.lookup("Thrown") and "ALIGNMENT Lawful Good (LG)" in L.lookup("Lawful Good")
+    assert "LANGUAGE Elvish" in L.lookup("Elvish", "language")
+    assert "Half-Elf" in L.lookup("Half-Elf") and "choose 2 of: STR +1" in L.lookup("Half-Elf")
+    assert set(L.KINDS.values()) >= {"Races", "Subraces", "Backgrounds", "Alignments", "Languages", "Weapon-Properties"}
+
+
+def test_a_name_starting_several_entries_named_name_comma_finds_them() -> None:
+    forms = L.lookup("Werewolf")
+    assert all(f"MONSTER Werewolf, {f} Form" in forms for f in ("Human", "Hybrid", "Wolf"))
+    assert L.lookup("Vampire").count("MONSTER Vampire, ") == 3 and "MONSTER Vampire Spawn" not in L.lookup("Vampire")
