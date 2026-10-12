@@ -47,12 +47,6 @@ def test_the_gap_fill_sections_the_dataset_lacks() -> None:
     squash = lambda t: " ".join(t.split())
     beyond = squash(L.lookup("Beyond 1st Level"))
     assert "| 300 | 2 | +2 |" in beyond and "| 355,000 | 20 | +6 |" in beyond and "gaining a level" in beyond
-    multi = L.lookup("Multiclassing")
-    assert multi.startswith("RULE Multiclassing:") and "never looking back at the class you left behind" in multi
-    assert "| Wizard | Intelligence 13 |" in squash(L.lookup("Multiclassing: Prerequisites"))
-    assert "| 20th | 4 | 3 | 3 | 3 | 3 | 2 | 2 | 1 | 1 |" in squash(L.lookup("Multiclassing: Spellcasting"))
-    assert "Grappler feat requires you to have a Strength of 13" in L.lookup("Feats")
-    assert "A feat represents a talent" in L.lookup("feats", "rule") and "gap-fill" in srd.table("Rules")["feats"]["source"]
-    assert "grappler" in srd.table("Feats")  # the feat itself is in the dataset
-    # the dataset's own sections are still the only ones under their bare names
-    assert L.lookup("Proficiency Bonus").count("RULE") == 1 and L.lookup("Spellcasting").count("RULE") == 1
+    assert "gap-fill" in srd.table("Rules")["beyond-1st-level"]["source"]
+    # multiclassing and feats are optional rules the game doesn't use (owner): not in the lookup
+    assert "multiclassing" not in srd.table("Rules") and "feats" not in srd.table("Rules")

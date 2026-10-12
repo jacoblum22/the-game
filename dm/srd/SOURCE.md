@@ -19,13 +19,8 @@ official SRD 5.1 PDF (`SRD_CC_v5.1.pdf`, https://dnd.wizards.com/resources/syste
 the PDF's text-extraction artefacts (spacing, split words, broken hyphens, ligatures) repaired. `dm/srd.py` `table()`
 adds these entries to the dataset's (an index that is already in the dataset raises). Each entry has a `source` field.
 - Beyond 1st Level, with the Character Advancement table (p.56)
-- Multiclassing (p.56) and its subsections, named "Multiclassing: <the SRD's heading>" so they don't mix with the
-  rules and features of the same name: Prerequisites (with the Multiclassing Prerequisites table, p.56), Experience
-  Points, Hit Points and Hit Dice, Proficiency Bonus, Proficiencies (with the Multiclassing Proficiencies table), Class
-  Features (p.57), and under Class Features: Channel Divinity, Extra Attack, Unarmored Defense (p.57) and Spellcasting
-  (pp.57-58, with the Multiclass Spellcaster table)
-- Feats, the introduction (p.75); the Grappler feat itself is in the dataset's Feats table.
-The game doesn't use multiclassing or feats (both optional rules); the text is for the DM to look up.
+The SRD's Multiclassing (pp.56-58) and Feats (p.75) sections are left out on purpose: the game doesn't use those
+optional rules (owner, 2026-10-11), and the DM's prompt says so.
 
 The gap-fill is under the same licence and attribution as the rest of the SRD content here. The PDF's legal page asks
 for this attribution statement:
