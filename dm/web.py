@@ -162,7 +162,7 @@ setInterval(poll, 1500);
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Play the terminal game from a web page over Tailscale.")
-    ap.add_argument("--port", type=int, default=8000)
+    ap.add_argument("--port", type=int, default=8765)
     port = ap.parse_args().port
     try:
         host = subprocess.run(["tailscale", "ip", "-4"], capture_output=True, text=True, check=True).stdout.split()[0]
