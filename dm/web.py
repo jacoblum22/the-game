@@ -79,6 +79,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply("{}", code=404)
 
     def do_POST(self) -> None:
+        global out
         data = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
         with lock:
             running = proc is not None and proc.poll() is None
@@ -91,6 +92,7 @@ class Handler(BaseHTTPRequestHandler):
                     return self.reply('{"error": "unknown game"}', code=400)
             elif self.path == "/in" and running:
                 line = str(data.get("line", "")).replace("\r", "").replace("\n", " ")
+                out += line + "\n"  # a terminal echoes what you type; a pipe doesn't
                 proc.stdin.write((line + "\n").encode())  # type: ignore[union-attr]
                 proc.stdin.flush()  # type: ignore[union-attr]
             else:
