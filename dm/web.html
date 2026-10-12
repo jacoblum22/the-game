@@ -10,7 +10,8 @@
   [hidden] { display: none !important; }
   body { margin: 0; background: var(--bg); color: var(--text); height: 100dvh; display: flex; flex-direction: column;
          font: 17px/1.6 Georgia, "Noto Serif", "Times New Roman", serif; }
-  .ui, button, input { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  button, input { font-family: inherit; }
+  .card, .event, header, button { font-variant-numeric: lining-nums; }
   header { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--line);
            background: var(--panel); }
   header .who { flex: 1; min-width: 0; }
@@ -23,7 +24,6 @@
   p { margin: 0 0 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .you { margin: 18px 0 18px auto; max-width: 85%; width: fit-content; background: var(--you); padding: 8px 12px;
          border-radius: 14px 14px 4px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
-  .card, .event, .notice { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   .card { margin: 10px 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line);
           border-radius: 10px; font-size: 14px; line-height: 1.45; }
   .card .what { color: var(--dim); }
@@ -42,7 +42,7 @@
   .event.hurt { color: var(--red); } .event.heal { color: var(--green); } .event.big { color: var(--accent); }
   .event small { display: block; opacity: .8; }
   details summary { cursor: pointer; color: var(--dim); font-size: 13px; }
-  pre { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.45 ui-monospace, Consolas, monospace; }
+  pre { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: 14px; line-height: 1.5; }
   .sheet { border-color: #5a4a35; }
   .notice { margin: 16px 0; text-align: center; color: var(--dim); font-size: 14px; }
   .notice.bad { color: var(--red); }
