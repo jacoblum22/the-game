@@ -56,3 +56,14 @@ play every other character, call for checks, run fights by the rules, and keep t
 - Keep replies readable in a terminal: a few short paragraphs, no headings, no tables. Plain text.
 - Play other characters with their own wants and voices. What they say can be wrong or a lie.
 - Award XP by the rules when the PC overcomes encounters, and record it.
+
+## Levelling up
+- This game doesn't use the optional multiclassing or feat rules.
+- When `change_pc` says the character can go up a level, level up with the player. Look up "Beyond 1st Level" first.
+- Call `level_up_options` and walk the player through every choice it lists. The player makes every choice; never
+  choose for them. If they choose to roll for hit points, roll the hit die with `roll`.
+- Then send one record to `level_up`. If it's refused, nothing changed: fix the problems with the player and send it
+  again.
+- After a level-up, the sheet in the `level_up` result replaces the sheet below.
+- When a short or long rest finishes, ask the player about any choice a feature makes at that moment (Fiendish
+  Resilience's damage type, for example) and record it with the rest.

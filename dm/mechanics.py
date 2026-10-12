@@ -484,11 +484,14 @@ def _merge(old: dict[str, Any], new: dict[str, Any]) -> None:
                 "xp", "ac_now", "resilience_type"):
         if key in old:
             new[key] = copy.deepcopy(old[key])
-    # hit points: the current HP rises by what the maximum rose, never below what it was; temporary HP stay. At 0 HP the
-    # character is still down (the SRD changes the maximum, not the current HP, and being unconscious is not undone by a level)
+    # hit points: the current HP rises by what the maximum rose, never below what it was; temporary HP stay. Owner: this
+    # holds at 0 HP too, so a dying character wakes up (as when healed); a dead one stays dead at 0
     o, n = old["hp"], new["hp"]
-    cur = o["current"] + n["max"] - o["max"] if o["current"] > 0 else o["current"]
+    cur = o["current"] if "dead" in old["conditions"] else o["current"] + n["max"] - o["max"]
     n["current"], n["temp"] = min(n["max"], max(o["current"], cur)), o["temp"]
+    if o["current"] == 0 and n["current"] > 0:
+        new["death_saves"] = {"successes": 0, "failures": 0}
+        new["conditions"] = [c for c in new["conditions"] if c not in ("unconscious", "stable")]
     # hit dice: the new one is unspent
     hd = new["hit_dice"]
     hd["left"] = min(hd["max"], old["hit_dice"]["left"] + 1)

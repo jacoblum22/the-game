@@ -120,12 +120,19 @@ def test_fighter_3_to_4_keeps_the_live_sheet() -> None:
     assert "enough for level 5 too" in m.level_up(xp(s, 6500), {"hp": "fixed", "asi": {"STR": 2}})[1]
 
 
-def test_a_character_at_zero_hp_stays_down() -> None:
+def test_a_dying_character_wakes_up_at_a_level_up() -> None:
+    # owner: the current HP rises by the maximum's rise at 0 HP too, so the character wakes, as when healed
     s = xp(built(BRAKKA, []), 300)
     s, _ = m.change_pc(s, {"damage": 20})  # 14 HP: down, not dead
+    s["death_saves"] = {"successes": 1, "failures": 2}
     assert s["hp"]["current"] == 0 and "unconscious" in s["conditions"]
     new, _ = m.level_up(s, FIXED)
-    assert new["hp"] == {"max": 24, "current": 0, "temp": 0} and "unconscious" in new["conditions"]
+    assert new["hp"] == {"max": 24, "current": 10, "temp": 0} and "unconscious" not in new["conditions"]
+    assert new["death_saves"] == {"successes": 0, "failures": 0}
+    # a dead character stays dead at 0
+    dead = s | {"conditions": [*s["conditions"], "dead"]}
+    new, _ = m.level_up(dead, FIXED)
+    assert new["hp"]["current"] == 0 and "dead" in new["conditions"]
 
 
 def test_wizard_4_to_5_keeps_the_prepared_list_the_spellbook_and_used_slots() -> None:

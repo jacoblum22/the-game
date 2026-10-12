@@ -653,6 +653,10 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
     st: dict[str, Any] = {"cantrips": [], "known": [], "spellbook": [], "prepared": [], "secrets": [], "arcanum": {},
                           "tome": [], "mastery": [], "signature": [], "invocations": [], "rituals": [], "boon": None,
                           "beguiling": None}
+    # cantrips the race gives (the tiefling's Thaumaturgy, the high elf's choice): a Tome pick can't repeat them (owner)
+    race_traits = {t["index"] for t in srd.find("Races", race).get("traits", [])}
+    st["racial"] = ([s for t, (s, _) in RACE_CANTRIPS.items() if t in race_traits]
+                    + [g["index"] for g in chosen.get("trait.high-elf-cantrip", [])])
     if cls not in CASTERS:
         if given:
             errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
@@ -792,10 +796,11 @@ def _level_spells(rec: dict[str, Any], L: int, cls: str, st: dict[str, Any], err
     elif rec.get("arcanum"):
         errs.append(f"{pre}arcanum: Mystic Arcanum comes to a warlock at 11th, 13th, 15th and 17th level")
 
-    # Pact of the Tome: "choose three cantrips from any class's spell list"
+    # Pact of the Tome: "choose three cantrips from any class's spell list"; none the character already knows (owner: the
+    # SRD doesn't say, and a known one would gain nothing)
     if any(g.get("index") == "pact-of-the-tome" for g in picked.get("feature.pact-boon", [])):
         st["tome"] += _check_names(f"{pre}tome", rec.get("tome"), TOME_CANTRIPS, {i for i, s in spells.items() if s["level"] == 0},
-                                   "a cantrip", errs)
+                                   "a cantrip", errs, taken=holds() | set(st["racial"]))
     elif rec.get("tome"):
         errs.append(f"{pre}tome: only when Pact of the Tome is chosen at this level (three cantrips from any class)")
 
@@ -1763,7 +1768,9 @@ def _spell_options(sheet: dict[str, Any], race: str, cls: str, N: int, L: int, s
         rec.append(("arcanum", f'"<one {_ordinal(lv)}-level spell>"'))
     if "feature.pact-boon" in [cid for cid, _, _ in sets]:
         out += [("Pact of the Tome, only if the player chooses it as the Pact Boon: three cantrips from any class's spell list "
-                 "(they needn't be from the same list). Eligible:"), _spell_groups([i for i, s in SP.items() if s["level"] == 0])]
+                 "(they needn't be from the same list), none the character already knows. Eligible:"),
+                _spell_groups([i for i, s in SP.items() if s["level"] == 0 and i not in holds and s["name"] not in
+                               [r.split(" (")[0] for r in sc.get("racial_cantrips", [])]])]
         rec.append(("tome", "[<3 cantrip names, any class>] (only if Pact of the Tome is chosen)"))
     for key, label, wanted, lv in (("mastery", "Spell Mastery", "a 1st-level and a 2nd-level", [1, 2]),
                                    ("signature", "Signature Spell", "two 3rd-level", [3])):

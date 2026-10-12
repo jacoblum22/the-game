@@ -1053,6 +1053,18 @@ def test_replacing_an_invocation_at_a_level_up() -> None:
     assert "book_rituals" not in sc(s6) and sc(s6)["invocations"] == ["Armor of Shadows", "Beast Speech", "Eldritch Sight"]
 
 
+def test_tome_cantrips_are_new_ones() -> None:
+    # owner: Pact of the Tome's three cantrips can't be ones the character already knows (the SRD doesn't say)
+    at3 = lambda tome, ch=LOCK: ([LOCK_LEVELS[0], rec(spells=["Misty Step"], choices=TOME, tome=tome)], ch)
+    assert "Eldritch Blast is already known" in problems(*at3(["Guidance", "Sacred Flame", "Eldritch Blast"]))
+    tiefling = LOCK | {"race": "tiefling", "choices": {k: v for k, v in LOCK["choices"].items() if k != "race.languages"}}
+    assert "Thaumaturgy is already known" in problems(*at3(["Guidance", "Sacred Flame", "Thaumaturgy"], tiefling))
+    assert built(tiefling, at3(["Guidance", "Sacred Flame", "Light"])[0])
+    menu = create.level_up_options(built(tiefling, LOCK_LEVELS[:1]))
+    tome = menu.split("Pact of the Tome, only if")[1].split("\n\n")[0]
+    assert "Guidance" in tome and "Thaumaturgy" not in tome and "Eldritch Blast" not in tome and "Minor Illusion" not in tome
+
+
 def test_book_of_ancient_secrets_rituals() -> None:
     s5 = built(LOCK, LOCK_LEVELS)
     # "Choose two 1st-level spells that have the ritual tag from any class's spell list" (they don't count as spells known)
