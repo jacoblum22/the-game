@@ -1116,8 +1116,6 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
     # features and counters
     features, resources = [], {}
     for t in p["traits"]:
-        if t["index"] in ("darkvision",):
-            continue
         features.append(f"{t['name']}: {' '.join(t['desc'])}")
     for cid, got in chosen.items():
         if cid.startswith("trait.draconic-ancestry"):
