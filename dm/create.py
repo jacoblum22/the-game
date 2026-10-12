@@ -7,6 +7,7 @@ The DM model talks the player through the choices; this code only checks them an
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from typing import Any
 
@@ -32,6 +33,24 @@ ACOLYTE_PRAYER = {"desc": "a prayer book or prayer wheel", "choose": 1, "type": 
     "option_set_type": "options_array",
     "options": [{"option_type": "string", "string": "Prayer book"}, {"option_type": "string", "string": "Prayer wheel"}]}}
 ACOLYTE_ITEMS = {"Vestments": 1, "Stick of incense": 5}
+# Ranger, Favored Enemy: "you also learn one language of your choice that is spoken by your favored enemies, if they
+# speak one at all", and "Alternatively, you can select two races of humanoid". The data has neither.
+ENEMY_FEATURE = "favored-enemy-1-type"
+ENEMY_LANGUAGE_ID = f"feature.{ENEMY_FEATURE}.language"
+ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
+ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
+                    "(such as gnolls and orcs), as a list of two names")
+
+
+def _enemy_language() -> dict[str, Any]:
+    langs = [{"option_type": "reference", "item": {"index": x["index"], "name": x["name"], "url": x["url"]}}
+             for x in srd.table("Languages").values()]
+    return {"desc": "one language spoken by your favored enemies, if they speak one at all. The code can't tell which "
+                    "languages a type of creature speaks: the DM and the player decide which languages fit, or pick "
+                    "the last option if they speak none",
+            "choose": 1, "type": "language", "from": {
+                "option_set_type": "options_array",
+                "options": langs + [{"option_type": "string", "string": "None (they speak no language)"}]}}
 
 
 def mod(score: int) -> int:
@@ -80,6 +99,8 @@ def choices_for(race: str, cls: str) -> list[tuple[str, str, dict[str, Any]]]:
         for cs in (f.get("feature_specific") or {}).values():
             if isinstance(cs, dict) and "choose" in cs:
                 out.append((f"feature.{f['index']}", f["name"], cs))
+        if f["index"] == ENEMY_FEATURE:
+            out.append((ENEMY_LANGUAGE_ID, f"{f['name']} language", _enemy_language()))
     for i, cs in enumerate(c["starting_equipment_options"], 1):
         out.append((f"class.equipment.{i}", f"{c['name']} equipment", cs))
     if b.get("language_options"):
@@ -168,7 +189,14 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
             continue
         chosen[cid] = got
         granted += got
-    extra_ids = set(picks) - {cid for cid, _, _ in sets}
+    allowed_ids = {cid for cid, _, _ in sets}
+    if any(g.get("text") == "humanoids" for g in chosen.get(f"feature.{ENEMY_FEATURE}", [])):
+        allowed_ids.add(ENEMY_RACES_ID)  # 'select two races of humanoid'
+        races = picks.get(ENEMY_RACES_ID)
+        if (not isinstance(races, list) or len(races) != 2 or not all(isinstance(x, str) and x.strip() for x in races)
+                or races[0].strip().casefold() == races[1].strip().casefold()):
+            errs.append(f"choices.{ENEMY_RACES_ID}: missing or wrong ({ENEMY_RACES_TEXT})")
+    extra_ids = set(picks) - allowed_ids
     if extra_ids:
         errs.append(f"choices: not needed for this character: {', '.join(sorted(extra_ids))}")
 
@@ -197,6 +225,20 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
         errs.append(f"choices: {', '.join(P[i]['name'] for i in twice)} would be gained twice (it already comes from "
                     "race, class or background, or was chosen twice); choose a different option")
     prof_ids |= set(chosen_profs)
+    # "(if proficient)" in an equipment option: only for items the character is proficient with
+    owned = _owned_prof(prof_ids)
+    for cid, _, cs in sets:
+        if cid.startswith("class.equipment.") and "(if proficient)" in cs.get("desc", "") and cid in chosen:
+            bits = re.split(r"\(([a-z])\) ", cs["desc"])[1:]  # ["a", "a mace or ", "b", "a warhammer (if proficient)"]
+            text = dict(zip(bits[::2], bits[1::2]))
+            for e in [picks[cid]] if isinstance(picks[cid], (str, dict)) else picks[cid]:
+                name = e.get("option") if isinstance(e, dict) else e
+                if "(if proficient)" in text[srd.LETTERS[srd._option_index(cs["from"]["options"], str(name), cid)]]:
+                    for g in chosen[cid]:
+                        if g.get("kind") == "Equipment" and g["index"] not in owned:
+                            errs.append(f"choices.{cid}: {srd.table('Equipment')[g['index']]['name']} is only an option "
+                                        "if the character is proficient with it, and this character is not; choose "
+                                        "a different option")
     skills = {P[i]["reference"]["index"] for i in prof_ids if P[i]["type"] == "Skills"}
     saves = {P[i]["reference"]["index"].upper() for i in prof_ids if P[i]["type"] == "Saving Throws"}
     expertise: set[str] = set()
@@ -239,6 +281,18 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
     return sheet, []
 
 
+def _owned_prof(prof_ids: set[str]) -> set[str]:
+    """Equipment indexes the proficiencies cover: a proficiency points at an item or at a category of items."""
+    owned: set[str] = set()
+    for i in prof_ids:
+        ref = srd.table("Proficiencies")[i]["reference"]
+        if "/equipment-categories/" in ref["url"]:
+            owned |= {e["index"] for e in srd.table("Equipment-Categories")[ref["index"]]["equipment"]}
+        elif "/equipment/" in ref["url"]:
+            owned.add(ref["index"])
+    return owned
+
+
 def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], chosen: dict[str, Any],
             errs: list[str]) -> dict[str, Any] | None:
     rules = spell_rules(race, cls, scores or None)
@@ -248,9 +302,9 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], cho
             errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
         return None
 
-    def check(key: str, names: Any, n: int, level: int, pool: list[str] | None = None) -> list[str]:
-        if not isinstance(names, list) or len(names) != n:
-            errs.append(f"{key}: choose exactly {n}")
+    def check(key: str, names: Any, n: int, level: int, pool: list[str] | None = None, atmost: bool = False) -> list[str]:
+        if not isinstance(names, list) or not (1 <= len(names) <= n if atmost else len(names) == n):
+            errs.append(f"{key}: choose " + (f"1 to {n} (the most you can prepare)" if atmost else f"exactly {n}"))
             return []
         allowed = pool if pool is not None else [s["index"] for s in srd.class_spells(cls, level, rules["expanded"])]
         out = []
@@ -274,11 +328,11 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], cho
     elif rules["how"] == "spellbook":
         out["spellbook"] = check("spells", ch.get("spells"), rules["spellbook"], 1)
         if "prepared" in rules:
-            out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1, out["spellbook"])
+            out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1, out["spellbook"], atmost=True)
     elif "prepared" in rules:
         if ch.get("spells"):
             errs.append(f"spells: a {cls} prepares spells from the whole class list; use prepared")
-        out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1)
+        out["prepared"] = check("prepared", ch.get("prepared"), rules["prepared"], 1, atmost=True)
     return out
 
 
@@ -293,14 +347,7 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
                   if cid == "feature.fighter-fighting-style" for g in got), None)
     style_id = style["index"].removeprefix("fighter-fighting-style-") if style else ""
 
-    # proficient items: proficiencies point at an item or at a category of items
-    owned_prof: set[str] = set()
-    for i in prof_ids:
-        ref = P[i]["reference"]
-        if "/equipment-categories/" in ref["url"]:
-            owned_prof |= {e["index"] for e in srd.table("Equipment-Categories")[ref["index"]]["equipment"]}
-        elif "/equipment/" in ref["url"]:
-            owned_prof.add(ref["index"])
+    owned_prof = _owned_prof(prof_ids)
 
     # hit points
     hp = c["hit_die"] + M["CON"] + (1 if "dwarven-toughness" in trait_ids else 0) + (1 if "draconic-resilience" in feat_ids else 0)
@@ -355,7 +402,7 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
     unarmed = max(M["STR"], M["DEX"]) if "martial-arts" in feat_ids else M["STR"]
     attacks.append(f"Unarmed strike: {signed(unarmed + prof)} to hit, " + (
         f"1d4{signed(max(M['STR'], M['DEX']))} bludgeoning (Martial Arts; DEX or STR)" if "martial-arts" in feat_ids
-        else f"{max(1, 1 + M['STR'])} bludgeoning"))
+        else f"{max(0, 1 + M['STR'])} bludgeoning"))  # Damage Rolls: "never negative damage"
 
     # spellcasting
     spellcasting = None
@@ -377,9 +424,9 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
             spellcasting["prepare_from"] = "spellbook" if rules["how"] == "spellbook" else "class"
         spellcasting["notes"] = {
             "known": "Spells known are fixed until a level-up.",
-            "prepared": f"Prepare {rules.get('prepared')} spells from the whole {c['name'].lower()} list after a long rest"
+            "prepared": f"Prepare up to {rules.get('prepared')} spells from the whole {c['name'].lower()} list after a long rest"
                         + (" (domain spells are always prepared and don't count)." if rules.get("always_prepared") else "."),
-            "spellbook": f"Prepare {rules.get('prepared')} spells from the spellbook after a long rest. Ritual Casting: "
+            "spellbook": f"Prepare up to {rules.get('prepared')} spells from the spellbook after a long rest. Ritual Casting: "
                          "a ritual spell in the spellbook can be cast as a ritual (10 minutes longer, no slot), prepared "
                          "or not.",
         }[rules["how"]]
@@ -425,6 +472,10 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         for cid, got in chosen.items():
             if cid == f"feature.{f['index']}":
                 line += " CHOSEN: " + ", ".join(_grant_name(g) for g in got) + "."
+        if f["index"] == ENEMY_FEATURE:
+            if ENEMY_RACES_ID in (ch.get("choices") or {}):
+                line += " Humanoid races: " + " and ".join(x.strip() for x in ch["choices"][ENEMY_RACES_ID]) + "."
+            line += " Language learned: " + ", ".join(_grant_name(g) for g in chosen[ENEMY_LANGUAGE_ID]) + "."
         features.append(line)
     if style:
         features.append(f"{style['name']}: {' '.join(style['desc'])}")
@@ -451,6 +502,8 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
 
     langs = [x["name"] for x in r["languages"]] + [srd.table("Languages")[g["index"]]["name"]
                                                    for got in chosen.values() for g in got if g.get("kind") == "Languages"]
+    if "dragon-ancestor" in feat_ids:  # "You can speak, read, and write Draconic."
+        langs.append(srd.table("Languages")["draconic"]["name"])
     other_profs = sorted(P[i]["name"] for i in prof_ids if P[i]["type"] not in ("Skills", "Saving Throws"))
     race_name = sub["name"] if sub else r["name"]
     summary = f"{race_name} {c['name'].lower()} 1" + (f" ({sc['name']})" if sc else "") + f", {b['name'].lower()} background"
@@ -568,13 +621,15 @@ def options_text(race: str = "", cls: str = "") -> str:
                      "5 sticks of incense")
         for cid, what, cs in choices_for(race, cls):
             lines.append(srd.set_text(cs, f"[{cid}] {what}"))
+            if cid == f"feature.{ENEMY_FEATURE}":
+                lines.append(f"  [{ENEMY_RACES_ID}] only if 'humanoids' is chosen: {ENEMY_RACES_TEXT}")
         sr = spell_rules(race, cls)
         if sr:
             lines.append(f"Spells ({sr['ability']}): cantrips = {sr['cantrips']} from the {sr['class']} cantrips"
                          + (f"; spells = {sr['known']} level-1 spells known" if "known" in sr else "")
                          + (f"; spells = {sr['spellbook']} level-1 wizard spells for the spellbook, prepared = "
-                            f"INT modifier + 1 of them (minimum 1)" if "spellbook" in sr else "")
-                         + ("; prepared = WIS modifier + 1 (minimum 1) level-1 spells from the whole list"
+                            f"up to INT modifier + 1 of them (the most; minimum of one)" if "spellbook" in sr else "")
+                         + ("; prepared = up to WIS modifier + 1 (the most; minimum of one) level-1 spells from the whole list"
                             if sr["how"] == "prepared" else "")
                          + (f"; always prepared: {', '.join(srd.table('Spells')[s]['name'] for s in sr['always_prepared'])}"
                             if sr.get("always_prepared") else ""))

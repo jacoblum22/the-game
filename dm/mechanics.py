@@ -100,6 +100,11 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         return v
 
     if ch.get("long_rest"):
+        # SRD Long Rest: "a character must have at least 1 hit point at the start of the rest to gain its benefits".
+        # The code can't know the "no more than one long rest in a 24-hour period" limit; the DM checks that.
+        if "dead" in s["conditions"] or hp["current"] < 1:
+            raise Refused("a long rest gives no benefit to a character with 0 hit points (or dead): "
+                          "they need at least 1 hit point at the start of the rest. Heal them first")
         hp["current"], hp["temp"] = hp["max"], 0
         for slot in s.get("spell_slots", {}).values():
             slot["left"] = slot["max"]
@@ -121,10 +126,16 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
 
     n = _int("hit_dice_spent")
     if n:
-        if n > s["hit_dice"]["left"]:
-            raise Refused(f"only {s['hit_dice']['left']} hit dice left")
-        s["hit_dice"]["left"] -= n
-        out.append(f"spent {n} hit {'die' if n == 1 else 'dice'} (roll the healing and pass it as heal)")
+        # SRD Short Rest: the player rolls each Hit Die and adds CON; "can decide to spend an additional Hit Die after each roll".
+        if n > 1:
+            raise Refused("spend hit dice one at a time: for each one the player rolls it and adds their CON modifier, "
+                          "and decides whether to spend another only after seeing that roll")
+        if s["hit_dice"]["left"] < 1:
+            raise Refused(f"no hit dice left (0/{s['hit_dice']['max']})")
+        s["hit_dice"]["left"] -= 1
+        out.append(f"spent 1 hit die ({s['hit_dice']['left']}/{s['hit_dice']['max']} left): roll 1{s['hit_dice']['die']} and add "
+                   f"the CON modifier (CON {s['abilities']['CON']}), then pass the total as heal; the player "
+                   "decides whether to spend another after the roll")
 
     temp = _int("temp_hp")
     if temp:
@@ -144,8 +155,13 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             _add(s, "dead")
             out.append(f"took {dmg} damage at 0 HP, at least max HP {hp['max']}: the character dies")
         elif was == 0 and left:
-            s["death_saves"]["failures"] += 1
-            out.append(f"took {dmg} damage at 0 HP: one death save failure (two if it was a critical hit)")
+            # SRD: damage at 0 HP is one death save failure, two if from a critical hit; it also ends 'stable'.
+            n = 2 if ch.get("critical_hit") else 1
+            s["death_saves"]["failures"] = min(3, s["death_saves"]["failures"] + n)
+            out.append(f"took {dmg} damage at 0 HP: {'two death save failures (critical hit)' if n == 2 else 'one death save failure'}")
+            if "stable" in s["conditions"]:
+                _remove(s, "stable")
+                out.append("no longer stable: death saving throws start again")
         else:
             hp["current"] = max(0, was - left)
             out.append(f"took {dmg} damage" + (f" ({absorbed} absorbed by temporary HP)" if absorbed else "")
@@ -162,7 +178,8 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
     heal = _int("heal")
     if heal:
         if "dead" in s["conditions"]:
-            raise Refused("the character is dead; ordinary healing doesn't work")
+            raise Refused("the character is dead; ordinary healing doesn't work. A spell or effect that returns the dead to life "
+                          "is recorded by removing the 'dead' condition (conditions_removed), then healing")
         was = hp["current"]
         hp["current"] = min(hp["max"], was + heal)
         out.append(f"healed {heal}: HP {was} → {hp['current']}")
@@ -177,6 +194,11 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         if n:
             if hp["current"] > 0:
                 raise Refused("death saves are only made at 0 HP")
+            if "dead" in s["conditions"]:
+                raise Refused("the character is dead; no death saves")
+            if "stable" in s["conditions"]:
+                raise Refused("the character is stable and doesn't make death saving throws "
+                              "(they start again only if the character takes damage)")
             s["death_saves"][kind] = min(3, s["death_saves"][kind] + n)
             out.append(f"death save {kind}: {s['death_saves'][kind]}/3")
     if s["death_saves"]["failures"] >= 3 and "dead" not in s["conditions"]:
@@ -184,7 +206,9 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         out.append("three death save failures: the character dies")
     elif s["death_saves"]["successes"] >= 3 and "stable" not in s["conditions"] and hp["current"] == 0:
         _add(s, "stable")
-        out.append("three death save successes: stable (unconscious at 0 HP, regains 1 HP after 1d4 hours)")
+        s["death_saves"] = {"successes": 0, "failures": 0}  # SRD: both counts reset when you become stable
+        out.append("three death save successes: stable (unconscious at 0 HP, no death saves; regains 1 HP after 1d4 hours "
+                   "unless healed); death save counts reset")
 
     for key, delta in (("spend_slot", -1), ("restore_slot", 1)):
         lvl = ch.get(key)
@@ -214,7 +238,9 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             out.append(f"{name}: {res['left']}/{res['max']}")
 
     for it in ch.get("items_lost") or []:
-        name, qty = it["item"], int(it.get("qty") or 1)
+        name, qty = it["item"], int(it.get("qty", 1))  # not `or 1`: an explicit 0 must be refused, not turned into 1
+        if qty < 1:
+            raise Refused("each lost item needs a quantity of 1 or more")
         have = s["items"].get(name, 0)
         if have < qty:
             raise Refused(f"the character has {have} × {name!r}; items on the sheet: {', '.join(s['items'])}")
@@ -240,10 +266,14 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
     for c in ch.get("conditions_added") or []:
         _add(s, c)
         out.append(f"condition added: {c}")
+        if c == "stable":  # e.g. first aid (DC 10 Wisdom (Medicine)): SRD resets both counts on becoming stable
+            s["death_saves"] = {"successes": 0, "failures": 0}
     for c in ch.get("conditions_removed") or []:
         if c not in s["conditions"]:
             raise Refused(f"condition {c!r} is not on the sheet; conditions now: {', '.join(s['conditions']) or 'none'}")
         _remove(s, c)
+        if c == "dead":  # a revival starts fresh, so 3 old failures don't kill the character again on the next change
+            s["death_saves"] = {"successes": 0, "failures": 0}
         out.append(f"condition removed: {c}")
 
     if ch.get("prepare_spells") is not None:
@@ -351,7 +381,11 @@ def status(s: dict[str, Any]) -> str:
                                               for k, v in s["resources"].items()))
     lines.append("Conditions: " + (", ".join(s["conditions"]) or "none"))
     ds = s["death_saves"]
-    if hp["current"] == 0:
+    if hp["current"] == 0 and "dead" in s["conditions"]:
+        lines.append("Dead: no death saves")
+    elif hp["current"] == 0 and "stable" in s["conditions"]:
+        lines.append("Stable at 0 HP: no death saves unless it takes damage")
+    elif hp["current"] == 0:
         lines.append(f"Death saves: {ds['successes']} successes, {ds['failures']} failures")
     lines.append("Money: " + coins_text(s["coins_cp"]))
     lines.append("Items: " + ", ".join(f"{n}" + (f" ×{q}" if q > 1 else "") for n, q in s["items"].items()))

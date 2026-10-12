@@ -118,10 +118,17 @@ class Game:
             return self.run("dice", lambda: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"), a["reason"]))
 
         @tool("change_pc", "Record a change to the player character's sheet. Pass only the fields that change. "
-              "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned.",
+              "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned. "
+              "Rules you must apply yourself: a long rest needs the PC at 1 HP or more and only one long rest counts per "
+              "24 hours (check the time; the tool can't); hit dice are spent at the end of a short rest, one per call.",
               {"type": "object", "properties": {
                   "damage": _INT, "heal": _INT, "temp_hp": _INT,
-                  "hit_dice_spent": _INT, "death_save_successes": _INT, "death_save_failures": _INT,
+                  "critical_hit": {"type": "boolean", "description": "the damage is from a critical hit (any hit on an unconscious "
+                                   "PC from within 5 feet is one): at 0 HP that is two death save failures instead of one"},
+                  "hit_dice_spent": {"type": "integer", "minimum": 0,
+                                     "description": "1 = spend one hit die at the end of a short rest; the result says what to roll, "
+                                     "then pass the total as heal. The player decides after each roll whether to spend another"},
+                  "death_save_successes": _INT, "death_save_failures": _INT,
                   "spend_slot": {"type": "integer", "minimum": 1, "maximum": 9, "description": "spell slot level spent"},
                   "restore_slot": {"type": "integer", "minimum": 1, "maximum": 9},
                   "use_resource": {"type": "string", "description": "a feature name exactly as on the sheet, e.g. Second Wind"},
@@ -144,7 +151,7 @@ class Game:
                 return "; ".join(lines)
             return self.run("sheet", go)
 
-        @tool("add_combatants", "Start a fight, or add arrivals to the current one. Roll initiative first. The PC is "
+        @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
               "the combatant named 'pc'; every creature needs a distinct name, hp and ac.",
               {"type": "object", "properties": {"combatants": {"type": "array", "items": {
                   "type": "object", "properties": {"name": {"type": "string"}, "initiative": {"type": "integer"},
@@ -219,8 +226,15 @@ def system_prompt(sheet: dict[str, Any]) -> str:
             + "\n\n## The opening\n" + sheet["opening"])
 
 
+# sent with every play turn, after the status (owner, 2026-10-11): the DM went from memory despite the prompt
+RULES_REMINDER = (
+    "[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a "
+    "spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD "
+    "text must already be in this conversation from a lookup. If it isn't, look it up first.")
+
+
 async def turn(client: ClaudeSDKClient, game: Game | Creation, text: str) -> None:
-    await client.query(f"[Status now]\n{game.status()}\n\n{text}" if isinstance(game, Game) else text)
+    await client.query(f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}" if isinstance(game, Game) else text)
     async for msg in client.receive_response():
         if isinstance(msg, AssistantMessage):
             for b in msg.content:

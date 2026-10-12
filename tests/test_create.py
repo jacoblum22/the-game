@@ -7,7 +7,7 @@ import pytest
 
 from dm import create, srd
 from dm import mechanics as m
-from tests.autochar import build_any
+from tests.autochar import build_any, character
 
 ARRAY = dict(zip(create.ABILITIES, [15, 10, 14, 8, 13, 12]))  # STR DEX CON INT WIS CHA
 
@@ -142,3 +142,69 @@ def test_games_started_in_the_same_second_get_separate_saves(tmp_path: Path, mon
     monkeypatch.setattr(play, "SAVES", tmp_path)
     names = [play.new_save("wren-20261011-161351").name for _ in range(3)]
     assert names == ["wren-20261011-161351.json", "wren-20261011-161351-2.json", "wren-20261011-161351-3.json"]
+
+
+def test_draconic_sorcerer_speaks_draconic() -> None:
+    # Dragon Ancestor: "You can speak, read, and write Draconic."
+    sheet = build_any("human", "sorcerer")[0]
+    assert sheet and "Draconic" in sheet["languages"].split(", ")
+    dragonborn = build_any("dragonborn", "sorcerer")[0]  # already speaks it: listed once
+    assert dragonborn and dragonborn["languages"].split(", ").count("Draconic") == 1
+
+
+def ranger(**choices: object) -> dict:
+    """A human ranger from autochar's choices (the first shift that builds; some first picks collide with the
+    background's skills), with `choices` replacing or adding to them."""
+    ch = next(c for c in (character("human", "ranger", n) for n in range(40)) if create.build(c)[0])
+    return ch | {"choices": ch["choices"] | choices}
+
+
+def unarmed(sheet: dict) -> str:
+    return next(a for a in sheet["attacks"] if a.startswith("Unarmed strike"))
+
+
+def test_ranger_favored_enemy_language_and_humanoid_races() -> None:
+    fe, lang, races = "feature.favored-enemy-1-type", create.ENEMY_LANGUAGE_ID, create.ENEMY_RACES_ID
+    s = built(ranger(**{fe: ["Fiends"], lang: ["Abyssal"]}))
+    assert "Abyssal" in s["languages"].split(", ") and "Language learned: Abyssal." in "".join(s["features"])
+    assert "Abyssal" in create.options_text("human", "ranger") and races in create.options_text("human", "ranger")
+    none = built(ranger(**{fe: ["Beasts"], lang: ["None (they speak no language)"]}))
+    assert none["languages"] == built(ranger(**{fe: ["Beasts"], lang: ["Common"]}))["languages"]
+    no_lang = ranger(**{fe: ["Fiends"]})
+    del no_lang["choices"][lang]
+    assert f"choices.{lang}: missing" in problems(no_lang)
+    # "humanoids" means two races of humanoid
+    assert races in problems(ranger(**{fe: ["Humanoids"], lang: ["Orc"]}))
+    for bad in (["gnolls"], ["gnolls", "Gnolls"], ["gnolls", ""], "gnolls and orcs"):
+        assert races in problems(ranger(**{fe: ["Humanoids"], lang: ["Orc"], races: bad}))
+    h = built(ranger(**{fe: ["Humanoids"], lang: ["Orc"], races: ["gnolls", "orcs"]}))
+    assert "Humanoid races: gnolls and orcs." in "".join(h["features"])
+    assert "not needed" in problems(ranger(**{fe: ["Undead"], lang: ["Common"], races: ["gnolls", "orcs"]}))
+
+
+def test_cleric_warhammer_needs_proficiency() -> None:
+    human = copy.deepcopy(HILDA) | {"race": "human"}  # a human cleric has simple weapons only
+    human["choices"] = {k: v for k, v in HILDA["choices"].items() if k != "trait.tool-proficiency"} | {
+        "race.languages": ["Elvish"]}
+    assert "Warhammer is only an option if the character is proficient" in problems(human)
+    assert built(human | {"choices": human["choices"] | {"class.equipment.1": ["Mace"]}})["items"]["Mace"] == 1
+    assert "Warhammer" in built(HILDA)["items"]  # the dwarf's Dwarven Combat Training covers it
+
+
+def test_unarmed_strike_damage_is_never_negative() -> None:
+    # Melee Attacks: 1 + Strength modifier; Damage Rolls: "it is possible to deal 0 damage, but never negative damage"
+    assert unarmed(built(WREN)).endswith("0 bludgeoning")  # STR 8 (-1): 1 - 1 = 0
+    weak = WREN | {"ability_method": "rolled", "base_scores": WREN["base_scores"] | {"STR": 6}}  # STR 6 (-2): 1 - 2 = -1
+    assert unarmed(built(weak, [6, 14, 13, 15, 12, 10])).endswith("0 bludgeoning")
+    assert unarmed(built(BRAKKA)).endswith("3 bludgeoning")  # STR 15 (+2)
+
+
+def test_prepared_spells_are_a_maximum() -> None:
+    # Wizard, cleric and druid: "a number of ... spells equal to your ... modifier + your ... level (minimum of one spell)"
+    assert built(WREN | {"prepared": ["Shield"]})["spellcasting"]["prepared"] == ["Shield"]
+    assert built(HILDA | {"prepared": ["Bless"]})["spellcasting"]["prepared"] == ["Bless"]
+    for ch in (WREN, HILDA):
+        assert "1 to 4" in problems(ch, prepared=[])
+        assert "1 to 4" in problems(ch, prepared=(ch["prepared"] + ["Detect Magic"] if ch is WREN else ch["prepared"] + ["Command"]))
+    assert "choose exactly 6" in problems(WREN, spells=WREN["spells"][:5])  # the spellbook stays exact
+    assert "choose exactly 3" in problems(WREN, cantrips=["Fire Bolt"])  # so do cantrips

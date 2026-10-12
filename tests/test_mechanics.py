@@ -42,6 +42,69 @@ def test_damage_heal_and_dying() -> None:
     assert "dead" in dead["conditions"]
 
 
+def _down(name: str = "fighter") -> dict:
+    s, _ = m.change_pc(sheet(name), {"damage": 20})  # 14 HP fighter at 0 HP, unconscious
+    return s
+
+
+def test_critical_hit_at_zero_hp() -> None:
+    s, text = m.change_pc(_down(), {"damage": 3, "critical_hit": True})
+    assert s["death_saves"]["failures"] == 2 and "two death save failures" in text[0]
+    s, _ = m.change_pc(s, {"damage": 3})  # an ordinary hit adds one: 3 failures, dead
+    assert "dead" in s["conditions"]
+    s, _ = m.change_pc(_down(), {"damage": 14, "critical_hit": True})  # damage >= max HP is still instant death
+    assert "dead" in s["conditions"]
+
+
+def test_stable_resets_and_ends_on_damage() -> None:
+    s, _ = m.change_pc(_down(), {"death_save_failures": 2})
+    s, _ = m.change_pc(s, {"death_save_successes": 3})
+    assert "stable" in s["conditions"] and s["death_saves"] == {"successes": 0, "failures": 0}
+    assert "Stable" in m.status(s)
+    for kind in ("death_save_successes", "death_save_failures"):
+        with pytest.raises(m.Refused, match="stable"):
+            m.change_pc(s, {kind: 1})
+    s, _ = m.change_pc(s, {"damage": 2})
+    assert "stable" not in s["conditions"] and s["death_saves"] == {"successes": 0, "failures": 1}
+    s, _ = m.change_pc(s, {"death_save_successes": 1})  # death saves start again
+    assert s["death_saves"]["successes"] == 1
+    first_aid, _ = m.change_pc(s, {"conditions_added": ["stable"]})  # first aid also resets both counts
+    assert first_aid["death_saves"] == {"successes": 0, "failures": 0}
+
+
+def test_dead_and_revival() -> None:
+    dead, _ = m.change_pc(_down(), {"death_save_failures": 3})
+    assert "dead" in dead["conditions"]
+    with pytest.raises(m.Refused, match="dead"):
+        m.change_pc(dead, {"death_save_successes": 1})
+    with pytest.raises(m.Refused, match="conditions_removed"):
+        m.change_pc(dead, {"heal": 5})
+    alive, _ = m.change_pc(dead, {"conditions_removed": ["dead"]})
+    alive, _ = m.change_pc(alive, {"heal": 1})
+    assert alive["hp"]["current"] == 1 and "dead" not in alive["conditions"] and "unconscious" not in alive["conditions"]
+
+
+def test_long_rest_needs_a_hit_point() -> None:
+    for s in (_down(), m.change_pc(_down(), {"death_save_failures": 3})[0]):
+        with pytest.raises(m.Refused, match="at least 1 hit point"):
+            m.change_pc(s, {"long_rest": True})
+    hurt, _ = m.change_pc(sheet("fighter"), {"damage": 13})  # 1 HP is enough
+    rested, _ = m.change_pc(hurt, {"long_rest": True})
+    assert rested["hp"]["current"] == 14
+
+
+def test_hit_dice_one_at_a_time() -> None:
+    w = sheet("wizard")
+    w["hit_dice"]["left"] = w["hit_dice"]["max"] = 3
+    with pytest.raises(m.Refused, match="one at a time"):
+        m.change_pc(w, {"hit_dice_spent": 2})
+    w, text = m.change_pc(w, {"hit_dice_spent": 1})
+    assert w["hit_dice"]["left"] == 2 and "CON" in text[0] and f"1{w['hit_dice']['die']}" in text[0] and "heal" in text[0]
+    w["hit_dice"]["left"] = 0
+    with pytest.raises(m.Refused, match="no hit dice left"):
+        m.change_pc(w, {"hit_dice_spent": 1})
+
+
 def test_all_or_nothing_and_resources() -> None:
     w = sheet("wizard")
     w, _ = m.change_pc(w, {"spend_slot": 1})
@@ -61,6 +124,9 @@ def test_items_and_money() -> None:
     r = sheet("rogue")
     r, _ = m.change_pc(r, {"items_lost": [{"item": "Arrows", "qty": 3}], "coin_change_gp": -0.25})
     assert r["items"]["Arrows"] == 17 and r["coins_cp"] == 1475 and m.coins_text(1475) == "14 gp 7 sp 5 cp"
+    for qty in (-5, 0):  # a non-positive quantity must not add items
+        with pytest.raises(m.Refused):
+            m.change_pc(r, {"items_lost": [{"item": "Arrows", "qty": qty}]})
     with pytest.raises(m.Refused):
         m.change_pc(r, {"items_lost": [{"item": "Longsword"}]})
     with pytest.raises(m.Refused):
