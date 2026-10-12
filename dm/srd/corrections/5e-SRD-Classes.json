@@ -1,0 +1,25 @@
+[
+  {
+    "index": "paladin",
+    "source": "SRD 5.1 p.31 (correction)",
+    "set": {
+      "spellcasting.info.0.desc.2": "For example, if you are a 5th-level paladin, you have four 1st-level and two 2nd-level spell slots. With a Charisma of 14, your list of prepared spells can include four spells of 1st or 2nd level, in any combination. If you prepare the 1st-level spell cure wounds, you can cast it using a 1st-level or a 2nd-level slot. Casting the spell doesn't remove it from your list of prepared spells."
+    }
+  },
+  {
+    "index": "wizard",
+    "source": "SRD 5.1 p.52 (correction)",
+    "set": {
+      "spellcasting.info.1.desc.0": "At 1st level, you have a spellbook containing six 1st-level wizard spells of your choice. Your spellbook is the repository of the wizard spells you know, except your cantrips, which are fixed in your mind."
+    }
+  },
+  {
+    "index": "druid",
+    "source": "SRD 5.1 p.20 (correction)",
+    "set": {
+      "spellcasting.info.4.desc": [
+        "You can use a druidic focus (see \"Equipment\") as a spellcasting focus for your druid spells."
+      ]
+    }
+  }
+]

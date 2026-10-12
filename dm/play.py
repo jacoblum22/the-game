@@ -47,8 +47,10 @@ DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MD
 def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
     """The rules lookup, shared by creation and play. `record` keeps the call and its result in the transcript."""
     @tool("lookup", "Look up the exact SRD 5.1 text of a spell, monster stat block, condition, magic item, piece of "
-          "equipment, rules section, class feature or racial trait, by its name. If there's no entry by that name, "
-          "the names and rules sections that contain it are listed.",
+          "equipment, rules section, class feature or racial trait, by its name. A class (kind \"class\") gives its "
+          "rules other than its features: hit points, proficiencies, equipment, the level table and the spellcasting "
+          "rules; a subclass name (Life Domain, The Fiend) gives its text and spell list. If there's no entry by that "
+          "name, the names and rules sections that contain it are listed.",
           {"type": "object", "properties": {
               "name": {"type": "string", "description": "e.g. Goblin, Shield, Grappled, Cover, Longsword, Sneak Attack"},
               "kind": {"type": "string", "enum": list(lookup.KINDS), "description": "optional: only this kind"}},

@@ -19,8 +19,48 @@ official SRD 5.1 PDF (`SRD_CC_v5.1.pdf`, https://dnd.wizards.com/resources/syste
 the PDF's text-extraction artefacts (spacing, split words, broken hyphens, ligatures) repaired. `dm/srd.py` `table()`
 adds these entries to the dataset's (an index that is already in the dataset raises). Each entry has a `source` field.
 - Beyond 1st Level, with the Character Advancement table (p.56)
+- Class passages the dataset lacks, for the "class" lookup. An entry with `for` (a class or subclass index) and `after`
+  (the heading of the block it follows in the class lookup; "" = first) is printed there in place, and is also found
+  by its own heading:
+  - Hit Points, Proficiencies and Equipment, one entry each for all 12 classes (Barbarian p.8, Bard p.11, Cleric p.15,
+    Druid p.19, Fighter p.24, Monk p.26, Paladin p.30, Ranger p.35, Rogue p.39, Sorcerer p.42, Warlock p.46, Wizard p.52)
+  - Wizard: Learning Spells of 1st Level and Higher (p.53), Your Spellbook (pp.54-55)
+  - Warlock: Eldritch Invocations, the paragraph on prerequisites (p.48); Fiend Expanded Spell List (p.50); Your Pact
+    Boon (p.51)
+  - Paladin: Tenets of Devotion (p.33), Breaking Your Oath (pp.33-34)
+  - Druid: Beast Shapes table (p.20), Sacred Plants and Wood (p.22)
+  - Cleric: Destroy Undead table (p.17)
+  - Sorcerer: Flexible Casting, Creating Spell Slots table (p.43); Draconic Ancestry table (p.44)
 The SRD's Multiclassing (pp.56-58) and Feats (p.75) sections are left out on purpose: the game doesn't use those
 optional rules (owner, 2026-10-11), and the DM's prompt says so.
+
+Corrections: `dm/srd/corrections/5e-SRD-<Table>.json` holds the places where the dataset differs from the SRD 5.1 PDF.
+`dm/srd.py` `table()` applies them after loading and gap-fill. Each is {"index", "source", "set": {path: value}}; a path
+is dotted and may index a list by number ("class_specific.invocations_known", "spellcasting.info.4.desc"). An index
+that is not in the table, or a dict field that does not exist, raises. The text is the PDF's, word for word. Entries
+(PDF page):
+- Levels: Warlock levels 4 and 6, Invocations Known 2 and 3 (the dataset had 3 and 4) (p.46)
+- Subclasses: Life Domain, Guardian of Faith added to the domain spells at Cleric level 7; the introduction gets the
+  PDF's examples of gods back (p.17)
+- Features, text brought to the PDF's:
+  - Rage: the Rage Damage and Rages columns of the table, not fixed numbers (p.8)
+  - Frenzy: "appendix PH-A" (p.9); Retaliation: "melee weapon attack" (p.10)
+  - Divine Domain and its four improvement placeholders: the dataset's non-SRD domain names removed (p.16)
+  - Destroy Undead at CR 1/2, 1, 2, 3, 4: "as shown in the Destroy Undead table" (p.17)
+  - Martial Arts, Ki, Unarmored Movement (both): "the Monk table" for "Table: The Monk"; "two-handed" (pp.26-27)
+  - Divine Sense: the Count Strahd example (p.30); Lay on Hands: "level × 5" (p.31)
+  - Roguish Archetype and its three improvement placeholders: a non-SRD sentence removed (p.40)
+  - Otherworldly Patron and its three improvement placeholders: the dataset's non-SRD patron names removed (p.46)
+  - Mystic Arcanum (6th to 9th): "6th-level" for "6th- level" (p.48)
+- Classes: Druid Spellcasting Focus, 'see "Equipment"' for "see chapter 5" (p.20); Paladin (p.31) and Wizard (p.52)
+  spellcasting text, a space after a hyphen removed
+Not corrected: the `aura-improvements` feature (Paladin Aura of Protection levels), which the dataset invented and the
+PDF does not have; and the eldritch invocations' prerequisites, which come from the dataset's `prerequisites` and are
+printed in the PDF's wording by `dm/lookup.py` (checked against pp.48-50).
+
+The "class" lookup (`dm/lookup.py`) builds the class table from the dataset's Levels rows with the PDF's column headings
+(Features names come from the dataset), and a subclass's spell list from its `spells` and the PDF's headings
+(`_SUBCLASS`).
 
 The gap-fill is under the same licence and attribution as the rest of the SRD content here. The PDF's legal page asks
 for this attribution statement:

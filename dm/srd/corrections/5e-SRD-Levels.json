@@ -1,0 +1,16 @@
+[
+  {
+    "index": "warlock-4",
+    "source": "SRD 5.1 p.46 (correction)",
+    "set": {
+      "class_specific.invocations_known": 2
+    }
+  },
+  {
+    "index": "warlock-6",
+    "source": "SRD 5.1 p.46 (correction)",
+    "set": {
+      "class_specific.invocations_known": 3
+    }
+  }
+]

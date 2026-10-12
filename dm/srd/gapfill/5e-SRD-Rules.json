@@ -5,5 +5,446 @@
     "desc": "As your character goes on adventures and overcomes challenges, he or she gains experience, represented by experience points. A character who reaches a specified experience point total advances in capability. This advancement is called gaining a level.\n\nWhen your character gains a level, his or her class often grants additional features, as detailed in the class description. Some of these features allow you to increase your ability scores, either increasing two scores by 1 each or increasing one score by 2. You can't increase an ability score above 20. In addition, every character's proficiency bonus increases at certain levels.\n\nEach time you gain a level, you gain 1 additional Hit Die. Roll that Hit Die, add your Constitution modifier to the roll, and add the total to your hit point maximum. Alternatively, you can use the fixed value shown in your class entry, which is the average result of the die roll (rounded up).\n\nWhen your Constitution modifier increases by 1, your hit point maximum increases by 1 for each level you have attained. For example, if your 7th-level fighter has a Constitution score of 17, when he reaches 8th level, he increases his Constitution score from 17 to 18, thus increasing his Constitution modifier from +3 to +4. His hit point maximum then increases by 8.\n\nThe Character Advancement table summarizes the XP you need to advance in levels from level 1 through level 20, and the proficiency bonus for a character of that level. Consult the information in your character's class description to see what other improvements you gain at each level.\n\nCharacter Advancement\n\n| Experience Points | Level | Proficiency Bonus |\n| ----------------- | ----- | ----------------- |\n| 0                 | 1     | +2                |\n| 300               | 2     | +2                |\n| 900               | 3     | +2                |\n| 2,700             | 4     | +2                |\n| 6,500             | 5     | +3                |\n| 14,000            | 6     | +3                |\n| 23,000            | 7     | +3                |\n| 34,000            | 8     | +3                |\n| 48,000            | 9     | +4                |\n| 64,000            | 10    | +4                |\n| 85,000            | 11    | +4                |\n| 100,000           | 12    | +4                |\n| 120,000           | 13    | +5                |\n| 140,000           | 14    | +5                |\n| 165,000           | 15    | +5                |\n| 195,000           | 16    | +5                |\n| 225,000           | 17    | +6                |\n| 265,000           | 18    | +6                |\n| 305,000           | 19    | +6                |\n| 355,000           | 20    | +6                |",
     "url": "/api/2014/rules/beyond-1st-level",
     "source": "SRD 5.1 p.56 (gap-fill)"
+  },
+  {
+    "index": "hit-points-barbarian",
+    "name": "Hit Points (Barbarian)",
+    "for": "barbarian",
+    "after": "",
+    "desc": "Hit Dice: 1d12 per barbarian level\nHit Points at 1st Level: 12 + your Constitution modifier\nHit Points at Higher Levels: 1d12 (or 7) + your Constitution modifier per barbarian level after 1st",
+    "url": "/api/2014/rules/hit-points-barbarian",
+    "source": "SRD 5.1 p.8 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-barbarian",
+    "name": "Proficiencies (Barbarian)",
+    "for": "barbarian",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Constitution\nSkills: Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival",
+    "url": "/api/2014/rules/proficiencies-barbarian",
+    "source": "SRD 5.1 p.8 (gap-fill)"
+  },
+  {
+    "index": "equipment-barbarian",
+    "name": "Equipment (Barbarian)",
+    "for": "barbarian",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a greataxe or (b) any martial melee weapon\n- (a) two handaxes or (b) any simple weapon\n- An explorer's pack and four javelins",
+    "url": "/api/2014/rules/equipment-barbarian",
+    "source": "SRD 5.1 p.8 (gap-fill)"
+  },
+  {
+    "index": "hit-points-bard",
+    "name": "Hit Points (Bard)",
+    "for": "bard",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per bard level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per bard level after 1st",
+    "url": "/api/2014/rules/hit-points-bard",
+    "source": "SRD 5.1 p.11 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-bard",
+    "name": "Proficiencies (Bard)",
+    "for": "bard",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor\nWeapons: Simple weapons, hand crossbows, longswords, rapiers, shortswords\nTools: Three musical instruments of your choice\nSaving Throws: Dexterity, Charisma\nSkills: Choose any three",
+    "url": "/api/2014/rules/proficiencies-bard",
+    "source": "SRD 5.1 p.11 (gap-fill)"
+  },
+  {
+    "index": "equipment-bard",
+    "name": "Equipment (Bard)",
+    "for": "bard",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a rapier, (b) a longsword, or (c) any simple weapon\n- (a) a diplomat's pack or (b) an entertainer's pack\n- (a) a lute or (b) any other musical instrument\n- Leather armor and a dagger",
+    "url": "/api/2014/rules/equipment-bard",
+    "source": "SRD 5.1 p.11 (gap-fill)"
+  },
+  {
+    "index": "hit-points-cleric",
+    "name": "Hit Points (Cleric)",
+    "for": "cleric",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per cleric level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per cleric level after 1st",
+    "url": "/api/2014/rules/hit-points-cleric",
+    "source": "SRD 5.1 p.15 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-cleric",
+    "name": "Proficiencies (Cleric)",
+    "for": "cleric",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor, medium armor, shields\nWeapons: Simple weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two from History, Insight, Medicine, Persuasion, and Religion",
+    "url": "/api/2014/rules/proficiencies-cleric",
+    "source": "SRD 5.1 p.15 (gap-fill)"
+  },
+  {
+    "index": "equipment-cleric",
+    "name": "Equipment (Cleric)",
+    "for": "cleric",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a mace or (b) a warhammer (if proficient)\n- (a) scale mail, (b) leather armor, or (c) chain mail (if proficient)\n- (a) a light crossbow and 20 bolts or (b) any simple weapon\n- (a) a priest's pack or (b) an explorer's pack\n- A shield and a holy symbol",
+    "url": "/api/2014/rules/equipment-cleric",
+    "source": "SRD 5.1 p.15 (gap-fill)"
+  },
+  {
+    "index": "hit-points-druid",
+    "name": "Hit Points (Druid)",
+    "for": "druid",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per druid level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per druid level after 1st",
+    "url": "/api/2014/rules/hit-points-druid",
+    "source": "SRD 5.1 p.19 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-druid",
+    "name": "Proficiencies (Druid)",
+    "for": "druid",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor, medium armor, shields (druids will not wear armor or use shields made of metal)\nWeapons: Clubs, daggers, darts, javelins, maces, quarterstaffs, scimitars, sickles, slings, spears\nTools: Herbalism kit\nSaving Throws: Intelligence, Wisdom\nSkills: Choose two from Arcana, Animal Handling, Insight, Medicine, Nature, Perception, Religion, and Survival",
+    "url": "/api/2014/rules/proficiencies-druid",
+    "source": "SRD 5.1 p.19 (gap-fill)"
+  },
+  {
+    "index": "equipment-druid",
+    "name": "Equipment (Druid)",
+    "for": "druid",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a wooden shield or (b) any simple weapon\n- (a) a scimitar or (b) any simple melee weapon\n- Leather armor, an explorer's pack, and a druidic focus",
+    "url": "/api/2014/rules/equipment-druid",
+    "source": "SRD 5.1 p.19 (gap-fill)"
+  },
+  {
+    "index": "hit-points-fighter",
+    "name": "Hit Points (Fighter)",
+    "for": "fighter",
+    "after": "",
+    "desc": "Hit Dice: 1d10 per fighter level\nHit Points at 1st Level: 10 + your Constitution modifier\nHit Points at Higher Levels: 1d10 (or 6) + your Constitution modifier per fighter level after 1st",
+    "url": "/api/2014/rules/hit-points-fighter",
+    "source": "SRD 5.1 p.24 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-fighter",
+    "name": "Proficiencies (Fighter)",
+    "for": "fighter",
+    "after": "Hit Points",
+    "desc": "Armor: All armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Constitution\nSkills: Choose two skills from Acrobatics, Animal Handling, Athletics, History, Insight, Intimidation, Perception, and Survival",
+    "url": "/api/2014/rules/proficiencies-fighter",
+    "source": "SRD 5.1 p.24 (gap-fill)"
+  },
+  {
+    "index": "equipment-fighter",
+    "name": "Equipment (Fighter)",
+    "for": "fighter",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) chain mail or (b) leather armor, longbow, and 20 arrows\n- (a) a martial weapon and a shield or (b) two martial weapons\n- (a) a light crossbow and 20 bolts or (b) two handaxes\n- (a) a dungeoneer's pack or (b) an explorer's pack",
+    "url": "/api/2014/rules/equipment-fighter",
+    "source": "SRD 5.1 p.24 (gap-fill)"
+  },
+  {
+    "index": "hit-points-monk",
+    "name": "Hit Points (Monk)",
+    "for": "monk",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per monk level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per monk level after 1st",
+    "url": "/api/2014/rules/hit-points-monk",
+    "source": "SRD 5.1 p.26 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-monk",
+    "name": "Proficiencies (Monk)",
+    "for": "monk",
+    "after": "Hit Points",
+    "desc": "Armor: None\nWeapons: Simple weapons, shortswords\nTools: Choose one type of artisan's tools or one musical instrument\nSaving Throws: Strength, Dexterity\nSkills: Choose two from Acrobatics, Athletics, History, Insight, Religion, and Stealth",
+    "url": "/api/2014/rules/proficiencies-monk",
+    "source": "SRD 5.1 p.26 (gap-fill)"
+  },
+  {
+    "index": "equipment-monk",
+    "name": "Equipment (Monk)",
+    "for": "monk",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a shortsword or (b) any simple weapon\n- (a) a dungeoneer's pack or (b) an explorer's pack\n- 10 darts",
+    "url": "/api/2014/rules/equipment-monk",
+    "source": "SRD 5.1 p.26 (gap-fill)"
+  },
+  {
+    "index": "hit-points-paladin",
+    "name": "Hit Points (Paladin)",
+    "for": "paladin",
+    "after": "",
+    "desc": "Hit Dice: 1d10 per paladin level\nHit Points at 1st Level: 10 + your Constitution modifier\nHit Points at Higher Levels: 1d10 (or 6) + your Constitution modifier per paladin level after 1st",
+    "url": "/api/2014/rules/hit-points-paladin",
+    "source": "SRD 5.1 p.30 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-paladin",
+    "name": "Proficiencies (Paladin)",
+    "for": "paladin",
+    "after": "Hit Points",
+    "desc": "Armor: All armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two from Athletics, Insight, Intimidation, Medicine, Persuasion, and Religion",
+    "url": "/api/2014/rules/proficiencies-paladin",
+    "source": "SRD 5.1 p.30 (gap-fill)"
+  },
+  {
+    "index": "equipment-paladin",
+    "name": "Equipment (Paladin)",
+    "for": "paladin",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a martial weapon and a shield or (b) two martial weapons\n- (a) five javelins or (b) any simple melee weapon\n- (a) a priest's pack or (b) an explorer's pack\n- Chain mail and a holy symbol",
+    "url": "/api/2014/rules/equipment-paladin",
+    "source": "SRD 5.1 p.30 (gap-fill)"
+  },
+  {
+    "index": "hit-points-ranger",
+    "name": "Hit Points (Ranger)",
+    "for": "ranger",
+    "after": "",
+    "desc": "Hit Dice: 1d10 per ranger level\nHit Points at 1st Level: 10 + your Constitution modifier\nHit Points at Higher Levels: 1d10 (or 6) + your Constitution modifier per ranger level after 1st",
+    "url": "/api/2014/rules/hit-points-ranger",
+    "source": "SRD 5.1 p.35 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-ranger",
+    "name": "Proficiencies (Ranger)",
+    "for": "ranger",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor, medium armor, shields\nWeapons: Simple weapons, martial weapons\nTools: None\nSaving Throws: Strength, Dexterity\nSkills: Choose three from Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, and Survival",
+    "url": "/api/2014/rules/proficiencies-ranger",
+    "source": "SRD 5.1 p.35 (gap-fill)"
+  },
+  {
+    "index": "equipment-ranger",
+    "name": "Equipment (Ranger)",
+    "for": "ranger",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) scale mail or (b) leather armor\n- (a) two shortswords or (b) two simple melee weapons\n- (a) a dungeoneer's pack or (b) an explorer's pack\n- A longbow and a quiver of 20 arrows",
+    "url": "/api/2014/rules/equipment-ranger",
+    "source": "SRD 5.1 p.35 (gap-fill)"
+  },
+  {
+    "index": "hit-points-rogue",
+    "name": "Hit Points (Rogue)",
+    "for": "rogue",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per rogue level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per rogue level after 1st",
+    "url": "/api/2014/rules/hit-points-rogue",
+    "source": "SRD 5.1 p.39 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-rogue",
+    "name": "Proficiencies (Rogue)",
+    "for": "rogue",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor\nWeapons: Simple weapons, hand crossbows, longswords, rapiers, shortswords\nTools: Thieves' tools\nSaving Throws: Dexterity, Intelligence\nSkills: Choose four from Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, and Stealth",
+    "url": "/api/2014/rules/proficiencies-rogue",
+    "source": "SRD 5.1 p.39 (gap-fill)"
+  },
+  {
+    "index": "equipment-rogue",
+    "name": "Equipment (Rogue)",
+    "for": "rogue",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a rapier or (b) a shortsword\n- (a) a shortbow and quiver of 20 arrows or (b) a shortsword\n- (a) a burglar's pack, (b) a dungeoneer's pack, or (c) an explorer's pack\n- (a) Leather armor, two daggers, and thieves' tools",
+    "url": "/api/2014/rules/equipment-rogue",
+    "source": "SRD 5.1 p.39 (gap-fill)"
+  },
+  {
+    "index": "hit-points-sorcerer",
+    "name": "Hit Points (Sorcerer)",
+    "for": "sorcerer",
+    "after": "",
+    "desc": "Hit Dice: 1d6 per sorcerer level\nHit Points at 1st Level: 6 + your Constitution modifier\nHit Points at Higher Levels: 1d6 (or 4) + your Constitution modifier per sorcerer level after 1st",
+    "url": "/api/2014/rules/hit-points-sorcerer",
+    "source": "SRD 5.1 p.42 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-sorcerer",
+    "name": "Proficiencies (Sorcerer)",
+    "for": "sorcerer",
+    "after": "Hit Points",
+    "desc": "Armor: None\nWeapons: Daggers, darts, slings, quarterstaffs, light crossbows\nTools: None\nSaving Throws: Constitution, Charisma\nSkills: Choose two from Arcana, Deception, Insight, Intimidation, Persuasion, and Religion",
+    "url": "/api/2014/rules/proficiencies-sorcerer",
+    "source": "SRD 5.1 p.42 (gap-fill)"
+  },
+  {
+    "index": "equipment-sorcerer",
+    "name": "Equipment (Sorcerer)",
+    "for": "sorcerer",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a light crossbow and 20 bolts or (b) any simple weapon\n- (a) a component pouch or (b) an arcane focus\n- (a) a dungeoneer's pack or (b) an explorer's pack\n- Two daggers",
+    "url": "/api/2014/rules/equipment-sorcerer",
+    "source": "SRD 5.1 p.42 (gap-fill)"
+  },
+  {
+    "index": "hit-points-warlock",
+    "name": "Hit Points (Warlock)",
+    "for": "warlock",
+    "after": "",
+    "desc": "Hit Dice: 1d8 per warlock level\nHit Points at 1st Level: 8 + your Constitution modifier\nHit Points at Higher Levels: 1d8 (or 5) + your Constitution modifier per warlock level after 1st",
+    "url": "/api/2014/rules/hit-points-warlock",
+    "source": "SRD 5.1 p.46 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-warlock",
+    "name": "Proficiencies (Warlock)",
+    "for": "warlock",
+    "after": "Hit Points",
+    "desc": "Armor: Light armor\nWeapons: Simple weapons\nTools: None\nSaving Throws: Wisdom, Charisma\nSkills: Choose two skills from Arcana, Deception, History, Intimidation, Investigation, Nature, and Religion",
+    "url": "/api/2014/rules/proficiencies-warlock",
+    "source": "SRD 5.1 p.46 (gap-fill)"
+  },
+  {
+    "index": "equipment-warlock",
+    "name": "Equipment (Warlock)",
+    "for": "warlock",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a light crossbow and 20 bolts or (b) any simple weapon\n- (a) a component pouch or (b) an arcane focus\n- (a) a scholar's pack or (b) a dungeoneer's pack\n- Leather armor, any simple weapon, and two daggers",
+    "url": "/api/2014/rules/equipment-warlock",
+    "source": "SRD 5.1 p.46 (gap-fill)"
+  },
+  {
+    "index": "hit-points-wizard",
+    "name": "Hit Points (Wizard)",
+    "for": "wizard",
+    "after": "",
+    "desc": "Hit Dice: 1d6 per wizard level\nHit Points at 1st Level: 6 + your Constitution modifier\nHit Points at Higher Levels: 1d6 (or 4) + your Constitution modifier per wizard level after 1st",
+    "url": "/api/2014/rules/hit-points-wizard",
+    "source": "SRD 5.1 p.52 (gap-fill)"
+  },
+  {
+    "index": "proficiencies-wizard",
+    "name": "Proficiencies (Wizard)",
+    "for": "wizard",
+    "after": "Hit Points",
+    "desc": "Armor: None\nWeapons: Daggers, darts, slings, quarterstaffs, light crossbows\nTools: None\nSaving Throws: Intelligence, Wisdom\nSkills: Choose two from Arcana, History, Insight, Investigation, Medicine, and Religion",
+    "url": "/api/2014/rules/proficiencies-wizard",
+    "source": "SRD 5.1 p.52 (gap-fill)"
+  },
+  {
+    "index": "equipment-wizard",
+    "name": "Equipment (Wizard)",
+    "for": "wizard",
+    "after": "Proficiencies",
+    "desc": "You start with the following equipment, in addition to the equipment granted by your background:\n- (a) a quarterstaff or (b) a dagger\n- (a) a component pouch or (b) an arcane focus\n- (a) a scholar's pack or (b) an explorer's pack\n- A spellbook",
+    "url": "/api/2014/rules/equipment-wizard",
+    "source": "SRD 5.1 p.52 (gap-fill)"
+  },
+  {
+    "index": "learning-spells-of-1st-level-and-higher",
+    "name": "Learning Spells of 1st Level and Higher",
+    "for": "wizard",
+    "after": "Spellcasting Focus",
+    "desc": "Each time you gain a wizard level, you can add two wizard spells of your choice to your spellbook for free. Each of these spells must be of a level for which you have spell slots, as shown on the Wizard table. On your adventures, you might find other spells that you can add to your spellbook (see the \"Your Spellbook\" sidebar).",
+    "url": "/api/2014/rules/learning-spells-of-1st-level-and-higher",
+    "source": "SRD 5.1 p.53 (gap-fill)"
+  },
+  {
+    "index": "your-spellbook",
+    "name": "Your Spellbook",
+    "for": "wizard",
+    "after": "Learning Spells of 1st Level and Higher",
+    "desc": "The spells that you add to your spellbook as you gain levels reflect the arcane research you conduct on your own, as well as intellectual breakthroughs you have had about the nature of the multiverse. You might find other spells during your adventures. You could discover a spell recorded on a scroll in an evil wizard's chest, for example, or in a dusty tome in an ancient library.\n\nCopying a Spell into the Book. When you find a wizard spell of 1st level or higher, you can add it to your spellbook if it is of a spell level you can prepare and if you can spare the time to decipher and copy it.\n\nCopying that spell into your spellbook involves reproducing the basic form of the spell, then deciphering the unique system of notation used by the wizard who wrote it. You must practice the spell until you understand the sounds or gestures required, then transcribe it into your spellbook using your own notation.\n\nFor each level of the spell, the process takes 2 hours and costs 50 gp. The cost represents material components you expend as you experiment with the spell to master it, as well as the fine inks you need to record it. Once you have spent this time and money, you can prepare the spell just like your other spells.\n\nReplacing the Book. You can copy a spell from your own spellbook into another book—for example, if you want to make a backup copy of your spellbook. This is just like copying a new spell into your spellbook, but faster and easier, since you understand your own notation and already know how to cast the spell. You need spend only 1 hour and 10 gp for each level of the copied spell.\n\nIf you lose your spellbook, you can use the same procedure to transcribe the spells that you have prepared into a new spellbook. Filling out the remainder of your spellbook requires you to find new spells to do so, as normal. For this reason, many wizards keep backup spellbooks in a safe place.\n\nThe Book's Appearance. Your spellbook is a unique compilation of spells, with its own decorative flourishes and margin notes. It might be a plain, functional leather volume that you received as a gift from your master, a finely bound gilt-edged tome you found in an ancient library, or even a loose collection of notes scrounged together after you lost your previous spellbook in a mishap.",
+    "url": "/api/2014/rules/your-spellbook",
+    "source": "SRD 5.1 pp.54-55 (gap-fill)"
+  },
+  {
+    "index": "eldritch-invocations-prerequisites",
+    "name": "Eldritch Invocations",
+    "for": "warlock",
+    "after": "Spellcasting Focus",
+    "desc": "If an eldritch invocation has prerequisites, you must meet them to learn it. You can learn the invocation at the same time that you meet its prerequisites. A level prerequisite refers to your level in this class.",
+    "url": "/api/2014/rules/eldritch-invocations-prerequisites",
+    "source": "SRD 5.1 p.48 (gap-fill)"
+  },
+  {
+    "index": "expanded-spell-list",
+    "name": "Expanded Spell List",
+    "for": "fiend",
+    "after": "The Fiend",
+    "desc": "The Fiend lets you choose from an expanded list of spells when you learn a warlock spell. The following spells are added to the warlock spell list for you.",
+    "url": "/api/2014/rules/expanded-spell-list",
+    "source": "SRD 5.1 p.50 (gap-fill)"
+  },
+  {
+    "index": "your-pact-boon",
+    "name": "Your Pact Boon",
+    "for": "warlock",
+    "after": "Fiend Expanded Spells",
+    "desc": "Each Pact Boon option produces a special creature or an object that reflects your patron's nature.\n\nPact of the Chain. Your familiar is more cunning than a typical familiar. Its default form can be a reflection of your patron, with imps and quasits tied to the Fiend.\n\nPact of the Blade. If you serve the Fiend, your weapon could be an axe made of black metal and adorned with decorative flames.\n\nPact of the Tome. Your Book of Shadows could be a weighty tome bound in demon hide studded with iron, holding spells of conjuration and a wealth of forbidden lore about the sinister regions of the cosmos, a gift of the Fiend.",
+    "url": "/api/2014/rules/your-pact-boon",
+    "source": "SRD 5.1 p.51 (gap-fill)"
+  },
+  {
+    "index": "tenets-of-devotion",
+    "name": "Tenets of Devotion",
+    "for": "devotion",
+    "after": "Oath of Devotion",
+    "desc": "Though the exact words and strictures of the Oath of Devotion vary, paladins of this oath share these tenets.\n\nHonesty. Don't lie or cheat. Let your word be your promise.\n\nCourage. Never fear to act, though caution is wise.\n\nCompassion. Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom.\n\nHonor. Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.\n\nDuty. Be responsible for your actions and their consequences, protect those entrusted to your care, and obey those who have just authority over you.",
+    "url": "/api/2014/rules/tenets-of-devotion",
+    "source": "SRD 5.1 p.33 (gap-fill)"
+  },
+  {
+    "index": "breaking-your-oath",
+    "name": "Breaking Your Oath",
+    "for": "paladin",
+    "after": "Oath of Devotion Spells",
+    "desc": "A paladin tries to hold to the highest standards of conduct, but even the most virtuous paladin is fallible. Sometimes the right path proves too demanding, sometimes a situation calls for the lesser of two evils, and sometimes the heat of emotion causes a paladin to transgress his or her oath.\n\nA paladin who has broken a vow typically seeks absolution from a cleric who shares his or her faith or from another paladin of the same order. The paladin might spend an all-night vigil in prayer as a sign of penitence, or undertake a fast or similar act of self-denial. After a rite of confession and forgiveness, the paladin starts fresh.\n\nIf a paladin willfully violates his or her oath and shows no sign of repentance, the consequences can be more serious. At the GM's discretion, an impenitent paladin might be forced to abandon this class and adopt another.",
+    "url": "/api/2014/rules/breaking-your-oath",
+    "source": "SRD 5.1 pp.33-34 (gap-fill)"
+  },
+  {
+    "index": "sacred-plants-and-wood",
+    "name": "Sacred Plants and Wood",
+    "for": "druid",
+    "after": "Circle Spells",
+    "desc": "A druid holds certain plants to be sacred, particularly alder, ash, birch, elder, hazel, holly, juniper, mistletoe, oak, rowan, willow, and yew. Druids often use such plants as part of a spellcasting focus, incorporating lengths of oak or yew or sprigs of mistletoe.\n\nSimilarly, a druid uses such woods to make other objects, such as weapons and shields. Yew is associated with death and rebirth, so weapon handles for scimitars or sickles might be fashioned from it. Ash is associated with life and oak with strength. These woods make excellent hafts or whole weapons, such as clubs or quarterstaffs, as well as shields. Alder is associated with air, and it might be used for thrown weapons, such as darts or javelins.\n\nDruids from regions that lack the plants described here have chosen other plants to take on similar uses. For instance, a druid of a desert region might value the yucca tree and cactus plants.",
+    "url": "/api/2014/rules/sacred-plants-and-wood",
+    "source": "SRD 5.1 p.22 (gap-fill)"
+  },
+  {
+    "index": "beast-shapes",
+    "name": "Beast Shapes",
+    "for": "druid",
+    "after": "Spellcasting Focus",
+    "desc": "| Level | Max. CR | Limitations                 | Example     |\n| ----- | ------- | --------------------------- | ----------- |\n| 2nd   | 1/4     | No flying or swimming speed | Wolf        |\n| 4th   | 1/2     | No flying speed             | Crocodile   |\n| 8th   | 1       | —                           | Giant eagle |",
+    "url": "/api/2014/rules/beast-shapes",
+    "source": "SRD 5.1 p.20 (gap-fill)"
+  },
+  {
+    "index": "destroy-undead-table",
+    "name": "Destroy Undead",
+    "for": "cleric",
+    "after": "Spellcasting Focus",
+    "desc": "| Cleric Level | Destroys Undead of CR . . . |\n| ------------ | --------------------------- |\n| 5th          | 1/2 or lower                |\n| 8th          | 1 or lower                  |\n| 11th         | 2 or lower                  |\n| 14th         | 3 or lower                  |\n| 17th         | 4 or lower                  |",
+    "url": "/api/2014/rules/destroy-undead-table",
+    "source": "SRD 5.1 p.17 (gap-fill)"
+  },
+  {
+    "index": "flexible-casting",
+    "name": "Flexible Casting",
+    "for": "sorcerer",
+    "after": "Spellcasting Focus",
+    "desc": "You can use your sorcery points to gain additional spell slots, or sacrifice spell slots to gain additional sorcery points. You learn other ways to use your sorcery points as you reach higher levels.",
+    "url": "/api/2014/rules/flexible-casting",
+    "source": "SRD 5.1 p.43 (gap-fill)"
+  },
+  {
+    "index": "creating-spell-slots",
+    "name": "Creating Spell Slots",
+    "for": "sorcerer",
+    "after": "Flexible Casting",
+    "desc": "| Spell Slot Level | Sorcery Point Cost |\n| ---------------- | ------------------ |\n| 1st              | 2                  |\n| 2nd              | 3                  |\n| 3rd              | 5                  |\n| 4th              | 6                  |\n| 5th              | 7                  |",
+    "url": "/api/2014/rules/creating-spell-slots",
+    "source": "SRD 5.1 p.43 (gap-fill)"
+  },
+  {
+    "index": "draconic-ancestry",
+    "name": "Draconic Ancestry",
+    "for": "draconic",
+    "after": "Draconic Bloodline",
+    "desc": "| Dragon | Damage Type |\n| ------ | ----------- |\n| Black  | Acid        |\n| Blue   | Lightning   |\n| Brass  | Fire        |\n| Bronze | Lightning   |\n| Copper | Acid        |\n| Gold   | Fire        |\n| Green  | Poison      |\n| Red    | Fire        |\n| Silver | Cold        |\n| White  | Cold        |",
+    "url": "/api/2014/rules/draconic-ancestry",
+    "source": "SRD 5.1 p.44 (gap-fill)"
   }
 ]

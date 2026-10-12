@@ -1,8 +1,9 @@
 """The DM's rules lookup: the exact SRD 5.1 text for a spell, monster, condition, magic item, piece of equipment,
-rules section, class feature or racial trait, from the dataset in dm/srd/.
+rules section, class (without its features), class feature or racial trait, from the dataset in dm/srd/.
 
-The DM names what it wants. An exact name (case ignored) returns the entry; otherwise the names that contain the
-words asked for are listed, so the DM can pick one.
+The DM names what it wants. An exact name (case ignored) returns the entry; failing that, a name that differs only in
+apostrophe style, hyphens or a plural "s" does. A name that starts several entries named "Name (...)" returns them all
+("Wild Shape"). Otherwise the names that contain the words asked for are listed, so the DM can pick one.
 """
 
 from __future__ import annotations
@@ -13,16 +14,25 @@ from typing import Any
 from dm import srd
 
 KINDS = {"spell": "Spells", "monster": "Monsters", "condition": "Conditions", "magic_item": "Magic-Items",
-         "equipment": "Equipment", "rule": "Rules", "feature": "Features", "trait": "Traits"}
-_KIND_OF = {t: k for k, t in KINDS.items()}
+         "equipment": "Equipment", "rule": "Rules", "feature": "Features", "trait": "Traits", "class": "Classes"}
+_KIND_OF = {t: k for k, t in KINDS.items()} | {"Subclasses": "class"}
+_ALSO = {"Classes": ["Subclasses"]}  # a subclass is found along with the classes
+# the SRD's name for each subclass (the dataset's is shorter) and the heading of its spell list
+_SUBCLASS = {"berserker": ("Path of the Berserker", ""), "lore": ("College of Lore", ""),
+             "life": ("Life Domain", "Life Domain Spells"), "land": ("Circle of the Land", "Circle Spells"),
+             "champion": ("Champion", ""), "open-hand": ("Way of the Open Hand", ""),
+             "devotion": ("Oath of Devotion", "Oath of Devotion Spells"), "hunter": ("Hunter", ""), "thief": ("Thief", ""),
+             "draconic": ("Draconic Bloodline", ""), "fiend": ("The Fiend", "Fiend Expanded Spells"),
+             "evocation": ("School of Evocation", "")}
 
 
 def lookup(name: str, kind: str = "") -> str:
     tables = [KINDS[kind]] if kind else list(KINDS.values())
+    tables += [s for t in list(tables) for s in _ALSO.get(t, [])]
     key = name.strip().casefold()
     if not key:
         return "Give the name of what to look up."
-    hits = [(t, x) for t in tables for x in srd.table(t).values() if key in (x["index"], x["name"].casefold())]
+    hits = _find(tables, key)
     if hits:
         out, features = [], {}
         for t, x in hits:
@@ -46,6 +56,33 @@ def lookup(name: str, kind: str = "") -> str:
     if out:
         return f"No entry named {name!r}. " + " ".join(out)
     return f"No SRD entry named {name!r}" + (f" among {kind}s" if kind else "") + ". It may not be in the SRD."
+
+
+def _names(t: str, x: dict[str, Any]) -> list[str]:
+    return [x["index"], x["name"].casefold()] + ([_SUBCLASS[x["index"]][0].casefold()] if t == "Subclasses" else [])
+
+
+def _norm(s: str) -> str:
+    """Apostrophe style, hyphen or space, and a plural "s" don't matter."""
+    s = re.sub(r"[\s-]+", " ", s.casefold().replace("’", "'")).strip()
+    return s.removesuffix("s")
+
+
+def _find(tables: list[str], key: str) -> list[tuple[str, dict[str, Any]]]:
+    """The entries an exact name (case ignored) matches, else those it matches under `_norm`; plus the entries named
+    "Name (...)" when it is their start. A kind that has an exact entry keeps just that, except features ("Channel
+    Divinity" is a Paladin feature and a Cleric one that comes in variants)."""
+    every = [(t, x) for t in tables for x in srd.table(t).values()]
+    hits = [(t, x) for t, x in every if key in _names(t, x)]
+    n = _norm(key)
+    if not hits:
+        hits = [(t, x) for t, x in every if n in map(_norm, _names(t, x))]
+    have = {t for t, _ in hits}
+    for t, x in every:
+        if ((t not in have or t == "Features") and " (" in x["name"] and _norm(x["name"].split(" (")[0]) == n
+                and not any(x is h for _, h in hits)):
+            hits.append((t, x))
+    return hits
 
 
 def _lines(x: Any) -> str:
@@ -130,13 +167,126 @@ def _equipment(e: dict[str, Any]) -> str:
 
 
 def _features(fs: list[dict[str, Any]]) -> str:
-    """Features with one name and one text: 'Ability Score Improvement (Fighter level 4, 6, 8; Rogue level 4, 10)'."""
+    """Features with one text: 'Ability Score Improvement (Fighter level 4, 6, 8; Rogue level 4, 10)'. Variants of one
+    feature ("Wild Shape (CR 1/4 ...)", "Wild Shape (CR 1/2 ...)") are named one after the other, in level order."""
     where: dict[str, list[str]] = {}
     for f in fs:
         who = f["class"]["name"] + (f" ({f['subclass']['name']})" if f.get("subclass") else "")
         where.setdefault(who, []).append(str(f["level"]))
     whos = "; ".join(f"{w} level {', '.join(lv)}" for w, lv in where.items())
-    return f"FEATURE {fs[0]['name']} ({whos}):\n{_lines(fs[0]['desc'])}"
+    pre = f"Prerequisite: {', '.join(map(_prereq, fs[0]['prerequisites']))}\n" if fs[0].get("prerequisites") else ""
+    return f"FEATURE {' / '.join(dict.fromkeys(f['name'] for f in fs))} ({whos}):\n{pre}{_lines(fs[0]['desc'])}"
+
+
+def _prereq(p: dict[str, Any]) -> str:
+    """An eldritch invocation's prerequisite, as the SRD words it: '15th level', 'Pact of the Chain feature'."""
+    if p["type"] == "level":
+        return f"{_ord(p['level'])} level"
+    x = srd.ref({"index": p[p["type"]].rsplit("/", 1)[1], "url": p[p["type"]]})
+    return f"{x['name'].lower()} cantrip" if p["type"] == "spell" else f"{x['name']} feature"  # the only spell is a cantrip
+
+
+def _ord(n: int) -> str:
+    return f"{n}{'th' if n % 100 in (11, 12, 13) else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+# ---------- classes ----------
+
+def _lv(key: str, part: str = "class_specific") -> Any:
+    """A column of the class table: that value of the Levels data, a dash when it is 0 or absent."""
+    return lambda r: r.get(part, {}).get(key) or "—"
+
+
+def _dice(key: str) -> Any:
+    return lambda r: "{dice_count}d{dice_value}".format(**r["class_specific"][key])
+
+
+def _pact(slot_level: bool) -> Any:
+    """Warlock: the Spell Slots and Slot Level columns (all the slots are of one level)."""
+    def col(r: dict[str, Any]) -> str:
+        slots = {i: r["spellcasting"][f"spell_slots_level_{i}"] for i in range(1, 10)}
+        i = next(i for i, n in slots.items() if n)
+        return _ord(i) if slot_level else str(slots[i])
+    return col
+
+
+_SLOTS = lambda top: [(_ord(n), _lv(f"spell_slots_level_{n}", "spellcasting")) for n in range(1, top + 1)]
+_CANTRIPS, _KNOWN = ("Cantrips Known", _lv("cantrips_known", "spellcasting")), ("Spells Known", _lv("spells_known", "spellcasting"))
+# class -> the columns of its table before and after Features (headings as in the SRD), from the Levels data
+_COLS: dict[str, tuple[list[Any], list[Any]]] = {
+    "barbarian": ([], [("Rages", lambda r: "Unlimited" if r["class_specific"]["rage_count"] == 9999
+                        else r["class_specific"]["rage_count"]),
+                       ("Rage Damage", lambda r: f"+{r['class_specific']['rage_damage_bonus']}")]),
+    "bard": ([], [_CANTRIPS, _KNOWN, *_SLOTS(9)]), "cleric": ([], [_CANTRIPS, *_SLOTS(9)]),
+    "druid": ([], [_CANTRIPS, *_SLOTS(9)]), "fighter": ([], []),
+    "monk": ([("Martial Arts", _dice("martial_arts")), ("Ki Points", _lv("ki_points")),
+              ("Unarmored Movement", lambda r: f"+{r['class_specific']['unarmored_movement']} ft."
+               if r["class_specific"]["unarmored_movement"] else "—")], []),
+    "paladin": ([], _SLOTS(5)), "ranger": ([], [_KNOWN, *_SLOTS(5)]), "rogue": ([("Sneak Attack", _dice("sneak_attack"))], []),
+    "sorcerer": ([("Sorcery Points", _lv("sorcery_points"))], [_CANTRIPS, _KNOWN, *_SLOTS(9)]),
+    "warlock": ([], [_CANTRIPS, _KNOWN, ("Spell Slots", _pact(False)), ("Slot Level", _pact(True)),
+                     ("Invocations Known", _lv("invocations_known"))]),
+    "wizard": ([], [_CANTRIPS, *_SLOTS(9)]),
+}
+
+
+def _table(c: dict[str, Any]) -> str:
+    """The class table: one row per level, the SRD's columns, the features as the dataset names them."""
+    pre, post = _COLS[c["index"]]
+    cols = [("Proficiency Bonus", lambda r: f"+{r['prof_bonus']}"), *pre,
+            ("Features", lambda r: ", ".join(f["name"] for f in r["features"]) or "—"), *post]
+    row = lambda *cells: "| " + " | ".join(map(str, cells)) + " |"
+    levels = [srd.table("Levels")[f"{c['index']}-{n}"] for n in range(1, 21)]
+    return "\n".join([row("Level", *(h for h, _ in cols))] + [row(_ord(r["level"]), *(f(r) for _, f in cols)) for r in levels])
+
+
+def _spell_list(s: dict[str, Any]) -> str:
+    """A subclass's spells by the class level they come at (the Fiend's, as in the SRD's table, by spell level);
+    the Circle of the Land's by land."""
+    groups: dict[tuple[str, str], list[str]] = {}
+    for e in s["spells"]:
+        lvl = next(int(p["index"].rsplit("-", 1)[1]) for p in e["prerequisites"] if p["type"] == "level")
+        land = next((p["name"].split(": ")[1] for p in e["prerequisites"] if p["type"] == "feature"), "")
+        sp = srd.ref(e["spell"])
+        label = f"Spell level {_ord(sp['level'])}" if s["class"]["index"] == "warlock" else f"{s['class']['name']} level {lvl}"
+        groups.setdefault((land, label), []).append(sp["name"])
+    return "\n".join((f"{land} - " if land else "") + f"{label}: {', '.join(names)}" for (land, label), names in groups.items())
+
+
+def _fill(scope: str, blocks: list[tuple[str, str, str]]) -> list[tuple[str, str, str]]:
+    """Add the gap-fill sections of a class or subclass (`for` in dm/srd/gapfill/5e-SRD-Rules.json), each after the
+    block its `after` names ("" is the start). A block is (name, heading, text)."""
+    for g in srd.table("Rules").values():
+        if g.get("for") == scope:
+            head = g["name"].split(" (")[0]
+            blocks.insert([k for k, _, _ in blocks].index(g["after"]) + 1 if g["after"] else 0, (head, head, g["desc"]))
+    return blocks
+
+
+def _subclass_blocks(s: dict[str, Any]) -> list[tuple[str, str, str]]:
+    name, spells = _SUBCLASS[s["index"]]
+    return _fill(s["index"], [(name, name, "\n\n".join(s["desc"]))] + ([(spells, spells, _spell_list(s))] if spells else []))
+
+
+def _blocks(blocks: list[tuple[str, str, str]]) -> str:
+    return "\n\n".join(f"{head}:\n{text}" for _, head, text in blocks)
+
+
+def _subclass(s: dict[str, Any]) -> str:
+    first, *rest = _subclass_blocks(s)  # the first block is the subclass's own text
+    return "\n\n".join([f"SUBCLASS {first[1]} ({s['class']['name']}: {s['subclass_flavor']}):\n{first[2]}"]
+                       + ([_blocks(rest)] if rest else []))
+
+
+def _class(c: dict[str, Any]) -> str:
+    """A class's rules text without its features (the table's Features column names them; each is looked up by name):
+    hit points, proficiencies, equipment, the table, spellcasting, the SRD subclass."""
+    magic = "Pact Magic" if c["index"] == "warlock" else "Spellcasting"
+    blocks = [(f"The {c['name']}", f"The {c['name']}", _table(c))]
+    blocks += [(i["name"], f"{magic}: {i['name']}", "\n\n".join(i["desc"])) for i in c.get("spellcasting", {}).get("info", [])]
+    for r in c["subclasses"]:
+        blocks += _subclass_blocks(srd.table("Subclasses")[r["index"]])
+    return f"CLASS {c['name']} (without its features; the table names them, look each one up):\n{_blocks(_fill(c['index'], blocks))}"
 
 
 def _trait(t: dict[str, Any]) -> str:
@@ -182,5 +332,5 @@ FORMAT = {
     "Spells": _spell, "Monsters": _monster, "Equipment": _equipment, "Features": lambda f: _features([f]), "Traits": _trait,
     "Conditions": lambda c: f"CONDITION {c['name']}:\n{_lines(c['desc'])}",
     "Magic-Items": lambda i: f"MAGIC ITEM {i['name']} ({i['rarity']['name']}):\n{_lines(i['desc'])}",
-    "Rules": _rule,
+    "Rules": _rule, "Classes": _class, "Subclasses": _subclass,
 }

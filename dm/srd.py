@@ -34,6 +34,19 @@ def table(name: str) -> dict[str, dict[str, Any]]:
             if x["index"] in out:
                 raise ValueError(f"gap-fill {name} entry {x['index']!r} is already in the dataset")
             out[x["index"]] = x
+    fix = DIR / "corrections" / f"5e-SRD-{name}.json"  # where the dataset differs from the SRD (see SOURCE.md)
+    if fix.exists():
+        for c in json.loads(fix.read_text(encoding="utf-8")):
+            if c["index"] not in out:
+                raise ValueError(f"correction for {name} entry {c['index']!r}, which is not in the table")
+            for path, value in c["set"].items():  # "class_specific.invocations_known", "spellcasting.info.4.desc"
+                *head, last = path.split(".")
+                node = out[c["index"]]
+                for k in head:
+                    node = node[int(k) if isinstance(node, list) else k]
+                if isinstance(node, dict) and last not in node:
+                    raise ValueError(f"correction for {name} entry {c['index']!r}: no field {path!r}")
+                node[int(last) if isinstance(node, list) else last] = value
     return out
 
 
