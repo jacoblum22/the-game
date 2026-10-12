@@ -138,12 +138,22 @@ function dice(text) {
     });
     first = false;
   }
-  const what = esc(reason).replace(/\b(DC|AC) (\d+)/g, '<span class="tag">$1 $2</span>');
+  const what = esc(hideAC(reason)).replace(/\b(DC|AC) (\d+)/g, '<span class="tag">$1 $2</span>');
   const note = (mode ? `<span class="note">${mode}</span>` : "") +
                (nat ? `<span class="note">natural ${nat}</span>` : "");
   return `<div class="card"><div class="what">🎲 ${what}</div><div class="roll">${html}` +
          `<span class="op">=</span><span class="total${nat ? " nat" + nat : ""}">${total}</span>${note}</div></div>`;
 }
+
+// ---- a monster's HP and AC stay hidden from the player (the terminal still shows them; the DM needs them) ----
+let pc = "";  // the PC's first name, from the header: an AC on a roll against the PC stays
+function hideAC(reason) {
+  if (pc && new RegExp(`\\b(vs\\.?|against) ${pc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(reason)) return reason;
+  return reason.replace(/\s*\b(?:vs\.?|against) AC \d+/g, "").replace(/\s*\(AC \d+\)/g, "")
+               .replace(/\(AC \d+(?:, |; )/g, "(").replace(/,? AC \d+/g, "");
+}
+const hideFoe = s => s.replace(/\(initiative (-?\d+)\): HP \d+\/\d+, AC \d+/g, "(initiative $1)")
+  .replace(/ took (\d+): HP \d+ → \d+(?: \(0 HP\))?/g, " took $1 damage").replace(/ healed (\d+): HP \d+ → \d+/g, " healed $1");
 
 // ---- the six ability scores at character creation: "4d6 [6, 5, 3, 2] drop 2 = 14; ..." ----
 function abilities(text) {
@@ -156,7 +166,7 @@ function abilities(text) {
 
 // ---- a tool line: "  [dice …]", "  [sheet: …]", "  [fight: …]", "  [level up: …]" (some run over several lines) ----
 function tool(text) {
-  const [head, ...more] = text.split("\n");
+  let [head, ...more] = text.split("\n");
   const rest = more.length ? `<details><summary>details</summary><pre>${esc(more.join("\n"))}</pre></details>` : "";
   if (head.startsWith("dice ") && !more.length) { const d = dice(head); if (d) return d; }
   if (head.startsWith("ability scores rolled:")) { const a = abilities(head); if (a) return a; }
@@ -166,6 +176,7 @@ function tool(text) {
     const cls = /dies|death save failure/.test(m[1]) || (hp && +hp[2] < +hp[1]) ? "hurt" : hp && +hp[2] > +hp[1] ? "heal" : "";
     return `<div class="event ${cls}">${hp || cls ? "❤" : "✎"} ${esc(m[1])}${rest}</div>`;
   }
+  if (head.startsWith("fight: ")) head = hideFoe(head);
   if ((m = head.match(/^fight: Round (\d+), now: (.+?)\.(?: (.*))?$/)))
     return `<div class="event">⚔ Round ${m[1]} · ${esc(m[2])}'s turn${m[3] ? `<small>${esc(m[3])}</small>` : ""}${rest}</div>`;
   if ((m = head.match(/^fight: (.*)$/)))  // the tail is a note to the DM about its next_turn tool
@@ -292,7 +303,7 @@ function sheetCard(raw) {
   const fightOn = fight.length && fight[0] !== "No fight is on.";
 
   return `<div class="card sheet"><div class="title">${esc(head[1])}</div><div class="dim">${esc(head[2])}</div>` + top +
-    (fightOn ? sec("Fight", `<pre>${esc(fight.join("\n"))}</pre>`) : "") + ab +
+    (fightOn ? sec("Fight", `<pre>${esc(hideFoe(fight.join("\n")))}</pre>`) : "") + ab +
     sec("Uses left", uses) + sec("Attacks", attacks.map(named).join("")) + sec("Spells", spells) + sec("Skills", skills) +
     sec("Features <span class=\"dim small\">(tap one to read it)</span>", feats) + sec("Equipment", gear) +
     sec("Languages and proficiencies", prof2) + sec("About", about) + sec("More", more) + `</div>`;
@@ -303,6 +314,7 @@ const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet, \/quit exi
 function render(text) {
   const lines = text.replace(/\r/g, "").split("\n");
   let html = "", para = [], sheet = null, who = null;
+  pc = ((text.match(/^(.+?), .+?\. Saving to .*\/sheet shows your sheet/m) || [])[1] || "").split(" ")[0];
   const flush = () => { if (para.length) html += `<p>${esc(para.join("\n"))}</p>`; para = []; };
   const endSheet = () => {
     if (sheet) html += sheetCard(sheet.join("\n").trim().replace("; nobody's yet, next_turn starts the first", ""));
