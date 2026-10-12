@@ -51,7 +51,7 @@ ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
 ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
                     "(such as gnolls and orcs), as a list of two names")
 SPELL_KEYS = ("cantrips", "spells", "prepared", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
-INVOCATION_KEYS = ("invocations", "replace_invocation", "rituals")  # warlock: Eldritch Invocations, from 2nd level
+INVOCATION_KEYS = ("invocations", "replace_invocation", "rituals", "invocation_skills")  # warlock: Eldritch Invocations, from 2nd level
 RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS, *INVOCATION_KEYS}  # a level record's fields
 # The Levels data has the warlock's Invocations Known column wrong at 4th and 6th level (3 and 4); the SRD 5.1 pdf, Warlock
 # table (pp.46-47), has this column, for levels 1 to 20. The data's number is used nowhere.
@@ -75,6 +75,9 @@ INVOCATION_SPELLS = {
     "sculptor-of-flesh": ("polymorph", "once"), "minions-of-chaos": ("conjure-elemental", "once"),
 }
 BEGUILING = ("skill-deception", "skill-persuasion")  # Beguiling Influence: "proficiency in the Deception and Persuasion skills"
+BEGUILING_INV = INVOCATION_PREFIX + "beguiling-influence"
+# HOUSE RULE (owner, 2026-10-11; the Player's Handbook rule, not in the SRD): a skill proficiency gained twice is replaced by
+# another skill of the player's choice, so Beguiling Influence gives a substitute skill for each of the two already held.
 BOOK = INVOCATION_PREFIX + "book-of-ancient-secrets"
 BOOK_RITUALS = 2  # Book of Ancient Secrets: "Choose two 1st-level spells that have the ritual tag from any class's spell list"
 LORE_PROFS = "bonus-proficiencies"  # College of Lore, 3rd level: "you gain proficiency with three skills of your choice"
@@ -524,13 +527,10 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
         errs.append(f"choices: {', '.join(P[i]['name'] for i in twice)} would be gained twice (it already comes from "
                     "race, class or background, or was chosen twice); choose a different option")
     prof_ids |= set(chosen_profs)
-    if INVOCATION_PREFIX + "beguiling-influence" in (spells or {}).get("invocations", []):
-        # "You gain proficiency in the Deception and Persuasion skills." (a proficiency gained twice: as above)
-        had = [P[i]["name"] for i in BEGUILING if i in prof_ids]
-        if had:
-            errs.append(f"invocations: Beguiling Influence would gain {', '.join(had)} twice (the character already has it); "
-                        "choose a different invocation")
-        prof_ids |= set(BEGUILING)
+    if BEGUILING_INV in (spells or {}).get("invocations", []):
+        # "You gain proficiency in the Deception and Persuasion skills." House rule: for each one already held, the player
+        # chooses another skill (record field invocation_skills) instead
+        prof_ids |= set(BEGUILING) | _beguiling_skills(spells["beguiling"], [i for i in BEGUILING if i in prof_ids], prof_ids, errs)
     # "(if proficient)" in an equipment option: only for items the character is proficient with
     owned = _owned_prof(prof_ids)
     for cid, _, cs in sets:
@@ -659,7 +659,8 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
     rules1 = spell_rules(race, cls, scores1 or None)
     given = {k: ch.get(k) for k in ("cantrips", "spells", "prepared") if ch.get(k)}
     st: dict[str, Any] = {"cantrips": [], "known": [], "spellbook": [], "prepared": [], "secrets": [], "arcanum": {},
-                          "tome": [], "mastery": [], "signature": [], "invocations": [], "rituals": [], "boon": None}
+                          "tome": [], "mastery": [], "signature": [], "invocations": [], "rituals": [], "boon": None,
+                          "beguiling": None}
     if cls not in CASTERS:
         if given:
             errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
@@ -708,7 +709,7 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
         return None
     out: dict[str, Any] = {"rules": rules, "cantrips": st["cantrips"], "secrets": st["secrets"], "arcanum": st["arcanum"],
                            "tome": st["tome"], "mastery": st["mastery"], "signature": st["signature"],
-                           "invocations": st["invocations"], "rituals": st["rituals"]}
+                           "invocations": st["invocations"], "rituals": st["rituals"], "beguiling": st["beguiling"]}
     if rules["how"] == "known":
         out["known"] = st["known"]
     if rules["how"] == "spellbook":
@@ -828,6 +829,32 @@ def _level_spells(rec: dict[str, Any], L: int, cls: str, st: dict[str, Any], err
             st[key] = [s["index"] for s in found]
 
 
+def _beguiling_skills(bg: dict[str, Any], held: list[str], prof_ids: set[str], errs: list[str]) -> set[str]:
+    """The substitute skills (proficiency indexes) a record gave for Beguiling Influence: one skill the character lacks for
+    each of Deception and Persuasion already held (`held`), and not those two. `bg` = {"level", "skills"}."""
+    pre, P = f"level {bg['level']}: invocation_skills: ", srd.table("Proficiencies")
+    names = bg["skills"] or []
+    if len(names) != len(held):
+        errs.append(pre + (f"the character already has {' and '.join(srd.short(P[i]['name']) for i in held)}: choose exactly "
+                           f"{len(held)} other skill{'s' * (len(held) > 1)} instead (house rule: the Player's Handbook)"
+                           if held else "not needed: the character has neither Deception nor Persuasion"))
+        return set()
+    out: set[str] = set()
+    for nm in names:
+        try:
+            idx = f"skill-{srd.find('Skills', nm)['index']}"
+        except Bad:
+            errs.append(f"{pre}no skill {nm!r}")
+            continue
+        if idx in BEGUILING:
+            errs.append(f"{pre}{srd.short(P[idx]['name'])} comes with the invocation: choose a different skill")
+        elif idx in prof_ids or idx in out:
+            errs.append(f"{pre}{srd.short(P[idx]['name'])} is already a proficiency (or listed twice): choose a different skill")
+        else:
+            out.add(idx)
+    return out
+
+
 def _invocations(rec: dict[str, Any], L: int, st: dict[str, Any], errs: list[str]) -> None:
     """Check the Eldritch Invocation fields of the warlock's record of level L and apply them to `st`. Class text: "At 2nd
     level, you gain two eldritch invocations of your choice ... When you gain certain warlock levels, you gain additional
@@ -872,6 +899,19 @@ def _invocations(rec: dict[str, Any], L: int, st: dict[str, Any], errs: list[str
             gained.append(to)
             dropped = old["index"]
     st["invocations"] = prior + new
+    # Beguiling Influence (house rule above): the substitute skills come with the record that learns it; the count is checked
+    # in build, which knows the proficiencies. Replacing it away drops them.
+    skills = rec.get("invocation_skills")
+    if dropped == BEGUILING_INV:
+        st["beguiling"] = None
+    if BEGUILING_INV in gained:
+        st["beguiling"] = {"level": L, "skills": skills}
+        if skills is not None and not (isinstance(skills, list) and all(isinstance(x, str) for x in skills)):
+            errs.append(f"{pre}invocation_skills: a list of skill names (a substitute for each of Deception and Persuasion "
+                        "the character already has)")
+            st["beguiling"]["skills"] = []
+    elif skills is not None:
+        errs.append(f"{pre}invocation_skills: only when Beguiling Influence is learned at this level")
     # Book of Ancient Secrets: the first two rituals come with the invocation (adding rituals found later is play)
     if dropped == BOOK:
         st["rituals"] = []
@@ -884,7 +924,7 @@ def _invocations(rec: dict[str, Any], L: int, st: dict[str, Any], errs: list[str
                     "(two 1st-level ritual spells from any class)")
 
 
-def _invocation_lines(ids: list[str], M: dict[str, int]) -> list[str]:
+def _invocation_lines(ids: list[str], M: dict[str, int], substitutes: list[str]) -> list[str]:
     """The sheet's feature lines for the invocations: each one's text, with the numbers the sheet computes."""
     out = []
     for i in ids:
@@ -894,6 +934,9 @@ def _invocation_lines(ids: list[str], M: dict[str, int]) -> list[str]:
             note = f" On the Eldritch Blast line: {signed(M['CHA'])} is included in each beam's damage." if M["CHA"] else ""
         elif i.endswith("lifedrinker"):
             note = f" Extra necrotic damage on your pact weapon's hit: {max(1, M['CHA'])}."
+        elif i == BEGUILING_INV and substitutes:
+            note = (" House rule (the Player's Handbook, not in the SRD): a skill you already had is replaced by another of your "
+                    f"choice; you chose {', '.join(substitutes)}.")
         out.append(f"{f['name']}: {' '.join(f['desc'])}{note}")
     return out
 
@@ -1117,7 +1160,7 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
                 opt = srd.table("Features")[g["index"]]
                 features.append(f"{opt['name']}: {' '.join(opt['desc'])}")
     invocations = (spells or {}).get("invocations", [])
-    features += _invocation_lines(invocations, M)
+    features += _invocation_lines(invocations, M, [srd.find("Skills", x)["name"] for x in ((spells or {}).get("beguiling") or {}).get("skills") or []])
     if asi_log:
         features.append("Ability Score Improvements taken: " + "; ".join(asi_log) + ".")
     features.append(f"{b['feature']['name']} ({b['name']}): {' '.join(b['feature']['desc'])}")
@@ -1442,3 +1485,356 @@ def options_text(race: str = "", cls: str = "") -> str:
                  + f", two extra languages; feature {b['feature']['name']}.")
     lines.append(METHODS)
     return "\n".join(lines)
+
+
+# ---------- what the DM shows the player at a level-up ----------
+
+def _spell_groups(indexes: list[str]) -> str:
+    """Spell names (names only), grouped by spell level, one line per level."""
+    by: dict[int, list[str]] = {}
+    for i in indexes:
+        s = srd.table("Spells")[i]
+        by.setdefault(s["level"], []).append(s["name"])
+    return "\n".join(f"    {'cantrips' if lv == 0 else _ordinal(lv) + '-level'}: {', '.join(sorted(n))}"
+                     for lv, n in sorted(by.items()))
+
+
+def _info(cls: str, name: str) -> str:
+    """One paragraph of the class's spellcasting text, as the SRD has it."""
+    x = next(x for x in srd.table("Classes")[cls]["spellcasting"]["info"] if x["name"] == name)
+    return f"{x['name']}: {' '.join(x['desc'])}"
+
+
+def _chosen_so_far(sheet: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
+    """What each of the character's feature choices granted ({id: grants}), from the saved build."""
+    ch, levels = sheet["build"]["choices"], sheet["build"]["levels"]
+    race, cls = srd.find("Races", ch["race"])["index"], srd.find("Classes", ch["class"])["index"]
+    sets = choices_for(race, cls) + [s for n in range(2, len(levels) + 2) for s in level_sets(cls, n)]
+    picks = dict(ch.get("choices") or {})
+    for r in levels:
+        picks |= r.get("choices") or {}
+    return {cid: srd.resolve(cs, picks[cid], cid) for cid, _, cs in sets if cid in picks}
+
+
+def _skill_marks(sheet: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """(the skills the sheet is proficient in, those with expertise), by name."""
+    marks = [x.rsplit(" ", 1) for x in sheet["skills"].split(" (* proficient")[0].split(", ")]
+    return [n for n, v in marks if v.endswith("*")], [n for n, v in marks if v.endswith("**")]
+
+
+def _prereq_words(inv: dict[str, Any]) -> str:
+    out = []
+    for q in inv["prerequisites"]:
+        want = (q.get("spell") or q.get("feature") or "").rsplit("/", 1)[-1]
+        out.append(f"warlock level {q['level']}" if q["type"] == "level" else
+                   f"the {srd.table('Spells')[want]['name']} cantrip" if q["type"] == "spell" else
+                   srd.table("Features")[want]["name"])
+    return ", ".join(out) or "none"
+
+
+def _plural(n: int, word: str) -> str:
+    return f"{n} {word}" + "s" * (n != 1)
+
+
+def level_up_options(sheet: dict[str, Any]) -> str:
+    """Everything the next level gives and every choice the player makes at it, from the saved build (sheet["build"]):
+    hit points, proficiency bonus, features with their SRD text and the numbers the sheet shows, Ability Score
+    Improvement, option sets, spells, Eldritch Invocations, and the skeleton of the level record to send."""
+    build = sheet.get("build")
+    if not build:
+        raise Bad("this sheet has no build record, so it can't be levelled up")
+    N = 1 + len(build["levels"])
+    if N >= 20:
+        raise Bad(f"{sheet['name']} is level 20, the highest level: there is no next level")
+    L = N + 1
+    ch = build["choices"]
+    race, c = srd.find("Races", ch["race"])["index"], srd.find("Classes", ch["class"])
+    cls, die = c["index"], c["hit_die"]
+    Lv, Ft, SP = srd.table("Levels"), srd.table("Features"), srd.table("Spells")
+    row0, row1 = Lv[f"{cls}-{N}"], Lv[f"{cls}-{L}"]
+    p0, p1 = parts(race, cls, N), parts(race, cls, L)
+    scores = sheet["scores"]
+    M = {a: mod(scores[a]) for a in ABILITIES}
+    cs0, cs1 = row0.get("class_specific") or {}, row1.get("class_specific") or {}
+    prof0, prof1 = row0["prof_bonus"], row1["prof_bonus"]
+    chosen, sets, asi = _chosen_so_far(sheet), level_sets(cls, L), has_asi(cls, L)
+    shown = [f for f in level_features(cls, L) if not NOT_SHOWN.search(f["index"])]
+    land = next((g["index"] for g in chosen.get("feature.circle-of-the-land", [])), None)
+    proficient, expert = _skill_marks(sheet)
+    rec: list[tuple[str, str]] = [("hp", f'"fixed" or {{"rolled": <the d{die} result, 1 to {die}>}}')]
+    out = [(f"LEVEL UP: {sheet['name']}, {sheet['race']} {sheet['class']}, level {N} -> {L}. Below is everything level {L} "
+            "gives and every choice the player makes. Walk the player through each choice (the player decides; nothing "
+            "has a default), then send ONE level record (its skeleton is at the end).")]
+
+    # hit points
+    fixed = die // 2 + 1
+    extra = [f"{t['name']}: {' '.join(t['desc'])}" for t in p1["traits"] if t["index"] == "dwarven-toughness"]
+    extra += [f"{f['name']}: {' '.join(f['desc'])}" for f in p1["features"] if f["index"] == "draconic-resilience"]
+    out += ["", "== Hit points ==",
+            (f"Hit Die d{die}: take the fixed value {fixed} (the SRD class entries write it \"1d{die} (or {fixed})\"), or roll "
+             f"1d{die} with the roll tool if the player chooses to roll; the record says the d{die} result, before Constitution."),
+            f"Constitution modifier now: {signed(M['CON'])} (CON {scores['CON']}).", *extra,
+            "HOUSE RULE (the owner's, not in the SRD, which sets no minimum): each level after the 1st adds at least 1 hit "
+            f"point, so the level adds max(1, die or fixed value {signed(M['CON'])})" + (" and then " + str(len(extra)) + " more for the above"
+                                                                                          if extra else "")
+            + f". Fixed: {max(1, fixed + M['CON']) + len(extra)} hit points. Rolled: the roll {signed(M['CON'])}, at least 1"
+            + (f", plus {len(extra)}" if extra else "") + f". Hit Dice: {N} -> {L}."]
+    if any(f["index"] == "primal-champion" for f in shown):
+        con = min(24, scores["CON"] + 4)
+        out.append(f"Primal Champion raises CON {scores['CON']} -> {con}: the modifier goes {signed(M['CON'])} -> {signed(mod(con))}, and "
+                   "\"your hit point maximum changes as well, as though you had the new modifier from 1st level\", so every level, "
+                   f"this one included, is worth {mod(con) - M['CON']} more hit points ({(mod(con) - M['CON']) * L} in all).")
+    if asi:
+        out.append('Constitution: "If your Constitution modifier changes, your hit point maximum changes as well, as though '
+                   'you had the new modifier from 1st level." (an Ability Score Improvement to CON can do that)')
+    if prof1 != prof0:
+        out += ["", "== Proficiency bonus ==", f"+{prof0} -> +{prof1} (the class table; attacks, saves, skills and spell numbers follow)"]
+
+    # features gained, and the ones that improve
+    out += ["", f"== Features at level {L} =="]
+    if p1["subclass"] and not p0["subclass"]:
+        sub = p1["subclass"]
+        out.append(f"Subclass gained now: {sub['name']} ({sub['subclass_flavor']}), the only one in the SRD.")
+    earlier = {_family(f["index"]): f for f in p0["features"]}
+    for f in shown:
+        note = (f" Your scores become STR {scores['STR']} -> {min(24, scores['STR'] + 4)}, CON {scores['CON']} -> "
+                f"{min(24, scores['CON'] + 4)} (the maximum for those scores is now 24)."
+                if f["index"] == "primal-champion" else _at_this_level(f["index"], cs1, L, M, prof1))
+        old = earlier.get(_family(f["index"]))
+        out.append(f"- {f['name']}" + (f" (replaces {old['name']})" if old and old["name"] != f["name"] else "") + f": {' '.join(f['desc'])}{note}")
+    if not shown:
+        out.append("(no new class features)")
+    gained = {_family(f["index"]) for f in shown}
+    changed = []
+    for fam, f in earlier.items():
+        if fam in gained or f["index"].startswith("spellcasting-") or NOT_SHOWN.search(f["index"]):
+            continue
+        was, now = (re.sub(r"^ At level \d+: ", "", _at_this_level(f["index"], cs, n, M, pr)).strip().rstrip(".")
+                    for cs, n, pr in ((cs0, N, prof0), (cs1, L, prof1)))
+        if was != now:
+            changed.append(f"- {f['name']}: now {now} (was: {was})")
+    traits = {t["index"] for t in p1["traits"]}
+    r0 = _resources({f["index"] for f in p0["features"]}, traits, cs0, N, M)
+    r1 = _resources({f["index"] for f in p1["features"]}, traits, cs1, L, M)
+    for n, v in r1.items():
+        if n not in r0 or r0[n]["max"] != v["max"]:
+            changed.append(f"- {n} (counter on the sheet): " + (f"{r0[n]['max']} -> {v['max']}" if n in r0 else f"new, {v['max']}")
+                           + f", restored by a {v['recharge']} rest")
+    changed = [x for x in changed if "(counter" not in x or not any(y.startswith(x.split(" (counter")[0] + ":") for y in changed)]
+    changed += [f"- {n} (counter on the sheet): no longer limited" for n in r0 if n not in r1]
+    for name in (sheet.get("spellcasting") or {}).get("cantrips", []) + (sheet.get("spellcasting") or {}).get("tome_cantrips", []):
+        dmg = SP[srd.spell(name)["index"]].get("damage") or {}  # cantrip damage grows with the character level (5th, 11th, 17th)
+        dmg = (dmg[0] if dmg else {}) if isinstance(dmg, list) else dmg
+        was, now = (_at_level(dmg.get("damage_at_character_level") or {}, n) for n in (N, L))
+        if was != now:
+            changed.append(f"- {name} (cantrip): damage {was} -> {now}")
+        if name == "Eldritch Blast" and (L >= 5) + (L >= 11) + (L >= 17) != (N >= 5) + (N >= 11) + (N >= 17):
+            changed.append(f"- Eldritch Blast: {1 + (L >= 5) + (L >= 11) + (L >= 17)} beams, each with its own attack roll")
+    if changed:
+        out += ["", "Numbers that change at this level (they use the current ability scores):", *changed]
+    if CASTERS.get(cls, ("", ""))[1] == "prepared" and p1["subclass"]:
+        always = [s for s in subclass_spells(p1["subclass"], L, land) if s not in subclass_spells(p0["subclass"], N, land)]
+        if always:
+            out.append("Always prepared from now on (no choice; they don't count against the prepared spells): "
+                       + ", ".join(SP[s]["name"] for s in always))
+
+    # Ability Score Improvement
+    if asi:
+        f = next(f for f in level_features(cls, L) if "ability-score-improvement" in f["index"])
+        out += ["", "== Ability Score Improvement ==", f"{f['name']}: {' '.join(f['desc'])}",
+                'Record: "asi": {"STR": 2} (one ability +2) or {"STR": 1, "CON": 1} (two different abilities +1 each). Scores now: '
+                + ", ".join(f"{a} {scores[a]}" for a in ABILITIES)
+                + f". +2 possible for: {', '.join(a for a in ABILITIES if scores[a] <= 18) or 'none'}; only +1 for: "
+                f"{', '.join(a for a in ABILITIES if scores[a] == 19) or 'none'}; no increase for: "
+                f"{', '.join(a for a in ABILITIES if scores[a] >= 20) or 'none'}. No score goes above 20"
+                + (" with this feature (Primal Champion at 20th level raises STR and CON by 4, to a maximum of 24)"
+                   if cls == "barbarian" else "") + "."]
+        rec.append(("asi", '{"STR": 2} or {"STR": 1, "CON": 1}'))
+
+    # option sets
+    if sets:
+        have = {g["index"] for got in chosen.values() for g in got if g.get("kind") == "Features"}
+        out += ["", "== Choices (put each in the record's choices under its id; picks by name or letter) =="]
+    for cid, what, cs in sets:
+        out.append(srd.set_text(cs, f"[{cid}] {what}"))
+        parent = Ft.get(cid.removeprefix("feature."))
+        opts = [Ft[o["item"]["index"]] for o in cs["from"].get("options", []) if isinstance(o, dict)
+                and o["option_type"] == "reference" and srd.ref_kind(o["item"]) == "Features"]
+        out += [f"    {o['name']}: {' '.join(o['desc'])}" for o in opts if parent is None or o["desc"] != parent["desc"]]
+        if taken := [o["name"] for o in opts if o["index"] in have]:
+            out.append(f"    Already chosen, so refused again: {', '.join(taken)}")
+        if cid == "feature.circle-of-the-land":  # each land's Circle Spells (always prepared, from the circle's spell levels)
+            land_spells = srd.table("Subclasses")["land"]["spells"]
+            for o in cs["from"]["options"]:
+                got = [(next(int(q["index"].rsplit("-", 1)[1]) for q in x["prerequisites"] if q["type"] == "level"), x["spell"]["name"])
+                       for x in land_spells if any(q["type"] == "feature" and q["index"] == o["item"]["index"] for q in x["prerequisites"])]
+                out.append(f"    {srd.short(o['item']['name'])}: circle spells " + ", ".join(f"{n} (druid level {lv})" for lv, n in sorted(got)))
+        if "expertise" in cid:
+            out.append("    Only a proficiency the character has, without expertise yet. Skills: "
+                       + (", ".join(s for s in proficient if s not in expert) or "none"))
+        if cid.endswith(LORE_PROFS):
+            out.append("    Already proficient (refused, they would be gained twice): " + ", ".join(proficient))
+        if re.fullmatch(r"feature\.favored-enemy-[\w-]+", cid):
+            out.append(f"  [{cid}.humanoid-races] only if 'humanoids' is chosen: {ENEMY_RACES_TEXT}")
+    if sets:
+        rec.append(("choices", "{" + ", ".join(f'"{cid}": <{_plural(cs["choose"], "pick")}>' for cid, _, cs in sets) + "}"))
+
+    if cls in CASTERS:
+        out += _spell_options(sheet, race, cls, N, L, sets, rec)
+    if cls == "warlock":
+        out += _invocation_options(sheet, N, L, chosen, sets, proficient, rec)
+    out += ["", f"== Level record for level {L} ==",
+            'The fields to send ("(optional)" and "(only if ...)" ones may be left out):', "{"]
+    out += [f'  "{k}": {v}' + ("," if k != rec[-1][0] else "") for k, v in rec] + ["}"]
+    return "\n".join(out)
+
+
+def _spell_options(sheet: dict[str, Any], race: str, cls: str, N: int, L: int, sets: list[tuple[str, str, dict[str, Any]]],
+                 rec: list[tuple[str, str]]) -> list[str]:
+    """The spell part of level_up_options (and the record fields it needs)."""
+    SP, sc, need, how = srd.table("Spells"), sheet.get("spellcasting") or {}, level_spell_needs(cls, L), CASTERS[cls][1]
+    top = need["max_level"]
+    span = "level 1" if top == 1 else f"level 1 to {top}"
+    sub = srd.table("Subclasses")[srd.table("Classes")[cls]["subclasses"][0]["index"]]
+    extra = subclass_spells(sub, L) if how == "known" else []
+    known, book = sc.get("known", []), sc.get("spellbook", [])
+    holds = {srd.spell(n)["index"] for n in sc.get("cantrips", []) + known}
+
+    def slots(s: dict[str, int]) -> str:
+        return ", ".join(f"{_ordinal(int(k))}-level x{n}" for k, n in s.items()) or "none"
+
+    def spells_known(n: int) -> int:
+        return (srd.table("Levels")[f"{cls}-{n}"].get("spellcasting") or {}).get("spells_known", 0)
+
+    now, was = slots_at(cls, L), slots_at(cls, N)
+    out = ["", f"== Spells ({CASTERS[cls][0]}) ==",
+           f"Spell slots at level {L}: {slots(now)}" + (f" (was: {slots(was)})" if now != was else " (unchanged)")
+           + (". Pact Magic: all your slots are the same level" if cls == "warlock" else "")
+           + f". Highest spell level you can cast: {_ordinal(top)}."]
+    if need["cantrips"]:
+        out += [f"New cantrips: choose {need['cantrips']} (cantrips known now: {', '.join(sc.get('cantrips', [])) or 'none'}).",
+                "  " + _info(cls, "Cantrips"), "  Eligible:", _spell_groups([i for i in spell_pool(cls, 0, 0) if i not in holds])]
+        rec.append(("cantrips", f"[<{_plural(need['cantrips'], 'cantrip name')}>]"))
+    if how == "spellbook":
+        pool = [i for i in spell_pool(cls, 1, top) if SP[i]["name"] not in book]
+        out += [f"Spellbook: add exactly {need['spells']} wizard spells of {span} (the spellbook has {len(book)}).",
+                "  " + _info(cls, "Spellbook"), "  Eligible:", _spell_groups(pool)]
+        rec.append(("spells", f"[<{need['spells']} spell names>]"))
+        r1, r0 = spell_rules(race, cls, sheet["scores"], L), spell_rules(race, cls, sheet["scores"], N)
+        out.append(f"Prepared spells now: up to {r1['prepared']} (was {r0['prepared']}), prepared from the spellbook after a long "
+                   "rest; the record has no prepared list.")
+    elif how == "known":
+        pool = [i for i in spell_pool(cls, 1, top, extra) if i not in holds]
+        if need["spells"]:
+            out += [f"New spells known: choose {need['spells']}, each of {span} (known now: {', '.join(known) or 'none'}).",
+                    "  " + _info(cls, "Spells Known of 1st Level and Higher")]
+            if extra:
+                out.append(f"  The {sub['name']} expanded spells are included: {', '.join(SP[s]['name'] for s in extra)}.")
+            out += ["  Eligible:", _spell_groups(pool)]
+            rec.append(("spells", f"[<{_plural(need['spells'], 'spell name')}>]"))
+        else:
+            out.append("No other new spells known at this level" + (" (the new Spells Known are the Magical Secrets below)"
+                                                                    if need["secrets_counted"] else " (the Spells Known column doesn't go up)")
+                       + f". Known now: {', '.join(known) or 'none yet'}.")
+        if known:
+            out.append(f"Replace one spell (optional): swap one of the spells known now ({', '.join(known)}) for another {cls} spell "
+                       f"of {span} that you don't know" + (" (the list above)." if need["spells"] else ":"))
+            if not need["spells"]:
+                out.append(_spell_groups(pool))
+            rec.append(("replace", '{"from": "<a spell you know>", "to": "<a new spell>"} (optional)'))
+    else:
+        r1, r0 = spell_rules(race, cls, sheet["scores"], L), spell_rules(race, cls, sheet["scores"], N)
+        if need["first_list"]:
+            out += [("First prepared list (chosen now; the SRD only says the list changes after a long rest, not when it is first "
+                     f"made): choose 1 to {r1['prepared']} spells (the most you can prepare), each of {span}."),
+                    "  " + _info(cls, "Preparing and Casting Spells"), "  Eligible:", _spell_groups(spell_pool(cls, 1, top))]
+            rec.append(("prepared", f"[<1 to {r1['prepared']} spell names>]"))
+        else:
+            out.append(f"No spells to learn: a {cls} prepares from " + ("the spellbook" if how == "spellbook" else "the whole class list")
+                       + f" after a long rest (prepared spells now: up to {r1['prepared']}, was {r0['prepared']}); the record has no "
+                       "prepared list.")
+    if need["secrets"]:
+        out += [f"Magical Secrets: choose {need['secrets']} spells from any class, of level {top} or lower or a cantrip. "
+                + (f'The feature text: they "are included in the number in the Spells Known column", which goes {spells_known(N)} -> '
+                   f"{spells_known(L)}: these are all of the level's new spells known, there are no others."
+                   if need["secrets_counted"] else
+                   'The feature text: they "don\'t count against the number of bard spells you know", so they come on top of the '
+                   "new spells the Spells Known column gives."),
+                "  A cantrip chosen counts as a bard spell known, not as a bard cantrip. Eligible:",
+                _spell_groups([i for i, s in SP.items() if s["level"] <= top and i not in holds])]
+        rec.append(("secrets", f"[<{need['secrets']} spell names, any class>]"))
+    if need["arcanum"]:
+        lv = need["arcanum"]
+        out += [(f"Mystic Arcanum: choose one {_ordinal(lv)}-level warlock spell (arcanum now: "
+                 f"{', '.join(f'{_ordinal(int(k))}: {v}' for k, v in (sc.get('arcanum') or {}).items()) or 'none'}). Eligible:"),
+                _spell_groups(spell_pool(cls, lv, lv, extra))]
+        rec.append(("arcanum", f'"<one {_ordinal(lv)}-level spell>"'))
+    if "feature.pact-boon" in [cid for cid, _, _ in sets]:
+        out += [("Pact of the Tome, only if the player chooses it as the Pact Boon: three cantrips from any class's spell list "
+                 "(they needn't be from the same list). Eligible:"), _spell_groups([i for i, s in SP.items() if s["level"] == 0])]
+        rec.append(("tome", "[<3 cantrip names, any class>] (only if Pact of the Tome is chosen)"))
+    for key, label, wanted, lv in (("mastery", "Spell Mastery", "a 1st-level and a 2nd-level", [1, 2]),
+                                   ("signature", "Signature Spell", "two 3rd-level", [3])):
+        if need[key]:
+            out.append(f"{label}: choose {wanted} wizard spells that are in the spellbook (including the 2 added at this level). "
+                       "Spellbook now: " + ", ".join(n for n in book if SP[srd.spell(n)["index"]]["level"] in lv))
+            rec.append((key, '["<1st-level spell>", "<2nd-level spell>"]' if key == "mastery" else '["<3rd-level spell>", "<3rd-level spell>"]'))
+    return out
+
+
+def _invocation_options(sheet: dict[str, Any], N: int, L: int, chosen: dict[str, Any], sets: list[tuple[str, str, dict[str, Any]]],
+                      proficient: list[str], rec: list[tuple[str, str]]) -> list[str]:
+    """The Eldritch Invocation part of level_up_options (and the record fields it needs)."""
+    Ft, sc, need = srd.table("Features"), sheet.get("spellcasting") or {}, invocation_needs(L)
+    known = [find_invocation(x)["index"] for x in sc.get("invocations", [])]
+    cantrips = {srd.spell(x)["index"] for x in sc.get("cantrips", []) + sc.get("tome_cantrips", [])}
+    boon = next((g["index"] for g in chosen.get("feature.pact-boon", [])), None)
+    boon_now = "feature.pact-boon" in [cid for cid, _, _ in sets]
+    pacts = [o["item"]["index"] for o in Ft["pact-boon"]["feature_specific"]["subfeature_options"]["from"]["options"]]
+    had = [srd.short(srd.table("Proficiencies")[i]["name"]) for i in BEGUILING]
+    had = [s for s in had if s in proficient]
+    ok, later, no = [], [], []
+    for f in Ft.values():
+        if not f["index"].startswith(INVOCATION_PREFIX) or f["index"] in known:
+            continue
+        why = invocation_problem(f, L, cantrips, boon)
+        via = [b for b in pacts if not invocation_problem(f, L, cantrips, b)] if why and boon_now else []
+        (ok if not why else later if via else no).append((f, why, via))
+
+    free = [s["name"] for s in srd.table("Skills").values() if s["name"] not in proficient + [srd.short(srd.table("Proficiencies")[i]["name"])
+                                                                                        for i in BEGUILING]]
+
+    def line(f: dict[str, Any]) -> str:
+        note = ""
+        if f["index"] == BEGUILING_INV and had:  # house rule
+            note = (f" HOUSE RULE (the Player's Handbook, not in the SRD): the character already has {' and '.join(had)}, so the player "
+                    f"chooses {_plural(len(had), 'other skill')} instead, in \"invocation_skills\" (skills not yet proficient, not "
+                    f"Deception or Persuasion): {', '.join(free)}.")
+        return f"- {srd.short(f['name'])} (needs: {_prereq_words(f)}): {' '.join(f['desc'])}{note}"
+
+    out = ["", "== Eldritch Invocations ==", f"Invocations Known column: {need['known'] - need['learn']} -> {need['known']}"
+           + (f" (learn {need['learn']} new)" if need["learn"] else " (no new invocation at this level)")
+           + f". Known now: {', '.join(srd.short(Ft[i]['name']) for i in known) or 'none'}.",
+           "Class text: " + " ".join(Ft["eldritch-invocations"]["desc"][1:]),
+           ("A prerequisite that another choice in this same record meets counts (a cantrip learned now, the Pact Boon chosen "
+            "now). Eligible now:")]
+    out += [line(f) for f, _, _ in ok] or ["  (none)"]
+    if later:
+        out.append("Eligible if the player picks that Pact Boon in this same record:")
+        out += [line(f) + f" [needs {', '.join(Ft[b]['name'] for b in v)}]" for f, _, v in later]
+    out += ["Not eligible (why):"] + [f"- {srd.short(f['name'])}: {why}" for f, why, _ in no]
+    if need["learn"]:
+        rec.append(("invocations", f"[<{_plural(need['learn'], 'invocation name')}>]"))
+    if known:
+        out.append('Replace one invocation (optional, "replace_invocation"): swap one known for another you could learn now (an '
+                   "eligible one above). Replacing Book of Ancient Secrets removes its rituals; replacing Beguiling Influence removes "
+                   "its skills, and any substitutes.")
+        rec.append(("replace_invocation", '{"from": "<an invocation you know>", "to": "<an eligible one>"} (optional)'))
+    if had and BEGUILING_INV not in known and any(f["index"] == BEGUILING_INV for f, _, _ in ok + later):
+        rec.append(("invocation_skills", f"[<{_plural(len(had), 'skill name')}>] (only if Beguiling Influence is learned in this record)"))
+    if BOOK not in known and any(f["index"] == BOOK for f, _, _ in ok + later):
+        rituals = sorted(s["name"] for s in srd.table("Spells").values() if s["level"] == 1 and s.get("ritual"))
+        out.append('Book of Ancient Secrets needs "rituals": exactly two 1st-level spells with the ritual tag, from any class. '
+                   "Eligible: " + ", ".join(rituals))
+        rec.append(("rituals", "[<2 ritual spell names>] (only if Book of Ancient Secrets is learned in this record)"))
+    return out

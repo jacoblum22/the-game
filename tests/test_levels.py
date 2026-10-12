@@ -912,8 +912,62 @@ def test_eldritch_spear_and_the_other_numbers_the_sheet_computes() -> None:
     b = built(free, [one])
     assert skills(b)["Deception"] == "+5*" and skills(b)["Persuasion"] == "+5*" and skills(b)["Arcana"].endswith("*")
     assert skills(built(free, []))["Deception"] == "+3"
-    # the character already has Deception (LOCK chose it): the same proficiency twice
-    assert "Beguiling Influence would gain Skill: Deception twice" in problems([one], LOCK)
+    # the character already has Deception (LOCK chose it): house rule, a substitute skill is asked for (see test_beguiling_*)
+    assert "level 2: invocation_skills: the character already has Deception: choose exactly 1 other skill" in problems([one], LOCK)
+
+
+def test_beguiling_influence_gives_substitute_skills_for_skills_already_held() -> None:
+    # HOUSE RULE (owner; the Player's Handbook, not the SRD): a proficiency gained twice is replaced by another skill of the
+    # player's choice. LOCK has Deception (class); acolyte gives Insight and Religion; INT 11 (+0), CHA 16 (+3), proficiency 2
+    inv = ["Beguiling Influence", "Armor of Shadows"]
+    one = rec(spells=["Comprehend Languages"], invocations=inv)
+    s = built(LOCK, [one | {"invocation_skills": ["Nature"]}])
+    assert skills(s)["Persuasion"] == "+5*" and skills(s)["Deception"] == "+5*" and skills(s)["Nature"] == "+2*"
+    assert skills(s)["Survival"] == "+1" and "you chose Nature" in next(f for f in s["features"] if "Beguiling" in f)
+    assert s["build"]["levels"][0]["invocation_skills"] == ["Nature"]
+    msg = "level 2: invocation_skills: "
+    assert msg + "the character already has Deception: choose exactly 1 other skill" in problems([one], LOCK)
+    assert msg + "the character already has Deception: choose exactly 1" in problems([one | {"invocation_skills": []}], LOCK)
+    assert msg + "the character already has Deception: choose exactly 1" in problems(
+        [one | {"invocation_skills": ["Nature", "Survival"]}], LOCK)
+    assert msg + "Persuasion comes with the invocation" in problems([one | {"invocation_skills": ["Persuasion"]}], LOCK)
+    assert msg + "Deception comes with the invocation" in problems([one | {"invocation_skills": ["Deception"]}], LOCK)
+    assert msg + "Insight is already a proficiency" in problems([one | {"invocation_skills": ["Insight"]}], LOCK)  # acolyte
+    assert msg + "Arcana is already a proficiency" in problems([one | {"invocation_skills": ["Arcana"]}], LOCK)  # class choice
+    assert msg + "no skill 'Juggling'" in problems([one | {"invocation_skills": ["Juggling"]}], LOCK)
+    assert msg + "a list of skill names" in problems([one | {"invocation_skills": "Nature"}], LOCK)
+    # a character with neither skill takes none; the field is refused
+    free = LOCK | {"choices": LOCK["choices"] | {"class.proficiencies.1": ["Arcana", "History"]}}
+    assert msg + "not needed: the character has neither Deception nor Persuasion" in problems(
+        [one | {"invocation_skills": ["Nature"]}], free)
+    assert skills(built(free, [one]))["Persuasion"] == "+5*"
+    # the field only goes with the record that learns the invocation
+    other = rec(spells=["Comprehend Languages"], invocations=["Armor of Shadows", "Beast Speech"], invocation_skills=["Nature"])
+    assert msg + "only when Beguiling Influence is learned at this level" in problems([other], LOCK)
+    assert "invocation_skills: only a warlock gets Eldritch Invocations" in problems([FIXED | {"invocation_skills": ["Nature"]}])
+    # both held: a half-elf with Deception and Persuasion (Skill Versatility) takes two substitutes
+    half = LOCK | {"race": "half-elf", "choices": {k: v for k, v in LOCK["choices"].items() if k != "race.languages"} | {
+        "race.ability_bonuses": ["STR +1", "DEX +1"], "race.languages": ["Orc"],
+        "trait.skill-versatility": ["Deception", "Persuasion"], "class.proficiencies.1": ["Arcana", "History"]}}
+    assert msg + "the character already has Deception and Persuasion: choose exactly 2 other skills" in problems([one], half)
+    assert msg + "the character already has Deception and Persuasion: choose exactly 2" in problems(
+        [one | {"invocation_skills": ["Nature"]}], half)
+    assert msg + "Nature is already a proficiency (or listed twice)" in problems([one | {"invocation_skills": ["Nature", "Nature"]}], half)
+    got = built(half, [one | {"invocation_skills": ["Nature", "Stealth"]}])
+    assert skills(got)["Nature"].endswith("*") and skills(got)["Stealth"].endswith("*") and skills(got)["Survival"][-1] != "*"
+    # replacing Beguiling Influence away drops its skills and the substitutes (the half-elf keeps what it had before)
+    two = rec(spells=["Misty Step"], choices=TOME, tome=["Guidance", "Sacred Flame", "Light"],
+              replace_invocation={"from": "Beguiling Influence", "to": "Beast Speech"})
+    gone = built(half, [one | {"invocation_skills": ["Nature", "Stealth"]}, two])
+    assert skills(gone)["Nature"][-1] != "*" and skills(gone)["Stealth"][-1] != "*" and skills(gone)["Deception"].endswith("*")
+    assert not any("Beguiling" in f for f in gone["features"])
+    # learned at a later level, and a field left over from the replaced one is refused
+    later = rec(spells=["Misty Step"], choices=TOME, tome=["Guidance", "Sacred Flame", "Light"],
+                replace_invocation={"from": "Beast Speech", "to": "Beguiling Influence"}, invocation_skills=["Nature", "Stealth"])
+    assert "Beguiling Influence" in sc(built(half, [rec(spells=["Comprehend Languages"], invocations=["Armor of Shadows", "Beast Speech"]),
+                                                    later]))["invocations"]
+    assert "level 3: invocation_skills: the character already has Deception and Persuasion: choose exactly 2" in problems(
+        [rec(spells=["Comprehend Languages"], invocations=["Armor of Shadows", "Beast Speech"]), later | {"invocation_skills": []}], half)
 
 
 def test_invocation_prerequisites_counts_and_duplicates() -> None:

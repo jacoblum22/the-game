@@ -131,6 +131,12 @@ def invocation_fields(cls: str, level: int, sheet: dict[str, Any], rec: dict[str
     if known and level % 2 == 0 and len(pool) > need:
         to = pool[need]
         out["replace_invocation"] = {"from": srd.table("Features")[known[0]]["name"], "to": to["name"]}
+    if create.BEGUILING_INV in [f["index"] for f in new + [to or {"index": ""}]]:  # a substitute skill for each one already held
+        have = {x.rsplit(" ", 1)[0] for x in sheet["skills"].split(" (* proficient")[0].split(", ") if x.endswith("*")}
+        held = [n for n in ("Deception", "Persuasion") if n in have]
+        if held:
+            out["invocation_skills"] = [n for n in (x["name"] for x in srd.table("Skills").values())
+                                        if n not in have and n not in ("Deception", "Persuasion")][:len(held)]
     if create.BOOK in [f["index"] for f in new + [to or {"index": ""}]]:
         out["rituals"] = [s["name"] for s in S.values() if s["level"] == 1 and s.get("ritual")][:create.BOOK_RITUALS]
     return out
