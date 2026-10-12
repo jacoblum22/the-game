@@ -51,7 +51,33 @@ ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
 ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
                     "(such as gnolls and orcs), as a list of two names")
 SPELL_KEYS = ("cantrips", "spells", "prepared", "secrets", "replace", "arcanum", "tome", "mastery", "signature")
-RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS}  # a level record's fields
+INVOCATION_KEYS = ("invocations", "replace_invocation", "rituals")  # warlock: Eldritch Invocations, from 2nd level
+RECORD_KEYS = {"hp", "asi", "choices", *SPELL_KEYS, *INVOCATION_KEYS}  # a level record's fields
+# The Levels data has the warlock's Invocations Known column wrong at 4th and 6th level (3 and 4); the SRD 5.1 pdf, Warlock
+# table (pp.46-47), has this column, for levels 1 to 20. The data's number is used nowhere.
+INVOCATIONS_KNOWN = [0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
+INVOCATION_PREFIX = "eldritch-invocation-"
+# The Life domain's 7th-level spells are Death Ward and Guardian of Faith (SRD 5.1 pdf, Life Domain Spells table, p.17);
+# the data's list lacks Guardian of Faith.
+SUBCLASS_SPELL_GAPS = {"life": [("guardian-of-faith", 7)]}
+# The invocations that give a spell (the text names it): "at will" = no spell slot; "once" = once using a warlock spell slot,
+# then not again "until you finish a long rest" (a counter on the sheet). Chains of Carceri is at will, but "You must finish
+# a long rest before you can use this invocation on the same creature again": per creature, so no counter.
+INVOCATION_SPELLS = {
+    "armor-of-shadows": ("mage-armor", "at will"), "beast-speech": ("speak-with-animals", "at will"),
+    "eldritch-sight": ("detect-magic", "at will"), "fiendish-vigor": ("false-life", "at will"),
+    "mask-of-many-faces": ("disguise-self", "at will"), "misty-visions": ("silent-image", "at will"),
+    "ascendant-step": ("levitate", "at will"), "otherworldly-leap": ("jump", "at will"),
+    "whispers-of-the-grave": ("speak-with-dead", "at will"), "master-of-myriad-forms": ("alter-self", "at will"),
+    "visions-of-distant-realms": ("arcane-eye", "at will"), "chains-of-carceri": ("hold-monster", "at will"),
+    "thief-of-five-fates": ("bane", "once"), "mire-the-mind": ("slow", "once"), "sign-of-ill-omen": ("bestow-curse", "once"),
+    "bewitching-whispers": ("compulsion", "once"), "dreadful-word": ("confusion", "once"),
+    "sculptor-of-flesh": ("polymorph", "once"), "minions-of-chaos": ("conjure-elemental", "once"),
+}
+BEGUILING = ("skill-deception", "skill-persuasion")  # Beguiling Influence: "proficiency in the Deception and Persuasion skills"
+BOOK = INVOCATION_PREFIX + "book-of-ancient-secrets"
+BOOK_RITUALS = 2  # Book of Ancient Secrets: "Choose two 1st-level spells that have the ritual tag from any class's spell list"
+LORE_PROFS = "bonus-proficiencies"  # College of Lore, 3rd level: "you gain proficiency with three skills of your choice"
 # The class table repeats a feature under a new name as it improves (Bardic Inspiration d6, d8, ...): only the newest
 # is shown, with the choices made at every stage. The "-improvement-N" entries are placeholders for subclass features.
 FAMILIES = [
@@ -84,6 +110,14 @@ def _enemy_language() -> dict[str, Any]:
             "choose": 1, "type": "language", "from": {
                 "option_set_type": "options_array",
                 "options": langs + [{"option_type": "string", "string": "None (they speak no language)"}]}}
+
+
+def _lore_skills() -> dict[str, Any]:
+    skills = [p for p in srd.table("Proficiencies").values() if p["type"] == "Skills"]
+    return {"desc": "any three skills, ones the character isn't proficient in yet", "choose": 3, "type": "proficiency", "from": {
+        "option_set_type": "options_array",
+        "options": [{"option_type": "reference", "item": {"index": p["index"], "name": p["name"],
+                                                          "url": f"/api/2014/proficiencies/{p['index']}"}} for p in skills]}}
 
 
 def mod(score: int) -> int:
@@ -140,6 +174,8 @@ def _feature_sets(f: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
            if isinstance(cs, dict) and "choose" in cs]
     if f["index"].startswith("favored-enemy-"):
         out.append((f"feature.{f['index']}.language", f"{f['name']} language", _enemy_language()))
+    if f["index"] == LORE_PROFS:  # the data has no option set for it
+        out.append((f"feature.{f['index']}", f["name"], _lore_skills()))
     return out
 
 
@@ -194,13 +230,18 @@ def max_spell_level(cls: str, level: int) -> int:
 def subclass_spells(sub: dict[str, Any] | None, level: int, land: str | None = None) -> list[str]:
     """The subclass's spells (indexes) whose prerequisites are met at this class level: Life domain, Devotion oath,
     Fiend expanded list, and the Circle of the Land spells of the chosen land (a Features index, or None)."""
-    out: list[str] = []
+    out: list[tuple[int, str]] = []  # (the class level it comes at, spell)
     for s in (sub or {}).get("spells", []):
         pre = s["prerequisites"]
         if (all(q["type"] != "level" or int(q["index"].rsplit("-", 1)[1]) <= level for q in pre)
-                and all(q["type"] != "feature" or q["index"] == land for q in pre) and s["spell"]["index"] not in out):
-            out.append(s["spell"]["index"])
-    return out
+                and all(q["type"] != "feature" or q["index"] == land for q in pre)
+                and s["spell"]["index"] not in [i for _, i in out]):
+            out.append((max((int(q["index"].rsplit("-", 1)[1]) for q in pre if q["type"] == "level"), default=0),
+                        s["spell"]["index"]))
+    for idx, at in SUBCLASS_SPELL_GAPS.get((sub or {}).get("index", ""), []):  # in the table's order, by level
+        if at <= level and idx not in [i for _, i in out]:
+            out.insert(next((k for k, (lv, _) in enumerate(out) if lv > at), len(out)), (at, idx))
+    return [i for _, i in out]
 
 
 def spell_pool(cls: str, low: int, high: int, extra: list[str] | None = None) -> list[str]:
@@ -267,6 +308,34 @@ def level_spell_needs(cls: str, level: int) -> dict[str, Any]:
             "max_level": max_spell_level(cls, level)}
 
 
+def invocation_needs(level: int) -> dict[str, int]:
+    """What the warlock's record of this level (2 to 20) says about Eldritch Invocations: "learn" = how many new ones (the
+    rise of the Invocations Known column), "known" = how many the character knows after the level."""
+    return {"learn": INVOCATIONS_KNOWN[level - 1] - INVOCATIONS_KNOWN[level - 2], "known": INVOCATIONS_KNOWN[level - 1]}
+
+
+def find_invocation(name: Any) -> dict[str, Any] | None:
+    """The Features entry of an Eldritch Invocation by index, name or name without "Eldritch Invocation: " (case ignored)."""
+    key = str(name).strip().casefold()
+    return next((f for i, f in srd.table("Features").items() if i.startswith(INVOCATION_PREFIX)
+                 and key in (i, f["name"].casefold(), srd.short(f["name"]).casefold())), None)
+
+
+def invocation_problem(inv: dict[str, Any], level: int, cantrips: set[str], boon: str | None) -> str | None:
+    """Why a warlock of this level can't learn the invocation (its prerequisites in the data), or None. `cantrips` = the
+    indexes of the cantrips known, `boon` = the index of the Pact Boon chosen, if any. SRD: "You can learn the invocation
+    at the same time that you meet its prerequisites. A level prerequisite refers to your level in this class.\""""
+    for q in inv["prerequisites"]:
+        want = (q.get("spell") or q.get("feature") or "").rsplit("/", 1)[-1]
+        if q["type"] == "level" and level < q["level"]:
+            return f"needs warlock level {q['level']} (this is level {level})"
+        if q["type"] == "spell" and want not in cantrips:
+            return f"needs the {srd.table('Spells')[want]['name']} cantrip"
+        if q["type"] == "feature" and want != boon:
+            return f"needs {srd.table('Features')[want]['name']}"
+    return None
+
+
 # ---------- building ----------
 
 def _check_sets(sets: list[tuple[str, str, dict[str, Any]]], picks: dict[str, Any], pre: str,
@@ -329,6 +398,8 @@ def _check_record(rec: dict[str, Any], level: int, c: dict[str, Any], errs: list
     else:
         errs.append(f'{pre}hp: "fixed" ({die // 2 + 1}) or {{"rolled": 1 to {die}}} (the d{die} result, before Constitution)'
                     + (f"; {hp['rolled']} is not on a d{die}" if isinstance(hp, dict) and type(hp.get("rolled")) is int else ""))
+    if c["index"] != "warlock" and (keys := [k for k in INVOCATION_KEYS if k in rec]):
+        errs.append(f"{pre}{', '.join(keys)}: only a warlock gets Eldritch Invocations")
     asi = has_asi(c["index"], level)
     if asi and "asi" not in rec:
         errs.append(f"{pre}asi: missing (this level grants Ability Score Improvement)")
@@ -435,6 +506,9 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
     M = {a: mod(scores.get(a, 10)) for a in ABILITIES}
     prof = p["level"]["prof_bonus"]
 
+    # spells (a warlock's Eldritch Invocations too): the level-1 casting, then each level's record
+    spells = _spells(ch, r["index"], c["index"], scores, scores1, chosen, level_chosen, levels, errs)
+
     # proficiencies
     prof_ids = {x["index"] for x in c["proficiencies"]}
     prof_ids |= {x["index"] for t in p["traits"] for x in t.get("proficiencies", [])}
@@ -450,6 +524,13 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
         errs.append(f"choices: {', '.join(P[i]['name'] for i in twice)} would be gained twice (it already comes from "
                     "race, class or background, or was chosen twice); choose a different option")
     prof_ids |= set(chosen_profs)
+    if INVOCATION_PREFIX + "beguiling-influence" in (spells or {}).get("invocations", []):
+        # "You gain proficiency in the Deception and Persuasion skills." (a proficiency gained twice: as above)
+        had = [P[i]["name"] for i in BEGUILING if i in prof_ids]
+        if had:
+            errs.append(f"invocations: Beguiling Influence would gain {', '.join(had)} twice (the character already has it); "
+                        "choose a different invocation")
+        prof_ids |= set(BEGUILING)
     # "(if proficient)" in an equipment option: only for items the character is proficient with
     owned = _owned_prof(prof_ids)
     for cid, _, cs in sets:
@@ -505,9 +586,6 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
         for nm, q in carried.items():
             if nm.strip().casefold() in by_name:
                 items[by_name[nm.strip().casefold()]] += q
-
-    # spells: the level-1 casting, then each level's record
-    spells = _spells(ch, r["index"], c["index"], scores, scores1, chosen, level_chosen, levels, errs)
 
     if errs:
         return None, errs
@@ -581,7 +659,7 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
     rules1 = spell_rules(race, cls, scores1 or None)
     given = {k: ch.get(k) for k in ("cantrips", "spells", "prepared") if ch.get(k)}
     st: dict[str, Any] = {"cantrips": [], "known": [], "spellbook": [], "prepared": [], "secrets": [], "arcanum": {},
-                          "tome": [], "mastery": [], "signature": []}
+                          "tome": [], "mastery": [], "signature": [], "invocations": [], "rituals": [], "boon": None}
     if cls not in CASTERS:
         if given:
             errs.append(f"{', '.join(given)}: a level-1 {cls} has no spells")
@@ -613,6 +691,10 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
                                           f"a level-1 {cls} spell", errs, atmost=True)
     for i, rec in enumerate(levels):
         _level_spells(rec, i + 2, cls, st, errs, level_chosen[i])
+        if cls == "warlock":
+            if boon := level_chosen[i].get("feature.pact-boon"):
+                st["boon"] = boon[0]["index"]
+            _invocations(rec, i + 2, st, errs)
         if level_spell_needs(cls, i + 2)["first_list"]:  # no ASI before this level: the 1st-level scores still hold
             first = spell_rules(race, cls, scores1, i + 2)
             st["prepared"] = _check_names(f"level {i + 2}: prepared", rec.get("prepared"), first["prepared"],
@@ -625,7 +707,8 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
     if not rules:
         return None
     out: dict[str, Any] = {"rules": rules, "cantrips": st["cantrips"], "secrets": st["secrets"], "arcanum": st["arcanum"],
-                           "tome": st["tome"], "mastery": st["mastery"], "signature": st["signature"]}
+                           "tome": st["tome"], "mastery": st["mastery"], "signature": st["signature"],
+                           "invocations": st["invocations"], "rituals": st["rituals"]}
     if rules["how"] == "known":
         out["known"] = st["known"]
     if rules["how"] == "spellbook":
@@ -743,6 +826,76 @@ def _level_spells(rec: dict[str, Any], L: int, cls: str, st: dict[str, Any], err
             errs.append(f"{pre}{key}: {', '.join(missing)} must be in your spellbook")
         else:
             st[key] = [s["index"] for s in found]
+
+
+def _invocations(rec: dict[str, Any], L: int, st: dict[str, Any], errs: list[str]) -> None:
+    """Check the Eldritch Invocation fields of the warlock's record of level L and apply them to `st`. Class text: "At 2nd
+    level, you gain two eldritch invocations of your choice ... When you gain certain warlock levels, you gain additional
+    invocations of your choice, as shown in the Invocations Known column"; "when you gain a level in this class, you can
+    choose one of the invocations you know and replace it with another invocation that you could learn at that level." """
+    pre = f"level {L}: "
+    need = invocation_needs(L)["learn"]
+    cantrips, prior = set(st["cantrips"]) | set(st["tome"]), list(st["invocations"])
+
+    def learn(key: str, name: Any, taken: set[str]) -> str | None:
+        f = find_invocation(name)
+        if f is None:
+            errs.append(f"{pre}{key}: no Eldritch Invocation {name!r}")
+        elif f["index"] in taken:
+            errs.append(f"{pre}{key}: {srd.short(f['name'])} is already known")
+        elif why := invocation_problem(f, L, cantrips, st["boon"]):
+            errs.append(f"{pre}{key}: {srd.short(f['name'])} {why}")
+        else:
+            return f["index"]
+        return None
+
+    names, new = rec.get("invocations"), []
+    if need:
+        if not isinstance(names, list) or len(names) != need:
+            errs.append(f"{pre}invocations: choose exactly {need} (the Invocations Known column rises to "
+                        f"{invocation_needs(L)['known']})")
+        else:
+            for nm in names:
+                if got := learn("invocations", nm, set(prior) | set(new)):
+                    new.append(got)
+    elif names:
+        errs.append(f"{pre}invocations: no new invocations at this level (the Invocations Known column doesn't go up)")
+    gained, dropped = list(new), None
+    if (rep := rec.get("replace_invocation")) is not None:
+        if not (isinstance(rep, dict) and set(rep) == {"from", "to"}):
+            errs.append(f'{pre}replace_invocation: {{"from": "<an invocation you know>", "to": "<one you could learn now>"}}')
+        elif (old := find_invocation(rep["from"])) is None or old["index"] not in prior:
+            errs.append(f"{pre}replace_invocation: {rep['from']!r} is not one of the invocations you know "
+                        f"({', '.join(srd.short(srd.table('Features')[i]['name']) for i in prior) or 'none yet'})")
+        elif to := learn("replace_invocation", rep["to"], set(prior) | set(new)):
+            prior[prior.index(old["index"])] = to
+            gained.append(to)
+            dropped = old["index"]
+    st["invocations"] = prior + new
+    # Book of Ancient Secrets: the first two rituals come with the invocation (adding rituals found later is play)
+    if dropped == BOOK:
+        st["rituals"] = []
+    if BOOK in gained:
+        ritual = {i for i, s in srd.table("Spells").items() if s["level"] == 1 and s.get("ritual")}
+        st["rituals"] = _check_names(f"{pre}rituals", rec.get("rituals"), BOOK_RITUALS, ritual,
+                                     "a 1st-level spell with the ritual tag", errs)
+    elif rec.get("rituals"):
+        errs.append(f"{pre}rituals: only when Book of Ancient Secrets is learned at this level "
+                    "(two 1st-level ritual spells from any class)")
+
+
+def _invocation_lines(ids: list[str], M: dict[str, int]) -> list[str]:
+    """The sheet's feature lines for the invocations: each one's text, with the numbers the sheet computes."""
+    out = []
+    for i in ids:
+        f = srd.table("Features")[i]
+        note = ""
+        if i.endswith("agonizing-blast"):
+            note = f" On the Eldritch Blast line: {signed(M['CHA'])} is included in each beam's damage." if M["CHA"] else ""
+        elif i.endswith("lifedrinker"):
+            note = f" Extra necrotic damage on your pact weapon's hit: {max(1, M['CHA'])}."
+        out.append(f"{f['name']}: {' '.join(f['desc'])}{note}")
+    return out
 
 
 def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, int], M: dict[str, int], prof: int,
@@ -891,10 +1044,24 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         for lv, n in rules["slots"].items():  # the class table's slots at this level; Pact Magic comes back on a short rest
             slots[lv] = {"max": n, "left": n, "recharge": "short" if c["index"] == "warlock" else "long"}
         every = list(dict.fromkeys(spells["cantrips"] + spells["tome"] + [s for s in spells["secrets"] if SP[s]["level"] == 0]))
+        invs = [i.removeprefix(INVOCATION_PREFIX) for i in spells["invocations"]]
         for s in every:
-            line = _cantrip(SP[s], dc, atk, N)
+            line = _cantrip(SP[s], dc, atk, N, invs, M["CHA"])
             if line:
                 attacks.append(line)
+        given = []  # invocations that give a spell: at will, or once with a warlock spell slot (a counter, below)
+        for i in invs:
+            if i in INVOCATION_SPELLS:
+                sp, how = INVOCATION_SPELLS[i]
+                given.append(f"{SP[sp]['name']} ({srd.short(srd.table('Features')[INVOCATION_PREFIX + i]['name'])}, "
+                             + ("at will, no spell slot" if how == "at will" else "once per long rest, using a warlock "
+                                "spell slot") + ")")
+        if given:
+            spellcasting["invocation_spells"] = given
+        if invs:
+            spellcasting["invocations"] = [srd.short(srd.table("Features")[INVOCATION_PREFIX + i]["name"]) for i in invs]
+        if spells["rituals"]:
+            spellcasting["book_rituals"] = [SP[s]["name"] for s in spells["rituals"]]  # Book of Ancient Secrets: only as rituals
     extra_cantrips = []
     for t, (spell_id, a) in RACE_CANTRIPS.items():
         if t in trait_ids:
@@ -949,10 +1116,17 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
             if g.get("kind") == "Features" and (parent is None or srd.table("Features")[g["index"]]["desc"] != parent["desc"]):
                 opt = srd.table("Features")[g["index"]]
                 features.append(f"{opt['name']}: {' '.join(opt['desc'])}")
+    invocations = (spells or {}).get("invocations", [])
+    features += _invocation_lines(invocations, M)
     if asi_log:
         features.append("Ability Score Improvements taken: " + "; ".join(asi_log) + ".")
     features.append(f"{b['feature']['name']} ({b['name']}): {' '.join(b['feature']['desc'])}")
     resources.update(_resources(feat_ids, trait_ids, cs, N, M))
+    for i in invocations:  # "You can cast X once using a warlock spell slot. You can't do so again until you finish a long rest."
+        sp, how = INVOCATION_SPELLS.get(i.removeprefix(INVOCATION_PREFIX), ("", ""))
+        if how == "once":
+            resources[f"{srd.short(srd.table('Features')[i]['name'])} ({srd.table('Spells')[sp]['name']})"] = {
+                "max": 1, "left": 1, "recharge": "long"}
     for sp in (spells or {}).get("signature", []):  # "you can cast each of them once at 3rd level without expending a spell slot"
         resources[f"Signature Spell: {srd.table('Spells')[sp]['name']}"] = {"max": 1, "left": 1, "recharge": "short"}
 
@@ -975,7 +1149,11 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         "saving_throws": save_line + " (* proficient)",
         "skills": ", ".join(sk_lines) + " (* proficient, ** expertise)" + skill_note,
         "passive_perception": 10 + perception,
-        "senses": "darkvision 60 ft" if "darkvision" in trait_ids else "normal",
+        "senses": "; ".join(
+            (["darkvision 60 ft"] if "darkvision" in trait_ids else [])
+            # Devil's Sight: "see normally in darkness, both magical and nonmagical, to a distance of 120 feet"
+            + (["Devil's Sight: see normally in magical and nonmagical darkness to 120 ft"]
+               if INVOCATION_PREFIX + "devils-sight" in invocations else [])) or "normal",
         "languages": ", ".join(dict.fromkeys(langs)),
         "proficiencies": ", ".join(other_profs),
         "attacks": attacks, "features": features,
@@ -1132,8 +1310,9 @@ def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, s
     return line
 
 
-def _cantrip(s: dict[str, Any], dc: int, atk: int, level: int = 1) -> str:
-    """A damage cantrip's line at this character level (damage_at_character_level in the data)."""
+def _cantrip(s: dict[str, Any], dc: int, atk: int, level: int = 1, invocations: list[str] | None = None, cha: int = 0) -> str:
+    """A damage cantrip's line at this character level (damage_at_character_level in the data). `invocations` = the
+    character's Eldritch Invocations (without the "eldritch-invocation-" start); `cha` = the Charisma modifier."""
     dmg = s.get("damage") or {}
     if isinstance(dmg, list):
         dmg = dmg[0] if dmg else {}
@@ -1147,11 +1326,16 @@ def _cantrip(s: dict[str, Any], dc: int, atk: int, level: int = 1) -> str:
         how = f"{s['dc']['dc_type']['name']} save DC {dc}"
     else:
         how = "automatic"
-    beams = ""
+    beams, rng, tail = "", s["range"], ""
     if s["index"] == "eldritch-blast":  # "two beams at 5th level, three beams at 11th level, and four beams at 17th level"
         n = 1 + (level >= 5) + (level >= 11) + (level >= 17)
         beams = f" per beam, {n} beams, each with its own attack roll" if n > 1 else ""
-    return f"{s['name']} (cantrip): {how}, {lvl} {dtype}{beams}, range {s['range']}"
+        if "agonizing-blast" in (invocations or []) and cha:  # "add your Charisma modifier to the damage it deals on a hit"
+            lvl += signed(cha)
+            tail = " (Agonizing Blast included)"
+        if "eldritch-spear" in (invocations or []):  # "its range is 300 feet"
+            rng = "300 feet (Eldritch Spear)"
+    return f"{s['name']} (cantrip): {how}, {lvl} {dtype}{beams}, range {rng}{tail}"
 
 
 def _grant_name(g: dict[str, Any]) -> str:

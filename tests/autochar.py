@@ -106,13 +106,44 @@ def spell_fields(cls: str, level: int, sheet: dict[str, Any], rec: dict[str, Any
     return out
 
 
-def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None) -> list[dict[str, Any]]:
+def invocation_fields(cls: str, level: int, sheet: dict[str, Any], rec: dict[str, Any], shift: int) -> dict[str, Any]:
+    """A warlock's Eldritch Invocation fields: the first invocations it could learn (the list turned by `level + shift`),
+    and on even levels a replacement of the first one it knows. `sheet` is the character one level lower."""
+    if cls != "warlock":
+        return {}
+    sc, S = sheet.get("spellcasting") or {}, srd.table("Spells")
+    cantrips = {srd.spell(x)["index"] for x in sc.get("cantrips", []) + sc.get("tome_cantrips", [])
+                + rec.get("cantrips", []) + rec.get("tome", [])}
+    boon = None
+    for r in [*sheet["build"]["levels"], rec]:
+        if pick := r.get("choices", {}).get("feature.pact-boon"):
+            boon = srd.resolve(next(cs for cid, _, cs in create.level_sets(cls, 3) if cid == "feature.pact-boon"), pick, "")[0]["index"]
+    known = [create.find_invocation(x)["index"] for x in sc.get("invocations", [])]
+    pool = [f for i, f in srd.table("Features").items() if i.startswith(create.INVOCATION_PREFIX) and i not in known
+            and not create.invocation_problem(f, level, cantrips, boon)]
+    turn = (level + shift) % len(pool)
+    pool = pool[turn:] + pool[:turn]
+    need, out = create.invocation_needs(level)["learn"], {}
+    new = pool[:need]
+    if need:
+        out["invocations"] = [f["name"] for f in new]
+    to = None
+    if known and level % 2 == 0 and len(pool) > need:
+        to = pool[need]
+        out["replace_invocation"] = {"from": srd.table("Features")[known[0]]["name"], "to": to["name"]}
+    if create.BOOK in [f["index"] for f in new + [to or {"index": ""}]]:
+        out["rituals"] = [s["name"] for s in S.values() if s["level"] == 1 and s.get("ritual")][:create.BOOK_RITUALS]
+    return out
+
+
+def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None,
+                start: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
     """Level records for levels 2..upto: fixed hit points, the two highest scores below 20 for each Ability Score
     Improvement, expertise in the first skills the character is proficient in, the first valid spells, other choices
-    shifted until one builds."""
+    shifted until one builds. `start` = records already made for the first levels, which are kept."""
     cls = srd.find("Classes", ch["class"])["index"]
-    levels: list[dict[str, Any]] = []
-    for level in range(2, upto + 1):
+    levels: list[dict[str, Any]] = list(start or [])
+    for level in range(2 + len(levels), upto + 1):
         sheet, errs = create.build(ch, rolled, levels)
         assert sheet, errs
         rec: dict[str, Any] = {"hp": "fixed"}
@@ -125,7 +156,9 @@ def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None) 
         for shift in range(60):
             rec["choices"] = {cid: proficient[:cs["choose"]] if "expertise" in cid else pick(cs, shift + i)
                               for i, (cid, _, cs) in enumerate(sets)}
-            rec = {k: v for k, v in rec.items() if k not in create.SPELL_KEYS} | spell_fields(cls, level, sheet, rec)
+            rec = {k: v for k, v in rec.items() if k not in create.SPELL_KEYS + create.INVOCATION_KEYS}
+            rec |= spell_fields(cls, level, sheet, rec)
+            rec |= invocation_fields(cls, level, sheet, rec, shift)
             built, errs = create.build(ch, rolled, levels + [rec])
             if built:
                 break

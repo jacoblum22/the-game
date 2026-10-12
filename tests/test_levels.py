@@ -581,11 +581,12 @@ LOCK = human("warlock", [8, 14, 13, 10, 12, 15], **{
     "class.equipment.3": ["a"], "class.equipment.4": ["Dagger"]}) | {
     "cantrips": ["Eldritch Blast", "Minor Illusion"], "spells": ["Charm Person", "Hellish Rebuke"]}
 TOME = {"feature.pact-boon": ["Pact of the Tome"]}
+INV2 = ["Armor of Shadows", "Beast Speech"]  # no prerequisites, no effect on the Eldritch Blast line
 LOCK_LEVELS = [
-    rec(spells=["Comprehend Languages"]),                                              # 2: known 3; two 1st-level slots
+    rec(spells=["Comprehend Languages"], invocations=INV2),                            # 2: known 3; two 1st-level slots; 2 invocations
     rec(spells=["Misty Step"], choices=TOME, tome=["Guidance", "Sacred Flame", "Light"]),  # 3: known 4; two 2nd-level slots
     rec(asi={"CHA": 2}, cantrips=["Chill Touch"], spells=["Scorching Ray"]),           # 4: CHA 18 (+4); 3 cantrips; known 5
-    rec(spells=["Fireball"]),                                                          # 5: known 6; two 3rd-level slots
+    rec(spells=["Fireball"], invocations=["Book of Ancient Secrets"], rituals=["Find Familiar", "Identify"]),  # 5: known 6; 3 invocations
 ]
 
 
@@ -619,7 +620,7 @@ def test_warlock_pact_magic_to_5() -> None:
     assert "level 5: spells: Magic Missile is not a warlock spell of level 1 to 3" in problems(
         [*LOCK_LEVELS[:3], rec(spells=["Magic Missile"])], LOCK)
     assert "level 2: spells: Misty Step is not a warlock spell of level 1 to 1" in problems([rec(spells=["Misty Step"])], LOCK)
-    assert "Burning Hands" in sc(built(LOCK, [rec(spells=["Burning Hands"])]))["known"]  # the Fiend's list, 1st level
+    assert "Burning Hands" in sc(built(LOCK, [rec(spells=["Burning Hands"], invocations=INV2)]))["known"]  # the Fiend's list, 1st level
     # Pact of the Tome: "choose three cantrips from any class's spell list", only when it is the pact chosen
     third = LOCK_LEVELS[1]
     assert "level 3: tome: choose exactly 3" in problems([LOCK_LEVELS[0], third | {"tome": ["Guidance"]}], LOCK)
@@ -820,3 +821,252 @@ def test_every_caster_builds_at_every_level_by_the_class_table(cls: str) -> None
             assert got["prepare_count"] == max(1, create.mod(s["scores"]["CHA"]) + n // 2)
         assert len(got.get("arcanum", {})) == (sum(n >= lv for lv in (11, 13, 15, 17)) if cls == "warlock" else 0), n
     assert s["build"]["levels"] == levels and s["level"] == 20
+
+
+# ---------- later-level choices: Eldritch Invocations, College of Lore, Life domain ----------
+
+def test_invocations_known_column_is_the_pdfs_not_the_datas() -> None:
+    # SRD 5.1 pdf, Warlock table: 2nd-4th 2, 5th-6th 3, 7th-8th 4, 9th-11th 5, 12th-14th 6, 15th-17th 7, 18th-20th 8
+    assert create.INVOCATIONS_KNOWN == [0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8]
+    assert [create.invocation_needs(n)["learn"] for n in range(2, 21)] == [2, 0, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
+
+
+def test_every_invocation_is_handled_as_its_text_says() -> None:
+    invs = {i: f for i, f in srd.table("Features").items() if i.startswith(create.INVOCATION_PREFIX)}
+    assert len(invs) == 32 and len(srd.table("Features")["eldritch-invocations"]["feature_specific"]["invocations"]) == 32
+    for i, f in invs.items():
+        text, key = " ".join(f["desc"]), i.removeprefix(create.INVOCATION_PREFIX)
+        assert (key in create.INVOCATION_SPELLS) == ("You can cast " in text), key  # a spell the invocation gives
+        if key in create.INVOCATION_SPELLS:
+            spell, how = create.INVOCATION_SPELLS[key]
+            assert srd.table("Spells")[spell]["name"].lower() in text.lower(), key
+            assert (how == "once") == ("once using a warlock spell slot" in text), key
+    assert sum(how == "once" for _, how in create.INVOCATION_SPELLS.values()) == 7 and len(create.INVOCATION_SPELLS) == 19
+
+
+# Pact of the Blade warlock (LOCK: CHA 15 + 1 = 16 (+3), CON 14 (+2)), invocations by the Invocations Known column
+BLADE = {"feature.pact-boon": ["Pact of the Blade"]}
+BLADE_LEVELS = [
+    rec(spells=["Comprehend Languages"], invocations=["Agonizing Blast", "Armor of Shadows"]),  # 2: 2 invocations
+    rec(spells=["Misty Step"], choices=BLADE),                                                    # 3: still 2
+    rec(asi={"CHA": 2}, cantrips=["Chill Touch"], spells=["Scorching Ray"]),                      # 4: CHA 18 (+4); still 2
+    rec(spells=["Fireball"], invocations=["Thirsting Blade"]),                                    # 5: 3
+]
+
+
+@cache
+def _blade() -> list:
+    """Levels 2-12: the hand-made 2-5, then generated spells, with the invocations of this test."""
+    taken = {7: ["Mire the Mind"], 9: ["Ascendant Step"], 12: ["Lifedrinker"]}  # the rises at 7, 9 and 12
+    out = []
+    for n, r in enumerate(auto_levels(LOCK, 12, start=BLADE_LEVELS), 2):
+        if n > 5:
+            r = without(r, *create.INVOCATION_KEYS) | ({"invocations": taken[n]} if n in taken else {})
+        out.append(r | ({"asi": {"CON": 2}} if n == 8 else {"asi": {"CHA": 2}} if n == 12 else {}))
+    return out
+
+
+def test_warlock_invocations_to_5_and_12() -> None:
+    levels = _blade()
+    # Invocations Known: 2 (2nd-4th level), 3 (5th, 6th), 4 (7th, 8th), 5 (9th-11th), 6 (12th)
+    assert [len(sc(built(LOCK, levels[: n - 1]))["invocations"]) for n in range(2, 13)] == [2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6]
+    s2, s4, s5 = (built(LOCK, levels[: n - 1]) for n in (2, 4, 5))
+    # Eldritch Blast: Agonizing Blast adds CHA to each hit. Level 2: CHA +3, proficiency 2: +5 to hit, 1d10+3
+    assert attack(s2, "Eldritch Blast") == ("Eldritch Blast (cantrip): +5 spell attack, 1d10+3 force, range 120 feet "
+                                            "(Agonizing Blast included)")
+    # level 4: CHA 18 (+4), proficiency 2: +6; level 5: proficiency 3: +7, two beams (each hit adds +4)
+    assert attack(s4, "Eldritch Blast") == ("Eldritch Blast (cantrip): +6 spell attack, 1d10+4 force, range 120 feet "
+                                            "(Agonizing Blast included)")
+    assert attack(s5, "Eldritch Blast") == ("Eldritch Blast (cantrip): +7 spell attack, 1d10+4 force per beam, 2 beams, each "
+                                            "with its own attack roll, range 120 feet (Agonizing Blast included)")
+    assert sc(s5)["invocations"] == ["Agonizing Blast", "Armor of Shadows", "Thirsting Blade"]
+    assert "On the Eldritch Blast line: +4 is included" in next(f for f in s5["features"] if "Agonizing Blast:" in f)
+    assert has(s5, "Eldritch Invocation: Thirsting Blade") and has(s5, "Pact of the Blade")
+    assert sc(s5)["invocation_spells"] == ["Mage Armor (Armor of Shadows, at will, no spell slot)"] and not s5["resources"]
+    # level 12: proficiency 4, CHA 20 (+5): +9 to hit, spell save DC 8 + 4 + 5 = 17; three beams from 11th level; Warlock table
+    # at 12: three 5th-level slots
+    s12 = built(LOCK, levels)
+    assert sc(s12)["invocations"] == ["Agonizing Blast", "Armor of Shadows", "Thirsting Blade", "Mire the Mind", "Ascendant Step",
+                                      "Lifedrinker"]
+    assert attack(s12, "Eldritch Blast").startswith("Eldritch Blast (cantrip): +9 spell attack, 1d10+5 force per beam, 3 beams")
+    assert (sc(s12)["save_dc"], slot_table(s12)) == (17, {"5": (3, 3, "short")})
+    # "You can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest."
+    assert s12["resources"]["Mire the Mind (Slow)"] == {"max": 1, "left": 1, "recharge": "long"}
+    assert sorted(s12["resources"]) == ["Dark One's Own Luck", "Mire the Mind (Slow)", "Mystic Arcanum (6th level)"]
+    assert "Levitate (Ascendant Step, at will, no spell slot)" in sc(s12)["invocation_spells"]
+    assert "Slow (Mire the Mind, once per long rest, using a warlock spell slot)" in sc(s12)["invocation_spells"]
+    # Lifedrinker: extra necrotic damage equal to the CHA modifier (minimum 1) = 5
+    assert "Extra necrotic damage on your pact weapon's hit: 5." in next(f for f in s12["features"] if "Lifedrinker:" in f)
+    assert s12["build"]["levels"] == levels
+
+
+def test_eldritch_spear_and_the_other_numbers_the_sheet_computes() -> None:
+    two = rec(spells=["Comprehend Languages"], invocations=["Eldritch Spear", "Devil's Sight"])
+    s = built(LOCK, [two])
+    # "its range is 300 feet"; no Agonizing Blast, so the damage is the spell's own
+    assert attack(s, "Eldritch Blast") == "Eldritch Blast (cantrip): +5 spell attack, 1d10 force, range 300 feet (Eldritch Spear)"
+    assert s["senses"] == "Devil's Sight: see normally in magical and nonmagical darkness to 120 ft"
+    # Beguiling Influence: proficiency in Deception and Persuasion. CHA +3 + proficiency 2 = +5
+    free = LOCK | {"choices": LOCK["choices"] | {"class.proficiencies.1": ["Arcana", "History"]}}
+    one = rec(spells=["Comprehend Languages"], invocations=["Beguiling Influence", "Armor of Shadows"])
+    b = built(free, [one])
+    assert skills(b)["Deception"] == "+5*" and skills(b)["Persuasion"] == "+5*" and skills(b)["Arcana"].endswith("*")
+    assert skills(built(free, []))["Deception"] == "+3"
+    # the character already has Deception (LOCK chose it): the same proficiency twice
+    assert "Beguiling Influence would gain Skill: Deception twice" in problems([one], LOCK)
+
+
+def test_invocation_prerequisites_counts_and_duplicates() -> None:
+    two = rec(spells=["Comprehend Languages"])
+    ok2 = ["Armor of Shadows", "Beast Speech"]
+
+    def at2(*names: str, ch: dict = LOCK) -> str:
+        return problems([two | {"invocations": list(names)}], ch)
+
+    # a level prerequisite refers to the warlock level
+    assert "level 2: invocations: Mire the Mind needs warlock level 5 (this is level 2)" in at2("Armor of Shadows", "Mire the Mind")
+    # a Pact Boon prerequisite: the boon comes at 3rd level, so at 2nd none is chosen yet
+    assert "level 2: invocations: Book of Ancient Secrets needs Pact of the Tome" in at2("Armor of Shadows", "Book of Ancient Secrets")
+    assert "Voice of the Chain Master needs Pact of the Chain" in at2("Armor of Shadows", "Voice of the Chain Master")
+    # a spell prerequisite: the Eldritch Blast cantrip
+    nobl = LOCK | {"cantrips": ["Minor Illusion", "Prestidigitation"]}
+    assert "level 2: invocations: Agonizing Blast needs the Eldritch Blast cantrip" in at2("Agonizing Blast", "Beast Speech", ch=nobl)
+    assert "Repelling Blast needs the Eldritch Blast cantrip" in at2("Armor of Shadows", "Repelling Blast", ch=nobl)
+    # level and boon together (Thirsting Blade: 5th level and Pact of the Blade), at 5th level with the Tome
+    up3 = LOCK_LEVELS[:3]
+    five = rec(spells=["Fireball"])
+    assert "level 5: invocations: Thirsting Blade needs Pact of the Blade" in problems(
+        [*up3, five | {"invocations": ["Thirsting Blade"]}], LOCK)
+    assert "level 5: invocations: Voice of the Chain Master needs Pact of the Chain" in problems(
+        [*up3, five | {"invocations": ["Voice of the Chain Master"]}], LOCK)
+    assert "Lifedrinker needs warlock level 12 (this is level 5)" in problems([*up3, five | {"invocations": ["Lifedrinker"]}], LOCK)
+    assert "Witch Sight needs warlock level 15" in problems([*up3, five | {"invocations": ["Witch Sight"]}], LOCK)
+    # Eldritch Blast known as one of the Tome's cantrips counts as knowing the cantrip: refused at 2nd, allowed at 5th
+    tome_eb = [two | {"invocations": ok2}, LOCK_LEVELS[1] | {"tome": ["Eldritch Blast", "Guidance", "Light"]}, LOCK_LEVELS[2]]
+    assert sc(built(nobl, [*tome_eb, five | {"invocations": ["Eldritch Spear"]}]))["invocations"] == [*ok2, "Eldritch Spear"]
+    # exactly the rise of the Invocations Known column, no duplicates
+    assert "level 2: invocations: choose exactly 2" in at2("Armor of Shadows") and "level 2: invocations: choose exactly 2" in at2()
+    assert "level 2: invocations: choose exactly 2" in at2("Armor of Shadows", "Beast Speech", "Eldritch Sight")
+    assert "level 2: invocations: Armor of Shadows is already known" in at2("Armor of Shadows", "Armor of Shadows")
+    assert "level 2: invocations: no Eldritch Invocation 'Zork'" in at2("Armor of Shadows", "Zork")
+    assert "level 3: invocations: no new invocations at this level" in problems(
+        [LOCK_LEVELS[0], LOCK_LEVELS[1] | {"invocations": ["Eldritch Sight"]}], LOCK)
+    assert "level 5: invocations: Armor of Shadows is already known" in problems(
+        [*up3, five | {"invocations": ["Armor of Shadows"]}], LOCK)
+    assert "level 5: invocations: choose exactly 1" in problems([*up3, five], LOCK)
+    # every problem at once
+    both = at2("Mire the Mind", "Book of Ancient Secrets")
+    assert "Mire the Mind needs warlock level 5" in both and "Book of Ancient Secrets needs Pact of the Tome" in both
+    # only a warlock; names by index or with the "Eldritch Invocation: " start work too
+    assert "level 2: invocations: only a warlock gets Eldritch Invocations" in problems([rec(invocations=ok2)])
+    assert "level 2: invocations, rituals: only a warlock" in problems(
+        [rec(spells=WREN_LEVELS[0]["spells"], invocations=ok2, rituals=ok2)], WREN)
+    names = ["Eldritch Invocation: Armor of Shadows", "eldritch-invocation-beast-speech"]
+    assert sc(built(LOCK, [two | {"invocations": names}]))["invocations"] == ok2
+
+
+def test_replacing_an_invocation_at_a_level_up() -> None:
+    # "when you gain a level in this class, you can choose one of the invocations you know and replace it with another
+    # invocation that you could learn at that level" (3rd level: the Tome is chosen then, so the Book qualifies)
+    first, third = LOCK_LEVELS[0], LOCK_LEVELS[1]
+    swap = {"from": "Beast Speech", "to": "Eldritch Sight"}
+    s = built(LOCK, [first, third | {"replace_invocation": swap}])
+    assert sc(s)["invocations"] == ["Armor of Shadows", "Eldritch Sight"]  # in place
+    assert "Detect Magic (Eldritch Sight, at will, no spell slot)" in sc(s)["invocation_spells"] and len(sc(s)["invocation_spells"]) == 2
+    book = {"from": "Beast Speech", "to": "Book of Ancient Secrets"}
+    s = built(LOCK, [first, third | {"replace_invocation": book, "rituals": ["Alarm", "Identify"]}])
+    assert sc(s)["invocations"] == ["Armor of Shadows", "Book of Ancient Secrets"] and sc(s)["book_rituals"] == ["Alarm", "Identify"]
+    assert "level 3: rituals: choose exactly 2" in problems([first, third | {"replace_invocation": book}], LOCK)
+    unknown = "'Mire the Mind' is not one of the invocations you know (Armor of Shadows, Beast Speech)"
+    for bad, why in (({"from": "Mire the Mind", "to": "Eldritch Sight"}, unknown),
+                     ({"from": "Beast Speech", "to": "Mire the Mind"}, "Mire the Mind needs warlock level 5 (this is level 3)"),
+                     ({"from": "Beast Speech", "to": "Armor of Shadows"}, "Armor of Shadows is already known"),
+                     ({"from": "Beast Speech", "to": "Beast Speech"}, "Beast Speech is already known"),
+                     ({"from": "Beast Speech", "to": "Voice of the Chain Master"}, "needs Pact of the Chain"),
+                     ({"from": "Beast Speech", "to": "Zork"}, "no Eldritch Invocation 'Zork'"),
+                     ({"from": "Beast Speech"}, 'replace_invocation: {"from"'), ("Beast Speech", 'replace_invocation: {"from"')):
+        assert why in problems([first, third | {"replace_invocation": bad}], LOCK), bad
+    # a level that gains one: the new one is not yet known, so it can't be the one replaced, nor chosen twice
+    five = LOCK_LEVELS[3] | {"invocations": ["Eldritch Sight"]}
+    assert "'Eldritch Sight' is not one of the invocations you know" in problems(
+        [*LOCK_LEVELS[:3], five | {"replace_invocation": {"from": "Eldritch Sight", "to": "Misty Visions"}}], LOCK)
+    assert "Eldritch Sight is already known" in problems(
+        [*LOCK_LEVELS[:3], five | {"replace_invocation": {"from": "Beast Speech", "to": "Eldritch Sight"}}], LOCK)
+    # replacing the Book drops its rituals (level 5 learns it; a 6th level replaces it)
+    six = auto_levels(LOCK, 6, start=LOCK_LEVELS)[4]
+    s6 = built(LOCK, [*LOCK_LEVELS, without(six, *create.INVOCATION_KEYS) | {
+        "replace_invocation": {"from": "Book of Ancient Secrets", "to": "Eldritch Sight"}}])
+    assert "book_rituals" not in sc(s6) and sc(s6)["invocations"] == ["Armor of Shadows", "Beast Speech", "Eldritch Sight"]
+
+
+def test_book_of_ancient_secrets_rituals() -> None:
+    s5 = built(LOCK, LOCK_LEVELS)
+    # "Choose two 1st-level spells that have the ritual tag from any class's spell list" (they don't count as spells known)
+    assert sc(s5)["book_rituals"] == ["Find Familiar", "Identify"] and len(sc(s5)["known"]) == 6
+    assert "Find Familiar" not in sc(s5)["known"] and has(s5, "Eldritch Invocation: Book of Ancient Secrets")
+    up3, five = LOCK_LEVELS[:3], LOCK_LEVELS[3]
+    wrong = {"Bless": "Bless is not a 1st-level spell with the ritual tag",
+             "Augury": "Augury is not a 1st-level spell with the ritual tag",  # a ritual, but 2nd level
+             "Zork": "no SRD spell 'Zork'"}
+    for name, why in wrong.items():
+        assert f"level 5: rituals: {why}" in problems([*up3, five | {"rituals": ["Find Familiar", name]}], LOCK), name
+    assert "level 5: rituals: choose exactly 2" in problems([*up3, without(five, "rituals")], LOCK)
+    assert "level 5: rituals: choose exactly 2" in problems([*up3, five | {"rituals": ["Alarm"]}], LOCK)
+    assert "level 5: rituals: a spell is listed twice" in problems([*up3, five | {"rituals": ["Alarm", "Alarm"]}], LOCK)
+    # from any class's list: Alarm (ranger, wizard), Speak with Animals (bard, druid, ranger)
+    got = built(LOCK, [*up3, five | {"rituals": ["Alarm", "Speak with Animals"]}])
+    assert sc(got)["book_rituals"] == ["Alarm", "Speak with Animals"]
+    assert "level 3: rituals: only when Book of Ancient Secrets is learned" in problems(
+        [LOCK_LEVELS[0], LOCK_LEVELS[1] | {"rituals": ["Alarm", "Identify"]}], LOCK)
+    # Adding rituals found later (spell level up to half the warlock level, 2 hours and 50 gp per spell level) is play, not
+    # a level-up choice: nothing in the record.
+
+
+def test_lore_bard_bonus_proficiencies_and_later_expertise() -> None:
+    ch, levels = _auto("bard")
+    s2 = built(ch, levels[:1])
+    have = {k for k, v in skills(s2).items() if v.endswith("*")}
+    new = [k for k in ("Arcana", "History", "Nature", "Religion", "Survival", "Medicine", "Stealth") if k not in have][:3]
+    lore = "feature.bonus-proficiencies"
+    r3 = levels[1] | {"choices": levels[1]["choices"] | {lore: new}}
+    s3 = built(ch, [levels[0], r3])
+    # "you gain proficiency with three skills of your choice": level 3 proficiency bonus 2 + the ability modifier
+    ability = {k: srd.table("Skills")[k.lower().replace(" ", "-")]["ability_score"]["name"] for k in new}
+    for k in new:
+        assert skills(s3)[k] == f"{create.mod(s3['scores'][ability[k]]) + 2:+d}*", k
+    now = {k for k, v in skills(s3).items() if v.endswith("*")}
+    assert now == have | set(new) and len(now) == len(have) + 3
+    assert "CHOSEN: " + ", ".join(f"Skill: {k}" for k in new) in next(f for f in s3["features"] if f.startswith("Bonus Proficiencies"))
+    # exactly three, none already proficient, none twice
+    assert f"level 3: choices.{lore}: choose exactly 3" in problems(
+        [levels[0], r3 | {"choices": r3["choices"] | {lore: new[:2]}}], ch)
+    assert f"level 3: choices.{lore}: missing" in problems(
+        [levels[0], levels[1] | {"choices": without(levels[1]["choices"], lore)}], ch)
+    owned = min(have)
+    assert f"Skill: {owned} would be gained twice" in problems(
+        [levels[0], r3 | {"choices": r3["choices"] | {lore: [owned, *new[:2]]}}], ch)
+    assert f"'Skill: {new[0]}' chosen twice" in problems(
+        [levels[0], r3 | {"choices": r3["choices"] | {lore: [new[0], new[0], new[1]]}}], ch)
+    # Expertise at 10th level (proficiency 4) on a bonus skill: 2 x 4 + the ability modifier
+    r10 = levels[8] | {"choices": levels[8]["choices"] | {"feature.bard-expertise-2": new[:2]}}
+    s10 = built(ch, [levels[0], r3, *levels[2:8], r10])
+    for k in new[:2]:
+        assert skills(s10)[k] == f"{create.mod(s10['scores'][ability[k]]) + 8:+d}**", k
+    # expertise still needs a proficiency: a skill that is neither class, background nor Lore is refused
+    other = next(k for k in ("Arcana", "History", "Nature", "Religion", "Survival", "Medicine") if k not in have and k not in new)
+    bad = r10 | {"choices": r10["choices"] | {"feature.bard-expertise-2": [new[0], other]}}
+    assert "needs a proficiency the character has" in problems([levels[0], r3, *levels[2:8], bad], ch)
+    # the bonus skills are not asked of other classes
+    assert not [cid for cid, _, _ in create.level_sets("rogue", 3) if "bonus-proficiencies" in cid]
+
+
+def test_life_domain_gets_guardian_of_faith_at_7() -> None:
+    # SRD Life Domain Spells table: 7th level Death Ward, Guardian of Faith (the data lacks the second)
+    levels = auto_levels(HILDA, 9)
+    s6, s7, s9 = (built(HILDA, levels[: n - 1]) for n in (6, 7, 9))
+    assert sc(s6)["always_prepared"][-2:] == ["Beacon of Hope", "Revivify"]
+    assert sc(s7)["always_prepared"] == ["Bless", "Cure Wounds", "Lesser Restoration", "Spiritual Weapon", "Beacon of Hope",
+                                         "Revivify", "Death Ward", "Guardian of Faith"]
+    assert sc(s9)["always_prepared"][-4:] == ["Death Ward", "Guardian of Faith", "Mass Cure Wounds", "Raise Dead"]
+    assert create.subclass_spells(srd.table("Subclasses")["life"], 6) == [
+        "bless", "cure-wounds", "lesser-restoration", "spiritual-weapon", "beacon-of-hope", "revivify"]
