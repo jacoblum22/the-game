@@ -98,6 +98,13 @@ def test_con_increase_counts_for_every_level() -> None:
     assert split["hp"]["max"] == 45 and split["scores"]["CON"] == 17
 
 
+def test_each_level_adds_at_least_1_hp() -> None:
+    # house rule (owner; the SRD sets no minimum). CON 8 + 1 = 9 (-1), d12: level 1 12 - 1 = 11; rolled 1: 1 - 1 = 0 -> 1;
+    # rolled 5: 5 - 1 = 4
+    weak = GROG | {"base_scores": dict(zip(create.ABILITIES, [15, 13, 8, 14, 10, 12]))}
+    assert built(weak, [{"hp": {"rolled": 1}}, {"hp": {"rolled": 5}}])["hp"]["max"] == 11 + 1 + 4
+
+
 def test_rogue_to_3_and_6() -> None:
     # Vex: DEX 16 (+3), CON 14 (+2), WIS 15 (+2), INT 13 (+1). Level 1: 8 + 2 = 10; each fixed level 5 + 2 = 7
     s1 = built(VEX, [])

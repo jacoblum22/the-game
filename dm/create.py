@@ -752,9 +752,10 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
     owned_prof = _owned_prof(prof_ids)
 
     # hit points: the Hit Die at 1st level, then each level's roll (or the fixed value); Constitution (as it is now)
-    # for every level, and +1 per level from Dwarven Toughness and Draconic Resilience
-    hp = (c["hit_die"] + sum(hp_rolls) + N * (M["CON"] + (1 if "dwarven-toughness" in trait_ids else 0)
-                                                   + (1 if "draconic-resilience" in feat_ids else 0)))
+    # for every level, and +1 per level from Dwarven Toughness and Draconic Resilience. House rule (owner; the SRD sets
+    # no minimum): each level after the 1st adds at least 1, before Toughness and Resilience
+    hp = (c["hit_die"] + M["CON"] + sum(max(1, r + M["CON"]) for r in hp_rolls)
+          + N * ((1 if "dwarven-toughness" in trait_ids else 0) + (1 if "draconic-resilience" in feat_ids else 0)))
 
     # armor class: the best the character can wear from what they carry
     armors = [E[i] for i in items if E[i].get("armor_category") in ("Light", "Medium", "Heavy") and i in owned_prof]
