@@ -221,3 +221,10 @@ def test_a_name_starting_several_entries_named_name_comma_finds_them() -> None:
     forms = L.lookup("Werewolf")
     assert all(f"MONSTER Werewolf, {f} Form" in forms for f in ("Human", "Hybrid", "Wolf"))
     assert L.lookup("Vampire").count("MONSTER Vampire, ") == 3 and "MONSTER Vampire Spawn" not in L.lookup("Vampire")
+
+
+def test_the_datasets_monk_property_is_hidden() -> None:
+    # not an SRD property; the dataset tags exactly Martial Arts' monk weapons (shortswords and simple melee weapons
+    # without two-handed or heavy), which the class feature already names
+    assert "Monk" not in L.lookup("Handaxe") and "Light, Thrown" in L.lookup("Handaxe")
+    assert "WEAPON PROPERTY" not in L.lookup("Monk")

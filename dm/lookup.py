@@ -46,7 +46,7 @@ def lookup(name: str, kind: str = "") -> str:
         out += [_features(fs) for fs in features.values()]
         return "\n\n".join(out)
     words = key.split()
-    near = [f"{x['name']} ({_KIND_OF[t]})" for t in tables for x in srd.table(t).values()
+    near = [f"{x['name']} ({_KIND_OF[t]})" for t in tables for x in _entries(t)
             if all(w in x["name"].casefold() for w in words)]
     # some rules sit inside a larger section (grappling is in Melee Attacks): name the sections whose text has it
     inside = [r["name"] for r in srd.table("Rules").values() if "Rules" in tables
@@ -58,7 +58,7 @@ def lookup(name: str, kind: str = "") -> str:
         out.append("Rules sections whose text mentions it: " + ", ".join(inside[:10]))
     if out:
         return f"No entry named {name!r}. " + " ".join(out)
-    return f"No SRD entry named {name!r}" + (f" among {kind}s" if kind else "") + ". It may not be in the SRD."
+    return f"No SRD entry named {name!r}" + (f" among {kind.replace('_', ' ').replace('erty', 'ertie')}s" if kind else "") + ". It may not be in the SRD."
 
 
 def _names(t: str, x: dict[str, Any]) -> list[str]:
@@ -71,11 +71,17 @@ def _norm(s: str) -> str:
     return s.removesuffix("s")
 
 
+def _entries(t: str) -> list[dict[str, Any]]:
+    """A table's entries, less the dataset's "Monk" weapon property: not an SRD property (the monk weapons are named in
+    Martial Arts; the dataset tags exactly those ten weapons), so the DM never sees it (owner, 2026-10-12)."""
+    return [x for x in srd.table(t).values() if not (t == "Weapon-Properties" and x["index"] == "monk")]
+
+
 def _find(tables: list[str], key: str) -> list[tuple[str, dict[str, Any]]]:
     """The entries an exact name (case ignored) matches, else those it matches under `_norm`; plus the entries named
     "Name (...)" when it is their start. A kind that has an exact entry keeps just that, except features ("Channel
     Divinity" is a Paladin feature and a Cleric one that comes in variants)."""
-    every = [(t, x) for t in tables for x in srd.table(t).values()]
+    every = [(t, x) for t in tables for x in _entries(t)]
     hits = [(t, x) for t, x in every if key in _names(t, x)]
     n = _norm(key)
     if not hits:
@@ -155,11 +161,11 @@ def _equipment(e: dict[str, Any]) -> str:
         lines.append(f"{e['category_range']} weapon: {e['damage']['damage_dice']} {e['damage']['damage_type']['name'].lower()}"
                      + (f", two-handed {e['two_handed_damage']['damage_dice']}" if e.get("two_handed_damage") else "")
                      + (f", range {rng['normal']}/{rng['long']}" if rng.get("long") else "")
-                     + "; properties: " + (", ".join(p["name"] for p in e.get("properties", [])) or "none")
+                     + "; properties: " + (", ".join(p["name"] for p in e.get("properties", []) if p["index"] != "monk") or "none")
                      + (f"; thrown range {e['throw_range']['normal']}/{e['throw_range']['long']}" if e.get("throw_range") else ""))
     elif e.get("weapon_category"):  # a weapon with no damage (Net)
         rng = e.get("throw_range") or e.get("range") or {}
-        lines.append(f"{e['category_range']} weapon: no damage; properties: " + ", ".join(p["name"] for p in e.get("properties", []))
+        lines.append(f"{e['category_range']} weapon: no damage; properties: " + ", ".join(p["name"] for p in e.get("properties", []) if p["index"] != "monk")
                      + (f"; range {rng['normal']}/{rng['long']}" if rng.get("long") else ""))
     if e.get("special"):
         lines.append("Special: " + _lines(e["special"]))
