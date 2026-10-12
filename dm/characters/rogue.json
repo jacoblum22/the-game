@@ -1,51 +1,157 @@
 {
   "name": "Pip Thistledown",
-  "summary": "Lightfoot halfling rogue 1, acolyte background",
+  "summary": "Lightfoot Halfling rogue 1, acolyte background",
   "opening": "Pip Thistledown was left as a baby on the steps of the Sisters of the Sheaf, a harvest temple in Lowmarket, a crowded river city of barges and warehouses. Pip grew up sweeping its floors, learning its prayers, and quietly learning to pick the pockets of the people who came to hear them. Two nights ago someone broke into the temple and stole its silver reliquary, the one thing of value the sisters own. Mother Abenna, who raised Pip, believes it was taken to be sold and has asked Pip, of all people, to get it back without the city watch finding out how. Pip has one lead: a dockside fence called Old Corrow, who is said to hold court at the Drowned Lantern tavern after dark. It is just past sunset, and Pip is outside the tavern's door.",
   "level": 1,
-  "race": "Lightfoot halfling",
+  "race": "Lightfoot Halfling",
   "class": "Rogue",
+  "subclass": null,
   "background": "Acolyte",
+  "alignment": "",
+  "personality": "",
+  "appearance": "",
   "ac": 14,
-  "ac_note": "leather armor 11 + DEX 3",
+  "ac_note": "Leather Armor 11 + DEX 3",
+  "ac_now": null,
   "speed": "25 ft",
-  "abilities": {"STR": "8 (-1)", "DEX": "17 (+3)", "CON": "14 (+2)", "INT": "12 (+1)", "WIS": "13 (+1)", "CHA": "11 (+0)"},
+  "size": "Small",
+  "scores": {
+    "STR": 8,
+    "DEX": 17,
+    "CON": 14,
+    "INT": 12,
+    "WIS": 13,
+    "CHA": 11
+  },
+  "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "17 (+3)",
+    "CON": "14 (+2)",
+    "INT": "12 (+1)",
+    "WIS": "13 (+1)",
+    "CHA": "11 (+0)"
+  },
   "proficiency_bonus": 2,
   "saving_throws": "STR -1, DEX +5*, CON +2, INT +3*, WIS +1, CHA +0 (* proficient)",
   "skills": "Acrobatics +3, Animal Handling +1, Arcana +1, Athletics -1, Deception +2*, History +1, Insight +3*, Intimidation +0, Investigation +1, Medicine +1, Nature +1, Perception +3*, Performance +0, Persuasion +0, Religion +3*, Sleight of Hand +5*, Stealth +7**, Survival +1 (* proficient, ** expertise)",
   "passive_perception": 13,
   "senses": "normal",
-  "languages": "Common, Halfling, Elvish, Dwarvish, Thieves' Cant",
-  "proficiencies": "light armor; simple weapons, hand crossbows, longswords, rapiers, shortswords; thieves' tools +7 (expertise)",
+  "languages": "Common, Halfling, Elvish, Dwarvish",
+  "proficiencies": "Hand crossbows, Light Armor, Longswords, Rapiers, Shortswords, Simple Weapons, Thieves' Tools",
   "attacks": [
     "Rapier: +5 to hit, 1d8+3 piercing (finesse)",
-    "Shortbow: +5 to hit, 1d6+3 piercing, range 80/320, two-handed",
-    "Dagger (2): +5 to hit, 1d4+3 piercing, finesse, light, thrown 20/60"
+    "Shortbow: +5 to hit, 1d6+3 piercing; range 80/320 (ammunition, two-handed)",
+    "Dagger: +5 to hit, 1d4+3 piercing; range 20/60 (finesse, light, thrown)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning"
   ],
   "features": [
-    "Sneak Attack: once per turn, +1d6 damage on a hit with a finesse or ranged weapon if the attack has advantage, or if an enemy of the target is within 5 ft of it and Pip doesn't have disadvantage",
-    "Expertise: Stealth and thieves' tools",
-    "Thieves' Cant: secret language and signs of thieves",
-    "Lucky: when Pip rolls a natural 1 on an attack roll, ability check or saving throw, reroll the die and use the new roll",
-    "Brave: advantage on saves against being frightened",
-    "Halfling Nimbleness: can move through the space of any creature larger than Pip",
-    "Naturally Stealthy: can try to hide when obscured only by a creature at least one size larger",
-    "Shelter of the Faithful (Acolyte): free healing and care at temples of the Sheaf; support from its sisters"
+    "Brave: You have advantage on saving throw against being frightened.",
+    "Halfling Nimbleness: You can move through the space of any creature that is of a size larger than yours.",
+    "Lucky: When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
+    "Naturally Stealthy: You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you.",
+    "Expertise: At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with thieves' tools. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies. At 6th level, you can choose two more of your proficiencies (in skills or with thieves' tools) to gain this benefit CHOSEN: Skill: Stealth, Thieves' Tools.",
+    "Sneak Attack: Beginning at 1st level, you know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon. You don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't incapacitated, and you don't have disadvantage on the attack roll. The amount of the extra damage increases as you gain levels in this class, as shown in the Sneak Attack column of the Rogue table.",
+    "Thieves' Cant: During your rogue training you learned thieves' cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves' cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly. In addition, you understand a set of secret signs and symbols used to convey short, simple messages, such as whether an area is dangerous or the territory of a thieves' guild, whether loot is nearby, or whether the people in an area are easy marks or will provide a safe house for thieves on the run.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
   ],
-  "hp": {"max": 10, "current": 10, "temp": 0},
-  "hit_dice": {"die": "d8", "max": 1, "left": 1},
+  "hp": {
+    "max": 10,
+    "current": 10,
+    "temp": 0
+  },
+  "hit_dice": {
+    "die": "d8",
+    "max": 1,
+    "left": 1
+  },
   "resources": {},
   "conditions": [],
-  "death_saves": {"successes": 0, "failures": 0},
+  "death_saves": {
+    "successes": 0,
+    "failures": 0
+  },
   "xp": 0,
-  "scores": {"STR": 8, "DEX": 17, "CON": 14, "INT": 12, "WIS": 13, "CHA": 11},
-  "build": {"choices": {"name": "Pip Thistledown", "race": "halfling", "class": "rogue", "ability_method": "standard_array", "base_scores": {"STR": 8, "DEX": 15, "CON": 14, "INT": 12, "WIS": 13, "CHA": 10}, "choices": {"class.proficiencies.1": ["Stealth", "Sleight of Hand", "Perception", "Deception"], "feature.rogue-expertise-1": [{"option": "b", "picks": ["Stealth"]}], "class.equipment.1": ["a"], "class.equipment.2": ["a"], "class.equipment.3": ["a"], "background.languages": ["Elvish", "Dwarvish"], "background.equipment.1": ["Emblem"], "background.equipment.prayer": ["Prayer book"]}}, "rolled": null, "levels": []},
   "coins_cp": 1500,
   "items": {
-    "Leather Armor": 1, "Rapier": 1, "Shortbow": 1, "Arrows": 20, "Quiver": 1, "Dagger": 2,
-    "Thieves' tools": 1, "Backpack": 1, "Bag of ball bearings": 1, "String (10 ft)": 1, "Bell": 1, "Candle": 5,
-    "Crowbar": 1, "Hammer": 1, "Piton": 10, "Hooded lantern": 1, "Flask of oil": 2, "Rations (1 day)": 5,
-    "Tinderbox": 1, "Waterskin": 1, "Hempen rope (50 ft)": 1, "Holy symbol of the Sheaf": 1, "Prayer book": 1,
-    "Stick of incense": 5, "Vestments": 1, "Common clothes": 1, "Belt pouch": 1
+    "Leather Armor": 1,
+    "Rapier": 1,
+    "Shortbow": 1,
+    "Arrows": 20,
+    "Quiver": 1,
+    "Dagger": 2,
+    "Thieves' tools": 1,
+    "Backpack": 1,
+    "Bag of ball bearings": 1,
+    "String (10 ft)": 1,
+    "Bell": 1,
+    "Candle": 5,
+    "Crowbar": 1,
+    "Hammer": 1,
+    "Piton": 10,
+    "Hooded lantern": 1,
+    "Flask of oil": 2,
+    "Rations (1 day)": 5,
+    "Tinderbox": 1,
+    "Waterskin": 1,
+    "Hempen rope (50 ft)": 1,
+    "Holy symbol of the Sheaf": 1,
+    "Prayer book": 1,
+    "Stick of incense": 5,
+    "Vestments": 1,
+    "Common clothes": 1,
+    "Belt pouch": 1
+  },
+  "build": {
+    "choices": {
+      "name": "Pip Thistledown",
+      "race": "halfling",
+      "class": "rogue",
+      "ability_method": "standard_array",
+      "base_scores": {
+        "STR": 8,
+        "DEX": 15,
+        "CON": 14,
+        "INT": 12,
+        "WIS": 13,
+        "CHA": 10
+      },
+      "choices": {
+        "class.proficiencies.1": [
+          "Stealth",
+          "Sleight of Hand",
+          "Perception",
+          "Deception"
+        ],
+        "feature.rogue-expertise-1": [
+          {
+            "option": "b",
+            "picks": [
+              "Stealth"
+            ]
+          }
+        ],
+        "class.equipment.1": [
+          "a"
+        ],
+        "class.equipment.2": [
+          "a"
+        ],
+        "class.equipment.3": [
+          "a"
+        ],
+        "background.languages": [
+          "Elvish",
+          "Dwarvish"
+        ],
+        "background.equipment.1": [
+          "Emblem"
+        ],
+        "background.equipment.prayer": [
+          "Prayer book"
+        ]
+      }
+    },
+    "rolled": null,
+    "levels": []
   }
 }

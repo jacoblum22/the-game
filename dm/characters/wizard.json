@@ -1,14 +1,28 @@
 {
   "name": "Wren Fennimore",
-  "summary": "Rock gnome wizard 1, acolyte background",
+  "summary": "Rock Gnome wizard 1, acolyte background",
   "opening": "Wren Fennimore keeps the archive at the Lantern House, a small temple of the god of lost things that collects old books, maps and letters. A week ago the temple's bell-keeper in Mirefold, a fen village two days' walk away, stopped sending her monthly letters. Yesterday a peat-cutter from Mirefold arrived at the temple door, frightened, saying the village bells now ring by themselves every night and that the bell-keeper has locked herself in the bell tower and won't come down. The high keeper has sent Wren to find out what is happening and to bring back the tower's old record book, which the temple wants kept safe. It is a grey morning, and Wren has just reached the edge of Mirefold on the causeway road, where the reeds are taller than a gnome.",
   "level": 1,
-  "race": "Rock gnome",
+  "race": "Rock Gnome",
   "class": "Wizard",
+  "subclass": null,
   "background": "Acolyte",
+  "alignment": "",
+  "personality": "",
+  "appearance": "",
   "ac": 11,
-  "ac_note": "no armor: 10 + DEX 1; Mage Armor makes it 14",
+  "ac_note": "no armor: 10 + DEX",
+  "ac_now": null,
   "speed": "25 ft",
+  "size": "Small",
+  "scores": {
+    "STR": 8,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 17,
+    "WIS": 12,
+    "CHA": 10
+  },
   "abilities": {
     "STR": "8 (-1)",
     "DEX": "13 (+1)",
@@ -23,46 +37,18 @@
   "passive_perception": 11,
   "senses": "darkvision 60 ft",
   "languages": "Common, Gnomish, Draconic, Celestial",
-  "proficiencies": "daggers, darts, slings, quarterstaffs, light crossbows; tinker's tools",
+  "proficiencies": "Crossbows, light, Daggers, Darts, Quarterstaffs, Slings, Tinker's Tools",
   "attacks": [
-    "Fire Bolt (cantrip): +5 spell attack, 1d10 fire, range 120 ft; ignites flammable objects not worn or carried",
-    "Quarterstaff: +1 to hit, 1d6-1 bludgeoning (1d8-1 in two hands)"
+    "Quarterstaff: +1 to hit, 1d6-1 bludgeoning; 1d8-1 two-handed (versatile)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Fire Bolt (cantrip): +5 spell attack, 1d10 fire, range 120 feet"
   ],
-  "spellcasting": {
-    "ability": "INT",
-    "save_dc": 13,
-    "attack_bonus": 5,
-    "cantrips": [
-      "Fire Bolt",
-      "Mage Hand",
-      "Light"
-    ],
-    "spellbook": [
-      "Burning Hands",
-      "Detect Magic",
-      "Mage Armor",
-      "Magic Missile",
-      "Shield",
-      "Sleep"
-    ],
-    "prepared": [
-      "Mage Armor",
-      "Magic Missile",
-      "Shield",
-      "Sleep"
-    ],
-    "class": "wizard",
-    "max_level": 1,
-    "prepare_count": 4,
-    "prepare_from": "spellbook",
-    "notes": "Prepare 4 spells from the spellbook after a long rest. Ritual Casting: Detect Magic can be cast as a ritual (10 minutes longer, no slot) straight from the spellbook, prepared or not."
-  },
   "features": [
-    "Arcane Recovery: once per day, when finishing a short rest, regain one level-1 spell slot",
-    "Gnome Cunning: advantage on INT, WIS and CHA saving throws against magic",
-    "Artificer's Lore: History checks about magic items, alchemical objects or technological devices: +7 total (double proficiency bonus)",
-    "Tinker: with tinker's tools, can spend 1 hour and 10 gp of materials to build a Tiny clockwork toy, fire starter or music box",
-    "Shelter of the Faithful (Acolyte): free healing and care at temples of the god of lost things; support from its keepers"
+    "Gnome Cunning: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+    "Artificer's Lore: Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply.",
+    "Tinker: You have proficiency with artisan's tools (tinker's tools). Using those tools, you can spend 1 hour and 10 gp worth of materials to construct a Tiny clockwork device (AC 5, 1 hp). The device ceases to function after 24 hours (unless you spend 1 hour repairing it to keep the device functioning), or when you use your action to dismantle it; at that time, you can reclaim the materials used to create it. You can have up to three such devices active at a time. When you create a device, choose one of the following options: Clockwork Toy: This toy is a clockwork animal, monster, or person, such as a frog, mouse, bird, dragon, or soldier. When placed on the ground, the toy moves 5 feet across the ground on each of your turns in a random direction. It makes noises as appropriate to the creature it represents. Fire Starter: The device produces a miniature flame, which you can use to light a candle, torch, or campfire. Using the device requires your action. Music Box: When opened, this music box plays a single song at a moderate volume. The box stops playing when it reaches the song's end or when it is closed.",
+    "Arcane Recovery: You have learned to regain some of your magical energy by studying your spellbook. Once per day when you finish a short rest, you can choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your wizard level (rounded up), and none of the slots can be 6th level or higher. For example, if you're a 4th-level wizard, you can recover up to two levels worth of spell slots. You can recover either a 2nd-level spell slot or two 1st-level spell slots.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
   ],
   "hp": {
     "max": 8,
@@ -73,12 +59,6 @@
     "die": "d6",
     "max": 1,
     "left": 1
-  },
-  "spell_slots": {
-    "1": {
-      "max": 2,
-      "left": 2
-    }
   },
   "resources": {
     "Arcane Recovery": {
@@ -93,8 +73,6 @@
     "failures": 0
   },
   "xp": 0,
-  "scores": {"STR": 8, "DEX": 13, "CON": 15, "INT": 17, "WIS": 12, "CHA": 10},
-  "build": {"choices": {"name": "Wren Fennimore", "race": "gnome", "class": "wizard", "ability_method": "standard_array", "base_scores": {"STR": 8, "DEX": 13, "CON": 14, "INT": 15, "WIS": 12, "CHA": 10}, "choices": {"class.proficiencies.1": ["Arcana", "Investigation"], "class.equipment.1": ["a"], "class.equipment.2": ["a"], "class.equipment.3": ["b"], "background.languages": ["Draconic", "Celestial"], "background.equipment.1": ["Emblem"], "background.equipment.prayer": ["Prayer book"]}, "cantrips": ["Fire Bolt", "Mage Hand", "Light"], "spells": ["Burning Hands", "Detect Magic", "Mage Armor", "Magic Missile", "Shield", "Sleep"], "prepared": ["Mage Armor", "Magic Missile", "Shield", "Sleep"]}, "rolled": null, "levels": []},
   "coins_cp": 1500,
   "items": {
     "Quarterstaff": 1,
@@ -114,5 +92,103 @@
     "Torch": 10,
     "Rations (1 day)": 10,
     "Hempen rope (50 ft)": 1
+  },
+  "spellcasting": {
+    "ability": "INT",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+      "Fire Bolt",
+      "Mage Hand",
+      "Light"
+    ],
+    "class": "wizard",
+    "max_level": 1,
+    "spellbook": [
+      "Burning Hands",
+      "Detect Magic",
+      "Mage Armor",
+      "Magic Missile",
+      "Shield",
+      "Sleep"
+    ],
+    "prepared": [
+      "Mage Armor",
+      "Magic Missile",
+      "Shield",
+      "Sleep"
+    ],
+    "prepare_count": 4,
+    "prepare_from": "spellbook",
+    "notes": "Prepare up to 4 spells from the spellbook after a long rest. Ritual Casting: a ritual spell in the spellbook can be cast as a ritual (10 minutes longer, no slot), prepared or not."
+  },
+  "spell_slots": {
+    "1": {
+      "max": 2,
+      "left": 2,
+      "recharge": "long"
+    }
+  },
+  "build": {
+    "choices": {
+      "name": "Wren Fennimore",
+      "race": "gnome",
+      "class": "wizard",
+      "ability_method": "standard_array",
+      "base_scores": {
+        "STR": 8,
+        "DEX": 13,
+        "CON": 14,
+        "INT": 15,
+        "WIS": 12,
+        "CHA": 10
+      },
+      "choices": {
+        "class.proficiencies.1": [
+          "Arcana",
+          "Investigation"
+        ],
+        "class.equipment.1": [
+          "a"
+        ],
+        "class.equipment.2": [
+          "a"
+        ],
+        "class.equipment.3": [
+          "b"
+        ],
+        "background.languages": [
+          "Draconic",
+          "Celestial"
+        ],
+        "background.equipment.1": [
+          "Emblem"
+        ],
+        "background.equipment.prayer": [
+          "Prayer book"
+        ]
+      },
+      "cantrips": [
+        "Fire Bolt",
+        "Mage Hand",
+        "Light"
+      ],
+      "spells": [
+        "Burning Hands",
+        "Detect Magic",
+        "Mage Armor",
+        "Magic Missile",
+        "Shield",
+        "Sleep"
+      ],
+      "prepared": [
+        "Mage Armor",
+        "Magic Missile",
+        "Shield",
+        "Sleep"
+      ]
+    },
+    "rolled": null,
+    "levels": []
   }
 }
