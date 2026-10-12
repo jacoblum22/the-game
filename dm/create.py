@@ -1,12 +1,16 @@
-"""Build a level-1 character sheet from choices, by the 2014 SRD rules and data (dm/srd.py).
+"""Build a character sheet from choices, by the 2014 SRD rules and data (dm/srd.py).
 
-`choices_for(race, class)` lists every choice the character needs, each with an id. `build(...)` checks a full set
-of choices and works out the sheet in the same format as dm/characters/*.json, or returns every problem at once.
-The DM model talks the player through the choices; this code only checks them and does the arithmetic.
+`choices_for(race, class)` lists every choice the level-1 character needs, each with an id. `build(...)` checks a full
+set of choices and works out the sheet in the same format as dm/characters/*.json, or returns every problem at once.
+With `levels` (one record per level gained after 1st) it builds the sheet at level 1 + len(levels); `level_sets` lists
+the choices a level's features need. The DM model talks the player through the choices; this code only checks them
+and does the arithmetic.
 """
 
 from __future__ import annotations
 
+import copy
+import math
 import re
 from collections import Counter
 from typing import Any
@@ -40,6 +44,29 @@ ENEMY_LANGUAGE_ID = f"feature.{ENEMY_FEATURE}.language"
 ENEMY_RACES_ID = f"feature.{ENEMY_FEATURE}.humanoid-races"
 ENEMY_RACES_TEXT = ("humanoid races: because 'humanoids' was chosen, name two races of humanoid as the favored enemies "
                     "(such as gnolls and orcs), as a list of two names")
+RECORD_KEYS = {"hp", "asi", "choices", "cantrips", "spells", "replace", "arcanum"}  # a level record's fields
+SPELL_KEYS = ("cantrips", "spells", "replace", "arcanum")
+# The class table repeats a feature under a new name as it improves (Bardic Inspiration d6, d8, ...): only the newest
+# is shown, with the choices made at every stage. The "-improvement-N" entries are placeholders for subclass features.
+FAMILIES = [
+    r"^(.*)-d(?:6|8|10|12)$", r"^(.*)-\d+-(?:die|dice|use|uses)$", r"^(.*)-cr-.*$",
+    r"^(extra-attack|unarmored-movement|magical-secrets|rogue-expertise|bard-expertise|metamagic|domain-spells|circle-spells)-\d+$",
+    r"^(favored-enemy|natural-explorer)-\d+-.*$", r"^(mystic-arcanum)-.*$",
+]
+NOT_SHOWN = re.compile(r"ability-score-improvement|-improvement-\d+$")
+
+
+def _family(index: str) -> str:
+    for pat in FAMILIES:
+        if m := re.match(pat, index):
+            return m.group(1)
+    return index
+
+
+def _at_level(by_level: dict[str, Any], level: int, default: Any = None) -> Any:
+    """A value the data keeps by character level ({"1": "2d6", "6": "3d6", ...}): the one for the highest key <= level."""
+    keys = [int(k) for k in by_level if int(k) <= level]
+    return by_level[str(max(keys))] if keys else default
 
 
 def _enemy_language() -> dict[str, Any]:
@@ -63,17 +90,47 @@ def signed(n: int) -> str:
 
 # ---------- what has to be chosen ----------
 
-def parts(race: str, cls: str) -> dict[str, Any]:
+def level_features(cls: str, level: int) -> list[dict[str, Any]]:
+    """The features the class and its (only SRD) subclass give at exactly this level."""
+    L = srd.table("Levels")
+    sc = srd.table("Classes")[cls]["subclasses"][0]["index"]
+    rows = [L[f"{cls}-{level}"]] + ([L[f"{sc}-{level}"]] if f"{sc}-{level}" in L else [])
+    return [srd.ref(f) for row in rows for f in row["features"]]
+
+
+def has_asi(cls: str, level: int) -> bool:
+    """Does this class level grant Ability Score Improvement?"""
+    return any("ability-score-improvement" in f["index"] for f in level_features(cls, level))
+
+
+def parts(race: str, cls: str, level: int = 1) -> dict[str, Any]:
+    """Everything the data gives a character of this race and class at `level`: "level" is the class table row,
+    "level1" the first row (the spell rules are level 1 until slice 2), "gained" every (level, feature) so far."""
     r = srd.find("Races", race)
     c = srd.find("Classes", cls)
     sub = srd.table("Subraces")[r["subraces"][0]["index"]] if r["subraces"] else None
     sc = srd.table("Subclasses")[c["subclasses"][0]["index"]]
-    lvl = srd.table("Levels")[f"{c['index']}-1"]
-    sc_lvl = srd.table("Levels").get(f"{sc['index']}-1")  # only subclasses chosen at level 1 have one
+    L = srd.table("Levels")
+    gained = [(n, f) for n in range(1, level + 1) for f in level_features(c["index"], n)]
+    has_sub = any(f"{sc['index']}-{n}" in L for n in range(1, level + 1))  # gained at its first level with features
     traits = [srd.ref(t) for t in r["traits"]] + ([srd.ref(t) for t in sub["racial_traits"]] if sub else [])
-    feats = [srd.ref(f) for f in lvl["features"]] + ([srd.ref(f) for f in sc_lvl["features"]] if sc_lvl else [])
-    return {"race": r, "subrace": sub, "class": c, "subclass": sc if sc_lvl else None, "level": lvl,
-            "traits": traits, "features": feats, "background": srd.table("Backgrounds")[BACKGROUND]}
+    return {"race": r, "subrace": sub, "class": c, "subclass": sc if has_sub else None, "level": L[f"{c['index']}-{level}"],
+            "level1": L[f"{c['index']}-1"], "traits": traits, "gained": gained, "features": [f for _, f in gained],
+            "background": srd.table("Backgrounds")[BACKGROUND]}
+
+
+def _feature_sets(f: dict[str, Any]) -> list[tuple[str, str, dict[str, Any]]]:
+    """(id, what it is, option set) for the choices one feature asks for."""
+    out = [(f"feature.{f['index']}", f["name"], cs) for cs in (f.get("feature_specific") or {}).values()
+           if isinstance(cs, dict) and "choose" in cs]
+    if f["index"].startswith("favored-enemy-"):
+        out.append((f"feature.{f['index']}.language", f"{f['name']} language", _enemy_language()))
+    return out
+
+
+def level_sets(cls: str, level: int) -> list[tuple[str, str, dict[str, Any]]]:
+    """(id, what it is, option set) for every choice the features gained at this level ask for."""
+    return [s for f in level_features(srd.find("Classes", cls)["index"], level) for s in _feature_sets(f)]
 
 
 def choices_for(race: str, cls: str) -> list[tuple[str, str, dict[str, Any]]]:
@@ -96,11 +153,7 @@ def choices_for(race: str, cls: str) -> list[tuple[str, str, dict[str, Any]]]:
     for i, cs in enumerate(c["proficiency_choices"], 1):
         out.append((f"class.proficiencies.{i}", f"{c['name']} proficiencies", cs))
     for f in p["features"]:
-        for cs in (f.get("feature_specific") or {}).values():
-            if isinstance(cs, dict) and "choose" in cs:
-                out.append((f"feature.{f['index']}", f["name"], cs))
-        if f["index"] == ENEMY_FEATURE:
-            out.append((ENEMY_LANGUAGE_ID, f"{f['name']} language", _enemy_language()))
+        out += _feature_sets(f)
     for i, cs in enumerate(c["starting_equipment_options"], 1):
         out.append((f"class.equipment.{i}", f"{c['name']} equipment", cs))
     if b.get("language_options"):
@@ -137,14 +190,98 @@ def spell_rules(race: str, cls: str, scores: dict[str, int] | None = None) -> di
 
 # ---------- building ----------
 
-def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str, Any] | None, list[str]]:
-    """Returns (sheet, []) or (None, problems)."""
+def _check_sets(sets: list[tuple[str, str, dict[str, Any]]], picks: dict[str, Any], pre: str,
+                errs: list[str]) -> tuple[dict[str, list[dict[str, Any]]], list[dict[str, Any]]]:
+    """Check the picks against option sets (`pre` starts every error). Returns (what each id granted, all grants)."""
+    granted: list[dict[str, Any]] = []
+    chosen: dict[str, list[dict[str, Any]]] = {}
+    for cid, what, cs in sets:
+        if cid not in picks:
+            errs.append(f"{pre}choices.{cid}: missing ({what}, {srd.set_text(cs).splitlines()[0]})")
+            continue
+        try:
+            got = srd.resolve(cs, picks[cid], f"{pre}choices.{cid}")
+        except Bad as e:
+            errs.append(str(e))
+            continue
+        chosen[cid] = got
+        granted += got
+    allowed_ids = {cid for cid, _, _ in sets}
+    for cid, got in chosen.items():
+        if re.fullmatch(r"feature\.favored-enemy-[\w-]+", cid) and any(g.get("text") == "humanoids" for g in got):
+            allowed_ids.add(f"{cid}.humanoid-races")  # 'select two races of humanoid'
+            races = picks.get(f"{cid}.humanoid-races")
+            if (not isinstance(races, list) or len(races) != 2 or not all(isinstance(x, str) and x.strip() for x in races)
+                    or races[0].strip().casefold() == races[1].strip().casefold()):
+                errs.append(f"{pre}choices.{cid}.humanoid-races: missing or wrong ({ENEMY_RACES_TEXT})")
+    extra_ids = set(picks) - allowed_ids
+    if extra_ids:
+        errs.append(f"{pre}choices: not needed for this character: {', '.join(sorted(extra_ids))}")
+    return chosen, granted
+
+
+def _check_asi(asi: Any, pre: str, scores: dict[str, int], errs: list[str]) -> None:
+    """Ability Score Improvement: +2 to one score or +1 to two; no score above 20. Adds it to `scores` if it is fine."""
+    if (not isinstance(asi, dict) or any(a not in ABILITIES or type(v) is not int for a, v in asi.items())
+            or sorted(asi.values()) not in ([2], [1, 1])):
+        errs.append(f'{pre}asi: one ability +2, e.g. {{"STR": 2}}, or two different abilities +1 each, e.g. '
+                    f'{{"STR": 1, "CON": 1}} (abilities: {", ".join(ABILITIES)})')
+        return
+    over = [f"{a} would be {scores[a] + v}" for a, v in asi.items() if scores and scores[a] + v > 20]
+    if over:
+        errs.append(f"{pre}asi: no score can go above 20 ({'; '.join(over)})")
+        return
+    for a, v in asi.items():
+        if scores:
+            scores[a] += v
+
+
+def _check_record(rec: dict[str, Any], level: int, c: dict[str, Any], errs: list[str]) -> int | None:
+    """The record's fields that need no ability scores. Returns the hit points the level's Hit Die (or the fixed value)
+    gives, before Constitution; None if wrong."""
+    pre = f"level {level}: "
+    if extra := set(rec) - RECORD_KEYS:
+        errs.append(f"{pre}not a level-record field: {', '.join(sorted(extra))} (fields: {', '.join(sorted(RECORD_KEYS))})")
+    die, hp, got = c["hit_die"], rec.get("hp"), None
+    if hp == "fixed":
+        got = die // 2 + 1  # SRD class entries: "1d10 (or 6)"
+    elif isinstance(hp, dict) and set(hp) == {"rolled"} and type(hp["rolled"]) is int and 1 <= hp["rolled"] <= die:
+        got = hp["rolled"]
+    else:
+        errs.append(f'{pre}hp: "fixed" ({die // 2 + 1}) or {{"rolled": 1 to {die}}} (the d{die} result, before Constitution)'
+                    + (f"; {hp['rolled']} is not on a d{die}" if isinstance(hp, dict) and type(hp.get("rolled")) is int else ""))
+    asi = has_asi(c["index"], level)
+    if asi and "asi" not in rec:
+        errs.append(f"{pre}asi: missing (this level grants Ability Score Improvement)")
+    elif "asi" in rec and not asi:
+        errs.append(f"{pre}asi: this level does not grant Ability Score Improvement")
+    if any(k in rec for k in SPELL_KEYS) and "spellcasting" not in srd.table("Levels")[f"{c['index']}-1"]:
+        errs.append(f"{pre}{', '.join(k for k in SPELL_KEYS if k in rec)}: a {c['name'].lower()} has no spells")
+    # slice 2: for casters the spell fields (cantrips, spells, replace, arcanum) are checked and applied here
+    return got
+
+
+def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict[str, Any]] | None = None,
+          carried: dict[str, int] | None = None) -> tuple[dict[str, Any] | None, list[str]]:
+    """Returns (sheet, []) or (None, problems). The sheet is at level 1 + len(levels): each level record is
+    {"hp": "fixed" | {"rolled": n}, "asi": {...} at levels that grant it, "choices": {"feature.<index>": pick}}.
+    `carried` ({item name: quantity}) replaces the starting gear for AC and attacks and becomes the sheet's items."""
     errs: list[str] = []
+    levels = levels or []
+    if not isinstance(levels, list) or not all(isinstance(x, dict) for x in levels):
+        return None, ["levels: a list of level records, one per level gained after 1st"]
+    if len(levels) > 19:
+        return None, ["levels: the highest level is 20 (at most 19 level records)"]
+    if carried is not None and not (isinstance(carried, dict) and all(isinstance(k, str) and type(v) is int and v >= 1
+                                                                      for k, v in carried.items())):
+        return None, ["carried: {item name: quantity}, quantities whole numbers of 1 or more"]
+    N = 1 + len(levels)
     try:
-        p = parts(ch.get("race", ""), ch.get("class", ""))
+        p = parts(ch.get("race", ""), ch.get("class", ""), N)
     except Bad as e:
         return None, [str(e)]
     r, sub, c, sc, b = p["race"], p["subrace"], p["class"], p["subclass"], p["background"]
+    feat_ids = {f["index"] for f in p["features"]}
     name = str(ch.get("name") or "").strip()
     if not name:
         errs.append("name: the character needs a name")
@@ -174,31 +311,9 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
         scores = dict(base)
 
     # every option set
-    picks = ch.get("choices") or {}
-    granted: list[dict[str, Any]] = []
-    chosen: dict[str, list[dict[str, Any]]] = {}
-    sets = choices_for(r["index"], c["index"])
-    for cid, what, cs in sets:
-        if cid not in picks:
-            errs.append(f"choices.{cid}: missing ({what}, {srd.set_text(cs).splitlines()[0]})")
-            continue
-        try:
-            got = srd.resolve(cs, picks[cid], f"choices.{cid}")
-        except Bad as e:
-            errs.append(str(e))
-            continue
-        chosen[cid] = got
-        granted += got
-    allowed_ids = {cid for cid, _, _ in sets}
-    if any(g.get("text") == "humanoids" for g in chosen.get(f"feature.{ENEMY_FEATURE}", [])):
-        allowed_ids.add(ENEMY_RACES_ID)  # 'select two races of humanoid'
-        races = picks.get(ENEMY_RACES_ID)
-        if (not isinstance(races, list) or len(races) != 2 or not all(isinstance(x, str) and x.strip() for x in races)
-                or races[0].strip().casefold() == races[1].strip().casefold()):
-            errs.append(f"choices.{ENEMY_RACES_ID}: missing or wrong ({ENEMY_RACES_TEXT})")
-    extra_ids = set(picks) - allowed_ids
-    if extra_ids:
-        errs.append(f"choices: not needed for this character: {', '.join(sorted(extra_ids))}")
+    sets = choices_for(r["index"], c["index"])  # the level-1 character's; each later level adds its features' own
+    picks = dict(ch.get("choices") or {})  # every pick at every level: ids are unique (one per feature)
+    chosen, granted = _check_sets(sets, picks, "", errs)
 
     # racial increases
     bonuses = [{"bonus": x["ability_score"]["name"], "n": x["bonus"]}
@@ -207,8 +322,38 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
     if scores:
         for x in bonuses:
             scores[x["bonus"]] += x["n"]
+
+    # the levels after 1st: hit points, Ability Score Improvement and the choices of the features gained
+    hp_rolls: list[int] = []
+    asi_log: list[str] = []
+    pre_of: dict[str, str] = {}  # the error prefix of each later-level choice id
+    for i, rec in enumerate(levels):
+        level = i + 2
+        pre = f"level {level}: "
+        if (got := _check_record(rec, level, c, errs)) is not None:
+            hp_rolls.append(got)
+        if "asi" in rec and has_asi(c["index"], level):
+            before = dict(scores)
+            _check_asi(rec["asi"], pre, scores, errs)
+            if scores != before:
+                asi_log.append(f"level {level}: " + ", ".join(f"{a} +{v}" for a, v in rec["asi"].items()))
+        rec_picks = rec.get("choices") or {}
+        if not isinstance(rec_picks, dict):
+            errs.append(f"{pre}choices: {{id: pick}} for the features gained at this level")
+            continue
+        got_chosen, got_granted = _check_sets(level_sets(c["index"], level), rec_picks, pre, errs)
+        picks |= rec_picks
+        chosen |= got_chosen
+        pre_of |= {cid: pre for cid in got_chosen}
+        granted += got_granted
+    if "primal-champion" in feat_ids and scores:  # "Your Strength and Constitution scores increase by 4. Your maximum ... 24."
+        for a in ("STR", "CON"):
+            scores[a] = min(24, scores[a] + 4)
+    again = sorted(i for i, n in Counter(g["index"] for g in granted if g.get("kind") == "Features").items() if n > 1)
+    if again:  # Fighting Style: "You can't take a Fighting Style option more than once"; Metamagic: "another one"
+        errs.append("choices: chosen twice: " + ", ".join(srd.table("Features")[i]["name"] for i in again))
     M = {a: mod(scores.get(a, 10)) for a in ABILITIES}
-    prof = 2
+    prof = p["level"]["prof_bonus"]
 
     # proficiencies
     prof_ids = {x["index"] for x in c["proficiencies"]}
@@ -241,13 +386,20 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
                                         "a different option")
     skills = {P[i]["reference"]["index"] for i in prof_ids if P[i]["type"] == "Skills"}
     saves = {P[i]["reference"]["index"].upper() for i in prof_ids if P[i]["type"] == "Saving Throws"}
+    if "diamond-soul" in feat_ids:  # "proficiency in all saving throws"
+        saves |= set(ABILITIES)
+    if "slippery-mind" in feat_ids:  # "You gain proficiency in Wisdom saving throws."
+        saves.add("WIS")
     expertise: set[str] = set()
     for cid, got in chosen.items():
         if cid.startswith("feature.") and "expertise" in cid:
             for g in got:
                 ref = P[g["index"]]["reference"]["index"] if g.get("kind") == "Proficiencies" else ""
                 if g["index"] not in prof_ids:
-                    errs.append(f"choices.{cid}: expertise needs a proficiency the character has ({P[g['index']]['name']})")
+                    errs.append(f"{pre_of.get(cid, '')}choices.{cid}: expertise needs a proficiency the character has "
+                                f"({P[g['index']]['name']})")
+                elif (ref or g["index"]) in expertise:  # "choose two more of your proficiencies"
+                    errs.append(f"{pre_of.get(cid, '')}choices.{cid}: {P[g['index']]['name']} already has expertise")
                 expertise.add(ref or g["index"])
 
     # items
@@ -267,17 +419,27 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None) -> tuple[dict[str
     for g in granted:
         if g.get("kind") == "Equipment":
             add_item(g["index"], g["count"])
+    if carried is not None:  # what the character has now: names matched to the SRD (case ignored), others ignored
+        by_name = {e["name"].casefold(): i for i, e in E.items()}
+        items = Counter()
+        for nm, q in carried.items():
+            if nm.strip().casefold() in by_name:
+                items[by_name[nm.strip().casefold()]] += q
 
-    # spells
+    # spells (slice 2: level-aware casting; today the level-1 casting whatever the level)
     spells = _spells(ch, r["index"], c["index"], scores, chosen, errs)
 
     if errs:
         return None, errs
-    sheet = _sheet(ch, name, p, scores, M, prof, prof_ids, skills, saves, expertise, items, chosen, spells)
-    if b["index"] == "acolyte":  # items the dataset lacks are kept by name
+    sheet = _sheet(ch, name, p, scores, M, prof, prof_ids, skills, saves, expertise, items, chosen, spells,
+                   picks=picks, hp_rolls=hp_rolls, asi_log=asi_log)
+    if carried is not None:
+        sheet["items"] = dict(carried)
+    elif b["index"] == "acolyte":  # items the dataset lacks are kept by name
         named = Counter(ACOLYTE_ITEMS) + Counter(g["text"] for g in chosen["background.equipment.prayer"])
         for n, q in named.items():
             sheet["items"][n] = sheet["items"].get(n, 0) + q
+    sheet["build"] = copy.deepcopy({"choices": ch, "rolled": rolled, "levels": levels})
     return sheet, []
 
 
@@ -338,19 +500,24 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], cho
 
 def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, int], M: dict[str, int], prof: int,
            prof_ids: set[str], skills: set[str], saves: set[str], expertise: set[str], items: Counter[str],
-           chosen: dict[str, Any], spells: dict[str, Any] | None) -> dict[str, Any]:
+           chosen: dict[str, Any], spells: dict[str, Any] | None, picks: dict[str, Any], hp_rolls: list[int],
+           asi_log: list[str]) -> dict[str, Any]:
     r, sub, c, sc, b, lvl = p["race"], p["subrace"], p["class"], p["subclass"], p["background"], p["level"]
     E, P = srd.table("Equipment"), srd.table("Proficiencies")
+    N = lvl["level"]
     trait_ids = {t["index"] for t in p["traits"]}
     feat_ids = {f["index"] for f in p["features"]}
-    style = next((srd.table("Features")[g["index"]] for cid, got in chosen.items()
-                  if cid == "feature.fighter-fighting-style" for g in got), None)
-    style_id = style["index"].removeprefix("fighter-fighting-style-") if style else ""
+    cs = lvl.get("class_specific") or {}
+    # fighting styles chosen so far (Fighter, Paladin, Ranger, and the Champion's second one)
+    styles = {g["index"].split("fighting-style-", 1)[1] for got in chosen.values() for g in got
+              if g.get("kind") == "Features" and "fighting-style-" in g["index"]}
 
     owned_prof = _owned_prof(prof_ids)
 
-    # hit points
-    hp = c["hit_die"] + M["CON"] + (1 if "dwarven-toughness" in trait_ids else 0) + (1 if "draconic-resilience" in feat_ids else 0)
+    # hit points: the Hit Die at 1st level, then each level's roll (or the fixed value); Constitution (as it is now)
+    # for every level, and +1 per level from Dwarven Toughness and Draconic Resilience
+    hp = (c["hit_die"] + sum(hp_rolls) + N * (M["CON"] + (1 if "dwarven-toughness" in trait_ids else 0)
+                                                   + (1 if "draconic-resilience" in feat_ids else 0)))
 
     # armor class: the best the character can wear from what they carry
     armors = [E[i] for i in items if E[i].get("armor_category") in ("Light", "Medium", "Heavy") and i in owned_prof]
@@ -367,41 +534,67 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         dex = min(M["DEX"], ac["max_bonus"]) if ac.get("max_bonus") is not None else M["DEX"]
         options.append((ac["base"] + (dex if ac["dex_bonus"] else 0),
                         f"{a['name']} {ac['base']}" + (f" + DEX {dex}" if ac["dex_bonus"] else ""), True))
-    scored = [(v + (2 if shield and ok else 0) + (1 if style_id == "defense" and "no armor" not in n and "Unarmored" not in n
+    scored = [(v + (2 if shield and ok else 0) + (1 if "defense" in styles and "no armor" not in n and "Unarmored" not in n
                                                     and "Resilience" not in n else 0), n, ok) for v, n, ok in options]
     ac, ac_note, ok = max(scored, key=lambda x: (x[0], not x[1].startswith("no armor")))  # a tie names the feature
     if shield and ok:
         ac_note += " + shield 2"
-    if style_id == "defense" and armors and any(a["name"] in ac_note for a in armors):
+    if "defense" in styles and armors and any(a["name"] in ac_note for a in armors):
         ac_note += " + Defense 1"
-    speed = r["speed"]
-    speed_note = f"{speed} ft"
     worn = next((a for a in armors if a["name"] in ac_note), None)
+    speed, speed_notes = r["speed"], []
     if worn and worn.get("str_minimum", 0) > scores["STR"]:
         if r["index"] == "dwarf":
-            speed_note += " (not reduced by heavy armor)"
+            speed_notes.append("not reduced by heavy armor")
         else:
-            speed_note = f"{speed - 10} ft (heavy armor without STR {worn['str_minimum']})"
+            speed -= 10
+            speed_notes.append(f"heavy armor without STR {worn['str_minimum']}")
     if worn and worn.get("stealth_disadvantage"):
         ac_note += "; disadvantage on Stealth"
+    if "fast-movement" in feat_ids and not (worn and worn.get("armor_category") == "Heavy"):
+        speed += 10  # Fast Movement: "your speed increases by 10 feet while you aren't wearing heavy armor"
+        speed_notes.append("includes Fast Movement +10 ft, which applies only while not wearing heavy armor")
+    if cs.get("unarmored_movement") and not worn and not (shield and ok):
+        speed += cs["unarmored_movement"]  # "your speed increases by 10 feet while you are not wearing armor or wielding a shield"
+        speed_notes.append(f"includes Unarmored Movement +{cs['unarmored_movement']} ft, which applies only while "
+                           "wearing no armor and wielding no shield")
+    speed_note = f"{speed} ft" + (f" ({'; '.join(speed_notes)})" if speed_notes else "")
 
     # skills and saves
+    # Jack of All Trades: "half your proficiency bonus, rounded down, to any ability check ... that doesn't already
+    # include your proficiency bonus"; Remarkable Athlete: half, rounded up, to Strength, Dexterity or Constitution checks
+    joat = prof // 2 if "jack-of-all-trades" in feat_ids else 0
+    athlete = (prof + 1) // 2 if "remarkable-athlete" in feat_ids else 0
+
+    def half(ability: str) -> int:
+        return joat or (athlete if ability in ("STR", "DEX", "CON") else 0)
+
     sk_lines = []
     for s in srd.table("Skills").values():
         a = s["ability_score"]["name"]
-        bonus = M[a] + (prof * (2 if s["index"] in expertise else 1) if s["index"] in skills else 0)
+        bonus = M[a] + (prof * (2 if s["index"] in expertise else 1) if s["index"] in skills else half(a))
         mark = "**" if s["index"] in expertise else "*" if s["index"] in skills else ""
         sk_lines.append(f"{s['name']} {signed(bonus)}{mark}")
-    perception = M["WIS"] + (prof * (2 if "perception" in expertise else 1) if "perception" in skills else 0)
+    perception = M["WIS"] + (prof * (2 if "perception" in expertise else 1) if "perception" in skills else half("WIS"))
+    skill_note = ""
+    if joat:
+        skill_note += (f" Jack of All Trades: +{joat} (half your proficiency bonus, rounded down) is included in every skill "
+                       "you aren't proficient in; add it to any other ability check that doesn't use your proficiency "
+                       "bonus (initiative, a plain ability check).")
+    if athlete:
+        skill_note += (f" Remarkable Athlete: +{athlete} (half your proficiency bonus, rounded up) is included in every "
+                       "Strength, Dexterity and Constitution skill you aren't proficient in; add it to any other "
+                       "Strength, Dexterity or Constitution check that doesn't use your proficiency bonus (initiative, "
+                       "a plain ability check).")
     save_line = ", ".join(f"{a} {signed(M[a] + (prof if a in saves else 0))}{'*' if a in saves else ''}"
                           for a in ABILITIES)
 
     # attacks
-    attacks = [_attack(E[i], M, prof, i in owned_prof, style_id, "martial-arts" in feat_ids) for i in items
-               if E[i].get("weapon_category")]
-    unarmed = max(M["STR"], M["DEX"]) if "martial-arts" in feat_ids else M["STR"]
+    martial = (cs["martial_arts"]["dice_count"], cs["martial_arts"]["dice_value"]) if "martial-arts" in feat_ids else None
+    attacks = [_attack(E[i], M, prof, i in owned_prof, styles, martial) for i in items if E[i].get("weapon_category")]
+    unarmed = max(M["STR"], M["DEX"]) if martial else M["STR"]
     attacks.append(f"Unarmed strike: {signed(unarmed + prof)} to hit, " + (
-        f"1d4{signed(max(M['STR'], M['DEX']))} bludgeoning (Martial Arts; DEX or STR)" if "martial-arts" in feat_ids
+        f"{martial[0]}d{martial[1]}{signed(max(M['STR'], M['DEX']))} bludgeoning (Martial Arts; DEX or STR)" if martial
         else f"{max(0, 1 + M['STR'])} bludgeoning"))  # Damage Rolls: "never negative damage"
 
     # spellcasting
@@ -430,7 +623,8 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
                          "a ritual spell in the spellbook can be cast as a ritual (10 minutes longer, no slot), prepared "
                          "or not.",
         }[rules["how"]]
-        n = (lvl.get("spellcasting") or {}).get("spell_slots_level_1", 0)
+        # slice 2: spell slots, cantrips and spells known for levels above 1 (this is the level-1 casting, whatever N is)
+        n = (p["level1"].get("spellcasting") or {}).get("spell_slots_level_1", 0)
         if n:
             slots["1"] = {"max": n, "left": n, "recharge": "short" if c["index"] == "warlock" else "long"}
         for s in spells["cantrips"]:
@@ -459,46 +653,42 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
             for g in got:
                 anc = srd.table("Traits")[g["index"]]
                 bw = (anc.get("trait_specific") or {}).get("breath_weapon") or {}
-                dmg = ((bw.get("damage") or [{}])[0].get("damage_at_character_level") or {}).get("1", "2d6")
+                dmg = _at_level(((bw.get("damage") or [{}])[0].get("damage_at_character_level") or {}), N, "2d6")
                 area = bw.get("area_of_effect") or {}
                 features.append(f"{anc['name']}: breath weapon {area.get('size', '')} ft {area.get('type', '')}, "
                                 f"{(bw.get('dc') or {}).get('dc_type', {}).get('name', '')} save DC {8 + M['CON'] + prof}, "
                                 f"{dmg} {(anc['trait_specific'].get('damage_type') or {}).get('name', '')} damage "
                                 "(half on a success); resistance to that damage type")
-    for f in p["features"]:
-        if f["index"].startswith("spellcasting-"):
-            continue
-        line = f"{f['name']}: {' '.join(f['desc'])}"
-        for cid, got in chosen.items():
-            if cid == f"feature.{f['index']}":
-                line += " CHOSEN: " + ", ".join(_grant_name(g) for g in got) + "."
-        if f["index"] == ENEMY_FEATURE:
-            if ENEMY_RACES_ID in (ch.get("choices") or {}):
-                line += " Humanoid races: " + " and ".join(x.strip() for x in ch["choices"][ENEMY_RACES_ID]) + "."
-            line += " Language learned: " + ", ".join(_grant_name(g) for g in chosen[ENEMY_LANGUAGE_ID]) + "."
-        features.append(line)
-    if style:
-        features.append(f"{style['name']}: {' '.join(style['desc'])}")
+
+    def note(f: dict[str, Any]) -> str:
+        """What was chosen for one feature."""
+        out = ""
+        if got := chosen.get(f"feature.{f['index']}"):
+            out += " CHOSEN: " + ", ".join(_grant_name(g) for g in got) + "."
+        if f["index"].startswith("favored-enemy-"):
+            if (rid := f"feature.{f['index']}.humanoid-races") in picks:
+                out += " Humanoid races: " + " and ".join(x.strip() for x in picks[rid]) + "."
+            out += " Language learned: " + ", ".join(_grant_name(g) for g in chosen[f"feature.{f['index']}.language"]) + "."
+        return out
+
+    families: dict[str, list[dict[str, Any]]] = {}
+    for _, f in p["gained"]:
+        if not f["index"].startswith("spellcasting-") and not NOT_SHOWN.search(f["index"]):
+            families.setdefault(_family(f["index"]), []).append(f)
+    for fs in families.values():
+        f = fs[-1]  # the newest stage, with the choices made at every stage
+        features.append(f"{f['name']}: {' '.join(f['desc'])}" + "".join(note(m) for m in fs)
+                        + (_at_this_level(f["index"], cs, N, M, prof) if N > 1 else ""))
+    for cid, got in chosen.items():  # the option a choice picked, when its text says more than the feature's
+        parent = srd.table("Features").get(cid.removeprefix("feature."))
+        for g in got:
+            if g.get("kind") == "Features" and (parent is None or srd.table("Features")[g["index"]]["desc"] != parent["desc"]):
+                opt = srd.table("Features")[g["index"]]
+                features.append(f"{opt['name']}: {' '.join(opt['desc'])}")
+    if asi_log:
+        features.append("Ability Score Improvements taken: " + "; ".join(asi_log) + ".")
     features.append(f"{b['feature']['name']} ({b['name']}): {' '.join(b['feature']['desc'])}")
-    cs = lvl.get("class_specific") or {}
-    if "rage" in feat_ids:
-        resources["Rage"] = {"max": cs.get("rage_count", 2), "left": cs.get("rage_count", 2), "recharge": "long"}
-    if any(i.startswith("bardic-inspiration") for i in feat_ids):
-        n = max(1, M["CHA"])
-        resources["Bardic Inspiration"] = {"max": n, "left": n, "recharge": "long"}
-    if "second-wind" in feat_ids:
-        resources["Second Wind"] = {"max": 1, "left": 1, "recharge": "short"}
-    if "divine-sense" in feat_ids:
-        n = max(0, 1 + M["CHA"])
-        resources["Divine Sense"] = {"max": n, "left": n, "recharge": "long"}
-    if "lay-on-hands" in feat_ids:
-        resources["Lay on Hands"] = {"max": 5, "left": 5, "recharge": "long"}
-    if "arcane-recovery" in feat_ids:
-        resources["Arcane Recovery"] = {"max": 1, "left": 1, "recharge": "long"}
-    if "breath-weapon" in trait_ids:
-        resources["Breath Weapon"] = {"max": 1, "left": 1, "recharge": "short"}
-    if "relentless-endurance" in trait_ids:
-        resources["Relentless Endurance"] = {"max": 1, "left": 1, "recharge": "long"}
+    resources.update(_resources(feat_ids, trait_ids, cs, N, M))
 
     langs = [x["name"] for x in r["languages"]] + [srd.table("Languages")[g["index"]]["name"]
                                                    for got in chosen.values() for g in got if g.get("kind") == "Languages"]
@@ -506,9 +696,9 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         langs.append(srd.table("Languages")["draconic"]["name"])
     other_profs = sorted(P[i]["name"] for i in prof_ids if P[i]["type"] not in ("Skills", "Saving Throws"))
     race_name = sub["name"] if sub else r["name"]
-    summary = f"{race_name} {c['name'].lower()} 1" + (f" ({sc['name']})" if sc else "") + f", {b['name'].lower()} background"
+    summary = f"{race_name} {c['name'].lower()} {N}" + (f" ({sc['name']})" if sc else "") + f", {b['name'].lower()} background"
     sheet: dict[str, Any] = {
-        "name": name, "summary": summary, "opening": "", "level": 1, "race": race_name, "class": c["name"],
+        "name": name, "summary": summary, "opening": "", "level": N, "race": race_name, "class": c["name"],
         "subclass": sc["name"] if sc else None, "background": b["name"],
         "alignment": ch.get("alignment") or "", "personality": ch.get("personality") or "",
         "appearance": ch.get("appearance") or "",
@@ -517,14 +707,14 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
         "abilities": {a: f"{scores[a]} ({signed(M[a])})" for a in ABILITIES},
         "proficiency_bonus": prof,
         "saving_throws": save_line + " (* proficient)",
-        "skills": ", ".join(sk_lines) + " (* proficient, ** expertise)",
+        "skills": ", ".join(sk_lines) + " (* proficient, ** expertise)" + skill_note,
         "passive_perception": 10 + perception,
         "senses": "darkvision 60 ft" if "darkvision" in trait_ids else "normal",
         "languages": ", ".join(dict.fromkeys(langs)),
         "proficiencies": ", ".join(other_profs),
         "attacks": attacks, "features": features,
         "hp": {"max": hp, "current": hp, "temp": 0},
-        "hit_dice": {"die": f"d{c['hit_die']}", "max": 1, "left": 1},
+        "hit_dice": {"die": f"d{c['hit_die']}", "max": N, "left": N},
         "resources": resources, "conditions": [], "death_saves": {"successes": 0, "failures": 0}, "xp": 0,
         "coins_cp": int(b.get("starting_gold", {}).get("quantity", 0)) * 100,
         "items": {E[i]["name"]: n for i, n in items.items()},
@@ -536,16 +726,127 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
     return sheet
 
 
-def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, style: str, monk: bool) -> str:
+def _at_this_level(fid: str, cs: dict[str, Any], N: int, M: dict[str, int], prof: int) -> str:
+    """The numbers a feature's text leaves to the class table, at character level N (class_specific in the data)."""
+    now = f" At level {N}: "
+    if fid == "rage":
+        n = cs["rage_count"]
+        return (f"{now}rage damage bonus +{cs['rage_damage_bonus']}; "
+                + (f"{n} rages" if n < 100 else "unlimited rages") + " before a long rest.")
+    if fid == "sneak-attack":
+        return f"{now}the extra damage is {cs['sneak_attack']['dice_count']}d{cs['sneak_attack']['dice_value']}."
+    if fid == "martial-arts":
+        return f"{now}Martial Arts die d{cs['martial_arts']['dice_value']}."
+    if fid.startswith("bardic-inspiration"):
+        return f"{now}Bardic Inspiration die d{cs['bardic_inspiration_die']}."
+    if fid.startswith("song-of-rest"):
+        return f"{now}extra 1d{cs['song_of_rest_die']} hit points."
+    if fid.startswith("unarmored-movement"):
+        return f"{now}speed +{cs['unarmored_movement']} ft."
+    if fid == "ki":
+        return f"{now}{cs['ki_points']} ki points; ki save DC {8 + prof + M['WIS']}."
+    if fid == "font-of-magic":
+        return f"{now}{cs['sorcery_points']} sorcery points."
+    if fid == "flexible-casting-creating-spell-slots":
+        return now + ", ".join(f"a level-{x['spell_slot_level']} slot costs {x['sorcery_point_cost']} points"
+                               for x in cs["creating_spell_slots"]) + "."
+    if fid == "lay-on-hands":
+        return f"{now}a pool of {5 * N} hit points."
+    if fid == "aura-of-protection":
+        return f"{now}aura range {cs['aura_range']} ft; bonus to saving throws +{max(1, M['CHA'])}."
+    if fid in ("aura-of-devotion", "aura-of-courage"):
+        return f"{now}aura range {cs['aura_range']} ft."
+    if fid == "arcane-recovery":
+        return f"{now}recover slots with a combined level of up to {cs['arcane_recovery_levels']}."
+    if fid == "natural-recovery":
+        return f"{now}recover slots with a combined level of up to {math.ceil(N / 2)}."
+    if fid == "second-wind":
+        return f"{now}1d10 + {N} hit points."
+    if fid == "channel-divinity-preserve-life":
+        return f"{now}{5 * N} hit points to divide."
+    if fid == "wholeness-of-body":
+        return f"{now}{3 * N} hit points."
+    if fid.startswith("wild-shape"):
+        return f"{now}up to {N // 2} hours in a beast shape."
+    if fid == "primal-champion":
+        return " Already included in your ability scores."
+    return ""
+
+
+def _resources(feat_ids: set[str], trait_ids: set[str], cs: dict[str, Any], N: int, M: dict[str, int]) -> dict[str, Any]:
+    """The counters of everything with limited uses: max and what restores it (from the class table or the feature's text)."""
+    res: dict[str, Any] = {}
+
+    def add(name: str, n: int, recharge: str) -> None:
+        res[name] = {"max": n, "left": n, "recharge": recharge}
+
+    if "rage" in feat_ids and cs["rage_count"] < 100:  # 20th level: unlimited (the class table)
+        add("Rage", cs["rage_count"], "long")
+    if any(i.startswith("bardic-inspiration") for i in feat_ids):  # Font of Inspiration: short or long rest
+        add("Bardic Inspiration", max(1, M["CHA"]), "short" if "font-of-inspiration" in feat_ids else "long")
+    if "second-wind" in feat_ids:
+        add("Second Wind", 1, "short")
+    if cs.get("action_surges"):
+        add("Action Surge", cs["action_surges"], "short")
+    if cs.get("indomitable_uses"):
+        add("Indomitable", cs["indomitable_uses"], "long")
+    if "ki" in feat_ids:
+        add("Ki", cs["ki_points"], "short")
+    if "wholeness-of-body" in feat_ids:
+        add("Wholeness of Body", 1, "long")
+    if "font-of-magic" in feat_ids:
+        add("Sorcery Points", cs["sorcery_points"], "long")
+    if any(i.startswith("channel-divinity-") and i.endswith("-rest") for i in feat_ids):  # cleric
+        add("Channel Divinity", cs["channel_divinity_charges"], "short")
+    if "channel-divinity" in feat_ids:  # paladin: "You must then finish a short or long rest to use your Channel Divinity again"
+        add("Channel Divinity", 1, "short")
+    if any(i.startswith("wild-shape") for i in feat_ids) and "archdruid" not in feat_ids:  # Archdruid: unlimited
+        add("Wild Shape", 2, "short")
+    if "natural-recovery" in feat_ids:
+        add("Natural Recovery", 1, "long")
+    if "divine-sense" in feat_ids:
+        add("Divine Sense", max(0, 1 + M["CHA"]), "long")
+    if "lay-on-hands" in feat_ids:
+        add("Lay on Hands", 5 * N, "long")
+    if "cleansing-touch" in feat_ids:
+        add("Cleansing Touch", max(1, M["CHA"]), "long")
+    if "stroke-of-luck" in feat_ids:
+        add("Stroke of Luck", 1, "short")
+    if "dark-ones-own-luck" in feat_ids:
+        add("Dark One's Own Luck", 1, "short")
+    if "hurl-through-hell" in feat_ids:
+        add("Hurl Through Hell", 1, "long")
+    if "eldritch-master" in feat_ids:
+        add("Eldritch Master", 1, "long")
+    for lv in (6, 7, 8, 9):  # one arcanum spell per level, each once per long rest
+        if cs.get(f"mystic_arcanum_level_{lv}"):
+            add(f"Mystic Arcanum ({lv}th level)", 1, "long")
+    if "arcane-recovery" in feat_ids:
+        add("Arcane Recovery", 1, "long")
+    if "breath-weapon" in trait_ids:
+        add("Breath Weapon", 1, "short")
+    if "relentless-endurance" in trait_ids:
+        add("Relentless Endurance", 1, "long")
+    if "infernal-legacy" in trait_ids:  # 3rd level: hellish rebuke once; 5th level: darkness once
+        if N >= 3:
+            add("Hellish Rebuke (Infernal Legacy)", 1, "long")
+        if N >= 5:
+            add("Darkness (Infernal Legacy)", 1, "long")
+    return res
+
+
+def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, styles: set[str],
+            martial: tuple[int, int] | None) -> str:
     props = [x["index"] for x in w.get("properties", [])]
     ranged = w["weapon_range"] == "Ranged"
     a = M["DEX"] if ranged else M["STR"]
-    if "finesse" in props or (monk and ("monk" in props or w["index"] == "shortsword")):
+    monk_weapon = bool(martial) and ("monk" in props or w["index"] == "shortsword")
+    if "finesse" in props or monk_weapon:
         a = max(M["STR"], M["DEX"])
-    hit = a + (prof if proficient else 0) + (2 if ranged and style == "archery" else 0)
+    hit = a + (prof if proficient else 0) + (2 if ranged and "archery" in styles else 0)
     dice = w["damage"]["damage_dice"] if w.get("damage") else "1"
     dtype = w["damage"]["damage_type"]["name"].lower() if w.get("damage") else ""
-    duel = 2 if style == "dueling" and not ranged and "two-handed" not in props else 0
+    duel = 2 if "dueling" in styles and not ranged and "two-handed" not in props else 0
     line = f"{w['name']}: {signed(hit)} to hit, {dice}{signed(a + duel) if a + duel else ''} {dtype}"
     if duel:
         line += " (Dueling +2 included: one-handed, no other weapon)"
@@ -554,6 +855,9 @@ def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, s
     rng = w.get("throw_range") if "thrown" in props else w.get("range") if ranged else None
     if rng:
         line += f"; range {rng['normal']}/{rng.get('long', rng['normal'])}"
+    if monk_weapon and martial and w.get("damage") and martial[1] > int(dice.split("d")[-1]):
+        # Martial Arts: "You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon"
+        line += f"; Martial Arts: you can roll {martial[0]}d{martial[1]} in place of the weapon's damage"
     shown = [x for x in props if x not in ("monk",)]
     if shown:
         line += f" ({', '.join(shown)})"
@@ -562,7 +866,7 @@ def _attack(w: dict[str, Any], M: dict[str, int], prof: int, proficient: bool, s
     return line
 
 
-def _cantrip(s: dict[str, Any], dc: int, atk: int) -> str:
+def _cantrip(s: dict[str, Any], dc: int, atk: int) -> str:  # slice 2: damage_at_character_level for levels above 1
     dmg = s.get("damage") or {}
     if isinstance(dmg, list):
         dmg = dmg[0] if dmg else {}

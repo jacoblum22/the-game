@@ -60,6 +60,32 @@ def character(race: str, cls: str, shift: int = 0) -> dict[str, Any]:
     return ch
 
 
+def auto_levels(ch: dict[str, Any], upto: int, rolled: list[int] | None = None) -> list[dict[str, Any]]:
+    """Level records for levels 2..upto: fixed hit points, the two highest scores below 20 for each Ability Score
+    Improvement, expertise in the first skills the character is proficient in, other choices shifted until one builds."""
+    cls = srd.find("Classes", ch["class"])["index"]
+    levels: list[dict[str, Any]] = []
+    for level in range(2, upto + 1):
+        sheet, errs = create.build(ch, rolled, levels)
+        assert sheet, errs
+        rec: dict[str, Any] = {"hp": "fixed"}
+        if create.has_asi(cls, level):
+            low = sorted((a for a in create.ABILITIES if sheet["scores"][a] < 20), key=lambda a: -sheet["scores"][a])[:2]
+            rec["asi"] = {a: 1 for a in low}
+        sets = create.level_sets(cls, level)
+        proficient = [x.rsplit(" ", 1)[0] for x in sheet["skills"].split(" (* proficient")[0].split(", ")
+                      if x.endswith("*") and not x.endswith("**")]
+        for shift in range(60):
+            rec["choices"] = {cid: proficient[:cs["choose"]] if "expertise" in cid else pick(cs, shift + i)
+                              for i, (cid, _, cs) in enumerate(sets)}
+            built, errs = create.build(ch, rolled, levels + [rec])
+            if built:
+                break
+        assert built, errs
+        levels.append(rec)
+    return levels
+
+
 def build_any(race: str, cls: str) -> tuple[dict[str, Any] | None, list[str]]:
     """Try shifted choices until one set is valid (some first picks collide with background skills)."""
     errs: list[str] = []
