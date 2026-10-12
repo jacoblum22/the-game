@@ -146,12 +146,43 @@ class Game:
                   "coin_change_gp": {"type": "number", "description": "money gained (+) or spent (-), in gp; 0.1 = 1 sp"},
                   "conditions_added": _NAMES, "conditions_removed": _NAMES,
                   "xp_gained": _INT,
+                  "resilience_type": {"type": "string", "description": "Fiend warlock of 10th level (Fiendish Resilience): the "
+                                      "damage type the player chooses when a rest finishes; only together with short_rest or long_rest"},
                   "short_rest": {"type": "boolean"}, "long_rest": {"type": "boolean"}}})
         async def change_pc(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
                 self.sheet, lines = m.change_pc(self.sheet, a)
                 return "; ".join(lines)
             return self.run("sheet", go)
+
+        @tool("level_up_options", "Everything the character's next level gives and every choice the player makes at it "
+              "(hit points, features, ability score improvement, spells, invocations), with the skeleton of the level record "
+              "to send to level_up. The first line says the XP now and the XP the level needs. No arguments.",
+              {"type": "object", "properties": {}})
+        async def level_up_options(a: dict[str, Any]) -> dict[str, Any]:
+            try:
+                text, error = m.level_up_options(self.sheet), False
+            except m.Refused as e:
+                text, error = str(e), True
+            self.transcript.append({"kind": "call", "tool": "level_up_options", "input": a, "result": text, "error": error})
+            self.save()
+            return {"content": [{"type": "text", "text": text}]} | ({"is_error": True} if error else {})
+
+        @tool("level_up", "Take the next level, once the XP is there and the player has made every choice level_up_options "
+              "lists: send the level record. One level per call. All-or-nothing: if the record has any problem, every "
+              "problem is returned and nothing changes. On success the sheet is rebuilt at the new level; current HP rises "
+              "by the maximum's rise, and the new spell slots and feature uses are usable at once.",
+              {"type": "object", "properties": {"record": {"type": "object", "description": "the level record, in the form "
+                                                           "level_up_options ends with"}}, "required": ["record"]})
+        async def level_up(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                self.sheet, text = m.level_up(self.sheet, a.get("record"))
+                return text
+            res = self.run("level up", go)
+            if not res.get("is_error"):  # the sheet in the DM's instructions was written at the old level
+                res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n"
+                                              + sheet_text(self.sheet))
+            return res
 
         @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
               "the combatant named 'pc'; every creature needs a distinct name, hp and ac.",
@@ -197,7 +228,8 @@ class Game:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
             self.save()
 
-        return [roll, change_pc, add_combatants, change_creature, next_turn, end_fight, lookup_tool(record)]
+        return [roll, change_pc, level_up_options, level_up, add_combatants, change_creature, next_turn, end_fight,
+                lookup_tool(record)]
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -216,6 +248,14 @@ def sheet_text(s: dict[str, Any]) -> str:
         if sp.get("known"):
             lines.append("Spells known: " + ", ".join(sp["known"]))
         lines.append(sp["notes"] + (" Prepared spells and the spellbook are in the status." if "prepared" in sp else ""))
+        lines += [f"{label}: " + ", ".join(sp[key]) for key, label in (
+            ("always_prepared", "Always prepared"), ("magical_secrets", "Magical Secrets spells (any class)"),
+            ("tome_cantrips", "Pact of the Tome cantrips (any class)"), ("spell_mastery", "Spell Mastery"),
+            ("signature_spells", "Signature spells"), ("invocations", "Eldritch Invocations"),
+            ("invocation_spells", "Spells from invocations"), ("book_rituals", "Book of Ancient Secrets rituals (cast only as rituals)"))
+            if sp.get(key)]
+        if sp.get("arcanum"):
+            lines.append("Mystic Arcanum: " + ", ".join(f"level {lv}: {name}" for lv, name in sp["arcanum"].items()))
     if sp.get("racial_cantrips"):
         lines.append("Racial cantrips: " + ", ".join(sp["racial_cantrips"]))
     lines += ["Features:", *(f"- {x}" for x in s["features"])]
@@ -401,8 +441,8 @@ async def main() -> None:
     SAVES.mkdir(exist_ok=True)
     opts = dm_options(
         game.cwd, system_prompt=system_prompt(game.sheet), model=game.model, mcp_servers={"dm": server},
-        allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "add_combatants", "change_creature",
-                                                 "next_turn", "end_fight", "lookup")],
+        allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "level_up_options", "level_up", "add_combatants",
+                                                 "change_creature", "next_turn", "end_fight", "lookup")],
         resume=game.session_id)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
     async with ClaudeSDKClient(options=opts) as client:

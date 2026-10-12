@@ -19,7 +19,7 @@
   },
   "proficiency_bonus": 2,
   "saving_throws": "STR -1, DEX +1, CON +2, INT +5*, WIS +3*, CHA +0 (* proficient)",
-  "skills": "Arcana +5, Investigation +5, Religion +5, Insight +3; all others use the plain ability modifier",
+  "skills": "Acrobatics +1, Animal Handling +1, Arcana +5*, Athletics -1, Deception +0, History +3, Insight +3*, Intimidation +0, Investigation +5*, Medicine +1, Nature +3, Perception +1, Performance +0, Persuasion +0, Religion +5*, Sleight of Hand +1, Stealth +1, Survival +1 (* proficient, ** expertise)",
   "passive_perception": 11,
   "senses": "darkvision 60 ft",
   "languages": "Common, Gnomish, Draconic, Celestial",
@@ -93,6 +93,8 @@
     "failures": 0
   },
   "xp": 0,
+  "scores": {"STR": 8, "DEX": 13, "CON": 15, "INT": 17, "WIS": 12, "CHA": 10},
+  "build": {"choices": {"name": "Wren Fennimore", "race": "gnome", "class": "wizard", "ability_method": "standard_array", "base_scores": {"STR": 8, "DEX": 13, "CON": 14, "INT": 15, "WIS": 12, "CHA": 10}, "choices": {"class.proficiencies.1": ["Arcana", "Investigation"], "class.equipment.1": ["a"], "class.equipment.2": ["a"], "class.equipment.3": ["b"], "background.languages": ["Draconic", "Celestial"], "background.equipment.1": ["Emblem"], "background.equipment.prayer": ["Prayer book"]}, "cantrips": ["Fire Bolt", "Mage Hand", "Light"], "spells": ["Burning Hands", "Detect Magic", "Mage Armor", "Magic Missile", "Shield", "Sleep"], "prepared": ["Mage Armor", "Magic Missile", "Shield", "Sleep"]}, "rolled": null, "levels": []},
   "coins_cp": 1500,
   "items": {
     "Quarterstaff": 1,

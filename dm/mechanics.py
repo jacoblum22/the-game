@@ -12,7 +12,12 @@ import random
 import re
 from typing import Any
 
+from dm import create, srd
+
 _TERM = re.compile(r"\s*([+-])?\s*(?:(\d*)d(\d+)|(\d+))\s*", re.IGNORECASE)
+# SRD 5.1 p.56, Character Advancement: the experience points a character needs for each level (a test pins this to the SRD text)
+XP_FOR_LEVEL = {2: 300, 3: 900, 4: 2700, 5: 6500, 6: 14000, 7: 23000, 8: 34000, 9: 48000, 10: 64000, 11: 85000,
+                12: 100000, 13: 120000, 14: 140000, 15: 165000, 16: 195000, 17: 225000, 18: 265000, 19: 305000, 20: 355000}
 
 
 class Refused(Exception):
@@ -290,10 +295,25 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         s["ac_now"] = {"value": v, "reason": why}
         out.append(f"AC now {v} ({why})")
 
+    if (kind := ch.get("resilience_type")) is not None:
+        # Fiend warlock 10th level, Fiendish Resilience: "you can choose one damage type when you finish a short or long rest.
+        # You gain resistance to that damage type until you choose a different one with this feature." The text excludes no type.
+        if not any(f.startswith("Fiendish Resilience:") for f in s["features"]):
+            raise Refused("this character doesn't have Fiendish Resilience (a Fiend warlock of 10th level)")
+        if not (ch.get("short_rest") or ch.get("long_rest")):
+            raise Refused("the damage type is chosen when a short or long rest finishes: pass resilience_type together with "
+                          "short_rest or long_rest")
+        types = {t["name"].casefold(): t["name"] for t in srd.table("Damage-Types").values()}
+        if str(kind).strip().casefold() not in types:
+            raise Refused(f"{kind!r} is not an SRD damage type: {', '.join(types.values())}")
+        s["resilience_type"] = types[str(kind).strip().casefold()]
+        out.append(f"Fiendish Resilience: resistance to {s['resilience_type']} damage until a different type is chosen "
+                   "(damage from magical weapons or silver weapons ignores this resistance)")
+
     xp = _int("xp_gained")
     if xp:
         s["xp"] += xp
-        out.append(f"XP +{xp}: {s['xp']}")
+        out.append(f"XP +{xp}: {s['xp']}" + _can_level(s))
 
     if not out:
         raise Refused("nothing to change: pass at least one field")
@@ -304,9 +324,16 @@ def _max_slot_level(s: dict[str, Any]) -> int:
     return max((int(k) for k, v in s.get("spell_slots", {}).items() if v["max"]), default=0)
 
 
-def _srd_spell(name: str) -> dict[str, Any]:
-    from dm import srd
+def _can_level(s: dict[str, Any]) -> str:
+    """Said after XP is gained: the XP reaches the next level's threshold."""
+    n = s["level"] + 1
+    if n > 20 or s["xp"] < XP_FOR_LEVEL[n]:
+        return ""
+    return (f" - {s['name']} can now go up to level {n} (XP {XP_FOR_LEVEL[n]}): use level_up_options, then level_up"
+            + ("" if s.get("build") else "; this sheet has no build record, so it can't be levelled up"))
 
+
+def _srd_spell(name: str) -> dict[str, Any]:
     try:
         return srd.spell(name)
     except srd.Bad:
@@ -368,7 +395,7 @@ def status(s: dict[str, Any]) -> str:
     hp = s["hp"]
     lines = [f"HP {hp['current']}/{hp['max']}" + (f" (+{hp['temp']} temporary)" if hp["temp"] else "")
              + f" · AC {ac_text(s)} · hit dice {s['hit_dice']['left']}/{s['hit_dice']['max']} {s['hit_dice']['die']}"
-             + f" · XP {s['xp']}"]
+             + f" · XP {s['xp']}" + (f"/{XP_FOR_LEVEL[s['level'] + 1]}" if s["level"] < 20 else "")]
     if s.get("spell_slots"):
         lines.append("Spell slots: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in s["spell_slots"].items()))
     sc = s.get("spellcasting") or {}
@@ -379,6 +406,10 @@ def status(s: dict[str, Any]) -> str:
     if s.get("resources"):
         lines.append("Features: " + ", ".join(f"{k} {v['left']}/{v['max']} ({v['recharge']} rest)"
                                               for k, v in s["resources"].items()))
+    if any(f.startswith("Fiendish Resilience:") for f in s["features"]):
+        lines.append("Fiendish Resilience: " + (f"resistance to {s['resilience_type']} damage (damage from magical weapons or silver "
+                                                f"weapons ignores this resistance)" if s.get("resilience_type") else
+                                                "no damage type chosen yet (choose one when a short or long rest finishes)"))
     lines.append("Conditions: " + (", ".join(s["conditions"]) or "none"))
     ds = s["death_saves"]
     if hp["current"] == 0 and "dead" in s["conditions"]:
@@ -395,6 +426,140 @@ def status(s: dict[str, Any]) -> str:
 def ac_text(s: dict[str, Any]) -> str:
     now = s.get("ac_now")
     return f"{now['value']} ({now['reason']}; normally {s['ac']})" if now else str(s["ac"])
+
+
+# ---------- level-ups ----------
+
+def level_up_options(s: dict[str, Any]) -> str:
+    """Everything the next level gives and asks (create.level_up_options), led by the XP it needs. Works before the XP is there."""
+    try:
+        text = create.level_up_options(s)
+    except create.Bad as e:
+        raise Refused(str(e)) from None
+    n = s["level"] + 1
+    need = XP_FOR_LEVEL[n]
+    head = f"{s['name']} has {s['xp']} XP; level {n} needs {need}. " + (
+        "Enough: the level can be taken now." if s["xp"] >= need else
+        f"NOT ENOUGH YET ({need - s['xp']} more): level_up refuses until the XP is there, so this is for planning only; "
+        "the player can't take the level yet.")
+    return head + "\n\n" + text
+
+
+def level_up(s: dict[str, Any], record: Any) -> tuple[dict[str, Any], str]:
+    """Take one level: rebuild the sheet from its saved build plus `record` (create.build), then merge the live state of
+    the old sheet into it. Returns (new sheet, report of what changed). Raises Refused, changing nothing."""
+    b = s.get("build")
+    if not b:
+        raise Refused("this sheet has no build record (it is hand-made, or from a save made before level-ups), so it can't be "
+                      "levelled up")
+    n = 1 + len(b["levels"])
+    if n >= 20:
+        raise Refused(f"{s['name']} is level 20, the highest level")
+    if s["xp"] < XP_FOR_LEVEL[n + 1]:
+        raise Refused(f"level {n + 1} needs {XP_FOR_LEVEL[n + 1]} XP and {s['name']} has {s['xp']}: give the XP with "
+                      "change_pc xp_gained first")
+    if not isinstance(record, dict):
+        raise Refused("record: the level record, an object with the fields level_up_options ends with")
+    book = {x.casefold() for x in (s.get("spellcasting") or {}).get("spellbook", [])}
+    for name in record.get("spells") if book and isinstance(record.get("spells"), list) else []:
+        # a wizard adds exactly 2 spells per level (owner); the build can't see spells copied into the book during play
+        try:
+            found = srd.spell(name)["name"]
+        except srd.Bad:
+            continue  # the build names it
+        if found.casefold() in book:
+            raise Refused(f"spells: {found} is already in the spellbook (copied during play): choose a spell that is not")
+    new, errs = create.build(b["choices"], b["rolled"], b["levels"] + [record], carried=dict(s["items"]))
+    if not new:
+        raise Refused("the level record has problems, nothing changed:\n- " + "\n- ".join(errs))
+    _merge(s, new)
+    return new, _level_report(s, new)
+
+
+def _merge(old: dict[str, Any], new: dict[str, Any]) -> None:
+    """Put the live state of the old sheet into the rebuilt one (in place). Owner: the new HP, slots and uses are usable at once."""
+    # play-only fields, kept as they are: name and backstory, items and coins (build already took the items), conditions,
+    # death saves, XP, AC set by a spell or item, the Fiendish Resilience damage type
+    for key in ("name", "opening", "alignment", "personality", "appearance", "items", "coins_cp", "conditions", "death_saves",
+                "xp", "ac_now", "resilience_type"):
+        if key in old:
+            new[key] = copy.deepcopy(old[key])
+    # hit points: the current HP rises by what the maximum rose, never below what it was; temporary HP stay. At 0 HP the
+    # character is still down (the SRD changes the maximum, not the current HP, and being unconscious is not undone by a level)
+    o, n = old["hp"], new["hp"]
+    cur = o["current"] + n["max"] - o["max"] if o["current"] > 0 else o["current"]
+    n["current"], n["temp"] = min(n["max"], max(o["current"], cur)), o["temp"]
+    # hit dice: the new one is unspent
+    hd = new["hit_dice"]
+    hd["left"] = min(hd["max"], old["hit_dice"]["left"] + 1)
+    # spell slots: left = old left + (new max - old max), at least 0; a level that is new arrives full. A warlock's single
+    # pact slot level changes ("2" -> "3"): the used count carries over (left = new max - (old max - old left))
+    was, now = old.get("spell_slots") or {}, new.get("spell_slots") or {}
+    pact = len(was) == 1 and len(now) == 1 and all(v.get("recharge") == "short" for v in now.values())
+    for lvl, slot in now.items():
+        if prev := (next(iter(was.values())) if pact else was.get(lvl)):
+            slot["left"] = min(slot["max"], max(0, prev["left"] + slot["max"] - prev["max"]))
+    # features with uses (Rage, Ki, Lay on Hands HP, invocation spells, ...): the same rule; a new one arrives full
+    for name, res in new["resources"].items():
+        if prev := (old.get("resources") or {}).get(name):
+            res["left"] = min(res["max"], max(0, prev["left"] + res["max"] - prev["max"]))
+    # spells: prepared lists change only on a long rest, so the live list stays (a paladin had none before its 2nd level: the
+    # build's first list stands); the spellbook is the rebuilt one plus spells copied into it during play
+    osc, nsc = old.get("spellcasting") or {}, new.get("spellcasting") or {}
+    if osc.get("prepared") is not None and "prepared" in nsc:
+        nsc["prepared"] = list(osc["prepared"])
+    if "spellbook" in nsc:
+        nsc["spellbook"] += [x for x in osc.get("spellbook", []) if x not in nsc["spellbook"]]
+
+
+def _level_report(old: dict[str, Any], new: dict[str, Any]) -> str:
+    """What a level-up changed, for the DM."""
+    def names(s: dict[str, Any]) -> dict[str, str]:
+        return {f.split(":", 1)[0]: f for f in s["features"] if not f.startswith("Ability Score Improvements taken")}
+
+    def change(label: str, before: list[str], after: list[str]) -> list[str]:
+        got, gone = [x for x in after if x not in before], [x for x in before if x not in after]
+        return [f"{label}: " + "; ".join(([f"new {', '.join(got)}"] if got else []) + ([f"no longer {', '.join(gone)}"] if gone else []))
+                ] if got or gone else []
+
+    o, n, hd = old["hp"], new["hp"], new["hit_dice"]
+    out = [f"Level up done: {new['name']} is now {new['summary']}.",
+           f"HP {o['current']}/{o['max']} -> {n['current']}/{n['max']}; hit dice left {hd['left']}/{hd['max']} {hd['die']}"]
+    if old["proficiency_bonus"] != new["proficiency_bonus"]:
+        out.append(f"Proficiency bonus +{old['proficiency_bonus']} -> +{new['proficiency_bonus']}")
+    if old["ac"] != new["ac"]:
+        out.append(f"AC {old['ac']} -> {new['ac']} ({new['ac_note']})" + (
+            f"; the AC now in force ({old['ac_now']['value']}, {old['ac_now']['reason']}) is unchanged: check it" if old.get("ac_now") else ""))
+    if old.get("scores") and old["scores"] != new["scores"]:
+        out.append("Ability scores: " + ", ".join(f"{a} {old['scores'][a]} -> {new['scores'][a]}" for a in create.ABILITIES
+                                                  if old["scores"][a] != new["scores"][a]))
+    fo, fn = names(old), names(new)
+    out += change("Features", list(fo), list(fn))
+    if better := [k for k in fn if k in fo and fo[k] != fn[k]]:
+        out.append("Features whose text changed (numbers or choices): " + ", ".join(better))
+    was, now = old.get("spell_slots") or {}, new.get("spell_slots") or {}
+    if any(k not in was or was[k]["max"] != v["max"] for k, v in now.items()):
+        out.append("Spell slots now: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in now.items()))
+    was, now = old.get("resources") or {}, new["resources"]
+    if moved := [f"{k} {v['left']}/{v['max']} ({v['recharge']} rest)" for k, v in now.items() if k not in was or was[k]["max"] != v["max"]]:
+        out.append("Feature uses now: " + ", ".join(moved))
+    osc, nsc = old.get("spellcasting") or {}, new.get("spellcasting") or {}
+    for key, label in (("cantrips", "Cantrips"), ("known", "Spells known"), ("spellbook", "Spellbook"),
+                       ("magical_secrets", "Magical Secrets"), ("tome_cantrips", "Pact of the Tome cantrips"),
+                       ("spell_mastery", "Spell Mastery"), ("signature_spells", "Signature spells"),
+                       ("always_prepared", "Always prepared"), ("invocations", "Eldritch Invocations"),
+                       ("book_rituals", "Book of Ancient Secrets rituals")):
+        out += change(label, osc.get(key, []), nsc.get(key, []))
+    if arcanum := [f"{lv}th level: {sp}" for lv, sp in (nsc.get("arcanum") or {}).items() if lv not in (osc.get("arcanum") or {})]:
+        out.append("Mystic Arcanum: new " + ", ".join(arcanum))
+    if osc.get("prepared") is None and nsc.get("prepared"):
+        out.append("Prepared spells (the first list): " + ", ".join(nsc["prepared"]))
+    elif nsc.get("prepare_count") != osc.get("prepare_count") and nsc.get("prepare_count"):
+        out.append(f"Can prepare up to {nsc['prepare_count']} spells (was {osc.get('prepare_count')}); the list changes after a long "
+                   "rest, so the prepared spells are unchanged for now")
+    if new["level"] < 20 and new["xp"] >= XP_FOR_LEVEL[new["level"] + 1]:
+        out.append(f"The XP ({new['xp']}) is enough for level {new['level'] + 1} too: use level_up_options again.")
+    return "\n".join(out)
 
 
 # ---------- the fight tracker ----------
