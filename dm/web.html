@@ -22,6 +22,7 @@
   button:active { background: #3a3126; }
   #out { flex: 1; overflow-y: auto; padding: 8px 16px 24px; }
   p { margin: 0 0 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  #out ul, #out ol { margin: 0 0 14px; padding-left: 22px; } #out li { margin: 2px 0; }
   .you { margin: 18px 0 18px auto; max-width: 85%; width: fit-content; background: var(--you); padding: 8px 12px;
          border-radius: 14px 14px 4px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
   .card { margin: 10px 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line);
@@ -315,6 +316,21 @@ function sheetCard(raw) {
     sec("Languages and proficiencies", prof2) + sec("About", about) + sec("More", more) + `</div>`;
 }
 
+// ---- a paragraph of the DM's text, with the bit of markdown it uses: **bold**, *italic*, "- " and "1. " lists ----
+const inline = s => esc(s).replace(/\*\*(\S(?:.*?\S)?)\*\*/g, "<b>$1</b>").replace(/(^|[^*\w])\*(\S(?:.*?\S)?)\*(?![*\w])/g, "$1<i>$2</i>");
+function md(lines) {
+  let out = "", text = [], list = null;
+  const endText = () => { if (text.length) out += `<p>${text.map(inline).join("\n")}</p>`; text = []; };
+  const endList = () => { if (list) out += `<${list.tag}>${list.items.map(x => `<li>${inline(x)}</li>`).join("")}</${list.tag}>`; list = null; };
+  for (const l of lines) {
+    const m = l.match(/^\s*(?:([-*•])|(\d+)[.)])\s+(.*)$/), tag = m && (m[1] ? "ul" : "ol");
+    if (m) { endText(); if (list && list.tag !== tag) endList(); (list ||= {tag, items: []}).items.push(m[3]); }
+    else { endList(); text.push(l); }
+  }
+  endText(); endList();
+  return out;
+}
+
 // ---- the whole output, line by line ----
 const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet, \/quit exits\.$/;
 function render(text) {
@@ -322,7 +338,7 @@ function render(text) {
   let html = "", para = [], sheet = null, who = null;
   pc = ((text.match(/^(.+?), .+?\. Saving to .*\/sheet shows your sheet/m) || [])[1] || "").split(" ")[0];
   party = [...text.matchAll(/\[party: (\S+)[^\n]*? joined the party/g)].map(m => m[1]);
-  const flush = () => { if (para.length) html += `<p>${esc(para.join("\n"))}</p>`; para = []; };
+  const flush = () => { if (para.length) html += md(para); para = []; };
   const endSheet = () => {
     // the PC's card, then one per companion ("Companion Wren: …" blocks after the PC's part)
     if (sheet) for (const part of sheet.join("\n").trim().split(/\n\n(?=Companion )/))
