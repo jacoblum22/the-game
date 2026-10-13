@@ -1,2 +1,3 @@
+claude-agent-sdk==0.2.165
 anthropic==1.13.0
 pytest

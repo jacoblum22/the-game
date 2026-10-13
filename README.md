@@ -10,9 +10,12 @@ Fresh start, 2026-10-11.
 - The first build (ruleset and engine) is archived under the git tags `archive/pre-reset/*`.
 
 ## Play
-Requires Python 3.12 and an Anthropic API key in the `ANTHROPIC_API_KEY` environment variable (the DM runs on
-the Anthropic API). A save from before the switch to the API is converted once with
-`py -3.12 -m dm.convert saves/<file>.json`.
+Requires Python 3.12. Two ways to run the DM, the same game either way:
+- your own, on your Claude login in Claude Code (the Claude Agent SDK): the terminal and `dm.web`, the default;
+- on the Anthropic API with a key (`ANTHROPIC_API_KEY`): `--api` in the terminal, and the browser version
+  (`py -3.12 -m dm.site`), where each player brings their own key.
+
+A save carries on the way it was started. `py -3.12 -m dm.convert saves/<file>.json` moves an SDK save to the API.
 
     py -3.12 -m pip install -r requirements.txt
     py -3.12 -m dm.play fighter        # or rogue, wizard

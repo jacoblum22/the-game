@@ -55,7 +55,7 @@ play.on_save = lambda path, text: js.storeSave(path.name, text)
 
 async def new(character: str) -> None:
     global session
-    session = play.Session()
+    session = play.Session(backend="api")
     await session.new(character)
 
 
@@ -63,12 +63,12 @@ async def resume(name: str, text: str) -> str:
     """Continue a save the page kept. Returns why it can't be continued, or ""."""
     global session
     data = json.loads(text)
-    if why := play.resumable(data):
+    if why := play.resumable(data, "api"):
         return why
     path = play.SAVES / name
     path.parent.mkdir(exist_ok=True)
     path.write_text(text, encoding="utf-8")
-    session = play.Session()
+    session = play.Session(backend="api")
     await session.play(play.Game(data, path))
     return ""
 

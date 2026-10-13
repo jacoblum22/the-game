@@ -61,16 +61,24 @@ class Game:
         self.companions: list[dict[str, Any]] = data.get("companions", [])  # full sheets, at most 2 (owner 2026-10-12)
         self.fight: dict[str, Any] | None = data.get("fight")
         self.clock: dict[str, Any] = data.get("clock") or m.new_clock()  # saves from before 2026-10-12 have none
-        self.messages: list[dict[str, Any]] = data.get("messages", [])  # the DM's conversation, as API messages
         self.transcript: list[dict[str, Any]] = data.get("transcript", [])
         self.model: str = data.get("model", MODEL)
         self.system = ""  # the DM's instructions, written when play starts
         self.path = path
+        # Two ways to run the DM (owner, 2026-10-13): "api", the API with a key, the conversation kept here in the save
+        # (the browser version); "sdk", the owner's own, on their Claude login, the conversation in Claude Code's
+        # session file (dm/sdk.py). Saves from before the API have a session id and no backend.
+        self.backend: str = data.get("backend") or ("sdk" if data.get("session_id") else "api")
+        self.messages: list[dict[str, Any]] = data.get("messages", [])
+        self.session_id: str | None = data.get("session_id")
+        self.cwd: str = data.get("cwd", str(SAVES))  # an SDK save's session folder; saves from before 2026-10-11 used saves/
+        self.sdk: Any = None  # the open SDK client while an SDK game is played
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
-                "transcript": self.transcript, "messages": self.messages}
+                "transcript": self.transcript, "backend": self.backend}
+        data |= ({"session_id": self.session_id, "cwd": self.cwd} if self.backend == "sdk" else {"messages": self.messages})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
         on_save(self.path, text)
@@ -471,9 +479,13 @@ async def turn(game: Game | Creation, text: str) -> None:
     def said(t: str) -> None:
         print("\n" + t)
         game.log("dm", t)
-    failed = await model.respond(
-        game.model, game.system, game.tools(), game.messages,
-        f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}" if isinstance(game, Game) else text, said, game.save)
+    if isinstance(game, Game):
+        text = f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}"
+    if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
+        failed = await game.sdk.respond(text, said)
+        game.session_id = game.sdk.session_id
+    else:
+        failed = await model.respond(game.model, game.system, game.tools(), game.messages, text, said, game.save)
     if failed:
         print(f"\n[the DM call failed: {failed}]")
     game.save()
@@ -491,6 +503,9 @@ class Creation:
         self.path = path
         self.model = MODEL
         self.system = (HERE / "create_prompt.md").read_text(encoding="utf-8")
+        self.backend = "api"
+        self.session_id: str | None = None
+        self.sdk: Any = None
 
     def log(self, kind: str, text: str) -> None:
         self.transcript.append({"kind": kind, "text": text})
@@ -584,31 +599,53 @@ def new_save(stem: str) -> Path:
 
 class Session:
     """One game, fed one line at a time. The terminal and the browser page both drive it: what the game says is
-    printed, and the player's lines come in through line()."""
+    printed, and the player's lines come in through line(). backend: "sdk" (the owner's own, on their Claude login)
+    or "api" (an API key; the browser's)."""
 
-    def __init__(self, model_name: str = MODEL) -> None:
+    def __init__(self, model_name: str = MODEL, backend: str = "api") -> None:
         self.model = model_name
+        self.backend = backend
         self.game: Game | None = None
         self.creation: Creation | None = None
+
+    async def connect(self, g: Game | Creation) -> None:
+        """An SDK game talks to one Claude Code conversation for as long as it's played."""
+        if g.backend != "sdk":
+            return
+        from dm import sdk  # here: the browser has no Agent SDK
+        if isinstance(g, Game) and not g.session_id:
+            g.cwd = str(sdk.DM_HOME)
+        g.sdk = sdk.Client(g.model, g.system, g.tools(), g.cwd if isinstance(g, Game) else str(sdk.DM_HOME),
+                           g.session_id)
+        await g.sdk.open()
+
+    async def close(self) -> None:
+        for g in (self.creation, self.game):
+            if g and g.sdk:
+                await g.sdk.close()
+                g.sdk = None
 
     async def new(self, character: str) -> None:
         """character: fighter, rogue or wizard (ready-made), or new (made with the DM first)."""
         stamp = time.strftime("%Y%m%d-%H%M%S")
         if character == "new":
             self.creation = Creation(new_save(f"new-{stamp}"))  # one file: creation, then play
-            self.creation.model = self.model
+            self.creation.model, self.creation.backend = self.model, self.backend
+            await self.connect(self.creation)
             print("Character creation. Talk to the DM; /quit exits.")
             await turn(self.creation, "[Start] Greet the player and begin making their character.")
             return
         sheet = json.loads((HERE / "characters" / f"{character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
-        await self.play(Game({"sheet": sheet, "model": self.model}, new_save(f"{name}-{stamp}")))
+        await self.play(Game({"sheet": sheet, "model": self.model, "backend": self.backend}, new_save(f"{name}-{stamp}")))
 
     async def play(self, game: Game) -> None:
+        await self.close()
         self.game, self.creation = game, None
         game.system = system_prompt(game.sheet, game.companions)
+        await self.connect(game)
         print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-        if game.messages:
+        if game.messages or game.session_id:
             last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
             print("\n" + last)
         else:
@@ -622,17 +659,20 @@ class Session:
             return True
         if c := self.creation:
             if line == "/quit":
+                await self.close()
                 return False
             c.log("player", line)
             await turn(c, line)
             if c.done:
                 assert c.draft
-                await self.play(Game({"sheet": c.draft, "model": c.model, "transcript": c.transcript}, c.path))
+                await self.play(Game({"sheet": c.draft, "model": c.model, "transcript": c.transcript,
+                                      "backend": c.backend}, c.path))
             return True
         game = self.game
         assert game
         if line == "/quit":
             game.save()
+            await self.close()
             print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
             return False
         if line == "/sheet":
@@ -642,7 +682,6 @@ class Session:
         await turn(game, f"[The player]\n{line}")
         return True
 
-
 def sheet_report(game: Game) -> str:
     """What /sheet shows: the PC's part as before (the web page lays it out as one card); companions after it."""
     return (sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
@@ -650,12 +689,15 @@ def sheet_report(game: Game) -> str:
             + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
 
 
-def resumable(data: dict[str, Any]) -> str:
-    """Why a save can't be continued, or "" if it can."""
+def resumable(data: dict[str, Any], backend: str = "") -> str:
+    """Why a save can't be continued, or "" if it can. backend: the only one this player can run, if that matters
+    (the browser page runs only API saves)."""
     if "sheet" not in data:
         return "that save stopped during character creation, which can't be resumed; start again with new"
-    if data.get("session_id") and "messages" not in data:
-        return "that save is from the Agent SDK: convert it first with py -3.12 -m dm.convert <save>"
+    kind = data.get("backend") or ("sdk" if data.get("session_id") else "api")
+    if backend and kind != backend:
+        return ("that save runs on the owner's own version (the Agent SDK); to play it here, convert it first with "
+                "py -3.12 -m dm.convert <save>")
     return ""
 
 
@@ -682,9 +724,11 @@ async def main() -> None:
     ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard", "new"))
     ap.add_argument("--resume", type=Path, help="a save file to continue")
     ap.add_argument("--model", default=MODEL)
+    ap.add_argument("--api", action="store_true", help="a new game on the API (ANTHROPIC_API_KEY) instead of your "
+                                                       "Claude login; a save carries on the way it was started")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
-    session = Session(args.model)
+    session = Session(args.model, "api" if args.api else "sdk")
     if args.resume:
         data = json.loads(args.resume.read_text(encoding="utf-8"))
         if why := resumable(data):

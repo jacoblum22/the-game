@@ -157,4 +157,55 @@ def test_session(monkeypatch: Any, tmp_path: Path) -> None:
     data = json.loads(s.game.path.read_text(encoding="utf-8"))  # type: ignore[union-attr]
     assert play.resumable(data) == "" and len(data["messages"]) == 4
     assert "> I open the gate" in play.history(data)
-    assert play.resumable({"sheet": {}, "session_id": "x"}).startswith("that save is from the Agent SDK")
+    assert play.resumable({"sheet": {}, "session_id": "x"}) == ""  # the terminal runs both kinds
+    assert play.resumable({"sheet": {}, "session_id": "x"}, "api").startswith("that save runs on the owner's own")
+
+
+def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
+    """The owner's own version: the same game, with the DM's conversation in Claude Code (a stand-in here)."""
+    from dm import sdk
+    opened: list[Any] = []
+
+    class FakeClient:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+            self.tools, self.cwd, self.session_id, self.closed = {t.name: t for t in tools}, cwd, session_id, False
+            opened.append(self)
+
+        async def open(self) -> None:
+            pass
+
+        async def close(self) -> None:
+            self.closed = True
+
+        async def respond(self, text: str, on_text: Any) -> None:
+            await self.tools["roll"].handler({"dice": "1d20", "reason": "a test"})  # the tools reach the same game
+            on_text("Roll made.")
+            self.session_id = "sess-1"
+
+    monkeypatch.setattr(sdk, "Client", FakeClient)
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
+    s = play.Session(backend="sdk")
+
+    async def go() -> None:
+        await s.new("fighter")
+        await s.line("I look")
+        await s.line("/quit")
+    asyncio.run(go())
+    data = json.loads(s.game.path.read_text(encoding="utf-8"))  # type: ignore[union-attr]
+    assert data["backend"] == "sdk" and data["session_id"] == "sess-1" and "messages" not in data
+    assert data["cwd"] == str(sdk.DM_HOME) and opened[0].closed
+    assert sum(t["kind"] == "tool" and t["text"].startswith("dice ") for t in data["transcript"]) == 2
+    # resumed: the same Claude Code conversation
+    s2 = play.Session(backend="api")  # a save carries on the way it was started
+    asyncio.run(s2.play(play.Game(data, s.game.path)))  # type: ignore[union-attr]
+    assert opened[-1].session_id == "sess-1" and s2.game.backend == "sdk"  # type: ignore[union-attr]
+
+
+def test_sdk_bridge() -> None:
+    """Our tools go to the Agent SDK as they are (nothing connects here)."""
+    from dm import sdk
+    g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, Path("unused.json"))
+    c = sdk.Client("m", "system", g.tools(), str(sdk.DM_HOME), None)
+    assert "mcp__dm__roll" in c.options.allowed_tools and "mcp__dm__lookup" in c.options.allowed_tools
+    assert c.options.max_turns == model.MAX_ROUNDS and c.options.mcp_servers["dm"]["type"] == "sdk"

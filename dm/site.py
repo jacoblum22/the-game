@@ -20,7 +20,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 OUT = ROOT / "build" / "site"
-LEFT_OUT = {"web.py", "web.html", "page.html", "site.py", "convert.py"}  # the server, the page itself, the tools
+LEFT_OUT = {"web.py", "web.html", "page.html", "site.py", "convert.py", "sdk.py"}  # the server, the page, the tools, the SDK
 
 
 def build() -> None:

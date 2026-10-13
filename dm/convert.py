@@ -62,6 +62,7 @@ def main() -> None:
     data.pop("session_id")
     data.pop("cwd", None)
     data["messages"] = messages
+    data["backend"] = "api"
     save.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
     print(f"{save}: {len(messages)} messages from {found[0].name}; the old save is {save.name}.sdk")
 
