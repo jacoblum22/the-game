@@ -395,7 +395,7 @@ def status(s: dict[str, Any]) -> str:
     hp = s["hp"]
     lines = [f"HP {hp['current']}/{hp['max']}" + (f" (+{hp['temp']} temporary)" if hp["temp"] else "")
              + f" · AC {ac_text(s)} · hit dice {s['hit_dice']['left']}/{s['hit_dice']['max']} {s['hit_dice']['die']}"
-             + f" · XP {s['xp']}" + (f"/{XP_FOR_LEVEL[s['level'] + 1]}" if s["level"] < 20 else "")]
+             + ("" if s.get("companion") else f" · XP {s['xp']}" + (f"/{XP_FOR_LEVEL[s['level'] + 1]}" if s["level"] < 20 else ""))]
     if s.get("spell_slots"):
         lines.append("Spell slots: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in s["spell_slots"].items()))
     sc = s.get("spellcasting") or {}
@@ -430,13 +430,19 @@ def ac_text(s: dict[str, Any]) -> str:
 
 # ---------- level-ups ----------
 
-def level_up_options(s: dict[str, Any]) -> str:
-    """Everything the next level gives and asks (create.level_up_options), led by the XP it needs. Works before the XP is there."""
+def level_up_options(s: dict[str, Any], cap: int | None = None) -> str:
+    """Everything the next level gives and asks (create.level_up_options), led by the XP it needs, or for a companion
+    (`cap` = the PC's level: companions have no XP and are at the PC's level, owner 2026-10-12) by that. Works before
+    the level can be taken."""
     try:
         text = create.level_up_options(s)
     except create.Bad as e:
         raise Refused(str(e)) from None
     n = s["level"] + 1
+    if cap is not None:
+        return (f"{s['name']} is a companion at level {s['level']}; companions are at the PC's level ({cap}). " + (
+            "The level can be taken now." if n <= cap else "NOT YET: level_up refuses until the PC reaches this level, so "
+            "this is for planning only.") + "\n\n" + text)
     need = XP_FOR_LEVEL[n]
     head = f"{s['name']} has {s['xp']} XP; level {n} needs {need}. " + (
         "Enough: the level can be taken now." if s["xp"] >= need else
@@ -445,7 +451,7 @@ def level_up_options(s: dict[str, Any]) -> str:
     return head + "\n\n" + text
 
 
-def level_up(s: dict[str, Any], record: Any) -> tuple[dict[str, Any], str]:
+def level_up(s: dict[str, Any], record: Any, cap: int | None = None) -> tuple[dict[str, Any], str]:
     """Take one level: rebuild the sheet from its saved build plus `record` (create.build), then merge the live state of
     the old sheet into it. Returns (new sheet, report of what changed). Raises Refused, changing nothing."""
     b = s.get("build")
@@ -455,7 +461,10 @@ def level_up(s: dict[str, Any], record: Any) -> tuple[dict[str, Any], str]:
     n = 1 + len(b["levels"])
     if n >= 20:
         raise Refused(f"{s['name']} is level 20, the highest level")
-    if s["xp"] < XP_FOR_LEVEL[n + 1]:
+    if cap is not None and n + 1 > cap:
+        raise Refused(f"{s['name']} is a companion at level {n}; companions are at the PC's level ({cap}), so level {n + 1} "
+                      "waits until the PC has it")
+    if cap is None and s["xp"] < XP_FOR_LEVEL[n + 1]:
         raise Refused(f"level {n + 1} needs {XP_FOR_LEVEL[n + 1]} XP and {s['name']} has {s['xp']}: give the XP with "
                       "change_pc xp_gained first")
     if not isinstance(record, dict):
@@ -480,7 +489,7 @@ def _merge(old: dict[str, Any], new: dict[str, Any]) -> None:
     """Put the live state of the old sheet into the rebuilt one (in place). Owner: the new HP, slots and uses are usable at once."""
     # play-only fields, kept as they are: name and backstory, items and coins (build already took the items), conditions,
     # death saves, XP, AC set by a spell or item, the Fiendish Resilience damage type
-    for key in ("name", "opening", "alignment", "personality", "appearance", "items", "coins_cp", "conditions", "death_saves",
+    for key in ("name", "opening", "companion", "alignment", "personality", "appearance", "items", "coins_cp", "conditions", "death_saves",
                 "xp", "ac_now", "resilience_type"):
         if key in old:
             new[key] = copy.deepcopy(old[key])

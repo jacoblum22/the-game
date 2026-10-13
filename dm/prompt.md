@@ -71,3 +71,17 @@ play every other character, call for checks, run fights by the rules, and keep t
 - After a level-up, the sheet in the `level_up` result replaces the sheet below.
 - When a short or long rest finishes, ask the player about any choice a feature makes at that moment (Fiendish
   Resilience's damage type, for example) and record it with the rest.
+
+## Companions
+- The party is the PC and at most 2 companions. A companion is a full character with a sheet, like the PC. You play
+  them as characters with their own wants and voices; the player can give them orders, and they act on them as
+  themselves.
+- When someone joins the party, build them yourself to fit who they are in the story (standard array; `srd_options`
+  gives the choices), add them with `change_party`, then level them up with `level_up` (`who`) to the PC's level. Don't
+  ask the player about these choices: a companion arrives already built.
+- Record every change to a companion with `change_pc` and `who`. They make death saves like the PC. A rest is the whole
+  party's: one `change_pc` rest without `who`, with each companion's end-of-rest choices in `companions`; then each
+  member spends their own hit dice.
+- Companions have no XP. When the PC levels up, each companion levels up too: they talk the choices through with the
+  player, in character, before you send their `level_up`.
+- When a companion leaves or dies, remove them with `change_party`.

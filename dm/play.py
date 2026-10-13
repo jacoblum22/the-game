@@ -71,11 +71,13 @@ _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"
                                                                       "qty": {"type": "integer", "minimum": 1}},
                                      "required": ["item"]}}
 _NAMES = {"type": "array", "items": {"type": "string"}}
+_WHO = {"type": "string", "description": "a companion's name; leave out for the player character"}
 
 
 class Game:
     def __init__(self, data: dict[str, Any], path: Path) -> None:
         self.sheet: dict[str, Any] = data["sheet"]
+        self.companions: list[dict[str, Any]] = data.get("companions", [])  # full sheets, at most 2 (owner 2026-10-12)
         self.fight: dict[str, Any] | None = data.get("fight")
         self.clock: dict[str, Any] = data.get("clock") or m.new_clock()  # saves from before 2026-10-12 have none
         self.session_id: str | None = data.get("session_id")
@@ -86,7 +88,7 @@ class Game:
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
-        data = {"sheet": self.sheet, "fight": self.fight, "clock": self.clock, "session_id": self.session_id, "model": self.model,
+        data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "session_id": self.session_id, "model": self.model,
                 "cwd": self.cwd, "transcript": self.transcript}
         self.path.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
 
@@ -96,7 +98,88 @@ class Game:
             print(f"  [{text}]")
 
     def status(self) -> str:
-        return m.clock_text(self.clock) + "\n" + m.status(self.sheet) + "\n" + m.fight_text(self.fight, self.sheet)
+        return (m.clock_text(self.clock) + "\n" + m.status(self.sheet)
+                + "".join(f"\n\nCompanion {c['name']}, {c['summary']}:\n" + m.status(c) for c in self.companions)
+                + "\n" + m.fight_text(self.fight, self.sheet))
+
+    def member(self, who: Any) -> int | None:
+        """The companion `who` names (index), or None for the PC (no `who`, or the PC's name). Raises Refused."""
+        if not who:
+            return None
+        key = str(who).strip().casefold()
+        for i, s in enumerate([self.sheet, *self.companions]):
+            if key in (s["name"].casefold(), s["name"].split()[0].casefold()):
+                return i - 1 if i else None
+        raise m.Refused(f"who: no party member called {who!r}; the party is "
+                      + ", ".join(s["name"] for s in [self.sheet, *self.companions]))
+
+    def change_party_member(self, a: dict[str, Any]) -> str:
+        """change_pc for the PC or a companion (`who`). A rest is the whole party's: the clock moves once, and each
+        companion rests too, with its own end-of-rest choices from `companions`."""
+        a = dict(a)
+        i = self.member(a.pop("who", None))
+        rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
+        if i is not None:
+            if rest:
+                raise m.Refused("rests are the whole party's: pass short_rest or long_rest without who (companions' "
+                              "end-of-rest choices go in companions)")
+            if a.get("xp_gained"):
+                raise m.Refused("companions have no XP: they are at the PC's level and level up when the PC does")
+            self.companions[i], lines = m.change_pc(self.companions[i], a)
+            return f"{self.companions[i]['name']}: " + "; ".join(lines)
+        choices = a.pop("companions", None) or {}
+        if choices and not rest:
+            raise m.Refused("companions: end-of-rest choices, only together with short_rest or long_rest")
+        named = {self.member(k): v for k, v in choices.items()}  # refuses an unknown name
+        if None in named:
+            raise m.Refused("companions: name companions here; the PC's own choices go in the call's other fields")
+        sheet, lines = m.change_pc(self.sheet, a)
+        party = list(self.companions)
+        for j, c in enumerate(party):
+            if a.get("long_rest") and ("dead" in c["conditions"] or c["hp"]["current"] < 1):
+                lines.append(f"{c['name']}: no benefit from the long rest (0 hit points)")
+                continue
+            if rest:
+                ch = {k: v for k, v in (named.get(j) or {}).items() if k in ("prepare_spells", "resilience_type")}
+                party[j], more = m.change_pc(c, ch | {"long_rest": bool(a.get("long_rest")),
+                                                       "short_rest": bool(a.get("short_rest"))})
+                lines.append(f"{c['name']}: " + "; ".join(more))
+        self.sheet, self.companions = sheet, party
+        self.clock = m.advance(self.clock, rest)
+        if rest and self.clock["now"] is not None:
+            lines.append(f"{m.span(rest)} later: {m.when(self.clock['now'])}")
+        return "; ".join(lines)
+
+    def change_party(self, a: dict[str, Any]) -> str:
+        if a.get("remove"):
+            i = self.member(a["remove"])
+            if i is None:
+                raise m.Refused("remove: the PC can't leave the party")
+            gone = self.companions.pop(i)
+            return f"{gone['name']} left the party"
+        ch = a.get("add")
+        if not isinstance(ch, dict):
+            raise m.Refused("pass add (a companion's full set of choices) or remove (a companion's name)")
+        if len(self.companions) >= 2:
+            raise m.Refused("the party is full: the PC and at most 2 companions")
+        if ch.get("ability_method") != "standard_array":
+            raise m.Refused("companions use the standard array: ability_method standard_array")
+        name = str(ch.get("name") or "").strip()
+        taken = False
+        if name:
+            try:
+                self.member(name)
+                taken = True
+            except m.Refused:
+                pass
+        if taken:
+            raise m.Refused(f"name: someone in the party is already called {name!r}")
+        sheet, errs = create.build(ch, None)
+        if not sheet:
+            raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
+        sheet["companion"] = True
+        self.companions.append(sheet)
+        return f"{sheet['name']} joined the party, {sheet['summary']}"
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
@@ -120,11 +203,14 @@ class Game:
         async def roll(a: dict[str, Any]) -> dict[str, Any]:
             return self.run("dice", lambda: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"), a["reason"]))
 
-        @tool("change_pc", "Record a change to the player character's sheet. Pass only the fields that change. "
+        @tool("change_pc", "Record a change to the sheet of the player character, or of a companion (who). Pass only the "
+              "fields that change. A rest is the whole party's: pass it without who; it rests every companion too and "
+              "moves the clock once. "
               "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned. "
               "Rules you must apply yourself: a long rest needs the PC at 1 HP or more and only one long rest counts per "
               "24 hours (check the time; the tool can't); hit dice are spent at the end of a short rest, one per call.",
               {"type": "object", "properties": {
+                  "who": _WHO,
                   "damage": _INT, "heal": _INT, "temp_hp": _INT,
                   "critical_hit": {"type": "boolean", "description": "the damage is from a critical hit (any hit on an unconscious "
                                    "PC from within 5 feet is one): at 0 HP that is two death save failures instead of one"},
@@ -149,24 +235,48 @@ class Game:
                   "xp_gained": _INT,
                   "resilience_type": {"type": "string", "description": "Fiend warlock of 10th level (Fiendish Resilience): the "
                                       "damage type the player chooses when a rest finishes; only together with short_rest or long_rest"},
-                  "short_rest": {"type": "boolean"}, "long_rest": {"type": "boolean"}}})
+                  "short_rest": {"type": "boolean"}, "long_rest": {"type": "boolean"},
+                  "companions": {"type": "object", "description": "only with short_rest or long_rest: each companion's own "
+                                 "end-of-rest choices, {name: {prepare_spells, resilience_type}}"}}})
         async def change_pc(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
-                self.sheet, lines = m.change_pc(self.sheet, a)
-                rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
-                self.clock = m.advance(self.clock, rest)
-                if rest and self.clock["now"] is not None:
-                    lines.append(f"{m.span(rest)} later: {m.when(self.clock['now'])}")
-                return "; ".join(lines)
-            return self.run("sheet", go)
+            return self.run("sheet", lambda: self.change_party_member(a))
 
-        @tool("level_up_options", "Everything the character's next level gives and every choice the player makes at it "
+        @tool("change_party", "A companion joins or leaves the party (the PC and at most 2 companions). add: the "
+              "companion's full set of level-1 choices, in the form build_character takes (name, race, class, "
+              "ability_method standard_array, base_scores, choices, cantrips, spells, prepared, alignment, personality, "
+              "appearance); srd_options gives the ids. Then level_up them (who) to the PC's level. remove: a companion's "
+              "name, when they leave or die.",
+              {"type": "object", "properties": {"add": {"type": "object"}, "remove": {"type": "string"}}})
+        async def change_party(a: dict[str, Any]) -> dict[str, Any]:
+            res = self.run("party", lambda: self.change_party(a))
+            if a.get("add") and not res.get("is_error"):
+                res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(self.companions[-1])
+            return res
+
+        @tool("srd_options", "What the SRD offers, for building a companion. No arguments: every race, class and the "
+              "background. race only: that race in full. class only: that class in full. race and class: every choice "
+              "that character needs, with ids, options and spell lists.",
+              {"type": "object", "properties": {"race": {"type": "string"}, "class": {"type": "string"}}})
+        async def srd_options(a: dict[str, Any]) -> dict[str, Any]:
+            try:
+                text, error = create.options_text(a.get("race") or "", a.get("class") or ""), False
+            except create.Bad as e:
+                text, error = str(e), True
+            self.transcript.append({"kind": "call", "tool": "srd_options", "input": a, "result": text, "error": error})
+            self.save()
+            return {"content": [{"type": "text", "text": text}]} | ({"is_error": True} if error else {})
+
+        @tool("level_up_options", "Everything the next level gives a character and every choice made at it "
               "(hit points, features, ability score improvement, spells, invocations), with the skeleton of the level record "
-              "to send to level_up. The first line says the XP now and the XP the level needs. No arguments.",
-              {"type": "object", "properties": {}})
+              "to send to level_up. The first line says the XP now and the XP the level needs; a companion (who) has no XP "
+              "and is at the PC's level.",
+              {"type": "object", "properties": {"who": _WHO}})
         async def level_up_options(a: dict[str, Any]) -> dict[str, Any]:
             try:
-                text, error = m.level_up_options(self.sheet), False
+                i = self.member(a.get("who"))
+                text = (m.level_up_options(self.sheet) if i is None
+                        else m.level_up_options(self.companions[i], cap=self.sheet["level"]))
+                error = False
             except m.Refused as e:
                 text, error = str(e), True
             self.transcript.append({"kind": "call", "tool": "level_up_options", "input": a, "result": text, "error": error})
@@ -177,16 +287,24 @@ class Game:
               "lists: send the level record. One level per call. All-or-nothing: if the record has any problem, every "
               "problem is returned and nothing changes. On success the sheet is rebuilt at the new level; current HP rises "
               "by the maximum's rise, and the new spell slots and feature uses are usable at once.",
-              {"type": "object", "properties": {"record": {"type": "object", "description": "the level record, in the form "
-                                                           "level_up_options ends with"}}, "required": ["record"]})
+              {"type": "object", "properties": {"who": _WHO, "record": {"type": "object", "description": "the level "
+                                                           "record, in the form level_up_options ends with"}},
+               "required": ["record"]})
         async def level_up(a: dict[str, Any]) -> dict[str, Any]:
+            done: list[dict[str, Any]] = []
+
             def go() -> str:
-                self.sheet, text = m.level_up(self.sheet, a.get("record"))
+                i = self.member(a.get("who"))
+                if i is None:
+                    self.sheet, text = m.level_up(self.sheet, a.get("record"))
+                    done.append(self.sheet)
+                else:
+                    self.companions[i], text = m.level_up(self.companions[i], a.get("record"), cap=self.sheet["level"])
+                    done.append(self.companions[i])
                 return text
             res = self.run("level up", go)
-            if not res.get("is_error"):  # the sheet in the DM's instructions was written at the old level
-                res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n"
-                                              + sheet_text(self.sheet))
+            if done:  # the sheet in the DM's instructions was written at the old level
+                res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0]))
             return res
 
         @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
@@ -261,8 +379,8 @@ class Game:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
             self.save()
 
-        return [roll, change_pc, level_up_options, level_up, add_combatants, change_creature, next_turn, end_fight,
-                change_time, lookup_tool(record)]
+        return [roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
+                next_turn, end_fight, change_time, lookup_tool(record)]
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -295,9 +413,10 @@ def sheet_text(s: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def system_prompt(sheet: dict[str, Any]) -> str:
+def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> str:
     return ((HERE / "prompt.md").read_text(encoding="utf-8")
             + "\n\n## The player's character\n" + sheet_text(sheet)
+            + "".join(f"\n\n## Companion: {c['name']}\n" + sheet_text(c) for c in companions)
             + "\n\n## The opening\n" + sheet["opening"])
 
 
@@ -473,8 +592,9 @@ async def main() -> None:
     server = create_sdk_mcp_server("dm", tools=game.tools())
     SAVES.mkdir(exist_ok=True)
     opts = dm_options(
-        game.cwd, system_prompt=system_prompt(game.sheet), model=game.model, mcp_servers={"dm": server},
-        allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "level_up_options", "level_up", "add_combatants",
+        game.cwd, system_prompt=system_prompt(game.sheet, game.companions), model=game.model, mcp_servers={"dm": server},
+        allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "change_party", "srd_options", "level_up_options", "level_up",
+                                                 "add_combatants",
                                                  "change_creature", "next_turn", "end_fight", "change_time", "lookup")],
         resume=game.session_id)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
@@ -494,7 +614,10 @@ async def main() -> None:
                 print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
                 return
             if line == "/sheet":
-                print(sheet_text(game.sheet) + "\n" + game.status())
+                # the PC's part as before (the web page lays it out as one card); companions after it
+                print(sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
+                      + m.fight_text(game.fight, game.sheet)
+                      + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
                 continue
             game.log("player", line)
             await turn(client, game, f"[The player]\n{line}")
