@@ -41,6 +41,8 @@ play every other character, call for checks, run fights by the rules, and keep t
 - Run the fight strictly in initiative order. On each creature's turn, call `next_turn`, look at the tracker as
   it is now, and decide that creature's action from its situation at that moment, and resolve it with the tools by
   the rules. When it is the PC's turn, describe the situation and stop to ask the player what they do.
+- Roll an attack's damage only after its attack roll has hit, never together with the attack roll: on a miss there is
+  no damage roll, and on a critical hit the damage dice are doubled.
 - Whenever the rules give the player a choice, on any turn (a reaction, for example), stop at that moment and ask
   before resolving anything that comes after it.
 - Record creature damage with `change_creature`. What happens to a creature at 0 HP follows the rules; once it's dead
