@@ -45,20 +45,43 @@ def find(lore: dict[str, Any], name: Any) -> str | None:
     return next((n for n in lore["entries"] if k in {_key(x) for x in _names(lore, n)}), None)
 
 
-def _pattern(names: list[str]) -> re.Pattern[str]:
-    """Any of the names as whole words, any capitals; "Brakka's" counts as Brakka."""
-    alts = sorted({r"\s+".join(map(re.escape, x.split())) for x in names if x.split()}, key=len, reverse=True)
-    return re.compile(r"(?<!\w)(?:" + "|".join(alts) + r")(?!\w)", re.IGNORECASE)
+# Small joining words match in any capitals; a name's other capitalised words must be capitalised in the text too
+# (owner, 2026-10-13: the dog Lamp isn't every lamp; "the Butcher of Blackshire" is "The Butcher of Blackshire").
+SMALL = {"the", "of", "a", "an", "and", "in", "on", "at", "to", "for", "from", "by", "with"}
+
+
+def _word(w: str) -> str:
+    if w[:1].isupper() and w.casefold() not in SMALL:
+        return re.escape(w[0]) + "(?i:" + re.escape(w[1:]) + ")"  # "LAMP" is still Lamp
+    return "(?i:" + re.escape(w) + ")"
+
+
+def _pattern(names: list[str], capitals: bool = True) -> re.Pattern[str]:
+    """Any of the names as whole words ("Brakka's" counts as Brakka). capitals=False: any capitals (a keyword)."""
+    alts = sorted({r"\s+".join((_word(w) if capitals else re.escape(w)) for w in x.split()) for x in names if x.split()},
+                  key=len, reverse=True)
+    return re.compile(r"(?<!\w)(?:" + "|".join(alts) + r")(?!\w)", 0 if capitals else re.IGNORECASE)
 
 
 def _patterns(lore: dict[str, Any]) -> dict[str, re.Pattern[str]]:
     return {n: _pattern(_names(lore, n)) for n in lore["entries"]}
 
 
+def _spans(text: str, pats: dict[str, re.Pattern[str]]) -> list[tuple[int, int, str]]:
+    """Where `text` names entries. The longest name wins: "Anvil Father" is the god, not also Anvil the mule."""
+    found = sorted(((m_.start(), m_.end(), n) for n, p in pats.items() for m_ in p.finditer(text)),
+                   key=lambda s: (s[0] - s[1], s[0]))
+    kept: list[tuple[int, int, str]] = []
+    for s in found:
+        if all(s[1] <= k[0] or s[0] >= k[1] for k in kept):
+            kept.append(s)
+    return sorted(kept)
+
+
 def mentioned(lore: dict[str, Any], text: str, pats: dict[str, re.Pattern[str]] | None = None) -> list[str]:
     """The entries `text` mentions, linked or not."""
-    pats = _patterns(lore) if pats is None else pats
-    return [n for n, p in pats.items() if p.search(text)]
+    got = {n for _, _, n in _spans(text, _patterns(lore) if pats is None else pats)}
+    return [n for n in lore["entries"] if n in got]
 
 
 def close(lore: dict[str, Any], name: str) -> list[str]:
@@ -263,8 +286,9 @@ def look(lore: dict[str, Any], names: list[str], transcript: list[dict[str, Any]
     assert n
     e = lore["entries"][n]
     recent = set(mentioned(lore, recent_text(transcript))) - {n}
+    every = _patterns(lore)
     last = next((t for t, x in reversed(turns(transcript)) if x["kind"] in ("player", "dm")
-                 and _pattern(_names(lore, n)).search(x["text"])), None)
+                 and every[n].search(x["text"]) and n in mentioned(lore, x["text"], every)), None)
     lines = [f"{n} ({e['kind']}" + (f"; also: {', '.join(e['other_names'])}" if e["other_names"] else "") + ")",
              "Description:", *(f"(t{p['turn']}) {p['text']}" for p in e["description"]),
              f"Last mentioned in play: turn {last}" if last is not None else "Not mentioned in play yet"]
@@ -323,18 +347,30 @@ def recall(lore: dict[str, Any], transcript: list[dict[str, Any]], search: list[
     search = [s for s in (search or []) if str(s).strip()]
     if not 1 <= len(search) <= 2:
         raise Refused("pass search (one or two words, phrases or entry names) or turn")
-    pats = [_pattern(_names(lore, n)) if (n := find(lore, s)) else _pattern([str(s)]) for s in search]
+    every = _patterns(lore)
+    spans: dict[int, list[tuple[int, int, str]]] = {}
+
+    def finder(s: str) -> Any:
+        """Where a term is in a text, or None: an entry as play names it (capitals, longest name); a keyword anyhow."""
+        if n := find(lore, s):
+            def at(text: str) -> tuple[int, int] | None:
+                sp = spans.setdefault(id(text), _spans(text, every))
+                return next(((a, b) for a, b, x in sp if x == n), None)
+            return at
+        p = _pattern([str(s)], capitals=False)
+        return lambda text: (m_.start(), m_.end()) if (m_ := p.search(text)) else None
+    finds = [finder(s) for s in search]
     said = [(t, e) for t, e in tt if e["kind"] in ("player", "dm")]
-    both = {t for t in {t for t, _ in said} if all(any(p.search(e["text"]) for tt_, e in said if tt_ == t) for p in pats)}
-    hits = [(t, e) for t, e in reversed(said) if t in both and any(p.search(e["text"]) for p in pats)]
+    both = {t for t in {t for t, _ in said} if all(any(f(e["text"]) for tt_, e in said if tt_ == t) for f in finds)}
+    hits = [(t, e) for t, e in reversed(said) if t in both and any(f(e["text"]) for f in finds)]
     what = " and ".join(repr(s) for s in search)
     if not hits:
         return f"no mentions of {what}" + (" in the same turn" if len(search) == 2 else "")
     shown = hits[(page - 1) * PAGE:page * PAGE]
     out = [f"{len(hits)} mentions of {what}" + (" in the same turn" if len(search) == 2 else "") + ", newest first:"]
     for t, e in shown:
-        m_ = min((m_ for p in pats if (m_ := p.search(e["text"]))), key=lambda x: x.start())
-        s, end = max(0, m_.start() - SNIP), min(len(e["text"]), m_.end() + SNIP)
+        a, b = min(x for f in finds if (x := f(e["text"])))
+        s, end = max(0, a - SNIP), min(len(e["text"]), b + SNIP)
         snippet = ("…" if s else "") + e["text"][s:end].replace("\n", " ") + ("…" if end < len(e["text"]) else "")
         out.append(f"turn {t}, {'player' if e['kind'] == 'player' else 'DM'}: {snippet}")
     if len(hits) > page * PAGE:

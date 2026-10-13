@@ -158,6 +158,28 @@ def test_notes_each_turn() -> None:
     assert nb.notes(nb.new(), [])[1] == "[Turn 0]\n" + nb.REMINDER
 
 
+def test_matching_names() -> None:
+    """Capitals count on a name's main words, not on small joining words; the longest name wins (owner, 2026-10-13)."""
+    lore = nb.new()
+    for a in ({"create": "Lamp", "kind": "creature", "description": "Tull's dog."},
+              {"create": "Anvil", "kind": "creature", "description": "The mule."},
+              {"create": "Anvil Father", "kind": "god", "description": "The dwarves' god."},
+              {"create": "The Butcher of Blackshire", "kind": "person", "description": "A killer."}):
+        lore, _ = nb.write(lore, a, 1)
+    assert nb.mentioned(lore, "She lit the lamp.") == []
+    assert nb.mentioned(lore, "Lamp barks. LAMP! Lamp's tail wags.") == ["Lamp"]
+    assert nb.mentioned(lore, "They prayed to the Anvil Father.") == ["Anvil Father"]  # not the mule as well
+    assert nb.mentioned(lore, "Anvil brays at the Anvil Father's shrine.") == ["Anvil", "Anvil Father"]
+    assert nb.mentioned(lore, "Fear the butcher of Blackshire") == []  # "butcher" is a main word
+    assert nb.mentioned(lore, "they fear the Butcher of Blackshire") == ["The Butcher of Blackshire"]
+    t = said(("I light a lamp", "The lamp flickers."), ("I pat Lamp", "Lamp licks your hand."))
+    assert nb.recall(lore, t, ["Lamp"]).splitlines()[0] == "2 mentions of 'Lamp', newest first:"  # the dog
+    assert nb.recall(lore, t, ["flickers"]).endswith("turn 1, DM: The lamp flickers.")  # a keyword: any capitals
+    assert "Last mentioned in play: turn 2" in nb.look(lore, ["Lamp"], t)
+    t2 = said(("hi", "The Anvil Father watches."))
+    assert "Not mentioned in play yet" in nb.look(lore, ["Anvil"], t2)
+
+
 def test_game_tools_hidden(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     """In play: the tools work on the save's notebook, nothing is printed for the player, and it's saved."""
     g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, tmp_path / "save.json")
