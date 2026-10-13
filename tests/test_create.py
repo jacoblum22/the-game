@@ -209,3 +209,18 @@ def test_prepared_spells_are_a_maximum() -> None:
         assert "1 to 4" in problems(ch, prepared=(ch["prepared"] + ["Detect Magic"] if ch is WREN else ch["prepared"] + ["Command"]))
     assert "choose exactly 6" in problems(WREN, spells=WREN["spells"][:5])  # the spellbook stays exact
     assert "choose exactly 3" in problems(WREN, cantrips=["Fire Bolt"])  # so do cantrips
+
+
+def test_personality_as_text_or_four_parts() -> None:
+    """The Acolyte's four parts are kept apart and shown on their own lines; plain text still works."""
+    from dm import play
+    four = {"traits": ["I idolize a hero of my faith. "], "ideal": "Aspiration.", "bond": "", "flaw": "Too hard on myself."}
+    s = built(BRAKKA | {"personality": four, "opening": ""})
+    assert s["personality"] == {"traits": ["I idolize a hero of my faith."], "ideal": "Aspiration.",
+                                "flaw": "Too hard on myself."}
+    text = play.sheet_text(s)
+    assert "\nTraits: I idolize a hero of my faith.\nIdeal: Aspiration.\nFlaw: Too hard on myself.\n" in text
+    assert "{" not in text.split("AC ")[0] and "Personality" not in text
+    assert "\nPersonality: Gruff.\n" in play.sheet_text(built(BRAKKA | {"personality": "Gruff."}))
+    assert "personality: text, or" in problems(BRAKKA, personality={"mood": "grim"})
+    assert "personality: text, or" in problems(BRAKKA, personality=["a"])

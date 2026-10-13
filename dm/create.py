@@ -403,6 +403,23 @@ def _check_record(rec: dict[str, Any], level: int, c: dict[str, Any], errs: list
     return got  # the spell fields are checked by _spells
 
 
+def personality(ch: dict[str, Any]) -> str | dict[str, Any] | None:
+    """The personality as the sheet keeps it: text, or the background's four parts (owner, 2026-10-13), empty ones
+    left out. None if it's neither."""
+    p = ch.get("personality") or ""
+    if isinstance(p, str):
+        return p.strip()
+    if not isinstance(p, dict) or set(p) - {"traits", "ideal", "bond", "flaw"}:
+        return None
+    t = p.get("traits") or []
+    t = [t] if isinstance(t, str) else t
+    if not (isinstance(t, list) and all(isinstance(x, str) for x in t)
+            and all(isinstance(p.get(k) or "", str) for k in ("ideal", "bond", "flaw"))):
+        return None
+    parts = [("traits", [x.strip() for x in t if x.strip()]), *((k, (p.get(k) or "").strip()) for k in ("ideal", "bond", "flaw"))]
+    return {k: v for k, v in parts if v}
+
+
 def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict[str, Any]] | None = None,
           carried: dict[str, int] | None = None) -> tuple[dict[str, Any] | None, list[str]]:
     """Returns (sheet, []) or (None, problems). The sheet is at level 1 + len(levels): each level record is
@@ -427,6 +444,8 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
     name = str(ch.get("name") or "").strip()
     if not name:
         errs.append("name: the character needs a name")
+    if personality(ch) is None:
+        errs.append('personality: text, or {"traits": [text, ...], "ideal": text, "bond": text, "flaw": text}')
 
     # ability scores
     base = ch.get("base_scores") or {}
@@ -1183,7 +1202,7 @@ def _sheet(ch: dict[str, Any], name: str, p: dict[str, Any], scores: dict[str, i
     sheet: dict[str, Any] = {
         "name": name, "summary": summary, "opening": "", "level": N, "race": race_name, "class": c["name"],
         "subclass": sc["name"] if sc else None, "background": b["name"],
-        "alignment": ch.get("alignment") or "", "personality": ch.get("personality") or "",
+        "alignment": ch.get("alignment") or "", "personality": personality(ch),
         "appearance": ch.get("appearance") or "",
         "ac": ac, "ac_note": ac_note, "ac_now": None, "speed": speed_note, "size": r["size"],
         "scores": scores,

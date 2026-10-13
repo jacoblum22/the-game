@@ -532,8 +532,12 @@ class Game:
 
 
 def sheet_text(s: dict[str, Any]) -> str:
-    lines = [f"{s['name']}: {s['summary']}",
-             *(f"{k.capitalize()}: {s[k]}" for k in ("alignment", "personality", "appearance") if s.get(k)),
+    p = s.get("personality")
+    about = ([f"Traits: {' '.join(p['traits'])}"] if p.get("traits") else []) + [
+        f"{k.capitalize()}: {p[k]}" for k in ("ideal", "bond", "flaw") if p.get(k)] if isinstance(p, dict) else (
+        [f"Personality: {p}"] if p else [])
+    lines = [f"{s['name']}: {s['summary']}", *([f"Alignment: {s['alignment']}"] if s.get("alignment") else []), *about,
+             *([f"Appearance: {s['appearance']}"] if s.get("appearance") else []),
              f"AC {s['ac']} ({s['ac_note']}); speed {s['speed']}; proficiency bonus +{s['proficiency_bonus']}",
              "Abilities: " + ", ".join(f"{k} {v}" for k, v in s["abilities"].items()),
              f"Saving throws: {s['saving_throws']}", f"Skills: {s['skills']}",
@@ -727,7 +731,8 @@ class Creation:
               "problem at once. Fields: name, race, class, ability_method (standard_array, point_buy or rolled), "
               "base_scores {STR..CHA} before racial increases, choices {id: [entries]} with the ids from srd_options "
               "(each entry an option letter or exact name, or {option, picks} for an option with a further choice), "
-              "cantrips, spells (known or spellbook), prepared, and optional alignment, personality, appearance.",
+              "cantrips, spells (known or spellbook), prepared, and optional alignment, personality (text, or {traits: "
+              "[...], ideal, bond, flaw}), appearance.",
               {"type": "object", "properties": {"character": {"type": "object"}}, "required": ["character"]})
         async def build_character(a: dict[str, Any]) -> dict[str, Any]:
             sheet, errs = create.build(a["character"], self.rolled)
