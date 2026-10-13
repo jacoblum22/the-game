@@ -142,6 +142,13 @@ def now(transcript: list[dict[str, Any]]) -> int:
     return sum(e["kind"] == "player" for e in transcript)
 
 
+def turn_text(transcript: list[dict[str, Any]], turn: int) -> str:
+    """One turn word for word as the player saw it (their line, the DM's text, the tool lines), or "" if none."""
+    items = [e for t, e in turns(transcript) if t == turn and e["kind"] in ("player", "dm", "tool")]
+    return f"Turn {turn}:\n" + "\n".join({"player": "Player: ", "dm": "DM: ", "tool": "["}[e["kind"]] + e["text"]
+                                         + ("]" if e["kind"] == "tool" else "") for e in items) if items else ""
+
+
 def recent_text(transcript: list[dict[str, Any]]) -> str:
     """The DM's last reply before the player's newest line, that line, and what the DM has said since."""
     said = [(t, e) for t, e in turns(transcript) if e["kind"] in ("player", "dm")]
@@ -365,11 +372,9 @@ def recall(lore: dict[str, Any], transcript: list[dict[str, Any]], search: list[
     newest first; two of them: only the turns where both come up."""
     tt = turns(transcript)
     if turn is not None:
-        items = [e for t, e in tt if t == turn and e["kind"] in ("player", "dm", "tool")]
-        if not items:
+        if not (text := turn_text(transcript, turn)):
             raise Refused(f"no turn {turn}: turns run from 0 to {now(transcript)}")
-        return f"Turn {turn}:\n" + "\n".join({"player": "Player: ", "dm": "DM: ", "tool": "["}[e["kind"]] + e["text"]
-                                             + ("]" if e["kind"] == "tool" else "") for e in items)
+        return text
     search = [s for s in (search or []) if str(s).strip()]
     if not 1 <= len(search) <= 2:
         raise Refused("pass search (one or two words, phrases or entry names) or turn")

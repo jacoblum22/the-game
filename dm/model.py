@@ -56,6 +56,13 @@ async def _send(request: dict[str, Any]) -> dict[str, Any]:
 send: Callable[[dict[str, Any]], Awaitable[dict[str, Any]]] = _send  # one API call: the request, and the reply as JSON
 
 
+def context_size(usage: dict[str, Any] | None) -> int:
+    """How long the conversation is after one model call, in tokens: everything it read and what it wrote."""
+    u = usage or {}
+    return sum(u.get(k) or 0 for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens",
+                                       "output_tokens"))
+
+
 def _error(text: str) -> dict[str, Any]:
     return {"content": [{"type": "text", "text": text}], "is_error": True}
 
@@ -73,10 +80,11 @@ def add_user(messages: list[dict[str, Any]], content: list[dict[str, Any]]) -> N
 
 
 async def respond(model: str, system: str, tools: list[Tool], messages: list[dict[str, Any]], text: str,
-                  on_text: Callable[[str], None], on_change: Callable[[], None] = lambda: None) -> str | None:
+                  on_text: Callable[[str], None], on_change: Callable[[], None] = lambda: None,
+                  on_size: Callable[[int], None] = lambda n: None) -> str | None:
     """Send `text` as the next user turn and run the DM until it finishes its reply: each tool it asks for runs, and
     its result goes back. `messages` grows in place; `on_text` gets each piece of the DM's text and `on_change`
-    is called whenever `messages` has grown (to save). Returns None, or why the call failed."""
+    is called whenever `messages` has grown (to save); `on_size` gets the conversation's length after each call. Returns None, or why the call failed."""
     add_user(messages, [{"type": "text", "text": text}])
     by_name = {t.name: t for t in tools}
     specs = [{"name": t.name, "description": t.description, "input_schema": t.input_schema} for t in tools]
@@ -88,6 +96,7 @@ async def respond(model: str, system: str, tools: list[Tool], messages: list[dic
                 "cache_control": {"type": "ephemeral", "ttl": "1h"}})  # players think for minutes between turns
         except Failed as e:
             return str(e)
+        on_size(context_size(reply.get("usage")))
         content = reply["content"]
         messages.append({"role": "assistant", "content": content})
         on_change()

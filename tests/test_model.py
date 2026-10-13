@@ -168,7 +168,7 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
 
     class FakeClient:
         def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
-            self.tools, self.cwd, self.session_id, self.closed = {t.name: t for t in tools}, cwd, session_id, False
+            self.tools, self.cwd, self.session_id, self.closed, self.size = {t.name: t for t in tools}, cwd, session_id, False, 0
             opened.append(self)
 
         async def open(self) -> None:
@@ -220,7 +220,7 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
 
     class FakeClient:
         def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
-            self.system, self.session_id, self.closed = system, session_id, False
+            self.system, self.session_id, self.closed, self.size = system, session_id, False, 0
             opened.append(self)
 
         async def open(self) -> None:
@@ -257,3 +257,93 @@ def test_sdk_bridge() -> None:
     # as on the API: no automatic compaction, and today's instructions on every call (no snapshot)
     assert c.options.env["DISABLE_AUTO_COMPACT"] == "1"
     assert c.options.system_prompt == {"type": "custom", "prompt": "system", "snapshot": False}
+
+
+def played(g: play.Game, n: int) -> None:
+    for i in range(1, n + 1):
+        g.log("player", f"line {i}")
+        g.log("dm", f"reply {i}")
+        g.log("tool", f"dice {i}")
+        g.transcript.append({"kind": "call", "tool": "lookup", "input": {}, "result": f"hidden {i}"})
+
+
+def test_cut(monkeypatch: Any, tmp_path: Path) -> None:
+    """Once the conversation is long, the DM writes the story so far; the next turn starts a new conversation with
+    that summary and the last turns word for word (no hidden calls), and the summary stays out of the player's view."""
+    monkeypatch.setattr(play, "CUT_AT", 2)  # the fake's usage: 1 token in, 1 out
+    monkeypatch.setattr(play, "KEEP", 2)
+    g = new_game(tmp_path)
+    played(g, 4)
+    g.messages = [{"role": "user", "content": "old"}, {"role": "assistant", "content": [text("old reply")]}]
+    g.log("player", "line 5")
+    fake, said = run(monkeypatch, [reply(text("Reply five.")), reply(text("The story: Brakka came."))], g,
+                     "[The player]\nline 5")
+    assert "turns 4 to 5 word for word" in fake.calls[1]["messages"][-1]["content"][0]["text"]
+    assert "end of turn 3" in fake.calls[1]["messages"][-1]["content"][0]["text"]
+    assert g.messages == [] and g.story == [{"turn": 3, "text": "The story: Brakka came."}]
+    assert not any("The story:" in s for s in said) and g.transcript[-1]["text"].startswith("conversation shortened")
+    data = json.loads(g.path.read_text(encoding="utf-8"))
+    assert data["story"] == g.story and data["messages"] == []
+    monkeypatch.setattr(play, "CUT_AT", 10**6)
+    g.log("player", "line 6")
+    fake, _ = run(monkeypatch, [reply(text("Reply six."))], g, "[The player]\nline 6")
+    first = fake.calls[0]["messages"][0]["content"][0]["text"]
+    assert len(fake.calls[0]["messages"]) == 1
+    assert first.startswith("[The story so far: your own summary of turns 0 to 3")
+    assert "The story: Brakka came." in first and "Turn 4:\nPlayer: line 4\nDM: reply 4\n[dice 4]" in first
+    assert "Turn 5:\nPlayer: line 5\nDM: Reply five." in first and "Turn 3:" not in first and "hidden 4" not in first
+    assert "Player: line 6" not in first and first.endswith("[The player]\nline 6")
+    assert len(g.messages) == 2  # the next call goes on in the same new conversation
+    fake, _ = run(monkeypatch, [reply(text("Reply seven."))], g, "[The player]\nline 7")
+    assert "story so far" not in fake.calls[0]["messages"][-1]["content"][0]["text"]
+
+
+def test_no_cut_when_short_or_failed(monkeypatch: Any, tmp_path: Path) -> None:
+    g = new_game(tmp_path)
+    played(g, 4)
+    run(monkeypatch, [reply(text("Fine."))], g, "x")
+    assert len(g.messages) == 2 and g.story == []  # under the limit
+    monkeypatch.setattr(play, "CUT_AT", 2)
+    monkeypatch.setattr(play, "KEEP", 2)
+    _, said = run(monkeypatch, [reply(text("Fine.")), reply()], g, "y")  # an empty summary: no cut
+    assert len(g.messages) == 6 and g.story == [] and any("trying again next turn" in s for s in said)
+
+
+def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
+    """The owner's version: the summary comes from the old Claude Code conversation, and a new one starts."""
+    from dm import sdk
+    opened: list[Any] = []
+
+    class FakeClient:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+            self.session_id, self.closed, self.size, self.got = session_id, False, 0, []
+            opened.append(self)
+
+        async def open(self) -> None:
+            pass
+
+        async def close(self) -> None:
+            self.closed = True
+
+        async def respond(self, text: str, on_text: Any) -> None:
+            self.got.append(text)
+            on_text("Summary." if "cut short" in text else "Reply.")
+            self.session_id, self.size = self.session_id or f"sess-{len(opened)}", 300_000
+
+    monkeypatch.setattr(sdk, "Client", FakeClient)
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
+    s = play.Session(backend="sdk")
+
+    async def go() -> None:
+        await s.new("fighter")
+        played(s.game, 25)  # type: ignore[arg-type]
+        await s.line("I look")
+        await s.line("I look again")
+    asyncio.run(go())
+    g = s.game
+    assert g is not None and g.story[0] == {"turn": 6, "text": "Summary."}
+    assert opened[0].closed and opened[1].closed and len(opened) == 3
+    assert opened[1].got[0].startswith("[The story so far: your own summary of turns 0 to 6")
+    assert "Turn 26:\nPlayer: I look\nDM: Reply." in opened[1].got[0] and "Turn 6:" not in opened[1].got[0]
+    assert g.session_id is None and g.story[1]["turn"] == 7  # the size stayed large: the next turn cut again

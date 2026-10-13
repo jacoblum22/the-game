@@ -66,6 +66,10 @@ class Game:
         self.lore: dict[str, Any] = data.get("lore") or notebook.new()  # the DM's notebook (dm/lore.py), hidden from the player
         self.model: str = data.get("model", MODEL)
         self.system = ""  # the DM's instructions, written when play starts
+        # The conversation is cut short when it gets long (owner, 2026-10-13): each cut keeps the DM's own summary of
+        # the game up to that turn, newest last, hidden from the player; the new conversation opens with it.
+        self.story: list[dict[str, Any]] = data.get("story", [])
+        self.size = 0  # the conversation's length after the last model call, in tokens
         self.path = path
         # Two ways to run the DM (owner, 2026-10-13): "api", the API with a key, the conversation kept here in the save
         # (the browser version); "sdk", the owner's own, on their Claude login, the conversation in Claude Code's
@@ -79,7 +83,8 @@ class Game:
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
-                "transcript": self.transcript, "lore": self.lore, "backend": self.backend}
+                "transcript": self.transcript, "lore": self.lore, "backend": self.backend,
+                "story": self.story}
         data |= ({"session_id": self.session_id, "cwd": self.cwd} if self.backend == "sdk" else {"messages": self.messages})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
@@ -589,13 +594,76 @@ async def turn(game: Game | Creation, text: str) -> None:
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
-    if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
-        failed = await game.sdk.respond(text, said)
-        game.session_id = game.sdk.session_id
-    else:
-        failed = await model.respond(game.model, game.system, game.tools(), game.messages, text, said, game.save)
+        if game.story and not (game.session_id if game.sdk else game.messages):  # a new conversation after a cut
+            text = so_far(game) + "\n\n" + text
+    failed = await ask(game, text, said)
     if failed:
         print(f"\n[the DM call failed: {failed}]")
+    game.save()
+    if isinstance(game, Game) and not failed and game.size >= CUT_AT:
+        await cut(game)
+
+
+async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) -> str | None:
+    """One message to the DM, and its whole reply. Returns None, or why the call failed."""
+    if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
+        failed = await game.sdk.respond(text, on_text)
+        game.session_id, game.size = game.sdk.session_id, game.sdk.size
+        return failed
+    return await model.respond(game.model, game.system, game.tools(), game.messages, text, on_text, game.save,
+                               lambda n: setattr(game, "size", n))
+
+
+# Cutting the conversation short (owner, 2026-10-13): once it reaches CUT_AT tokens, the DM writes the story so far up
+# to the last KEEP turns, and a new conversation starts with that summary and those turns word for word. The notebook
+# and recall are unchanged; what was looked up before the cut is looked up again when it's needed.
+CUT_AT = 200_000
+KEEP = 20
+
+SUMMARY_ASK = (
+    "[Not from the player: your notes, which the player never sees] This conversation is about to be cut short. The "
+    "next one will start with what you write now, then turns {first} to {last} word for word, then the player's next "
+    "message. Everything else in this conversation will be gone: earlier turns, lookups and tool results (the "
+    "notebook stays as it is, and the instructions and sheets come as they do now).\n\n"
+    "Write the story so far, from the start of the game to the end of turn {end}: what happened, in order, with the "
+    "names, numbers and words that may matter again; where things stand at the end of turn {end}; what each "
+    "character who matters knows, wants, promised or owes; the open threads and plans; and what you've decided "
+    "that hasn't come out in play yet, so you keep it the same. Plain text, no tools, nothing to the player.")
+
+
+def so_far(game: Game) -> str:
+    """The opening of a conversation after a cut: the DM's summary, and the turns after it word for word, up to the
+    player's line now being sent."""
+    end, now = game.story[-1]["turn"], notebook.now(game.transcript)
+    turns = "\n\n".join(t for n in range(end + 1, now) if (t := notebook.turn_text(game.transcript, n)))
+    return (f"[The story so far: your own summary of turns 0 to {end}, written when the conversation was cut short]\n"
+            f"{game.story[-1]['text']}\n\n[Turns {end + 1} to {now - 1}, word for word]\n{turns}")
+
+
+async def cut(game: Game) -> None:
+    """Ask the DM for the story so far, then start a new conversation. If that fails, nothing changes, and the next
+    turn tries again."""
+    last = notebook.now(game.transcript)
+    end = last - KEEP
+    if end < 0:
+        return
+    parts: list[str] = []
+    failed = await ask(game, SUMMARY_ASK.format(first=end + 1, last=last, end=end), parts.append)
+    summary = "\n\n".join(parts).strip()
+    if failed or not summary:
+        print(f"\n[the conversation couldn't be shortened: {failed or 'no summary'}; trying again next turn]")
+        return
+    game.story.append({"turn": end, "text": summary})
+    game.log("tool", f"conversation shortened: the DM's summary of turns 0 to {end}, then turns {end + 1} to {last}")
+    if game.sdk:
+        from dm import sdk  # here: the browser has no Agent SDK
+        await game.sdk.close()
+        game.session_id = None
+        game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, None)
+        await game.sdk.open()
+    else:
+        game.messages = []
+    game.size = 0
     game.save()
 
 
@@ -753,7 +821,7 @@ class Session:
         game.system = system_prompt(game.sheet, game.companions)
         await self.connect(game)
         print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-        if game.messages or game.session_id:
+        if game.messages or game.session_id or game.story:
             last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
             print("\n" + last)
         else:

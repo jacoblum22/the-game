@@ -17,7 +17,7 @@ from claude_agent_sdk import (
 )
 from claude_agent_sdk import tool as sdk_tool
 
-from dm.model import MAX_ROUNDS, Tool
+from dm.model import MAX_ROUNDS, Tool, context_size
 
 # The Claude Code program adds its own notes to every session. Run the DM outside any git repo (no git or worktree
 # notes) and switch off the notes that have switches: the developer's memory, CLAUDE.md files, the token count and
@@ -43,6 +43,7 @@ class Client:
             allowed_tools=[f"mcp__dm__{t.name}" for t in tools], resume=session_id)
         self.client = ClaudeSDKClient(options=self.options)
         self.session_id = session_id
+        self.size = 0  # the conversation's length after the last model call, in tokens
 
     async def open(self) -> None:
         await self.client.connect()
@@ -56,6 +57,8 @@ class Client:
         await self.client.query(text)
         async for msg in self.client.receive_response():
             if isinstance(msg, AssistantMessage):
+                if msg.usage:
+                    self.size = context_size(msg.usage)
                 for b in msg.content:
                     if isinstance(b, TextBlock) and b.text.strip():
                         on_text(b.text.strip())
