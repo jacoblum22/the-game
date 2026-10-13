@@ -137,3 +137,24 @@ def test_convert_session(tmp_path: Path) -> None:
     assert [mm["role"] for mm in out] == ["user", "assistant", "user", "assistant"]
     assert [b.get("name") for b in out[1]["content"]] == [None, "roll", "lookup"]
     assert [b["tool_use_id"] for b in out[2]["content"]] == ["t1", "t2"]
+
+
+def test_session(monkeypatch: Any, tmp_path: Path) -> None:
+    """The terminal and the browser page both drive a Session a line at a time."""
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    fake, said = Fake([reply(text("You stand at the gate.")), reply(text("You open it."))]), []
+    monkeypatch.setattr(model, "client", lambda: fake)
+    monkeypatch.setattr(play, "print", lambda *a, **k: said.append(" ".join(map(str, a))), raising=False)
+    s = play.Session()
+
+    async def go() -> list[bool]:
+        await s.new("fighter")
+        return [await s.line("  "), await s.line("/sheet"), await s.line("I open the gate"), await s.line("/quit")]
+    assert asyncio.run(go()) == [True, True, True, False]
+    assert said[0].startswith("Brakka Ironvein, Hill Dwarf fighter 1") and "You stand at the gate." in said[1]
+    assert said[2].startswith("Brakka Ironvein: Hill Dwarf fighter 1") and "Abilities:" in said[2]  # the sheet, no model call
+    assert "You open it." in said[3] and said[4].startswith("Saved.")
+    data = json.loads(s.game.path.read_text(encoding="utf-8"))  # type: ignore[union-attr]
+    assert play.resumable(data) == "" and len(data["messages"]) == 4
+    assert "> I open the gate" in play.history(data)
+    assert play.resumable({"sheet": {}, "session_id": "x"}).startswith("that save is from the Agent SDK")

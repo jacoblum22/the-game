@@ -19,3 +19,6 @@ saves/
 *.db
 *.db-wal
 *.db-shm
+
+build/
+node_modules/

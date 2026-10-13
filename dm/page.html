@@ -1,0 +1,551 @@
+<!doctype html>
+<!-- The game in the browser: dm/site.py packs the game's code beside this page, and Pyodide (Python for the browser)
+     runs it here (dm/browser.py). What the game prints is drawn nicely: the page recognises each kind of line (dice,
+     sheet changes, fight steps, prompts) and shows anything it doesn't recognise as plain text. The player's API key
+     and saves stay in this browser; the model is called straight from here. -->
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Game</title>
+<style>
+  :root { --bg: #16130f; --panel: #211c16; --line: #3a3127; --text: #e9e0d0; --dim: #9d9384; --accent: #d9a441;
+          --red: #e0705c; --green: #86c06c; --you: #263445; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg); color: var(--text); height: 100dvh; display: flex; flex-direction: column;
+         font: 17px/1.6 Georgia, "Noto Serif", "Times New Roman", serif; }
+  button, input { font-family: inherit; }
+  .card, .event, header, button { font-variant-numeric: lining-nums; }
+  header { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--line);
+           background: var(--panel); }
+  header .who { flex: 1; min-width: 0; }
+  header .name { font-weight: 600; font-size: 17px; }
+  header .sum { color: var(--dim); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  button { font-size: 15px; padding: 8px 12px; background: #2c251d; color: var(--text); border: 1px solid #4a3f31;
+           border-radius: 8px; cursor: pointer; }
+  button:active { background: #3a3126; }
+  #out { flex: 1; overflow-y: auto; padding: 8px 16px 24px; }
+  p { margin: 0 0 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  #out ul, #out ol { margin: 0 0 14px; padding-left: 22px; } #out li { margin: 2px 0; }
+  .you { margin: 18px 0 18px auto; max-width: 85%; width: fit-content; background: var(--you); padding: 8px 12px;
+         border-radius: 14px 14px 4px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .card { margin: 10px 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line);
+          border-radius: 10px; font-size: 14px; line-height: 1.45; }
+  .card .what { color: var(--dim); }
+  .tag { color: var(--accent); font-weight: 600; white-space: nowrap; }
+  .roll { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .die { min-width: 32px; height: 32px; padding: 0 6px; display: inline-flex; align-items: center; justify-content: center;
+         border: 1.5px solid #8a7a62; border-radius: 7px; background: #2c251d; font-weight: 700; font-size: 16px; }
+  .die.off { opacity: .35; text-decoration: line-through; }
+  .die.nat20 { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px #d9a44188; }
+  .die.nat1 { border-color: var(--red); color: var(--red); }
+  .op { color: var(--dim); font-size: 16px; }
+  .total { font-size: 24px; font-weight: 700; margin-left: 2px; }
+  .total.nat20 { color: var(--accent); } .total.nat1 { color: var(--red); }
+  .note { color: var(--dim); font-size: 12px; margin-left: 4px; }
+  .event { margin: 6px 0; font-size: 14px; color: var(--dim); line-height: 1.45; }
+  .event.hurt { color: var(--red); } .event.heal { color: var(--green); } .event.big { color: var(--accent); }
+  .event small { display: block; opacity: .8; }
+  details summary { cursor: pointer; color: var(--dim); font-size: 13px; }
+  pre { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: 14px; line-height: 1.5; }
+  .sheet { border-color: #5a4a35; font-size: 15px; padding: 14px; }
+  .sheet .title { font-size: 21px; font-weight: 700; }
+  .sheet .dim, .dim { color: var(--dim); } .small { font-size: 13px; }
+  .sheet h3 { margin: 18px 0 8px; font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase;
+              letter-spacing: .07em; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; }
+  .stat, .ab { background: #2a231b; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; text-align: center; }
+  .lbl { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .06em; }
+  .big { font-size: 22px; font-weight: 700; line-height: 1.2; } .of { font-size: 14px; color: var(--dim); font-weight: 400; }
+  .sm { font-size: 11px; color: var(--dim); line-height: 1.3; }
+  .bar { height: 5px; background: #3a2e24; border-radius: 3px; margin-top: 3px; overflow: hidden; }
+  .bar div { height: 100%; background: var(--red); }
+  .abil { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 10px; }
+  .sv { font-size: 12px; color: var(--dim); margin-top: 2px; } .sv.pro { color: var(--accent); }
+  .row { margin: 5px 0; } .row .k { color: var(--dim); margin-right: 4px; }
+  .row.bad .chip { border-color: var(--red); color: var(--red); } .badtxt { color: var(--red); }
+  .pips { color: var(--accent); letter-spacing: 2px; } .pips .used { color: #5a4a35; }
+  .chip { display: inline-block; margin: 2px 4px 2px 0; padding: 1px 8px; border: 1px solid var(--line); border-radius: 12px;
+          background: #2a231b; font-size: 14px; }
+  .item { margin: 6px 0; }
+  .skills { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 16px; font-size: 14px; }
+  .skills div { display: flex; justify-content: space-between; color: var(--dim); }
+  .skills div.pro { color: var(--text); } .skills .pro b { color: var(--accent); }
+  .feat { margin: 4px 0; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+  .feat summary { color: var(--text); font-size: 15px; } .feat div { margin-top: 4px; color: var(--dim); font-size: 14px; }
+  .notice { margin: 16px 0; text-align: center; color: var(--dim); font-size: 14px; }
+  .notice.bad { color: var(--red); }
+  .thinking { color: var(--dim); font-style: italic; font-size: 15px; margin: 8px 0; }
+  .thinking::after { content: "…"; animation: blink 1.2s infinite; } @keyframes blink { 50% { opacity: .2; } }
+  #start { padding: 16px; border-top: 1px solid var(--line); background: var(--panel); max-height: 70dvh; overflow-y: auto; }
+  #start h2 { font-size: 13px; font-weight: 600; color: var(--dim); text-transform: uppercase; letter-spacing: .06em;
+              margin: 4px 0 10px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+  .grid button { padding: 14px 8px; font-size: 16px; }
+  .save { display: flex; justify-content: space-between; width: 100%; margin-bottom: 6px; text-align: left; }
+  .save span { color: var(--dim); font-size: 13px; }
+  form { display: flex; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid var(--line); background: var(--panel); }
+  input { flex: 1; min-width: 0; font-size: 16px; padding: 10px 12px; background: var(--bg); color: var(--text);
+          border: 1px solid #4a3f31; border-radius: 10px; }
+  input:focus { outline: none; border-color: var(--accent); }
+  form button, .go { background: var(--accent); color: #1a140c; border: none; font-weight: 600; }
+  .saveRow { display: flex; gap: 6px; margin-bottom: 6px; } .saveRow .save { flex: 1; margin: 0; min-width: 0; }
+  .saveRow .save b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 400; }
+  .saveRow button:not(.save) { padding: 8px 10px; font-size: 13px; }
+  .keyRow { display: flex; gap: 8px; margin-bottom: 8px; }
+  .help { color: var(--dim); font-size: 13px; margin: 0 0 16px; white-space: normal; } .help a { color: var(--accent); }
+  #loading { padding: 24px 16px; text-align: center; color: var(--dim); }
+  /* the sheet opens over the game, not in it */
+  #shade { position: fixed; inset: 0; background: #0009; z-index: 1; }
+  #panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 100vw); z-index: 2; background: var(--bg);
+           border-left: 1px solid var(--line); display: flex; flex-direction: column; }
+  #panel .head { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px;
+                 border-bottom: 1px solid var(--line); background: var(--panel); font-weight: 600; }
+  #panelBody { flex: 1; overflow-y: auto; padding: 4px 16px 24px; }
+</style></head><body>
+<header class="ui" id="top" hidden>
+  <div class="who"><div class="name" id="name"></div><div class="sum" id="sum"></div></div>
+  <button id="sheetBtn" onclick="openSheet()">Sheet</button>
+  <button onclick="send('/quit')">Save &amp; quit</button>
+</header>
+<div id="out"></div>
+<div id="shade" hidden onclick="closeSheet()"></div>
+<div id="panel" hidden><div class="head">Sheet <button onclick="closeSheet()" aria-label="Close">✕</button></div>
+  <div id="panelBody"></div></div>
+<div id="loading">Loading the game…</div>
+<div id="start" class="ui" hidden>
+  <div id="keyBox">
+    <h2>Your Anthropic API key</h2>
+    <form id="keyForm" class="keyRow" style="padding:0;border:0;background:none">
+      <input id="key" type="password" autocomplete="off" placeholder="sk-ant-…"><button>Save</button></form>
+    <p class="help">The DM runs on your key, and your key pays for it. It stays in this browser and goes only to
+      Anthropic. Make one in the <a href="https://platform.claude.com/" target="_blank" rel="noopener">Claude Console</a>,
+      with a spending limit.</p>
+  </div>
+  <p class="help" id="keyHave" hidden>Your API key is saved in this browser. <a href="#" onclick="forgetKey(); return false">Forget it</a></p>
+  <h2>New game</h2>
+  <div class="grid">
+    <button onclick="go({character:'fighter'})">Fighter</button><button onclick="go({character:'rogue'})">Rogue</button>
+    <button onclick="go({character:'wizard'})">Wizard</button><button onclick="go({character:'new'})">Make a character</button>
+  </div>
+  <h2 id="contHead">Continue</h2>
+  <div id="saves"></div>
+  <p><button onclick="$('importFile').click()">Import a save</button>
+    <input id="importFile" type="file" accept=".json,application/json" hidden></p>
+  <p class="help">Saves are kept in this browser only. Export a save to keep a copy or to play it on another device;
+    some browsers (Safari especially) clear a site's data if you don't visit for a while.</p>
+</div>
+<form id="form" class="ui" hidden><input id="line" autocomplete="off" placeholder="What do you do?"><button>Send</button></form>
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
+<script>
+const $ = id => document.getElementById(id), out = $("out"), line = $("line");
+const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"})[c]);
+let text = "", running = false, busy = false, py = null, shown = null;
+const KEY = "anthropic-key";  // dm/browser.py reads it from here
+const store = {get: k => { try { return localStorage.getItem(k); } catch { return null; } },
+               set: (k, v) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch {} }};
+
+// ---- saves: the browser's database (IndexedDB), one record per save: {id, name, summary, when, data} ----
+const db = new Promise((ok, fail) => {
+  const r = indexedDB.open("the-game", 1);
+  r.onupgradeneeded = () => r.result.createObjectStore("saves", {keyPath: "id"});
+  r.onsuccess = () => ok(r.result); r.onerror = () => fail(r.error);
+});
+async function saves(mode, fn) {
+  const tx = (await db).transaction("saves", mode);
+  const req = fn(tx.objectStore("saves"));
+  return new Promise((ok, fail) => { tx.oncomplete = () => ok(req && req.result); tx.onerror = () => fail(tx.error); });
+}
+let writing = Promise.resolve();
+globalThis.storeSave = (id, data) => {  // called by the game (dm/browser.py) each time it saves
+  let sheet;
+  try { sheet = JSON.parse(data).sheet; } catch { return; }
+  if (!sheet) return;  // a character still being made can't be continued
+  writing = writing.then(() => saves("readwrite", s => s.put({id, name: sheet.name, summary: sheet.summary, when: Date.now(), data})))
+    .catch(e => { text += `\n[the DM call failed: the save couldn't be kept in this browser (${e})]\n`; draw(); });
+};
+async function listSaves() {
+  const all = (await saves("readonly", s => s.getAll())) || [];
+  all.sort((x, y) => y.when - x.when);
+  $("contHead").hidden = !all.length;
+  $("saves").innerHTML = all.map(v => {
+    const when = new Date(v.when).toLocaleString([], {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+    return `<div class="saveRow"><button class="save" data-id="${esc(v.id)}" onclick="resume(this.dataset.id)">` +
+      `<b>${esc(v.name)}</b> <span>${esc(when)}</span></button>` +
+      `<button data-id="${esc(v.id)}" onclick="exportSave(this.dataset.id)">Export</button>` +
+      `<button data-id="${esc(v.id)}" onclick="deleteSave(this.dataset.id)" aria-label="Delete">✕</button></div>`;
+  }).join("");
+}
+async function exportSave(id) {
+  const v = await saves("readonly", s => s.get(id));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([v.data], {type: "application/json"}));
+  a.download = id;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+async function deleteSave(id) {
+  const v = await saves("readonly", s => s.get(id));
+  if (!confirm(`Delete ${v.name}'s save from this browser? Export it first if you want to keep a copy.`)) return;
+  await saves("readwrite", s => s.delete(id));
+  listSaves();
+}
+$("importFile").onchange = async () => {
+  const f = $("importFile").files[0];
+  $("importFile").value = "";
+  if (!f) return;
+  let data;
+  try { data = JSON.parse(await f.text()); } catch { return alert("That file isn't a save."); }
+  if (!data.sheet) return alert("That file isn't a save that can be continued.");
+  if (data.session_id && !data.messages) return alert("That save is from the old version: it has to be converted first (py -3.12 -m dm.convert).");
+  const id = f.name.endsWith(".json") ? f.name : f.name + ".json";
+  if (await saves("readonly", s => s.get(id)) && !confirm(`A save called ${id} is already here. Replace it?`)) return;
+  await saves("readwrite", s => s.put({id, name: data.sheet.name, summary: data.sheet.summary, when: Date.now(), data: JSON.stringify(data, null, 1)}));
+  listSaves();
+};
+
+// ---- the key ----
+function showKey() { const have = !!store.get(KEY); $("keyBox").hidden = have; $("keyHave").hidden = !have; }
+$("keyForm").onsubmit = e => { e.preventDefault(); const k = $("key").value.trim(); if (k) store.set(KEY, k); $("key").value = ""; showKey(); };
+function forgetKey() { store.set(KEY, null); showKey(); }
+
+// ---- playing: the game runs in Python here (dm/browser.py); it prints, and the page draws what it printed ----
+async function run(fn) {  // one call into the game; the page shows "thinking" until it returns
+  busy = true; draw();
+  let more = true;
+  try { more = await fn(); }
+  catch (e) { text += `\n[the DM call failed: ${String(e).split("\n").filter(Boolean).pop()}]\n`; }
+  busy = false;
+  if (more === false) { running = false; listSaves(); } else text += "\n> ";  // the prompt, as the terminal shows it
+  draw();
+}
+function needKey() { if (store.get(KEY)) return false; alert("Add your Anthropic API key first."); return true; }
+function go(body) {
+  if (running) return;
+  if (needKey()) return;
+  text = ""; running = true;
+  run(() => py.pyimport("dm.browser").new(body.character));
+}
+async function resume(id) {
+  if (running) return;
+  if (needKey()) return;
+  const v = await saves("readonly", s => s.get(id));
+  text = py.pyimport("dm.browser").history(v.data); running = true;
+  run(async () => {
+    const why = await py.pyimport("dm.browser").resume(id, v.data);
+    if (why) { alert(why); return false; }
+  });
+}
+function send(line) {
+  if (busy || !running) return;
+  text += line + "\n";  // a terminal echoes what you type
+  run(() => py.pyimport("dm.browser").line(line));
+}
+function openSheet() {
+  const raw = py.pyimport("dm.browser").sheet();
+  $("panelBody").innerHTML = raw.trim().split(/\n\n(?=Companion )/)
+    .map(part => sheetCard(part.replace("; nobody's yet, next_turn starts the first", ""))).join("");
+  $("panel").hidden = $("shade").hidden = false;
+}
+function closeSheet() { $("panel").hidden = $("shade").hidden = true; }
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeSheet(); });
+$("form").onsubmit = e => { e.preventDefault(); if (line.value.trim()) send(line.value); line.value = ""; };
+
+// ---- one roll, as dm/mechanics.py roll_text prints it: "reason: 1d20+4 (advantage) = 1d20 [11, 16]→16 + 4 = 20" ----
+const DICE = /^dice (?:(.*?): )?(\S+)(?: \((advantage|disadvantage)\))? = (.+) = (-?\d+)(?: \(natural (20|1)\))?$/;
+const PART = /(?:^|([+-]) )(?:(\d*d\d+) \[([^\]]*)\](?:→(-?\d+))?|(\d+))(?= [+-] |$)/g;
+function dice(text) {
+  const m = text.match(DICE);
+  if (!m) return null;
+  const [, reason = "", , mode, body, total, nat] = m;
+  let html = "", first = true, natDone = false;
+  const parts = [...body.matchAll(PART)];
+  if (parts.map(p => p[0]).join(" ") !== body) return null;  // something this page can't draw: show the plain line
+  for (const p of parts) {
+    const sign = p[1] || "+";
+    if (p[5] !== undefined) {  // a flat number
+      if (p[5] !== "0") html += `<span class="op">${sign === "-" ? "−" : "+"} ${p[5]}</span>`;
+      continue;
+    }
+    if (!first || sign === "-") html += `<span class="op">${sign === "-" ? "−" : "+"}</span>`;
+    const rolls = p[3].split(", ");
+    const kept = p[4] !== undefined ? rolls.indexOf(p[4]) : -1;
+    rolls.forEach((r, i) => {
+      const off = kept >= 0 && i !== kept;
+      let cls = off ? " off" : "";
+      if (!off && nat && !natDone && p[2].endsWith("d20")) { cls += " nat" + nat; natDone = true; }
+      html += `<span class="die${cls}" title="${p[2]}">${r}</span>`;
+    });
+    first = false;
+  }
+  const what = esc(hideAC(reason)).replace(/\b(DC|AC) (\d+)/g, '<span class="tag">$1 $2</span>');
+  const note = (mode ? `<span class="note">${mode}</span>` : "") +
+               (nat ? `<span class="note">natural ${nat}</span>` : "");
+  return `<div class="card"><div class="what">🎲 ${what}</div><div class="roll">${html}` +
+         `<span class="op">=</span><span class="total${nat ? " nat" + nat : ""}">${total}</span>${note}</div></div>`;
+}
+
+// ---- a monster's HP and AC stay hidden from the player (the terminal still shows them; the DM needs them) ----
+let pc = "", party = [];  // the PC's first name (from the header) and the companions': an AC on a roll against them stays
+function hideAC(reason) {
+  for (const n of [pc, ...party])
+    if (n && new RegExp(`\\b(vs\\.?|against) ${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(reason)) return reason;
+  return reason.replace(/\s*\b(?:vs\.?|against) AC \d+/g, "").replace(/\s*\(AC \d+\)/g, "")
+               .replace(/\(AC \d+(?:, |; )/g, "(").replace(/,? AC \d+/g, "");
+}
+const hideFoe = s => s.replace(/\(initiative (-?\d+)\): HP \d+\/\d+, AC \d+/g, "(initiative $1)")
+  .replace(/ took (\d+): HP \d+ → \d+(?: \(0 HP\))?/g, " took $1 damage").replace(/ healed (\d+): HP \d+ → \d+/g, " healed $1");
+
+// ---- the six ability scores at character creation: "4d6 [6, 5, 3, 2] drop 2 = 14; ..." ----
+function abilities(text) {
+  const rows = [...text.matchAll(/4d6 \[([^\]]*)\] drop (\d+) = (\d+)/g)];
+  if (rows.length !== 6) return null;
+  return `<div class="card"><div class="what">🎲 Ability scores rolled (4d6, drop the lowest)</div>` + rows.map(r =>
+    `<div class="roll">${r[1].split(", ").map((d, i, a) => `<span class="die${i === a.length - 1 ? " off" : ""}">${d}</span>`).join("")}` +
+    `<span class="op">=</span><span class="total">${r[3]}</span></div>`).join("") + `</div>`;
+}
+
+// ---- a tool line: "  [dice …]", "  [sheet: …]", "  [fight: …]", "  [level up: …]" (some run over several lines) ----
+function tool(text) {
+  let [head, ...more] = text.split("\n");
+  const rest = more.length ? `<details><summary>details</summary><pre>${esc(more.join("\n"))}</pre></details>` : "";
+  if (head.startsWith("dice ") && !more.length) { const d = dice(head); if (d) return d; }
+  if (head.startsWith("ability scores rolled:")) { const a = abilities(head); if (a) return a; }
+  let m;
+  if ((m = head.match(/^sheet: (.*)$/))) {
+    const hp = m[1].match(/HP (\d+) → (\d+)/);
+    const cls = /dies|death save failure/.test(m[1]) || (hp && +hp[2] < +hp[1]) ? "hurt" : hp && +hp[2] > +hp[1] ? "heal" : "";
+    return `<div class="event ${cls}">${hp || cls ? "❤" : "✎"} ${esc(m[1])}${rest}</div>`;
+  }
+  if (head.startsWith("fight: ")) head = hideFoe(head);
+  if ((m = head.match(/^fight: Round (\d+), now: (.+?)\.(?: (.*))?$/)))
+    return `<div class="event">⚔ Round ${m[1]} · ${esc(m[2])}'s turn${m[3] ? `<small>${esc(m[3])}</small>` : ""}${rest}</div>`;
+  if ((m = head.match(/^fight: (.*)$/)))  // the tail is a note to the DM about its next_turn tool
+    return `<div class="event">⚔ ${esc(m[1].replace(/\. Nobody has had a turn yet: next_turn starts the first one\.$/, ""))}${rest}</div>`;
+  if ((m = head.match(/^time: (.*)$/))) return `<div class="event">⏳ ${esc(m[1])}${rest}</div>`;
+  if ((m = head.match(/^party: (.*)$/)))  // older saves carry a note to the DM after the sentence
+    return `<div class="event big">👥 ${esc(m[1].replace(/\. The PC is level \d+: level them up.*$/, ""))}${rest}</div>`;
+  if ((m = head.match(/^level up: (.*)$/))) return `<div class="event big">⬆ ${esc(m[1])}${rest}</div>`;
+  if ((m = head.match(/^built (.*)$/))) return `<div class="event big">✦ Built ${esc(m[1])}${rest}</div>`;
+  return `<div class="event">${esc(head)}${rest}</div>`;
+}
+
+// ---- the /sheet text (dm/play.py sheet_text, then mechanics status and fight_text), laid out by its line labels.
+//      Every line lands somewhere: a line this doesn't know goes under "More". ----
+const ABIL = ["STR", "DEX", "CON", "INT", "WIS", "CHA"];
+const pips = (left, max) => max <= 12
+  ? `<span class="pips">${"●".repeat(left)}<span class="used">${"○".repeat(Math.max(0, max - left))}</span></span>`
+  : `<b>${left}/${max}</b>`;
+const splitTop = v => {  // split at ", " but not inside brackets: "Slow (Mire the Mind, once per long rest), Bane (…)"
+  const out = [""]; let depth = 0;
+  for (let i = 0; i < v.length; i++) {
+    const c = v[i];
+    depth += c === "(" ? 1 : c === ")" ? -1 : 0;
+    if (!depth && c === "," && v[i + 1] === " ") { out.push(""); i++; } else out[out.length - 1] += c;
+  }
+  return out;
+};
+const chips = v => splitTop(v).map(x => `<span class="chip">${esc(x)}</span>`).join("");
+const row = (k, v) => `<div class="row"><span class="k">${esc(k)}</span> ${v}</div>`;
+const sec = (title, body) => body ? `<div class="sec"><h3>${title}</h3>${body}</div>` : "";
+function sheetCard(raw) {
+  const kv = {}, attacks = [], features = [], fight = [], loose = [];
+  let list = null, vitals = "", acLine = "", passive = "";
+  const lines = raw.split("\n"), head = lines[0].match(/^(.+?): (.+)$/);
+  for (const l of lines.slice(1)) {
+    if (fight.length || /^(FIGHT, |No fight is on\.)/.test(l)) { fight.push(l); continue; }
+    if (l === "Attacks:" || l === "Features:") { list = l === "Attacks:" ? attacks : features; continue; }
+    if (list && l.startsWith("- ")) { list.push(l.slice(2)); continue; }
+    list = null;
+    let m;
+    if (l.startsWith("HP ")) vitals = l;
+    else if (/^AC \d/.test(l)) acLine = l;
+    else if (l.startsWith("Passive Perception")) passive = l;
+    else if ((m = l.match(/^([A-Z][^:.]{0,70}): (.*)$/))) kv[m[1] === "Features" ? "Uses" : m[1]] = m[2];
+    else if (l.trim()) loose.push(l);
+  }
+  if (!head || !kv.Abilities || !vitals) return `<div class="card sheet"><pre>${esc(raw)}</pre></div>`;
+  const take = k => { const v = kv[k]; delete kv[k]; return v; };
+
+  // the numbers at a glance: HP, AC, speed, proficiency, hit dice, XP
+  const v = vitals.split(" · "), stat = (label, big, small = "") =>
+    `<div class="stat"><div class="lbl">${label}</div><div class="big">${big}</div>${small ? `<div class="sm">${small}</div>` : ""}</div>`;
+  const hp = v[0].match(/^HP (\d+)\/(\d+)(?: \(\+(\d+) temporary\))?/);
+  const ac = (v.find(x => x.startsWith("AC ")) || "").match(/^AC (\d+)(?: \((.*)\))?/);
+  const hd = (v.find(x => x.startsWith("hit dice ")) || "").replace("hit dice ", "");
+  const xp = (v.find(x => x.startsWith("XP ")) || "").replace("XP ", "");
+  const speed = (acLine.match(/speed ([^;]+)/) || [])[1] || "";
+  const prof = (acLine.match(/proficiency bonus (\+\d+)/) || [])[1] || "";
+  const acNote = (acLine.match(/^AC \d+ \((.*?)\); speed/) || [])[1] || "";
+  let top = `<div class="stats">`;
+  if (hp) top += `<div class="stat hp"><div class="lbl">HP</div><div class="big">${hp[1]}<span class="of">/${hp[2]}</span></div>` +
+    `<div class="bar"><div style="width:${Math.min(100, 100 * hp[1] / hp[2])}%"></div></div>` +
+    (hp[3] ? `<div class="sm">+${hp[3]} temporary</div>` : "") + `</div>`;
+  if (ac) top += stat("AC", ac[1], esc(ac[2] || acNote));
+  const sp = speed.match(/^(\d+) ft(?: \((.*)\))?$/);
+  top += (sp ? stat("Speed", sp[1], "ft" + (sp[2] ? ", " + esc(sp[2]) : "")) : stat("Speed", "", esc(speed))) +stat("Prof.", prof) + stat("Hit dice", esc(hd)) + (xp ? stat("XP", esc(xp)) : "");
+  top += `</div>`;
+  const time = take("Time"), timers = take("Timers");
+  if (time) top += row("Time", esc(time)) + (timers ? row("Timers", timers.split("; ").map(x => `<span class="chip">${esc(x)}</span>`).join("")) : "");
+  const cond = take("Conditions");
+  if (cond && cond !== "none") top += `<div class="row bad">${chips(cond)}</div>`;
+  for (const k of ["Death saves", "Dead", "Stable at 0 HP"]) if (kv[k]) top += row(k, `<span class="badtxt">${esc(take(k))}</span>`);
+
+  // abilities, with their saving throws
+  const saves = {};
+  for (const m of (take("Saving throws") || "").matchAll(/(STR|DEX|CON|INT|WIS|CHA) ([+-]\d+)(\*?)/g)) saves[m[1]] = [m[2], m[3]];
+  let ab = `<div class="abil">`;
+  for (const m of take("Abilities").matchAll(/(STR|DEX|CON|INT|WIS|CHA) (\d+) \(([+-]\d+)\)/g)) {
+    const s = saves[m[1]];
+    ab += `<div class="ab"><div class="lbl">${m[1]}</div><div class="big">${m[3]}</div><div class="sm">${m[2]}</div>` +
+      (s ? `<div class="sv${s[1] ? " pro" : ""}">save ${s[0]}${s[1] ? " ●" : ""}</div>` : "") + `</div>`;
+  }
+  ab += `</div>`;
+
+  // what's left to use: feature uses and spell slots
+  let uses = "";
+  const u = take("Uses");
+  if (u) for (const x of u.split(/, (?=[^,]+ \d+\/\d+ \()/)) {
+    const m = x.match(/^(.*) (\d+)\/(\d+) \((.*)\)$/);
+    uses += m ? `<div class="row"><span class="k">${esc(m[1])}</span> ${pips(+m[2], +m[3])} <span class="dim">${esc(m[4])}</span></div>` : row("", esc(x));
+  }
+  const slots = take("Spell slots");
+  if (slots) for (const m of slots.matchAll(/level (\d+): (\d+)\/(\d+)/g))
+    uses += `<div class="row"><span class="k">Level ${m[1]} slots</span> ${pips(+m[2], +m[3])}</div>`;
+  if (kv["Fiendish Resilience"]) uses += row("Fiendish Resilience", esc(take("Fiendish Resilience")));
+
+  // attacks and spells
+  const named = x => { const m = x.match(/^([^:]+): (.*)$/); return m ? `<div class="item"><b>${esc(m[1])}</b> ${esc(m[2])}</div>` : `<div class="item">${esc(x)}</div>`; };
+  let spells = "";
+  const sc = Object.keys(kv).find(k => k.startsWith("Spellcasting"));
+  if (sc) spells += row(sc.replace("Spellcasting ", "Casting ability "), esc(take(sc)));
+  for (const k of Object.keys(kv)) if (/[Cc]antrip|[Ss]pell|Arcanum|Invocation|ritual|Mastery|Always prepared/.test(k)) { const x = take(k).trim(); if (x) spells += row(k, `<div>${chips(x)}</div>`); }
+  if (spells) spells += loose.splice(0).map(l => `<div class="dim small">${esc(l)}</div>`).join("");
+
+  // skills
+  let skills = "";
+  const sk = take("Skills");
+  if (sk) {
+    skills = `<div class="skills">`;
+    // "Acrobatics +5, … Survival +2 (* proficient, ** expertise) Jack of All Trades: …" or, in older saves, "…; all others …"
+    const legend = sk.indexOf(" (* proficient");
+    const body = legend < 0 ? sk : sk.slice(0, legend), after = legend < 0 ? "" : sk.slice(sk.indexOf(")", legend) + 1).trim();
+    const [list, ...tail] = body.split("; ");
+    if (after) tail.push(after);
+    for (const m of list.matchAll(/([A-Z][A-Za-z ]+?) ([+-]\d+)(\*{0,2})/g))
+      skills += `<div class="${m[3] ? "pro" : ""}"><span>${m[1]}${m[3] === "**" ? " ●●" : m[3] ? " ●" : ""}</span><b>${m[2]}</b></div>`;
+    skills += `</div>` + (tail.length ? `<div class="dim small">${esc(tail.join("; "))}</div>` : "");
+  }
+  if (passive) skills += `<div class="dim small">${esc(passive)}</div>`;
+
+  const feats = features.map(f => {
+    const m = f.match(/^([^:]{1,80}): (.*)$/s);
+    return m ? `<details class="feat"><summary>${esc(m[1])}</summary><div>${esc(m[2])}</div></details>` : `<div class="item">${esc(f)}</div>`;
+  }).join("");
+  const gear = (kv.Money ? row("Money", esc(take("Money"))) : "") + (kv.Items ? `<div class="item">${esc(take("Items"))}</div>` : "");
+  const about = ["Alignment", "Personality", "Appearance"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
+  const prof2 = ["Languages", "Proficiencies"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
+  const more = Object.entries(kv).map(([k, x]) => row(k, esc(x))).join("") + loose.map(l => `<div class="item">${esc(l)}</div>`).join("");
+  const fightOn = fight.length && fight[0] !== "No fight is on.";
+
+  return `<div class="card sheet"><div class="title">${esc(head[1])}</div><div class="dim">${esc(head[2])}</div>` + top +
+    (fightOn ? sec("Fight", `<pre>${esc(hideFoe(fight.join("\n")))}</pre>`) : "") + ab +
+    sec("Uses left", uses) + sec("Attacks", attacks.map(named).join("")) + sec("Spells", spells) + sec("Skills", skills) +
+    sec("Features <span class=\"dim small\">(tap one to read it)</span>", feats) + sec("Equipment", gear) +
+    sec("Languages and proficiencies", prof2) + sec("About", about) + sec("More", more) + `</div>`;
+}
+
+// ---- a paragraph of the DM's text, with the bit of markdown it uses: **bold**, *italic*, "- " and "1. " lists ----
+const inline = s => esc(s).replace(/\*\*(\S(?:.*?\S)?)\*\*/g, "<b>$1</b>").replace(/(^|[^*\w])\*(\S(?:.*?\S)?)\*(?![*\w])/g, "$1<i>$2</i>");
+function md(lines) {
+  let out = "", text = [], list = null;
+  const endText = () => { if (text.length) out += `<p>${text.map(inline).join("\n")}</p>`; text = []; };
+  const endList = () => { if (list) out += `<${list.tag}>${list.items.map(x => `<li>${inline(x)}</li>`).join("")}</${list.tag}>`; list = null; };
+  for (const l of lines) {
+    const m = l.match(/^\s*(?:([-*•])|(\d+)[.)])\s+(.*)$/), tag = m && (m[1] ? "ul" : "ol");
+    if (m) { endText(); if (list && list.tag !== tag) endList(); (list ||= {tag, items: []}).items.push(m[3]); }
+    else { endList(); text.push(l); }
+  }
+  endText(); endList();
+  return out;
+}
+
+// ---- the whole output, line by line ----
+const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet, \/quit exits\.$/;
+function render(text) {
+  const lines = text.replace(/\r/g, "").split("\n");
+  let html = "", para = [], sheet = null, who = null, cards = "", count = 0;
+  pc = ((text.match(/^(.+?), .+?\. Saving to .*\/sheet shows your sheet/m) || [])[1] || "").split(" ")[0];
+  party = [...text.matchAll(/\[party: (\S+)[^\n]*? joined the party/g)].map(m => m[1]);
+  const flush = () => { if (para.length) html += md(para); para = []; };
+  const endSheet = () => {
+    // the PC's card, then one per companion ("Companion Wren: …" blocks after the PC's part), for the panel; a /sheet
+    // reply is complete once the next prompt follows it
+    if (!sheet) return;
+    cards = "";
+    for (const part of sheet.join("\n").trim().split(/\n\n(?=Companion )/))
+      cards += sheetCard(part.replace("; nobody's yet, next_turn starts the first", ""));
+    count++;
+    sheet = null;
+  };
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (l.startsWith(">")) {  // the prompt, and what the player typed after it
+      flush(); endSheet();
+      const said = l.slice(1).trim();
+      if (said === "/sheet") sheet = [];
+      else if (said && said !== "/quit") html += `<div class="you ui">${esc(said)}</div>`;
+      continue;
+    }
+    if (sheet) { sheet.push(l); continue; }
+    let m;
+    if (l.startsWith("  [")) {  // a tool line; it may run over several lines until the closing ]
+      flush();
+      let t = l.slice(3), j = i;
+      while (!t.endsWith("]") && j + 1 < lines.length) t += "\n" + lines[++j];
+      if (!t.endsWith("]")) break;  // still arriving
+      i = j;
+      html += tool(t.slice(0, -1));
+    } else if ((m = l.match(HEADER))) { flush(); who = [m[1], m[2]]; }
+    else if (l === "Character creation. Talk to the DM; /quit exits.") { flush(); who = ["New character", "Talk to the DM to make your character"]; }
+    else if (l.startsWith("Saved. Continue with:")) { flush(); html += `<div class="notice">Game saved.</div>`; }
+    else if ((m = l.match(/^\[the game ended \(exit code (-?\d+)\)\]$/))) {
+      flush();
+      if (m[1] !== "0") html += `<div class="notice bad">The game stopped unexpectedly (code ${m[1]}).</div>`;
+    }
+    else if ((m = l.match(/^\[the DM call failed: (.*)\]$/))) { flush(); html += `<div class="notice bad">The DM call failed: ${esc(m[1])}</div>`; }
+    else if (!l.trim()) flush();
+    else para.push(l);
+  }
+  flush();
+  return {html, who, cards, count};
+}
+
+function draw() {
+  const key = text + busy + running;
+  if (key !== shown) {
+    shown = key;
+    const atEnd = out.scrollHeight - out.scrollTop - out.clientHeight < 120;
+    const {html, who} = render(text);
+    out.innerHTML = html + (busy ? `<div class="thinking ui">The DM is thinking</div>` : "");
+    $("top").hidden = !running || !who;
+    if (who) { $("name").textContent = who[0]; $("sum").textContent = who[1]; }
+    $("sheetBtn").hidden = !who || who[0] === "New character";
+    if (atEnd) out.scrollTop = out.scrollHeight;
+  }
+  $("form").hidden = !running;
+  $("line").disabled = $("form").querySelector("button").disabled = busy;
+  $("start").hidden = running || !py;
+}
+
+(async () => {
+  try { navigator.storage?.persist?.(); } catch {}  // ask the browser to keep the saves
+  showKey();
+  listSaves().catch(() => {});
+  py = await loadPyodide();
+  py.setStdout({batched: l => { text += l + "\n"; draw(); }});
+  py.setStderr({batched: l => { text += l + "\n"; draw(); }});
+  py.unpackArchive(await (await fetch("GAME_ZIP")).arrayBuffer(), "zip", {extractDir: "/game"});
+  py.runPython("import sys; sys.path.insert(0, '/game')");
+  $("loading").hidden = true;
+  draw();
+})().catch(e => { $("loading").textContent = "The game couldn't load: " + e; });
+</script></body></html>

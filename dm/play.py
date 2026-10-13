@@ -26,6 +26,7 @@ from dm.model import tool
 HERE = Path(__file__).parent
 SAVES = HERE.parent / "saves"
 MODEL = "claude-sonnet-5-5"
+on_save: Callable[[Path, str], None] = lambda path, text: None  # the browser page sets it: it keeps saves itself
 
 
 def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
@@ -70,7 +71,9 @@ class Game:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
                 "transcript": self.transcript, "messages": self.messages}
-        self.path.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
+        text = json.dumps(data, indent=1, ensure_ascii=False)
+        self.path.write_text(text, encoding="utf-8")
+        on_save(self.path, text)
 
     def log(self, kind: str, text: str) -> None:
         self.transcript.append({"kind": kind, "text": text})
@@ -564,23 +567,6 @@ class Creation:
         return [srd_options, roll_ability_scores, build_character, finish_character, lookup_tool(record)]
 
 
-async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Returns the finished sheet and the creation transcript, which the play save continues."""
-    c = Creation(path)
-    c.model = model
-    print("Character creation. Talk to the DM; /quit exits.")
-    await turn(c, "[Start] Greet the player and begin making their character.")
-    while not c.done:
-        line = (await asyncio.to_thread(input, "\n> ")).strip()
-        if line == "/quit":
-            sys.exit(0)
-        if line:
-            c.log("player", line)
-            await turn(c, line)
-    assert c.draft
-    return c.draft, c.transcript
-
-
 def new_save(stem: str) -> Path:
     """A save file no other game has: two games started in the same second get stem.json and stem-2.json. The file
     is created here, so a second game can't pick the same name before the first one's first save."""
@@ -595,6 +581,102 @@ def new_save(stem: str) -> Path:
             n += 1
 
 
+
+class Session:
+    """One game, fed one line at a time. The terminal and the browser page both drive it: what the game says is
+    printed, and the player's lines come in through line()."""
+
+    def __init__(self, model_name: str = MODEL) -> None:
+        self.model = model_name
+        self.game: Game | None = None
+        self.creation: Creation | None = None
+
+    async def new(self, character: str) -> None:
+        """character: fighter, rogue or wizard (ready-made), or new (made with the DM first)."""
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        if character == "new":
+            self.creation = Creation(new_save(f"new-{stamp}"))  # one file: creation, then play
+            self.creation.model = self.model
+            print("Character creation. Talk to the DM; /quit exits.")
+            await turn(self.creation, "[Start] Greet the player and begin making their character.")
+            return
+        sheet = json.loads((HERE / "characters" / f"{character}.json").read_text(encoding="utf-8"))
+        name = sheet["name"].split()[0].lower()
+        await self.play(Game({"sheet": sheet, "model": self.model}, new_save(f"{name}-{stamp}")))
+
+    async def play(self, game: Game) -> None:
+        self.game, self.creation = game, None
+        game.system = system_prompt(game.sheet, game.companions)
+        print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
+        if game.messages:
+            last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
+            print("\n" + last)
+        else:
+            await turn(game, "[Start] Begin the session: set the opening scene for the player, then ask what "
+                             f"{game.sheet['name'].split()[0]} does.")
+
+    async def line(self, line: str) -> bool:
+        """The player's line. False once the game is over (the player quit)."""
+        line = line.strip()
+        if not line:
+            return True
+        if c := self.creation:
+            if line == "/quit":
+                return False
+            c.log("player", line)
+            await turn(c, line)
+            if c.done:
+                assert c.draft
+                await self.play(Game({"sheet": c.draft, "model": c.model, "transcript": c.transcript}, c.path))
+            return True
+        game = self.game
+        assert game
+        if line == "/quit":
+            game.save()
+            print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
+            return False
+        if line == "/sheet":
+            print(sheet_report(game))
+            return True
+        game.log("player", line)
+        await turn(game, f"[The player]\n{line}")
+        return True
+
+
+def sheet_report(game: Game) -> str:
+    """What /sheet shows: the PC's part as before (the web page lays it out as one card); companions after it."""
+    return (sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
+            + m.fight_text(game.fight, game.sheet, game.companions)
+            + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
+
+
+def resumable(data: dict[str, Any]) -> str:
+    """Why a save can't be continued, or "" if it can."""
+    if "sheet" not in data:
+        return "that save stopped during character creation, which can't be resumed; start again with new"
+    if data.get("session_id") and "messages" not in data:
+        return "that save is from the Agent SDK: convert it first with py -3.12 -m dm.convert <save>"
+    return ""
+
+
+def history(data: dict[str, Any]) -> str:
+    """The game so far, from a save, in the shape the terminal printed it. Continuing a save prints only the DM's
+    last reply, so that one is left out here."""
+    t = data.get("transcript", [])
+    last = max((i for i, e in enumerate(t) if e["kind"] == "dm"), default=-1)
+    text = ""
+    for i, e in enumerate(t):
+        if e["kind"] == "dm" and i != last:
+            text += f"\n{e['text']}\n"
+        elif e["kind"] == "player":
+            text += f"\n> {e['text']}\n"
+        elif e["kind"] == "tool":
+            text += f"  [{e['text']}]\n"
+        elif e["kind"] == "call" and e["tool"] == "roll_ability_scores" and not e["error"]:
+            text += f"  [{e['result']}]\n"
+    return text
+
+
 async def main() -> None:
     ap = argparse.ArgumentParser(description="Play with the AI DM.")
     ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard", "new"))
@@ -602,50 +684,18 @@ async def main() -> None:
     ap.add_argument("--model", default=MODEL)
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
-    stamp = time.strftime("%Y%m%d-%H%M%S")
+    session = Session(args.model)
     if args.resume:
         data = json.loads(args.resume.read_text(encoding="utf-8"))
-        if "sheet" not in data:
-            ap.error("that save stopped during character creation, which can't be resumed; start again with new")
-        if data.get("session_id") and "messages" not in data:
-            ap.error(f"that save is from the Agent SDK: convert it first with py -3.12 -m dm.convert {args.resume}")
-        game = Game(data, args.resume)
-    elif args.character == "new":
-        path = new_save(f"new-{stamp}")  # one file: creation, then play
-        sheet, transcript = await create_character(args.model, path)
-        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript}, path)
+        if why := resumable(data):
+            ap.error(why)
+        await session.play(Game(data, args.resume))
     elif args.character:
-        sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
-        name = sheet["name"].split()[0].lower()
-        game = Game({"sheet": sheet, "model": args.model}, new_save(f"{name}-{stamp}"))
+        await session.new(args.character)
     else:
         ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
-
-    SAVES.mkdir(exist_ok=True)
-    game.system = system_prompt(game.sheet, game.companions)
-    print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-    if game.messages:
-        last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
-        print("\n" + last)
-    else:
-        await turn(game, "[Start] Begin the session: set the opening scene for the player, then ask what "
-                         f"{game.sheet['name'].split()[0]} does.")
-    while True:
-        line = (await asyncio.to_thread(input, "\n> ")).strip()
-        if not line:
-            continue
-        if line == "/quit":
-            game.save()
-            print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
-            return
-        if line == "/sheet":
-            # the PC's part as before (the web page lays it out as one card); companions after it
-            print(sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
-                  + m.fight_text(game.fight, game.sheet, game.companions)
-                  + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
-            continue
-        game.log("player", line)
-        await turn(game, f"[The player]\n{line}")
+    while await session.line(await asyncio.to_thread(input, "\n> ")):
+        pass
 
 
 if __name__ == "__main__":
