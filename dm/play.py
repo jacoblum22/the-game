@@ -494,7 +494,11 @@ class Game:
             def go() -> str:
                 self.lore, text = notebook.write(self.lore, a, notebook.now(self.transcript))
                 return text
-            return self.run("write_lore", go, hidden=True, inp=a)
+            res = self.run("write_lore", go, hidden=True, inp=a)
+            if not res.get("is_error"):  # the player sees that it happened, not what was written (owner, 2026-10-13)
+                self.log("tool", notebook.shown(self.lore, a))
+                self.save()
+            return res
 
         @tool("lore", "Look in your notebook. One name: the entry in full (description, when it was last mentioned in "
               "play, its relationships: those with something from the last turns first, then newest first, 10 at a "

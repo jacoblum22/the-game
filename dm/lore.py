@@ -271,6 +271,32 @@ def write(lore: dict[str, Any], a: dict[str, Any], turn: int) -> tuple[dict[str,
     return lore, "; ".join(out)
 
 
+def shown(lore: dict[str, Any], a: dict[str, Any]) -> str:
+    """What the player sees of a write that went through (owner, 2026-10-13): which entries changed, never what was
+    written. `lore` is the notebook after the write."""
+    def n(name: Any) -> str:
+        return find(lore, name) or str(name)
+    rels = len(a.get("relationships") or []) + len(a.get("add_relationships") or [])
+    out = []
+    if a.get("create"):
+        out.append(f"created an entry for {n(a['create'])}")
+    elif a.get("entry"):
+        e = n(a["entry"])
+        if a.get("rename"):
+            out.append(f"renamed {a['entry']} to {e}")
+        if any(a.get(k) for k in ("kind", "description", "add_to_description", "add_other_names", "remove_other_names")):
+            out.append(f"updated {e}")
+    if rels:
+        out.append(f"added {rels} relationship{'s' if rels > 1 else ''} to {n(a.get('create') or a.get('entry'))}")
+    if a.get("change_relationship") is not None:
+        out.append("changed a relationship")
+    if a.get("remove_relationship") is not None:
+        out.append("removed a relationship")
+    if a.get("merge"):
+        out.append(f"merged {a['merge']} into {n(a.get('into'))}")
+    return "notebook: " + "; ".join(out)
+
+
 # ---------- looking up ----------
 
 def look(lore: dict[str, Any], names: list[str], transcript: list[dict[str, Any]], page: int = 1) -> str:

@@ -194,8 +194,22 @@ def test_matching_names() -> None:
     assert "Not mentioned in play yet" in nb.look(lore, ["Anvil"], t2)
 
 
+def test_shown() -> None:
+    """What the player sees of a write: which entries changed, not what was written."""
+    lore = book()
+    assert nb.shown(lore, {"create": "Vessa", "kind": "person", "description": "x", "relationships": ["a", "b"]}) == (
+        "notebook: created an entry for Vessa; added 2 relationships to Vessa")
+    assert nb.shown(lore, {"entry": "the fence", "add_to_description": "x", "add_relationships": ["a"]}) == (
+        "notebook: updated Vessa; added 1 relationship to Vessa")
+    assert nb.shown(lore, {"change_relationship": 1, "text": "x"}) == "notebook: changed a relationship"
+    assert nb.shown(lore, {"remove_relationship": 1}) == "notebook: removed a relationship"
+    lore2, _ = nb.write(lore, {"entry": "Vessa", "rename": "Vessa Thorne"}, 3)
+    assert nb.shown(lore2, {"entry": "Vessa", "rename": "Vessa Thorne"}) == "notebook: renamed Vessa to Vessa Thorne"
+    assert nb.shown(lore, {"merge": "Brakka", "into": "the guild"}) == "notebook: merged Brakka into Thieves Guild"
+
+
 def test_game_tools_hidden(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
-    """In play: the tools work on the save's notebook, nothing is printed for the player, and it's saved."""
+    """In play: the tools work on the save's notebook; the player sees only that a write happened; it's saved."""
     g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, tmp_path / "save.json")
     g.transcript += [{"kind": "player", "text": "hello"}]
     tools = {t.name: t.handler for t in g.tools()}
@@ -208,11 +222,14 @@ def test_game_tools_hidden(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -
     assert call("lore", names=["Vessa"])[0].startswith("Vessa (person)\nDescription:\n(t1) Half-elf.")
     assert call("recall", search=["hello"])[0].endswith("turn 1, player: hello")
     assert call("write_lore", create="Vessa", kind="person", description="x")[1]
-    assert capsys.readouterr().out == ""  # the player sees none of it
+    # the player sees that the write happened, nothing of what was written, and nothing of lookups or refusals
+    assert capsys.readouterr().out == "  [notebook: created an entry for Vessa]\n"
     data = json.loads((tmp_path / "save.json").read_text(encoding="utf-8"))
     assert list(data["lore"]["entries"]) == ["Vessa"]
     assert data["transcript"][1] == {"kind": "call", "tool": "write_lore", "input": {
         "create": "Vessa", "kind": "person", "description": "Half-elf."}, "result": "entry Vessa (person) created",
         "error": False}
+    assert data["transcript"][2] == {"kind": "tool", "text": "notebook: created an entry for Vessa"}
     assert play.Game(data, tmp_path / "save.json").lore == g.lore
-    assert "Vessa" not in play.sheet_report(g) and "Vessa" not in play.history(data)
+    assert "Vessa" not in play.sheet_report(g) and "Half-elf" not in play.history(data)
+    assert "[notebook: created an entry for Vessa]" in play.history(data)  # shown again when the game is continued
