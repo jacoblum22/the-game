@@ -184,9 +184,7 @@ class Game:
             raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
         sheet["companion"] = True
         self.companions.append(sheet)
-        return f"{sheet['name']} joined the party, {sheet['summary']}" + (
-            f". The PC is level {self.sheet['level']}: level them up to it with level_up_options and level_up, who "
-            f"{sheet['name']!r}" if self.sheet["level"] > 1 else "")
+        return f"{sheet['name']} joined the party, {sheet['summary']}"
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
@@ -257,7 +255,13 @@ class Game:
         async def change_party(a: dict[str, Any]) -> dict[str, Any]:
             res = self.run("party", lambda: self.change_party(a))
             if a.get("add") and not res.get("is_error"):
-                res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(self.companions[-1])
+                c = self.companions[-1]
+                if c["level"] < self.sheet["level"]:  # for the DM only: the player sees the line above
+                    res["content"][0]["text"] += (
+                        f"\n\nThe PC is level {self.sheet['level']}: level {c['name']} up to it now with level_up_options "
+                        f"and level_up, who {c['name']!r}. They arrive already built: make every choice of these levels "
+                        "yourself (hit points too), without asking the player.")
+                res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c)
             return res
 
         @tool("srd_options", "What the SRD offers, for building a companion. No arguments: every race, class and the "

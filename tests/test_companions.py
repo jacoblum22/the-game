@@ -123,5 +123,6 @@ def test_dunmar_keeps_his_name() -> None:
 
 def test_who_inside_the_record(tmp_path) -> None:
     g, t = game(tmp_path, built(BRAKKA, [rec()]))
-    assert "level them up to it" in call(t, "change_party", add=WREN)[0]
+    text = call(t, "change_party", add=WREN)[0]
+    assert "without asking the player" in text and g.transcript[-1]["text"] == "party: Wren joined the party, " + g.companions[0]["summary"]
     assert not call(t, "level_up", record=WREN_LEVELS[0] | {"who": "Wren"})[1] and g.companions[0]["level"] == 2

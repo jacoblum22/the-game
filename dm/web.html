@@ -183,7 +183,8 @@ function tool(text) {
   if ((m = head.match(/^fight: (.*)$/)))  // the tail is a note to the DM about its next_turn tool
     return `<div class="event">⚔ ${esc(m[1].replace(/\. Nobody has had a turn yet: next_turn starts the first one\.$/, ""))}${rest}</div>`;
   if ((m = head.match(/^time: (.*)$/))) return `<div class="event">⏳ ${esc(m[1])}${rest}</div>`;
-  if ((m = head.match(/^party: (.*)$/))) return `<div class="event big">👥 ${esc(m[1])}${rest}</div>`;
+  if ((m = head.match(/^party: (.*)$/)))  // older saves carry a note to the DM after the sentence
+    return `<div class="event big">👥 ${esc(m[1].replace(/\. The PC is level \d+: level them up.*$/, ""))}${rest}</div>`;
   if ((m = head.match(/^level up: (.*)$/))) return `<div class="event big">⬆ ${esc(m[1])}${rest}</div>`;
   if ((m = head.match(/^built (.*)$/))) return `<div class="event big">✦ Built ${esc(m[1])}${rest}</div>`;
   return `<div class="event">${esc(head)}${rest}</div>`;
