@@ -184,7 +184,9 @@ class Game:
             raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
         sheet["companion"] = True
         self.companions.append(sheet)
-        return f"{sheet['name']} joined the party, {sheet['summary']}"
+        return f"{sheet['name']} joined the party, {sheet['summary']}" + (
+            f". The PC is level {self.sheet['level']}: level them up to it with level_up_options and level_up, who "
+            f"{sheet['name']!r}" if self.sheet["level"] > 1 else "")
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
@@ -291,7 +293,8 @@ class Game:
         @tool("level_up", "Take the next level, once the XP is there and the player has made every choice level_up_options "
               "lists: send the level record. One level per call. All-or-nothing: if the record has any problem, every "
               "problem is returned and nothing changes. On success the sheet is rebuilt at the new level; current HP rises "
-              "by the maximum's rise, and the new spell slots and feature uses are usable at once.",
+              "by the maximum's rise, and the new spell slots and feature uses are usable at once. For a companion, pass who "
+              "(beside record): a companion has no XP and takes levels up to the PC's level.",
               {"type": "object", "properties": {"who": _WHO, "record": {"type": "object", "description": "the level "
                                                            "record, in the form level_up_options ends with"}},
                "required": ["record"]})
@@ -299,15 +302,17 @@ class Game:
             done: list[dict[str, Any]] = []
 
             def go() -> str:
-                i = self.member(a.get("who"))
+                record = a.get("record")
+                who = a.get("who") or (record.pop("who", None) if isinstance(record, dict) else None)  # seen inside record
+                i = self.member(who)
                 if i is None:
-                    self.sheet, text = m.level_up(self.sheet, a.get("record"))
+                    self.sheet, text = m.level_up(self.sheet, record)
                     done.append(self.sheet)
                     behind = [f"{c['name']} (level {c['level']})" for c in self.companions if c["level"] < self.sheet["level"]]
                     if behind:
                         text += "\nCompanions now below the PC's level: " + ", ".join(behind)
                 else:
-                    self.companions[i], text = m.level_up(self.companions[i], a.get("record"), cap=self.sheet["level"])
+                    self.companions[i], text = m.level_up(self.companions[i], record, cap=self.sheet["level"])
                     done.append(self.companions[i])
                 return text
             res = self.run("level up", go)

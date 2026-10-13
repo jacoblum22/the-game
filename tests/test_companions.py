@@ -106,3 +106,22 @@ def test_pc_level_up_names_companions_behind(tmp_path) -> None:
     call(t, "change_party", add=WREN)
     text, err = call(t, "level_up", record=rec())
     assert not err and "Companions now below the PC's level: Wren (level 1)" in text
+
+
+def test_dunmar_keeps_his_name() -> None:
+    # the DM's real call (2026-10-12): the "(if proficient)" equipment check overwrote the name with the last option
+    dunmar = {"name": "Dunmar", "race": "Human", "class": "Cleric", "ability_method": "standard_array",
+              "base_scores": {"STR": 8, "DEX": 10, "CON": 13, "INT": 12, "WIS": 15, "CHA": 14},
+              "choices": {"race.languages": "a", "class.proficiencies.1": ["c", "d"], "class.equipment.1": "a",
+                          "class.equipment.2": "b", "class.equipment.3": "a", "class.equipment.4": "a",
+                          "class.equipment.5": "Emblem", "background.languages": ["Dwarvish", "Giant"],
+                          "background.equipment.1": "Emblem", "background.equipment.prayer": "a"},
+              "cantrips": ["Light", "Sacred Flame", "Thaumaturgy"], "spells": [],
+              "prepared": ["Bless", "Cure Wounds", "Sanctuary", "Healing Word"]}
+    assert built(dunmar, [])["name"] == "Dunmar"
+
+
+def test_who_inside_the_record(tmp_path) -> None:
+    g, t = game(tmp_path, built(BRAKKA, [rec()]))
+    assert "level them up to it" in call(t, "change_party", add=WREN)[0]
+    assert not call(t, "level_up", record=WREN_LEVELS[0] | {"who": "Wren"})[1] and g.companions[0]["level"] == 2

@@ -530,8 +530,8 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
             bits = re.split(r"\(([a-z])\) ", cs["desc"])[1:]  # ["a", "a mace or ", "b", "a warhammer (if proficient)"]
             text = dict(zip(bits[::2], bits[1::2]))
             for e in [picks[cid]] if isinstance(picks[cid], (str, dict)) else picks[cid]:
-                name = e.get("option") if isinstance(e, dict) else e
-                if "(if proficient)" in text[srd.LETTERS[srd._option_index(cs["from"]["options"], str(name), cid)]]:
+                opt = e.get("option") if isinstance(e, dict) else e
+                if "(if proficient)" in text[srd.LETTERS[srd._option_index(cs["from"]["options"], str(opt), cid)]]:
                     for g in chosen[cid]:
                         if g.get("kind") == "Equipment" and g["index"] not in owned:
                             errs.append(f"choices.{cid}: {srd.table('Equipment')[g['index']]['name']} is only an option "
