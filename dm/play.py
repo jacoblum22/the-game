@@ -571,7 +571,19 @@ async def turn(game: Game | Creation, text: str) -> None:
         print("\n" + t)
         game.log("dm", t)
     if isinstance(game, Game):
-        game.lore, notes = notebook.notes(game.lore, game.transcript)
+        # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
+        # again (owner, 2026-10-13), and the owner's version reconnects to carry them. The whole conversation is then
+        # read at full price once.
+        system = system_prompt(game.sheet, game.companions)
+        if system != game.system:
+            game.system = system
+            if game.sdk:
+                from dm import sdk  # here: the browser has no Agent SDK
+                await game.sdk.close()
+                game.sdk = sdk.Client(game.model, system, game.tools(), game.cwd, game.session_id)
+                await game.sdk.open()
+        party = (game.sheet["name"], *(c["name"] for c in game.companions))
+        game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
     if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
         failed = await game.sdk.respond(text, said)

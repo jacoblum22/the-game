@@ -76,7 +76,7 @@ def test_tools_run_and_answer(monkeypatch: Any, tmp_path: Path) -> None:
     assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Roll for it.", "You climb the wall."]
     # what went to the API
     first = fake.calls[0]
-    assert first["system"] == "You are the DM." and first["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
+    assert first["system"] == play.system_prompt(g.sheet, g.companions) and first["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
     assert first["thinking"]["type"] == "adaptive"
     assert {t["name"] for t in first["tools"]} >= {"roll", "change_pc", "lookup", "level_up"}
     assert first["messages"][0]["content"][0]["text"].startswith("[Status now]")
@@ -200,6 +200,51 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
     s2 = play.Session(backend="api")  # a save carries on the way it was started
     asyncio.run(s2.play(play.Game(data, s.game.path)))  # type: ignore[union-attr]
     assert opened[-1].session_id == "sess-1" and s2.game.backend == "sdk"  # type: ignore[union-attr]
+
+
+def test_instructions_follow_the_sheets(monkeypatch: Any, tmp_path: Path) -> None:
+    """After a sheet change that the instructions show (a level-up, a companion joining), the next turn sends them
+    built again."""
+    g = new_game(tmp_path)
+    g.system = play.system_prompt(g.sheet, g.companions)
+    fake, _ = run(monkeypatch, [reply(text("One."))], g, "a")
+    first = fake.calls[0]["system"]
+    g.sheet["features"].append("Tough as Old Boots: a new feature")
+    fake, _ = run(monkeypatch, [reply(text("Two."))], g, "b")
+    assert fake.calls[0]["system"] != first and "Tough as Old Boots" in fake.calls[0]["system"]
+
+
+def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -> None:
+    from dm import sdk
+    opened: list[Any] = []
+
+    class FakeClient:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+            self.system, self.session_id, self.closed = system, session_id, False
+            opened.append(self)
+
+        async def open(self) -> None:
+            pass
+
+        async def close(self) -> None:
+            self.closed = True
+
+        async def respond(self, text: str, on_text: Any) -> None:
+            self.session_id = "sess-1"
+
+    monkeypatch.setattr(sdk, "Client", FakeClient)
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
+    s = play.Session(backend="sdk")
+
+    async def go() -> None:
+        await s.new("fighter")
+        await s.line("I look")
+        s.game.sheet["features"].append("Tough as Old Boots: a new feature")  # type: ignore[union-attr]
+        await s.line("I look again")
+    asyncio.run(go())
+    assert len(opened) == 2 and opened[0].closed and not opened[1].closed
+    assert opened[1].session_id == "sess-1" and "Tough as Old Boots" in opened[1].system  # the same conversation
 
 
 def test_sdk_bridge() -> None:

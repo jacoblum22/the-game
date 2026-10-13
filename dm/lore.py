@@ -384,12 +384,15 @@ REMINDER = ("Record new names and facts in your notebook with write_lore as you 
             "look things up with lore and recall before you state something you said earlier.")
 
 
-def notes(lore: dict[str, Any], transcript: list[dict[str, Any]]) -> tuple[dict[str, Any], str]:
+def notes(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[str, ...] = ()) -> tuple[dict[str, Any], str]:
     """The turn number, the notebook entries the last turns mention and those they link to (one line each, skipping
-    any shown in the last 3 turns), and the reminder. Returns (the notebook with what was shown, the text)."""
+    any shown in the last 3 turns), and the reminder. Returns (the notebook with what was shown, the text).
+    `party`: the PC's and companions' names; their entries are neither shown nor followed (owner, 2026-10-13): they
+    come up nearly every turn, and their sheets are in the instructions."""
     lore, turn = copy.deepcopy(lore), now(transcript)
     out: list[str] = []
-    seen = mentioned(lore, recent_text(transcript)) if lore["entries"] else []
+    skip = {e for p in party for e in (find(lore, p), find(lore, p.split()[0])) if e}
+    seen = [n for n in mentioned(lore, recent_text(transcript)) if n not in skip] if lore["entries"] else []
 
     def fresh(n: str) -> bool:
         return turn - lore["shown"].get(n, -SKIP - 1) > SKIP
@@ -401,7 +404,7 @@ def notes(lore: dict[str, Any], transcript: list[dict[str, Any]]) -> tuple[dict[
     if seen:
         facts = sorted((f for f in _facts(lore) if f["involves"] & set(seen)), key=_newest)
         for f in facts:
-            for c in sorted(f["involves"] - set(seen)):
+            for c in sorted(f["involves"] - set(seen) - skip):
                 if fresh(c) and len(out) < NOTES:
                     out.append(_short(lore, c) + " ← linked from " + ", ".join(sorted(f["involves"] & set(seen))))
                     lore["shown"][c] = turn

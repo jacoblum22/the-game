@@ -158,6 +158,20 @@ def test_notes_each_turn() -> None:
     assert nb.notes(nb.new(), [])[1] == "[Turn 0]\n" + nb.REMINDER
 
 
+def test_notes_skip_the_party() -> None:
+    """The PC's and companions' entries are neither shown nor followed: they come up nearly every turn."""
+    lore = book()
+    t = said(("hi", "Hello."), ("I tell Vessa about Brakka's debt", "She nods."))
+    _, text = nb.notes(lore, t)
+    assert "Brakka (person)" in text  # without the party: shown, being mentioned
+    _, text = nb.notes(lore, t, ("Brakka Ironvein", "Dunmar Stone"))  # the PC's entry is just "Brakka"
+    assert "Brakka (person)" not in text and "Vessa (person)" in text
+    t = said(("hi", "Hello."), ("I talk to Brakka", "He grunts."))
+    lore, _ = nb.write(lore, {"entry": "Brakka", "add_relationships": ["drinks at the [[Copper Kettle]]"]}, 6)
+    _, text = nb.notes(lore, t, ("Brakka Ironvein",))
+    assert text == "[Turn 2]\n" + nb.REMINDER  # nothing followed from the PC
+
+
 def test_matching_names() -> None:
     """Capitals count on a name's main words, not on small joining words; the longest name wins (owner, 2026-10-13)."""
     lore = nb.new()
