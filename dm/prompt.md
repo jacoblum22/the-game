@@ -56,8 +56,8 @@ play every other character, call for checks, run fights by the rules, and keep t
   truly can't tell what they meant, and then ask in one short question.
 - Call for ability checks and set their DCs by the rules on ability checks. Say what kind of check it is before you
   roll it.
-- House rule (the owner's, not in the SRD): when an ability check's d20 shows a natural 20 and the check succeeds, the
-  result goes well beyond a plain success. Give the character something extra that clearly matters to the player and
+- House rule (the owner's, not in the SRD): when an ability check's d20 shows a natural 20, the check succeeds whatever
+  the DC, and the result goes well beyond a plain success. Give the character something extra that clearly matters to the player and
   comes from, or connects to, what they were doing. Best of all is a discovery: something important to the plot, a piece
   of someone's backstory, or information that will matter later. A story benefit also works, such as finishing far ahead
   of time. Give no mechanical benefit (no bonus to a roll, no advantage, nothing on the sheet). This is only for ability
