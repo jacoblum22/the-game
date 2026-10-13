@@ -146,9 +146,10 @@ function dice(text) {
 }
 
 // ---- a monster's HP and AC stay hidden from the player (the terminal still shows them; the DM needs them) ----
-let pc = "";  // the PC's first name, from the header: an AC on a roll against the PC stays
+let pc = "", party = [];  // the PC's first name (from the header) and the companions': an AC on a roll against them stays
 function hideAC(reason) {
-  if (pc && new RegExp(`\\b(vs\\.?|against) ${pc.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(reason)) return reason;
+  for (const n of [pc, ...party])
+    if (n && new RegExp(`\\b(vs\\.?|against) ${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(reason)) return reason;
   return reason.replace(/\s*\b(?:vs\.?|against) AC \d+/g, "").replace(/\s*\(AC \d+\)/g, "")
                .replace(/\(AC \d+(?:, |; )/g, "(").replace(/,? AC \d+/g, "");
 }
@@ -182,6 +183,7 @@ function tool(text) {
   if ((m = head.match(/^fight: (.*)$/)))  // the tail is a note to the DM about its next_turn tool
     return `<div class="event">⚔ ${esc(m[1].replace(/\. Nobody has had a turn yet: next_turn starts the first one\.$/, ""))}${rest}</div>`;
   if ((m = head.match(/^time: (.*)$/))) return `<div class="event">⏳ ${esc(m[1])}${rest}</div>`;
+  if ((m = head.match(/^party: (.*)$/))) return `<div class="event big">👥 ${esc(m[1])}${rest}</div>`;
   if ((m = head.match(/^level up: (.*)$/))) return `<div class="event big">⬆ ${esc(m[1])}${rest}</div>`;
   if ((m = head.match(/^built (.*)$/))) return `<div class="event big">✦ Built ${esc(m[1])}${rest}</div>`;
   return `<div class="event">${esc(head)}${rest}</div>`;
@@ -240,7 +242,7 @@ function sheetCard(raw) {
     (hp[3] ? `<div class="sm">+${hp[3]} temporary</div>` : "") + `</div>`;
   if (ac) top += stat("AC", ac[1], esc(ac[2] || acNote));
   const sp = speed.match(/^(\d+) ft(?: \((.*)\))?$/);
-  top += (sp ? stat("Speed", sp[1], "ft" + (sp[2] ? ", " + esc(sp[2]) : "")) : stat("Speed", "", esc(speed))) +stat("Prof.", prof) + stat("Hit dice", esc(hd)) + stat("XP", esc(xp));
+  top += (sp ? stat("Speed", sp[1], "ft" + (sp[2] ? ", " + esc(sp[2]) : "")) : stat("Speed", "", esc(speed))) +stat("Prof.", prof) + stat("Hit dice", esc(hd)) + (xp ? stat("XP", esc(xp)) : "");
   top += `</div>`;
   const time = take("Time"), timers = take("Timers");
   if (time) top += row("Time", esc(time)) + (timers ? row("Timers", timers.split("; ").map(x => `<span class="chip">${esc(x)}</span>`).join("")) : "");
@@ -318,9 +320,12 @@ function render(text) {
   const lines = text.replace(/\r/g, "").split("\n");
   let html = "", para = [], sheet = null, who = null;
   pc = ((text.match(/^(.+?), .+?\. Saving to .*\/sheet shows your sheet/m) || [])[1] || "").split(" ")[0];
+  party = [...text.matchAll(/\[party: (\S+)[^\n]*? joined the party/g)].map(m => m[1]);
   const flush = () => { if (para.length) html += `<p>${esc(para.join("\n"))}</p>`; para = []; };
   const endSheet = () => {
-    if (sheet) html += sheetCard(sheet.join("\n").trim().replace("; nobody's yet, next_turn starts the first", ""));
+    // the PC's card, then one per companion ("Companion Wren: …" blocks after the PC's part)
+    if (sheet) for (const part of sheet.join("\n").trim().split(/\n\n(?=Companion )/))
+      html += sheetCard(part.replace("; nobody's yet, next_turn starts the first", ""));
     sheet = null;
   };
   for (let i = 0; i < lines.length; i++) {

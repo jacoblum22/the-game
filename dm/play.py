@@ -100,7 +100,7 @@ class Game:
     def status(self) -> str:
         return (m.clock_text(self.clock) + "\n" + m.status(self.sheet)
                 + "".join(f"\n\nCompanion {c['name']}, {c['summary']}:\n" + m.status(c) for c in self.companions)
-                + "\n" + m.fight_text(self.fight, self.sheet))
+                + "\n" + m.fight_text(self.fight, self.sheet, self.companions))
 
     def member(self, who: Any) -> int | None:
         """The companion `who` names (index), or None for the PC (no `who`, or the PC's name). Raises Refused."""
@@ -155,8 +155,13 @@ class Game:
             i = self.member(a["remove"])
             if i is None:
                 raise m.Refused("remove: the PC can't leave the party")
-            gone = self.companions.pop(i)
-            return f"{gone['name']} left the party"
+            name = self.companions[i]["name"]
+            note = ""
+            if self.fight and any(c["name"] == name for c in self.fight["order"]):
+                self.fight, note = m.change_creature(self.fight, {"name": name, "remove": True})
+                note = "; " + note
+            del self.companions[i]
+            return f"{name} left the party{note}"
         ch = a.get("add")
         if not isinstance(ch, dict):
             raise m.Refused("pass add (a companion's full set of choices) or remove (a companion's name)")
@@ -298,6 +303,9 @@ class Game:
                 if i is None:
                     self.sheet, text = m.level_up(self.sheet, a.get("record"))
                     done.append(self.sheet)
+                    behind = [f"{c['name']} (level {c['level']})" for c in self.companions if c["level"] < self.sheet["level"]]
+                    if behind:
+                        text += "\nCompanions now below the PC's level: " + ", ".join(behind)
                 else:
                     self.companions[i], text = m.level_up(self.companions[i], a.get("record"), cap=self.sheet["level"])
                     done.append(self.companions[i])
@@ -308,14 +316,16 @@ class Game:
             return res
 
         @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
-              "the combatant named 'pc'; every creature needs a distinct name, hp and ac.",
+              "the combatant named 'pc' and a companion the combatant with their name (their HP lives on their sheets); every "
+              "creature needs a distinct name, hp and ac.",
               {"type": "object", "properties": {"combatants": {"type": "array", "items": {
                   "type": "object", "properties": {"name": {"type": "string"}, "initiative": {"type": "integer"},
                                                    "hp": {"type": "integer"}, "ac": {"type": "integer"}},
                   "required": ["name", "initiative"]}}}, "required": ["combatants"]})
         async def add_combatants(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
-                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], a["combatants"])
+                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], a["combatants"],
+                                                     tuple(c["name"] for c in self.companions))
                 return text
             return self.run("fight", go)
 
@@ -616,7 +626,7 @@ async def main() -> None:
             if line == "/sheet":
                 # the PC's part as before (the web page lays it out as one card); companions after it
                 print(sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
-                      + m.fight_text(game.fight, game.sheet)
+                      + m.fight_text(game.fight, game.sheet, game.companions)
                       + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
                 continue
             game.log("player", line)

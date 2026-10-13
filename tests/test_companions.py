@@ -13,8 +13,8 @@ def game(tmp_path, pc=None):
     return g, {t.name: t.handler for t in g.tools()}
 
 
-def call(tools, name, **a):
-    res = asyncio.run(tools[name](a))
+def call(tools, tool, **a):
+    res = asyncio.run(tools[tool](a))
     return res["content"][0]["text"], bool(res.get("is_error"))
 
 
@@ -84,3 +84,25 @@ def test_level_up_to_the_pcs_level(tmp_path) -> None:
     assert not err and g.companions[0]["level"] == 2 and g.companions[0]["companion"] is True
     assert "NOT YET" in call(t, "level_up_options", who="Wren")[0]
     assert "waits until the PC" in call(t, "level_up", who="Wren", record=WREN_LEVELS[1])[0]
+
+
+def test_fights(tmp_path) -> None:
+    g, t = game(tmp_path)
+    call(t, "change_party", add=WREN)
+    text, err = call(t, "add_combatants", combatants=[{"name": "pc", "initiative": 12}, {"name": "wren", "initiative": 15},
+                                                      {"name": "Goblin 1", "initiative": 10, "hp": 7, "ac": 15}])
+    assert not err and "Wren (15)" in text
+    call(t, "change_pc", who="Wren", damage=2)
+    w = g.companions[0]
+    assert f"Wren (companion, initiative 15): HP {w['hp']['current']}/{w['hp']['max']}, AC {w['ac']}" in g.status()
+    assert "use change_pc with who" in call(t, "change_creature", name="Wren", damage=1)[0]
+    assert call(t, "next_turn")[0] == "Round 1, now: Wren."
+    text, err = call(t, "change_party", remove="Wren")
+    assert not err and "Wren removed from the fight" in text and "Wren" not in g.status()
+
+
+def test_pc_level_up_names_companions_behind(tmp_path) -> None:
+    _, t = game(tmp_path, built(BRAKKA, []) | {"xp": 300})
+    call(t, "change_party", add=WREN)
+    text, err = call(t, "level_up", record=rec())
+    assert not err and "Companions now below the PC's level: Wren (level 1)" in text

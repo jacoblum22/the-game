@@ -576,9 +576,11 @@ def _level_report(old: dict[str, Any], new: dict[str, Any]) -> str:
 
 # ---------- the fight tracker ----------
 
-def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[dict[str, Any]]) -> tuple[dict[str, Any], str]:
-    """Start a fight or add arrivals. Each combatant: name, initiative, and (not for the PC) hp and ac. The PC is
-    the entry named `pc`. Order is by initiative, highest first; ties keep the order given (the DM settles ties).
+def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[dict[str, Any]],
+                   companions: tuple[str, ...] = ()) -> tuple[dict[str, Any], str]:
+    """Start a fight or add arrivals. Each combatant: name, initiative, and (not for the PC or a companion) hp and ac.
+    The PC is the entry named `pc`; a companion is the entry with a companion's name (full or first), and like the PC
+    its HP lives on its sheet. Order is by initiative, highest first; ties keep the order given (the DM settles ties).
     A new fight starts with nobody's turn yet (turn -1): the first next_turn starts the first combatant's turn."""
     f = copy.deepcopy(fight) if fight else {"round": 1, "turn": -1, "order": []}
     names = {c["name"] for c in f["order"]}
@@ -586,16 +588,18 @@ def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[
     for c in combatants:
         name = str(c.get("name", "")).strip()
         is_pc = name.lower() == "pc" or name == pc_name
-        name = pc_name if is_pc else name
+        mate = next((x for x in companions if name.casefold() in (x.casefold(), x.split()[0].casefold())), None)
+        name = pc_name if is_pc else mate or name
         if not name or name in names:
             raise Refused(f"each combatant needs a unique name; already in the fight: {', '.join(names) or 'nobody'}")
         if not isinstance(c.get("initiative"), int):
             raise Refused(f"{name} needs an initiative total (roll it first)")
-        if not is_pc and not (isinstance(c.get("hp"), int) and c["hp"] > 0 and isinstance(c.get("ac"), int)):
+        if not is_pc and not mate and not (isinstance(c.get("hp"), int) and c["hp"] > 0 and isinstance(c.get("ac"), int)):
             raise Refused(f"{name} needs hp (above 0) and ac from its stat block")
         names.add(name)
-        new.append({"name": name, "initiative": c["initiative"], "pc": is_pc, "hp": c.get("hp"), "max_hp": c.get("hp"),
-                    "ac": c.get("ac"), "conditions": []})
+        new.append({"name": name, "initiative": c["initiative"], "pc": is_pc}
+                   | ({"companion": True} if mate else {"hp": c.get("hp"), "max_hp": c.get("hp"), "ac": c.get("ac"),
+                                                         "conditions": []}))
     current = f["order"][f["turn"]]["name"] if f["turn"] >= 0 else None
     f["order"] = sorted(f["order"] + new, key=lambda c: -c["initiative"])  # stable: ties keep the given order
     if current:
@@ -611,6 +615,8 @@ def change_creature(fight: dict[str, Any] | None, ch: dict[str, Any]) -> tuple[d
     c = _find(f, ch.get("name", ""))
     if c["pc"]:
         raise Refused("the PC's HP and conditions live on the character sheet: use change_pc")
+    if c.get("companion") and not ch.get("remove"):
+        raise Refused(f"{c['name']}'s HP and conditions live on their sheet: use change_pc with who")
     out = []
     if ch.get("remove"):
         i = f["order"].index(c)
@@ -652,10 +658,10 @@ def next_turn(fight: dict[str, Any] | None) -> tuple[dict[str, Any], str]:
     if f["turn"] >= len(f["order"]):
         f["turn"], f["round"] = 0, f["round"] + 1
     c = f["order"][f["turn"]]
-    return f, f"Round {f['round']}, now: {c['name']}." + ("" if c["pc"] else f" {_creature_text(c)}")
+    return f, f"Round {f['round']}, now: {c['name']}." + ("" if c["pc"] or c.get("companion") else f" {_creature_text(c)}")
 
 
-def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any]) -> str:
+def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any], companions: list[dict[str, Any]] | None = None) -> str:
     if not f:
         return "No fight is on."
     lines = [f"FIGHT, round {f['round']}. In initiative order (→ = whose turn it is"
@@ -663,8 +669,10 @@ def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any]) -> str:
     for i, c in enumerate(f["order"]):
         mark = "→" if i == f["turn"] else " "
         if c["pc"]:
-            lines.append(f"{mark} {c['name']} (the PC, initiative {c['initiative']}): HP {pc_sheet['hp']['current']}/"
-                         f"{pc_sheet['hp']['max']}, AC {(pc_sheet.get('ac_now') or {}).get('value', pc_sheet['ac'])}")
+            lines.append(f"{mark} {c['name']} (the PC, initiative {c['initiative']}): {_member_text(pc_sheet)}")
+        elif c.get("companion"):
+            mate = next(x for x in companions or [] if x["name"] == c["name"])
+            lines.append(f"{mark} {c['name']} (companion, initiative {c['initiative']}): {_member_text(mate)}")
         else:
             lines.append(f"{mark} {_creature_text(c)}")
     return "\n".join(lines)
@@ -678,6 +686,11 @@ def end_fight(fight: dict[str, Any] | None) -> tuple[None, str]:
 
 def order_text(f: dict[str, Any]) -> str:
     return ", ".join(f"{c['name']} ({c['initiative']})" for c in f["order"])
+
+
+def _member_text(s: dict[str, Any]) -> str:
+    """A party member's line in the tracker, from their sheet."""
+    return f"HP {s['hp']['current']}/{s['hp']['max']}, AC {(s.get('ac_now') or {}).get('value', s['ac'])}"
 
 
 def _creature_text(c: dict[str, Any]) -> str:
