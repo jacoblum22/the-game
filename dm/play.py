@@ -109,6 +109,36 @@ class Game:
         companion rests too, with its own end-of-rest choices from `companions`."""
         a = dict(a)
         i = self.member(a.pop("who", None))
+        s = self.sheet if i is None else self.companions[i]
+        first = s["name"].split()[0]
+        spell = {k: a.pop(k) for k in ("cast", "level", "ritual", "no_slot", "duration") if k in a}
+        clock, lines = self.clock, []
+        if spell:
+            if not spell.get("cast"):
+                raise m.Refused("level, ritual, no_slot and duration go with cast (the spell's name)")
+            if a.get("spend_slot") or a.get("long_rest") or a.get("short_rest"):
+                raise m.Refused("cast spends its own slot, and a rest is a call of its own: leave out spend_slot and rests")
+            slot, clock, lines = m.cast(s, self.clock, spell)
+            if slot:
+                a["spend_slot"] = slot
+        if not spell or any(a.values()):
+            lines.append(self._change_member(i, a))
+        if spell:  # a cast comes without a rest, so the clock is only the cast's
+            self.clock = clock
+        now = self.sheet if i is None else self.companions[i]
+        if (on := m.concentrating(self.clock, first)) and (a.get("damage") or a.get("conditions_added")):
+            out = set(now["conditions"]) & (m.incapacitating() | {"dead"})
+            if out:
+                self.clock, ended = m.end_concentration(self.clock, first, ", ".join(sorted(out)))
+                lines += ended
+            elif a.get("damage"):
+                spell_name = on.removeprefix(first + "'s ").removesuffix(m.CONCENTRATION)
+                lines.append(f"{first} is concentrating on {spell_name}: Constitution saving throw, DC "
+                             f"{max(10, a['damage'] // 2)} (10 or half the damage, whichever is higher); on a failure "
+                             f"the spell ends (remove its timer)")
+        return "; ".join(lines)
+
+    def _change_member(self, i: int | None, a: dict[str, Any]) -> str:
         rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
         if i is not None:
             if rest:
@@ -197,6 +227,8 @@ class Game:
         return {"content": [{"type": "text", "text": text}]}
 
     def tools(self) -> list[Any]:
+        _span = {k: _INT for k in ("days", "hours", "minutes", "seconds")}
+
         @tool("roll", "Roll dice, e.g. 1d20+5 or 2d6+3. The player sees every roll.",
               {"type": "object", "properties": {
                   "dice": {"type": "string", "description": "dice expression, e.g. 1d20+4, 2d8+3, 1d4+1d6"},
@@ -221,7 +253,20 @@ class Game:
                                      "description": "1 = spend one hit die at the end of a short rest; the result says what to roll, "
                                      "then pass the total as heal. The player decides after each roll whether to spend another"},
                   "death_save_successes": _INT, "death_save_failures": _INT,
-                  "spend_slot": {"type": "integer", "minimum": 1, "maximum": 9, "description": "spell slot level spent"},
+                  "cast": {"type": "string", "description": "a spell the character casts, e.g. Bless. One call does it all: "
+                           "it spends the slot (level), starts a timer for the spell's duration (the clock must be set), "
+                           "and a concentration spell ends the caster's earlier one. Can go with other fields, not a rest"},
+                  "level": {"type": "integer", "minimum": 1, "maximum": 9, "description": "with cast: the spell slot "
+                            "level used (the spell's level or higher); leave out for a cantrip or a ritual"},
+                  "ritual": {"type": "boolean", "description": "with cast: cast as a ritual (no slot, 10 minutes longer)"},
+                  "no_slot": {"type": "string", "description": "with cast: the spell is cast without a slot, and from "
+                              "what, e.g. 'spell scroll', 'Mystic Arcanum' (record that use with use_resource)"},
+                  "duration": {"type": "object", "properties": {**_span, "concentration": {"type": "boolean"}},
+                               "description": "with cast: only when the spell's higher-level text changes how long it "
+                               "lasts (the tool asks for it then), e.g. {hours: 8, concentration: true}; no time = until "
+                               "dispelled or ended"},
+                  "spend_slot": {"type": "integer", "minimum": 1, "maximum": 9, "description": "a spell slot spent "
+                                 "without casting a spell, e.g. Divine Smite; for a spell use cast"},
                   "restore_slot": {"type": "integer", "minimum": 1, "maximum": 9},
                   "use_resource": {"type": "string", "description": "a feature name exactly as on the sheet, e.g. Second Wind"},
                   "restore_resource": {"type": "string"},
@@ -401,8 +446,6 @@ class Game:
                     text += f" {m.span(rounds * 6)} of fighting; now {m.when(self.clock['now'])}."
                 return text
             return self.run("fight", go)
-
-        _span = {k: _INT for k in ("days", "hours", "minutes", "seconds")}
 
         @tool("change_time", "The game clock and timers. Set the time once at the start (and to correct it), and move it on "
               "whenever time passes outside fights and rests (travel, searching, waiting, talking). Fights (6 seconds a "

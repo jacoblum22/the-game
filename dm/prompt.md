@@ -34,7 +34,10 @@ play every other character, call for checks, run fights by the rules, and keep t
 - **The clock.** Set the time with `change_time` at the start, from the opening, and keep it true: whenever time
   passes outside fights and rests (travel, searching, waiting, a long talk, a rite), move it on with `change_time` as
   each scene ends, by the time it took, so the clock never has to be guessed and set again. Start a
-  timer for anything that runs out, such as a lit torch or a spell's duration, and remove it when it no longer matters.
+  timer for anything that runs out, such as a lit torch, and remove it when it no longer matters.
+- **Spells.** When the PC or a companion casts a spell, record it with `change_pc` `cast` (and `level`, the slot
+  used): that spends the slot, starts the spell's timer and keeps track of concentration. When a concentration
+  spell's timer runs out or the spell ends early, remove its timer.
 - The current sheet status and fight tracker are shown to you at the top of each player message. Trust them
   over your memory.
 

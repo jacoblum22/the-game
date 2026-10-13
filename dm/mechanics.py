@@ -788,3 +788,121 @@ def change_time(c: dict[str, Any], a: dict[str, Any]) -> tuple[dict[str, Any], s
     if not out:
         raise Refused("nothing to change: pass set, advance, add_timer or remove_timer")
     return c, "; ".join(out)
+
+
+# ---------- casting a spell ----------
+
+# SRD durations: "Instantaneous", "1 hour", "Up to 1 minute" (concentration), "1 round"; "Until dispelled" and "Special" run
+# until something ends them, so they get no timer.
+_DURATION = re.compile(r"(?:Up to )?(\d+) (round|minute|hour|day)s?")
+_UNIT = {"round": 6, "minute": 60, "hour": 3600, "day": DAY}
+CONCENTRATION = " (concentration)"
+
+
+def _ritual_casters() -> set[str]:
+    """Classes whose Spellcasting has Ritual Casting (SRD: bard, cleric, druid, wizard)."""
+    return {k for k, c in srd.table("Classes").items()
+            if any(i["name"] == "Ritual Casting" for i in (c.get("spellcasting") or {}).get("info", []))}
+
+
+def incapacitating() -> set[str]:
+    """Conditions that make a creature incapacitated (SRD Conditions: the condition itself, and those that say so)."""
+    return {"incapacitated"} | {k for k, c in srd.table("Conditions").items()
+                                if any("creature is incapacitated (see the condition)" in d for d in c["desc"])}
+    # not grappled: "The condition ends if the grappler is incapacitated (see the condition)"
+
+
+def sheet_spells(s: dict[str, Any]) -> dict[str, str]:
+    """Every spell on the sheet: name → how it's cast ("" normally, "ritual" only as a ritual)."""
+    sc = s.get("spellcasting") or {}
+    out = {n: "ritual" for n in sc.get("book_rituals", [])}  # Book of Ancient Secrets: only as rituals
+    if sc.get("class") == "wizard":
+        out |= {n: "ritual" for n in sc.get("spellbook", [])}  # Ritual Casting: a ritual in the spellbook, prepared or not
+    for key in ("cantrips", "known", "prepared", "always_prepared", "magical_secrets", "tome_cantrips", "signature_spells",
+                "racial_cantrips", "invocation_spells"):
+        out |= {n.split(" (")[0]: "" for n in sc.get(key, [])}  # "Thaumaturgy (Tiefling, CHA)"
+    out |= {n: "" for n in (sc.get("arcanum") or {}).values()}
+    return out
+
+
+def concentrating(c: dict[str, Any], first: str) -> str | None:
+    """The timer of the spell `first` is concentrating on, if it hasn't run out."""
+    return next((n for n, end in c["timers"].items() if n.startswith(f"{first}'s ") and n.endswith(CONCENTRATION)
+                 and (c["now"] is None or end > c["now"])), None)
+
+
+def end_concentration(c: dict[str, Any], first: str, why: str) -> tuple[dict[str, Any], list[str]]:
+    """Removes `first`'s concentration timers (a run-out one too). Returns (clock, lines)."""
+    gone = [n for n in c["timers"] if n.startswith(f"{first}'s ") and n.endswith(CONCENTRATION)]
+    if not gone:
+        return c, []
+    c = {**c, "timers": {n: e for n, e in c["timers"].items() if n not in gone}}
+    own = first + "'s "
+    return c, [f"{first} stops concentrating on {n.removeprefix(own).removesuffix(CONCENTRATION)} ({why})" for n in gone]
+
+
+def cast(s: dict[str, Any], c: dict[str, Any], a: dict[str, Any]) -> tuple[int | None, dict[str, Any], list[str]]:
+    """A spell cast by the character on sheet `s`: {cast, level, ritual, no_slot, duration}. Returns (the slot level to
+    spend or None, the clock with the spell's timer, lines). Raises Refused. The sheet itself isn't changed here."""
+    sp = _srd_spell(str(a["cast"]))
+    name, lvl, first = sp["name"], a.get("level"), s["name"].split()[0]
+    have, sc = sheet_spells(s), s.get("spellcasting") or {}
+    if lvl is not None and (not isinstance(lvl, int) or not sp["level"] <= lvl <= 9 or not sp["level"]):
+        raise Refused(f"{name} is a cantrip: leave out level" if not sp["level"] else
+                      f"level: the slot level, {sp['level']} ({name}'s level) to 9")
+    slot, out = None, []
+    if a.get("no_slot"):  # a scroll, a magic item, Mystic Arcanum (record its use with use_resource), a free casting
+        out.append(f"{first} casts {name}" + (f" at level {lvl}" if lvl else "") + f" without a spell slot ({a['no_slot']})")
+    elif a.get("ritual"):
+        if not sp["ritual"]:
+            raise Refused(f"{name} isn't a ritual spell")
+        if name not in sc.get("book_rituals", []) and (sc.get("class") not in _ritual_casters() or name not in have):
+            raise Refused(f"{first} can't cast {name} as a ritual: Ritual Casting (bard, cleric, druid, wizard) casts a "
+                          "ritual spell the character has (a wizard's: any in the spellbook); Book of Ancient Secrets, "
+                          "those in the Book of Shadows")
+        if lvl:
+            raise Refused("a ritual uses no spell slot: leave out level")
+        out.append(f"{first} casts {name} as a ritual: no spell slot, and it takes 10 minutes longer than its casting "
+                   f"time ({sp['casting_time']})")
+    else:
+        if name not in have or have[name] == "ritual":
+            spells = ", ".join(n for n, how in have.items() if not how) or "none"
+            raise Refused(f"{first} can't cast {name} with a spell slot " + (
+                "(only as a ritual: pass ritual)" if name in have else f"(not among their spells: {spells})")
+                + ". A spell from a scroll or item, or cast some other way: pass no_slot with what it's from")
+        if sp["level"] and not lvl:
+            raise Refused(f"level: which spell slot {name} is cast with ({sp['level']} or higher)")
+        slot = lvl or None
+        out.append(f"{first} casts {name}" + (f" at level {lvl}" if lvl else ""))
+    higher = " ".join(sp.get("higher_level", []))
+    changes = bool(re.search(r"duration|lasts|concentration", higher))  # e.g. Hunter's Mark, Major Image, Geas
+    d, conc = a.get("duration"), sp["concentration"]
+    if d is not None:
+        if not changes or not lvl or lvl == sp["level"]:
+            raise Refused(f"duration: only for a spell cast at a higher level whose higher-level text changes the duration; "
+                          f"{name} lasts {sp['duration']}")
+        sec, conc = _secs(d), bool(d.get("concentration"))
+        if sec < 0:
+            raise Refused("duration can't be negative")
+    elif changes and lvl and lvl > sp["level"]:
+        raise Refused(f"{name} cast at level {lvl}: its higher-level text may change how long it lasts ({higher}). Pass "
+                      f"duration as that text gives for this level, e.g. {{\"hours\": 8, \"concentration\": true}}, or "
+                      f"no time if it lasts until dispelled or ended; at its own level it lasts {sp['duration']}")
+    else:
+        m_ = _DURATION.fullmatch(sp["duration"])
+        sec = int(m_[1]) * _UNIT[m_[2]] if m_ else 0
+    if conc:
+        c, ended = end_concentration(c, first, f"concentrating on {name} instead")
+        out += ended
+    if sec:
+        if c["now"] is None:
+            raise Refused(f"{name} lasts {sp['duration']}, kept as a timer, and the time isn't set yet: set it with "
+                          "change_time first")
+        timer = f"{first}'s {name}" + (CONCENTRATION if conc else "")
+        c = {**c, "timers": {**c["timers"], timer: c["now"] + sec}}
+        out.append(f"timer {timer}: {span(sec)}")
+    elif d is not None:
+        out.append("lasts until dispelled or ended: no timer")
+    elif sp["duration"] != "Instantaneous":
+        out.append(f"lasts {sp['duration'].lower()}: no timer")
+    return slot, c, out
