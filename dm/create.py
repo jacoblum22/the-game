@@ -609,6 +609,9 @@ def _ordinal(n: int) -> str:
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
+ALWAYS = "always prepared, and always-prepared spells don't count against the number: choose another"
+
+
 def _check_names(key: str, names: Any, n: int, allowed: set[str], label: str, errs: list[str], atmost: bool = False,
                  taken: set[str] | None = None, have: str = "known") -> list[str]:
     """Spell names the player gave: exactly n (1 to n if `atmost`), each an SRD spell in `allowed` (`label` finishes
@@ -685,7 +688,8 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
             if ch.get("spells"):
                 errs.append(f"spells: a {cls} prepares spells from the whole class list; use prepared")
             st["prepared"] = _check_names("prepared", ch.get("prepared"), rules1["prepared"], level1(1),
-                                          f"a level-1 {cls} spell", errs, atmost=True)
+                                          f"a level-1 {cls} spell", errs, atmost=True,
+                                          taken=set(rules1.get("always_prepared", [])), have=ALWAYS)
     for i, rec in enumerate(levels):
         _level_spells(rec, i + 2, cls, st, errs, level_chosen[i])
         if cls == "warlock":
@@ -696,7 +700,8 @@ def _spells(ch: dict[str, Any], race: str, cls: str, scores: dict[str, int], sco
             first = spell_rules(race, cls, scores1, i + 2)
             st["prepared"] = _check_names(f"level {i + 2}: prepared", rec.get("prepared"), first["prepared"],
                                           set(spell_pool(cls, 1, first["max_level"])),
-                                          f"a {cls} spell of level 1 to {first['max_level']}", errs, atmost=True)
+                                          f"a {cls} spell of level 1 to {first['max_level']}", errs, atmost=True,
+                                          taken=set(first.get("always_prepared", [])), have=ALWAYS)
         elif rec.get("prepared"):
             errs.append(f"level {i + 2}: prepared: the prepared list changes when a long rest finishes, not at a level-up")
     land =next((g["index"] for g in chosen.get("feature.circle-of-the-land", [])), None)

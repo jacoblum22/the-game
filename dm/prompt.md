@@ -79,6 +79,7 @@ play every other character, call for checks, run fights by the rules, and keep t
 - When someone joins the party, build them yourself to fit who they are in the story (standard array; `srd_options`
   gives the choices), add them with `change_party`, then level them up with `level_up` (`who`) to the PC's level. Don't
   ask the player about any of these choices, the levels' hit points included: a companion arrives already built.
+  Where a choice lets them take up to a number at no cost (spells prepared, for example), take the full number.
 - Record every change to a companion with `change_pc` and `who`. They make death saves like the PC. A rest is the whole
   party's: one `change_pc` rest without `who`, with each companion's end-of-rest choices in `companions`; then each
   member spends their own hit dice.

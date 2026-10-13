@@ -183,18 +183,25 @@ class Game:
         if not sheet:
             raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
         sheet["companion"] = True
+        if sheet["level"] < self.sheet["level"]:
+            sheet["joining"] = True  # at the PC's level in the story: built up to it before the player sees them join
         self.companions.append(sheet)
+        if sheet.get("joining"):
+            return f"{sheet['name']} is being built: {sheet['summary']} so far"
         return f"{sheet['name']} joined the party, {sheet['summary']}"
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
-    def run(self, label: str, fn: Callable[[], str]) -> dict[str, Any]:
+    def run(self, label: str, fn: Callable[[], str], hidden: bool = False) -> dict[str, Any]:
         try:
             text = fn()
         except m.Refused as e:
             self.transcript.append({"kind": "refused", "text": f"{label}: {e}"})
             return {"content": [{"type": "text", "text": f"REFUSED, nothing changed: {e}"}], "is_error": True}
-        self.log("tool", f"{label}: {text}" if label != "dice" else text)
+        if hidden:  # recorded, not shown to the player
+            self.transcript.append({"kind": "call", "tool": label, "input": {}, "result": text, "error": False})
+        else:
+            self.log("tool", f"{label}: {text}" if label != "dice" else text)
         self.save()
         return {"content": [{"type": "text", "text": text}]}
 
@@ -253,14 +260,15 @@ class Game:
               "name, when they leave or die.",
               {"type": "object", "properties": {"add": {"type": "object"}, "remove": {"type": "string"}}})
         async def change_party(a: dict[str, Any]) -> dict[str, Any]:
-            res = self.run("party", lambda: self.change_party(a))
+            res = self.run("party", lambda: self.change_party(a), hidden=bool(a.get("add")) and self.sheet["level"] > 1)
             if a.get("add") and not res.get("is_error"):
                 c = self.companions[-1]
-                if c["level"] < self.sheet["level"]:  # for the DM only: the player sees the line above
+                if c.get("joining"):  # the player sees nothing until they are at the PC's level
                     res["content"][0]["text"] += (
-                        f"\n\nThe PC is level {self.sheet['level']}: level {c['name']} up to it now with level_up_options "
-                        f"and level_up, who {c['name']!r}. They arrive already built: make every choice of these levels "
-                        "yourself (hit points too), without asking the player.")
+                        f"\n\nThe PC is level {self.sheet['level']}, and so is {c['name']}: they had these levels before "
+                        f"they joined. Build them up to it now with level_up_options and level_up, who {c['name']!r}, making "
+                        "every choice yourself (hit points too), without asking the player. The player sees them join "
+                        "when the last level is taken.")
                 res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c)
             return res
 
@@ -287,6 +295,12 @@ class Game:
                 i = self.member(a.get("who"))
                 text = (m.level_up_options(self.sheet) if i is None
                         else m.level_up_options(self.companions[i], cap=self.sheet["level"]))
+                if i is not None and self.companions[i].get("joining"):
+                    c = self.companions[i]
+                    text = (f"{c['name']} is joining the party: they had this level before they joined. Make every choice "
+                            "yourself, without asking the player (the text below is written for a level-up with the player)"
+                            + (", and pass prepare_spells beside the record: the spells they have prepared at this level"
+                               if "prepare_count" in (c.get("spellcasting") or {}) else "") + ".\n\n" + text)
                 error = False
             except m.Refused as e:
                 text, error = str(e), True
@@ -300,10 +314,16 @@ class Game:
               "by the maximum's rise, and the new spell slots and feature uses are usable at once. For a companion, pass who "
               "(beside record): a companion has no XP and takes levels up to the PC's level.",
               {"type": "object", "properties": {"who": _WHO, "record": {"type": "object", "description": "the level "
-                                                           "record, in the form level_up_options ends with"}},
+                                                           "record, in the form level_up_options ends with"},
+                                                "prepare_spells": {**_NAMES, "description": "only for a companion who is "
+                                                                   "joining: the spells they have prepared at this level"}},
                "required": ["record"]})
         async def level_up(a: dict[str, Any]) -> dict[str, Any]:
             done: list[dict[str, Any]] = []
+            try:
+                joining = self.companions[self.member(a.get("who"))].get("joining")
+            except (m.Refused, TypeError):
+                joining = False  # the PC (index None), or a name go() refuses
 
             def go() -> str:
                 record = a.get("record")
@@ -316,10 +336,28 @@ class Game:
                     if behind:
                         text += "\nCompanions now below the PC's level: " + ", ".join(behind)
                 else:
-                    self.companions[i], text = m.level_up(self.companions[i], record, cap=self.sheet["level"])
-                    done.append(self.companions[i])
+                    c = self.companions[i]
+                    if c.get("joining") and "prepare_count" in (c.get("spellcasting") or {}) and not a.get("prepare_spells"):
+                        raise m.Refused("prepare_spells: a joining companion had this level already, so pass the spells "
+                                        "they have prepared at it, beside the record")
+                    if a.get("prepare_spells") and not c.get("joining"):
+                        raise m.Refused("prepare_spells: only for a companion who is joining; the prepared list changes "
+                                        "when a long rest finishes")
+                    new, text = m.level_up(c, record, cap=self.sheet["level"])
+                    if c.get("joining"):
+                        text = text.replace("; the list changes after a long rest, so the prepared spells are unchanged "
+                                            "for now", "")
+                        if a.get("prepare_spells"):
+                            text += "\n" + m._prepare(new, a["prepare_spells"], True)
+                        if new["level"] < self.sheet["level"]:
+                            new["joining"] = True
+                    self.companions[i] = new
+                    done.append(new)
                 return text
-            res = self.run("level up", go)
+            res = self.run("level up", go, hidden=bool(joining))
+            if joining and done and not done[0].get("joining"):
+                self.log("tool", f"party: {done[0]['name']} joined the party, {done[0]['summary']}")
+                self.save()
             if done:  # the sheet in the DM's instructions was written at the old level
                 res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0]))
             return res

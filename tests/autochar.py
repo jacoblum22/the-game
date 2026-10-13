@@ -55,7 +55,7 @@ def character(race: str, cls: str, shift: int = 0) -> dict[str, Any]:
         full = create.spell_rules(race, cls, sheet_scores)
         if full and "prepared" in full:
             # racial bonuses can raise the modifier: try counts until one fits
-            pool = ch.get("spells") or level1
+            pool = [x for x in ch.get("spells") or level1 if srd.spell(x)["index"] not in full.get("always_prepared", [])]
             ch["prepared"] = pool[:full["prepared"]]
     return ch
 

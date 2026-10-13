@@ -3,7 +3,10 @@ with the party."""
 import asyncio
 import json
 
-from dm import play
+import pytest
+
+from dm import create, play
+from dm import mechanics as m
 from tests.test_create import BRAKKA, WREN
 from tests.test_levels import WREN_LEVELS, built, rec
 
@@ -77,11 +80,26 @@ def test_party_rests(tmp_path) -> None:
 
 
 def test_level_up_to_the_pcs_level(tmp_path) -> None:
+    # owner 2026-10-12: a companion is already at the PC's level when found: built up to it (the prepared list too) before
+    # the player sees one line, them joining at that level
     g, t = game(tmp_path, built(BRAKKA, [rec()]))
+    shown = len([e for e in g.transcript if e["kind"] == "tool"])
     call(t, "change_party", add=WREN)
-    assert "can be taken now" in call(t, "level_up_options", who="Wren")[0]
-    err = call(t, "level_up", who="Wren", record=WREN_LEVELS[0])[1]
-    assert not err and g.companions[0]["level"] == 2 and g.companions[0]["companion"] is True
+    assert g.companions[0]["joining"] and g.transcript[-1]["kind"] == "call"
+    text = call(t, "level_up_options", who="Wren")[0]
+    assert "can be taken now" in text and "had this level before they joined" in text and "prepare_spells" in text
+    assert "prepare_spells" in call(t, "level_up", who="Wren", record=WREN_LEVELS[0])[0]
+    assert call(t, "level_up", who="Wren", record=WREN_LEVELS[0], prepare_spells=["Sleep", "Fireball"])[1]  # not in the book
+    assert g.companions[0]["level"] == 1
+    five = ["Mage Armor", "Magic Missile", "Shield", "Sleep", "Burning Hands"]
+    text, err = call(t, "level_up", who="Wren", record=WREN_LEVELS[0], prepare_spells=five)
+    assert not err and "unchanged for now" not in text and "prepared: " in text
+    w = g.companions[0]
+    assert w["level"] == 2 and w["companion"] is True and "joining" not in w and w["spellcasting"]["prepared"] == five
+    assert [e["text"] for e in g.transcript if e["kind"] == "tool"][shown:] == ["party: Wren joined the party, " + w["summary"]]
+    assert "Prepared spells (5 of 5): Mage Armor" in g.status()
+    # a later level-up is the usual kind: the prepared list waits for a long rest
+    assert "only for a companion who is joining" in call(t, "level_up", who="Wren", record=WREN_LEVELS[1], prepare_spells=five)[0]
     assert "NOT YET" in call(t, "level_up_options", who="Wren")[0]
     assert "waits until the PC" in call(t, "level_up", who="Wren", record=WREN_LEVELS[1])[0]
 
@@ -117,12 +135,21 @@ def test_dunmar_keeps_his_name() -> None:
                           "class.equipment.5": "Emblem", "background.languages": ["Dwarvish", "Giant"],
                           "background.equipment.1": "Emblem", "background.equipment.prayer": "a"},
               "cantrips": ["Light", "Sacred Flame", "Thaumaturgy"], "spells": [],
-              "prepared": ["Bless", "Cure Wounds", "Sanctuary", "Healing Word"]}
+              "prepared": ["Sanctuary", "Healing Word"]}
     assert built(dunmar, [])["name"] == "Dunmar"
+    # his first call put his domain spells in the prepared list, using up two of his four (owner: refuse it)
+    _, errs = create.build(dunmar | {"prepared": ["Bless", "Cure Wounds", "Sanctuary", "Healing Word"]}, None)
+    assert "prepared: Bless is already always prepared" in "\n".join(errs)
+    s = built(dunmar, [])
+    assert "Prepared spells (2 of 4): Sanctuary, Healing Word" in m.status(s)
+    with pytest.raises(m.Refused, match="Cure Wounds is already always prepared"):
+        m.change_pc(s, {"long_rest": True, "prepare_spells": ["Cure Wounds", "Sanctuary"]})
 
 
 def test_who_inside_the_record(tmp_path) -> None:
     g, t = game(tmp_path, built(BRAKKA, [rec()]))
     text = call(t, "change_party", add=WREN)[0]
-    assert "without asking the player" in text and g.transcript[-1]["text"] == "party: Wren joined the party, " + g.companions[0]["summary"]
-    assert not call(t, "level_up", record=WREN_LEVELS[0] | {"who": "Wren"})[1] and g.companions[0]["level"] == 2
+    assert "without asking the player" in text and "Wren is being built" in g.transcript[-1]["result"]
+    five = ["Mage Armor", "Magic Missile", "Shield", "Sleep", "Burning Hands"]
+    assert not call(t, "level_up", record=WREN_LEVELS[0] | {"who": "Wren"}, prepare_spells=five)[1]
+    assert g.companions[0]["level"] == 2

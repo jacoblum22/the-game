@@ -134,7 +134,7 @@ def test_play_tool_changes() -> None:
 def test_hand_made_wizard_prepares_from_its_spellbook() -> None:
     w = json.loads((Path(__file__).parent.parent / "dm" / "characters" / "wizard.json").read_text(encoding="utf-8"))
     w, _ = m.change_pc(w, {"long_rest": True, "prepare_spells": ["Burning Hands", "Detect Magic", "Shield", "Sleep"]})
-    assert "Prepared spells: Burning Hands" in m.status(w)
+    assert "Prepared spells (4 of 4): Burning Hands" in m.status(w)
 
 
 def test_games_started_in_the_same_second_get_separate_saves(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -202,7 +202,8 @@ def test_unarmed_strike_damage_is_never_negative() -> None:
 def test_prepared_spells_are_a_maximum() -> None:
     # Wizard, cleric and druid: "a number of ... spells equal to your ... modifier + your ... level (minimum of one spell)"
     assert built(WREN | {"prepared": ["Shield"]})["spellcasting"]["prepared"] == ["Shield"]
-    assert built(HILDA | {"prepared": ["Bless"]})["spellcasting"]["prepared"] == ["Bless"]
+    assert built(HILDA | {"prepared": ["Command"]})["spellcasting"]["prepared"] == ["Command"]
+    assert "Bless is already always prepared" in problems(HILDA, prepared=["Bless"])
     for ch in (WREN, HILDA):
         assert "1 to 4" in problems(ch, prepared=[])
         assert "1 to 4" in problems(ch, prepared=(ch["prepared"] + ["Detect Magic"] if ch is WREN else ch["prepared"] + ["Command"]))

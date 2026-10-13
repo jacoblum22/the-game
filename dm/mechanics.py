@@ -349,7 +349,9 @@ def _prepare(s: dict[str, Any], names: list[str], long_rest: bool) -> str:
     always, picked = set(sc.get("always_prepared", [])), []
     for n in names:
         sp = _srd_spell(n)
-        if sp["name"] in always or sp["name"] in picked:
+        if sp["name"] in always:
+            raise Refused(f"{sp['name']} is already {create.ALWAYS}")
+        if sp["name"] in picked:
             continue
         if sc["prepare_from"] == "spellbook":
             if sp["name"] not in sc["spellbook"]:
@@ -400,7 +402,7 @@ def status(s: dict[str, Any]) -> str:
         lines.append("Spell slots: " + ", ".join(f"level {k}: {v['left']}/{v['max']}" for k, v in s["spell_slots"].items()))
     sc = s.get("spellcasting") or {}
     if sc.get("prepared") is not None:
-        lines.append("Prepared spells: " + (", ".join(sc.get("always_prepared", []) + sc["prepared"]) or "none"))
+        lines.append(f"Prepared spells ({len(sc['prepared'])} of {sc['prepare_count']}): " + (", ".join(sc["prepared"]) or "none"))
     if sc.get("spellbook"):
         lines.append("Spellbook: " + ", ".join(sc["spellbook"]))
     if s.get("resources"):

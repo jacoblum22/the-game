@@ -507,8 +507,8 @@ def test_wizard_spell_mastery_and_signature_spells() -> None:
     assert "level 20: signature: two 3rd-level wizard spells that are in your spellbook" in problems(
         [*levels[:18], without(levels[18], "signature")], ch)
     assert "level 19: signature: only a wizard at 20th level" in problems([*levels[:17], levels[17] | {"signature": sig}], ch)
-    w, _ = m.change_pc(s20, {"long_rest": True, "prepare_spells": [*sig, book[0]]})
-    assert w["spellcasting"]["prepared"] == [book[0]]  # the signature spells are not counted or listed as prepared
+    with pytest.raises(m.Refused, match="always prepared"):  # the signature spells are not counted or listed as prepared
+        m.change_pc(s20, {"long_rest": True, "prepare_spells": [*sig, book[0]]})
 
 
 def test_cleric_with_the_life_domain_to_3_and_5() -> None:
