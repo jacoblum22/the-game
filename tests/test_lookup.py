@@ -19,7 +19,11 @@ def test_entries() -> None:
 
 
 def test_not_found() -> None:
-    assert "Rules sections whose text mentions it: Melee Attacks" in L.lookup("grappling")
+    assert "Rules sections whose text mentions it: Creature Size" in L.lookup("squeezing")
+    # a heading inside a section brings the section (2026-10-12: "Travel Pace" found nothing, so no Forced March saves)
+    assert L.lookup("grappling").startswith("'grappling' is a heading inside the rules section Melee Attacks")
+    assert "***Forced March.***" in L.lookup("Travel Pace") and "RULE Speed" in L.lookup("forced march")
+    assert "Sections inside it (look each up): Speed, Special Types of Movement" in L.lookup("Movement")
     assert "Adult Red Dragon (monster)" in L.lookup("red dragon")
     assert "may not be in the SRD" in L.lookup("displacer beast")  # not "beholder": the Type section names beholders
 

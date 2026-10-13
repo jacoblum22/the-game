@@ -45,6 +45,9 @@ def lookup(name: str, kind: str = "") -> str:
                 out.append(FORMAT[t](x))
         out += [_features(fs) for fs in features.values()]
         return "\n\n".join(out)
+    if "Rules" in tables and (within := _within(key)):  # "Travel Pace", "Forced March": headings inside "Speed" (2026-10-12)
+        return "\n\n".join(f"{name.strip()!r} is a heading inside the rules section {r['name']}; the whole section:\n\n"
+                           + _rule(r) for r in within)
     words = key.split()
     near = [f"{x['name']} ({_KIND_OF[t]})" for t in tables for x in _entries(t)
             if all(w in x["name"].casefold() for w in words)]
@@ -92,6 +95,16 @@ def _find(tables: list[str], key: str) -> list[tuple[str, dict[str, Any]]]:
                 and not any(x is h for _, h in hits)):
             hits.append((t, x))
     return hits
+
+
+_HEADING = re.compile(r"^#{2,6}\s*(.+?)\s*$|\*\*\*(.+?)\.?\*\*\*", re.MULTILINE)
+
+
+def _within(key: str) -> list[dict[str, Any]]:
+    """The rules sections with a heading named `key` in their text ("#### Travel Pace", "***Forced March.***")."""
+    n = _norm(key)
+    return [r for r in srd.table("Rules").values() if r.get("desc") and not r.get("for")
+            and any(_norm(a or b) == n for a, b in _HEADING.findall(_lines(r["desc"])))]
 
 
 def _lines(x: Any) -> str:
@@ -370,6 +383,8 @@ def _rule(r: dict[str, Any], linked: bool = True) -> str:
     twin = r.get("source") and sum(x["name"] == r["name"] and not x.get("for") for x in srd.table("Rules").values()) > 1
     text = f"RULE {r['name']}" + (f" ({r['source'].replace(' (gap-fill)', '')})" if twin else "") + ":\n" + (_lines(r["desc"]) if r.get("desc") else "Sections: " + ", ".join(
         c["name"] for c in r.get("children", [])))
+    if r.get("desc") and r.get("children"):  # Movement's travel rules are in Speed, a section of its own
+        text += "\n\nSections inside it (look each up): " + ", ".join(c["name"] for c in r["children"])
     named = _step_rules(r) if linked else []
     if named:
         text += "\n\nThe rules sections these steps name, in full:\n\n" + "\n\n".join(_rule(x, False) for x in named)
