@@ -209,3 +209,6 @@ def test_sdk_bridge() -> None:
     c = sdk.Client("m", "system", g.tools(), str(sdk.DM_HOME), None)
     assert "mcp__dm__roll" in c.options.allowed_tools and "mcp__dm__lookup" in c.options.allowed_tools
     assert c.options.max_turns == model.MAX_ROUNDS and c.options.mcp_servers["dm"]["type"] == "sdk"
+    # as on the API: no automatic compaction, and today's instructions on every call (no snapshot)
+    assert c.options.env["DISABLE_AUTO_COMPACT"] == "1"
+    assert c.options.system_prompt == {"type": "custom", "prompt": "system", "snapshot": False}
