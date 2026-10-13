@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any
 
 from dm import create, lookup, model
+from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import tool
 
@@ -62,6 +63,7 @@ class Game:
         self.fight: dict[str, Any] | None = data.get("fight")
         self.clock: dict[str, Any] = data.get("clock") or m.new_clock()  # saves from before 2026-10-12 have none
         self.transcript: list[dict[str, Any]] = data.get("transcript", [])
+        self.lore: dict[str, Any] = data.get("lore") or notebook.new()  # the DM's notebook (dm/lore.py), hidden from the player
         self.model: str = data.get("model", MODEL)
         self.system = ""  # the DM's instructions, written when play starts
         self.path = path
@@ -77,7 +79,7 @@ class Game:
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
-                "transcript": self.transcript, "backend": self.backend}
+                "transcript": self.transcript, "lore": self.lore, "backend": self.backend}
         data |= ({"session_id": self.session_id, "cwd": self.cwd} if self.backend == "sdk" else {"messages": self.messages})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
@@ -200,14 +202,14 @@ class Game:
 
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
-    def run(self, label: str, fn: Callable[[], str], hidden: bool = False) -> dict[str, Any]:
+    def run(self, label: str, fn: Callable[[], str], hidden: bool = False, inp: dict[str, Any] | None = None) -> dict[str, Any]:
         try:
             text = fn()
         except m.Refused as e:
             self.transcript.append({"kind": "refused", "text": f"{label}: {e}"})
             return {"content": [{"type": "text", "text": f"REFUSED, nothing changed: {e}"}], "is_error": True}
         if hidden:  # recorded, not shown to the player
-            self.transcript.append({"kind": "call", "tool": label, "input": {}, "result": text, "error": False})
+            self.transcript.append({"kind": "call", "tool": label, "input": inp or {}, "result": text, "error": False})
         else:
             self.log("tool", f"{label}: {text}" if label != "dice" else text)
         self.save()
@@ -459,8 +461,65 @@ class Game:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
             self.save()
 
+        # ---- the notebook (dm/lore.py): hidden from the player, recorded in the transcript as calls ----
+        _texts = {"type": "array", "items": {"type": "string"}}
+
+        @tool("write_lore", "Your notebook, hidden from the player: write down the world as you say it. An entry is a "
+              "person, place, group, creature, item, event, god, legend... with a description and relationships "
+              "(bullets; [[links]] to other entries; one bullet is one fact, and it shows on every entry it mentions). "
+              "Every part is stamped with the turn. One call can: create an entry (create, kind, description, "
+              "other_names, relationships); or change one (entry, with any of kind, description (rewrites it), "
+              "add_to_description (keeps the old part), add_relationships, add_other_names, remove_other_names, "
+              "rename); or change_relationship (its number, with text); or remove_relationship; or merge one entry "
+              "into another (merge, into). A name or other name belongs to one entry only.",
+              {"type": "object", "properties": {
+                  "create": {"type": "string", "description": "a new entry's name, e.g. Vessa"},
+                  "entry": {"type": "string", "description": "an existing entry, by its name or another name"},
+                  "kind": {"type": "string", "description": "e.g. person, place, group, creature, item, event, god, legend"},
+                  "other_names": {**_texts, "description": "with create: other names it goes by, e.g. the Fence"},
+                  "description": {"type": "string", "description": "what it is; with entry: rewrites the whole description"},
+                  "add_to_description": {"type": "string", "description": "with entry: added after the description, "
+                                         "which is kept with its own turn"},
+                  "relationships": {**_texts, "description": "with create: bullets, e.g. 'runs the [[Thieves Guild]] "
+                                    "from the back of the [[Copper Kettle]]'"},
+                  "add_relationships": {**_texts, "description": "with entry: more bullets"},
+                  "add_other_names": _texts, "remove_other_names": _texts,
+                  "rename": {"type": "string", "description": "with entry: its new name (the old one stays as an other name)"},
+                  "change_relationship": {"type": "integer", "description": "a relationship's number, e.g. 7 for [7]"},
+                  "text": {"type": "string", "description": "with change_relationship: its new wording"},
+                  "remove_relationship": {"type": "integer"},
+                  "merge": {"type": "string", "description": "an entry that turns out to be the same as into"},
+                  "into": {"type": "string"}}})
+        async def write_lore(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                self.lore, text = notebook.write(self.lore, a, notebook.now(self.transcript))
+                return text
+            return self.run("write_lore", go, hidden=True, inp=a)
+
+        @tool("lore", "Look in your notebook. One name: the entry in full (description, when it was last mentioned in "
+              "play, its relationships: those with something from the last turns first, then newest first, 10 at a "
+              "time). Two names: how they're connected, directly or through one other entry.",
+              {"type": "object", "properties": {
+                  "names": {**_texts, "description": "one entry, or two"},
+                  "page": {"type": "integer", "minimum": 1, "description": "the next 10 relationships: 2, 3..."}},
+               "required": ["names"]})
+        async def lore(a: dict[str, Any]) -> dict[str, Any]:
+            return self.run("lore", lambda: notebook.look(self.lore, a.get("names") or [], self.transcript,
+                                                           a.get("page") or 1), hidden=True, inp=a)
+
+        @tool("recall", "Search the game so far, for what was actually said. search: one word, phrase or notebook "
+              "entry (an entry finds its other names too), newest first; two: only the turns where both come up. "
+              "turn: that turn word for word.",
+              {"type": "object", "properties": {
+                  "search": {**_texts, "description": "e.g. ['silver key'], ['Vessa', 'Thieves Guild']"},
+                  "turn": {"type": "integer", "minimum": 0},
+                  "page": {"type": "integer", "minimum": 1}}})
+        async def recall(a: dict[str, Any]) -> dict[str, Any]:
+            return self.run("recall", lambda: notebook.recall(self.lore, self.transcript, a.get("search"), a.get("turn"),
+                                                              a.get("page") or 1), hidden=True, inp=a)
+
         return [roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
-                next_turn, end_fight, change_time, lookup_tool(record)]
+                next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall]
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -512,7 +571,8 @@ async def turn(game: Game | Creation, text: str) -> None:
         print("\n" + t)
         game.log("dm", t)
     if isinstance(game, Game):
-        text = f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}"
+        game.lore, notes = notebook.notes(game.lore, game.transcript)
+        text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
     if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
         failed = await game.sdk.respond(text, said)
         game.session_id = game.sdk.session_id
