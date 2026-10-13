@@ -5,7 +5,7 @@
     py -3.12 -m dm.play --resume saves/<file>.json
 
 In play: type what your character does. /sheet shows your sheet, /quit saves and exits.
-The DM runs through the Claude Code CLI on your Claude login (Claude Agent SDK).
+The DM runs on the Anthropic API, with the key in the ANTHROPIC_API_KEY environment variable.
 """
 
 from __future__ import annotations
@@ -19,29 +19,13 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from claude_agent_sdk import (
-    AssistantMessage,
-    ClaudeAgentOptions,
-    ClaudeSDKClient,
-    ResultMessage,
-    TextBlock,
-    create_sdk_mcp_server,
-    tool,
-)
-
-from dm import create, lookup
+from dm import create, lookup, model
 from dm import mechanics as m
+from dm.model import tool
 
 HERE = Path(__file__).parent
 SAVES = HERE.parent / "saves"
 MODEL = "claude-sonnet-5-5"
-# The Claude Code program adds its own notes to every session. Run the DM outside any git repo (no git or worktree
-# notes) and switch off the notes that have switches: the developer's memory, CLAUDE.md files, the token count and
-# the mid-turn "the user hasn't heard from you in a while" nudge.
-DM_HOME = Path.home() / "AppData" / "Local" / "the-game-dm"
-DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",
-          "CLAUDE_CODE_TOTAL_TOKENS_REMINDER": "off", "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
-          "CLAUDE_CODE_SILENT_TURN_REMINDER": "0"}
 
 
 def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
@@ -62,10 +46,6 @@ def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
     return lookup_
 
 
-def dm_options(cwd: str, **kw: Any) -> ClaudeAgentOptions:
-    Path(cwd).mkdir(parents=True, exist_ok=True)
-    return ClaudeAgentOptions(tools=[], setting_sources=[], strict_mcp_config=True, max_turns=40, cwd=cwd, env=DM_ENV, **kw)
-
 _INT = {"type": "integer", "minimum": 0}
 _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"type": "string"},
                                                                       "qty": {"type": "integer", "minimum": 1}},
@@ -80,16 +60,16 @@ class Game:
         self.companions: list[dict[str, Any]] = data.get("companions", [])  # full sheets, at most 2 (owner 2026-10-12)
         self.fight: dict[str, Any] | None = data.get("fight")
         self.clock: dict[str, Any] = data.get("clock") or m.new_clock()  # saves from before 2026-10-12 have none
-        self.session_id: str | None = data.get("session_id")
+        self.messages: list[dict[str, Any]] = data.get("messages", [])  # the DM's conversation, as API messages
         self.transcript: list[dict[str, Any]] = data.get("transcript", [])
         self.model: str = data.get("model", MODEL)
-        self.cwd: str = data.get("cwd", str(SAVES))  # where the DM's session lives; saves from before 2026-10-11 used saves/
+        self.system = ""  # the DM's instructions, written when play starts
         self.path = path
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
-        data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "session_id": self.session_id, "model": self.model,
-                "cwd": self.cwd, "transcript": self.transcript}
+        data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
+                "transcript": self.transcript, "messages": self.messages}
         self.path.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
 
     def log(self, kind: str, text: str) -> None:
@@ -484,18 +464,15 @@ RULES_REMINDER = (
     "text must already be in this conversation from a lookup. If it isn't, look it up first.")
 
 
-async def turn(client: ClaudeSDKClient, game: Game | Creation, text: str) -> None:
-    await client.query(f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}" if isinstance(game, Game) else text)
-    async for msg in client.receive_response():
-        if isinstance(msg, AssistantMessage):
-            for b in msg.content:
-                if isinstance(b, TextBlock) and b.text.strip():
-                    print("\n" + b.text.strip())
-                    game.log("dm", b.text.strip())
-        elif isinstance(msg, ResultMessage):
-            game.session_id = msg.session_id
-            if msg.is_error:
-                print(f"\n[the DM call failed: {msg.result or msg.errors}]")
+async def turn(game: Game | Creation, text: str) -> None:
+    def said(t: str) -> None:
+        print("\n" + t)
+        game.log("dm", t)
+    failed = await model.respond(
+        game.model, game.system, game.tools(), game.messages,
+        f"[Status now]\n{game.status()}\n\n{RULES_REMINDER}\n\n{text}" if isinstance(game, Game) else text, said, game.save)
+    if failed:
+        print(f"\n[the DM call failed: {failed}]")
     game.save()
 
 
@@ -506,9 +483,11 @@ class Creation:
         self.rolled: list[int] | None = None
         self.draft: dict[str, Any] | None = None
         self.done = False
-        self.session_id: str | None = None
+        self.messages: list[dict[str, Any]] = []
         self.transcript: list[dict[str, Any]] = []
         self.path = path
+        self.model = MODEL
+        self.system = (HERE / "create_prompt.md").read_text(encoding="utf-8")
 
     def log(self, kind: str, text: str) -> None:
         self.transcript.append({"kind": kind, "text": text})
@@ -588,22 +567,16 @@ class Creation:
 async def create_character(model: str, path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     """Returns the finished sheet and the creation transcript, which the play save continues."""
     c = Creation(path)
-    server = create_sdk_mcp_server("dm", tools=c.tools())
-    opts = dm_options(
-        str(DM_HOME), system_prompt=(HERE / "create_prompt.md").read_text(encoding="utf-8"), model=model,
-        mcp_servers={"dm": server},
-        allowed_tools=[f"mcp__dm__{n}" for n in ("srd_options", "roll_ability_scores", "build_character",
-                                                 "finish_character", "lookup")])
+    c.model = model
     print("Character creation. Talk to the DM; /quit exits.")
-    async with ClaudeSDKClient(options=opts) as client:
-        await turn(client, c, "[Start] Greet the player and begin making their character.")
-        while not c.done:
-            line = (await asyncio.to_thread(input, "\n> ")).strip()
-            if line == "/quit":
-                sys.exit(0)
-            if line:
-                c.log("player", line)
-                await turn(client, c, line)
+    await turn(c, "[Start] Greet the player and begin making their character.")
+    while not c.done:
+        line = (await asyncio.to_thread(input, "\n> ")).strip()
+        if line == "/quit":
+            sys.exit(0)
+        if line:
+            c.log("player", line)
+            await turn(c, line)
     assert c.draft
     return c.draft, c.transcript
 
@@ -634,50 +607,45 @@ async def main() -> None:
         data = json.loads(args.resume.read_text(encoding="utf-8"))
         if "sheet" not in data:
             ap.error("that save stopped during character creation, which can't be resumed; start again with new")
+        if data.get("session_id") and "messages" not in data:
+            ap.error(f"that save is from the Agent SDK: convert it first with py -3.12 -m dm.convert {args.resume}")
         game = Game(data, args.resume)
     elif args.character == "new":
         path = new_save(f"new-{stamp}")  # one file: creation, then play
         sheet, transcript = await create_character(args.model, path)
-        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript, "cwd": str(DM_HOME)}, path)
+        game = Game({"sheet": sheet, "model": args.model, "transcript": transcript}, path)
     elif args.character:
         sheet = json.loads((HERE / "characters" / f"{args.character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
-        game = Game({"sheet": sheet, "model": args.model, "cwd": str(DM_HOME)}, new_save(f"{name}-{stamp}"))
+        game = Game({"sheet": sheet, "model": args.model}, new_save(f"{name}-{stamp}"))
     else:
         ap.error("pick a character (fighter, rogue, wizard), make one (new), or --resume a save")
 
-    server = create_sdk_mcp_server("dm", tools=game.tools())
     SAVES.mkdir(exist_ok=True)
-    opts = dm_options(
-        game.cwd, system_prompt=system_prompt(game.sheet, game.companions), model=game.model, mcp_servers={"dm": server},
-        allowed_tools=[f"mcp__dm__{n}" for n in ("roll", "change_pc", "change_party", "srd_options", "level_up_options", "level_up",
-                                                 "add_combatants",
-                                                 "change_creature", "next_turn", "end_fight", "change_time", "lookup")],
-        resume=game.session_id)
+    game.system = system_prompt(game.sheet, game.companions)
     print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-    async with ClaudeSDKClient(options=opts) as client:
-        if game.session_id:
-            last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
-            print("\n" + last)
-        else:
-            await turn(client, game, "[Start] Begin the session: set the opening scene for the player, then ask what "
-                                     f"{game.sheet['name'].split()[0]} does.")
-        while True:
-            line = (await asyncio.to_thread(input, "\n> ")).strip()
-            if not line:
-                continue
-            if line == "/quit":
-                game.save()
-                print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
-                return
-            if line == "/sheet":
-                # the PC's part as before (the web page lays it out as one card); companions after it
-                print(sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
-                      + m.fight_text(game.fight, game.sheet, game.companions)
-                      + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
-                continue
-            game.log("player", line)
-            await turn(client, game, f"[The player]\n{line}")
+    if game.messages:
+        last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
+        print("\n" + last)
+    else:
+        await turn(game, "[Start] Begin the session: set the opening scene for the player, then ask what "
+                         f"{game.sheet['name'].split()[0]} does.")
+    while True:
+        line = (await asyncio.to_thread(input, "\n> ")).strip()
+        if not line:
+            continue
+        if line == "/quit":
+            game.save()
+            print(f"Saved. Continue with: py -3.12 -m dm.play --resume {game.path}")
+            return
+        if line == "/sheet":
+            # the PC's part as before (the web page lays it out as one card); companions after it
+            print(sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
+                  + m.fight_text(game.fight, game.sheet, game.companions)
+                  + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
+            continue
+        game.log("player", line)
+        await turn(game, f"[The player]\n{line}")
 
 
 if __name__ == "__main__":
