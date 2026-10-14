@@ -23,6 +23,8 @@ PATHS = 5  # two-step connections shown
 NOTES = 10  # lines of notes each turn
 SKIP = 3  # an entry shown in the last 3 turns isn't shown again
 SNIP = 160  # characters either side of a match in recall
+TASKS = ("quest", "lead")  # kinds shown every turn while open (owner, 2026-10-13)
+STATUSES = ("open", "done", "dropped")
 
 
 def new() -> dict[str, Any]:
@@ -94,6 +96,10 @@ def close(lore: dict[str, Any], name: str) -> list[str]:
                or difflib.SequenceMatcher(None, _key(name), k).ratio() >= 0.8 for k in keys):
             out.append(n)
     return out[:PAGE]
+
+
+def _task(e: dict[str, Any]) -> bool:
+    return e["kind"].strip().casefold() in TASKS
 
 
 def _short(lore: dict[str, Any], n: str) -> str:
@@ -206,7 +212,7 @@ def write(lore: dict[str, Any], a: dict[str, Any], turn: int) -> tuple[dict[str,
     elif a.get("entry"):
         target = entry(a["entry"])
     elif any(a.get(k) for k in ("kind", "description", "add_to_description", "add_relationships", "relationships",
-                                "add_other_names", "remove_other_names", "rename", "other_names")):
+                                "add_other_names", "remove_other_names", "rename", "other_names", "status")):
         raise Refused("say which entry: entry (an existing one) or create (a new one)")
     if target:
         e = ents[target]
@@ -231,6 +237,13 @@ def write(lore: dict[str, Any], a: dict[str, Any], turn: int) -> tuple[dict[str,
                     raise Refused(f"{o!r} isn't one of {target}'s other names: " + (", ".join(e["other_names"]) or "none"))
                 e["other_names"] = keep
                 out.append(f"{o} is no longer a name of {target}")
+        if a.get("status"):
+            if a["status"] not in STATUSES:
+                raise Refused(f"status: one of {', '.join(STATUSES)}")
+            if not _task(e):
+                raise Refused(f"status is for a quest or a lead; {target} is a {e['kind']}")
+            e["status"] = a["status"]
+            out.append(f"{target} is now {a['status']}")
         relationships(target, [*(a.get("relationships") or []), *(a.get("add_relationships") or [])])
         if a.get("rename"):
             new_name = " ".join(text(a["rename"], "rename").split())
@@ -291,7 +304,7 @@ def shown(lore: dict[str, Any], a: dict[str, Any]) -> str:
         e = n(a["entry"])
         if a.get("rename"):
             out.append(f"renamed {a['entry']} to {e}")
-        if any(a.get(k) for k in ("kind", "description", "add_to_description", "add_other_names", "remove_other_names")):
+        if any(a.get(k) for k in ("kind", "description", "add_to_description", "add_other_names", "remove_other_names", "status")):
             out.append(f"updated {e}")
     if rels:
         out.append(f"added {rels} relationship{'s' if rels > 1 else ''} to {n(a.get('create') or a.get('entry'))}")
@@ -423,6 +436,8 @@ def notes(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[s
     lore, turn = copy.deepcopy(lore), now(transcript)
     out: list[str] = []
     skip = {e for p in party for e in (find(lore, p), find(lore, p.split()[0])) if e}
+    tasks = [n for n, e in lore["entries"].items() if _task(e) and e.get("status", "open") == "open"]
+    skip |= set(tasks)  # shown in full above the names
     seen = [n for n in mentioned(lore, recent_text(transcript)) if n not in skip] if lore["entries"] else []
 
     def fresh(n: str) -> bool:
@@ -439,5 +454,11 @@ def notes(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[s
                 if fresh(c) and len(out) < NOTES:
                     out.append(_short(lore, c) + " ← linked from " + ", ".join(sorted(f["involves"] & set(seen))))
                     lore["shown"][c] = turn
-    text = f"[Turn {turn}]" + ("\n[Notebook: names from the last turns]\n" + "\n".join(out) if out else "")
+    text = f"[Turn {turn}]"
+    if tasks:
+        text += "\n[Open quests and leads]\n" + "\n".join(
+            f"{n} ({lore['entries'][n]['kind']}): " + " ".join(d["text"] for d in lore["entries"][n]["description"])
+            for n in tasks)
+    if out:
+        text += "\n[Notebook: names from the last turns]\n" + "\n".join(out)
     return lore, text + "\n" + REMINDER

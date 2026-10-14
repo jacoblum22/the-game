@@ -114,7 +114,7 @@ def test_fights(tmp_path) -> None:
     w = g.companions[0]
     assert f"Wren (companion, initiative 15): HP {w['hp']['current']}/{w['hp']['max']}, AC {w['ac']}" in g.status()
     assert "use change_pc with who" in call(t, "change_creature", name="Wren", damage=1)[0]
-    assert call(t, "next_turn")[0] == "Round 1, now: Wren."
+    assert call(t, "next_turn")[0].startswith("Round 1, now: Wren. Wren's turn: one action,")
     text, err = call(t, "change_party", remove="Wren")
     assert not err and "Wren removed from the fight" in text and "Wren" not in g.status()
 
@@ -153,3 +153,29 @@ def test_who_inside_the_record(tmp_path) -> None:
     five = ["Mage Armor", "Magic Missile", "Shield", "Sleep", "Burning Hands"]
     assert not call(t, "level_up", record=WREN_LEVELS[0] | {"who": "Wren"}, prepare_spells=five)[1]
     assert g.companions[0]["level"] == 2
+
+
+def test_uses_marks_and_reminds(tmp_path) -> None:
+    """Actions, bonus actions and reactions (owner, 2026-10-13): marked in the tracker with a note, never refused."""
+    g, t = game(tmp_path)
+    assert "uses is for a fight" in call(t, "roll", dice="1d20+5", reason="attack", uses="action")[0]
+    call(t, "add_combatants", combatants=[{"name": "pc", "initiative": 12},
+                                          {"name": "Imp", "initiative": 15, "hp": 10, "ac": 13}])
+    text, _ = call(t, "next_turn")
+    assert "Imp's turn: one action, one bonus action if a feature or spell gives one, its movement" in text
+    text, err = call(t, "change_creature", name="Imp", conditions_added=["polymorphed"], uses="action")
+    assert not err and text.endswith("(Imp has used its action: no more actions this turn.)")
+    assert "Imp (initiative 15): HP 10/10, AC 13, polymorphed; action used" in g.status()
+    text, err = call(t, "roll", dice="1d20+5", reason="Stealth to hide", uses="action")
+    assert not err and text.endswith("(Imp had already used its action: a second one needs a feature that allows it.)")
+    before = len(g.transcript)
+    assert "no combatant named" in call(t, "roll", dice="1d20", reason="x", uses="reaction", by="Goblin")[0]
+    assert len(g.transcript) == before + 1 and g.transcript[-1]["kind"] == "refused"  # nothing rolled
+    text, err = call(t, "change_pc", damage=2, uses="reaction", by="pc")
+    assert "no combatant named" in text  # by: the name as in the tracker
+    text, err = call(t, "change_pc", damage=2, uses="reaction", by=g.sheet["name"])
+    assert not err and "until the start of its next turn" in text and "AC" in g.status()
+    call(t, "next_turn")
+    assert "reaction used" not in g.status() and "action used" in g.status()  # the PC's turn: its reaction is back
+    call(t, "next_turn")
+    assert "used" not in g.status()

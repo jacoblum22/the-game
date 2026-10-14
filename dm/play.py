@@ -54,6 +54,11 @@ _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"
                                      "required": ["item"]}}
 _NAMES = {"type": "array", "items": {"type": "string"}}
 _WHO = {"type": "string", "description": "a companion's name; leave out for the player character"}
+# a fight's action economy (owner, 2026-10-13): marked in the tracker, with a reminder, never refused
+_USES = {"uses": {"type": "string", "enum": list(m.USES), "description": "in a fight: what this spends, e.g. the "
+                  "attack roll of an Attack action is the action; the tracker marks it until that combatant's next turn"},
+         "by": {"type": "string", "description": "with uses: the combatant, exactly as in the tracker, when it isn't "
+                "the one whose turn it is (a reaction, for example)"}}
 
 
 class Game:
@@ -220,6 +225,24 @@ class Game:
         self.save()
         return {"content": [{"type": "text", "text": text}]}
 
+    def using(self, a: dict[str, Any], fn: Callable[[dict[str, Any]], str]) -> Callable[[], str]:
+        """A roll or change that may spend an action (`uses`, `by`): the fight's mark and note go with it, all or
+        nothing."""
+        a = dict(a)
+        what, by = a.pop("uses", None), a.pop("by", None)
+
+        def go() -> str:
+            if not what:
+                return fn(a)
+            _, note = m.use(self.fight, what, by)  # a wrong uses refuses before anything is rolled or changed
+            text = fn(a)
+            try:
+                self.fight, note = m.use(self.fight, what, by)
+            except m.Refused:  # the change took the combatant out of the fight
+                pass
+            return text + note
+        return go
+
     def tools(self) -> list[Any]:
         _span = {k: _INT for k in ("days", "hours", "minutes", "seconds")}
 
@@ -227,10 +250,11 @@ class Game:
               {"type": "object", "properties": {
                   "dice": {"type": "string", "description": "dice expression, e.g. 1d20+4, 2d8+3, 1d4+1d6"},
                   "reason": {"type": "string", "description": "what the roll is for, e.g. 'Brakka's Athletics check, DC 15'"},
-                  "mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]}},
+                  "mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]}, **_USES},
                "required": ["dice", "reason"]})
         async def roll(a: dict[str, Any]) -> dict[str, Any]:
-            return self.run("dice", lambda: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"), a["reason"]))
+            return self.run("dice", self.using(a, lambda a: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"),
+                                                                                  a["reason"])))
 
         @tool("change_pc", "Record a change to the sheet of the player character, or of a companion (who). Pass only the "
               "fields that change. A rest is the whole party's: pass it without who; it rests every companion too and "
@@ -281,9 +305,9 @@ class Game:
                                       "damage type the player chooses when a rest finishes; only together with short_rest or long_rest"},
                   "short_rest": {"type": "boolean"}, "long_rest": {"type": "boolean"},
                   "companions": {"type": "object", "description": "only with short_rest or long_rest: each companion's own "
-                                 "end-of-rest choices, {name: {prepare_spells, resilience_type}}"}}})
+                                 "end-of-rest choices, {name: {prepare_spells, resilience_type}}"}, **_USES}})
         async def change_pc(a: dict[str, Any]) -> dict[str, Any]:
-            return self.run("sheet", lambda: self.change_party_member(a))
+            return self.run("sheet", self.using(a, self.change_party_member))
 
         @tool("change_party", "A companion joins or leaves the party (the PC and at most 2 companions). add: the "
               "companion's full set of level-1 choices, in the form build_character takes (name, race, class, "
@@ -412,13 +436,14 @@ class Game:
               {"type": "object", "properties": {
                   "name": {"type": "string", "description": "exactly as in the tracker"},
                   "damage": _INT, "heal": _INT, "conditions_added": _NAMES, "conditions_removed": _NAMES,
-                  "remove": {"type": "boolean", "description": "take it out of the fight (dead, fled, knocked out)"}},
+                  "remove": {"type": "boolean", "description": "take it out of the fight (dead, fled, knocked out)"},
+                  **_USES},
                "required": ["name"]})
         async def change_creature(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
+            def go(a: dict[str, Any]) -> str:
                 self.fight, text = m.change_creature(self.fight, a)
                 return text
-            return self.run("fight", go)
+            return self.run("fight", self.using(a, go))
 
         @tool("next_turn", "Start the next combatant's turn in initiative order (after add_combatants, the first "
               "combatant's) and show whose turn it is.",
@@ -476,7 +501,9 @@ class Game:
               "other_names, relationships); or change one (entry, with any of kind, description (rewrites it), "
               "add_to_description (keeps the old part), add_relationships, add_other_names, remove_other_names, "
               "rename); or change_relationship (its number, with text); or remove_relationship; or merge one entry "
-              "into another (merge, into). A name or other name belongs to one entry only.",
+              "into another (merge, into). A name or other name belongs to one entry only. An entry of kind quest (a "
+              "goal the party has taken on) or lead (a rumour or hook not taken up) is shown at the top of every "
+              "message while its status is open; with entry, status done or dropped ends that.",
               {"type": "object", "properties": {
                   "create": {"type": "string", "description": "a new entry's name, e.g. Vessa"},
                   "entry": {"type": "string", "description": "an existing entry, by its name or another name"},
@@ -493,6 +520,8 @@ class Game:
                   "change_relationship": {"type": "integer", "description": "a relationship's number, e.g. 7 for [7]"},
                   "text": {"type": "string", "description": "with change_relationship: its new wording"},
                   "remove_relationship": {"type": "integer"},
+                  "status": {"type": "string", "enum": list(notebook.STATUSES), "description": "with entry: a quest's "
+                             "or lead's, e.g. done when it's achieved; a new one is open"},
                   "merge": {"type": "string", "description": "an entry that turns out to be the same as into"},
                   "into": {"type": "string"}}})
         async def write_lore(a: dict[str, Any]) -> dict[str, Any]:

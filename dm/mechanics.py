@@ -677,7 +677,31 @@ def next_turn(fight: dict[str, Any] | None) -> tuple[dict[str, Any], str]:
     if f["turn"] >= len(f["order"]):
         f["turn"], f["round"] = 0, f["round"] + 1
     c = f["order"][f["turn"]]
-    return f, f"Round {f['round']}, now: {c['name']}." + ("" if c["pc"] or c.get("companion") else f" {_creature_text(c)}")
+    c["used"] = []  # a new turn: its action and bonus action, and its reaction is back
+    return f, (f"Round {f['round']}, now: {c['name']}." + ("" if c["pc"] or c.get("companion") else f" {_creature_text(c)}")
+               + f" {c['name']}'s turn: one action, one bonus action if a feature or spell gives one, its movement, one "
+               "free object interaction; its reaction is back.")
+
+
+USES = ("action", "bonus action", "reaction")
+
+
+def use(fight: dict[str, Any] | None, what: str, by: str | None = None) -> tuple[dict[str, Any], str]:
+    """A combatant spends its action, bonus action or reaction (owner, 2026-10-13): marked in the tracker, with a
+    note so the DM remembers. Never refused for a second use: the rules or a feature may allow it (Action Surge).
+    `by` defaults to whoever's turn it is."""
+    if what not in USES:
+        raise Refused(f"uses: one of {', '.join(USES)}")
+    if not fight or fight["turn"] < 0:
+        raise Refused("uses is for a fight, on someone's turn: leave it out outside fights")
+    f = copy.deepcopy(fight)
+    c = _find(f, by) if by else f["order"][f["turn"]]
+    used = c.setdefault("used", [])
+    again = what in used
+    used.append(what)
+    until = "until the start of its next turn" if what == "reaction" else "this turn"
+    return f, (f" ({c['name']} had already used its {what}: a second one needs a feature that allows it.)" if again else
+               f" ({c['name']} has used its {what}: no more {what}s {until}.)")
 
 
 def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any], companions: list[dict[str, Any]] | None = None) -> str:
@@ -687,13 +711,14 @@ def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any], companions: l
              + ("; nobody's yet, next_turn starts the first" if f["turn"] < 0 else "") + "):"]
     for i, c in enumerate(f["order"]):
         mark = "→" if i == f["turn"] else " "
+        used = "".join(f"; {w} used" for w in USES if w in c.get("used", []))
         if c["pc"]:
-            lines.append(f"{mark} {c['name']} (the PC, initiative {c['initiative']}): {_member_text(pc_sheet)}")
+            lines.append(f"{mark} {c['name']} (the PC, initiative {c['initiative']}): {_member_text(pc_sheet)}{used}")
         elif c.get("companion"):
             mate = next(x for x in companions or [] if x["name"] == c["name"])
-            lines.append(f"{mark} {c['name']} (companion, initiative {c['initiative']}): {_member_text(mate)}")
+            lines.append(f"{mark} {c['name']} (companion, initiative {c['initiative']}): {_member_text(mate)}{used}")
         else:
-            lines.append(f"{mark} {_creature_text(c)}")
+            lines.append(f"{mark} {_creature_text(c)}{used}")
     return "\n".join(lines)
 
 

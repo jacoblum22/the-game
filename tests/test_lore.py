@@ -172,6 +172,30 @@ def test_notes_skip_the_party() -> None:
     assert text == "[Turn 2]\n" + nb.REMINDER  # nothing followed from the PC
 
 
+def test_open_quests_and_leads_every_turn() -> None:
+    """Open quests and leads are shown in full every turn, clues included, until done or dropped (owner, 2026-10-13)."""
+    lore = book()
+    lore, _ = nb.write(lore, {"create": "The Scale", "kind": "Quest", "description": "Recover the Scale."}, 1)
+    lore, _ = nb.write(lore, {"entry": "The Scale", "add_to_description": "Clue: blood at the cairn."}, 2)
+    lore, _ = nb.write(lore, {"create": "Missing sheep", "kind": "lead", "description": "Sheep vanish in the hills."}, 2)
+    t = said(("hi", "Hello."), ("I ask about the Scale", "Nobody knows."))
+    for _ in range(3):  # every turn, not only when mentioned
+        lore, text = nb.notes(lore, t)
+        assert ("[Open quests and leads]\nThe Scale (Quest): Recover the Scale. Clue: blood at the cairn.\n"
+                "Missing sheep (lead): Sheep vanish in the hills.") in text
+        assert text.count("The Scale") == 1
+    with pytest.raises(Refused, match="quest or a lead"):
+        nb.write(lore, {"entry": "Vessa", "status": "done"}, 3)
+    with pytest.raises(Refused, match="one of"):
+        nb.write(lore, {"entry": "The Scale", "status": "finished"}, 3)
+    lore, text = nb.write(lore, {"entry": "The Scale", "status": "done"}, 3)
+    assert text == "The Scale is now done" and nb.shown(lore, {"entry": "The Scale", "status": "done"}) == \
+        "notebook: updated The Scale"
+    lore, text = nb.notes(lore, t)
+    assert "[Open quests and leads]\nMissing sheep (lead): Sheep vanish in the hills.\n[Notebook" in text  # the Scale
+    # is now only a name the last turns mention
+
+
 def test_matching_names() -> None:
     """Capitals count on a name's main words, not on small joining words; the longest name wins (owner, 2026-10-13)."""
     lore = nb.new()

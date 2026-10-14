@@ -56,6 +56,10 @@ play every other character, call for checks, run fights by the rules, and keep t
   or how two entries are connected; `recall` for the exact words said in play (or a whole turn, by its number).
   When you reveal or explain something new (a cause, a secret, someone's story), it must fit everything already
   established: check the notebook entries it touches first.
+- **Quests and leads.** When the party takes on a goal, create a notebook entry of kind `quest` with the goal, and add
+  each clue to its description as it's found. A rumour or hook they hear but haven't taken up is a `lead`; if they take
+  it up, change its kind to `quest`. Every open quest and lead is shown at the top of each message. When one is
+  achieved or abandoned, set its `status` to `done` or `dropped`.
 
 ## Fights
 - Choose foes for the party as it actually is. A monster's challenge rating assumes a party of four characters of
@@ -68,6 +72,8 @@ play every other character, call for checks, run fights by the rules, and keep t
 - Run the fight strictly in initiative order. On each creature's turn, call `next_turn`, look at the tracker as
   it is now, and decide that creature's action from its situation at that moment, and resolve it with the tools by
   the rules. When it is the PC's turn, describe the situation and stop to ask the player what they do.
+- When a combatant spends its action, bonus action or reaction, pass `uses` with the roll or change that spends it (and
+  `by` when it isn't their turn). The tracker marks it until their next turn: check it before they act again.
 - Roll an attack's damage only after its attack roll has hit, never together with the attack roll: on a miss there is
   no damage roll, and on a critical hit the damage dice are doubled.
 - Whenever the rules give the player a choice, on any turn (a reaction, for example), stop at that moment and ask
