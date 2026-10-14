@@ -272,8 +272,8 @@ class Game:
               "fields that change. A rest is the whole party's: pass it without who; it rests every companion too and "
               "moves the clock once. "
               "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned. "
-              "Rules you must apply yourself: a long rest needs the PC at 1 HP or more and only one long rest counts per "
-              "24 hours (check the time; the tool can't); hit dice are spent at the end of a short rest, one per call.",
+              "A long rest needs the PC at 1 HP or more and only one long rest counts per 24 hours (the tool checks both, "
+              "the second by the clock); hit dice are spent at the end of a short rest, one per call.",
               {"type": "object", "properties": {
                   "who": _WHO,
                   "damage": _INT, "heal": _INT, "temp_hp": _INT,
