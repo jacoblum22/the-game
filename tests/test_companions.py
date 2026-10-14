@@ -179,3 +179,5 @@ def test_uses_marks_and_reminds(tmp_path) -> None:
     assert "reaction used" not in g.status() and "action used" in g.status()  # the PC's turn: its reaction is back
     call(t, "next_turn")
     assert "used" not in g.status()
+    text, err = call(t, "change_pc", uses="action", conditions_added=[])  # a Dodge or Ready: only the action is spent
+    assert not err and text.endswith("has used its action: no more actions this turn.") and "action used" in g.status()

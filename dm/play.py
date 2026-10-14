@@ -236,7 +236,10 @@ class Game:
         def go() -> str:
             if not what:
                 return fn(a)
-            _, note = m.use(self.fight, what, by)  # a wrong uses refuses before anything is rolled or changed
+            f, note = m.use(self.fight, what, by)  # a wrong uses refuses before anything is rolled or changed
+            if not any(v for k, v in a.items() if k not in ("who", "name")):  # only the use: a Dodge, Dash or Ready
+                self.fight = f
+                return note.strip(" ()")
             text = fn(a)
             try:
                 self.fight, note = m.use(self.fight, what, by)
