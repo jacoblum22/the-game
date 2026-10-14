@@ -4,6 +4,8 @@ The DM's memory is Claude Code's session file, and the save keeps its id. The br
 
 from __future__ import annotations
 
+import os
+import tempfile
 from collections.abc import Callable
 from pathlib import Path
 
@@ -37,10 +39,16 @@ class Client:
         Path(cwd).mkdir(parents=True, exist_ok=True)
         server = create_sdk_mcp_server("dm", tools=[sdk_tool(t.name, t.description, t.input_schema)(t.handler)
                                                      for t in tools])
+        # The instructions go to Claude Code as a file: with a party's sheets they outgrow a Windows command line
+        # (about 32,700 characters). A file prompt can't carry the snapshot switch, so it goes as the CLI flag.
+        fd, self.system_file = tempfile.mkstemp(prefix="system-", suffix=".md", dir=cwd)
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(system)
         self.options = ClaudeAgentOptions(
             tools=[], setting_sources=[], strict_mcp_config=True, max_turns=MAX_ROUNDS, cwd=cwd, env=DM_ENV,
-            system_prompt={"type": "custom", "prompt": system, "snapshot": False}, model=model, mcp_servers={"dm": server},
-            allowed_tools=[f"mcp__dm__{t.name}" for t in tools], resume=session_id)
+            system_prompt={"type": "file", "path": self.system_file}, extra_args={"system-prompt-snapshot": "off"},
+            model=model, mcp_servers={"dm": server}, allowed_tools=[f"mcp__dm__{t.name}" for t in tools],
+            resume=session_id)
         self.client = ClaudeSDKClient(options=self.options)
         self.session_id = session_id
         self.size = 0  # the conversation's length after the last model call, in tokens
@@ -50,6 +58,7 @@ class Client:
 
     async def close(self) -> None:
         await self.client.disconnect()
+        Path(self.system_file).unlink(missing_ok=True)
 
     async def respond(self, text: str, on_text: Callable[[str], None]) -> str | None:
         """As model.respond: the DM's reply to `text`, tools and all. Returns None, or why the call failed."""

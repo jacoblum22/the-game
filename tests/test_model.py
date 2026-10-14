@@ -247,16 +247,19 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
     assert opened[1].session_id == "sess-1" and "Tough as Old Boots" in opened[1].system  # the same conversation
 
 
-def test_sdk_bridge() -> None:
+def test_sdk_bridge(tmp_path: Path) -> None:
     """Our tools go to the Agent SDK as they are (nothing connects here)."""
     from dm import sdk
     g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, Path("unused.json"))
-    c = sdk.Client("m", "system", g.tools(), str(sdk.DM_HOME), None)
+    c = sdk.Client("m", "system " * 6000, g.tools(), str(tmp_path), None)
     assert "mcp__dm__roll" in c.options.allowed_tools and "mcp__dm__lookup" in c.options.allowed_tools
     assert c.options.max_turns == model.MAX_ROUNDS and c.options.mcp_servers["dm"]["type"] == "sdk"
     # as on the API: no automatic compaction, and today's instructions on every call (no snapshot)
     assert c.options.env["DISABLE_AUTO_COMPACT"] == "1"
-    assert c.options.system_prompt == {"type": "custom", "prompt": "system", "snapshot": False}
+    assert c.options.extra_args == {"system-prompt-snapshot": "off"}
+    # the instructions go as a file, since a party's sheets outgrow a Windows command line
+    assert c.options.system_prompt["type"] == "file"
+    assert Path(c.options.system_prompt["path"]).read_text(encoding="utf-8") == "system " * 6000
 
 
 def played(g: play.Game, n: int) -> None:
