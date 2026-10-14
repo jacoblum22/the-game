@@ -75,7 +75,8 @@ def test_tools_run_and_answer(monkeypatch: Any, tmp_path: Path) -> None:
     assert results[0]["content"][0]["text"].startswith("dice ") and "is_error" not in results[0]
     assert g.messages[1]["content"][0] == {"type": "thinking", "thinking": "", "signature": "sig"}  # sent back as it came
     assert any(WHOLE in s for s in said)
-    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Roll for it.", WHOLE]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]  # words before the calls: a note
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Roll for it."]
     # what went to the API
     first = fake.calls[0]
     assert first["system"] == play.system_prompt(g.sheet, g.companions) and first["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
@@ -368,6 +369,18 @@ def test_stub_is_asked_for_again(monkeypatch: Any, tmp_path: Path) -> None:
     assert not any("Both are recorded" in s for s in said) and any(WHOLE in s for s in said)
     asked = fake.calls[2]["messages"][-1]["content"]
     assert play.STUB_ASK.format("Both are recorded on your sheet.") in json.loads(json.dumps(asked))[-1]["text"]
+
+
+def test_note_before_tool_calls_is_not_shown(monkeypatch: Any, tmp_path: Path) -> None:
+    """A few words, then tool calls, then the reply: the words were a note, not part of the reply."""
+    g = new_game(tmp_path)
+    _, said = run(monkeypatch, [
+        reply(text("Miss. Next."), use("t1", "roll", dice="1d20", reason="bite"), stop="tool_use"),
+        reply(text(WHOLE)),
+    ], g, "I attack")
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Miss. Next."]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
+    assert not any("Miss. Next." in s for s in said)
 
 
 def test_short_reply_without_tools_stands(monkeypatch: Any, tmp_path: Path) -> None:

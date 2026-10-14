@@ -646,6 +646,7 @@ STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing 
 
 async def turn(game: Game | Creation, text: str) -> None:
     held: list[str] = []
+    mark = [0]  # the transcript's length when text was last held
 
     def said(t: str) -> None:
         if isinstance(game, Creation):
@@ -654,8 +655,14 @@ async def turn(game: Game | Creation, text: str) -> None:
         elif game.late:  # written after a late tool call: kept in the save, never shown
             game.log("hidden", t)
         else:
+            # Short text followed by tool calls was a note to itself, not the reply ("Miss. Next."; 2 in 180 rounds)
+            if held and any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[mark[0]:]):
+                game.log("stub", "\n\n".join(held))  # kept in the save, never shown
+                held.clear()
+                game.reply_len = 0
             held.append(t)
             game.reply_len += len(t)
+            mark[0] = len(game.transcript)
     if isinstance(game, Game):
         game.reply_len, game.late = 0, False
         # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
