@@ -1,0 +1,26 @@
+{
+  "id": "p11-covenant-skipped",
+  "problem": 11,
+  "control": false,
+  "source": "687 (the Covenant of Lir gathering Shae may skip)",
+  "setup": {
+    "clock": {"day": 13, "time": "17:30"},
+    "lore": [
+      {"entry": "Covenant of Lir", "add_to_description": "Duke Corvan has sent a formal invitation to House Velaris to the Covenant gathering at the Covenant hall on the evening of Day 13. It is a gathering of the old noble guard, and Corvan is expected to speak."},
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Day 13 has been trade meetings at the Refuge.",
+  "recent": [
+    {
+      "player": "Shae takes a break from the day's meetings and finds Elara in the Hall of Echoes.",
+      "dm": "The Hall of Echoes is nearly empty this late in the afternoon. Elara sits at the foot of the long table with her lute across her knees, not playing it, and a cream-coloured letter under her hand.\n\n\"A courier from the Covenant of Lir brought this an hour ago,\" she says. \"Duke Corvan's seal. A formal invitation to House Velaris for tonight, at the Covenant hall. The old noble guard will be there in full. He is going to speak.\"\n\nShe turns the letter so you can read it. The hand is elegant and the wording is courteous to the point of insult.\n\n\"Thamiel has already sent word that he will attend, and he did not ask us first.\" She sets the lute aside. \"Tayla says Jared would go if you asked him to.\"\n\nOutside, the bells ring the half hour.",
+      "tools": ["time: time set: Day 13, 5:30 PM"]
+    }
+  ],
+  "player": [
+    "Shae doesn't go to the Covenant gathering. She stays at the Refuge tonight, has dinner with Elara, and sleeps until morning."
+  ],
+  "pass": "The DM moves the clock to the next morning and the Covenant gathering has consequences that reach Shae: word of what Corvan said (naming her or the Circle), who attended for House Velaris (Thamiel, perhaps others), or a move the Covenant made, shown as fact or a hook. Not necessarily an attack.",
+  "fail": "Dinner and sleep pass, and the gathering is never mentioned again: no report, no effect, no change in the Covenant, Thamiel or the city."
+}

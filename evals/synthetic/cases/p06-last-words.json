@@ -1,0 +1,22 @@
+{
+  "id": "p06-last-words",
+  "problem": 6,
+  "control": false,
+  "source": "41",
+  "story_extra": "Since the Conclave, Shae has been resting at the Refuge.",
+  "setup": {
+    "clock": {"day": 13, "time": "15:00"}
+  },
+  "recent": [
+    {
+      "player": "Shae sits in the Refuge's quiet garden court with a cup of tea, going over the Conclave in her head.",
+      "dm": "The garden court is the only place in the Refuge where the stone is warm. A fig tree grows against the south wall and a small fountain trickles into a bowl of black glass. The rain has stopped for the first time in days.\n\nElara has left a plate of bread and cold meat at your elbow. A Shadowcloak courier passes under the arch, sees you, and stops short of speaking.\n\nThe tea is hot. The afternoon is quiet.",
+      "tools": ["time: 2 hours later: Day 13, 3:00 PM"]
+    }
+  ],
+  "player": [
+    "What were the last words between Shae and her mother?"
+  ],
+  "pass": "The DM looks it up (recall of the transcript, or the notebook) and answers from what it finds: most recently Maelis sent away before the Conclave with 'Go. Make Vehris sweat.', and earlier the oath at the Veiled Manor ('Then let the shadows take me too. For House Velaris' / 'For us'). It says which it means if unsure, or asks. Nothing is made up.",
+  "fail": "The DM invents dialogue between Shae and Maelis without looking, or presents an invented exchange as the last words."
+}

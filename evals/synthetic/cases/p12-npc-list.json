@@ -1,0 +1,25 @@
+{
+  "id": "p12-npc-list",
+  "problem": 12,
+  "control": false,
+  "source": "147 (\"remind me of important NPCs, both allies and enemies\")",
+  "setup": {
+    "clock": {"day": 13, "time": "10:00"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering.",
+  "recent": [
+    {
+      "player": "Shae goes down to the Velvet Parlors with a cup of tea and sits by the fire.",
+      "dm": "The Parlors are empty at this hour, and the violet lamps are unlit. A maid lays a fresh log on the fire and bobs a curtsy before slipping away.\n\nThe rain has eased to a drizzle. Through the tall windows the Black Spires stand out against low cloud, and the bells of the lower city are ringing ten.\n\nElara has gone out to the stores with the steward, and Rhylla is somewhere upstairs sleeping off the night. For the first time in days no one is waiting on you.",
+      "tools": ["time: time set: Day 13, 10:00 AM"]
+    }
+  ],
+  "player": [
+    "DM: Remind me of important NPCs, both allies and enemies."
+  ],
+  "pass": "The DM looks the people up (lore) rather than answering from memory, and gives a short plain-prose list, allies and enemies, matching the notebook: for example Elara (distant cousin and betrothed), Rhylla, Celeste, Bellum (close, not romantic), Veyra Nox (former Pale, not Syndicate), Silas Crowley (Syndicate), Evander, Tayla and Jared, Maelis, Thamiel; against: Morthal and the Wards, Corvan, Vehris, Liraine Vos. No emoji, headings or tables.",
+  "fail": "Names or relations that contradict the notebook (Elara as sister, Veyra in the Syndicate, Ranna or Silva wrongly placed), characters invented, an answer from memory with no lookup, or a formatted menu of headings, emoji and tables."
+}

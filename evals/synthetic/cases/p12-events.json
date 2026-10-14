@@ -1,0 +1,26 @@
+{
+  "id": "p12-events",
+  "problem": 12,
+  "control": false,
+  "source": "609 (\"are there any events coming up?\")",
+  "setup": {
+    "clock": {"day": 13, "time": "11:00"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"create": "Gathering at the Refuge", "kind": "event", "description": "A gathering Elara is hosting for Shae in the Velvet Hall of the Shade's Refuge, on Day 15 from dusk. Planned guests include Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum and Veyra Nox.", "relationships": ["Hosted by [[Elara Velaris]] at [[The Shade's Refuge]]"]}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Elara has begun planning a gathering at the Refuge for Day 15.",
+  "recent": [
+    {
+      "player": "Shae sits down with Elara in the Hall of Echoes to plan the next few days.",
+      "dm": "The Hall of Echoes is still and cold, and your voices carry up into the dark of the vaulted ceiling. Elara has laid a sheet of paper on the long table, and half of it is already covered in her small, even hand.\n\n\"Celeste wants her contracts drawn up quickly,\" she says, without looking up. \"Bellum is more patient. The Shadowcloaks have a few reports waiting for you, and I have a list of names for the Refuge gathering, which I would like you to read before I send anything.\"\n\nShe taps the paper. \"Where would you like to begin?\"",
+      "tools": ["time: time set: Day 13, 11:00 AM"]
+    }
+  ],
+  "player": [
+    "DM: are there any events coming up?"
+  ],
+  "pass": "The DM looks in the notebook (lore) and lists what is recorded, in plain prose and agreeing with it: the gathering at the Refuge on Day 15 at dusk, the Covenant of Lir's gathering, and the Silent Veil's Eclipse Vigil (no date known). Any new event or date it supplies is recorded with write_lore, and nothing contradicts a stated date.",
+  "fail": "Events or dates invented and not recorded, a recorded event left out with no reason, or dates that contradict the notebook (the gathering on another day)."
+}

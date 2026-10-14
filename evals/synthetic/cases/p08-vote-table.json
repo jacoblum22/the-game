@@ -1,0 +1,33 @@
+{
+  "id": "p08-vote-table",
+  "problem": 8,
+  "control": false,
+  "source": "restart.txt 1446",
+  "setup": {
+    "clock": {
+      "day": 12,
+      "time": "12:05"
+    },
+    "pc": [],
+    "lore": [],
+    "fight": []
+  },
+  "recent": [
+    {
+      "player": "Shae and Rhylla walk into the hall and take their places.",
+      "dm": "🏛️ The Merchant Guildhall – Highsun\n\nGold chandeliers blaze over the marble floor. Merchants, guildmasters and minor nobles fill the benches, and the perfume in the air is thick enough to taste.\n\n🔹 Who Is Watching:\n\nTolan Vehris – on the dais, composed\nCeleste and Bellum – near the front, waiting for Shae\nEvander Velaris – somewhere in the crowd\nHalran Vos – alone beside a column of scroll-binders\n\nWould Shae greet Celeste and Bellum first? Look for Evander? Or take her seat and let the room come to her?",
+      "tools": []
+    },
+    {
+      "player": "Shae takes her seat and watches the dais.",
+      "dm": "⚖️ The Herald of Weighing\n\nA herald in grey and gold climbs to the dais and lifts a scroll sealed in wax. The benches go quiet.\n\n“Noble Guildmasters and Lords of Trade, the Eastern Docks Access Act is before the Conclave. The vote will be called shortly.”\n\n🔹 The mood: tense, expectant.\n\nWould Shae speak first, wait, or send Rhylla to whisper in a few ears?",
+      "tools": []
+    }
+  ],
+  "player": [
+    "DM: who gets to vote on this?",
+    "DM: and who is for and against right now?"
+  ],
+  "pass": "Plain prose with no table, bullets, emoji or headings, and the answer agrees with the notebook: five seats (Vehris against; Celeste and Bellum for; Halran Vos the swing; Hareth Dorne the rotating seat who follows the majority). Both answers give the same numbers.",
+  "fail": "A table or list with emoji or headers (copying the earlier turns), or a different count or different voters from the notebook, or two answers that disagree."
+}

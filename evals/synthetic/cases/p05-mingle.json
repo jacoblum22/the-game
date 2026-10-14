@@ -1,0 +1,33 @@
+{
+  "id": "p05-mingle",
+  "problem": 5,
+  "control": false,
+  "source": "3085-3110",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "19:30"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae waits at the head of the Velvet Hall as her guests come in.",
+      "dm": "They arrive in ones and twos as the lamps are lit. Maelis and Thamiel come together, Thamiel in his old black, saying nothing. Evander follows Celeste and Bellum, watching Bellum more than he knows. Tayla and Jared take a corner and a pair of glasses. Veyra Nox comes in with her hood low, flashes a grin at no one in particular and finds a pillar to lean on.\n\nSilas Crowley enters last, from a side door, without announcement. Pale eyes, long dust-coloured coat. Mira Rathven and Ranna Durn arrive within a minute of each other and take opposite sides of the room.\n\nElara steps forward with a glass and taps it once for quiet.\n\n\"Tonight is not about bloodlines,\" she says. \"Not even oaths. It's about vision.\" She turns to you. \"Shaedryn Velaris. The floor is yours.\"",
+      "tools": [
+        "time: 20 minutes later: Day 15, 7:30 PM"
+      ]
+    }
+  ],
+  "player": [
+    "DM: Shae welcomes them all. This is a select group of people, friends, family, allies, allies to be. Mingle, enjoy"
+  ],
+  "pass": "The DM sticks to what the player said: Shae welcomes them as friends, family, allies and allies to be, and the guests start to mingle. It may summarise it in narration or give only a line or two close to the player's words, then show the room, and it does not hand Shae new content to say.",
+  "fail": "The DM writes a speech for Shae in quotes with new claims, aims and remarks (naming guests, hinting at plans, lines about the Pale or the Wards) beyond what the player said.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

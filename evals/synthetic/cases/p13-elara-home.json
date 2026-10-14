@@ -1,0 +1,22 @@
+{
+  "id": "p13-elara-home",
+  "problem": 13,
+  "control": false,
+  "source": "3673 and the Elara-at-the-Guildhall muddle (a companion who is elsewhere is addressed as if present)",
+  "setup": {
+    "clock": {"day": 12, "time": "11:45"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae and Rhylla cross the Guildhall's entrance hall. Shae asks Rhylla whether the Refuge is all right without them.",
+      "dm": "Rhylla keeps her eyes on the room as she answers, as she always does. \"Elara has the Refuge. Jarek is at her door, Lirian's people are on the roads, and anything that comes through that gate tonight will find her waiting with a smile and a very long list of questions.\"\n\nThe entrance hall is all marble, with a ceiling so high the voices lose themselves in it. Merchants gather in groups around the benches, their coats damp with rain. A pair of clerks are checking names against a ledger at the doors of the main chamber.\n\n\"She wanted to come,\" Rhylla adds, very low. \"I told her the Refuge was where she could do the most good. She didn't enjoy that.\"",
+      "tools": ["time: time set: Day 12, 11:45 AM"]
+    }
+  ],
+  "player": [
+    "Shae leans toward where Elara stands and whispers, what do you make of Vehris up there on the dais?"
+  ],
+  "pass": "The DM notes that Elara is not in the Guildhall (she stayed at the Refuge), gives no reply from her, and does not put her in the scene. It can offer another way (Rhylla at her side, or a message later) without having Elara act or speak.",
+  "fail": "Elara answers Shae's whisper as if she were at her shoulder, or is described standing in the Guildhall."
+}

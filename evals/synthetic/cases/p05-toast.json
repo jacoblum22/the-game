@@ -1,0 +1,33 @@
+{
+  "id": "p05-toast",
+  "problem": 5,
+  "control": false,
+  "source": "3490-3506",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:00"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae brings Maelis over to Celeste and Bellum and introduces them.",
+      "dm": "Maelis takes in the three of you with one sweep of her pale eyes. Celeste and Bellum have been standing close, heads together, and they part with the ease of people who have just been discussing something they would rather not repeat.\n\n\"If this is your new court, daughter,\" Maelis says, dry as paper, \"I can only hope your enemies are paying attention.\"\n\nIt is as near to an endorsement as she gives in public. Bellum's shoulders ease by a hair.\n\n\"We were only discussing trade routes,\" Celeste says, without blinking. \"But if you'd rather speak of scandal, we can accommodate that too.\"\n\nShe lifts her glass toward Maelis. \"A toast, then. To mothers who raise dangerous daughters, and daughters who keep thrilling company.\"",
+      "tools": [
+        "time: 20 minutes later: Day 15, 9:00 PM"
+      ]
+    }
+  ],
+  "player": [
+    "To scandals"
+  ],
+  "pass": "Shae's line is the player's words, 'To scandals', perhaps with the glasses meeting; the DM then shows how the three react. It adds no further sentences in Shae's mouth.",
+  "fail": "The DM turns it into a speech for Shae: 'To scandals... the true currency of Mourhold, and the only thing more dangerous than truth', or any quoted sentence beyond the toast.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

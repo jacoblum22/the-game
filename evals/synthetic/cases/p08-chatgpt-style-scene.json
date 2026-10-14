@@ -1,0 +1,56 @@
+{
+  "id": "p08-chatgpt-style-scene",
+  "problem": 8,
+  "control": false,
+  "source": "restart.txt (the ChatGPT style throughout)",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:00"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae looks around the Velvet Hall.",
+      "dm": "🎭 The Velvet Hall – Night of Masks\n\nLamplight pools gold across the marble. Silk banners stir in the warm air.\n\n🔹 Who Is Here:\n\nMaelis – near the windows, watching\nThamiel – apart from the family, unreadable\nCeleste and Bellum – laughing over wine\nVeyra Nox – by the far pillar\nSilas Crowley – in a shadowed alcove\nMira Rathven – alone near the stair\nRanna Durn – studying the tasting table\n\n✨ The mood: expectant, dangerous, glittering.\n\nWould Shae approach Veyra? Speak with Silas? Or rejoin Elara at the center of the room?",
+      "tools": []
+    },
+    {
+      "player": "Shae goes to Veyra Nox.",
+      "dm": "🧩 Veyra Nox – Smuggler and Broker\n\nVeyra lifts her glass a few inches in greeting. Dry. Amused. Understated silks, a half-smile.\n\n“The queen of the evening,” she says. “Come to ask me something?”\n\n🔹 What Shae Notices:\n\nShe has not touched her wine\nHer eyes keep drifting to the east doors\n\nWould you like Shae to speak plainly with Veyra – or enjoy the wine first?",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae asks Veyra if she has heard anything lately about the Pale.",
+    "Shae takes Veyra's arm and walks her to the quiet side of the hall.",
+    "Shae thanks her and goes over to greet Evander."
+  ],
+  "pass": "Every reply is plain prose in short paragraphs, in the DM's own style: no emoji, no headings, no bullet lists, no closing menu of options. Veyra's answers fit the notebook (former Pale, not Syndicate; the lead about a Pale remnant).",
+  "fail": "A reply copies the earlier style: an emoji heading, a bulleted 'What Shae Notices' list, a bold label, or an ending like 'Would you like Shae to ...?'."
+}

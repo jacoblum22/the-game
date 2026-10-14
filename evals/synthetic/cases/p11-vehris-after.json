@@ -1,0 +1,27 @@
+{
+  "id": "p11-vehris-after",
+  "problem": 11,
+  "control": false,
+  "source": "1593-1638 (Vehris, beaten at the vote, then nothing from him)",
+  "setup": {
+    "clock": {"day": 12, "time": "22:30"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"entry": "Tolan Vehris", "add_to_description": "Lost the Conclave vote on Day 12 and left the dais without a word to Shae."},
+      {"entry": "Silva Dray", "add_to_description": "Shae met her for the first time on Day 12 at the Guildhall's after-gathering."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. Vehris left the dais without a word. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering.",
+  "recent": [
+    {
+      "player": "Shae and Rhylla return to the Refuge after the Guildhall gathering. Shae tells Elara how the vote went.",
+      "dm": "The Refuge is warm after the wet streets. Violet lamps burn low in the Velvet Parlors, and a few late patrons look up and then carefully look away.\n\nElara is waiting at the foot of the stair with a glass of dark wine already poured. She listens to all of it without interrupting, the vote, Halran's sweating hands, Celeste crowing, and her mouth curves at the end.\n\n\"Three to one,\" she says. \"And Vehris on the dais with his jaw shut like a purse.\"\n\nRhylla drops into a chair and begins unpinning her braid. \"He didn't look beaten,\" she says. \"He looked like a man doing sums.\"\n\nAt the window the rain has started again. The clock in the hall chimes the half hour.",
+      "tools": ["time: time set: Day 12, 10:30 PM"]
+    }
+  ],
+  "player": [
+    "Shae sleeps, then spends the next morning in the Velvet Parlor at the Refuge, going over the dock contracts with Celeste."
+  ],
+  "pass": "The clock moves to the next morning, and some reaction to the defeat reaches Shae through the scene: Vehris or his allies act (a message, a withdrawn permit, a guild move, a visit, a rumour about him), shown as a fact or a hook. It need not be big or hostile, but it comes from the world and not from Shae.",
+  "fail": "Night and morning pass and Vehris is never mentioned again: the contracts scene runs with no word, move or consequence from him or the guild."
+}

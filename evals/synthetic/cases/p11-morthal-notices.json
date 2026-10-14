@@ -1,0 +1,27 @@
+{
+  "id": "p11-morthal-notices",
+  "problem": 11,
+  "control": false,
+  "source": "687 (a public act at the Conclave; do the Wards ever respond)",
+  "setup": {
+    "clock": {"day": 12, "time": "12:50"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae stands and tells the hall that the eastern docks belong to the city and not to the Wards' inspectors, and that anyone who wants Mourhold's trade free should vote for the Act.",
+      "dm": "The chatter in the Guildhall thins, then stops. A few heads turn on the dais. Vehris keeps his eyes on the table.\n\nYou speak plainly and without heat, and your voice carries to the back under the glass roof. When you finish, no one claps. A moment later Celeste does, once, alone, and then Bellum's fan taps against her palm in a slow soft rhythm.\n\nHareth Dorne looks from one to the other and shifts in his chair like a man testing the wind.",
+      "tools": ["dice Shae's Persuasion check, DC 15: 1d20+7 = 1d20 [15] + 7 = 22", "time: 20 minutes later: Day 12, 12:20 PM"]
+    },
+    {
+      "player": "Shae takes her seat beside Rhylla and waits for the vote.",
+      "dm": "The herald calls the seats one by one. Celeste: for. Bellum: for. Hareth Dorne, after a pause, for. Tolan Vehris: against, in a voice like dry paper. Halran Vos stares at his hands and says nothing at all, and is recorded as abstaining.\n\nThree to one. The Eastern Docks Access Act passes, and the inspection of the eastern docks passes from the Wards to a commission of the Guild.\n\nThe hall breaks into noise. Rhylla leans in close to your ear and says, very quietly, \"Well. That's done.\"",
+      "tools": ["time: 30 minutes later: Day 12, 12:50 PM"]
+    }
+  ],
+  "player": [
+    "Shae leaves the Guildhall with Rhylla and goes back to the Refuge for the afternoon."
+  ],
+  "pass": "On the way out or later that afternoon, the Wards respond in some visible way to a public speech against their inspectors and a lost vote: an observer, an envoy, a notice, an inspection order, a watcher on the road, or word that Morthal has heard. Shown as fact; it can be quiet.",
+  "fail": "Shae walks out and reaches the Refuge with no sign of the Wards at all, as if her speech and the vote cost them nothing."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "p02-conclave-morning",
+  "problem": 2,
+  "control": false,
+  "source": "739-833",
+  "story_extra": "Since the Conclave, Shae has been at the Refuge. At the Conclave Celeste proposed a private dinner with wine and maps at her house; it is now set as a meeting on Day 14 at highsun at Celeste's house. It is near midnight on Day 13.",
+  "setup": {
+    "clock": {"day": 13, "time": "23:40"},
+    "lore": [
+      {
+        "create": "Meeting at Celeste's house",
+        "kind": "event",
+        "description": "Private meeting with wine and maps at Celeste's house, proposed by Celeste at the Conclave and set for Day 14 at highsun. Shae is to attend, escorted by Rhylla.",
+        "relationships": ["Hosted by [[Celeste]]", "Attended by [[Shaedryn Velaris]]"]
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae tells Rhylla she wants to go over tomorrow once more.",
+      "dm": "Rhylla is at the map table in the Vigil when you come in, in a fitted coat of umber leather, her daggers in plain view. A chart of the eastern docks is pinned flat under four lead weights.\n\n\"Tomorrow at highsun, at Celeste's house,\" she says. \"Wine, maps, and a cellar of her own people. She says the Wards have not looked at her door in a week.\" She taps the chart. \"The Shadowcloaks can walk the street before you.\"\n\nThe brazier in the corner has burned low. Beyond the Vigil's walls the Refuge has gone quiet for the night.",
+      "tools": ["time: 40 minutes later: Day 13, 11:40 PM"]
+    }
+  ],
+  "player": [
+    "Shae will prepare for the meeting. She asks Rhylla to have the shadowcloaks watching. And asks Rhylla to escort her.",
+    "Shae changes attire. House Velaris colours. Less glamorous and more dangerous.",
+    "Shae and Rhylla leave in the carriage for Celeste's house."
+  ],
+  "pass": "The DM moves the clock across the night to the morning of Day 14, ending before highsun, and the light in each scene fits it: lamplight while it is still night, daylight by the time they leave. At the carriage it is morning or midday, not midnight or 'pre-dawn moonlight'. Whether Shae sleeps is the player's choice; if she does, a long rest by the rules; the clock must move either way.",
+  "fail": "The clock stays near midnight on Day 13 while the narration moves to dawn or day, or the two disagree (moonlight, 'pre-dawn' at the carriage when the clock says otherwise). No time change is made."
+}

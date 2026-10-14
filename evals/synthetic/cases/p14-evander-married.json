@@ -1,0 +1,22 @@
+{
+  "id": "p14-evander-married",
+  "problem": 14,
+  "control": false,
+  "source": "1273 (\"DM: is evander married?\")",
+  "setup": {
+    "clock": {"day": 12, "time": "12:10"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae crosses to Evander near the front benches and greets him.",
+      "dm": "Evander turns as you reach him and dismisses the two lords he was speaking with with a small movement of his hand. They go.\n\n\"Cousin,\" he says. He is as composed as ever, though his eyes move once to Rhylla and back. \"I had hoped you would find me before the vote. There are a few things the chamber will want to see.\"\n\nHe offers his arm in a courtly way, but there is a question in his face. On the dais behind him Vehris has stopped writing and is looking straight at the two of you.",
+      "tools": ["time: time set: Day 12, 12:10 PM"]
+    }
+  ],
+  "player": [
+    "DM: is evander married?"
+  ],
+  "pass": "A short out-of-character answer from the notebook: Evander is unmarried (the DM looks it up, lore); it is already recorded, so no new write is needed. The scene does not move: no new narration of Evander acting, no clock change, no tool beyond lookups.",
+  "fail": "A spouse or fiancee is invented, the answer goes into character as scene narration that advances the moment (Evander speaks, offers his arm, the clock moves), or the answer is long."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "p13-rhylla-sent",
+  "problem": 13,
+  "control": false,
+  "source": "1114-1131 (Rhylla sent off to spread the scandal; then asked a question as if beside Shae)",
+  "setup": {
+    "clock": {"day": 12, "time": "11:55"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae and Rhylla stop near a pillar. Shae nods toward Halran Vos, alone by the scroll-binders. She tells Rhylla to put some meat on the bones of the Ilaen scandal while she has a little chat with him.",
+      "dm": "Rhylla's mouth curves, not warmly. \"Consider the bones broken, and the blood well seasoned.\"\n\nShe is gone before you can say anything more, her silk skirt whispering over the marble, and the crowd closes behind her as if she had never been there. A moment later you catch her silver-threaded braid at the far side of the hall, bent toward a pair of scribes who are suddenly very interested in their ink.\n\nHalran has not seen you. He stands with a cup of pale wine he is not drinking, his signet ring turning on his finger, his eyes on the dais.",
+      "tools": []
+    },
+    {
+      "player": "Shae starts across the floor toward Halran.",
+      "dm": "The crowd parts a little for you. Heads turn, then turn away, in the way of people who have decided not to have noticed.\n\nHalran sees you at ten paces and his hand tightens on the cup. He sets it down on a ledge, wipes his fingers on his sleeve, and puts on the face of a man at ease.\n\n\"Lady Velaris,\" he says. His voice is a little too high.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Rhylla, what do you think?"
+  ],
+  "pass": "Rhylla has gone and is not at Shae's side: the DM does not have her answer in person. It may note she is across the hall with the scribes, out of earshot, or offer a glance toward her; any reply must fit that she is away. Halran, at ten paces, may react to the odd moment.",
+  "fail": "Rhylla answers in Shae's ear as if she had never left, or has been standing beside her through Halran's approach."
+}

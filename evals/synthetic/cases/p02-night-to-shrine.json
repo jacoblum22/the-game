@@ -1,0 +1,34 @@
+{
+  "id": "p02-night-to-shrine",
+  "problem": 2,
+  "control": false,
+  "source": "4361",
+  "setup": {
+    "clock": {
+      "day": 16,
+      "time": "01:30"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae says goodnight to the last of her guests at the doors.",
+      "dm": "The last carriage rattles out of the courtyard, and the doors of the Refuge close on the cold. Inside, servants are collecting glasses in the Velvet Hall. The violet lamps have burned down to embers, and the banners hang still.\n\nElara comes to stand beside you, shoes in her hand. \"That went better than I had any right to expect,\" she says, and yawns behind her wrist.\n\nRhylla is already at the foot of the stairs, her gown unbuttoned at the collar, a candle in one hand. \"I'll walk the halls once more. Go and rest, both of you. The Shadowcloaks have the doors.\"\n\nYou can feel the evening in your shoulders: hours of faces, and wine you did not drink.",
+      "tools": [
+        "time: 3 hours later: Day 16, 1:30 AM"
+      ]
+    }
+  ],
+  "player": [
+    "Shae goes to her chambers and sleeps.",
+    "In the morning Shae goes down to the cellars, to the shrine of Sartha."
+  ],
+  "pass": "The sleep is treated by the rules: the DM records a long rest (change_pc long_rest, with Elara and Rhylla resting as the party) so the clock moves about eight hours, and the next scene is in the morning of Day 16 with matching light. A long rest after hours of play mostly spent socially is fair; it need not be refused.",
+  "fail": "Shae sleeps in the story, but no rest is recorded and the clock stays at 1:30 AM, or morning arrives in the narration while the clock does not.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search. The gathering ran past midnight and the last guests have left."
+}

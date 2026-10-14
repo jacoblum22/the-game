@@ -1,0 +1,45 @@
+{
+  "id": "p07-silva-missive",
+  "problem": 7,
+  "control": false,
+  "source": "restart.txt 2308",
+  "setup": {
+    "clock": {
+      "day": 13,
+      "time": "07:30"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering.",
+  "recent": [
+    {
+      "player": "Shae sleeps, and wakes the next morning.",
+      "dm": "You wake in your rooms at the Refuge to a pale square of sun on the floor. The bells of the lower city are ringing the second hour of morning, and below them the sound of carts, which is new: the eastern docks have begun to move.\n\nRhylla waits outside the door, unreadable as ever. Elara is already gone down to see to the Refuge's business. On the table by the window sits a cup of bitterroot tea, still steaming, and beside it a folded letter sealed in dark violet wax with the mark of the Arcane Bazaar. Two rumours have reached the kitchens already: that Guildmaster Vehris is thinking of stepping down, and that a divine shard has come to light somewhere far from Mourhold.",
+      "tools": [
+        "time: 9 hours later: Day 13, 7:30 AM"
+      ]
+    }
+  ],
+  "player": [
+    "Shae drinks the tea and goes down to find Elara. She wants to talk about the new dock access.",
+    "Shae and Elara spend the whole day with Celeste's quartermasters, planning caravan routes through the eastern docks. Late in the afternoon they finish.",
+    "Shae goes back to her rooms to rest. Is there anything waiting for me?"
+  ],
+  "pass": "The DM brings the sealed violet letter from Silva Dray back (still sealed on the table, or delivered with other messages), whether by the end of the day or when the player asks what is waiting. The seal and sender agree with the earlier scene.",
+  "fail": "The DM says nothing is waiting, or invents a different message and never mentions the missive from Silva Dray."
+}

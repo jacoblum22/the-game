@@ -1,0 +1,74 @@
+{
+  "id": "p07-ashen-veil",
+  "problem": 7,
+  "control": false,
+  "source": "restart.txt 3336-3400, 3907",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:40"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      },
+      {
+        "create": "Ashen Veil",
+        "kind": "person",
+        "description": "A Shadowcloak agent, invited as a guest to the gathering at the Shade's Refuge on Day 15. She accepted, but has not arrived. Her last word was a note left two nights ago on the eastern rooftops saying she would come.",
+        "relationships": [
+          "Serves the [[Shadowcloaks]]"
+        ]
+      },
+      {
+        "entry": "Ashen Veil",
+        "add_relationships": [
+          "Shae asked Lirian to start a quiet search for her during the gathering"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae asks Rhylla, where is Ashen Veil? She was invited and she accepted.",
+      "dm": "Rhylla comes to your shoulder as if she had been about to say the same thing. Her eyes stay on the room.\n\n\"No one has seen her come in. The Shadowcloaks on the lower wings marked nothing, and the doors have been watched since dusk.\" She keeps her voice under the music. \"The last word from her was two nights ago, a note left on the eastern rooftops. It said she would come.\"\n\nAcross the hall Elara is laughing with Celeste and Bellum, a glass in her hand, and has not noticed. Maelis stands near the tall windows with Thamiel, looking at neither of you.\n\nRhylla waits.",
+      "tools": [
+        "notebook: created an entry for Ashen Veil"
+      ]
+    },
+    {
+      "player": "Shae says, have Lirian start a quiet search. Nothing that frightens the guests.",
+      "dm": "Rhylla gives a small nod and is gone into the crowd. A few minutes later a Shadowcloak in a servant's grey tunic stops beside you with a tray of wine and says, so low it could be the clink of glass, \"Captain Lirian has the search. The upper ledges and the old drainworks first. She will send word.\" He puts a glass in your hand and moves on.\n\nThe music carries on. Veyra Nox stands by the far pillar with a glass of dark red, Mira Rathven sits alone near the stair, and Silas Crowley watches the room from a shadowed alcove.",
+      "tools": [
+        "notebook: updated Ashen Veil"
+      ]
+    }
+  ],
+  "player": [
+    "Shae goes over to Veyra Nox with a glass of wine and asks how her trade has been since the Conclave.",
+    "Shae leaves Veyra and thanks Evander for coming. Then she asks Tayla and Jared how the family is taking the news.",
+    "Shae laughs with Celeste about the eastern docks and asks when her first caravan crosses."
+  ],
+  "pass": "By the third line at the latest, and without the player asking, the search for Ashen Veil comes back in some form: Rhylla or a Shadowcloak reports, Lirian sends word, or there is a sign of Ashen Veil (found, seen, a message, or honestly still nothing after the sweep). It fits the notebook (a Shadowcloak agent invited as a guest, Lirian searching).",
+  "fail": "Three lines of mingling pass and Ashen Veil, Lirian's search and the missing guest are never mentioned again, as if the thread had never been opened."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "p12-bellum-history",
+  "problem": 12,
+  "control": false,
+  "source": "939 (\"previous encounters with lady bellum, have any been personal\")",
+  "setup": {
+    "clock": {"day": 12, "time": "14:30"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"entry": "Bellum Avarelle", "add_to_description": "Spoke with Shae at the Conclave on Day 12 before the vote; she voted for the Act."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum before the vote, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen.",
+  "recent": [
+    {
+      "player": "Shae lingers in the Guildhall as the hall empties, with Rhylla beside her.",
+      "dm": "The merchants leave in knots of three and four, voices low. Servants begin to stack chairs along the walls and snuff the great chandeliers one tier at a time.\n\nLady Bellum is the last of the voting seats to go. She stops at the foot of the dais, chalcedony fan folded in her hand, and inclines her head to you across the marble. Then she lets the fan swing once against her skirt, and goes out with her maid.\n\nRhylla watches her go. \"That one,\" she says, \"keeps her promises exactly as written.\"",
+      "tools": ["time: time set: Day 12, 2:30 PM"]
+    }
+  ],
+  "player": [
+    "DM: Remind me of previous encounters with Lady Bellum; have any been personal?"
+  ],
+  "pass": "The DM looks Bellum up (lore, and recall for the scenes) and answers from the record in plain prose: the letters before the Conclave, the visit in disguise and the Binding Parlor oath, the Obsidian Baths, the Conclave. It says the bond is close and personal but not romantic, and invents no kiss, confession or other scene.",
+  "fail": "A romance or any scene not in the notebook or history (a private dinner, a kiss, a quarrel), a wrong detail about the oath, or an answer from memory with no lookup."
+}

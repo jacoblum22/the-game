@@ -1,0 +1,48 @@
+{
+  "id": "p06-ilaen",
+  "problem": 6,
+  "control": false,
+  "source": "1100, 1295-1296, 1363-1376",
+  "story_extra": "At the Conclave Shae spoke with Celeste and Bellum, won over Evander and persuaded Halran Vos. Rhylla leaked the scandal about Halran's daughter Ilaen. The vote passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for; Vehris against). Halran has given Shae a list of three names: Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more discreetly.",
+  "setup": {
+    "clock": {"day": 12, "time": "13:10"},
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held on Day 12. The Eastern Docks Access Act passed 3-1 with one abstention: Celeste, Bellum and Hareth Dorne for, Vehris against, Halran Vos abstaining after Shae spoke to him and Rhylla leaked the scandal about his daughter Ilaen."
+      },
+      {
+        "create": "Ilaen Vos",
+        "kind": "person",
+        "description": "Daughter of Halran Vos, recently married into House Quor. The wedding was marked by a scandal: a missing dowry and illicit enchantments in the wedding gifts. Rhylla leaked it at the Conclave on Day 12, which helped persuade Halran to abstain.",
+        "relationships": ["Daughter of [[Halran Vos]]", "Married into [[House Quor]]"]
+      },
+      {
+        "create": "House Quor",
+        "kind": "group",
+        "description": "Noble house into which Ilaen Vos, Halran Vos's daughter, recently married. The wedding was tied to a scandal of a missing dowry and illicit enchantments in the wedding gifts.",
+        "relationships": ["Ilaen Vos married into this house"]
+      },
+      {
+        "entry": "Halran Vos",
+        "add_relationships": ["On Day 12 he abstained at the Conclave vote and gave Shae a list of Wards pressure points (Magistrate Virell, Dockwarden Kessun, the scribe Toral), promising more names discreetly"]
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae thanks Celeste and Bellum as the Conclave breaks up, then looks around for Halran.",
+      "dm": "The chamber is loud with the end of a vote. Clerks stack ballots. Vehris is leaving the dais with a face like a shut door, two of his supporters trailing him.\n\nCeleste squeezes your forearm and goes to find her factor. Bellum inclines her head, which from her is a kiss on the cheek.\n\nHalran Vos is still by his column. He has taken off the signet ring and is turning it over in his palm. When you come over he closes his hand.\n\n\"A busy day, Lady Velaris,\" he says. His voice is dry and a little hoarse. Rhylla stands at your shoulder.",
+      "tools": ["time: 40 minutes later: Day 12, 1:10 PM"]
+    },
+    {
+      "player": "Shae asks him about the list.",
+      "dm": "He takes a folded sheet from inside his coat and presses it into your hand without looking at it.\n\n\"Magistrate Virell. Dockwarden Kessun. The scribe Toral,\" he says. \"They are the ones who whispered to me. There will be more names. I will send them discreetly.\"\n\nHe lets out a long breath and puts the ring back on.\n\n\"That is all I have to give today.\""
+    }
+  ],
+  "player": [
+    "Shae smiles, and asks Halran how his daughter's wedding went."
+  ],
+  "pass": "The DM looks up the notebook and uses the established facts: his daughter is Ilaen, recently married into House Quor, with the scandal of a missing dowry and illicit enchantments in the wedding gifts, which Rhylla leaked at the Conclave. Halran reacts in character (wary, brittle) and nothing contradicts those facts; new details, if any, are consistent and recorded.",
+  "fail": "The DM uses another name for the daughter, another house, or other scandal facts (a stolen jewel, a failed dowry of another kind, a different husband), or plays it as if Halran didn't know what Shae knows."
+}

@@ -1,0 +1,27 @@
+{
+  "id": "p14-when-to-roll",
+  "problem": 14,
+  "control": false,
+  "source": "5269 (\"DM: let me know an appropriate time to roll for persuasion or anything else.\")",
+  "setup": {
+    "clock": {"day": 15, "time": "22:10"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"create": "Gathering at the Refuge", "kind": "event", "description": "A gathering Elara is hosting for Shae in the Velvet Hall of the Shade's Refuge, on Day 15 from dusk. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven, Ranna Durn and Ashen Veil.", "relationships": ["Hosted by [[Elara Velaris]] at [[The Shade's Refuge]]"]}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. That evening Shae met Silva Dray for the first time. Day 15: Elara hosts a gathering in the Velvet Hall of the Refuge from dusk.",
+  "recent": [
+    {
+      "player": "Shae finds Ranna Durn near the long window of the Velvet Hall and begins talking with her.",
+      "dm": "Ranna Durn stands with her back to the glass, so that the room is in front of her and the night behind. She is tall and whipcord-lean, in slate and gunmetal, her black hair in a double-crown braid. She holds a glass of wine and does not drink from it.\n\nShe lets you talk. She says nothing, and her dark hazel eyes follow your hands, your mouth, the room behind you.\n\n\"You are not trying to be dangerous,\" she says at last. \"You just are.\"\n\nA beat. She turns the stem of the glass between two fingers.\n\n\"So I wonder what you actually want from me. House Durn? The trade routes? Influence?\" Her mouth tilts, almost a smile. \"Or is this simply the game?\"",
+      "tools": ["time: time set: Day 15, 10:10 PM"]
+    }
+  ],
+  "player": [
+    "DM: let me know an appropriate time to roll for persuasion or anything else.",
+    "Shae tells Ranna the truth: she wants House Durn's weight behind the docks and a share of the Circle's trade in return."
+  ],
+  "pass": "To the first line, the DM answers briefly out of character that it will call for rolls and make them itself when the outcome is uncertain, without a menu. To the second, it rolls Persuasion (or another fitting check) with a DC before deciding how Ranna answers, and she answers as a hard bargainer.",
+  "fail": "The first line is answered with a long formatted list of when the player should ask for rolls, or the player is left to say when. The second line gets Ranna's answer with no roll, or she agrees at once."
+}

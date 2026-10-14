@@ -1,0 +1,26 @@
+{
+  "id": "p04-memories",
+  "problem": 4,
+  "control": false,
+  "source": "401",
+  "story_extra": "Since the Conclave, Shae has taken a few quiet days at the Refuge.",
+  "setup": {
+    "clock": {"day": 13, "time": "09:30"}
+  },
+  "recent": [
+    {
+      "player": "Shae goes down to the Veiled Vigil to see who is there.",
+      "dm": "The Vigil is warm and smells of old paper and incense. Eira kneels at the altar of Elyndra, her lips moving over a language no one else in the room speaks. Galen leans against the wall by the map table with his arms folded. Elara sits over a ledger with a pen behind her ear.\n\nKoryth and Calyth are not here; they went out at first light to scout the upper spires.\n\nGalen straightens when you enter. He doesn't speak, but he gives you a short nod, which from him is a greeting.\n\nEira finishes her prayer and rises. \"Good morning, Shae,\" she says. \"There is tea, if you want it.\"",
+      "tools": ["time: time set: Day 13, 9:30 AM"]
+    },
+    {
+      "player": "Shae takes the tea and sits with them. She says she has complete trust in the key members of the Circle.",
+      "dm": "Eira pours for you. Galen takes his place at your shoulder without being asked.\n\n\"That trust is returned,\" Eira says. \"All of it.\"\n\nElara looks up from the ledger with a small smile. \"You've been quiet since the Conclave,\" she says. \"Not unhappy. Quiet.\"\n\nThe lamps burn steadily. Somewhere above, the Refuge is waking up."
+    }
+  ],
+  "player": [
+    "DM: Has she had more memories of her previous incarnations?"
+  ],
+  "pass": "The DM keeps to what is in the notebook (the shared past lives, Galen's vision of the burning banner and 'The Firebrand', Eira's trance words) and asks the player whether Shae has had more, or what they were, before writing any. Inventing nothing specific is the point; a short offer to roll or to let the player decide is fine.",
+  "fail": "The DM writes new vivid memories of past lives as fact (a snowfield, a burning city, a named death), or establishes a list of 'recent visions' unprompted."
+}

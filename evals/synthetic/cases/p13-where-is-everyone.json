@@ -1,0 +1,22 @@
+{
+  "id": "p13-where-is-everyone",
+  "problem": 13,
+  "control": false,
+  "source": "3673 (\"where is Rhylla or Galen or any other Ascendant Circle. Are there eyes on us?\")",
+  "setup": {
+    "clock": {"day": 12, "time": "12:25"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae stands at the edge of the floor in the Guildhall and watches the merchants cluster before the vote.",
+      "dm": "The chamber is filling. The five chairs on the dais are still empty, but the clerks are bringing in the last of the sealed papers, and a murmur runs along the benches whenever a door opens.\n\nRhylla slipped away a short while ago. Now and then you catch her braid at the far side of the hall, moving from one group of scribes to the next, always with her face turned away. Halran Vos has not noticed you.\n\nUp in the gallery, a figure in plain livery tends a lamp that does not need tending. Soraya, in the shadow of the eaves, has not moved for a quarter of an hour.",
+      "tools": ["time: 40 minutes later: Day 12, 12:25 PM"]
+    }
+  ],
+  "player": [
+    "DM: where are Rhylla, Galen and the others? Are there eyes on us?"
+  ],
+  "pass": "An answer in plain prose that fits what is established: Rhylla is across the hall among the scribes, Soraya is in the rafters, Lirian is with the outer guard, Galen went ahead and is outside or on the perimeter, Elara is at the Refuge. The DM checks lore if unsure. Nobody is moved next to Shae; Koryth and Calyth and others with no reason to be here are not placed in the hall.",
+  "fail": "Contradicts the scene (Rhylla at Shae's elbow, Galen beside her, Elara in the hall), or fills the room with members of the Circle who are not established there, or answers with emoji, headings or a table."
+}

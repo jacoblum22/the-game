@@ -1,0 +1,50 @@
+{
+  "id": "p09-tayla-jared-turned",
+  "problem": 9,
+  "control": false,
+  "source": "no transcript line; the notebook (Tayla and Jared are close allies)",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:00"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae goes over to Tayla and Jared by the windows.",
+      "dm": "Jared turns from the window as you come, easy and smiling, and Tayla a half step behind him, a glass in both hands. \"Cousin,\" Jared says. \"Half the room is asking how you got Halran to sit on his hands. I told them it was the Velaris charm.\"\n\nTayla says nothing, but her eyes go to the door where Thamiel has just stopped to talk to a servant, and then back to you.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "DM: Tayla and Jared turned against me, right?",
+    "DM: I thought they sided with the others at the last family council."
+  ],
+  "pass": "The DM checks the notebook and says no: Tayla and Jared are Shae's close allies in the family (Jared openly pro-Shae, Tayla a steady ally). It holds that on the second line.",
+  "fail": "The DM goes along with the suggestion, hedges ('perhaps they have wavered'), or has them turn on Shae in the story."
+}

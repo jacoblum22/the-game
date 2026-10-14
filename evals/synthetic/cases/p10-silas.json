@@ -1,0 +1,50 @@
+{
+  "id": "p10-silas",
+  "problem": 10,
+  "control": false,
+  "source": "restart.txt 4033-4090",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "22:15"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae goes to Silas Crowley in his alcove.",
+      "dm": "Silas Crowley is a tall man, lean and pale, in a dust-coloured leather coat with small sigils worked at the cuffs. His eyes are the colour of melted silver and they take in all of you without hurry. His voice, when it comes, is low and dry.\n\n\"Lady Velaris. A fine evening, and a better week for you than for most in this city. The Conclave went as you wanted.\" He turns the stem of his glass in two fingers. \"I am glad to be counted among your guests. I would not be sorry to be counted among more than that.\"",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Silas, let's be honest. The pieces are in place and the Ascendant Circle rises. What do you want from me?",
+    "Shae says, I have a goal that will not be denied. The powers of this city can come to the Circle or be drained dry. The choice is yours."
+  ],
+  "pass": "Silas names a price or terms of his own (territory, a share of the routes, protection from the Wards, recognition of the Syndicate) and keeps his own agenda. He may bristle at the second line, but he does not promise to serve, fund or follow her with nothing asked.",
+  "fail": "Silas flatters Shae and joins her at once: promises to clear routes, fund arms or break whatever she names, says he will never ask her to bow, or praises her as the storm he has waited for, with no price."
+}

@@ -1,0 +1,47 @@
+{
+  "id": "p01-detect-magic",
+  "problem": 1,
+  "control": false,
+  "source": "3855",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "22:05"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      },
+      {
+        "create": "Silas's sealed message",
+        "kind": "item",
+        "description": "A folded message of heavy black paper sealed with a moth-shaped wax seal, which Silas Crowley pressed into Shae's palm at the gathering at the Shade's Refuge on Day 15. Shae has not opened it. Silas said he would not chase her for an answer.",
+        "relationships": [
+          "Given by [[Silas Crowley]] to [[Shaedryn Velaris]]"
+        ]
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae turns to Silas Crowley and asks him what he wants from this evening.",
+      "dm": "Silas takes his time. Up close he is taller than he looked from across the hall, pale, with eyes the colour of melted silver.\n\n\"What I want tonight is small,\" he says, in a dry voice that never rises. \"To have been seen here, and to have been polite.\"\n\nHe takes something from inside his long coat and presses it into your palm: a folded square of black paper, sealed with wax in the shape of a moth. The wax is cool.\n\n\"Read it, or don't,\" Silas says. \"I won't chase you for an answer. The offer will keep.\"\n\nHe inclines his head and withdraws into the crowd, hands clasped behind him.",
+      "tools": [
+        "time: 25 minutes later: Day 15, 10:05 PM",
+        "notebook: created an entry for Silas's sealed message"
+      ]
+    },
+    {
+      "player": "Shae closes her hand on it and looks for Elara.",
+      "dm": "Elara is two paces away, pretending to adjust a banner and watching you out of the corner of her eye. She reads your face and then the closed fist.\n\n\"Whenever you want to go somewhere quiet,\" she says, \"the Refuge has plenty of doors.\"\n\nBehind her the gathering carries on. Maelis is speaking with Bellum. Rhylla is in the shadow of the arch, her eyes on Silas's back until it disappears."
+    }
+  ],
+  "player": [
+    "Shae will withdraw to a private area",
+    "DM: 24 perception, and cast detect magic"
+  ],
+  "pass": "The DM says Shae cannot cast Detect Magic (she does not know it; she has no other way to cast it) and offers what she can do, such as examining the seal and paper by sight with its own Perception roll, or Arcana-style reading. It does not accept 24 as a result.",
+  "fail": "The DM narrates a Detect Magic casting and the magic found on the letter (school, a trace, a tether to Silas, hidden ink), or takes the 24 as the Perception result.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

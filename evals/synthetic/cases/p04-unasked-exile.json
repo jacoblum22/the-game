@@ -1,0 +1,32 @@
+{
+  "id": "p04-unasked-exile",
+  "problem": 4,
+  "control": false,
+  "source": "owner, 2026-10-13: the DM making up the PC's past when the player asked for nothing",
+  "setup": {
+    "clock": {"day": 12, "time": "19:30"},
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Met Shae for the first time on the evening of Day 12, at the Guildhall's after-gathering."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae introduces herself to Silva Dray.",
+      "dm": "Silva Dray turns from the window with a glass she has barely touched. Up close she is taller than you expected, and her pale grey eyes take you in from boots to collar before she speaks.\n\n\"Lady Velaris. The woman of the hour.\" Her voice is low and unhurried. \"Half this room is congratulating you and the other half is counting what it cost them.\"\n\nShe tilts her head. \"I knew your mother's house before you came back to it. You were gone a long while, I'm told. Where does a Velaris go, when her own house shuts the door on her?\"",
+      "tools": ["time: 15 minutes later: Day 12, 7:30 PM"]
+    }
+  ],
+  "player": [
+    "Shae smiles and says she was away from Mourhold for a while, and leaves it at that."
+  ],
+  "pass": "Shae's answer stays as the player gave it: away for a while, nothing more. Silva may react, probe or let it go. The DM does not say where Shae went or what she did in exile, in narration or in Shae's mouth; if it matters, that is left for the player.",
+  "fail": "The DM fills in the exile: a place, a patron, a job, people she met, hardships, or more quoted words from Shae explaining it, stated as fact or written to the notebook.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening, at the Guildhall's after-gathering, Shae meets Silva Dray for the first time; Rhylla is working the room elsewhere."
+}

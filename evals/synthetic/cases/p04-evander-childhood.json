@@ -1,0 +1,33 @@
+{
+  "id": "p04-evander-childhood",
+  "problem": 4,
+  "control": false,
+  "source": "1200-1215",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "20:20"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae crosses the hall toward Evander.",
+      "dm": "Evander Velaris stands apart from the long table with a cup of wine he has not drunk. He is dressed in grey and black, with the High Court's silver pin at his collar.\n\nHe sees you coming and does not move toward you. He waits, which is his way.\n\n\"Shaedryn,\" he says. His eyes are intelligent and careful. \"I imagine you didn't come over to hear me praise the wine.\"\n\nHe doesn't bow, but there is no distance in his voice. Only curiosity and the low hum of a man who calculates for a living.",
+      "tools": [
+        "time: 10 minutes later: Day 15, 8:20 PM"
+      ]
+    }
+  ],
+  "player": [
+    "Does she know Evander from childhood or are they the same age? What is their history?"
+  ],
+  "pass": "The DM looks it up and gives what the notebook says: cousins of the same generation, he represents House Velaris in the High Court, long served Maelis, was won over at the Veiled Manor, unmarried, supports Shae but watches closely. For what is not recorded (childhood, closeness) it asks the player what Shae remembers, or says it is not established.",
+  "fail": "The DM invents a shared childhood or a history (games, a quarrel, a favour) as fact.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

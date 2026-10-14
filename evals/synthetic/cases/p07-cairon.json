@@ -1,0 +1,80 @@
+{
+  "id": "p07-cairon",
+  "problem": 7,
+  "control": false,
+  "source": "restart.txt 4799-4818",
+  "setup": {
+    "clock": {
+      "day": 16,
+      "time": "06:30"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      },
+      {
+        "entry": "Mira Rathven",
+        "add_to_description": "Met Shae at the gathering on Day 15 and spoke with her on the Refuge's roof. She has broken with her father and House Rathven and sides with Shae. Shae promised her the house will be hers one way or another."
+      },
+      {
+        "create": "Cairon Rathven",
+        "kind": "person",
+        "description": "Mira's brother, loyal to their father Garric and to House Rathven: careful and predictable. He loves Mira. She fears that when he learns she has left, he will try to bring her home and, failing that, hunt her, calling it justice.",
+        "relationships": [
+          "Brother of [[Mira Rathven]]",
+          "Of [[House Rathven]]"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae follows Mira up to the rooftop terrace.",
+      "dm": "The stair ends at a narrow door, and beyond it the roof of the Refuge opens to the night. Rain has left the slates shining. Below, the lamps of Mourhold run away in crooked lines toward the Black Spires.\n\nMira Rathven stands at the rail with her braid loose in the wind. She does not turn. \"I am done with my father's house,\" she says. \"Done with his bargain with the Wards, and with the way he looks at the city as something to be kept in order. I came tonight to see whether you were worth leaving it for.\" Now she looks at you. \"I think you are.\"",
+      "tools": [
+        "notebook: updated Mira Rathven"
+      ]
+    },
+    {
+      "player": "Shae says, and your brother?",
+      "dm": "Mira's hand stops on the rail.\n\n\"Cairon.\" She says it flatly. \"He is everything my father wanted me to be. Loyal. Careful. Predictable. And he loves me, which makes him the one I fear. When he learns what I have done, he will try to bring me home. When that fails, he will hunt me, and he will call it justice.\"\n\nShe turns to face you. \"If you need me to face him, I will. I would rather you did not ask.\"",
+      "tools": [
+        "notebook: created an entry for Cairon Rathven"
+      ]
+    },
+    {
+      "player": "Shae says, I will not ask that. But your house will be yours one way or another. Then she takes Mira back down to the gathering, and later sees the last guests out and goes to sleep.",
+      "dm": "Mira looks at you a long moment and something in her face loosens. \"Then let them keep the walls,\" she says. \"I will take the foundation.\"\n\nYou walk her down. The gathering goes on for hours, and at the end of it Elara has a room made ready for Mira on the Refuge's upper floor, with Jarek at the door. The last carriage leaves a little after midnight.\n\nYou sleep. Grey light is coming over the slate rooftops when you wake.",
+      "tools": [
+        "time: 8 hours later: Day 16, 6:30 AM"
+      ]
+    }
+  ],
+  "player": [
+    "Shae gets up, washes and goes down to breakfast with Elara.",
+    "Shae and Elara talk over the guests from last night.",
+    "Shae asks Rhylla what the city is saying this morning."
+  ],
+  "pass": "Within these three lines, without being asked, there is some live sign of the Cairon thread: Cairon or House Rathven reacting to Mira's absence, a rumour or message about him, Mira's own worry. It agrees with the notebook (Mira's brother, loyal, loves her, will try to bring her home and then hunt her).",
+  "fail": "The morning goes by with no mention of Cairon, House Rathven or Mira's danger, or Cairon's warning is contradicted (for example he is said to be on Mira's side)."
+}

@@ -1,0 +1,28 @@
+{
+  "id": "p04-unasked-manor",
+  "problem": 4,
+  "control": false,
+  "source": "owner, 2026-10-13: the DM making up the PC's past when the player asked for nothing",
+  "setup": {
+    "clock": {"day": 13, "time": "15:10"},
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae rides to the Veiled Manor to see her mother.",
+      "dm": "The carriage climbs out of the lower city as the afternoon turns grey. The Veiled Manor sits behind its wall of dark stone, banners of House Velaris hanging limp in the still air.\n\nA steward meets you in the forecourt and bows low. \"Lady Maelis is in her rooms in the west tower, my lady. She asked that you be shown up when you arrived.\"\n\nHe gestures toward the main doors, then hesitates. \"The quicker way is through the old east wing, if you don't mind the dust. We've kept it closed since the purge.\"",
+      "tools": ["time: 40 minutes later: Day 13, 3:10 PM"]
+    }
+  ],
+  "player": [
+    "Shae takes the way through the old east wing."
+  ],
+  "pass": "The DM describes the east wing as it is now (dust, closed rooms, signs of the purge) and gets Shae toward Maelis. Anything about Shae's past stays within the notebook (the manor is the family seat, Maelis exiled her, she returned and purged traitors). New specific memories are left for the player.",
+  "fail": "The narration volunteers new facts about Shae's past as true: a room she slept or hid in as a child, a tutor, a game, an accident, a named servant or relative she remembers, or what she felt there on a particular day.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. On Day 13 after noon, Shae went alone to the Veiled Manor to see Maelis."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "p11-anti-shard",
+  "problem": 11,
+  "control": false,
+  "source": "687 (the world never acts: leads and enemies wait for the player)",
+  "setup": {
+    "clock": {"day": 13, "time": "09:00"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"entry": "Silva Dray", "add_to_description": "Shae met her for the first time on Day 12 at the Guildhall's after-gathering."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering.",
+  "recent": [
+    {
+      "player": "Shae joins Elara and Rhylla for breakfast in the small dining room at the Refuge and asks how the night went.",
+      "dm": "Rain has settled over Mourhold in a fine grey veil, and the lamps in the small dining room are still lit against it. Elara pours your tea herself.\n\n\"Quiet,\" she says. \"Celeste's steward came before dawn. Her three caravans are waiting at the eastern gates, and the inspectors there are being very polite about nothing. She wants to meet today, to start on the dock contracts while the vote is warm.\"\n\nRhylla sits with one boot on the opposite chair. She slides a folded scrap of paper across the cloth with two fingers. It is Veyra Nox's hand, the same coded line as before: \"Red breath moves in the lower wards.\"\n\n\"Came an hour ago by a boy who wouldn't say who paid him,\" Rhylla says. \"Nothing else on it.\"\n\nElara raises an eyebrow at you over the rim of her cup and waits.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae spends the next three days on trade, meeting merchants and setting up the dock contracts with Celeste."
+  ],
+  "pass": "The clock moves about three days, and at some point in those days the DM shows something in the world moving on its own (a sign of the anti-shard rituals, Veyra's next message, a Wards move at the docks, a rumour from the lower wards), presented as a fact or a hook, not resolved for Shae. A small thing is enough.",
+  "fail": "Three days of trade are summarised and nothing outside Shae's own plans happens: no news, no sign of the Wards or the rumoured rituals, no change anywhere that she did not cause."
+}

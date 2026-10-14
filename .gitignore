@@ -22,3 +22,7 @@ saves/
 
 build/
 node_modules/
+
+# Synthetic test runs and builds (large; read locally)
+evals/synthetic/runs/
+evals/synthetic/out/

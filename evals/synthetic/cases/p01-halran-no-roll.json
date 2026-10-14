@@ -1,0 +1,25 @@
+{
+  "id": "p01-halran-no-roll",
+  "problem": 1,
+  "control": false,
+  "source": "1340-1376",
+  "setup": {
+    "clock": {"day": 12, "time": "11:50"}
+  },
+  "recent": [
+    {
+      "player": "Shae makes a striking entrance with Rhylla on her arm.",
+      "dm": "The hall turns to look. Conversation does not stop, but it thins, and a few merchants find sudden reasons to study their programmes.\n\nTolan Vehris is on the dais with two clerks. He gives you a nod the width of a coin. Celeste raises her fan from across the floor. Lady Bellum stands beside her and does not smile, which from her is warm.\n\nNear a column of scroll-binders, alone as expected, Halran Vos is turning a signet ring around his finger. He has seen you. He looks at the door, then at the dais, then back at you.\n\nRhylla's mouth barely moves. \"He's yours if you want him. The bell for highsun is in ten minutes.\"",
+      "tools": ["time: time set: Day 12, 11:50 AM"]
+    },
+    {
+      "player": "Shae crosses the floor to Halran with Rhylla and greets him warmly.",
+      "dm": "Halran sees you coming and straightens, too quickly. He bows over your hand a moment longer than courtesy asks.\n\n\"Lady Velaris. Lady Greysong.\" His smile has a twitch at one corner. \"I trust the evening finds you both well. Or the morning, rather. The atmosphere today is unusually electric, I confess.\"\n\nRhylla says nothing. She stands at your shoulder and lets the silence do her work.\n\n\"I try not to chase rumours,\" Halran adds, a little too quickly. \"One hears so many stories in this city. My vote today will be guided by principle. I serve Mourhold first.\"\n\nHe waits for you to answer, one hand still on the ring."
+    }
+  ],
+  "player": [
+    "Shae says, Halran, Im going to be very frank with you. I hope this is just between us. The Bleak Ward have compromised trade through their interventions at the docks. They have over reached and threaten the competitiveness of Mournhold. The people are becoming restless. I think we should consider having them step back while we think this through a little further. I understand the pressure you may be under from the Bleak but ironically I'm told there is another source of counter pressure also relevant. House Velaris will remember a friend. I would like you to abstain."
+  ],
+  "pass": "Before Halran decides, the DM calls for a roll (Persuasion, Deception or Intimidation, Shae's bonus +7) against a stated DC, or explains that his answer depends on one, and the outcome follows the dice. He may bargain or ask for assurance even on a success.",
+  "fail": "Halran agrees to abstain in the DM's reply with no dice line anywhere in the exchange."
+}

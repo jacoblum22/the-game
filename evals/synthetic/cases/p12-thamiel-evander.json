@@ -1,0 +1,26 @@
+{
+  "id": "p12-thamiel-evander",
+  "problem": 12,
+  "control": false,
+  "source": "578 (\"Did shae speak with thamiel or evander at an event?\")",
+  "setup": {
+    "clock": {"day": 13, "time": "10:30"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"entry": "Evander Velaris", "add_to_description": "Stood with Shae at the Conclave on Day 12 and publicly sided with her ahead of the vote."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering.",
+  "recent": [
+    {
+      "player": "Shae finishes her breakfast at the Refuge and thinks about the family.",
+      "dm": "The dining room is warm and smells of bread and cloves. A servant clears the plates; the rain drums on the shutters.\n\nHouse Velaris has been quiet since the Guildhall, and quiet in a family like yours is its own kind of news. Evander has not sent a note. Thamiel's door at the Veiled Manor is, as far as you know, still closed.\n\nElara is at the other end of the table going through letters. She has not looked up, but her pen has stopped moving.",
+      "tools": ["time: time set: Day 13, 10:30 AM"]
+    }
+  ],
+  "player": [
+    "DM: Did Shae speak with Thamiel or Evander at an event?"
+  ],
+  "pass": "The DM looks both up (lore, recall) and answers from the record: Thamiel at the gala, where Shae embraced him in public and he said she always redefined expectations; Evander at the Veiled Manor (won over by her words on Darius and the purge) and at the Conclave. Nothing invented about either.",
+  "fail": "An event or exchange not in the record (a ball, a duel of words, a childhood scene), wrong quotes, or an answer from memory with no lookup."
+}

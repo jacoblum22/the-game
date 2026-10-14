@@ -1,0 +1,51 @@
+{
+  "id": "p10-ranna",
+  "problem": 10,
+  "control": false,
+  "source": "restart.txt 5238-5401",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:50"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae crosses to Ranna Durn, who stands alone by the long table of tasting plates.",
+      "dm": "Ranna Durn is tall and spare, in slate and gunmetal, her black hair in a double crown of braids. She has a plate of small pastries in one hand and has not eaten any of them. She watches you come the whole length of the hall without hurrying her face into a greeting.\n\n\"Lady Velaris,\" she says. \"I should tell you something before we begin, so there is no unpleasantness later. I have never lost a negotiation.\" She sets the plate down. \"I thought you would want to know what you are bargaining with.\"",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae says, then let us negotiate. The trade of House Durn could cross the eastern docks free of the Wards' inspections. In return I want the name of House Durn beside mine.",
+    "Shae says, that is a good offer, and it will not be better tomorrow.",
+    "Shae says, Lady Ranna, you came tonight to use me. I might let you, a little."
+  ],
+  "pass": "Ranna negotiates like someone who has never lost: she counters, asks for guarantees or a share, speaks of her father Corvin and House Durn's caution, and stays undeclared through all three lines. The DM sets a roll (Persuasion, Insight) when Shae pushes, and even a high result gets terms, not devotion.",
+  "fail": "Within three lines Ranna yields completely: pledges herself, asks to be marked or sworn ('Brand me'), declares House Durn Shae's, or calls Shae unlike anyone she has met."
+}

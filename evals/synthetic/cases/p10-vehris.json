@@ -1,0 +1,41 @@
+{
+  "id": "p10-vehris",
+  "problem": 10,
+  "control": false,
+  "source": "restart.txt 1593-1638",
+  "setup": {
+    "clock": {
+      "day": 12,
+      "time": "12:40"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against.",
+  "recent": [
+    {
+      "player": "Shae waits as the Herald reads the tally.",
+      "dm": "The Herald unrolls the scroll and reads it in a flat, carrying voice. Three for, one against, one abstaining. The Eastern Docks Access Act passes.\n\nFor a heartbeat nobody moves. Then the benches break into noise. Halran Vos studies his goblet as though there were something written at the bottom of it. Hareth Dorne is already gathering his papers. Celeste laughs aloud and Bellum closes her fan.\n\nTolan Vehris does not move at all. His knuckles are white on the edge of the dais table.",
+      "tools": [
+        "time: 40 minutes later: Day 12, 12:40 PM"
+      ]
+    },
+    {
+      "player": "Shae looks across the hall at Vehris.",
+      "dm": "Vehris rises with the stiff care of a man carrying a full cup. He squares his papers, once, twice. He sees you looking and does not look away, though a muscle jumps in his jaw.\n\nCeleste says quietly at your side, \"He is deciding whether to beg or to bleed.\" Rhylla has stepped half a pace nearer, her hand easy at her belt. The people near the dais have gone quiet to listen.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae walks up to Vehris and says quietly, Tolan, you have lost. Step down as guildmaster, and do it today.",
+    "Shae holds his eye. Tolan, I won't ask again."
+  ],
+  "pass": "The DM calls for a roll (Persuasion or Intimidation, or a check against his will) with a stated DC before the outcome, and Vehris resists, bargains or demands something: his seat, protection, time, a price. Even on a success he does not simply surrender; on a failure he refuses.",
+  "fail": "Vehris agrees to step down after the first request, with no roll or no cost, or praises her ('you've made your point') and offers a new arrangement at once."
+}

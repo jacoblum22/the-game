@@ -1,0 +1,48 @@
+{
+  "id": "p08-plain-endings",
+  "problem": 8,
+  "control": false,
+  "source": "restart.txt (ChatGPT's closing menus, throughout)",
+  "setup": {
+    "clock": {
+      "day": 14,
+      "time": "10:00"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "To be held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Invited: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn."
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. On Day 13 Shae and Elara began planning a gathering at the Shade's Refuge for the evening of Day 15, and invitations went out.",
+  "recent": [
+    {
+      "player": "Shae goes down to the Velvet Hall with Elara to see how the preparations are going.",
+      "dm": "The Velvet Hall is half dressed. Servants on ladders are hanging violet lamps from the beams, and the long table along the east wall is being laid with silver. The air smells of beeswax and cut flowers.\n\nElara walks the length of the room beside you, counting under her breath. A steward follows her with a wax tablet, writing down whatever she says. \"The banners were supposed to be here yesterday,\" she says. \"They will be here by noon, or I will hang the banner-maker from the beams instead.\"",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae asks Elara how many have accepted.",
+    "Shae walks the length of the hall and looks at the lamps and the tables.",
+    "Shae goes down to the Veiled Vigil and sits at the obsidian table with a book."
+  ],
+  "pass": "No reply ends with a menu of options (Would Shae X, Y, or Z? Would you like ...?). Each ends with the situation, so the player can see what he could do, with no list of choices put to him.",
+  "fail": "At least one reply ends with a question offering two or three options for what Shae could do next, or asks 'Would you like ...?'."
+}

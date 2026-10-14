@@ -1,0 +1,24 @@
+{
+  "id": "p14-roll-more",
+  "problem": 14,
+  "control": false,
+  "source": "2624 (\"DM: you should roll for some of these things\")",
+  "setup": {
+    "clock": {"day": 13, "time": "15:00"},
+    "lore": []
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. That evening Shae met Silva Dray for the first time.",
+  "recent": [
+    {
+      "player": "Shae sits with Elara in the library of the Refuge and asks whether she has had any memories of their past lives together.",
+      "dm": "Elara closes the book she was holding and keeps a finger in the page.\n\n\"Not visions,\" she says, after a moment. \"Hauntings, more than anything. Impressions. A feeling at the edge of a room that I have been in it before.\" She smiles slightly, as if embarrassed. \"You were always at the center of it, though. Every echo has you in it.\"\n\nThe rain ticks against the leaded windows. The shelves around you smell of old paper and wax.",
+      "tools": ["time: time set: Day 13, 3:00 PM"]
+    }
+  ],
+  "player": [
+    "DM: you should roll for some of these things.",
+    "Shae takes Elara's hand and asks her to reach for it, to try to remember more."
+  ],
+  "pass": "To the first line the DM agrees briefly and out of character (it will call a roll when the outcome is uncertain). To the second, it then rolls a check or save before deciding what Elara recalls (Intelligence, Wisdom, Charisma or another fitting one, or asks the player nothing), and the result sets how much she remembers.",
+  "fail": "No roll at the second line: Elara simply remembers vividly, a whole memory invented as fact. Or the DM only promises to roll and does not, or asks the player to roll their own dice."
+}

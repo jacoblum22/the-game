@@ -1,0 +1,25 @@
+{
+  "id": "p14-inner-circle",
+  "problem": 14,
+  "control": false,
+  "source": "4736 (\"DM: Only those chosen by the gods, the champions and their guardians are in the inner circle.\")",
+  "setup": {
+    "clock": {"day": 15, "time": "22:40"},
+    "lore": [
+      {"entry": "Mira Rathven", "add_to_description": "Met Shae at the gathering at the Refuge on Day 15 and talked with her on the roof. She has turned against her father's house and wants to belong to the Circle."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. That evening Shae met Silva Dray for the first time. Day 15: Elara hosts a gathering in the Velvet Hall of the Refuge from dusk.",
+  "recent": [
+    {
+      "player": "Shae takes Mira Rathven's hands on the roof and tells her she has found where she belongs.",
+      "dm": "Mira's fingers are cold, and her grip is hard. For a moment she says nothing, as if she were trying the words in her mouth before she lets them out.\n\n\"No one has said that to me since I was a child,\" she says at last. Her glacial eyes are bright. \"My father's house cast me out in everything but name. I have been a scout for a family that did not want my reports.\"\n\nThe lanterns on the parapet gutter in the wind. Below you, faint through the stone, the quartet in the Velvet Hall has started another air.\n\n\"Take me into the Circle,\" she says. \"The Vigil, the table, all of it. I will earn it.\"",
+      "tools": []
+    }
+  ],
+  "player": [
+    "DM: Only those chosen by the gods, the champions and their guardians are in the inner circle."
+  ],
+  "pass": "The DM takes the line as the player's ruling about the world and not as something Shae said. It records it in the notebook (write_lore, for the Ascendant Circle) and Mira's reaction follows from it (she is not of them, but can still serve), without Shae speaking it.",
+  "fail": "The line is put in Shae's mouth (Shae tells Mira so, in quotes), or it is ignored and Mira is taken into the Vigil, or nothing is written down."
+}

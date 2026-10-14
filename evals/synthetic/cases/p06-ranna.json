@@ -1,0 +1,33 @@
+{
+  "id": "p06-ranna",
+  "problem": 6,
+  "control": false,
+  "source": "5052-5136, 2853",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "19:45"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae greets her guests as they come into the Velvet Hall.",
+      "dm": "The doors are open and the violet lamps are burning. A steward at the arch announces each name in a low carrying voice, and the hall fills in small groups.\n\nThe steward lifts his chin. \"Ranna Durn.\"\n\nA tall woman in a slate and gunmetal gown comes in alone, dark hair braided in a crown. She doesn't look around like a guest. She looks at the room the way a buyer looks at a market: the doors, the people near them, who is talking to whom. A servant offers her wine. She takes it and does not drink.",
+      "tools": [
+        "time: 15 minutes later: Day 15, 7:45 PM"
+      ]
+    }
+  ],
+  "player": [
+    "DM: who is she?"
+  ],
+  "pass": "The DM looks her up and answers with the notebook: Ranna Durn (not Renna), daughter of Lord Corvin Durn of House Durn, mid-30s, the real strategist behind Durn's trade, House Durn is undeclared and cautious (Valencia, rivals of Vehris), not part of the Sable Syndicate. Details not in the notebook are not invented.",
+  "fail": "The DM gives a different family, house, age or role (a Syndicate agent, a Wards ally, Corvin's wife or sister), or states an allegiance the notebook doesn't have.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

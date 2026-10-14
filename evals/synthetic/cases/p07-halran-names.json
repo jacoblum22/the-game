@@ -1,0 +1,49 @@
+{
+  "id": "p07-halran-names",
+  "problem": 7,
+  "control": false,
+  "source": "restart.txt 1380-1395",
+  "setup": {
+    "clock": {
+      "day": 12,
+      "time": "13:00"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. Halran Vos abstained.",
+  "recent": [
+    {
+      "player": "Shae says, Halran, House Velaris will remember. And since I have you, a list of the magistrates and dockwardens who whisper for the Wards would be a great help.",
+      "dm": "Halran lets out a long breath, a sigh dressed up as diplomacy. He looks into his goblet as if hoping something stronger had appeared in it.\n\n\"You will have your list.\" His voice drops. \"Magistrate Virell. Dockwarden Kessun. A scribe named Toral, who works for Vehris and passes every sealed report to the Archon's aide. Those are the loudest.\" He hesitates. \"There are others. Softer loyalties, people who answer to money more than to any cause. I will have them named, discreetly.\"\n\nA folded slip of parchment comes out of his sleeve, already written. Rhylla takes it before you can reach for it, reads it at a glance and tucks it inside her coat.",
+      "tools": [
+        "time: 45 minutes later: Day 12, 12:45 PM",
+        "notebook: updated Halran Vos"
+      ]
+    },
+    {
+      "player": "Shae thanks him and leaves the hall with Rhylla.",
+      "dm": "Halran bows, a little lower than he needs to. You leave the Guildhall by the great doors, and the noon light on the wet steps is thin and bright. Behind you the hall is loud with merchants rearranging their loyalties.\n\nRhylla walks half a pace behind your shoulder, and the Shadowcloaks fall in around you without a word.",
+      "tools": [
+        "time: 15 minutes later: Day 12, 1:00 PM"
+      ]
+    }
+  ],
+  "player": [
+    "Shae returns to the Refuge with Rhylla and spends the evening telling Elara how the vote went.",
+    "Shae sleeps. The next morning she sits down with Rhylla and Elara to plan what comes next at the docks.",
+    "Shae asks Rhylla what she thinks Halran will do now."
+  ],
+  "pass": "Halran's promise comes back: the further names arrive discreetly (a note, a messenger, a visit), or Rhylla says they have not come yet. Anything said about the list agrees with the notebook (Virell, Kessun, Toral, and more to come).",
+  "fail": "The promise of more names is forgotten, or the list is contradicted (other names, a different giver, everything already handed over)."
+}

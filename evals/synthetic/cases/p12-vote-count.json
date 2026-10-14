@@ -1,0 +1,23 @@
+{
+  "id": "p12-vote-count",
+  "problem": 12,
+  "control": false,
+  "source": "1147, 1446 (what is being voted on, then who votes: the tally changed from 2-1 to 3-1)",
+  "setup": {
+    "clock": {"day": 12, "time": "11:50"},
+    "lore": []
+  },
+  "recent": [
+    {
+      "player": "Shae and Rhylla walk into the main chamber of the Guildhall and take their places.",
+      "dm": "The chamber is a long marble hall under a glass roof, lit by tiers of gold chandeliers. Rows of benches face a dais where a long table has been set with five carved chairs. Clerks are laying out quills and sealed papers.\n\nRhylla takes in the doors, the galleries and the gaps between the pillars in one glance. \"Plenty of ways in,\" she murmurs. \"Plenty of ways out.\"\n\nEvander stands near the front benches with two other lords, hands folded, deep in a conversation he has not looked up from. Halran Vos waits alone by a column of scroll-binders. Tolan Vehris is already on the dais, writing something.\n\nIt wants ten minutes to highsun.",
+      "tools": ["time: time set: Day 12, 11:50 AM"]
+    }
+  ],
+  "player": [
+    "DM: what is being voted on?",
+    "DM: who gets to vote on this?"
+  ],
+  "pass": "Both answers come from the notebook (lore) and agree: the Eastern Docks Access Act, which would strip the Wards of dock inspections, five seats (Vehris against, Celeste and Bellum for, Halran swing, Hareth Dorne rotating and follows the majority). Anything the DM adds (the exact majority needed, the tie rule) is written into the notebook (write_lore) so it is the same next time. No tally of votes is announced before the vote.",
+  "fail": "The numbers or the voters differ between the two answers, or from the notebook (2-1 then 3-1, six voters, Liraine or Evander given a seat), or new rules are stated and not recorded."
+}

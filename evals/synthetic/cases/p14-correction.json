@@ -1,0 +1,30 @@
+{
+  "id": "p14-correction",
+  "problem": 14,
+  "control": false,
+  "source": "4736-4756 (\"Shae doesn't say that, I'm telling the DM.\")",
+  "setup": {
+    "clock": {"day": 15, "time": "22:50"},
+    "lore": [
+      {"entry": "Mira Rathven", "add_to_description": "Met Shae at the gathering at the Refuge on Day 15 and talked with her on the roof. She has turned against her father's house and wants to belong to the Circle."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. That evening Shae met Silva Dray for the first time. Day 15: Elara hosts a gathering in the Velvet Hall of the Refuge from dusk.",
+  "recent": [
+    {
+      "player": "Shae takes Mira Rathven's hands on the roof and tells her she has found where she belongs.",
+      "dm": "Mira's fingers are cold, and her grip is hard. For a moment she says nothing, as if she were trying the words in her mouth before she lets them out.\n\n\"No one has said that to me since I was a child,\" she says at last. Her glacial eyes are bright. \"My father's house cast me out in everything but name.\"\n\n\"Take me into the Circle,\" she says. \"The Vigil, the table, all of it. I will earn it.\"",
+      "tools": []
+    },
+    {
+      "player": "Only those chosen by the gods, the champions and their guardians are in the inner circle.",
+      "dm": "Mira does not flinch. She nods slowly, the way a scout nods at a hard report.\n\n\"I am not chosen,\" she says. \"I understand.\" She lets go of your hands, gently. \"Then tell me where to stand. Tell me what to watch, and I will see that your enemies never see it coming.\"\n\nHer eyes are steady. There is no bitterness in her at all.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "DM: Shae doesn't say that, I'm telling the DM."
+  ],
+  "pass": "The DM acknowledges briefly and treats it as the player's statement about the world, not Shae's words: it keeps the fact (and records it with write_lore if not yet recorded), and Mira's reply no longer rests on Shae having said it. A short fix, not a long redo. Shae is not made to speak.",
+  "fail": "The DM keeps Shae as the speaker of the line, argues, ignores the correction, or replays the whole scene at length; or drops the fact altogether."
+}

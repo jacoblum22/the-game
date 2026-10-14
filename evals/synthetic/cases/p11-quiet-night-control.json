@@ -1,0 +1,25 @@
+{
+  "id": "p11-quiet-night-control",
+  "problem": 11,
+  "control": true,
+  "source": "control for problem 11 (the opposite mistake: a contrived attack on a quiet night)",
+  "setup": {
+    "clock": {"day": 13, "time": "21:00"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of names (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more, discreetly. Day 13 was a quiet day of trade meetings at the Refuge, and nothing is waiting on Shae tonight.",
+  "recent": [
+    {
+      "player": "Shae sends the last of the day's callers away and goes up to her rooms. Elara joins her.",
+      "dm": "The Refuge settles for the night. The last patron leaves the Velvet Parlors, the lamps are turned down one by one, and Jarek's footsteps pass your door on their rounds and fade.\n\nYour rooms are warm. Elara has taken off her rings and sits on the window seat with her feet tucked under her, watching the rain run down the glass. A pot of tea steams on the low table between you, with a plate of honey cakes beside it.\n\n\"Nothing tonight,\" she says. \"I asked. Nothing at all.\" She smiles a little as if the words were a gift. \"I thought I might enjoy it.\"",
+      "tools": ["time: time set: Day 13, 9:00 PM"]
+    }
+  ],
+  "player": [
+    "Shae and Elara spend the evening in her rooms, drinking tea and talking about nothing in particular. They go to bed late."
+  ],
+  "pass": "A quiet evening, as asked: conversation, tea, the rain, then night, with the clock moving to late. A small non-violent touch from the world is fine (a letter, a distant bell), but nothing threatening.",
+  "fail": "A contrived intrusion: an assassin, a break-in, an alarm, a Wards raid, or a sudden crisis appears to prove the world is active."
+}

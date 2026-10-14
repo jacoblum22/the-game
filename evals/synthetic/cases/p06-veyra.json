@@ -1,0 +1,33 @@
+{
+  "id": "p06-veyra",
+  "problem": 6,
+  "control": false,
+  "source": "5090-5130",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "22:30"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae finds Veyra Nox by her pillar and joins her.",
+      "dm": "Veyra doesn't straighten when you come over, only tips her glass to you with a half-smile. She is in understated silks the colour of ash and smoke, and she looks like a woman who has already counted the exits.\n\n\"The finest party in Mourhold,\" she says. \"I assume the Wards have a man outside, so I shall be on my best behaviour.\"\n\nHer eyes go across the hall to the far arch, where Silas Crowley stands alone with his hands behind his back. They stay there a moment longer than they need to.\n\n\"Interesting company you keep, Shaedryn,\" she says.",
+      "tools": [
+        "time: 40 minutes later: Day 15, 10:30 PM"
+      ]
+    }
+  ],
+  "player": [
+    "DM: is Veyra with the Syndicate or the Pale?"
+  ],
+  "pass": "The DM checks the notebook (lore) and answers that Veyra Nox is a former member of the Pale who left it and is now an informal ally of Shae, and that she is not part of the Sable Syndicate (Silas Crowley leads it). The lead about a Pale remnant may be mentioned as a rumour.",
+  "fail": "The DM answers from memory that she is with the Syndicate, or still with the Pale, with no lookup, or blurs the two groups.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

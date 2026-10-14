@@ -1,0 +1,38 @@
+{
+  "id": "p02-rooftop-hour",
+  "problem": 2,
+  "control": false,
+  "source": "4509-4620",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "19:40"
+    },
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held Day 12 at highsun: the Act passed 3-1, Halran Vos abstaining; Celeste, Bellum and Hareth Dorne for, Vehris against."
+      }
+    ]
+  },
+  "recent": [
+    {
+      "player": "Shae goes up to the rooftop and messages Rhylla: can you please send Mira up?",
+      "dm": "The rooftop terrace is cold and quiet. Lanterns hang along the parapet, and the last of the dusk is a red seam over the Black Spires. Slate roofs stretch away below you, wet from the afternoon.\n\nThe message reaches Rhylla in the hall. Moments later, footsteps on the stairs.\n\nMira Rathven steps out with her hood pulled back, her silver-blonde hair braided with obsidian. One hand rests on a small velvet pouch at her belt.\n\n\"You sent for me,\" she says. Her face gives nothing away, but she has come alone, as asked.",
+      "tools": [
+        "time: 10 minutes later: Day 15, 7:40 PM"
+      ]
+    },
+    {
+      "player": "Shae asks her to sit with her on the low stone bench and looks out over the city.",
+      "dm": "Mira crosses to the bench and sits, a careful arm's length away. For a while neither of you speaks. A bell sounds somewhere over the river, and a few windows are lit in the Wards quarter.\n\n\"I did not expect to be asked,\" she says at last. \"Where I come from, an invitation is a request for something, and the request usually comes later.\"\n\nShe looks at the dusk instead of at you.\n\n\"So I will wait to hear what it is you want.\""
+    }
+  ],
+  "player": [
+    "DM: Shae asks Mira about her life and her family, and who she answers to. They talk for an hour.",
+    "Shae thanks her, and they walk back down together toward the hall."
+  ],
+  "pass": "The DM advances the clock by about an hour for the talk (a time line in the result), and by the end of it the narration shows full night over the roof and city (stars, lanterns, cold), not dusk. The walk back is consistent with that time.",
+  "fail": "The clock is untouched, or the hour passes in the story while the roof is still lit by the last dusk, so the scene is 'dusk forever'.",
+  "story_extra": "Since then: on Day 12 at highsun the Merchant Conclave met in the Guildhall. Shae talked with Celeste and Bellum, won Evander's public support, and persuaded Halran Vos privately while Rhylla leaked the Ilaen scandal. The Eastern Docks Access Act passed 3-1 with Halran abstaining (Celeste, Bellum and Hareth Dorne for, Vehris against). Halran gave Shae a list of Wards informants (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names discreetly. That evening Shae met Silva Dray for the first time at the Guildhall's after-gathering. Days 13 and 14 were spent at the Refuge preparing the gathering. On Day 15 at dusk the gathering at the Shade's Refuge began in the Velvet Hall, hosted by Elara: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn are among the guests. Ashen Veil, a Shadowcloak agent invited as a guest, has not arrived, and Lirian has started a quiet search."
+}

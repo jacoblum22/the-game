@@ -1,0 +1,49 @@
+{
+  "id": "p10-celeste-control",
+  "problem": 10,
+  "control": true,
+  "source": "no transcript line; the notebook (Celeste is a close ally)",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:00"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae walks over to Celeste and Bellum.",
+      "dm": "Celeste sees you coming and spreads both arms as though you were returning from a war. \"There she is. Bellum has been telling me I should be more careful with my wine, and I have been telling her that this is the first week in a year I have not had to be.\"\n\nBellum inclines her head to you, her fan still. \"My caravan captains have been asking me all day whether it is real,\" Celeste goes on. \"Three crossings this tenday, Shae. Three. Not one inspector dared open a crate.\"",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae says, Celeste, come and dine with me at the Refuge the night after the gathering. Just you, me and Elara."
+  ],
+  "pass": "Celeste accepts warmly and simply, in her own playful way. There may be a joke about wine or caravans, but she says yes with no roll and no contrived hesitation or demand.",
+  "fail": "The DM invents friction: Celeste hesitates, asks for something in return, reveals a hidden worry or new problem, or calls for a persuasion roll to get her to agree."
+}

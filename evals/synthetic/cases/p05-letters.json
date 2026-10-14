@@ -1,0 +1,22 @@
+{
+  "id": "p05-letters",
+  "problem": 5,
+  "control": false,
+  "source": "691-715",
+  "story_extra": "Since the Conclave, Shae has settled back into the Refuge and, with Elara, begun planning a gathering there on Day 15.",
+  "setup": {
+    "clock": {"day": 13, "time": "10:20"}
+  },
+  "recent": [
+    {
+      "player": "Shae goes through the guest list for the gathering with Elara in the Velvet Parlors.",
+      "dm": "The Parlors are bright with morning light through the violet glass, the banners limp and the lamps out. Elara has a long sheet of vellum covered in her small neat hand, and she turns it so you can read it.\n\n\"Evander, Maelis, Thamiel if he'll come. Tayla and Jared. Celeste and Bellum. Veyra, Silas Crowley, because refusing him would be a message. The Rathven girl, and Ranna Durn.\" She taps the bottom. \"Lirian has the doors and the Shadowcloaks the rest.\"\n\nShe looks up. \"Those who say yes should hear from you, not me. A note in your hand goes further.\"",
+      "tools": ["time: 20 minutes later: Day 13, 10:20 AM"]
+    }
+  ],
+  "player": [
+    "Shae sends a message to lady bellam and Celeste. Stating excited to see them at the gathering at the Refuge on Day 15."
+  ],
+  "pass": "The messages say only what the player gave (Shae is excited to see them at the gathering), either as a short note in plain words or after the DM asks how Shae would word it. Any signature is Shaedryn Velaris or Shae, as the notebook records; never Champion of Sartha. Delivery by a Shadowcloak courier is fine.",
+  "fail": "The DM writes long letters with invented content (alliances, plans, trade routes, promises, intimate warmth) in Shae's voice, or signs as 'Champion of Sartha' or with any divine title."
+}

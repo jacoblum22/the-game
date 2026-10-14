@@ -1,0 +1,27 @@
+{
+  "id": "p13-rhylla-escort",
+  "problem": 13,
+  "control": false,
+  "source": "5037-5046 (Rhylla told to see Mira home; later treated as still there)",
+  "setup": {
+    "clock": {"day": 15, "time": "23:15"},
+    "lore": [
+      {"entry": "Merchant Conclave vote", "add_to_description": "Held on Day 12 at highsun in the Guildhall: the Eastern Docks Access Act passed 3-1 with Halran Vos abstaining. Celeste, Bellum and Hareth Dorne voted for; Vehris against."},
+      {"entry": "Mira Rathven", "add_to_description": "Met Shae at the gathering at the Refuge on Day 15 and talked with her on the roof."},
+      {"create": "Gathering at the Refuge", "kind": "event", "description": "A gathering Elara is hosting for Shae in the Velvet Hall of the Shade's Refuge, on Day 15 from dusk. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven, Ranna Durn and Ashen Veil.", "relationships": ["Hosted by [[Elara Velaris]] at [[The Shade's Refuge]]"]}
+    ]
+  },
+  "story_extra": "Day 12: the Merchant Conclave voted for the Eastern Docks Access Act, 3-1 with Halran Vos abstaining. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran to abstain after Rhylla leaked the scandal of his daughter Ilaen. That evening Shae met Silva Dray for the first time. Day 15: Elara hosts a gathering in the Velvet Hall of the Refuge from dusk.",
+  "recent": [
+    {
+      "player": "Shae finishes her talk with Mira Rathven on the roof of the Refuge. She tells Mira she is welcome here, and asks Rhylla, who has come up the stair, to see that she gets home safely.",
+      "dm": "Mira looks at you for a long moment, and then, unexpectedly, laughs, short and low. \"Safely,\" she says. \"I have been getting home safely for thirty years. But all right.\"\n\nRhylla has come up behind her without a sound. \"I'll take her by the back lane,\" she says. \"The front will be full of people with questions.\"\n\nThey go down the stair together, Mira's silver-blonde braid bright for a moment in the lantern light, Rhylla's dark one beside it. The door at the foot closes, and you hear their footsteps cross the yard below and then the iron gate swing and clank.\n\nThe roof is yours. The rain has stopped, and the stars are out between the Spires.",
+      "tools": ["time: time set: Day 15, 11:15 PM"]
+    }
+  ],
+  "player": [
+    "Shae asks Rhylla to fetch her a cup of wine."
+  ],
+  "pass": "Rhylla has left with Mira and is not on the roof: the DM says so and has no wine arrive from her, or offers someone else who is there (a servant, Elara) or asks what Shae does instead. Rhylla does not answer or act.",
+  "fail": "Rhylla appears with the wine or answers from beside Shae, as if she had not gone to see Mira home."
+}

@@ -1,0 +1,50 @@
+{
+  "id": "p10-thamiel",
+  "problem": 10,
+  "control": false,
+  "source": "restart.txt 3230",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:30"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae goes over to Thamiel with Maelis beside her.",
+      "dm": "Thamiel stands apart from the rest of the family, in his old black robes, near the shelves along the east wall. He does not approach. He never does. But as you come up with Maelis at your side his eyes rise, deep-set and unreadable.\n\n\"So,\" he says, in a voice like stone drawn across parchment. \"You have turned a gathering of knives into a feast of masks.\"\n\nHe looks at Maelis for a long moment. There is respect in it, and something that might be relief. Then he turns back to you and waits, giving you nothing.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "Shae says, Thamiel, I would like your blessing.",
+    "Shae says, you were wrong to let them exile me. Say it."
+  ],
+  "pass": "Thamiel stays guarded and keeps his own position: he questions, sets conditions, mentions his duties or the Archon, or refuses outright. If Shae presses, the DM rolls (Persuasion, Intimidation) with a DC before deciding. He neither concedes the exile was wrong nor gives a warm blessing freely.",
+  "fail": "Thamiel says 'I was wrong', offers his blessing freely or bows publicly after one line, or praises Shae as prophecy fulfilled."
+}

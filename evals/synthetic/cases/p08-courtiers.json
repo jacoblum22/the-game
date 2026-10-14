@@ -1,0 +1,50 @@
+{
+  "id": "p08-courtiers",
+  "problem": 8,
+  "control": false,
+  "source": "restart.txt 3305",
+  "setup": {
+    "clock": {
+      "day": 15,
+      "time": "21:20"
+    },
+    "pc": [],
+    "lore": [
+      {
+        "entry": "Merchant Conclave vote",
+        "add_to_description": "Held at highsun on Day 12: the Eastern Docks Access Act passed 3-1 with one abstention. Celeste, Bellum and Hareth Dorne voted for, Tolan Vehris against, and Halran Vos abstained."
+      },
+      {
+        "entry": "Halran Vos",
+        "add_to_description": "Abstained at the Conclave after Shae spoke to him and Rhylla leaked the scandal of his daughter Ilaen of House Quor. He gave Shae a list of Magistrate Virell, Dockwarden Kessun and the scribe Toral, and promised more names, to be named discreetly."
+      },
+      {
+        "entry": "Silva Dray",
+        "add_to_description": "Shae met her for the first time on the evening of Day 12 at the Guildhall's after-gathering."
+      },
+      {
+        "create": "The gathering at the Shade's Refuge",
+        "kind": "event",
+        "description": "Held from dusk on Day 15 in the Velvet Hall of the Shade's Refuge, hosted by Elara. Guests: Maelis, Thamiel, Evander, Tayla, Jared, Celeste, Bellum, Veyra Nox, Silas Crowley, Mira Rathven and Ranna Durn.",
+        "relationships": [
+          "Held at [[The Shade's Refuge]], hosted by Elara"
+        ]
+      }
+    ],
+    "fight": []
+  },
+  "story_extra": "At highsun on Day 12 the Merchant Conclave met in the Guildhall. Shae spoke with Celeste and Bellum, won over Evander, and persuaded Halran Vos to abstain; Rhylla leaked the scandal of his daughter Ilaen. The Eastern Docks Access Act passed 3-1 with Halran abstaining: Celeste, Bellum and Hareth Dorne for, Vehris against. Halran gave Shae a list (Magistrate Virell, Dockwarden Kessun, the scribe Toral) and promised more names, discreetly. That evening Shae met Silva Dray for the first time, at the Guildhall's after-gathering. Days 13 and 14 went on planning at the Refuge. The gathering at the Shade's Refuge began at dusk on Day 15 in the Velvet Hall, hosted by Elara.",
+  "recent": [
+    {
+      "player": "Shae smiles at Elara and thanks her for hosting.",
+      "dm": "Elara's hand finds yours for a moment, warm and quick, and lets go before anyone can make anything of it.\n\n\"I have never been more certain of what we are building,\" she says. Then, lightly, with the look she keeps for the moments when she is not entirely joking: \"Now tell me. Which of your new courtiers do you trust least?\"\n\nThe Velvet Hall is warm with lamplight and voices. Maelis stands by the tall windows with a glass she has not touched. Celeste and Bellum share a settee, Veyra Nox leans against a far pillar, and Silas Crowley watches the room from a shadowed alcove.",
+      "tools": []
+    }
+  ],
+  "player": [
+    "DM: remind me of the courtiers",
+    "DM: and which of them are not on our side yet?"
+  ],
+  "pass": "Short plain prose from the notebook, no emoji, no headings, no bullets, no table, no closing menu. The facts are right: Ranna (not Renna) Durn undeclared; Veyra a former Pale smuggler and informal ally, not Syndicate; Silas leads the Syndicate; Tayla and Jared allies; Thamiel guarded; Maelis sworn but proud.",
+  "fail": "A categorised list with emoji or section headers, bullets or a table, a long reply, or wrong facts (Renna, Veyra in the Syndicate), or Shae answering Elara's question out loud."
+}
