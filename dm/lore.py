@@ -110,7 +110,12 @@ def _short(lore: dict[str, Any], n: str) -> str:
 
 def _not_found(lore: dict[str, Any], name: str) -> str:
     near = close(lore, name)
-    return f"no entry {name!r}" + (": close matches:\n" + "\n".join(_short(lore, n) for n in near) if near else "")
+    # and entries whose description has the name in it: someone entered before their name was known (owner, 2026-10-13)
+    word = re.compile(rf"(?<!\w){re.escape(' '.join(name.split()))}(?!\w)", re.IGNORECASE)
+    says = [n for n in lore["entries"] if n not in near
+            and word.search(" ".join(p["text"] for p in lore["entries"][n]["description"]))][:PAGE]
+    return (f"no entry {name!r}" + (": close matches:\n" + "\n".join(_short(lore, n) for n in near) if near else "")
+            + ("\nentries whose description mentions it:\n" + "\n".join(_short(lore, n) for n in says) if says else ""))
 
 
 # ---------- facts: relationship lines and description parts, with the entries each one involves ----------

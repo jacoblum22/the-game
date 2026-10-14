@@ -257,3 +257,18 @@ def test_game_tools_hidden(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -
     assert play.Game(data, tmp_path / "save.json").lore == g.lore
     assert "Vessa" not in play.sheet_report(g) and "Half-elf" not in play.history(data)
     assert "[notebook: created an entry for Vessa]" in play.history(data)  # shown again when the game is continued
+
+
+def test_not_found_lists_entries_that_mention_the_name() -> None:
+    """Someone entered before their name was known can still be found by it (owner, 2026-10-13)."""
+    lore = nb.new()
+    lore, _ = nb.write(lore, {"create": "Mirefold bell-keeper", "kind": "person", "description": "Locked in the tower."}, 0)
+    lore, _ = nb.write(lore, {"entry": "Mirefold bell-keeper", "add_to_description": "Name: Mistress Odda."}, 3)
+    lore, _ = nb.write(lore, {"create": "Oddaline", "kind": "person", "description": "A baker."}, 3)
+    with pytest.raises(Refused) as e:
+        nb.look(lore, ["Odda"], said())
+    assert "entries whose description mentions it:\nMirefold bell-keeper (person)" in str(e.value)
+    assert "Oddaline (person)" not in str(e.value).split("mentions it:")[1]  # a whole word, not part of one
+    with pytest.raises(Refused) as e:
+        nb.look(lore, ["Harl"], said())
+    assert "mentions it" not in str(e.value)
