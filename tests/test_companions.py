@@ -71,6 +71,7 @@ def test_party_rests(tmp_path) -> None:
     assert w["spellcasting"]["prepared"] == ["Sleep", "Shield"]
     # a companion at 0 HP doesn't block the party's long rest
     call(t, "change_pc", who="Wren", damage=99)
+    call(t, "change_time", advance={"hours": 16})  # one long rest in 24 hours
     text, err = call(t, "change_pc", long_rest=True)
     assert not err and "Wren: no benefit" in text and g.companions[0]["hp"]["current"] == 0
     # a bad companion choice refuses the whole rest

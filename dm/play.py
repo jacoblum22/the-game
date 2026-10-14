@@ -149,6 +149,11 @@ class Game:
                 raise m.Refused("companions have no XP: they are at the PC's level and level up when the PC does")
             self.companions[i], lines = m.change_pc(self.companions[i], a)
             return f"{self.companions[i]['name']}: " + "; ".join(lines)
+        last, now = self.sheet.get("last_long_rest"), self.clock["now"]
+        if a.get("long_rest") and now is not None and last is not None and now + rest - last < m.DAY:
+            # SRD: "A character can't benefit from more than one long rest in a 24-hour period" (autoloop, 2026-10-14)
+            raise m.Refused(f"one long rest in 24 hours: the last finished {m.when(last)}, so the next can finish "
+                            f"{m.when(last + m.DAY)} at the earliest. A short rest is allowed")
         choices = a.pop("companions", None) or {}
         if choices and not rest:
             raise m.Refused("companions: end-of-rest choices, only together with short_rest or long_rest")
@@ -168,6 +173,8 @@ class Game:
                 lines.append(f"{c['name']}: " + "; ".join(more))
         self.sheet, self.companions = sheet, party
         self.clock = m.advance(self.clock, rest)
+        if a.get("long_rest") and self.clock["now"] is not None:
+            self.sheet["last_long_rest"] = self.clock["now"]
         if rest and self.clock["now"] is not None:
             lines.append(f"{m.span(rest)} later: {m.when(self.clock['now'])}")
         return "; ".join(lines)

@@ -106,7 +106,7 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
 
     if ch.get("long_rest"):
         # SRD Long Rest: "a character must have at least 1 hit point at the start of the rest to gain its benefits".
-        # The code can't know the "no more than one long rest in a 24-hour period" limit; the DM checks that.
+        # The "no more than one long rest in a 24-hour period" limit is checked against the clock (play.py).
         if "dead" in s["conditions"] or hp["current"] < 1:
             raise Refused("a long rest gives no benefit to a character with 0 hit points (or dead): "
                           "they need at least 1 hit point at the start of the rest. Heal them first")

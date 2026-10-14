@@ -58,6 +58,11 @@ def test_fight_and_rests_move_it(tmp_path: Path) -> None:
     g.sheet["hp"]["current"] = 1
     assert "1 hour later: Day 1, 11:00:18 AM" in call("change_pc", short_rest=True)[0]
     assert "8 hours later: Day 1, 7:00:18 PM" in call("change_pc", long_rest=True)[0]
+    call("change_time", advance={"hours": 15})  # the next would finish 23 hours after the last: refused
+    text, err = call("change_pc", long_rest=True)
+    assert err and "the next can finish Day 2, 7:00:18 PM at the earliest" in text and g.clock["now"] == 34 * 3600 + 18
+    call("change_time", advance={"hours": 1})
+    assert "8 hours later: Day 2, 7:00:18 PM" in call("change_pc", long_rest=True)[0]
 
 
 def test_unset_clock_stays_unset(tmp_path: Path) -> None:
