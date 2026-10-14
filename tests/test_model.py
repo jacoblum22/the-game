@@ -12,6 +12,8 @@ from anthropic.types import Message
 from dm import model, play
 
 CHAR = Path(__file__).parent.parent / "dm" / "characters"
+# a whole reply: after tool calls, a reply under play.FULL_REPLY characters is taken for a stub and asked for again
+WHOLE = ("You climb the wall, hand over hand, and pull yourself onto the ledge. " * 5).strip()
 
 
 class Fake:
@@ -64,7 +66,7 @@ def test_tools_run_and_answer(monkeypatch: Any, tmp_path: Path) -> None:
         reply({"type": "thinking", "thinking": "", "signature": "sig"}, text("Roll for it."),
               use("t1", "roll", dice="1d20+5", reason="Athletics"), use("t2", "change_pc", heal=99999, damage=0),
               stop="tool_use"),
-        reply(text("You climb the wall.")),
+        reply(text(WHOLE)),
     ], g, "I climb")
     roles = [mm["role"] for mm in g.messages]
     assert roles == ["user", "assistant", "user", "assistant"]
@@ -72,8 +74,8 @@ def test_tools_run_and_answer(monkeypatch: Any, tmp_path: Path) -> None:
     assert [r["tool_use_id"] for r in results] == ["t1", "t2"]
     assert results[0]["content"][0]["text"].startswith("dice ") and "is_error" not in results[0]
     assert g.messages[1]["content"][0] == {"type": "thinking", "thinking": "", "signature": "sig"}  # sent back as it came
-    assert any("You climb the wall." in s for s in said)
-    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Roll for it.", "You climb the wall."]
+    assert any(WHOLE in s for s in said)
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Roll for it.", WHOLE]
     # what went to the API
     first = fake.calls[0]
     assert first["system"] == play.system_prompt(g.sheet, g.companions) and first["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
@@ -90,7 +92,7 @@ def test_refusal_and_unknown_tool(monkeypatch: Any, tmp_path: Path) -> None:
     g = new_game(tmp_path)
     run(monkeypatch, [
         reply(use("t1", "change_pc", use_resource="Nonsense"), use("t2", "fly"), stop="tool_use"),
-        reply(text("Fine.")),
+        reply(text(WHOLE)),
     ], g, "go")
     r1, r2 = g.messages[2]["content"]
     assert r1["is_error"] and r1["content"][0]["text"].startswith("REFUSED")
@@ -179,7 +181,7 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
 
         async def respond(self, text: str, on_text: Any) -> None:
             await self.tools["roll"].handler({"dice": "1d20", "reason": "a test"})  # the tools reach the same game
-            on_text("Roll made.")
+            on_text(WHOLE)
             self.session_id = "sess-1"
 
     monkeypatch.setattr(sdk, "Client", FakeClient)
@@ -350,3 +352,43 @@ def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
     assert opened[1].got[0].startswith("[The story so far: your own summary of turns 0 to 6")
     assert "Turn 26:\nPlayer: I look\nDM: Reply." in opened[1].got[0] and "Turn 6:" not in opened[1].got[0]
     assert g.session_id is None and g.story[1]["turn"] == 7  # the size stayed large: the next turn cut again
+
+
+def test_stub_is_asked_for_again(monkeypatch: Any, tmp_path: Path) -> None:
+    """A few words after tool calls is a stub: the DM drafted its reply in thinking and never wrote it. The player
+    sees only the full reply asked for in its place (owner, 2026-10-14)."""
+    g = new_game(tmp_path)
+    fake, said = run(monkeypatch, [
+        reply(use("t1", "roll", dice="1d20", reason="Perception"), stop="tool_use"),
+        reply(text("Both are recorded on your sheet.")),
+        reply(text(WHOLE)),
+    ], g, "I look")
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Both are recorded on your sheet."]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
+    assert not any("Both are recorded" in s for s in said) and any(WHOLE in s for s in said)
+    asked = fake.calls[2]["messages"][-1]["content"]
+    assert play.STUB_ASK.format("Both are recorded on your sheet.") in json.loads(json.dumps(asked))[-1]["text"]
+
+
+def test_short_reply_without_tools_stands(monkeypatch: Any, tmp_path: Path) -> None:
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [reply(text("Yes, you can."))], g, "DM: can I?")
+    assert len(fake.calls) == 1 and [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Yes, you can."]
+
+
+def test_call_after_the_reply(monkeypatch: Any, tmp_path: Path) -> None:
+    """After a full reply, a call still counts and a roll is refused; what the DM writes then is never shown."""
+    g = new_game(tmp_path)
+    g.clock, _ = play.m.change_time(g.clock, {"set": {"day": 1, "time": "17:50"}})
+    _, said = run(monkeypatch, [
+        reply(text(WHOLE), use("t1", "change_time", advance={"minutes": 7}),
+              use("t2", "roll", dice="1d20", reason="late"), stop="tool_use"),
+        reply(text("The clock now reads 5:57 PM.")),
+    ], g, "I go on")
+    r1, r2 = g.messages[2]["content"]
+    assert "Day 1, 5:57 PM" in play.m.clock_text(g.clock) and play.LATE in json.dumps(r1)
+    assert r2["is_error"] and r2["content"][0]["text"].startswith("REFUSED, nothing rolled")
+    assert not any(t["kind"] == "tool" and t["text"].startswith("dice ") for t in g.transcript)
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
+    assert [t["text"] for t in g.transcript if t["kind"] == "hidden"] == ["The clock now reads 5:57 PM."]
+    assert not any("clock now reads" in s for s in said)

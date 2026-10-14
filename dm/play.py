@@ -22,7 +22,7 @@ from typing import Any
 from dm import create, lookup, model
 from dm import lore as notebook
 from dm import mechanics as m
-from dm.model import tool
+from dm.model import Tool, tool
 
 HERE = Path(__file__).parent
 SAVES = HERE.parent / "saves"
@@ -84,6 +84,8 @@ class Game:
         self.session_id: str | None = data.get("session_id")
         self.cwd: str = data.get("cwd", str(SAVES))  # an SDK save's session folder; saves from before 2026-10-11 used saves/
         self.sdk: Any = None  # the open SDK client while an SDK game is played
+        self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
+        self.late = False
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
@@ -270,7 +272,11 @@ class Game:
                   "hit_dice_spent": {"type": "integer", "minimum": 0,
                                      "description": "1 = spend one hit die at the end of a short rest; the result says what to roll, "
                                      "then pass the total as heal. The player decides after each roll whether to spend another"},
-                  "death_save_successes": _INT, "death_save_failures": _INT,
+                  # how many to add (owner, 2026-10-14): the DM had passed the new total, and a second failure made three
+                  "death_save_successes": {**_INT, "description": "how many to add, not the new total: 1 for a successful "
+                                           "death saving throw"},
+                  "death_save_failures": {**_INT, "description": "how many to add, not the new total: 1 for a failed death "
+                                          "saving throw, 2 for a natural 1. Damage at 0 HP adds its own failures"},
                   "cast": {"type": "string", "description": "a spell the character casts, e.g. Bless. One call does it all: "
                            "it spends the slot (level), moves the clock on by a casting time of minutes or hours, starts a "
                            "timer for the spell's duration at that level (the clock must be set), and starts concentration "
@@ -556,8 +562,24 @@ class Game:
             return self.run("recall", lambda: notebook.recall(self.lore, self.transcript, a.get("search"), a.get("turn"),
                                                               a.get("page") or 1), hidden=True, inp=a)
 
-        return [roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
-                next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall]
+        return [self.after_reply(t) for t in (
+            roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
+            next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)]
+
+    def after_reply(self, t: Tool) -> Tool:
+        """A tool called after the DM has written a full reply (owner, 2026-10-14): the call still counts, but a roll
+        is refused (nothing it decides can be told), and what the DM writes after it is held back (turn()). The DM
+        had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice."""
+        async def handler(a: dict[str, Any]) -> dict[str, Any]:
+            if self.reply_len < FULL_REPLY:
+                return await t.handler(a)
+            self.late = True
+            if t.name == "roll":
+                self.transcript.append({"kind": "refused", "text": f"dice: called after the reply: {a.get('reason', '')}"})
+                return {"content": [{"type": "text", "text": "REFUSED, nothing rolled: " + LATE}], "is_error": True}
+            out = await t.handler(a)
+            return out | {"content": [*out["content"], {"type": "text", "text": LATE}]}
+        return Tool(t.name, t.description, t.input_schema, handler)
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -608,11 +630,31 @@ RULES_REMINDER = (
     "text must already be in this conversation from a lookup. If it isn't, look it up first.")
 
 
+# The DM's reply is held until its turn is over (owner, 2026-10-14). A reply under FULL_REPLY characters after tool
+# calls is a stub ("Both are recorded on your sheet."): the DM drafted the answer in its thinking, made its calls, and
+# never wrote it. The stub is replaced by asking once for the full reply. In 312 turns of play every reply with tool
+# calls under 300 characters was a stub, and the shortest good one was 389.
+FULL_REPLY = 300
+LATE = ("Your reply has already gone to the player as written; nothing you write after it will be shown. Make all "
+        "your tool calls before your reply.")
+STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing has been shown to the player yet. '
+            "Write your full reply to their last message now; it replaces that line.")
+
+
 async def turn(game: Game | Creation, text: str) -> None:
+    held: list[str] = []
+
     def said(t: str) -> None:
-        print("\n" + t)
-        game.log("dm", t)
+        if isinstance(game, Creation):
+            print("\n" + t)
+            game.log("dm", t)
+        elif game.late:  # written after a late tool call: kept in the save, never shown
+            game.log("hidden", t)
+        else:
+            held.append(t)
+            game.reply_len += len(t)
     if isinstance(game, Game):
+        game.reply_len, game.late = 0, False
         # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
         # again (owner, 2026-10-13), and the owner's version reconnects to carry them. The whole conversation is then
         # read at full price once.
@@ -629,7 +671,18 @@ async def turn(game: Game | Creation, text: str) -> None:
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
         if game.story and not (game.session_id if game.sdk else game.messages):  # a new conversation after a cut
             text = so_far(game) + "\n\n" + text
+    start = len(game.transcript)
     failed = await ask(game, text, said)
+    if isinstance(game, Game):
+        tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
+        if not failed and tools and game.reply_len < FULL_REPLY:
+            stub = "\n\n".join(held)
+            game.log("stub", stub)  # kept in the save, never shown
+            held[:], game.reply_len = [], 0
+            failed = await ask(game, STUB_ASK.format(stub), said)
+        for t in held:
+            print("\n" + t)
+            game.log("dm", t)
     if failed:
         print(f"\n[the DM call failed: {failed}]")
     game.save()
