@@ -157,3 +157,20 @@ def test_fight_order_and_turns() -> None:
     with pytest.raises(m.Refused):
         m.change_creature(f, {"name": "goblin 2", "damage": 1})
     assert m.end_fight(f)[0] is None
+
+
+def test_conditions_whatever_their_case() -> None:
+    """The DM added "Unconscious"; healing has to clear it and "unconscious" has to remove it (autoloop)."""
+    s, _ = m.change_pc(_down(), {"conditions_added": ["Unconscious", "Poisoned"]})
+    assert s["conditions"].count("unconscious") == 1 and "poisoned" in s["conditions"]
+    s, _ = m.change_pc(s, {"heal": 3})
+    assert "unconscious" not in s["conditions"]
+    s, _ = m.change_pc(s, {"conditions_removed": ["POISONED"]})
+    assert "poisoned" not in s["conditions"]
+    s, _ = m.change_pc(s, {"conditions_added": ["Blessed by the river"]})  # not an SRD condition: kept as written
+    assert "Blessed by the river" in s["conditions"]
+    f, _ = m.add_combatants(None, "Brakka", [{"name": "pc", "initiative": 12},
+                                             {"name": "Goblin 1", "initiative": 15, "hp": 7, "ac": 15}])
+    f, _ = m.change_creature(f, {"name": "Goblin 1", "conditions_added": ["Prone"]})
+    f, _ = m.change_creature(f, {"name": "Goblin 1", "conditions_removed": ["prone"]})
+    assert not f["order"][0]["conditions"]
