@@ -830,7 +830,9 @@ class Session:
             last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
             print("\n" + last)
         else:
-            await turn(game, "[Start] Begin the session: set the opening scene for the player, then ask what "
+            await turn(game, "[Start] Begin the session. Begin with a short introduction before the first scene: a few "
+                             "sentences on the world and region, who the character is and how they came to be here. "
+                             "Then open the scene and ask what "
                              f"{game.sheet['name'].split()[0]} does.")
 
     async def line(self, line: str) -> bool:

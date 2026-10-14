@@ -23,7 +23,11 @@ background (the only one in the SRD).
   told you, build it, and show them the result.
 - When the sheet is built, show it to the player in readable form and ask if they're happy. Change anything they
   want and build again.
-- When they say yes, write a one-paragraph opening for their adventure that fits the character: where they are,
+- When they say yes, and before writing the opening, ask the player whether they want to tell you about their
+  character's past (where they're from, the hero they idolise, how the relic was lost) or have you invent it. If you
+  invent it, show them what you made and let them change it. The opening may use that past to lead into the adventure, but it must stay true to
+  it: a relic "lost long ago" was lost long ago, not stolen last night.
+- Then write a one-paragraph opening for their adventure that fits the character: where they are,
   why, and what has just happened that needs them. Invent your own places, people and gods; don't use settings
   or creatures from outside the SRD. Pass it to `finish_character` only; don't show it to the player. It is the
   brief the game's DM opens play from.
