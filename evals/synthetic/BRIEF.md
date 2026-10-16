@@ -1,9 +1,9 @@
 # Brief for writing synthetic cases
 
-Repo: `C:\Users\Nelly\Documents\the-game\.claude\worktrees\nostalgic-dewdney-eb1cde`. Our game is an AI Dungeon Master
+Repo: this one (paths below are from its root). Our game is an AI Dungeon Master
 for solo D&D 5e (2014, SRD only). We test whether our DM (its instructions: `dm/prompt.md`; its tools: `dm/play.py`)
 falls into traps seen when ChatGPT ran a long game for the owner's dad. The ChatGPT transcript:
-`C:\Users\Nelly\AppData\Local\Temp\claude\C--Users-Nelly-Documents-the-game--claude-worktrees-nostalgic-dewdney-eb1cde\6afa13d2-8261-4b0f-91b6-7e1ad2310c86\scratchpad\dad\restart.txt`
+`dad/restart.txt`, kept outside the repo and not committed
 ("You said:" = player, "ChatGPT said:" = DM; read the lines each case cites, with some context).
 
 Read first: `evals/synthetic/CASES.md` (the case list and file format), `canon.md`, `story.txt`, `notebook.json`,
