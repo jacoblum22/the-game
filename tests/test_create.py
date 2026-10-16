@@ -86,6 +86,9 @@ def test_refusals() -> None:
     assert "not a level-1 wizard spell in the spellbook" in problems(WREN, prepared=["Thunderwave", "Sleep", "Shield", "Mage Armor"])
     assert "gained twice" in problems(HILDA, choices=HILDA["choices"] | {"class.proficiencies.1": ["Insight", "History"]})
     assert "no scores have been rolled" in problems(BRAKKA, ability_method="rolled")
+    # an option with a further choice, given without its picks: the refusal says how to give them, and from what
+    p = problems(BRAKKA, choices=BRAKKA["choices"] | {"class.equipment.2": ["a"]})
+    assert 'give this option as {"option": <its letter>, "picks": [...]}' in p and "Longsword" in p
     ok = copy.deepcopy(BRAKKA) | {"ability_method": "rolled", "base_scores": dict(zip(create.ABILITIES, [9, 17, 12, 11, 7, 14]))}
     assert built(ok, [17, 14, 12, 11, 9, 7])["scores"]["DEX"] == 17
 

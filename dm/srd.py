@@ -170,6 +170,9 @@ def _grant(o: Any, picks: list[Any], where: str) -> list[dict[str, Any]]:
     if t == "choice":
         c = o["choice"]
         take = [picks.pop(0) for _ in range(min(c["choose"], len(picks)))]
+        if len(take) < c["choose"]:  # the DM tried eleven shapes for a fighter's weapon (autoloop, 2026-10-16)
+            raise Bad(f"{where} > {c.get('desc') or 'choice'}: choose exactly {c['choose']} (got {len(take)}); give "
+                      'this option as {"option": <its letter>, "picks": [...]}, the picks from this: ' + set_text(c))
         return resolve(c, take, where + f" > {c.get('desc') or 'choice'}")
     if t == "ability_bonus":
         return [{"bonus": o["ability_score"]["name"], "n": o["bonus"]}]
