@@ -1,0 +1,83 @@
+{
+ "name": "cleric2",
+ "rounds": 60,
+ "reply chars median": 1635,
+ "reply chars max": 2326,
+ "turn seconds median": 13.8,
+ "turn seconds max": 86.8,
+ "stub (lost reply, re-asked)": 0,
+ "hidden (text after a late call)": 0,
+ "refused tool calls": 1,
+ "rounds with no reply": 2,
+ "rounds with bullets": 2,
+ "rounds with bold": 0,
+ "rounds with headings": 0,
+ "rounds with meta talk": 0,
+ "DM: questions": 2,
+ "tool use": {
+  "dice": 119,
+  "fight": 77,
+  "write_lore": 71,
+  "notebook": 71,
+  "time": 47,
+  "sheet": 38,
+  "lookup": 17,
+  "level_up_options": 1,
+  "level": 1
+ }
+}
+{
+ "name": "barbarian2",
+ "rounds": 60,
+ "reply chars median": 1568,
+ "reply chars max": 2905,
+ "turn seconds median": 15.3,
+ "turn seconds max": 54.4,
+ "stub (lost reply, re-asked)": 1,
+ "hidden (text after a late call)": 0,
+ "refused tool calls": 3,
+ "rounds with no reply": 0,
+ "rounds with bullets": 0,
+ "rounds with bold": 0,
+ "rounds with headings": 0,
+ "rounds with meta talk": 1,
+ "DM: questions": 0,
+ "tool use": {
+  "dice": 102,
+  "fight": 68,
+  "write_lore": 66,
+  "notebook": 66,
+  "time": 47,
+  "sheet": 36,
+  "lookup": 12,
+  "conversation": 1
+ }
+}
+{
+ "name": "bard2",
+ "rounds": 60,
+ "reply chars median": 1402,
+ "reply chars max": 2094,
+ "turn seconds median": 12.850000000000001,
+ "turn seconds max": 84.6,
+ "stub (lost reply, re-asked)": 0,
+ "hidden (text after a late call)": 0,
+ "refused tool calls": 12,
+ "rounds with no reply": 0,
+ "rounds with bullets": 1,
+ "rounds with bold": 1,
+ "rounds with headings": 0,
+ "rounds with meta talk": 1,
+ "DM: questions": 5,
+ "tool use": {
+  "dice": 78,
+  "write_lore": 69,
+  "notebook": 69,
+  "time": 52,
+  "sheet": 30,
+  "fight": 29,
+  "lookup": 15,
+  "srd_options": 2,
+  "party": 1
+ }
+}

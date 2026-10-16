@@ -1,0 +1,263 @@
+## Corvin (22 sentences in 16 rounds)
+R3: Inside are sheets of blank vellum, a tin of wax-impressions, a Verrel seal among them, and a half-finished draft in Corvin's neat, unmistakable hand.
+R3: So Corvin is fixing his own forgery, and he knows it's about to be exposed.
+R6: The charter, he says, was bought from Corvin years ago, and Lord Edric has barely slept since the assessor's letter came.
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R13: You have until noon on Day 4, a copy of Corvin's draft, a tin of seal impressions, and a ledger of his methods.
+R24: Corvin is somewhere upriver and may learn that his forgery has failed, and two other houses in your psalter are still owed the truth.
+R25: Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+R25: Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+R28: Corvin knew you were coming, or guessed.
+R30: Whoever made one made the other, and Corvin got both.
+R30: Corvin's rendezvous is dusk on Day 5.
+R31: The ford at Ashby Weir is where Corvin wants to meet you on the fifth day.
+R36: You've heard Corvin's name linked to this twice in a day.
+R37: Corvin is a day's wait away at the ford, and he knows it is true.
+R41: Corvin's gaze lingers on the letter in your hand, on the looped hand you both know, and for the space of one breath his face loses all its warmth and becomes only a thing at rest, thoughtful and cold.
+R41: You stand on a flat stone in the middle of a shallow ford, ten hit points, a rapier, and a lute on your back, with Corvin two stones away and his hand still open.
+R42: Corvin has stepped back two stones and watches with an odd, stilled expression, no longer smiling.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R43: Now there's only the driver on the bank, with the crossbow cocked and his face gone a nasty shade of grey, and Corvin, two stones away, perfectly still.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+
+## Day (16 sentences in 13 rounds)
+R13: You have until noon on Day 4, a copy of Corvin's draft, a tin of seal impressions, and a ledger of his methods.
+R24: It's a quarter past seven on Day 2.
+R25: It's just before seven now on Day 3, with the sun rising over a clean, cold morning.
+R26: It's half past one on Day 3.
+R30: It's near eight now on Day 3.
+R30: Corvin's rendezvous is dusk on Day 5.
+R37: It's ten past eight on Day 4.
+R38: It's seven in the morning on Day 5 now, and the village has been up for an hour.
+R44: It's nearly six now, on Day 5.
+R45: That's Day 9.
+R45: Saltmarsh is some five days' ride by the river road, so you won't make it by Day 9 without hard riding and a lucky road.
+R46: It's quarter to eight on Day 6.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+R47: You reach Thornhallow at a quarter to four on Day 7.
+R48: It's near midnight now on Day 7.
+R49: You stop at a lock-keeper's cottage in the afternoon for a few hours' sleep and some bread, then limp on through Day 8's evening and dawn along the widening river as the air turns to salt and gull-cry.
+
+## Lord Edric (11 sentences in 11 rounds)
+R6: The charter, he says, was bought from Corvin years ago, and Lord Edric has barely slept since the assessor's letter came.
+R11: "I was told a friend of Master Tallowmere was coming," Lord Edric says.
+R13: Hale has the spare key, and Lord Edric admits, with a flush, that he once saw Hale's hand on the copy "for safekeeping.
+R15: You copy the third descent's names and dates onto a clean sheet, and Lord Edric rolls the charter back into the chest and locks it, the key going back inside his collar.
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+R19: That's Lord Edric's study, and Tobin got there first.
+R22: You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other.
+R23: Then Lord Edric turns to Hale, who hasn't moved from your shoulder, and for the first time the steward's smile has gone entirely.
+R26: Lord Edric is at the kitchen table in his shirt-sleeves with a bowl of porridge, looking ten years younger.
+R31: The assessor, if Lord Edric has told the truth, arrives at Thornhallow at noon today.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+
+## Marrowford (9 sentences in 8 rounds)
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R9: You can head straight down the river road, or take a few minutes in Marrowford first for supplies, a better lockpick set, or anything else you want.
+R19: He lets slip that he came upriver from Marrowford the same day you did, and that he "keeps an eye on the road for the steward," then catches himself and laughs it off.
+R25: Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights.
+R26: By half past one you're clattering over the stone bridge into Marrowford.
+R32: The ford is two days of walking from Marrowford, and you've made it with a day to spare.
+R34: "Some months after, a storyteller came down the Marrowford road with a little girl of about that age on his cart.
+R47: You pass the night at Lantern's Rest, where Marta feeds you both and refuses payment, and ride on through Marrowford the next day.
+R47: She says a girl who confesses unprompted is worth hearing, and that she will be at the Marrowford assize at month's end.
+
+## The Frightened Page (9 sentences in 7 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R6: Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done.
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R8: Tobin takes a straw pallet against the wall near you, one hand never far from his knife.
+R19: By the time you reach the kitchen door, a quarter of an hour has gone, and Tobin has had all the time he needed.
+R19: That's Lord Edric's study, and Tobin got there first.
+R26: Tobin takes the last of your bread with both hands, as if it were a medal, and nods fiercely.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+R48: Before you go you press a thumb to Tobin's forehead and say the Lantern-Bearer's short blessing.
+
+## Thornhallow (9 sentences in 7 rounds)
+R6: Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done.
+R7: A storyteller came to Thornhallow with a girl who sang at my lord's table, and my lord wept at the last verse and gave her a ribbon.
+R7: Thornhallow's a day's walk downriver, and the assessor comes in three days.
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R8: - Do you remember that night at Thornhallow at all?
+R9: The river road to Thornhallow runs downriver from the bridge, a day's walk through farmland and willow-banks.
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+R31: The assessor, if Lord Edric has told the truth, arrives at Thornhallow at noon today.
+R47: You reach Thornhallow at a quarter to four on Day 7.
+
+## Saltmarsh (8 sentences in 7 rounds)
+R25: Sir Corwen Dray of Saltmarsh Keep, out on the estuary some three days downriver of here, bought a betrothal contract and a vow-tale tying his heir to a wealthy merchant family, and those merchants have begun to doubt.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R45: Saltmarsh is some five days' ride by the river road, so you won't make it by Day 9 without hard riding and a lucky road.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+R47: The road to Saltmarsh runs on three days further, and the ninth is two days off.
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R49: Saltmarsh spreads below you on a grey estuary: slate roofs, drying nets, a stone quay, the squat bulk of Saltmarsh Keep on a rise to the north.
+
+## Sonnet (14 sentences in 7 rounds)
+R54: API Error: Sonnet 5.
+R54: Claude Code can't respond to this message with Sonnet 5.
+R55: API Error: Sonnet 5.
+R55: Claude Code can't respond to this message with Sonnet 5.
+R56: API Error: Sonnet 5.
+R56: Claude Code can't respond to this message with Sonnet 5.
+R57: API Error: Sonnet 5.
+R57: Claude Code can't respond to this message with Sonnet 5.
+R58: API Error: Sonnet 5.
+R58: Claude Code can't respond to this message with Sonnet 5.
+R59: API Error: Sonnet 5.
+R59: Claude Code can't respond to this message with Sonnet 5.
+R60: API Error: Sonnet 5.
+R60: Claude Code can't respond to this message with Sonnet 5.
+
+## Code (7 sentences in 7 rounds)
+R54: Claude Code can't respond to this message with Sonnet 5.
+R55: Claude Code can't respond to this message with Sonnet 5.
+R56: Claude Code can't respond to this message with Sonnet 5.
+R57: Claude Code can't respond to this message with Sonnet 5.
+R58: Claude Code can't respond to this message with Sonnet 5.
+R59: Claude Code can't respond to this message with Sonnet 5.
+R60: Claude Code can't respond to this message with Sonnet 5.
+
+## Hale (9 sentences in 6 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R13: Hale has the spare key, and Lord Edric admits, with a flush, that he once saw Hale's hand on the copy "for safekeeping.
+R13: Hale knows you're here.
+R16: You have the truth in hand, a day and a half before Dame Crowe arrives, and you can't be sure Hale hasn't another way into the chapel.
+R17: Hale is somewhere in the manor, and the assessor is a day and a half away.
+R18: that's one of Hale's men.
+R18: Hale is in the house, and he knows you went to the chapel.
+R23: Then Lord Edric turns to Hale, who hasn't moved from your shoulder, and for the first time the steward's smile has gone entirely.
+
+## Alder (6 sentences in 6 rounds)
+R39: Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar.
+R41: On the near bank, two shapes step out of the willows, Alder and Kit with their spears levelled, and the villagers' murmur sharpens into a shout.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R44: Twice you hear Alder's voice and Hob's wheeze over you, hands pressing at your wound and failing, and Kit swearing in a language you don't know.
+R45: Alder and Kit haul you up the bank like a netted fish, and you cough up what feels like half the Marrow.
+R46: " Alder claps her on the shoulder, and Lady Maren pays her a month's wage in advance without being asked.
+
+## Brother Osric (5 sentences in 5 rounds)
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R14: "Brother Osric keeps the parish register in the chapel vestry, on the green," he says.
+R15: Brother Osric is on his knees at a bench, a bent, white-haired man in a patched brown robe, polishing a pewter cup with great slowness.
+R16: For a long moment Brother Osric says nothing.
+R26: "I'll be Brother Osric's legs.
+
+## Smiling Follower (6 sentences in 5 rounds)
+R21: Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since.
+R25: Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+R26: So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule.
+R42: Before you can find your feet, Garrow comes splashing across the shallows with his short blade, and a slash opens your arm, three more.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R44: Garrow and the driver are dead, and the villagers are gathered quietly on the bank, looking at you with a different face than they wore at noon.
+
+## Lady Maren (5 sentences in 5 rounds)
+R34: "Lady Maren rules the spur now, her daughter," he adds.
+R39: Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar.
+R41: Not in Lady Maren's keeping, not in anyone's keeping but mine, where it can be put right before it hurts the innocent.
+R45: Lady Maren arrives at a run with a lantern and a blanket, takes one look at you, and says nothing at all for a moment.
+R46: " Alder claps her on the shoulder, and Lady Maren pays her a month's wage in advance without being asked.
+
+## Vantry (5 sentences in 5 rounds)
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R49: In the town below, a bell has begun to toll the hour, and a small crowd is moving toward a hall by the quay marked with the Vantry scales.
+R51: Her Stealth was a 7, and at the turn of the quay the young man glances back, sees a stocky woman in a blue tabard, and picks up his pace toward the Vantry hall's wide doors.
+R52: Down on the quay, Kit is a blue spot at the edge of the crowd before the Vantry hall.
+R53: Your Deception check was a 7 with disadvantage, and the doorman, a stout man in Vantry grey with a ledger of his own, isn't fooled by a story, only unconvinced by a notary's junior who has no token.
+
+## Inspiration (4 sentences in 4 rounds)
+R9: HP and spell slots are restored, and Bardic Inspiration is back to 3 uses.
+R31: You're rested, your spells and Bardic Inspiration are restored, and the clock reads half past six.
+R38: Bardic Inspiration is at 3 of 3, none spent.
+R45: You're whole again: all your hit points and your spell slots, and Bardic Inspiration back at three.
+
+## Ashby Weir (4 sentences in 4 rounds)
+R25: Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights.
+R26: So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule.
+R29: Come to the ford at Ashby Weir at dusk on the fifth day, alone, and bring it.
+R31: The ford at Ashby Weir is where Corvin wants to meet you on the fifth day.
+
+## Master Tallowmere (3 sentences in 3 rounds)
+R1: He said Master Tallowmere would know what he meant.
+R7: He doesn't trust anyone but Master Tallowmere, and he's frightened because Master Tallowmere hasn't answered him in a month.
+R11: "I was told a friend of Master Tallowmere was coming," Lord Edric says.
+
+## Verrel (5 sentences in 3 rounds)
+R3: Inside are sheets of blank vellum, a tin of wax-impressions, a Verrel seal among them, and a half-finished draft in Corvin's neat, unmistakable hand.
+R3: The Verrel charter's third descent must hold, or the ink on the whole line will not.
+R3: "* Beneath it is a list of three noble houses with sums beside them, two struck through and one circled: Verrel.
+R7: Whatever you choose to do about Verrel's third descent, you can do it with all of them.
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+
+## Dame Crowe (3 sentences in 3 rounds)
+R16: You have the truth in hand, a day and a half before Dame Crowe arrives, and you can't be sure Hale hasn't another way into the chapel.
+R17: "I'll set my name to it, in writing and in person, before this Dame Crowe, so long as it's the truth you mean to tell and not another tale.
+R47: Dame Crowe came on the fourth day, at noon exactly.
+
+## Osric (3 sentences in 3 rounds)
+R22: You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other.
+R25: Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+
+## Dray (4 sentences in 3 rounds)
+R25: Sir Corwen Dray of Saltmarsh Keep, out on the estuary some three days downriver of here, bought a betrothal contract and a vow-tale tying his heir to a wealthy merchant family, and those merchants have begun to doubt.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R48: You take out the Dray leaf by the candle to check it again before the road.
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+
+## Marta (5 sentences in 3 rounds)
+R28: Marta Pell, keeper here these fourteen years.
+R28: You can open the note now, take a moment with Marta first, or sleep on it.
+R30: The first year he stopped here, he sat up all night over that brass lamp over my door, turning it in his hands and saying, 'The same hand, Marta.
+R30: You tell Marta a story for the lamp, one about a tinker's daughter and a lantern that wouldn't go out, and she laughs and wipes her eyes at the end.
+R47: You pass the night at Lantern's Rest, where Marta feeds you both and refuses payment, and ride on through Marrowford the next day.
+
+## Thistlewood (3 sentences in 3 rounds)
+R29: The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R46: She has written it in her own square hand, naming you her friend and Elowen Ashgrove's daughter, "with every claim on the house of Thistlewood that her mother had, and gladly given.
+
+## Ashby (3 sentences in 3 rounds)
+R29: The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork.
+R31: Biscuit is fed and saddled in the yard, and the Ashby road runs north under a white morning mist.
+R39: In the green and gold light, down the Ashby road, comes the creak of a wagon, a painted lantern swinging on its side, and a lean man walking before it in a brown coat.
+
+## Master Hale (2 sentences in 2 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R13: Master Hale is there, a pace from the frame with his head cocked, and for half a breath the smile is not on his face.
+
+## Drowned Candle (2 sentences in 2 rounds)
+R6: He's lodging for the night at the Drowned Candle, an inn on the near bank, and is meant to leave at dawn.
+R21: Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since.
+
+## Marrow (2 sentences in 2 rounds)
+R10: The river road runs down the Marrow's north bank through willow-banks, wheat fields gone gold, and stone farmsteads with smoke rising.
+R45: Alder and Kit haul you up the bank like a netted fish, and you cough up what feels like half the Marrow.
+
+## Biscuit (2 sentences in 2 rounds)
+R31: Biscuit is fed and saddled in the yard, and the Ashby road runs north under a white morning mist.
+R32: Biscuit eats the miles patiently.
+
+## Lantern-Bearer (2 sentences in 2 rounds)
+R33: "A traveler of the Lantern-Bearer, sent by Mother Pell, who says you keep the best memory on the river.
+R48: Before you go you press a thumb to Tobin's forehead and say the Lantern-Bearer's short blessing.
+
+## Elowen (2 sentences in 2 rounds)
+R35: "If a lady asks me, I'll say what I saw, and swear it on Elowen's lamp.
+R38: I gave you 75 for finding Elowen's trail and opening the coffer.
+
+## Wren (2 sentences in 2 rounds)
+R38: What does Wren do with the day?
+R40: "She's alive, Wren.
+
+## The Salt Gull (2 sentences in 2 rounds)
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+
+## Ember (2 sentences in 2 rounds)
+R46: My father's grey, Ember, who's too good for this village and bored with it.
+R47: Ember sulks for the first mile and then, as you sing, begins to keep time with his ears.

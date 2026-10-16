@@ -94,3 +94,48 @@ Next: confirm 1B and 2A with more runs, then block 2.
 - 2026-10-16: took Windows usernames out of the repo (Jake's request, before it might go public). Meta `save` is
   now just the file name, save `cwd` is ~/..., replay.py derives the DM's projects folder from DM_HOME, and
   synthetic/BRIEF.md no longer names local paths. No DM behaviour change. Tests: 271 passed.
+
+## Second set of games (2026-10-16, on K-2SO, unattended)
+Jake's brief for this run (via the project's coordinator): confirm 1B and 2A with about 8 replays per arm, judged
+blind; add a whole-story reader if the readers only see slices; then three new stories, blocks of 60 rounds to 180,
+with the same analysis after each block and a detailed report in evals/autoloop/. Push to `autoloop` only, never main.
+
+- The first set's DM conversations stayed on the old PC (no `~/.claude/projects/<DM_HOME>` folder here), so its games
+  can neither go on nor be replayed: replay.py forks the DM's Claude Code session. So:
+  - three new games, `cleric2` (human Life cleric, careful and kind), `barbarian2` (dragonborn barbarian, bold),
+    `bard2` (half-elf Lore bard, trickster): new briefs in run.py, same classes and player styles, new races and
+    characters. Started 2026-10-16, 60 rounds each, all three at once.
+  - 1B and 2A are confirmed on the new games' block-1 rounds instead (a held-out set for both, since they were written
+    against the first set), together with the block's own A/B tests.
+- Readers: each of the three READ.md readers read one game's whole block (dump.py of rounds 1-60). From block 2 on a
+  block is a slice of the story, so a fourth reader (READ_STORY.md) reads each game from the opening to its latest
+  round for contradictions, lore, plot holes, characters out of character and dropped threads. facts.py gives it
+  candidates: for each name in the notebook, or capitalised inside a sentence in two or more rounds (rules names left
+  out), the sentences about it with a number, a distance, a time or a relation, by round. It judges nothing.
+  On the first set's cleric (rounds 1-60): 24 names, 211 sentences (Father Dorrin 25, Garrick 21, the Deepwatch 18).
+- dump.py's docstring said earlier rounds were summarised by the notebook; the code never did. Docstring corrected.
+
+### Second set, block 1 (rounds 1-60): where it stopped (2026-10-16, usage limit reached)
+- Played: cleric2 (Brannoc Ashdown, human Life cleric), barbarian2 (Korvash Emberhide, dragonborn), bard2 (Wren
+  Ashgrove, half-elf Lore bard; companion Kit). Metrics in games/metrics2-b1.json. Notebook reads (lore, recall): 0 in
+  180 rounds again; write_lore 73/70/74.
+- Readers (READ.md): cleric2 69, barbarian2 44, bard2 56 findings; whole-story readers (READ_STORY.md): 15/12/12, about
+  a third in rounds the block readers had no contradiction for. Spot-checked samples held (Hob "cannot leave" the lamp
+  after walking a mile from it; two archers then "three more"). Files in games/read/.
+- Found by the readers and traced:
+  - cleric2 R12, R29: no reply at all, only game lines: the turn hit 40 model calls (max_turns_reached in the session
+    file). Fixed (ddbedbb): asked once for the reply.
+  - bard2 R46: eleven refused change_party calls, the format for an option's further choice wasn't in the tool's
+    description; the DM made a rogue instead of the fighter it meant. Fixed (c8b0375).
+  - bard2 R54-60: "API Error: ... safeguards flagged this message [reasoning_extraction]" shown as the DM's reply 7
+    rounds running. Fixed (3f9eb6f): a failure, not shown. A probe on a fork later answered normally, so the flag is
+    intermittent, but the game had no way to recover: open decision.
+  - cleric2 R20: the PC died by the rules (two critical claws while paralysed at 0 HP). The DM ended the game; the
+    test player asked to replay the night, and the DM rewound (clock set back to Day 1 11:55 PM, 'dead' removed). Rounds
+    23-60 run on that rewind, so some "contradictions" with rounds 12-20 are the rewind. Open decision.
+  - R42 bard2: `by: "pc"` refused; a test pins "the name as in the tracker", so left alone.
+- A/B replays done, NOT yet judged (ab2/A, B, C; arms in ab2/arms): A = base/1B/2A on 8 rounds x 8 runs (64 replies
+  per arm); B = base/3C/3D (agency) and C = base/4A/4B (clock), 6 rounds x 4 runs (24 per arm). Regex counts only
+  (fmt.py): menu at end base 5, 1B 4, 2A 1 of 64; sheet numbers at end 4/5/2. 3D's replies are less than half as long
+  (641 vs 1532 chars): a likely side effect to check. Next: blind.py + three Sonnet judges with JUDGE.md, score.py,
+  then keep/drop in dm/prompt.md (nothing changed there yet), report, blocks 2 and 3.

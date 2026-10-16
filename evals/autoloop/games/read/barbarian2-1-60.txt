@@ -1,0 +1,1321 @@
+CHARACTER: Korvash Emberhide, Dragonborn barbarian 1, acolyte background
+== OPENING ==
+Your character is complete.
+
+The mountains stand over the lowlands like a wall, and everything beneath them lives with an eye turned upward. Herders drive their flocks down from the high pastures to the market towns, and some come down with stories of the warbands that raid the passes. The Iron Tallies are the worst of those stories: hobgoblins who count their raids in notches.
+
+Korvash Emberhide is a red-scaled, broad-shouldered dragonborn, loud and proud, and he is the son of a clan of mountain herders. When he was a boy, the Iron Tallies overran his village. His father Dargan held the Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee. His sister Tessa was lost in the raid, and no one ever learned her fate. Korvash was raised in Harrowmere by his Aunt Veshra. He carries his father's second-best greataxe, with Dargan's ember-red scale-sash tied to the haft, and he has spent years making sure no one weak is bullied while he stands nearby.
+
+Dusk settles over Harrowmere's market square. Lanterns are being lit and stallholders are folding awnings. Three young toughs scatter into the alleys, one of them clutching a wrist and swearing, and they leave behind an overturned cart of cheeses and a family of herders huddled against it. The mother is gathering the wheels back into her apron, and the father is nursing a split lip.
+
+A thin boy of about twelve, mud to the knees, breaks away from them and runs up to you, breathless. "You're Korvash, aren't you? Veshra's nephew? She sent me to find you, but she's not the only one who wants you." He swallows. "Drovers came down from the high road this morning. They saw a hobgoblin band, with a captain in a tin mask carrying a rod covered in notches. They're camped below the Goat's Throat, and they're taking children from the herding steadings. Please... my little sister's up there with our uncle's flock."
+
+The family watches you, and the market has gone quiet. What does Korvash do?
+
+== ROUND 1 ==
+PLAYER: I crouch down to the boy's level, set a hand on his shoulder, and say, "What's your name, lad? Your sister's name too. I'll bring her home, and that's my word." Then I stand, help the herder family right their cart so they're not left in the dust, and tell the father to get his wife and kids to Aunt Veshra's door while I gear up and head for the Goat's Throat tonight.
+  [DM write_lore (hidden)] {"create": "Wren", "kind": "person", "description": "Pell's little sister (about 7), up with their uncle's flock near the Goat's Throat; feared taken by the Iron Tallies. Korvash gave his word to bring her home."}
+  [game] notebook: created an entry for Wren
+  [DM write_lore (hidden)] {"create": "Bring Wren Home", "kind": "quest", "description": "Korvash swore to Pell to bring his sister Wren home from the Iron Tallies camped below the Goat's Throat, where children are being taken from herding steadings. Korvash leaves for the pass tonight. The route leads to the pass where his father died and to the question of Tessa."}
+  [game] notebook: created an entry for Bring Wren Home
+  [game] time: 20 minutes later: Day 1, 6:50 PM
+DM: The boy's chin trembles, but he stands straighter under your hand. "Pell, sir. Pell Harrow-side. My sister's Wren. She's seven, she has a red scarf, and she hums when she's scared." He wipes his nose on his sleeve. "She'll hum. You'll hear her."
+
+"Then I'll listen for it," you tell him.
+
+You set your shoulder to the cheese cart and heave it upright, and the father scrambles to stack the wheels back on. The mother catches your scaled hand in both of hers and says nothing, which says enough. When you tell them to go to Veshra's door and say Korvash sent them, the father nods hard, wipes his lip, and herds his children off through the lanterns. Pell hesitates, then runs after them, glancing back twice.
+
+The market is still quiet as you leave. A stallholder presses a heel of bread and a wedge of hard cheese into your hands without a word. Aunt Veshra's house is only two streets away, and the road north is the other way. The mountains are going black against a purple sky, and the Goat's Throat lies a night's hard march up that road.
+
+You still have 15 gp, ten days of rations, and ten torches. It is about seven in the evening. Do you stop at Veshra's door first, to say a word and take her counsel, or do you head straight for the high road?
+
+== ROUND 2 ==
+PLAYER: I stop at Veshra's door first, because she sent Pell for me and she's earned a word. I'll keep it short: tell her I'm going up to the Goat's Throat after Wren, ask what she knows about the Iron Tallies' camp, and see if she'll hold onto Pell's family until I'm back.
+  [DM write_lore (hidden)] {"entry": "Aunt Veshra", "add_to_description": "Day 1 evening: lives two streets from the market; sent Pell for Korvash. Told him a drover (Hale Orrin) saw the Iron Tallies' camp at Cinder Ford, below the Goat's Throat; a scout-pair watches the old herd track. She gives him a pouch of dried goat meat and a clan token: Dargan's whistle-carved horn charm. She will shelter Pell's family."}
+  [game] notebook: updated Aunt Veshra
+  [DM write_lore (hidden)] {"create": "Cinder Ford", "kind": "place", "description": "Stream crossing on the high road below the Goat's Throat; the Iron Tallies' camp, seen by drovers. Watched by hobgoblin scouts on the old herd track."}
+  [game] notebook: created an entry for Cinder Ford
+  [game] time: 15 minutes later: Day 1, 7:05 PM
+DM: Veshra's door opens before you knock. She is a lean, grey-scaled dragonborn with flour on her forearms and your father's jaw. She looks at your axe, then at your face, and sighs like someone who has long expected this.
+
+"The boy found you, then." She hears you out without interrupting, and when you ask about the camp she pulls you into the kitchen light. "Hale Orrin, the drover, came through at noon. They're at Cinder Ford, where the road crosses the stream under the Throat. Forty tents, he said, maybe fewer, with fires and a tin mask walking among them. Two scouts sit the old herd track above the ford. Take the north goat-path around them, the one your father used to bring the lambs down. You'll remember it."
+
+You do remember it. She doesn't say the rest, but her eyes go to the sash on your haft.
+
+She presses a pouch of dried goat meat into your hand and, with it, a small horn charm on a thong, worn smooth. "Dargan carved it. Wear it. Come back and wear it at my table." Then, quieter: "Pell's family will sleep here, and no one will touch them while I'm breathing. Go and do what you've sworn. And Korvash, if you find the cairn, you may stop there. You don't have to be loud with him."
+
+She shuts the door softly. Beyond the last lanterns of Harrowmere, the high road climbs into the dark, and the first stars are out above the peaks.
+
+You have the horn charm and the goat meat now. The road is a night's march. Do you push on straight through, or make camp partway and arrive fresh at dawn?
+
+== ROUND 3 ==
+PLAYER: I tie the horn charm around my neck, tuck the goat meat in my pack, and tell her, "I'll wear it at your table, Aunt." Then I push on through the night, taking the north goat-path my father used so I can slip past the two scouts above Cinder Ford before dawn, and I'll rest in the rocks nearby if I need it, because Wren can't wait for a morning.
+  [DM lookup (hidden)] {"name": "Forced March"}
+  [game] dice Korvash's Survival check to find the north goat-path in the dark, DC 10: 1d20+0 = 1d20 [2] + 0 = 2
+  [game] time: 7 hours later: Day 2, 2:05 AM
+  [DM write_lore (hidden)] {"entry": "Cinder Ford", "add_to_description": "Day 2, ~2 AM: Korvash lost the goat-path (failed Survival) and came out on a scree shoulder about 300 yards from the ford, in view of the fires. The two scouts sit a rocky lookout upslope on the herd track."}
+  [game] notebook: updated Cinder Ford
+DM: You march through the dark with the horn charm knocking against your chest. The road climbs, and then the stars show you the line of the old goat-path, a pale scratch on the slope. But the dark was kinder to your memory than to your feet. Somewhere past a split boulder the path forks and you pick the wrong fork, and for two long hours you are working along scree and thorn, finding the path again only by the cold smell of the stream.
+
+It is a little after two in the morning when you come out on a rocky shoulder above the Goat's Throat. Below you, the ford is a cluster of low red fires and dark tents, and a single tall figure walks between them, the firelight catching a flat pale gleam where a face should be. Smoke rolls along the water.
+
+To your right, perhaps sixty yards off along the ridge, a small coal glows in the rocks, with two shapes beside it: the scouts. They are above the line you meant to take, and they haven't seen you yet. The path you lost would have run well below them. From here, a cairn of stacked stones stands out against the sky farther up the pass.
+
+Faint on the wind, from the camp, comes a thin sound: someone humming.
+
+What does Korvash do?
+
+== ROUND 4 ==
+PLAYER: I go flat to the rock and stay there, jaw tight, listening to that humming. Wren's alive, and that's all I needed to hear. I'll take the scouts quietly before they raise a shout: creep along the ridge in the shadows, close to within handaxe range, and cut them down fast with the axe if they spot me. Dargan's cairn can wait until she's safe.
+  [DM lookup (hidden)] {"name": "Hobgoblin", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Hiding"}
+  [game] dice Korvash's Stealth creeping along the ridge toward the scouts (no armor penalty): 1d20+1 = 1d20 [11] + 1 = 12
+  [game] time: 10 minutes later: Day 2, 2:15 AM
+DM: You go belly-down along the ridge, keeping the rocks between you and the coal. Your breath runs slow and your scales stay dark against the stone. The humming drifts up from the camp now and then, and each time it does your jaw tightens, but you keep your pace. The scouts never turn their heads. The one nearest the coal has his helmet off, picking at a bone. The other sits with a longbow across his knees, watching the road below, and his back is to you.
+
+You settle in behind a boulder about fifteen feet from them, close enough to hear them muttering in Goblin about the cold and how long until relief. Both are hobgoblins in iron-banded mail and shields, and a tin-striped tally is painted on each breastplate. They don't know you are here.
+
+The camp is far below, and the nearest tents are a long run downhill. A shout from either of these two would carry. You have the dark, the boulder, and the first move.
+
+What does Korvash do?
+
+== ROUND 5 ==
+PLAYER: I wait for the archer to look back down the road, then I rage and charge out from behind the boulder, going for the archer first with the greataxe so he can't raise a shout or loose an arrow. If the one with the bone gets up, I'll drop him next before he can yell.
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Surprise"}
+  [game] dice Korvash's initiative: 1d20+1 = 1d20 [17] + 1 = 18
+  [game] dice Hobgoblin scouts' initiative (group): 1d20+1 = 1d20 [14] + 1 = 15
+  [game] fight: Fight started. Order: Korvash Emberhide (18), Hobgoblin Archer (15), Hobgoblin Picket (15). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: Rage: 1/2; condition added: Raging (Korvash Emberhide has used its bonus action: no more bonus actions this turn.)
+  [DM lookup (hidden)] {"name": "Unseen Attackers and Targets"}
+  [game] dice Korvash greataxe vs Hobgoblin Archer (AC 18), advantage: unseen attacker: 1d20+6 (advantage) = 1d20 [9, 17]→17 + 6 = 23 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Greataxe damage (1d12+4 STR +2 Rage): 1d12+6 = 1d12 [1] + 6 = 7
+  [game] fight: Hobgoblin Archer took 7: HP 11 → 4
+  [game] fight: Round 1, now: Hobgoblin Archer. Hobgoblin Archer (initiative 15): HP 4/11, AC 18 Hobgoblin Archer's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Hobgoblin Picket. Hobgoblin Picket (initiative 15): HP 11/11, AC 18 Hobgoblin Picket's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You burst from behind the boulder with a roar in your throat and heat rolling under your scales. The rage takes you in a single stride. The greataxe comes round in a flat arc and bites into the archer's shoulder-plate, driving him to his knees and ripping the bow from his hands. He is hurt badly but still alive, and the iron mail turned the worst of it.
+
+Both hobgoblins were frozen in shock for that first breath, but they won't be for the next. The archer is bloodied and on one knee at your feet, clawing for his sword. The other has scrambled upright beside the coal with his shield half raised and his mouth open to shout. Neither has had a chance to yet.
+
+It is your turn again, and you are close enough to either of them. What does Korvash do?
+
+== ROUND 6 ==
+PLAYER: I'm not letting that picket shout. I swing the greataxe at the one with the shield first, since he's the one about to raise the alarm, and if I've got movement to spare I step so the archer's still within reach. If I drop him, I finish the archer next.
+  [game] dice Korvash greataxe vs Hobgoblin Picket (AC 18): 1d20+6 = 1d20 [8] + 6 = 14 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Hobgoblin Archer. Hobgoblin Archer (initiative 15): HP 4/11, AC 18 Hobgoblin Archer's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Hobgoblin Archer longsword vs Korvash (AC 13): 1d20+3 = 1d20 [8] + 3 = 11 (Hobgoblin Archer has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Hobgoblin Picket. Hobgoblin Picket (initiative 15): HP 11/11, AC 18 Hobgoblin Picket's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Hobgoblin Picket has used its action: no more actions this turn.
+  [game] fight: Round 3, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: My swing glances off the picket's shield and rings it like a bell. The picket gets his breath in and bellows down the slope in Goblin: "Raiders on the ridge! Iron Tallies, up!" The cry rolls off the rocks. In the camp below, a horn gives one raw note, then shouts and the scrape of iron. Torches are already bobbing at the edge of the fires. The archer's sword was a clumsy lash that did not find you, and your rage turned aside the edge.
+
+Your ruling-level problem is plain: you have perhaps three or four rounds before the camp's runners reach this ridge, and the tin-masked captain will be among them. Both hobgoblins are still on their feet, and the archer is bleeding at your boots.
+
+It is your turn again. What does Korvash do?
+
+== ROUND 7 ==
+PLAYER: Time's short, so I finish the bloodied archer at my boots first with the greataxe, then turn on the picket. If the dice give me the room, I'll hammer him down before the runners reach the ridge and keep my rage burning.
+  [game] dice Korvash greataxe vs Hobgoblin Archer (AC 18): 1d20+6 = 1d20 [5] + 6 = 11 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Hobgoblin Archer. Hobgoblin Archer (initiative 15): HP 4/11, AC 18 Hobgoblin Archer's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Hobgoblin Archer longsword vs Korvash (AC 13): 1d20+3 = 1d20 [20] + 3 = 23 (natural 20) (Hobgoblin Archer has used its action: no more actions this turn.)
+  [game] dice Archer longsword crit damage (slashing): 2d8+1 = 2d8 [7, 5] + 1 = 13
+  [game] dice Archer Martial Advantage extra damage, crit doubled (slashing): 4d6 = 4d6 [3, 4, 1, 6] = 14
+  [game] sheet: took 13 damage: HP 14 → 1
+  [game] fight: Round 3, now: Hobgoblin Picket. Hobgoblin Picket (initiative 15): HP 11/11, AC 18 Hobgoblin Picket's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Hobgoblin Picket longsword vs Korvash (AC 13): 1d20+3 = 1d20 [17] + 3 = 20 (Hobgoblin Picket has used its action: no more actions this turn.)
+  [game] dice Picket longsword damage (slashing): 1d8+1 = 1d8 [1] + 1 = 2
+  [game] dice Picket Martial Advantage extra damage (slashing): 2d6 = 2d6 [4, 1] = 5
+  [game] sheet: took 3 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: unconscious; condition removed: Raging
+  [DM lookup (hidden)] {"name": "Death Saving Throws"}
+  [game] fight: Round 4, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Korvash death saving throw: 1d20 = 1d20 [9] = 9
+  [game] sheet: death save failures: 1/3
+  [game] dice Hobgoblin tending Korvash: Wisdom (Medicine) DC 10 to stabilize: 1d20 = 1d20 [16] = 16
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 2, 2:15:24 AM.
+  [game] dice Hours until stable Korvash regains 1 HP: 1d4 = 1d4 [3] = 3
+  [DM write_lore (hidden)] {"entry": "Cinder Ford", "add_to_description": "Day 2, ~2:20 AM: Korvash's ambush on the scouts failed; the picket raised the alarm and Korvash fell at 0 HP. Ruling: the hobgoblins, on the picket's order ('the captain wants him alive for the rod'), stabilized him and took him captive into the Iron Tallies camp. Gorrak Vael is there. The archer (4 HP left) and picket (unhurt) live."}
+  [game] notebook: updated Cinder Ford
+  [game] time: 3 hours later: Day 2, 5:15:24 AM
+  [refused] sheet: condition 'unconscious' is not on the sheet; conditions now: Prisoner (bound)
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 2: his hobgoblins captured Korvash at Cinder Ford. Korvash's greataxe (with Dargan's sash), handaxes and javelins were taken and are kept in the camp's baggage pile near the captain's tent."}
+  [game] notebook: updated Gorrak Vael
+  [game] sheet: lost 1 × Greataxe; lost 2 × Handaxe; lost 4 × Javelin
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+DM: You surface slowly, as if from deep water, and the first thing you know is cold stone under your cheek and a taste of iron in your mouth.
+
+You remember falling: the archer's blade, the picket's, then the weight of the dark. You remember the picket's voice over you, curt and unhurried in Goblin. "Not the throat, fool. The captain wants this one breathing. Tally him." Hands were on your chest after that, hard but practiced, binding something tight. After that there was nothing.
+
+It is nearly dawn, about a quarter past five. You are propped against the wheel of a supply cart at the edge of the Iron Tallies' camp, wrists bound behind you with leather cord and ankles hobbled. You have 1 hit point and a body that feels like one big bruise. Your greataxe, your handaxes, and your javelins are gone. The horn charm still hangs at your chest, so they didn't think it worth taking. Grey light is spreading across the ford, and the smoke of the cookfires lies low over the water.
+
+Forty feet away, where a stake line has been driven into the mud, a huddle of small shapes sits on the ground, bound at the wrist and tied to the line: a dozen children, maybe more. One of them, a small girl in a red scarf, is humming very quietly, and she hasn't stopped.
+
+Two hobgoblins stand guard over the line with bows. Across the camp a tall figure in a tin mask is looking straight at you, a long rod notched along its whole length in his hand. He says something to the picket beside him and begins to walk toward you.
+
+What does Korvash do?
+
+== ROUND 8 ==
+PLAYER: I stay slumped and let him come, but I lift my head and meet that tin mask dead on, spitting blood into the mud. "You're Gorrak Vael. My father took your hand at the Goat's Throat, and I'm Dargan's son. Whatever you want me breathing for, say it, but those children go free first."
+
+Behind my back I'm quietly working the cord against the cart's iron wheel rim, feeling for a rough edge, and I keep my eyes flicking to Wren's red scarf so she knows someone's heard her humming.
+  [game] dice Korvash Dex (Sleight of Hand) to saw leather cord on the iron wheel rim, DC 13, unseen: 1d20+1 = 1d20 [7] + 1 = 8
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 2 dawn: speaks Common, calm and dry. Offers Korvash a bargain: swear on his word to serve the Iron Tallies as a hired axe for one year and one day, and the children go free to Harrowmere. Knows Dargan's name and recognized the ember-red sash. Wears a tin mask; has both hands (Dargan did not take his hand; Dargan lost his own)."}
+  [game] notebook: updated Gorrak Vael
+  [game] time: 2 minutes later: Day 2, 5:17:24 AM
+DM: Behind your back the cord rasps against the rim. It frays and bites into your wrists, but it won't part, and you keep at it as quietly as you can.
+
+The tin-masked hobgoblin stops an arm's length off. Up close the mask is crude, hammered from a cook's pot and riveted at the temples, and behind its eye-slits his gaze is slow and level. The rod in his hand has more notches than you can count. Two hobgoblins with drawn blades stand a pace behind him.
+
+"Dargan's son," he says in Common, flat and dry, without a trace of heat. "I know the sash. I know the name, and I know your father lost the hand. I took nothing from him but a morning and a pass." He tilts his head at the children. "Your voice carried well. Good. A voice is worth something."
+
+He crouches until the mask is level with your eyes. "Look at them. I have thirty-one on the line and the road to the tin-mines is long, and children sell cheap in bulk. But I am short of axes. You killed none of mine, which is a mercy to both of us, though you were two seconds from it. Swear on your word, the word your clan is known for, to carry an axe for the Iron Tallies for one year and a day. Then the line is cut at Harrowmere's border and the children walk home. I keep my word too, boy. Ask anyone who has met me."
+
+Behind him, Wren's humming has faltered. The little girl in the red scarf is looking at you with her whole face.
+
+The cord is frayed but still holds, and you have 1 hit point and no weapon. What do you say?
+
+== ROUND 9 ==
+PLAYER: I keep my eyes on his mask and keep sawing behind my back. "You say you keep your word, so hear mine: I'll swear, but the children are cut loose and walking before I do, and I want Wren and the rest within sight of Harrowmere's border with my own eyes. Do that, and Dargan's son will carry your axe for a year and a day."
+  [game] dice Korvash Charisma (Persuasion) to get the children freed first, DC 14: 1d20+1 = 1d20 [8] + 1 = 9
+  [game] dice Korvash Dex (Sleight of Hand) continuing to saw the frayed cord, DC 11: 1d20+1 = 1d20 [12] + 1 = 13
+  [game] time: 1 minute later: Day 2, 5:18:24 AM
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Refused to free the children before Korvash swears; counter-offer: Korvash swears now, then walks with the line under escort to Harrowmere's border, where the children are cut loose. Korvash's cord is secretly parted behind his back (Day 2, 5:18 AM)."}
+  [game] notebook: updated Gorrak Vael
+DM: Gorrak listens to all of it without moving, and then something that could be a laugh comes dry through the tin.
+
+"A bargain-maker. Dargan was the same." He shakes his head slowly. "No. A sworn word buys the line, and a conditional word buys nothing. You swear first. Then the line moves out at noon with my sergeants and with you walking at its head, unbound. At the border stones they are cut loose. You will see it, as you ask, and you will see it with a blade at your back." He straightens. "I give you the time it takes the sun to clear the ridge. Think quickly, boy. The tin-mines are patient but I am not."
+
+His shadow lifts off you. Behind your back the leather finally gives with a soft tug and parts, though you keep your wrists together and say nothing. Two hobgoblins with drawn blades stand within reach, three more at the stake line have bows, and the camp is waking all around you. The cart wheel is at your back, and the children are forty feet off. You are at 1 hit point with no weapon in your hands, and your gear is somewhere in this camp.
+
+Gorrak waits for your answer. What does Korvash do?
+
+== ROUND 10 ==
+PLAYER: I let the silence sit a moment, then lift my chin. "Then I swear it, Gorrak Vael, on my father's blood: a year and a day, my axe for the Iron Tallies, and every child walks free at the border stones. I keep my word, so you'd better keep yours."
+
+I keep my wrists tucked behind me with the cord hanging loose, and add, "And my father's axe comes back to my hand, or what use am I to you?"
+  [game] sheet: short rest; 1 hour later: Day 2, 6:18:24 AM
+  [game] sheet: spent 1 hit die (0/1 left): roll 1d12 and add the CON modifier (CON 14 (+2)), then pass the total as heal; the player decides whether to spend another after the roll
+  [game] dice Korvash hit die during short rest: 1d12+2 = 1d12 [5] + 2 = 7
+  [game] sheet: healed 7: HP 1 → 8
+  [DM write_lore (hidden)] {"create": "Oath to the Iron Tallies", "kind": "quest", "description": "Day 2 dawn: Korvash swore on his father's blood to carry an axe for the Iron Tallies for a year and a day, in return for Gorrak Vael freeing all 31 children (including Wren) at Harrowmere's border stones. Gorrak promised Korvash's greataxe back at the stones. Korvash keeps his word. Wren's rescue now depends on the oath being 
+  [game] notebook: created an entry for Oath to the Iron Tallies
+  [game] time: 4 hours 30 minutes later: Day 2, 10:48:24 AM
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 2: accepted Korvash's oath. Wants him at the head of the line. Axe returns at the border stones. Has told Korvash to rest first; camp breaks around noon."}
+  [game] notebook: updated Gorrak Vael
+DM: You say it clearly enough for the whole ford to hear: on your father's blood, a year and a day, and every child to walk free at the border stones. For a long breath nobody moves. Then Gorrak Vael lays two fingers of his free hand against the rod, as if marking something no one else can see.
+
+"Sworn." He turns the tin mask to the picket. "Cut him loose. Water, bread, and a place to sit. Let him not be dead of a cough before the border."
+
+"His father's axe," he adds, without looking back, "comes home when the stones do. Not before. You have had one hour's use of a bargain already, boy. Don't spend it on cleverness."
+
+The picket cuts the frayed leather and does not remark on how little there was left to cut. They give you water, a heel of black bread, and a flat stone by a dying fire. You sit. Whether it is the bread or sheer stubbornness, the shaking leaves your hands. Across the camp, someone has taken pity on the children and a hobgoblin cook is carrying a pot of porridge along the stake line. Wren eats with both hands and watches you over the rim of the bowl, and when she sees you looking she holds up one grubby fist, thumb tucked in, in the clan sign for "I'm well."
+
+By mid-morning the sun has cleared the ridge and the camp is breaking. Tents come down in practiced silence, mule teams are being hitched, and the line of children is being roped together for the road. You have your wits again, and about eight hit points. You are unarmed among forty-odd hobgoblins, sworn to a year and a day, and the road south toward Harrowmere's border stones is a long one.
+
+Above the pass, the cairn stands against the sky. The line is not yet moving. What does Korvash do?
+
+== ROUND 11 ==
+PLAYER: I stand slowly and walk to Gorrak, hands open. "Before we march, give me the time it takes to walk to my father's cairn and back, with a guard at my shoulder if you like. I've kept my word to you, and I'll keep it, but I owe Dargan a word too."
+
+If he grants it, I'll touch the horn charm and say my piece quietly, the way Aunt Veshra said I could, then come back and take my place at the head of the line.
+  [DM write_lore (hidden)] {"create": "Dargan's Cairn", "kind": "place", "description": "Clan cairn at the Goat's Throat pass where Dargan fell. Day 2: Gorrak allowed Korvash to visit with a guard (a hobgoblin sergeant named Ushk). A small weathered goat figure of carved horn, with fresh ribbon of undyed wool, was left among the stones, recent, within a season; origin unknown (clue; do not confirm Tessa)."}
+  [game] notebook: created an entry for Dargan's Cairn
+  [game] time: 25 minutes later: Day 2, 11:13:24 AM
+DM: Gorrak Vael studies you through the mask for the length of two breaths. "Sergeant Ushk goes with you," he says at last. "Half an hour. A man who leaves his father unspoken to gets sloppy." He turns away, already done with it.
+
+Ushk is a broad, scar-faced hobgoblin who walks a pace behind your left shoulder with his sword sheathed and his hand never far from it. He says nothing the whole climb. The old goat-path is steeper than you remembered, switchbacking up through the thorn and the loose scree, and every turn of it is a memory you'd rather not have: the place where you fell as a boy and your father picked you up one-handed; the ledge where the lambs were counted.
+
+The Goat's Throat is narrow, as it always was: a notch of grey rock barely wide enough for two men abreast, with the wind funneling through it like breath. The cairn stands just inside the mouth, taller than you recall, a mound of fitted stones with a flat slab at its head. Someone has cut Dargan's name into the slab in Draconic, the letters weathered soft. Lichen has crept over the older stones, but the top of the cairn is clean.
+
+Among the stones at the base, tucked in a gap where the wind can't take it, sits a small goat carved from horn, no longer than your thumb, with a ribbon of undyed wool tied about its neck. The ribbon is not grey with weather. It has been here a season, perhaps, but not years.
+
+Ushk stops three paces back and folds his arms. The wind is the only sound.
+
+What does Korvash say, and what does he do?
+
+== ROUND 12 ==
+PLAYER: I kneel at the slab, lay my hand flat on the cold stone, and let the wind carry off the loudness for once. "Father, I'm sorry it took me this long. I swore a hard oath today to buy thirty-one children their lives, and I'll keep it the way you taught me, but I won't break faith with you either."
+
+Then I pick up the little horn goat and turn it over, because someone has been here recently and left it for Dargan, and I want to see if it's carved like his work or someone else's. And I ask quietly, without turning round, "Ushk, did your warband leave anything here, or did someone else come to this cairn?"
+  [game] dice Korvash Intelligence (Investigation) examining the carved horn goat, DC 10: 1d20-1 = 1d20 [20] - 1 = 19 (natural 20)
+  [DM write_lore (hidden)] {"entry": "Dargan's Cairn", "add_to_description": "Natural 20 discovery: the underside of the horn goat bears Tessa's childhood lamb-mark (a notched crescent, her own design, which she cut into everything she owned). The ribbon is fresh wool; someone with the goat, or the goat's maker, visited within a season or two. Ushk (hobgoblin sergeant) says a small cloaked herder-girl or boy was seen at the
+  [game] notebook: updated Dargan's Cairn
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Two moons before Day 2 he ordered his patrol NOT to hunt the small cloaked figure seen at Dargan's cairn. Reason unknown."}
+  [game] notebook: updated Gorrak Vael
+  [game] time: 15 minutes later: Day 2, 11:28:24 AM
+DM: You kneel with your palm flat on the cold slab and say it low enough that only the stone and the wind can hear: the apology, the oath, and the promise that you'll keep faith with both of them. The wind goes on moving through the Throat, and for a moment the loudness really does leave you. Behind you, Ushk shifts his weight and says nothing.
+
+Then you pick up the little horn goat. It is a child's work: lopsided legs, one horn longer than the other, the cuts shallow and eager. Turning it over, you find a mark scratched into the belly, a small crescent with a single notch bitten out of its curve. You know that mark. It was never your father's. It is the mark Tessa cut into every spindle, bowl, and peg she ever owned when she was small, her own invention, and she scratched it into your boots once, the winter she was six. No one else in the clan used a notched crescent. You are sure of that.
+
+The ribbon knotted at the goat's neck is fresh wool, not yet gone grey.
+
+You ask Ushk the question without turning. He is silent long enough that you think he has decided not to answer. Then, in the clipped Common of a soldier giving a report: "Tallies leave nothing at graves. Two moons back at dusk, a patrol saw one by the stones. Small. Herder's cloak, hood up. It saw the patrol first and ran into the high rocks, quick as a goat. The patrol wanted to hunt it down." He pauses. "Captain said no. Said leave it be. I have not wondered why."
+
+The wind has moved the ribbon. Ushk clears his throat, because the half hour is nearly spent. The line is waiting below, thirty-one children, and the border stones are a long day's walk.
+
+What does Korvash do?
+
+== ROUND 13 ==
+PLAYER: My throat is tight, and for once I'm not loud. I close the goat in my fist, then set it back exactly where she left it. With the tip of my knife-edge of a thumbnail and a flat stone, I scratch her notched crescent into the base of the cairn, and under it in Draconic: "Tessa. Korvash lives. Harrowmere, Aunt Veshra's door."
+
+I stand, wipe my face with the back of my hand, and say to Ushk, "That's what I owed him. Lead on, Sergeant, and mark where the captain said to leave her be, because I will be asking him why."
+  [DM write_lore (hidden)] {"entry": "Dargan's Cairn", "add_to_description": "Korvash put the goat back and scratched Tessa's crescent-mark into the base of the cairn with a message in Draconic: 'Tessa. Korvash lives. Harrowmere, Aunt Veshra's door.'"}
+  [game] notebook: updated Dargan's Cairn
+  [game] time: 30 minutes later: Day 2, 11:58:24 AM
+DM: You set the little goat back in its gap among the stones, exactly as she left it, and the ribbon lifts once in the wind and settles. With a flat stone you scratch the crescent into the base of the cairn, the notch in its curve, and below it in Draconic you cut the words one at a time, pressing hard enough that your thumb bleeds. *Tessa. Korvash lives. Harrowmere, Aunt Veshra's door.*
+
+When you rise, your eyes are wet and you do not hide it. Ushk looks at the carving, at you, and then at the sky. When he speaks it is nearly gentle. "The wind will wear it by spring. Cut it deeper next time."
+
+He leads you down. The goat-path takes you back to the ford a little before noon, and the camp has finished its breaking. Mule trains stand hitched, the stake line has been turned into a rope-chain, and the children stand in a ragged column with hobgoblin sergeants walking its length. Wren is third from the front, small and straight in the red scarf. The hobgoblins have made a space at the head of the line for you, and Gorrak Vael stands by it, rod in hand, mask turned toward you.
+
+"The half hour has become a full one," he says, "and I allowed it. Take your place."
+
+You have a question you promised yourself you would ask, and a long road to ask it on. The line has not yet moved.
+
+What does Korvash do?
+
+== ROUND 14 ==
+PLAYER: I take my place at the head of the line, but before I step off I look Gorrak dead in the mask and say it low so the children don't hear: "A patrol saw a hooded herder at my father's cairn two moons back, and you ordered them to let it be. Why? I swore my axe to you, so I'll have that answer on this road."
+
+Then I turn, give Wren a small nod and a thumb tucked in, and set a pace the smallest legs can keep.
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 2 noon: Asked why he spared the figure at the cairn, he said: 'Some marks on my rod are not for notching. You'll have the answer at the stones, with your axe in your hand.' Deferred. Marches the line south toward Harrowmere's border stones; first night's halt at an abandoned drovers' fold."}
+  [game] notebook: updated Gorrak Vael
+  [game] time: 6 hours later: Day 2, 5:58:24 PM
+DM: Gorrak does not answer at once. The tin mask stays on you long enough that you hear a mule stamp somewhere behind the column, and the rod shifts in his hand, a thumb moving over one notch, then another.
+
+"A rod holds a tally of what is taken," he says, very quietly. "Not every mark on it is that. Some are what is owed." He turns his face away toward the road. "You will have the answer at the stones, boy, with your axe in your hand. Not on a road with sergeants listening. I have said more than I meant to."
+
+You do not like it, but it is an answer and it has the sound of truth. You turn, give Wren the nod and the thumb tucked in, and she answers with her own fist and falls in behind you with a small, stern face. You set the pace the smallest legs can keep.
+
+It is a slow day's walk. The road drops out of the high pastures by switchbacks and stone steps, with the mule trains clanking behind and hobgoblin sergeants walking the margins. They do not strike the children, which surprises you, and they hand water along the line at each halt. At one rest a boy no older than six asks you in a whisper if you are really going to take them home. You say yes, and keep saying it, in different words, until he sleeps standing against your arm.
+
+By evening, the light is going copper on the western slopes when the column halts at an abandoned drovers' fold, a long stone enclosure with a half roof and a spring. Fires are lit. The children are bedded down in the lee of the wall under hobgoblin blankets. Gorrak's tent goes up at the far end, and Ushk stations himself on a rock where he can see you. By a sergeant's count, the border stones lie perhaps ten miles on, a morning's walk.
+
+You have the evening to yourself, as much as a sworn man under guard has anything, and the children are close. What does Korvash do?
+
+== ROUND 15 ==
+PLAYER: I settle among the children by the wall, get the little ones fed from the porridge pot, and ask Wren quietly what she saw in the camp, who spoke kindly and who didn't, in case it matters at the stones. I keep an eye on Ushk's rock and sit with my back to the wall where I can watch Gorrak's tent.
+
+DM: Remind me, what exactly did Aunt Veshra give me before I left Harrowmere, and how many rages do I have left after that fight?
+  [game] sheet: gained 1 × Dried goat meat (pouch); gained 1 × Horn charm (Dargan's, carved)
+  [DM write_lore (hidden)] {"create": "Brakk", "kind": "person", "description": "Cruel hobgoblin sergeant of the Iron Tallies; kicked a boy on the stake line; Wren fears him. Ushk, by contrast, gave Wren an extra blanket."}
+  [game] notebook: created an entry for Brakk
+  [DM write_lore (hidden)] {"entry": "Wren", "add_to_description": "Day 2 evening, told Korvash: Gorrak counts the children each night with the rod, asks every child's name and which steading they are from. Asked Wren, gently, whether she'd seen a girl in a hooded cloak in the high rocks; she said no. Brakk the sergeant is cruel; Ushk gave her a blanket."}
+  [game] notebook: updated Wren
+  [game] time: 1 hour later: Day 2, 6:58:24 PM
+DM: Out of game for a moment: Aunt Veshra gave you a pouch of dried goat meat and Dargan's carved horn charm on a thong, which is round your neck. I've now added both to your sheet. They hadn't been recorded. As for your rage, you have 1 of 2 uses left until a long rest. The fight at the ridge spent one.
+
+Back in the fold. You sit with your back to the wall and the porridge pot between your knees, ladling it out to the little ones, and Wren leans against your arm to eat. You ask her your questions lightly, the way you'd ask about the weather.
+
+She thinks about it with the seriousness of a seven-year-old. "The sergeant with the long scar, Ushk, gave me his blanket when it rained. He doesn't talk." She wrinkles her nose. "Brakk's the mean one. He kicked Tam for crying. He's got a ring in his ear." Then, more quietly: "The tin man counts us every night with the stick. He asks everybody's name and what steading they're from, and he nods. Like he's checking. He asked me, too, if I'd seen a girl in a hooded cloak up in the rocks." She stirs her porridge. "I said no. Was I s'posed to say yes?"
+
+You tell her she said exactly right. She nods and goes back to her bowl, and after a while she begins to hum.
+
+The sun goes down red behind the western ridges. Across the fold, Ushk sits on his rock and Gorrak's tent glows faintly from a lantern within. The fires burn low, the children sleep in a heap against the wall, and the border stones are ten miles off in the dark. It is just after seven.
+
+What does Korvash do?
+
+== ROUND 16 ==
+PLAYER: I lay Wren down against the wall with the blanket Ushk gave her, then walk over to his rock with my hands in plain sight. "Sergeant, the one called Brakk kicked a crying boy named Tam. Keep him off this line tonight, or I'll have words with him and the captain's bargain gets a good deal messier."
+
+Then I go back, sit with my back to the wall among the sleeping children where I can see Gorrak's lantern, and turn over what Wren said: the captain is hunting for a girl in a hooded cloak too.
+  [game] time: 30 minutes later: Day 2, 7:28:24 PM
+  [DM write_lore (hidden)] {"entry": "Brakk", "add_to_description": "Day 2 night: Korvash warned Ushk to keep Brakk off the children's line; Ushk posted Brakk on the far picket instead, with a grunt of agreement. Brakk glares at Korvash across the fold; has a ring in his ear."}
+  [game] notebook: updated Brakk
+DM: Ushk watches you come, hands open and steady, and doesn't stand. He lets you finish. For a moment you can't tell whether he has understood. Then he spits to one side, looks across the fold to where a ring-eared hobgoblin is working a whetstone along his blade, and grunts.
+
+"Boy cried. Cry costs a kick on a line, in some bands." He turns his head back. "Not this one. Not mine." He stands, walks across the fold, and says something short and flat to the ring-eared one. Brakk's whetstone stops. Brakk looks at you across the dark ground with a long flat stare, then picks up his helm and walks off toward the far picket line. Ushk comes back and takes his rock.
+
+"Done," he says. "Don't make me regret it."
+
+You go back to the wall and sit among the sleeping children, shoulder to the stone, where you can see Gorrak's lantern through the tent canvas. You turn over what Wren said. The captain counts every child by name and steading and nods, as though checking. The captain asked if she had seen a girl in a hooded cloak. The captain told his patrol to leave a small cloaked figure at the cairn be.
+
+Whatever Gorrak Vael wants with Tessa, or with whoever left that goat, he does not want her dead. That does not make it comfortable.
+
+It is a little past half past seven, with the stars coming out over the fold. You are at 8 of 14 hit points, and ten miles from the border stones. The children sleep, the pickets walk, and you are as awake as you have ever been.
+
+What does Korvash do?
+
+== ROUND 17 ==
+PLAYER: I won't wait for the stones to get my answer if I can get part of it now. I'll go to Gorrak's tent flap, stop where Ushk and the pickets can see me, and say loud enough for him only: "Captain, you asked a seven-year-old about a hooded girl in the rocks. If that's my sister, I want to know what you want with her before I walk another mile."
+
+If he lets me in, I'll go in unarmed with my hands open. If he refuses, I'll go back to the children, sleep with my back to the wall, and ask again at dawn.
+  [game] dice Korvash Wisdom (Insight) to read whether Gorrak is lying, DC 12: 1d20+2 = 1d20 [20] + 2 = 22 (natural 20)
+  [DM write_lore (hidden)] {"create": "The Greyshaft Foreman", "kind": "person", "description": "Hobgoblin overseer of Greyshaft tin-mine, to whom Gorrak Vael owes a tally of 'hands' (children and axes) each season. Gorrak fears him; he will punish a short count. Korvash's sworn year-and-a-day axe is meant to cover part of Gorrak's quota. Learned by Korvash via natural 20 Insight on Day 2 night."}
+  [game] notebook: created an entry for The Greyshaft Foreman
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 2 night, in his tent: told Korvash (truthfully) that at the Goat's Throat he offered Dargan the children's lives for the axe, and Dargan refused. After the raid one child of the clan was never accounted for on his count; he notched the rod for her, then struck it out. He does not know whether the hooded figure is Tessa. He has never hunted it and
+  [game] notebook: updated Gorrak Vael
+  [game] time: 20 minutes later: Day 2, 7:48:24 PM
+DM: You stop at the tent flap where Ushk and the nearest pickets can see you, hands open, and say it low and level through the canvas. There is a pause. Then Gorrak's voice, dry as ever: "Come in, then. Leave the shouting outside."
+
+The tent is bare. A bedroll, a map-case, a lantern, a chair he does not sit in. He stands with the rod across his palms and has taken off the tin mask. Behind it is a hobgoblin's face, older than you pictured, grey at the temples and seamed with a burn scar that runs from jaw to ear. He sets the mask on the bedroll as if it were a heavy thing.
+
+"No, I do not know that it is your sister," he says. "You will want me to say yes or no, and I can't. At the Goat's Throat your father and I bargained, with his hand in the dirt. The children for the axe. He refused. I counted the ones who ran that night, as I count everything. One of the clan was never accounted for. A girl. I notched the rod for her, and then I struck it out." He turns the rod so you can see: one notch, scored through. "A hooded figure has watched my band two moons, no more. Quick as a goat. It does not run from me. It runs from the others."
+
+Something falls into place for you as he speaks, the way a stranger's face sometimes does. You are watching his hands, and they are not steady on the rod. When he glances at the tent flap, it is not at Ushk. He is afraid, and not of you. You catch the name he doesn't say, in the shape of his jaw as he swallows it.
+
+"The tin-mines, boy." His voice drops. "Greyshaft. There is a Foreman there who counts hands the way I count raids, and every season I owe him a quota. Thirty-one children are not a quota. They are *my* quota. If I cut them loose at the stones, I come to him short, and short counts get a rod laid across a back. So I take an axe. A year and a day of yours covers the shortfall, if he accepts it." He meets your eyes. "That is what you swore into. I will still cut them loose. I gave my word. But now you know what it costs, and I would like to see how much you can carry."
+
+He lifts the mask and sets it back over his face, and it changes him back into the thing from the ford. "Go and sleep, Dargan's son. The stones are a morning's walk."
+
+It is a little before eight. You have been told a great deal, and you still have your word, a long night, and a sleeping line of children. What does Korvash do?
+
+== ROUND 18 ==
+PLAYER: I hold his eyes a long moment, then nod once. "I carry it, Gorrak. My word stands, and so does yours, the children walk at the stones. But the day the Foreman lays a rod across your back for being short, tell me, because I'll be the one standing between him and you."
+
+I turn at the flap and add, "And if that hooded girl comes to you before she comes to me, you tell her Korvash lives." Then I go back to the sleeping children, take the wall at my back, and try to sleep with one ear open.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 3, 3:48:24 AM
+  [game] time: 7 hours 10 minutes later: Day 3, 10:58:24 AM
+  [DM write_lore (hidden)] {"create": "Border Stones", "kind": "place", "description": "Three weathered standing stones marking Harrowmere's northern border on the high road, ten miles south of the drovers' fold. Day 3 ~11 AM: Aunt Veshra and about twenty armed herders and townsfolk of Harrowmere wait there, led by Veshra with Hale Orrin the drover; they intend to ambush the Tallies and free the children by force. This thre
+  [game] notebook: created an entry for Border Stones
+DM: Gorrak does not answer. The tin mask stays turned toward you a moment longer, and then it dips, barely, the way a man nods who would rather not be seen to.
+
+You sleep against the wall among the children with one ear open, and the night passes without Brakk, without arrows, and without dreams. You wake to grey dawn, stiff and clear-headed, with the cold gone from your bones. You are fully rested, and the rage is back in your chest like a banked coal.
+
+The column is moving by first light. The road drops through pasture and hedge and thinning pine, and the smell of lowland smoke comes up the valley to meet you. Wren walks at your side, her small hand in your fingers because the line is long and you are the first thing she trusts. The sergeants say little. Even Brakk keeps to the rear.
+
+A little before eleven, the road bends round a shoulder of rock and the Border Stones stand ahead: three weathered pillars of grey granite, taller than a man, with a grassy cut between them where the road passes. Harrowmere's rooftops are visible in the haze beyond.
+
+And between the stones, in the road, stand people. A score of them: herders with crooks and hay-forks, a pair of men with hunting bows, a woman with a cleaver in her belt, and at their head a lean grey dragonborn with flour still on her forearms, her chin lifted. Aunt Veshra. Beside her is a weathered drover who must be Hale Orrin, and behind them, half hidden, Pell's mother with a kitchen knife.
+
+Behind you, hobgoblin blades whisper out of their scabbards all down the line. Ushk's hand is on his sword hilt. Gorrak has stopped walking. And Veshra's eyes find yours, then Wren's hand in yours, then the tin mask, and her knuckles whiten on the crook.
+
+The next breath decides whether children walk home or die. What does Korvash do?
+
+== ROUND 19 ==
+PLAYER: I step out in front of the line, put myself between the villagers and the hobgoblins, and raise both open hands. In my loudest, clearest voice: "Hold! Every blade stays down on both sides. Aunt, put the crook down. This is a bargain, and I swore on Dargan's blood to see it kept."
+
+Then I turn to Gorrak and say, "Cut the line, Captain. Here, now, at the stones, as you promised, and let them walk to their mothers."
+  [game] dice Korvash Charisma (Intimidation) booming both sides to stand down, DC 13: 1d20+3 = 1d20 [5] + 3 = 8
+  [DM write_lore (hidden)] {"entry": "Border Stones", "add_to_description": "Day 3 ~11 AM: Korvash's attempt to calm both sides partly failed. Gorrak cut the line's rope; children are being freed, but Veshra's party hasn't lowered weapons and Brakk, at the rear, has drawn a longbow on the villagers' archers."}
+  [game] notebook: updated Border Stones
+DM: Your voice does what it has always done, which is fill the whole road. But it is not enough. Nobody stands down. Veshra's crook stays level, and the two hunters in the villagers' line keep their arrows nocked. Behind you the hobgoblin blades do not return to their sheaths.
+
+Gorrak Vael lifts the notched rod above his head, and the tin mask turns slowly across his own people. "The line is cut," he says. It is not a shout. It carries anyway. He draws a knife, walks to the head of the rope that binds the children, and slices through it in one stroke, then goes down the line cutting each tether without hurrying. "Walk. Walk to the stones. Do not run."
+
+Wren's hand leaves yours. The first children step forward, then a few break into a trot. Pell's mother drops her knife and runs to meet them, and the herders' line breaks open to let the children through.
+
+But the line of herders and the line of hobgoblins still bristle at each other across forty feet of road, and at the rear of the column a ring-eared sergeant has slipped a longbow off his shoulder. Brakk has an arrow on the string. He's aimed it, not at the children, but over their heads at the herder-archers. A killing shot could break this whole truce open.
+
+Ushk is already turning toward him, but Brakk is closer to the road than Ushk is. You are between them, in the open road, with a clear field. Your axe is still in Gorrak's baggage.
+
+What does Korvash do?
+
+== ROUND 20 ==
+PLAYER: I rage and sprint straight at Brakk, bellowing his name so every eye turns to me instead of the herder-archers. I'll hit him with a shoulder before he can loose, knock the bow wide, and pin him in the dirt, and if I'm close enough with him still drawing, I'll breathe fire across his string hand.
+
+"Ushk, the rest of them stand down! Gorrak's word is the law here!"
+  [DM lookup (hidden)] {"name": "Shoving a Creature"}
+  [DM lookup (hidden)] {"name": "Grappling"}
+  [game] dice Korvash's initiative: 1d20+1 = 1d20 [19] + 1 = 20
+  [game] dice Brakk's initiative: 1d20+1 = 1d20 [9] + 1 = 10
+  [game] fight: Fight started. Order: Korvash Emberhide (20), Brakk (10). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: Rage: 1/2; condition added: Raging (Korvash Emberhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Korvash Athletics (shove) vs Brakk, advantage from Rage: 1d20+6 (advantage) = 1d20 [12, 4]→12 + 6 = 18 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Brakk's Athletics/Acrobatics to resist the shove: 1d20+1 = 1d20 [19] + 1 = 20
+  [game] fight: Round 1, now: Brakk. Brakk (initiative 10): HP 11/11, AC 18 Brakk's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brakk longsword vs Korvash (AC 13): 1d20+3 = 1d20 [19] + 3 = 22 (Brakk has used its action: no more actions this turn.)
+  [game] dice Brakk longsword damage (slashing; halved by Rage): 1d8+1 = 1d8 [1] + 1 = 2
+  [game] sheet: took 1 damage: HP 14 → 13
+  [game] fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The rage floods up your spine as you hit the road at a dead run, roaring Brakk's name down the length of the column so that every head, hobgoblin and herder alike, turns toward you instead of the archers. For a heartbeat the bowstring is half drawn and the arrow is still pointed over the children's heads. Then you slam into him shoulder-first.
+
+He doesn't go down. He turns with it, braced and heavy, and the force of the blow rolls off him like water off a rock. The bow goes clattering out of his hands, and the arrow skitters harmlessly into the dirt, but he has a longsword out in the same motion and rakes it across your ribs. The rage turns most of it aside, leaving a shallow, stinging line.
+
+Brakk is within arm's reach, scowling, ring glinting in his ear. Behind him the column has frozen. Ushk is a dozen paces away with his hand half-raised, the villagers are still locked in their line, and every breath you take is another one in which someone might lose their nerve.
+
+It is your turn, and the bow is gone. What does Korvash do?
+
+== ROUND 21 ==
+PLAYER: I grab his sword arm with one hand and drive my forehead into his face, then try to wrestle him to the dirt and pin him there. I don't want him dead, I want him disarmed and shamed in front of Ushk and Gorrak, so the truce holds.
+
+If I get him down, I'll say loud enough for both lines: "The captain's word stands. Anyone who raises a blade now answers to me."
+  [DM lookup (hidden)] {"name": "Grappled", "kind": "condition"}
+  [game] dice Korvash Athletics (grapple) vs Brakk, advantage from Rage: 1d20+6 (advantage) = 1d20 [19, 8]→19 + 6 = 25 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Brakk's Athletics/Acrobatics to resist the grapple: 1d20+1 = 1d20 [12] + 1 = 13
+  [game] fight: Round 2, now: Brakk. Brakk (initiative 10): HP 11/11, AC 18 Brakk's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brakk escape-grapple check (Athletics): 1d20+1 = 1d20 [6] + 1 = 7 (Brakk has used its action: no more actions this turn.)
+  [game] dice Korvash Athletics contesting Brakk's escape, advantage from Rage: 1d20+6 (advantage) = 1d20 [20, 2]→20 + 6 = 26 (natural 20)
+  [game] fight: Fight over after 2 round(s). 12 seconds of fighting; now Day 3, 10:58:36 AM.
+  [game] sheet: gained 1 × Greataxe; gained 2 × Handaxe; gained 4 × Javelin; condition removed: Raging; XP +100: 100
+  [game] time: 30 minutes later: Day 3, 11:28:36 AM
+  [DM write_lore (hidden)] {"entry": "Border Stones", "add_to_description": "Day 3 ~11 AM: Korvash grappled Brakk and pinned him; Ushk disarmed Brakk. Truce held. All 31 children freed to Harrowmere's villagers. Gorrak returned Korvash's greataxe, handaxes and javelins. Korvash is sworn to the Tallies for a year and a day; Gorrak has told him to report to the road at dawn on Day 4 at the stones."}
+  [game] notebook: updated Border Stones
+DM: Your forehead meets his nose with a crack you feel in your own teeth, and your arm locks about his sword-arm. Then your weight does the rest. Brakk goes down on his back in the dust with you across him, the longsword pinned under your hand, and when he heaves against you it is like heaving against a boulder. His second try dies halfway. Over his face, with blood running from his nose, you say it loud enough for both lines: "The captain's word stands. Anyone who raises a blade now answers to me."
+
+The road is very quiet. Then Ushk walks up and, without hurry, plucks the sword out of Brakk's slack hand. He stands over him, looks down, and says something in Goblin that makes the ring-eared sergeant go gray. In Common, to the column: "The captain's word is the law of the Tallies. Sheathe." One by one the hobgoblin blades whisper home. On the far side, Veshra's crook comes down slowly, and the two hunters let their strings go slack.
+
+Gorrak Vael has not moved from the rope. He is looking at you through the tin mask, and for a moment you cannot read it at all. Then he walks to a pack mule, unbuckles a bundle, and carries it across the stones himself. Your greataxe is in it, the red sash still knotted at the haft, along with your handaxes and javelins. He holds the haft out across both palms.
+
+"Your father's axe," he says. "As sworn."
+
+You take it. It is heavier than you remember, and the sash is warm in the sun. Behind him the children are streaming toward the villagers. Wren breaks free and runs, red scarf flying, and does not stop until she has thrown her arms around your leg and pressed her face into it. A moment later, a boy of about twelve is running up the road from Harrowmere, mud to the knees, shouting her name.
+
+Gorrak watches that too. When he speaks again, it is quiet. "You will find me on the road at the Throat in the dark of the moon, and I will tell you where the Foreman wants his axe. A year and a day, Korvash Emberhide. Don't be late, and don't make me come looking." He turns and goes back up the line to his column.
+
+You've earned 100 XP for the bout with Brakk. It is half past eleven. Wren is at your leg, Pell is almost to you, and your aunt is walking up the road with her chin up and tears on her face. What does Korvash do?
+
+== ROUND 22 ==
+PLAYER: I kneel and lift Wren onto my arm so she's level with Pell when he skids up, then put my free hand on the lad's head. "Told you I'd listen for the humming, Pell. She's whole, and she hummed the entire way."
+
+Then I stand and go to meet Aunt Veshra, tying Dargan's horn charm where she can see it. "I wore it, Aunt, and I'll wear it at your table. There's much to tell you, about the cairn, and about Tessa."
+  [DM write_lore (hidden)] {"entry": "Bring Wren Home", "status": "done", "add_to_description": "Done Day 3: Wren and all 31 children freed at the Border Stones and reunited with their families."}
+  [game] notebook: updated Bring Wren Home
+  [DM write_lore (hidden)] {"create": "Find Tessa", "kind": "quest", "description": "Korvash's sister Tessa's fate is unknown. Clues: horn goat with her notched-crescent mark left at Dargan's cairn with fresh wool ribbon; a hooded small herder seen at the cairn two moons before Day 2 and spared by Gorrak's order; Gorrak notched then struck out a rod mark for an unaccounted girl of the clan and has shadowed no hunt. Korvash 
+  [game] notebook: created an entry for Find Tessa
+  [game] time: 3 hours later: Day 3, 2:28:36 PM
+DM: Wren settles into the crook of your arm as though she has done it all her life, and when Pell skids to a stop, gasping and wide-eyed, you set a hand on his muddy head. "Told you I'd listen for the humming, Pell. She hummed the entire way." Pell stares at you, then at her, and his face crumples all at once. He buries it against your side and says nothing at all, and Wren pats his hair with the grave authority of a seven-year-old.
+
+Veshra waits until you have handed Wren down to her mother, until Pell's mother has stopped trying to thank you and instead simply holds your hand in both of hers, until the herders have begun, awkwardly, to lower their pitchforks and look at their boots. Then she comes the last few paces and stops in front of you. You tie the horn charm where she can see it. She takes in the charm, the axe, the sash, and your face, and the tears finally spill over.
+
+"You wore it," she says.
+
+"And I'll wear it at your table, Aunt. There's much to tell you. About the cairn." You hold her eyes. "And about Tessa."
+
+She goes still, as if she has been told a bird has landed on her shoulder. Her hand finds your forearm and holds it hard.
+
+The walk to Harrowmere takes the rest of the early afternoon. The children are carried or cajoled home, the herders trade murmured stories with the drover Hale Orrin, and the hobgoblin column is long gone, back up the high road with a tin mask at its head. You are at Veshra's door a little after two, with bread and warm milk already set out on the long table and the scent of flour thick in the air. Pell's family stays too. Somewhere in the kitchen Wren is humming again.
+
+By the lamp of that table, you can tell Veshra everything: the oath you swore, the year and a day owed to the Iron Tallies, the cairn and the goat and the notched crescent, and Gorrak's promise to speak more at the Throat in the dark of the moon, about nine days off.
+
+You have 13 of 14 hit points and 100 of 300 XP. The oath will call you back north, and the question of Tessa is open. What does Korvash do?
+
+== ROUND 23 ==
+PLAYER: I sit down at Veshra's long table, take the bread and milk, and tell her all of it from start to finish, the oath, the cairn, the horn goat with Tessa's notched crescent, and what Gorrak said about the Foreman at Greyshaft. Then I ask her plainly: "Aunt, did Tessa ever come to Harrowmere, or send word? And who in the clan knew the goat-paths around the Throat well enough to hide in those rocks two moons running?"
+
+When we've talked it through, I mean to rest here till the dark of the moon, mend my gear, and ask around town for anyone who has seen a hooded herder girl on the high road.
+  [game] dice Korvash Charisma (Persuasion) asking around Harrowmere over several days for a hooded herder girl, DC 12: 1d20+1 = 1d20 [16] + 1 = 17
+  [DM write_lore (hidden)] {"create": "Hobb Teyl", "kind": "person", "description": "Old goat-keeper in Harrowmere, once of Korvash's clan; knew the secret goat-paths and rock shelters around the Goat's Throat (including the Weeping Ledge, a cave behind a seep). Says Dargan taught the paths to both his children."}
+  [game] notebook: created an entry for Hobb Teyl
+  [DM write_lore (hidden)] {"create": "The Weeping Ledge", "kind": "place", "description": "Hidden shelter in the rocks above the Goat's Throat behind a water seep; only clan members of Dargan's household knew it. Possible hiding place of the hooded figure."}
+  [game] notebook: created an entry for The Weeping Ledge
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 3-10: Veshra never had word from Tessa. Hobb Teyl says Dargan taught his children the Weeping Ledge shelter above the Throat. Town gossip (Persuasion 17): a salt-peddler named Marl Quill says a hooded girl twice left a bundle of goat-cheeses at the Seven Crooks inn's back step, paid in carved horn tokens, always at dusk, last seen four days before
+  [game] notebook: updated Find Tessa
+  [game] time: 6 days 18 hours later: Day 10, 8:28:36 AM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 10, 4:28:36 PM
+DM: You tell it all from start to finish at the long table, with the lamp lit against the afternoon and the bread going cold under your hands: the oath, the cairn, the horn goat, the crescent, Gorrak's rod with a notch struck through, the name of Greyshaft and its Foreman. Veshra does not interrupt. When you finish she is silent for a long time, her fingers pressed to her mouth.
+
+"No," she says at last. "No word. Not a note, not a rumor, not in all these years. I would have told you the hour it came." She looks at the horn charm on your chest. "Your father taught you both the paths. Dargan was not a talker, but he took you up there as boys. The shelters, the seeps, the ledges. Ask Hobb Teyl, in the lane behind the tannery. He was goat-keeper to your father's herd and he's the only one left who walked those rocks with Dargan."
+
+You do, that evening. Hobb Teyl is eighty if he is a day, cataracts in both eyes, but he lights up at your father's name. He tells you about the Weeping Ledge, a shelter above the Throat hidden behind a water seep, a crack in the cliff only Dargan's own household ever knew. "He showed his children. Only his. If a child of that house lived and wanted to hide, it'd be there."
+
+The days after are quiet, and mostly yours. You mend your pack, sharpen the greataxe, and drink Veshra's soup. You carry Pell's family's water. In the market you ask quietly and often. On the fourth day the peddler Marl Quill, a salt-seller with a tongue like a rasp, tells you over a mug of small beer that a hooded girl has twice left bundles of goat cheese on the back step of the Seven Crooks inn and taken nothing for them but a few copper and, once, a carved horn token in change. Dusk, always. Not seen for a week.
+
+It is the evening of the tenth day. You are rested, hale, with every ember of your rage banked and ready. The dark of the moon is tonight or tomorrow, and the high road north is a day and a half away at a forced pace, or two at an ordinary one. Veshra is at the door with a pack she has put together without being asked.
+
+What does Korvash do?
+
+== ROUND 24 ==
+PLAYER: I take the pack from Veshra and kiss her scaled brow. "Aunt, the Weeping Ledge sits above the Throat, so I can keep my word to Gorrak and look for Tessa on the same road. I'll force the march and check the ledge first."
+
+Before I leave, I stop by the Seven Crooks and tell the innkeeper and Marl Quill that if a hooded girl leaves cheese on the step again, they tell her this: "Korvash lives. Veshra's door is open." Then I shoulder the greataxe, tie the sash tight, and take the high road north at a hard pace.
+  [game] dice Korvash Wisdom (Survival) following the goat-path to the Weeping Ledge in a moonless night, DC 12: 1d20+0 = 1d20 [6] + 0 = 6
+  [DM write_lore (hidden)] {"entry": "Dargan's Cairn", "add_to_description": "Day 11 ~1 AM (dark of the moon): Korvash lost the goat-path to the Weeping Ledge (failed Survival) and came out at the cairn. Beneath his scratched message, a new fresh scratch in Draconic: 'Not yet.' with the notched crescent. The horn goat is gone. Gorrak Vael waits at the cairn alone, unmasked at first glance, rod in hand."}
+  [game] notebook: updated Dargan's Cairn
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 10: Korvash left word at the Seven Crooks (innkeeper and Marl Quill) for the hooded girl: 'Korvash lives. Veshra's door is open.' Day 11: at the cairn found a reply scratched beneath his own: 'Not yet.' with Tessa's crescent mark; the goat figure gone. Someone with Tessa's mark is alive and nearby, or was within days."}
+  [game] notebook: updated Find Tessa
+  [game] time: 8 hours later: Day 11, 12:28:36 AM
+DM: Veshra lets you kiss her brow and says nothing, but she tucks a last oatcake into the pack before she lets go. At the Seven Crooks the innkeeper, a stout woman who has heard of you by now, listens with her mouth set and then repeats the message back word for word, and Marl Quill tips two fingers to his hat. "Korvash lives. Veshra's door is open. She'll hear it, if she's within hearing."
+
+You take the high road at a hard pace, with the axe on your shoulder and the sash knotted tight. The light goes out of the sky over the first hour, and then the moon, which is absent tonight, doesn't come up at all. It is the darkest road you have ever walked: stars and the pale scratch of the track and your own breath, no more. The weight of the pack, the clank of the handaxes, and the steady climb are a kind of comfort.
+
+You make the foothills near midnight, and you go looking for the goat-path to the Weeping Ledge by Hobb Teyl's directions. But you cannot find the turning in the dark. Twice you think you have it, and twice it dwindles to scree and thorn. By the time you give it up, you have come out into the notch of the Goat's Throat itself, with the wind funneling over you, and the cairn is ahead.
+
+It is a little after midnight. Someone has been here. Beneath the words you scratched, fresh pale lines in the stone catch the starlight: the notched crescent, and under it a single Draconic word cut hard and quick. *Not yet.*
+
+The horn goat is gone from its gap.
+
+And beside the cairn, with his back to the wind and his rod resting across his arm, stands a tall figure in a tin mask, who has plainly been waiting for you.
+
+"You are early, Emberhide," says Gorrak Vael. "Or I am late. Come and stand where I can see you."
+
+What does Korvash do?
+
+== ROUND 25 ==
+PLAYER: I come up to the cairn slowly, axe held loose in one hand, and stop a few paces from him with my eyes on those fresh cuts in the stone. "She was here tonight, Captain, and she took the goat. Did you see her, or did she keep out of your sight?"
+
+I keep my voice low out of respect for my father's grave. "I'm here, as sworn. Tell me about the Foreman and what Greyshaft wants of my axe, and then tell me honestly whether you were looking for Tessa or only counting her."
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 11 ~1 AM at the cairn: says he arrived just after the fresh cuts were made; the figure was gone. Admits he saw a small figure slip through the goat-path while Dargan held the Throat and let her go, a debt to Dargan, and has watched for her since to keep the Foreman's scouts from finding her. Greyshaft wants a dragonborn axe-and-fire for the smelt
+  [game] notebook: updated Gorrak Vael
+  [game] time: 20 minutes later: Day 11, 12:48:36 AM
+DM: You keep the axe low and your voice lower, out of respect for the stones. Gorrak watches you come, and when you stop he does not take the tin mask off this time, though his hand rises toward it and falls.
+
+"I saw the marks as you did," he says. "I came up the east path an hour after dusk and found them already cut, the goat gone. She is quicker than my scouts and kinder to the rocks than they are." He lets that sit. "Counting, you ask. Both, boy. I will not insult you."
+
+He turns the rod over in his hands. "Your father held this notch with one hand and a goat-herd's axe. I had a score of my own with me and could have gone through him in half a morning, and he made me work for it all the same. While we were at it, a small thing went by on the high ledge, quick, in the dark, behind the cairn-stones he'd already stacked. I saw it. I did not raise my hand. I have asked myself since what I owed him that morning that I paid in that coin." The mask turns to the cuts in the stone. "The Foreman's scouts hunt that ledge too. I have walked those rocks for two seasons to keep them off, and that is what 'leave it be' meant."
+
+He straightens. "As to the axe. Greyshaft's smelter galleries need a hard man who does not cough at fire. A dragonborn's fire is useful to a Foreman. He asked for one by name, and the name he asked for was yours, because I told him what I had seen at the ford." Something almost like shame crosses the voice, flat though it is. "I will carry that. You report at Greyshaft's gate by midwinter's eve, three days' road from here. I would have you leave at dawn."
+
+The wind has changed. You are at the cairn of your father, with a hundred stars and no moon, a hobgoblin who held the pass against him and let your sister live, and a word freshly cut in the stone that says *not yet*. The Weeping Ledge is somewhere in the dark above you.
+
+It is a little before one in the morning. What does Korvash do?
+
+== ROUND 26 ==
+PLAYER: I nod slowly. "Then I'll be at Greyshaft's gate by midwinter's eve, as sworn. But I have until dawn, Captain, and I mean to spend it finding the Weeping Ledge. Keep your scouts away from it tonight."
+
+I leave my torches in the pack, step past the cairn onto the east path, and call up into the dark low and steady in Draconic, the way Dargan used to call us in from the high pasture: "Tessa. It's Kor. I'm not leaving without you."
+  [game] dice Korvash Wisdom (Perception) listening for an answer in the dark rocks, DC 12: 1d20+0 = 1d20 [10] + 0 = 10
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 11 dawn: after Korvash called into the dark in Draconic, nothing answered but he found at first light the horn goat on a flat stone on the east path, with a slate chip scratched in Draconic: 'Greyshaft. Third gate. Don't let him see you know me.' The writer is almost certainly Tessa or someone who knows her marks; the identity of 'him' is probably
+  [game] notebook: updated Find Tessa
+  [game] time: 4 hours 40 minutes later: Day 11, 5:28:36 AM
+DM: Gorrak says nothing as you go, and does not take a step to follow. You hear the rasp of tin on the edge of his hand as he turns the rod over, and after a time his footfalls recede, west along the notch, toward his own fires.
+
+You take the east path with the sash knotted on the haft and your hands empty of torchlight, because Dargan never carried one in these rocks and the stars are enough. You climb by feel, and as you climb you call: your father's call, three notes rising, low and steady in Draconic. *Tessa. It's Kor. I'm not leaving without you.* The wind takes the words up and throws them against the stone, and you listen for an answer with everything you have, and you hear only the wind and, now and again, a loose pebble skittering from a ledge that may have been dislodged by a goat or a girl or your own heel. You can't tell which.
+
+You find three seeps in the dark. None is the Weeping Ledge. Dawn comes up grey and cold over the eastern ridges and finds you on a shoulder of rock with your voice gone to gravel, the cold in your bones again, and nothing in your hands.
+
+Then, as the light creeps down the path, you see it. On a flat stone at the next bend, set square in the middle of the way where you could not miss it, sits the little horn goat. Its ribbon is new, a fresh strip of wool the color of dried blood. Under its feet is a chip of black slate, and scratched into the slate, in a hand you last saw at six years old, grown quick and angular but still hers, is a line of Draconic.
+
+*Greyshaft. Third gate. Don't let him see you know me.*
+
+You turn the chip over. On the back is the notched crescent, cut deeper than the rest, like a signature.
+
+It is a little after half past five on the morning of day eleven. Gorrak's fires are a smudge of smoke to the west. You have until midwinter's eve to reach Greyshaft, and now you know who will be waiting at its third gate.
+
+What does Korvash do?
+
+== ROUND 27 ==
+PLAYER: I close my fist around the slate and the horn goat, press them once to my chest beside Dargan's charm, and say to the empty rocks, hoarse as I am: "Third gate. I'll not know you, Tess. I swear it." Then I wipe my eyes, tuck both tokens into my belt pouch where no one will see them, and tell nobody, not even Gorrak.
+
+I walk down to the cairn, lay my palm on the slab once more, and head for the road to Greyshaft, with the greataxe on my shoulder and the sash tied tight, to arrive loud and sullen and bound by oath, just as the Foreman expects.
+  [game] sheet: gained 1 × Carved horn goat (Tessa's); gained 1 × Slate chip: 'Greyshaft. Third gate.'
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 11 morning: Korvash vowed not to show he knows her and tells no one, not even Gorrak. Heads for Greyshaft to arrive 'loud and sullen and bound by oath.' Third gate of Greyshaft is the meeting place. Midwinter's eve is the deadline."}
+  [game] notebook: updated Find Tessa
+  [game] time: 30 minutes later: Day 11, 5:58:36 AM
+DM: You close your fist around the slate and the little goat and press them to your chest beside your father's charm. The wind has dropped, and the rocks are very still. Hoarse as you are, you tell them: "Third gate. I'll not know you, Tess. I swear it." No answer comes, and you were not asking for one.
+
+You wipe your eyes with the back of your wrist, once, hard, the way you wipe a blade. The goat and the slate go into your belt pouch, under the coins where no one will think to look. You will tell nobody. Not Veshra, not Pell, not the tin-masked man whose fires you can still see. This one is yours to keep.
+
+Back at the cairn you lay your palm flat on the slab a last time, over the cold stone and the scratched crescent. Then you shoulder the greataxe, tie the sash tight, and let the old loudness settle back across your shoulders like a coat you have decided to wear: the sullen set of the jaw, the heavy stride of a man who has been bought and does not like it. Let the Foreman see exactly that.
+
+By six the cairn is behind you, and the road to Greyshaft runs north and east over the high ground, three days of cold rock and thin pasture. Midwinter's eve is coming, and at its end waits a gate, and a girl who has not yet decided to be found.
+
+That's the end of the opening chapter. You're at 14 of 14 hit points with Rage 2/2 and 100 of 300 XP. You hold a year-and-a-day oath, a sister to find, and a Foreman to meet, and no one but you knows the shape of it. What does Korvash do on the road to Greyshaft?
+
+== ROUND 28 ==
+PLAYER: I keep a hard, steady pace along the road and watch the ridgelines as I go, because Gorrak said the Foreman's scouts hunt these rocks and I mean to see them before they see me. At each night's camp I'll keep my fire small, sharpen the greataxe, and rehearse the face I'll wear at the gate: sullen, sworn, and a stranger to everyone.
+
+DM: Before I get there, how many days do I have until midwinter's eve, and how many gold pieces do I have left?
+  [game] dice Korvash Wisdom (Perception) watching the ridgelines for the Foreman's scouts, DC 13: 1d20+0 = 1d20 [18] + 0 = 18
+  [DM write_lore (hidden)] {"create": "Midwinter's Eve", "kind": "event", "description": "Deadline for Korvash to report to Greyshaft's gate. DM ruling: it falls on Day 20, nine days after Day 11 (Day 11 = 5:58 AM when Korvash left the cairn). Greyshaft is three days' road from the Goat's Throat."}
+  [game] notebook: created an entry for Midwinter's Eve
+  [DM write_lore (hidden)] {"create": "Foreman's Scouts", "kind": "group", "description": "Pair of hobgoblin riders-on-foot in grey cloaks, sent by the Greyshaft Foreman to watch the road north of the Throat. Day 12 afternoon: Korvash spotted them on a ridge, shadowing him from half a mile off. They have not closed."}
+  [game] notebook: created an entry for Foreman's Scouts
+  [game] time: 1 day 9 hours later: Day 12, 2:58:36 PM
+DM: Out of game for a moment, two things. You have 15 gp, unchanged, and that is all the coin you carry. As for midwinter's eve, I hadn't pinned its date when Gorrak named it, so here is my ruling: it falls on day 20, nine days from this morning. The road to Greyshaft is three days long. You have slack, and Gorrak's "leave at dawn" was a captain's impatience more than a deadline. I've noted it in the record.
+
+Back on the road. You walk the high ground at a hard, steady pace, and you do not just walk. You read the land the way your father taught you: the lines of the ridges, the places a man would stand if he wanted to see a road without being seen on it. You keep your fire small at night and your axe sharpened, and you practice the face you will wear at the gate until it fits without effort.
+
+On the second afternoon, near three o'clock, you find them. It is not the movement that gives them away but the lack of it. Half a mile off on a bare ridge to the east, two grey shapes sit where goats and ravens should be, and one of them is too still to be a rock. Two hobgoblins in grey cloaks, bows slung, keeping pace along the ridge with you. They have been there, you think, since this morning. They do not close the distance, and they do not hide the fact that they are watching. They are meant to be seen. It is a message and a leash.
+
+The road runs on ahead, and the afternoon light is long and cold. You have a day and a half of road left and almost eight days of slack, with the Foreman's eyes already on your back.
+
+What does Korvash do?
+
+== ROUND 29 ==
+PLAYER: I stop in the road, turn square to the ridge, and give them a slow, sour salute with two fingers off the haft, the way a bought man greets his keepers. Then I shoulder the axe and walk on, grumbling in Goblin loud enough to carry about wolf-leash and tin-mine wages.
+
+That night I'll make a big, honest fire for them to see and sit with my back to the light, sharpening the axe slowly and counting out who's watching, so that by Greyshaft they'll think they know me.
+  [game] dice Korvash Charisma (Deception) playing the sullen bought man for the watching scouts, DC 12: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+  [DM write_lore (hidden)] {"entry": "Foreman's Scouts", "add_to_description": "Day 12 night: Korvash's sullen act (Deception natural 1) overplayed: too loud, too much; the scouts doubt it. One of them ran ahead to Greyshaft to report he 'acts like a man with something to hide'; the other shadows him until the gate. The Foreman will have him watched."}
+  [game] notebook: updated Foreman's Scouts
+  [game] time: 1 day 15 hours later: Day 14, 5:58:36 AM
+DM: You give the ridge your two-finger salute, slow and sour, and walk on grumbling in Goblin about wolf-leashes and tin-mine wages loud enough to carry across the empty ground. That night you build a big, honest fire, sit with your back to the flames, and sharpen the greataxe slowly while you count who is watching.
+
+It is a good performance, and a little too much of one. You were never a subtle man, and your best acting is the same as your loudest self, so the sullen sneer comes out with the bellow still in it. You see it too late. The nearer of the grey cloaks has sat very still all evening on his ridge, and when you glance up he is not watching the fire. He is watching you the way a man watches a trick he has almost seen through. At dawn one of them is gone. The other keeps pace with you the rest of the way, a half-mile off, patient as a stone.
+
+The road climbs through a long grey day and a longer grey night. On the morning of day fourteen, a little before six, you crest a rise, and there is Greyshaft.
+
+It sits in a bowl of black scree: a stockade of iron-banded timber, three gates one above the next up the slope, and behind them the dark mouths of the galleries, each with its smear of smoke. Smelter chimneys breathe over the whole valley, and the air tastes of cold metal. Hobgoblin sentries walk the wall in steady pairs. Below the lowest gate, a line of carts and shackled laborers waits to be let in.
+
+The lowest gate is the one you must report to. Somewhere above it, the third gate stands against the grey sky. You have six days to spare before midwinter's eve, and a grey cloak is watching your back.
+
+What does Korvash do?
+
+== ROUND 30 ==
+PLAYER: I won't dither on a hill with a grey cloak at my back. I walk straight down to the lowest gate, join the line of carts and chained laborers, and when I reach the sentry I say it flat and short, no sneer this time: "Korvash Emberhide, son of Dargan. Sworn to the Iron Tallies a year and a day, and sent for by your Foreman. I'm early, so take me to him."
+
+I keep my mouth shut after that, and my eyes on the gates climbing the slope, counting guards and counting steps to the third.
+  [DM write_lore (hidden)] {"entry": "The Greyshaft Foreman", "add_to_description": "Day 14 morning: meets Korvash in the Counting House at Greyshaft's lowest gate. Heavy, fastidious hobgoblin in a leather apron with brass tallying beads on his belt and a ledger; speaks Common softly; never raises his voice. Has been told by his scouts that Korvash 'plays at sullen'. Asked what he was doing at his father's cairn on Day 11 (
+  [game] notebook: updated The Greyshaft Foreman
+  [game] time: 1 hour later: Day 14, 6:58:36 AM
+DM: You walk down from the rise without ceremony and join the line of carts and shackled laborers at the lowest gate. A cart-driver glances at your axe and says nothing. When you reach the sentry you give your name flat and short, with no sneer this time, and add that you are early and he should take you to the Foreman. The sentry looks you over, looks past you to a grey cloak sitting on the rise, and sends a runner up the slope without another word.
+
+You count as you wait. Four pairs on the wall at the lowest gate. Eight on the second wall, which you can see over the first. The third gate is far above, a black notch against the sky with smoke rising behind it, and it is guarded by something you cannot make out from here, but it has more torches than the rest.
+
+The Counting House sits just inside the lowest gate, a squat building of stacked slate with a single barred window. The Foreman is waiting. He is not tall. He is heavy and fastidious, in a leather apron with a ring of brass tallying beads at his belt and a ledger open on a standing desk. He does not raise his eyes when you enter.
+
+"Emberhide." His voice is soft, almost kind. "Dargan's son. The Iron Tallies' hired axe." He finishes his line in the ledger, blots it, and only then looks up. His eyes are flat and clever, and they run over you from boots to horns exactly as a butcher's would, weighing without malice. "You walk well for a man who has been bought. Better than my scouts reported. They tell me you play at sullen, and that you do it poorly."
+
+He closes the ledger. "Three days ago you stood at your father's cairn at the Goat's Throat, an hour before dawn. My scouts did not see why. I would like to hear it from you."
+
+Two guards stand either side of the door. A scribe sits behind a screen, pen poised. The Foreman waits, his thumb on the page.
+
+What does Korvash say?
+
+== ROUND 31 ==
+PLAYER: I plant my feet and let the old loudness out, because it's the one thing about me that's true. "My father's grave, Foreman. Fourteen years I couldn't climb to it, and your Captain Vael gave me half an hour to say my piece before I sold my axe, so I took the time and said it."
+
+I tilt my chin at the ledger. "Count that however you like. I swore an oath on my father's blood and I keep it, so put me to work, and tell your scouts to find something better to chew on than a son's grief."
+  [game] dice Korvash Charisma (Deception) telling the grief-true story while hiding Tessa, DC 13 (Foreman's Insight): 1d20+1 = 1d20 [6] + 1 = 7
+  [DM write_lore (hidden)] {"entry": "The Greyshaft Foreman", "add_to_description": "Day 14: believed the grief but sensed an omission (Deception 7). Assigned Korvash to the second smelter gallery door-guard, bunk in lower barracks, with a watcher bunkmate named Tally-Pip (young goblin, ledger-boy, reports to the Foreman). Declared the third gate off-limits to hired axes: 'the third gate is where the ledger sleeps.' Korvash
+  [game] notebook: updated The Greyshaft Foreman
+  [DM write_lore (hidden)] {"create": "Tally-Pip", "kind": "person", "description": "Young goblin ledger-boy at Greyshaft, the Foreman's watcher assigned as Korvash's bunkmate; quick, bright-eyed, chatters; reports nightly to the Counting House. Can be bribed with rations or befriended."}
+  [game] notebook: created an entry for Tally-Pip
+  [game] time: 6 hours later: Day 14, 12:58:36 PM
+DM: You say it the way you say everything: loudly, with your chin up and every word meant. The scribe's pen scratches behind its screen. The guards by the door shift their feet. When you finish, the Foreman looks at you for a long moment, and his thumb moves once across the edge of the page.
+
+"Grief," he says at last, soft as before. "A son's. I have seen it, and it is not a lie, and it is not the whole of it." He lets that sit between you like a coin on a table. "I do not ask for the whole of a man. I ask for his hands." He turns the ledger toward you. There is already a line on the page with your name in a clerk's neat hand, and beside it a blank column. "You will guard the door of the second smelter gallery. The heat is considerable. You will be fed, and you will sleep in the lower barracks. A bunkmate will show you the ways of the place."
+
+A small goblin boy appears at the screen as if summoned: thin, bright-eyed, ink to the elbows, a clerk's cap sliding over one ear. "Tally-Pip, sir!" he chirps, and gives you a grin that is both friendly and perfectly attentive. You do not doubt that he writes down everything you say.
+
+"One more thing," the Foreman adds as you turn. "The third gate is closed to hired axes. It is where the ledger sleeps. Do not climb to it. Do not look up at it." The softness has gone out of his voice and left only the level weight. "I would be most displeased."
+
+The rest of the morning goes to marching and a bowl of grey porridge, to the smell of coal and iron, to the second gallery's door, a slab of riveted plate with a gap through which heat rolls out like breath. It is nearly one in the afternoon. Tally-Pip chatters at your elbow the whole way, naming the guards, the cooks, and the shifts, and from the corner of your eye you watch him count how many questions you do not ask.
+
+The third gate is above and behind you, forbidden, and somewhere up there is a girl who left you a slate chip. You have six days.
+
+What does Korvash do?
+
+== ROUND 32 ==
+PLAYER: I take the post at the gallery door like a man who's resigned to it, arms folded, greataxe grounded beside me, and share a strip of Veshra's dried goat meat with Tally-Pip, since he looks like he doesn't eat enough. "Eat, little clerk. Write down that I'm generous, if you must write something."
+
+Then I ask only the harmless things: when the shifts change, who brings the water, and which guards drink on watch. I'll learn the rhythm of the place before I ever look up at that third gate.
+  [game] dice Korvash Charisma (Persuasion) befriending Tally-Pip with goat meat and harmless questions, DC 11: 1d20+1 = 1d20 [12] + 1 = 13
+  [DM write_lore (hidden)] {"entry": "Tally-Pip", "add_to_description": "Day 14 afternoon: befriended by Korvash with goat meat (Persuasion 13). Told him: shifts change at dawn, noon and dusk bells; water carts come at the noon bell; the guards of the second wall drink on watch after the dusk bell; the third gate is the Foreman's ledger-house and its stairs, guarded by six Tally-sworn hobgoblins, never drunk. A quiet girl, 
+  [game] notebook: updated Tally-Pip
+  [game] time: 5 hours later: Day 14, 5:58:36 PM
+DM: You plant yourself at the gallery door like a man resigned to it, arms folded, greataxe grounded beside your boot. The heat that rolls out through the plate is a steady, dry fist. When Pip stops chattering to wipe his forehead you tear a strip from Veshra's pouch and hold it out. "Eat, little clerk. Write down that I'm generous, if you must write something."
+
+He blinks, takes it, and eats the whole strip while looking very hard at you. After that he talks a good deal more and writes a good deal less. You ask only the harmless things. The shift bells ring at dawn, noon and dusk. The water carts come on the noon bell, always the same boy with the same limp. The guards of the second wall drink on watch once the dusk bell has gone and the Foreman is back in his counting-house; the lower wall keep sober, being closer. The third gate is another matter. "That's the ledger-house," Pip says, lowering his voice with relish. "Six Tally-sworn on the stair and none of them drunk, ever. The Foreman sleeps up there with his books." He licks his fingers. "There's a mender, too. Came with the autumn tally. Quiet. Hood always up. She mends the ledger-bindings and she sings to goats that aren't there. I've only seen her at dusk, at the wash-line on the gate-top, hanging cloths. She never comes down."
+
+He looks at you sidelong with the open, avid curiosity of a boy who has just given something away and isn't sure what. Then he shrugs, because he is fourteen and it isn't his problem. "Don't tell the Foreman I said."
+
+The dusk bell tolls across the valley. It is nearly six in the evening, and the light in the bowl of scree is going the color of a bruise. From the gallery door you have a clear line up the slope past the second wall to the third gate, a black notch with a ribbon of washing flapping on a line along its top. Someone is up there hanging cloths.
+
+You are due off your post with the bell, and the barracks are down the hill. The guards of the second wall are beginning to drink.
+
+What does Korvash do?
+
+== ROUND 33 ==
+PLAYER: I don't look up. I thank Pip with a gruff nod, tell him his secret is safe with a dragonborn who's never kept a clean ledger, and fall in with the shift going downhill to the lower barracks.
+
+I take a bunk by the wall, keep my pouch under my head with the goat and the slate in it, and eat my porridge slow, listening to who talks and who drinks. Tomorrow at dusk I'll be back at my post with my eyes on the dirt and my ears on that wash-line, because a girl who sings to goats that aren't there will sing a tune I know.
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: at the second gallery door, Korvash hears the hooded mender at the third-gate wash-line singing the clan's goat-counting song, the one Dargan sang; she hit the verse about the 'seventh goat that returns' twice, pointedly. The Foreman's guards did not notice. She has not looked down."}
+  [game] notebook: updated Find Tessa
+  [game] time: 1 day later: Day 15, 5:58:36 PM
+DM: You thank Pip with a gruff nod and tell him his secret is as safe with you as a dragonborn's ever is, which is to say very. Then you fall in with the shift going down the hill and do not look up once, not at the notch of the third gate and not at the cloth flapping above it, though your neck prickles the whole way.
+
+The lower barracks are a long low hall that smells of wet wool, coal and boiled barley. You take the bunk against the wall, tuck your pouch beneath your head with the goat and the slate inside it, and eat your porridge slowly while the room talks around you. You learn who gambles and who sulks, who owes whom, which sergeant has a cough. Tally-Pip drops onto the next bunk with his ledger and falls asleep mid-sentence, cap over his eyes.
+
+The next day passes at the gallery door in heat and noise: a shift bell, a water cart, a hobgoblin with a hammer. You keep your eyes on the dirt. At the noon bell the limping boy brings water and a heel of bread. You think about not thinking.
+
+At dusk, when the bell has tolled and the second-wall guards have begun, quietly, to pass a flask, you hear it. At first it is only a thread under the forge noise and the wind: a woman's voice, or a girl's, thin and unhurried, floating down from the gate-top where the washing hangs. You know the tune before you know the words. It is the clan's goat-counting song, the one Dargan sang at the evening fold when you were small and could not sleep, a nonsense chant of numbers and animals that ends in one goat missing and coming home.
+
+She sings it quietly, in Draconic, all the way through. Then, where the seventh goat is lost and found again, she goes back and sings the verse a second time, slower and plainer, so that anyone who knew it would hear.
+
+None of the guards pay it any mind. Pip, beside you, doesn't look up from his page, except to say, "Mender's singing again. She does that. It's creepy." He scratches something out.
+
+It is just after six in the evening of day fifteen, and the song has stopped. The wash-line is still. You have not looked up. Five days remain, and you have a hundred ways to get a message to a girl you are not allowed to know.
+
+What does Korvash do?
+
+== ROUND 34 ==
+PLAYER: I keep my eyes on the dirt, but I let my lips move and take up the tune myself, low and rough, the last two lines she left unfinished, where the missing goat comes home. When Pip glances over, I scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk, so write that down."
+
+Then I go back to dragging a whetstone down the greataxe, steady and slow, and I don't lift my head again.
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 16 dusk: Korvash hummed the answering lines; Pip wrote it down but accepted the sentiment. The mender answered with the wash-line: cloths hung grey, red, grey, an old clan field signal meaning 'meet by water after dark'. The third-gate wash-house sluice runs down to a stone culvert opening at the foot of the second wall, east side, behind the coal
+  [game] notebook: updated Find Tessa
+  [game] time: 1 day later: Day 16, 5:58:36 PM
+DM: You keep your eyes on the dirt and your lips moving, and you take up the tune yourself, low and rough as a file on iron. You sing the last two lines she left unfinished, the seventh goat turning back down the hill toward the fold. Pip's head comes up. He looks at you, quill hovering, and you do not give him time to wonder. You scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+He considers this, nods slowly, and writes it down. You go back to dragging the whetstone down the greataxe, steady and slow, and you do not lift your head again. Whatever the Foreman makes of it, the words were true.
+
+Nothing happens that night. Nothing happens the next day, except heat and bells and the limping boy with the water cart. You do not look up. At dusk on the sixteenth, when the dusk bell has tolled and the flask has begun to pass along the second wall, a line of washing goes up on the gate-top, snapping in the cold wind. You do not look at it, but you do not have to. It is in the corner of your eye, a thing you know the way you know your own breath.
+
+Three cloths, hung in order: grey, red, grey.
+
+You have not seen that signal since you were a boy. Dargan hung it from a fold's wall when the weather turned and the herd had to come down to the water before nightfall: *meet at the stream after dark.* The red cloth in the middle is the place, and the two grey ones mean *come alone*.
+
+Pip, beside you, chews his quill. "Funny. She's put out the mending colors." He yawns. "She does that."
+
+Water, you think, and look without looking along the slope. Below the third gate's wash-house a stone sluice runs down, bright with runoff, to a culvert at the foot of the second wall. It opens behind the coal sheds on the east side, where a drunk pair of guards on the wall would look straight over it and see only the dark. It is just after six, with the second night bell about four hours off, and the barracks are down the hill.
+
+What does Korvash do?
+
+== ROUND 35 ==
+PLAYER: I finish my shift without so much as a glance uphill, eat my porridge at the barracks, and lie down with my back to Pip's bunk until his breathing goes slow and his cap slides over his eyes. Then, around the second night bell, I slip out in my stocking feet with my boots in my hand, leaving the greataxe under the blanket where a sleeper's shape is expected, and keeping only one handaxe in my belt.
+
+I'll move along the shadow of the coal sheds, wait for the drunk guards on the wall to look away, and creep down to the culvert behind them. If anyone stops me I'm a man who couldn't sleep and went to take a piss.
+  [game] dice Korvash Dexterity (Stealth) slipping from barracks past Pip and along the coal sheds to the culvert, vs passive 10: 1d20+1 = 1d20 [4] + 1 = 5
+  [DM write_lore (hidden)] {"create": "Sergeant Ruk", "kind": "person", "description": "Drunk hobgoblin guard of Greyshaft's second wall, east side. Day 16 night: spotted Korvash slipping toward the coal sheds and challenged him from the stair; half-drunk, loud, curious, loyal to the Foreman's coin more than the Foreman."}
+  [game] notebook: created an entry for Sergeant Ruk
+  [game] time: 4 hours 5 minutes later: Day 16, 10:03:36 PM
+DM: You lie with your back to Pip's bunk until his breathing goes slow and his cap slides over his eyes. At the second night bell you ease out in your stocking feet with your boots in your hand. The greataxe stays rolled in your blanket, a sleeper's shape for anyone who looks, and one handaxe goes in your belt. The hall's snores and coughs cover your passage. Nobody stirs at the door.
+
+Outside the cold bites. You keep to the shadow of the coal sheds, bent low, with the dark mass of the second wall above you and the red glow of the smelters flickering on its underside. The culvert is near. You can hear the water.
+
+Then, at the worst possible place, a loose lump of coal slides out from under your heel and clatters down the cinder slope.
+
+"Oi!" The voice comes from the wall above, thick with drink. A torch swings out over the parapet, and a heavy figure leans on the rampart with a flask in one fist. "Who's that? Who's down there?" Boots scrape on the stone stair. Sergeant Ruk, one of the drunk pair you had counted on being drunk enough, is coming down, wavering, with a hand on his sword. His partner is a vague shape behind him, still swigging.
+
+You are fifty feet from the culvert, in the open between two sheds, in stocking feet with a handaxe in your belt, and a torch is already swinging toward you. The scrape of the stair is getting nearer.
+
+It is just after ten at night. What does Korvash do?
+
+== ROUND 36 ==
+PLAYER: I don't run. I straighten up, step out into the torchlight with my boots in one hand and the other held open, and give Ruk a sheepish grimace. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep, and I came out for the cold air and a piss behind the sheds before I woke the whole barracks."
+
+I hold out Veshra's pouch of dried goat meat like a peace offering. "Take a strip, and tell your mate on the wall to keep his flask. I'll be back to my bunk before the bell."
+  [game] dice Korvash Charisma (Deception) sheepish insomniac excuse and goat-meat bribe to drunk Sergeant Ruk, DC 11: 1d20+1 = 1d20 [10] + 1 = 11
+  [DM write_lore (hidden)] {"entry": "Sergeant Ruk", "add_to_description": "Day 16 night: accepted Korvash's insomnia excuse and a strip of goat meat (Deception 11, just). Told him: 'Don't let the Foreman's boys see you east of the sheds after the bell, Emberhide. I never saw you.' Returned to the wall to drink with his mate. Owes Korvash nothing but will not volunteer the sighting unless asked."}
+  [game] notebook: updated Sergeant Ruk
+  [game] time: 25 minutes later: Day 16, 10:28:36 PM
+DM: You do not run. You stand up out of the shadow of the sheds into the torchlight with your boots in one hand and the other held open, and you put on the sheepish grimace of a man whose bladder has outvoted his common sense. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep and I came out for a bit of cold air and a piss behind the sheds before I woke the whole barracks."
+
+You hold out Veshra's pouch like a peace offering. Ruk's torch lowers. Up close he is broad and red-eyed and not unfriendly, and the pouch smells of salt and smoke. He takes a strip, sniffs it, and chews with open and unfeigned pleasure.
+
+"Gallery axe." He wipes his mouth on the back of his wrist. "Thought you were one of the ledger-boy's mice, come to steal my coal." He jerks his chin back up the stair at his mate. "Go on, then. Do your piss." He drops his voice, and some wary part of his sodden brain makes him look both ways. "But not east of the sheds, Emberhide. Not after the bell. Foreman's eyes are on that side, and I haven't seen you." He wavers, waves a hand, and climbs back to the wall, calling something to the flask-holder.
+
+You let your breath go. You walk the rest of the way in the shadow with your boots still in your hand, past the coal sheds, down the cinder slope toward the sound of water.
+
+The culvert is a low arch of black stone with the sluice-water running out of it in a thin glittering rope and a path of flat rocks leading in. Cold breath comes from the tunnel. It is just past half past ten at night. Nothing moves in the arch. You have not called out, and you have not looked up, and somewhere in the dark of that tunnel something small stirs and goes still.
+
+What does Korvash do?
+
+== ROUND 37 ==
+PLAYER: I pull my boots on, wade onto the flat rocks, and stop at the mouth of the arch with my hands open and the handaxe still in my belt. Low and steady, I hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle of the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+  [DM write_lore (hidden)] {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive. Day 16 night, ~10:30 PM, met him at the Greyshaft culvert. Small and wiry for a dragonborn, red scales dulled to rust, left horn broken, burn scar on one forearm; hooded; speaks Draconic in short clipped sentences; she cut her crescent mark. Survived the raid by hiding on the Weeping Ledge as a child; Dargan's c
+  [game] notebook: created an entry for Tessa
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "status": "done", "add_to_description": "DONE Day 16: Tessa found alive at Greyshaft's culvert. New purpose: help her break the Foreman's ledger and free the children in the lower galleries before midwinter's eve (Day 20), when the ledger and a hundred 'hands' move to the deep shaft."}
+  [game] notebook: updated Find Tessa
+  [DM write_lore (hidden)] {"create": "Break the Foreman's Ledger", "kind": "quest", "description": "With Tessa, destroy the Greyshaft Foreman's ledger of 'hands' and free the children held in the lower galleries before Day 20 (midwinter's eve), when the ledger and about a hundred laborers are moved to the deep shaft. Complications: Korvash's year-and-a-day oath to the Iron Tallies; Gorrak Vael's debt and fear; Tally-Pip wa
+  [game] notebook: created an entry for Break the Foreman's Ledger
+  [game] time: 25 minutes later: Day 16, 10:53:36 PM
+DM: You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open and the handaxe still in your belt. The water is loud and cold around your ankles. Low and steady, above the trickle, you hum the first three notes of Dargan's evening call, and then you say it in Draconic: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment nothing answers. Then, from the dark of the arch, very quietly, a voice finishes the next three notes of the call, a little flat, as though it has been a long time since anyone sang them to anyone.
+
+She steps out into the starlight with the hood pushed back. She is smaller than you remember anything being: lean and wiry, hardly more than a breath taller than your shoulder. Her scales have gone the rust-red of old iron, dulled by years of soot and cold. One horn is broken off short, and a burn scar runs up her left forearm in a ladder of pale seams. Her eyes are your father's eyes, yellow-amber and level, and they look at you as though she is memorizing something she is afraid will vanish.
+
+"Kor," she says. Then: "You got *fat*."
+
+You laugh. It comes out cracked and wrong, and you have the axe out of your head and your arms around her before you've decided to move. She does not hug back at first, stiff as a post. Then her fingers dig into the back of your tunic and hold on hard enough to hurt, and her shoulders start to shake without any sound at all.
+
+It is a minute, or ten. When she steps back she scrubs her face on her sleeve and the look in her eyes has hardened into purpose. "No time. Listen." She speaks in short clipped sentences, the way you learn to when every word costs. "I hid on the ledge the night they came. Dargan's stones covered me. Gorrak's man saw me go, and let me." Her mouth twists. "I lived on goat-farms. Cheese. Whatever. A year ago I heard the tin-masks sold a hundred children a season to a mine. So I came to see. I got on as a mender. I've been up in the ledger-house since autumn." She pulls a fold of grey cloth from her cloak, and in it a tiny scrap of black paper with writing on it, columns of names. "The Foreman writes every hand he owns. Every child. Every date. He moves the ledger and a hundred of them to the deep shaft on midwinter's eve, four days from now. After that, they're gone. Nobody can find them. Nobody can count them."
+
+She looks up at you, and her chin is Dargan's chin. "I can't do it alone, Kor. I couldn't even climb to the cairn. But I can get you up the stair. Will you help me burn his book?"
+
+It is nearly eleven at night. The wall is quiet above you, with Ruk's flask somewhere up there, and the sluice runs cold over your boots. You have kept your word to the Tallies for eleven days of a year and a day, and the girl you went looking for is here, alive, asking you for something that would break it.
+
+What does Korvash say?
+
+== ROUND 38 ==
+PLAYER: I hold her by both shoulders and say, "Dargan's oath came first, Tess: stand between the weak and whoever means them harm, and that's a hundred children going down a shaft. I swore Gorrak my axe, not my silence, so I'll burn his book, and then I'll stand before the captain with the ash on my hands and answer for it."
+
+I check the dark arch behind her and drop my voice. "Tell me the stair, how many Tally-sworn guard it, and where the ledger sleeps, because I'm in."
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night, Tessa's intel: the ledger-house crowns the third gate; six Tally-sworn hobgoblins hold the stair in two shifts of three (changing at the dusk bell and the dawn bell); a wash-house door on the gate-top roof is unlocked from inside by Tessa and opens onto the Foreman's outer room. The ledger sleeps in an iron-bound chest in
+  [game] notebook: updated Break the Foreman's Ledger
+  [game] time: 20 minutes later: Day 16, 11:13:36 PM
+DM: You take her by both shoulders, because it is the only way to say it so she will hear. "Dargan's oath came first, Tess. Stand between the weak and whoever means them harm, and that is a hundred children going down a shaft. I swore Gorrak my axe, not my silence. I'll burn his book, and then I'll stand before the captain with ash on my hands and answer for it."
+
+Her eyes go bright, and she looks away to hide it. For a moment she looks six years old. Then she nods once, hard, the way Dargan used to nod at the end of a counting, and the girl is gone again and the mender stands in the water in her place.
+
+"Then listen." She crouches on a flat stone and draws in the wet with one finger, fast and sure. "Third gate. The ledger-house sits on top of it, one stair. Six Tally-sworn hold it, three and three, changing at the dusk bell and the dawn bell. Sober, always. Not the Foreman's men like the wall. Gorrak's own kind." She taps a second line. "Here, on the roof, the wash-house. Its door opens onto the Foreman's outer room from inside. I can unlatch it any night at the second bell, but only from inside. You come up the sluice path, the drain-stair behind the wash-house, and over the parapet. I'll have the rope down."
+
+Another stroke. "The ledger sleeps in an iron-bound chest in his bedchamber. The key is on a chain at his belt, and he sleeps like a hawk. There's a second book, a copy, in the Counting House by the lower gate. If we burn one and not the other, we've done nothing, so both."
+
+"The nights of the eighteenth or the nineteenth," she says. "Before the move. Any later and they're in the deep shaft, and I don't know the way."
+
+Behind her the water drips and the arch is silent. Up on the wall someone laughs and a flask clinks, and Ruk's voice calls a name, then falls quiet. It is a little after eleven, and you must be in your bunk before the dawn bell.
+
+You have three nights to prepare and a sister who has just asked you to commit your oath-bound axe to arson. What does Korvash do?
+
+== ROUND 39 ==
+PLAYER: I crouch beside her and look at the drawing in the wet. "Then it's the night of the eighteenth, and we do it in order: the copy in the Counting House first, because it's nearest my gallery and I can pull it down off the shelf with my own hands, and then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?"
+
+I touch the broken stump of her horn gently. "Until then you stay hooded and you stay dull, and you don't come to the culvert again. I'll hang a red thread on my belt at dusk the day before if the way is clear, and I'll keep Pip fed and talkative so he writes down boredom instead of me."
+  [game] dice Korvash Dexterity (Stealth) returning from the culvert to his bunk before dawn bell, DC 10: 1d20+1 = 1d20 [14] + 1 = 15
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Plan agreed Day 16 night: night of Day 18: Korvash burns the copy in the Counting House first (he'll pull it from the shelf), then climbs the drain-stair to the third gate and Tessa lets him in at the second bell to burn the master ledger. Children are held in the Tin Row, a barred bunkhouse built into the cliff beneath the first gate 
+  [game] notebook: updated Break the Foreman's Ledger
+  [DM write_lore (hidden)] {"create": "Warden Hask", "kind": "person", "description": "Hobgoblin warden of the Tin Row, the barred bunkhouse where Greyshaft's captive children sleep; keeps four wall-guards. Methodical, joyless, drinks nothing. Carries a ring of keys."}
+  [game] notebook: created an entry for Warden Hask
+  [game] time: 2 days 6 hours later: Day 19, 5:13:36 AM
+  [game] time: time set: Day 18, 5:58 PM
+DM: You crouch beside her in the wet and look at the drawing she has scratched there, and then you take the stick out of her hand and mend it, because the lines for the Counting House are wrong and you have stood at its door. "The copy first," you say. "It's by the lower gate, nearest my gallery, and I can pull it off its shelf with my own hands. Then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?"
+
+She answers without looking up. "The Tin Row. A barred bunkhouse cut into the cliff under the first gate. Ninety-four of them. A warden called Hask and four guards. The door key's on the Foreman's chain, but the Row has an old ore-chute at its back. I found it on a washing day. It runs out to the scree on the east side." She sketches it, then rubs the drawing out with her palm. "It's tight. Small ones first."
+
+You touch the broken stump of her horn, very lightly. "Until then you stay hooded and stay dull, and you don't come to the culvert again. At dusk the day before, I'll hang a red thread on my belt if the way is clear. And I'll keep Pip fed and talkative, so he writes down boredom instead of me."
+
+She almost smiles. Then she is gone up the sluice-path without a sound, a rust-colored shadow, and you stand alone in the cold water for a minute until you can trust your legs.
+
+You make your bunk well before the dawn bell, with no one the wiser and Pip snoring under his cap. Two days go by as days do in a mine: heat and bells and the dull ache of standing. You feed Pip strips of goat meat and let him chatter. He writes *bored, hums, sharpens axe*, and you read it upside down over his shoulder with a straight face.
+
+It is just before six in the evening on the eighteenth, and the dusk bell is about to ring. You have a red thread in your pocket, a handaxe in your belt, and a greataxe leaning against the gallery door. The second wall's flask is already going round. Above you at the gate-top, a line of washing hangs: grey, grey, grey.
+
+Tonight is the night. What does Korvash do?
+
+== ROUND 40 ==
+PLAYER: I tie the red thread to my belt in plain sight as the dusk bell rings, so she can see the way is clear on my side, and I keep my post with my eyes on the dirt.
+
+DM: Three grey cloths and no red, what did that mean in Dargan's fold signals when I was a boy? Does it mean the plan holds, or that something has gone wrong above?
+  [DM write_lore (hidden)] {"entry": "Tessa", "add_to_description": "Clan cloth signals (Dargan's fold): grey alone = fair weather, nothing to report, hold the plan; grey-red-grey = meet at the stream after dark, come alone; red alone (single) = go now / the way is open. Day 18 dusk: three greys at the gate-top, then a single red cloth hung after Korvash tied his red thread."}
+  [game] notebook: updated Tessa
+  [game] time: 10 minutes later: Day 18, 6:08 PM
+DM: Out of game for a moment, to answer your question: in Dargan's fold signals, grey cloths alone meant fair weather, with nothing to report and nothing changed, so you hold your plan and keep to the day's work. Three greys at dusk is Tessa telling you that the stair is as she described it, no new guards and no new trouble. Nothing has gone wrong above.
+
+The dusk bell rings out over the valley, long and low. You tie the red thread to your belt in plain sight, where anyone looking down from the gate-top could see a stray scrap of color, and then you plant your feet at the gallery door again and keep your eyes on the dirt.
+
+Pip is at your elbow with his ledger, chewing a strip of goat meat. "You've got a bit of string on your belt," he says, around the meat. You grunt that it's a family thing, and he writes *family string* and loses interest.
+
+Ten minutes later, the wash-line at the gate-top changes. The two grey cloths come down and a single red one goes up in the middle of the line, alone, snapping once in the cold wind. You do not look at it. You know the signal. *Go now. The way is open.*
+
+The shift bell for the second-wall guards rings, and the flask begins its round. Ruk's mate is already laughing at something. It is just after six in the evening, with the second bell about four hours off. The Counting House sits by the lower gate, a squat building of stacked slate with a barred window and a lamp burning in it: a night scribe, two door guards, and the copy of the ledger on a shelf behind them.
+
+Your plan was the copy first, then the stair. What does Korvash do?
+
+== ROUND 41 ==
+PLAYER: I finish my shift and go back to the barracks like any other tired man, and at the second bell I slip out again, this time with the greataxe on my back and a torch from my ten, because tonight I won't leave my father's axe behind. I'll put the torch to the east coal shed, the one farthest from the third gate's stair, then crouch in the shadow beside the Counting House.
+
+When the two door guards run for the fire, I go in fast and low, take the scribe by the collar, tell him in my best bellow that he'll live if he sits quiet, tie and gag him with his own sash, and put the copy of the ledger to the lamp.
+  [game] dice Korvash Dexterity (Stealth): leaving barracks, lighting the east coal shed, crouching by the Counting House; vs guards' passive 10: 1d20+1 = 1d20 [5] + 1 = 6
+  [game] dice Do both Counting House door guards run to the fire? (1-4 both go, 5-6 one stays at the door): 1d6 = 1d6 [1] = 1
+  [game] dice Korvash Charisma (Intimidation) on the night scribe, DC 10: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] dice Korvash's initiative: 1d20+1 = 1d20 [19] + 1 = 20
+  [game] dice Counting House guards' initiative (group): 1d20+1 = 1d20 [8] + 1 = 9
+  [game] fight: Fight started. Order: Korvash Emberhide (20), Guard 1 (9), Guard 2 (9). Nobody has had a turn yet: next_turn starts the first one.
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 night: Korvash set fire to the east coal shed but his Stealth failed (6) and a Counting House door guard saw him; the alarm is rising. Night scribe still inside with the copy. Guard 2 ran to the fire; the second bell has not yet rung."}
+  [game] notebook: updated Break the Foreman's Ledger
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You leave the barracks at the second bell with the greataxe on your back and a torch from the pack, and tonight you do not leave your father's axe behind. The cold bites hard. Keeping to the long shadow of the lower wall, you reach the east coal shed, put the torch to a drift of dry slack under its eaves, and watch the first yellow tongue climb the boards before you slip back toward the Counting House.
+
+It is almost perfect. Almost. As the shed catches with a whump of heat, the glare throws your shadow long across the cinders for the length of a breath, and the nearer of the two door guards, already half-turned toward the flame, sees it.
+
+"Emberhide!" The hobgoblin's roar carries across the yard. He has his longsword out and is coming for the corner of the slate house, shield up, fifteen feet from you with the firelight in his helm. Behind him, his partner has taken three strides toward the burning shed, and is looking back over his shoulder, torn between the two. The night scribe's lamp is still burning in the barred window behind you, and a pale face has appeared there.
+
+Your breath is a plume in the cold. The alarm is not yet bell-rung, but it will be in a moment. The guards are hobgoblins with shields, hard to hit and harder to stand beside. You have the first move.
+
+It is your turn. What does Korvash do?
+
+== ROUND 42 ==
+PLAYER: I rage and charge the nearer guard before he can sound off, hitting him hard with the greataxe to drop him fast and quiet, since the other is half-turned toward the burning shed and I can't let either one raise the bell. If I take him down, I go straight at the second before he gets to the alarm-rope, and I'll hold my breath weapon for if they bunch up.
+  [game] sheet: Rage: 1/2; condition added: Raging (Korvash Emberhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Korvash greataxe vs Guard 1 (AC 18): 1d20+6 = 1d20 [3] + 6 = 9 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Guard 1. Guard 1 (initiative 9): HP 11/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 1 longsword vs Korvash (AC 13): 1d20+3 = 1d20 [19] + 3 = 22 (Guard 1 has used its action: no more actions this turn.)
+  [game] dice Guard 1 longsword damage (slashing; halved by Rage): 1d8+1 = 1d8 [1] + 1 = 2
+  [game] sheet: took 1 damage: HP 14 → 13
+  [game] fight: Round 1, now: Guard 2. Guard 2 (initiative 9): HP 11/11, AC 18 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Guard 2 has used its action: no more actions this turn.
+  [game] fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You hit the cinders already running, the rage a hot wind in your chest, and swing the greataxe in a flat arc at the nearer guard before he can open his mouth for the bell. The blade skips off the rim of his raised shield with a clang that rings across the yard. He is not quiet, and he is not hurt. His longsword answers, a cold line along your ribs. Raging, you barely feel it.
+
+His partner has stopped trying to decide. He drops the pretense of the fire and sprints for the iron post at the corner of the Counting House, where a bell-rope hangs, and hauls on it with both fists. The first slow clang of the alarm rolls out across the valley and stops, and then it starts again, and again. Doors are banging down the slope. Torches are bobbing out of the lower barracks. You have a few rounds before the whole second wall is on you.
+
+The first guard is at arm's reach, shield up and sword wet, a thin trickle of red on your ribs. The bell-guard is on the far side of him, ten feet off, hauling the rope. Behind you, in the barred window, the scribe's pale face has vanished and the lamp is guttering.
+
+It is your turn. What does Korvash do?
+
+== ROUND 43 ==
+PLAYER: The alarm's already ringing, so killing them isn't the point anymore, the book is. I turn square on the two of them, line them up across the cone, and breathe fire across both, aiming at the bell-guard's hands on the rope as much as at the shield man.
+
+If I've bought a breath of room, next turn I kick in the Counting House door, grab the copy off its shelf, and put it to the lamp before the second wall gets down the hill.
+  [game] sheet: Breath Weapon: 0/1 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Korvash breath weapon fire damage (DC 12 DEX save, half on success): 2d6 = 2d6 [1, 2] = 3
+  [game] dice Guard 1 DEX save vs breath weapon DC 12: 1d20+1 = 1d20 [15] + 1 = 16
+  [game] dice Guard 2 DEX save vs breath weapon DC 12: 1d20+1 = 1d20 [15] + 1 = 16
+  [game] fight: Guard 1 took 1: HP 11 → 10
+  [game] fight: Guard 2 took 1: HP 11 → 10
+  [game] fight: Round 2, now: Guard 1. Guard 1 (initiative 9): HP 10/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 1 longsword vs Korvash (AC 13): 1d20+3 = 1d20 [8] + 3 = 11 (Guard 1 has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Guard 2. Guard 2 (initiative 9): HP 10/11, AC 18 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 2 longsword vs Korvash (AC 13): 1d20+3 = 1d20 [1] + 3 = 4 (natural 1) (Guard 2 has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You turn square to the pair and draw breath until your ribs creak, and the fire comes out of you in a red cone that lights the whole yard. It is a short, ragged gout, the flame guttering as you spend yourself on it, and the hobgoblins are quicker than it is. Both throw themselves aside behind their shields. Only a scorch of heat licks across a gauntlet and a sleeve. It leaves them rattled, but it does not drop them, and it does not stop the bell.
+
+The shield-man's blade whips back at you, and the other comes in at your flank, and neither finds flesh. The bell-guard's cut goes wide enough that he nearly stumbles on his own feet. The clang of the alarm has fallen silent, because he has let go of the rope to fight.
+
+Down the slope, torches are streaming out of the lower barracks, a long ragged line of them. Whistles are shrilling. You have the breath of room you wanted, but not much of it. Both guards are adjacent now, shields up, and the Counting House door is at your shoulder. It is a plain plank door with an iron latch, and behind it a lamp is burning.
+
+You have used your breath. What does Korvash do?
+
+== ROUND 44 ==
+PLAYER: I put my shoulder through the Counting House door, since a raging dragonborn with a greataxe is a better battering ram than a latch, and charge in. I want the copy off its shelf and onto the lamp before the torches get here, so I'll grab the ledger and smash the lamp over it if the scribe won't give up the shelf.
+
+If the guards follow me through the door, good, because then they have to come one at a time and I can fight with the doorframe at my back.
+  [game] dice Korvash Athletics (shoulder through the plank door, DC 12), advantage from Rage: 1d20+6 (advantage) = 1d20 [18, 6]→18 + 6 = 24 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Guard 1 opportunity attack as Korvash leaves reach (longsword vs AC 13): 1d20+3 = 1d20 [16] + 3 = 19
+  [game] dice Guard 2 opportunity attack as Korvash leaves reach (longsword vs AC 13): 1d20+3 = 1d20 [12] + 3 = 15
+  [game] dice Guard 1 OA damage incl. Martial Advantage (slashing; halved by Rage): 1d8+1+2d6 = 1d8 [1] + 1 + 2d6 [4, 3] = 9
+  [game] dice Guard 2 OA damage incl. Martial Advantage (slashing; halved by Rage): 1d8+1+2d6 = 1d8 [2] + 1 + 2d6 [6, 6] = 15
+  [game] sheet: took 11 damage: HP 13 → 2
+  [game] fight: Korvash Emberhide has used its reaction: no more reactions until the start of its next turn.
+  [game] fight: Korvash Emberhide had already used its reaction: a second one needs a feature that allows it.
+  [game] fight: Round 3, now: Guard 1. Guard 1 (initiative 9): HP 10/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 1 longsword vs Korvash (AC 13) from the doorway: 1d20+3 = 1d20 [8] + 3 = 11 (Guard 1 has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Guard 2. Guard 2 (initiative 9): HP 10/11, AC 18 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Guard 2 has used its action: no more actions this turn.
+  [game] fight: Round 4, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The door goes in with a crack of splitting plank, and you go through it at a run, but you leave two shields behind you with a clear opening at your back. Both blades take you on the way through. Your rage drinks most of it, but not all: a hot ribbon of pain down your side and one across your thigh, enough that you smell your own blood. You're at the edge of what you can lose. You are at 2 hit points.
+
+Inside, the Counting House is a narrow slate room: a standing desk, a lamp on a hook, a rack of shelves up the back wall crowded with ledgers bound in black leather and, at eye level, one thicker than the rest with a brass clasp and a strip of tin down the spine. The scribe has flattened himself into the far corner with his pen still in his hand and his mouth open. He does not seem to be breathing.
+
+Behind you the doorway is the only way in. Guard 1 is filling it, shield up and sword back, dark against the firelight of the burning shed. The other is behind him in the yard, snarling and unable to get past, and has stopped to haul the bell-rope again. Down the hill, torches are closing: thirty seconds, no more.
+
+You have the shelf at your shoulder, the lamp on its hook an arm's length away, and the guard in the door with his blade ready. It is your turn. What does Korvash do?
+
+== ROUND 45 ==
+PLAYER: I grab the thick brass-clasped ledger off the shelf with one hand, rip the lamp from its hook with the other, and smash it down onto the open pages so the oil catches, then hurl the whole burning book into the middle of the shelves behind me, setting the rest of the rack alight.
+
+Then I plant my back to the burning shelves, raise the greataxe, and snarl at the guard in the doorway: "Come and put it out, then!"
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~6:08 PM: Korvash set the Counting House copy and shelves alight with the lamp oil; copy burning. The master ledger in the third-gate ledger-house remains. Korvash is at 2 HP in a burning room, the doorway held by Guard 1; second wall's torches closing."}
+  [game] notebook: updated Break the Foreman's Ledger
+  [refused] fight: nothing to change: pass damage, heal, conditions or remove
+  [game] fight: Round 4, now: Guard 1. Guard 1 (initiative 9): HP 10/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 1 longsword vs Korvash (AC 13) from the doorway: 1d20+3 = 1d20 [12] + 3 = 15 (Guard 1 has used its action: no more actions this turn.)
+  [game] dice Guard 1 longsword damage (slashing; halved by Rage): 1d8+1 = 1d8 [7] + 1 = 8
+  [game] sheet: took 4 damage: HP 2 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: unconscious; condition removed: Raging
+  [game] fight: Round 4, now: Guard 2. Guard 2 (initiative 9): HP 10/11, AC 18 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Guard 2 has used its action: no more actions this turn.
+  [game] fight: Round 5, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Korvash death saving throw: 1d20 = 1d20 [11] = 11
+  [game] sheet: death save successes: 1/3
+  [game] dice Guard binding Korvash's wounds on the Foreman's orders: Wisdom (Medicine) DC 10 to stabilize: 1d20 = 1d20 [9] = 9
+  [game] fight: Round 5, now: Guard 1. Guard 1 (initiative 9): HP 10/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Guard 1 has used its action: no more actions this turn.
+  [game] fight: Round 5, now: Guard 2. Guard 2 (initiative 9): HP 10/11, AC 18 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Guard 2 has used its action: no more actions this turn.
+  [game] fight: Round 6, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Korvash death saving throw: 1d20 = 1d20 [19] = 19
+  [game] sheet: death save successes: 2/3
+  [game] fight: Round 6, now: Guard 1. Guard 1 (initiative 9): HP 10/11, AC 18 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard 1 Medicine (DC 10) to stabilize Korvash on the Foreman's orders: 1d20 = 1d20 [17] = 17 (Guard 1 has used its action: no more actions this turn.)
+  [game] fight: Fight over after 6 round(s). 36 seconds of fighting; now Day 18, 6:08:36 PM.
+  [game] dice Hours until stable Korvash regains 1 HP: 1d4 = 1d4 [2] = 2
+  [game] time: 2 hours later: Day 18, 8:08:36 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; lost 1 × Greataxe; lost 2 × Handaxe; lost 4 × Javelin; lost 1 × Carved horn goat (Tessa's); lost 1 × Slate chip: 'Greyshaft. Third gate.'; money -15 gp: now 0 gp; condition added: Prisoner (Tin Row)
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~8:10 PM: Korvash fell at 0 HP in the burning Counting House; the Foreman's guards stabilized him (the Foreman wants him alive as a 'hand') and put the fire out, saving the shelves but not the copy ledger, which is ash. He is held in the Tin Row with the children, stripped of axe, handaxes, javelins, pouch (coins, Tessa's horn g
+  [game] notebook: updated Break the Foreman's Ledger
+  [DM write_lore (hidden)] {"entry": "Warden Hask", "add_to_description": "Day 18 night: took custody of Korvash in the Tin Row on the Foreman's orders; chained him by one ankle to a ring at the end of the row beside the children. Methodical, took his belt and pouch to the Foreman."}
+  [game] notebook: updated Warden Hask
+DM: You come back to the world slowly, and the first thing you know is cold iron around your ankle and the smell of sweat, wet straw, and damp stone.
+
+You remember the door going in, the lamp in your fist, the oil catching, and the ledger flaring up like a torch. You remember the guard in the doorway, and the dark. You do not remember anyone dragging you. A dull weight on your chest feels like a hand that has not yet let go.
+
+You are lying on straw against a rock wall with a manacle on your left ankle, chained to a ring set in the stone. Your belt is gone, and the pouch with it, and so are the greataxe on your back and the handaxes and the javelins. Someone has bound your side and thigh with strips of coarse cloth, tight and not unkindly. It is a little after eight at night, and you are at 1 hit point.
+
+The place is a long low chamber cut into the cliff, with a barred door at one end and a single lamp burning on a hook. Along both walls lie rows of small shapes in straw, wrapped in blankets: ninety-odd children, most of them awake, all of them silent. Dozens of eyes are on you. This is the Tin Row. A girl no older than ten, a few feet away, is watching you with the slow stare of someone who has learned not to be surprised. At the barred door a hobgoblin sits on a stool with a ring of keys in his lap, methodical and joyless, not looking at you at all. Warden Hask.
+
+Your pouch, with the carved goat and the slate chip and your last coin, is gone with the rest. You think of Tessa on the roof of the third gate, listening to a bell that has stopped. You think of a ledger in a chest, intact, and a hundred children moving to a deep shaft in two nights' time.
+
+At the back of the long chamber, in the shadow behind the last row of bunks, a draft is moving the lamp-flame. Somewhere back there is the old ore-chute.
+
+What does Korvash do?
+
+== ROUND 46 ==
+PLAYER: I keep still and low, eyes half-lidded so Hask thinks I'm out, and turn my head slowly toward the girl who's watching me. In a whisper no louder than breath, in Common, I ask, "What's your name, little one? Do you know the chute at the back, and who of you can fit it?"
+
+While she thinks, I run my fingers along the manacle and the ring in the wall, feeling for a rusted pin or a loose bolt, because I'm not walking out of here without every one of these children.
+  [game] dice Korvash Charisma (Persuasion) whispering to the girl, DC 10: 1d20+1 = 1d20 [15] + 1 = 16
+  [game] dice Korvash Intelligence (Investigation) feeling over the manacle and ring for a weak pin, DC 13: 1d20-1 = 1d20 [8] - 1 = 7
+  [game] dice Korvash Dexterity (Stealth) whispering unseen by Warden Hask (passive Perception 10): 1d20+1 = 1d20 [11] + 1 = 12
+  [DM write_lore (hidden)] {"create": "Ninna", "kind": "person", "description": "About ten years old, in the Tin Row at Greyshaft; unsurprised, shrewd, a herders' daughter from the lower steadings. Told Korvash (Day 18 night): the ore-chute at the back is a cellar-hatch fifteen paces behind the last bunk, a square iron grate bolted from the outside, wide enough for ten-year-olds; the older ones won't fit. A hooded mender ca
+  [game] notebook: created an entry for Ninna
+  [game] time: 15 minutes later: Day 18, 8:23:36 PM
+DM: You keep still and low, eyes half-lidded, the way a man lies when he's taking stock of his own ribs, and you turn your head a fraction toward the girl. Your whisper is no more than breath in the straw. "What's your name, little one? Do you know the chute at the back, and who of you can fit it?"
+
+She doesn't startle. She looks at Hask, at his stool and his bent head, and then at you, and answers in a voice smaller than yours. "Ninna." Her eyes are old for ten. "The grate's fifteen paces behind the last bunk. A square one, bolted from the outside. Only the little ones fit. Not me, maybe. Not the big boys." She hesitates. "The mender came two nights ago. She brought bread. She said to wait until a goat sings. We don't know what that means."
+
+Hask turns a page in whatever he is reading, and does not look up. The lamp flame wavers in the draft from the back. Your fingers have been busy under the blanket they covered you with, running along the iron cuff on your ankle and the ring where its chain meets the rock. It is solid work. The cuff is riveted, the ring is sunk deep, and there is no pin to work and no bolt to wiggle. Whoever made it did not make it carelessly.
+
+Ninna sees your face and nods very slightly, like someone who has had the same thought. She tips her chin at the warden. "He keeps all the keys in his lap. That one's for you. He counts us at dawn and dusk."
+
+It is just after half past eight. You have one hit point, a cuff you can't pick, a warden with the only key in his lap, and a sister somewhere above who has heard the alarm and does not know whether you are alive. In two nights the Row is emptied and the master ledger goes with it.
+
+What does Korvash do?
+
+== ROUND 47 ==
+PLAYER: I whisper back, "The goat that sings is her, Ninna, my sister the mender, so tell the little ones to be ready at her song and keep quiet till then." I ask her to have the smallest ones loosen the chute bolts' nuts if they can reach them, and to cough and moan about me at the dawn count so Hask thinks I'm dying.
+
+Then I lie slack and gray, breathing shallow, waiting for him to come kneel by the chained prisoner the Foreman wants alive. When his hand's at my throat, I'll rage, seize him and take the key ring before he can shout.
+  [game] dice Night disturbance in the Tin Row (1 = the Foreman or guards come and interrupt his rest): 1d6 = 1d6 [5] = 5
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 19, 4:23:36 AM
+  [game] dice Korvash Charisma (Deception) playing the dying prisoner, DC 12 (Hask passive Insight 10): 1d20+1 = 1d20 [17] + 1 = 18
+  [DM write_lore (hidden)] {"entry": "Ninna", "add_to_description": "Day 19 pre-dawn: agreed with Korvash to have the smallest children loosen the chute-grate nuts at dawn if they can, to cough and moan about the 'dying' man at the dawn count, and to wait for the mender's goat-song. Korvash rested the night (long rest, undisturbed)."}
+  [game] notebook: updated Ninna
+  [game] time: 1 hour 30 minutes later: Day 19, 5:53:36 AM
+DM: You whisper it back to her, flat and certain: "The goat that sings is my sister, Ninna, the mender. Tell the little ones to be ready at her song and keep silent until then. Have the smallest loosen the nuts on the chute if they can reach them, and at the dawn count, cough and moan about me, as if I'm dying." She does not ask who you are, only nods her head hard once, and the word goes down the rows the way it goes in any herd, nudge by nudge, in whispers, until the whole long dark room is listening with its back to the lamp.
+
+Then you lie slack and grey with your breath shallow, and in the dark, as if it were nothing, you sleep. It is the sleep of a man who has been taught by the mountains to take what rest he is given. No one comes in the night. The lamp gutters low. Somewhere the wind moves along the cliff. When you wake, your wounds have knit and the stiffness has gone out of your joints. You are whole again, with the rage banked in your chest and a fire in your lungs, but you are careful to keep your face the face of a man at death's door.
+
+Pre-dawn comes with a scrape of iron. At the dawn bell, a quarter before six, Hask stands, stretches his back, and makes his count. He walks the rows with the lamp, tapping children's shoulders with the tip of a rod. Around you a ragged chorus of coughing starts, then low moans, then a small voice: "The big one's gone cold, Warden. He won't wake." Another: "He's breathing funny."
+
+Hask stops in front of you and looks down. His face is blank and lined and without malice, exactly the face of a man counting grain. He sets the lamp on the floor, crouches, and extends a thick hand toward your throat to feel for the pulse. The ring of keys hangs at his belt, within arm's reach. Behind him, the stool, the barred door, and four guards are asleep in a clump at the far end.
+
+You are chained at one ankle, but not at the hands. His fingers are inches from your neck. It is just before six in the morning. What does Korvash do?
+
+== ROUND 48 ==
+PLAYER: I lie dead still until his thick fingers settle on my throat, then my eyes snap open and I rage. One hand locks on his wrist, the other clamps over his mouth, and I haul him down onto me, wrapping an arm round his neck to choke him quiet. When he goes slack, I rip the key ring off his belt and free my ankle.
+
+I whisper to the nearest children, "Stay down, stay silent, no one cries out," and point at the four sleeping guards, because the first thing I do next is see to them without a sound.
+  [game] dice Korvash's initiative: 1d20+1 = 1d20 [20] + 1 = 21 (natural 20)
+  [game] dice Warden Hask's initiative: 1d20+1 = 1d20 [3] + 1 = 4
+  [game] fight: Fight started. Order: Korvash Emberhide (21), Warden Hask (4). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: Rage: 1/2; condition added: Raging (Korvash Emberhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Korvash Athletics (grapple Hask, mouth clamped), advantage from Rage: 1d20+6 (advantage) = 1d20 [12, 5]→12 + 6 = 18 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Hask's Athletics/Acrobatics to resist the grapple: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+  [game] sheet: gained 1 × Key ring (Warden Hask's)
+  [game] fight: Round 1, now: Warden Hask. Warden Hask (initiative 4): HP 11/11, AC 18 Warden Hask's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You lie dead still until his thick fingers settle on your throat. Then your eyes snap open and the rage takes you. One hand locks on his wrist and the other clamps over his mouth. You haul him down across your chest and pin him there, and when he heaves you are already round his neck with your arm. He has not even drawn breath to cry out. His whole body is a surprised weight in your arms, and the blow he takes from the rock when you roll him under you drives the wind out of him.
+
+As his belt rides up in the struggle, your free hand finds the key ring and tears it loose. The iron chinks, a small bright sound in the quiet room, and for a moment you both hold your breath. Four sleeping guards snore on at the far end. Nobody stirs. Among the straw, forty small faces are turned toward you in the half-dark, and not one of them has made a sound.
+
+You have Hask pinned under your arm, mouth clamped, eyes rolling. He is not out, and you are still chained at the ankle. The lamp he set on the floor is throwing wild shadows across the roof.
+
+It is your turn again. What does Korvash do?
+
+== ROUND 49 ==
+PLAYER: I tighten my forearm across Hask's throat until his struggling goes slack, holding the choke long enough to put him out without killing him. With the key ring in my free hand, I find the cuff key by feel and unlock my ankle, then bind and gag him with strips of blanket so he can't shout when he wakes.
+
+Then I whisper to the nearest children, "Keys, quick: the grate's at the back, littlest first." Once the cuff is off, I creep for the four sleeping guards with a heavy stool leg, because they have to be dealt with before anyone can move.
+  [game] dice Korvash Athletics (choke Hask unconscious; my ruling: contested), advantage from Rage: 1d20+6 (advantage) = 1d20 [1, 11]→11 + 6 = 17 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] dice Hask's Athletics resisting the choke: 1d20+1 = 1d20 [4] + 1 = 5
+  [game] fight: Fight over after 2 round(s). 12 seconds of fighting; now Day 19, 5:53:48 AM.
+  [game] dice Korvash Dexterity (Stealth) creeping across the Row to bind four sleeping guards, vs their sleeping passive Perception (about 5): 1d20+1 = 1d20 [14] + 1 = 15
+  [game] sheet: condition removed: Prisoner (Tin Row); condition removed: Raging
+  [DM write_lore (hidden)] {"entry": "Warden Hask", "add_to_description": "Day 19 ~5:55 AM: choked unconscious by Korvash, bound and gagged with blanket strips. Four wall-guards of the Tin Row were bound asleep with rope. Korvash holds the key ring. The Tin Row is unlocked but still unnoticed from outside (dawn bell has just rung)."}
+  [game] notebook: updated Warden Hask
+  [game] time: 12 minutes later: Day 19, 6:05:48 AM
+DM: You tighten your forearm across Hask's throat and hold it, counting, while his heels drum once against the straw and then stop. He goes limp with his breath still in him, a long slow rasp, and you ease him down on his side the way you would a sleeping goat. The key ring is cold in your fist. You find the cuff key by feel, the third on the ring, an ugly flat thing with a notched bit, and the manacle falls open with a clink that makes forty children flinch.
+
+You bind Hask with strips torn from his own blanket and gag him with a twist of cloth. Then you take the hempen rope from your pack, and a heavy stool leg, because you have a long row to cross, and you go barefoot between the bunks in the half-dark to where four hobgoblins lie sprawled in a heap of cloaks and snoring. They are armored, but they have taken the helms off to sleep. Sleeping heavily, they never feel the first knot, or the second. You work quickly and quietly, each wrist and ankle trussed to the next, and a sock stuffed in each mouth. The last one stirs and mutters something about a bell. You wait with the stool leg raised, the whole room holding its breath, until he settles.
+
+When you straighten, there is a space in the Tin Row that has not been there in years: silence, but different. Ninety-four children are sitting up in the straw, watching you. Ninna has crossed the floor in her bare feet and stands at your elbow with her arms wrapped round herself. Someone at the back, a small boy, has started to cry without sound and is being hushed by an older girl.
+
+It is a little after six in the morning. You are armed with a ring of keys, a stool leg, and a coil of rope. The barred door at the front is open to the dawn, with the lower gate beyond it and the sentries on the wall above. The grate at the back is bolted from the outside. And the master ledger is still in the chest on the third gate.
+
+What does Korvash do?
+
+== ROUND 50 ==
+PLAYER: I move fast and quietly. "Ninna, you and the older ones organize them in groups of ten by the grate, littlest first, and the first to get out pushes the grate open from the scree side for the rest. Nobody runs until I say, and the big ones carry the little ones."
+
+I strip the best sword and shield off the sleeping guards, drag Hask and the four bound hobgoblins into the back corner, and lock them in with the key ring. Then I take a guard's cloak and helm, stand by the barred door where I can see the lower gate, and keep watch while the children go out through the chute.
+  [game] dice Korvash Dexterity (Stealth) standing disguised at the door while 94 children slip out the chute; vs wall sentries' passive Perception 10: 1d20+1 = 1d20 [4] + 1 = 5
+  [game] sheet: gained 1 × Longsword; gained 1 × Shield; gained 1 × Guard's cloak and iron helm; AC now 15 (Unarmored Defense 10 + DEX + CON, plus Shield +2)
+  [DM write_lore (hidden)] {"entry": "Ninna", "add_to_description": "Day 19 ~6:20 AM: organized the children in tens at the chute, littlest first, older carrying the little ones. About thirty were out onto the east scree when a wall sentry noticed. Tessa's goat-song is heard from outside."}
+  [game] notebook: updated Ninna
+  [game] time: 15 minutes later: Day 19, 6:20:48 AM
+DM: "Ninna, you and the older ones, groups of ten by the grate, littlest first, and the big ones carry the small. Nobody runs until I say." She is already moving, a ten-year-old with a general's back, and the Row comes alive without a sound. It is the most disciplined thing you have ever seen children do.
+
+You strip the best sword and shield off the sleeping guards, haul Hask and the four bound hobgoblins into the corner, and lock them in with the key ring. Then you pull a guard's cloak around your shoulders and drop an iron helm over your horns, and plant yourself by the barred door where you can see the lower gate and the second wall beyond it.
+
+Behind you, from the back of the Row, there is the sound you have been waiting for. Not a bell, nor a call, but a thin, tuneless trill from outside the grate, in Draconic: the goat-counting song, one verse, very soft. A scrape of iron on iron follows, and a rusty bolt slides back. Cold dawn air flows into the Row. Ninna's whisper runs along the line: "Go. Quick. Quiet." One by one, the smallest children are lowered through the chute into waiting hands, and you can hear, outside, a woman's hoarse voice counting them off by name.
+
+It goes well for a quarter hour. Thirty children are through, then forty, and the line shuffles faster. Then a shout comes down from the second wall, and you freeze. A sentry is leaning on the parapet, pointing down the slope to the east scree. "Oi! Hask! There's brats on the rocks! Whose bloody count is this?"
+
+His voice carries. He turns his head, and he is looking directly at you, a figure in a helm and cloak at the door of the Tin Row, standing too straight and too tall, with horns pushing at the iron. A second sentry beside him lowers a spear, and the first begins to take the stairs down toward you at a trot.
+
+It is twenty minutes past six. About half the children are through the grate. The rest are lining up in the dark behind you, with Ninna's face pale and set. What does Korvash do?
+
+== ROUND 51 ==
+PLAYER: I keep the helm on and let the sentry come, but I step out into the yard, take the shield and sword in hand, and bellow in my best barracks-sergeant Goblin that he's late and the brats are being counted, so he'd best get on the wall and hold his spear steady.
+
+If it works, I turn him back up the stair. If he sees through it, I'll be waiting in the doorway so the narrow Row is behind me and he has to come through me to get a single child, and I'll shout back to Ninna: "Faster! Don't stop for anything!"
+  [game] dice Korvash Charisma (Deception) barking as a barracks sergeant in Goblin to turn the sentry back, DC 13: 1d20+1 = 1d20 [10] + 1 = 11
+  [game] dice Korvash's initiative: 1d20+1 = 1d20 [8] + 1 = 9
+  [game] dice Sentries' initiative (group): 1d20+1 = 1d20 [9] + 1 = 10
+  [game] fight: Fight started. Order: Sentry A (10), Sentry B (10), Korvash Emberhide (9). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Sentry A. Sentry A (initiative 10): HP 11/11, AC 18 Sentry A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry A longsword vs Korvash (AC 15): 1d20+3 = 1d20 [19] + 3 = 22 (Sentry A has used its action: no more actions this turn.)
+  [game] dice Sentry A longsword damage (slashing): 1d8+1 = 1d8 [8] + 1 = 9
+  [game] sheet: took 9 damage: HP 14 → 5
+  [game] fight: Round 1, now: Sentry B. Sentry B (initiative 10): HP 11/11, AC 18 Sentry B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry B longbow vs Korvash (AC 15): 1d20+3 = 1d20 [9] + 3 = 12 (Sentry B has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your barracks-sergeant bark comes out of the iron helm a half-beat too loud and a full tone too deep. You see the sentry's stride falter, and then the doubt in his face turns to certainty. The horns pushing at the helm, the height, the wrong shoulders on a man in a Warden's cloak. "That's no sergeant," he roars, and he is on you before you can raise the shield properly.
+
+His longsword takes you under the shield-rim and bites. It is a hard cut, and your blood runs warm down your side. You are at 5 hit points. Above, on the parapet, his partner has unslung a longbow and fires. The arrow punches into the wood of the doorframe a hand's breadth from your head.
+
+You are in the open yard with the open door of the Tin Row at your back, one sentry at your arm and one archer on the wall, with the lower gate beyond them and the whole camp waking. Behind you the children are still coming through the grate, and you can hear Ninna's hoarse whisper urging them on.
+
+It is your turn. What does Korvash do?
+  [game] conversation shortened: the DM's summary of turns 0 to 35, then turns 36 to 55
+
+== ROUND 52 ==
+PLAYER: I fling off the helm, rage, and step back into the doorway of the Tin Row so the sentry has to come through me and the archer has a poor angle. Raging with the shield up, I cut hard at the sentry with the longsword.
+
+"Ninna, keep them going! Nobody stops for me!"
+  [DM lookup (hidden)] {"name": "Longsword"}
+  [DM lookup (hidden)] {"name": "Hobgoblin"}
+  [game] sheet: Rage: 0/2; condition added: Raging (Korvash Emberhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Korvash longsword vs Sentry A (AC 18): 1d20+6 = 1d20 [11] + 6 = 17 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Sentry A. Sentry A (initiative 10): HP 11/11, AC 18 Sentry A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry A longsword vs Korvash (AC 15): 1d20+3 = 1d20 [8] + 3 = 11 (Sentry A has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Sentry B. Sentry B (initiative 10): HP 11/11, AC 18 Sentry B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry B longbow vs Korvash (AC 15, +2 half cover from doorframe = 17): 1d20+3 = 1d20 [15] + 3 = 18 (Sentry B has used its action: no more actions this turn.)
+  [game] dice Sentry B longbow damage (piercing; halved by Rage): 1d8+1 = 1d8 [5] + 1 = 6
+  [game] sheet: took 3 damage: HP 5 → 2
+  [game] fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [stub, not shown] Halved: 3.
+DM: You fling the helm clattering across the cobbles and the rage takes you. You back into the doorway of the Tin Row with the shield up and the doorframe at your shoulders, and the longsword comes round in a hard cut at the sentry. He gets his own shield across it, and the blade rings off the rim and skids away. Behind you Ninna's whisper runs on: "Go. Go. Don't stop."
+
+The sentry's answering stroke hammers your shield and glances off the rage-hardened scales of your arm, leaving only a bruise. The archer on the wall is steadier. His arrow comes in over the sentry's shoulder, clips the doorframe, and carves a furrow across your ribs. You are at 2 hit points. Your rage is still burning, and nobody on that wall has lost their nerve.
+
+Behind you the line of children keeps shuffling toward the grate in the dark. Down the slope, a second bell has started to ring somewhere, and the camp is waking.
+
+It is your turn. The sentry is at arm's length in front of the door, the archer is above and to the side, and you are standing on your last scrap of blood. What does Korvash do?
+
+== ROUND 53 ==
+PLAYER: I'm done trading blows at two hit points. I slam the barred door shut in the sentry's face, turn the cuff key's neighbour in the lock, and wedge the stool leg through the bars to hold it.
+
+Then I run down the Row, scoop up the smallest stragglers, and push them to the grate. "Ninna, last ones through, then you, then me. Move!"
+  [game] sheet: Korvash Emberhide has used its action: no more actions this turn.
+  [game] fight: Round 3, now: Sentry A. Sentry A (initiative 10): HP 11/11, AC 18 Sentry A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry A Strength check to force the locked, wedged door (my ruling, DC 15): 1d20+1 = 1d20 [4] + 1 = 5 (Sentry A has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Sentry B. Sentry B (initiative 10): HP 11/11, AC 18 Sentry B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry B longbow through the bars at Korvash (AC 15; my ruling: half cover from bars and bunks = 17; disadvantage, dim light and range): 1d20+3 (disadvantage) = 1d20 [13, 16]→13 + 3 = 16 (Sentry B has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [refused] time: advance needs a positive amount of time
+DM: You step back across the threshold and put your whole weight behind the door. It slams in the sentry's face with a crash that shakes dust from the roof. The cuff key's neighbour turns in the lock with a heavy click, and you jam the stool leg through the bars and the iron bracket, hard. The sentry hammers on the other side and shoulders it once, and the wedge only groans. He does not move it.
+
+Through the bars, the archer's arrow whips in over the bunks and thuds into a post a hand's breadth from your shoulder. The bars and the dim light spoil his aim, but he will keep trying, and the sentry is already bellowing for more men and for the bell. Whatever the door buys you, it buys by the minute, not the hour.
+
+Then you run. You scoop up two small boys who've frozen between the bunks and a girl of five clutching a blanket, and herd the rest toward the back, where the grate is a square of grey dawn at the foot of the wall. Perhaps a dozen children are left, Ninna among them, standing at the head of the line with her fists clenched, refusing to go before you. A hoarse voice outside is still counting them through, by name, and it is Tessa's.
+
+You are at 2 hit points, and your rage is only holding as long as it has something to feed on. It's your turn, and you stand among the last of the children with the door behind you holding for now. What does Korvash do?
+
+== ROUND 54 ==
+PLAYER: I hustle Ninna and the last of them into the chute. "Go, Ninna, and don't look back." Then I grab the rim of the grate in both hands, plant my boots on the wall, and haul with all the rage I've got left to tear the frame out wider so a dragonborn can squeeze through behind them.
+
+If it won't give, I'll hold the door as long as I'm standing, and tell Tessa through the gap to take the children to Harrowmere without me.
+  [game] dice Korvash Athletics tearing the grate frame wider (my ruling DC 20; advantage from Rage): 1d20+6 (advantage) = 1d20 [14, 20]→20 + 6 = 26 (natural 20) (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] sheet: condition removed: Raging
+  [game] fight: Round 4, now: Sentry A. Sentry A (initiative 10): HP 11/11, AC 18 Sentry A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry A shoulders the wedged door again (DC 15): 1d20+1 = 1d20 [6] + 1 = 7 (Sentry A has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Sentry B. Sentry B (initiative 10): HP 11/11, AC 18 Sentry B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Sentry B has used its action: no more actions this turn.
+  [game] fight: Round 4, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:25 AM: Korvash tore out the Tin Row ore-chute grate frame (nat 20) and found behind it an old side-drift with rusted rails and a ladder rising toward the third gate, smelling of lamp oil and paper; Tessa's crescent is scratched on a rivet where she sawed it over nights. Tin Row door locked and wedged with a stool leg; Sentry 
+  [game] notebook: updated Break the Foreman's Ledger
+DM: You push Ninna in head-first with the last of the children behind her, then set your boots on the wall and haul. The old iron groans. A rivet sheared half through, then another, and the whole frame peels out of the rock in a shower of grit and rust. Someone had been at it before you: down in the corner of the frame, a crescent has been scratched into a rivet head, and the bolts underneath are sawn nearly through. Tessa has been working at this for nights.
+
+The opening is wide enough for your shoulders now. Behind the frame, where the chute bends, an older working opens off to one side: a drift with rotted rails and a rusted ladder climbing into the dark, toward the third gate. The draft in it smells of lamp oil and paper.
+
+From outside, Tessa's voice, ragged and fast: "Kor? Kor, is that you? The little ones are out, the east scree is clear. *Come on.*"
+
+Back at the door the sentry's boot slams the planks again, the wedge shifting a finger's width. The rage has gone out of you and left your legs shaking. You are at 2 hit points, with the door still holding, a clear way out, and a side-drift that might lead to the ledger.
+
+It is your turn. What does Korvash do?
+
+== ROUND 55 ==
+PLAYER: I squeeze through the torn frame, grab the lamp oil flask off my belt and splash the wedge's side of the door, then hand it to Tessa. "The book can wait, Tess, I'm two hit points from dead, and the children need us on that scree more than the ledger needs burning tonight."
+
+I crawl out into the grey dawn and take her arm. "Get them moving east, and I'll walk the rear with the sword and shield. We'll bring the flame back to that ledger once they're safe, I swear it."
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 19, 6:21:12 AM.
+  [game] time: 4 minutes later: Day 19, 6:25:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:30 AM: Korvash got out through the chute with the last children to the east scree to Tessa; sentries A and B raised the alarm; all 94 children free of the Row but pursuit expected. Master ledger still in the ledger-house; Korvash has 2 HP, no lamp oil, longsword and shield only."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: You squeeze through the torn frame on your belly with the shield scraping rock above you, and the cold dawn hits your face. There's no oil flask on your belt, only your torches and tinderbox. Whatever Greyshaft took off you in the night, it took that too, so the door stays as it is and the wedge will have to hold on its own.
+
+Tessa is there, flat against the scree with her hood thrown back, and she has your arm before you've fully cleared the opening, hauling you upright with a strength that doesn't match her size. She looks at your side, at the black blood on the bandage, at your face, and her mouth goes thin. "You are an idiot," she says in Draconic, and doesn't let go.
+
+The east slope is a wasteland of grey scree and broken slate. Strung out across it, crouched behind boulders in bunches of ten the way you told them, are the children. Ninna is counting heads with her lips moving, one hand on the shoulder of each as she passes. She reaches the end, looks at Tessa, and nods once. Ninety-four. Nobody has been left behind.
+
+Behind and above, the alarm bell has begun to ring out over Greyshaft, long and angry, and from the Row's door you can hear the sentries bellowing for axes to break it. You have a quarter hour at most, perhaps less. East is the stone gully Tessa scouted, a goat track dropping toward a stream and the high road beyond. Harrowmere is three days' march for children on foot.
+
+Tessa keeps her voice low. "I can lead them down the track. I can't walk them all the way and hold off hobgoblins too. And the book is still up there. He'll move it tomorrow, with whatever hands he has left."
+
+You are at 2 hit points with a longsword, a shield, a ring of keys and your sister's hand on your arm. What does Korvash do?
+
+== ROUND 56 ==
+PLAYER: I take Tessa's hand and squeeze it once. "You lead them down the goat track, Tess, and Ninna keeps the count. I walk the rear with the shield and sword, and at the narrowest part of the gully I'll pull the slate down behind us so the Tallies have to dig to follow."
+
+I look at the children and put some of the old loudness back in my voice, pitched low. "Quiet feet, hands on shoulders, and no one drops back. Anyone who gets tired, tell me, and I'll carry you."
+  [game] dice Korvash Athletics pulling the slate down across the narrow gully (my ruling DC 14), 2 HP, not raging: 1d20+6 = 1d20 [6] + 6 = 12
+  [game] dice Pursuit on the goat track (1-2 Foreman's scouts overtake the column; 3-6 not yet): 1d6 = 1d6 [2] = 2
+  [game] time: 25 minutes later: Day 19, 6:50:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:50 AM: Tessa leads 94 children down the east goat-track gully with Ninna counting; Korvash's slate-pull failed (12) and only half the slope came down; two of the Foreman's grey-cloaked scouts have caught up on the ridge above the gully."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: Tessa takes the head of the column without argument, and Ninna falls in beside her, one hand on a shoulder at a time, counting under her breath. The children go down the goat track in a long whispering chain, small ones riding on bigger backs, and nobody drops back. At the first tired boy, you hoist him onto your shoulder without a word, shield on one arm, sword hand free.
+
+At the narrowest place in the gully the walls close to a spear's length, loose slate stacked in dark leaning sheets overhead. You set your back to it, find the keystone slab and heave. Your arms are not what they were an hour ago. The slab shudders and a trickle of shale slides across the path, and then it stops. The slope shrugs, and half of what you wanted comes down: a ragged heap you could climb in a minute, no wall.
+
+You are still staring at it when Ninna's whisper cuts back down the line. "Two of them. On the ridge."
+
+Two grey-cloaked figures stand against the lightening sky on the lip of the gully, thirty feet above the track and forty behind the last of the column. They are the Foreman's scouts, the ones who watched you on the road. One has a short bow already nocked. The other has a longsword and is looking at the children, not at you. Neither has shouted. They are waiting to see how many of you there are.
+
+It is a little before seven in the morning. You are at 2 hit points with a boy on your shoulder, a sword and a shield, the narrow gully at your back, and the whole column strung out ahead of you in the open. What does Korvash do?
+
+== ROUND 57 ==
+PLAYER: I set the boy down, tell him "Run to Tessa, lad, and don't stop," and climb onto the rubble heap with the shield up and the sword out, so the scouts have to look at me and not the column. Then I bellow up the gully in Goblin and Common alike, as loud as my cracked voice will go: "Two grey cloaks on a ridge, and a whole camp's worth of me already past you! Come down and learn what a Tally's axe is worth, or go and tell your Foreman Dargan's son walked ninety-four children out of his mine!"
+
+"Ninna, Tessa, keep them moving!"
+  [game] dice Korvash Charisma (Intimidation) bellowing at the two scouts from the rubble, DC 13: 1d20+3 = 1d20 [20] + 3 = 23 (natural 20)
+  [game] time: 20 minutes later: Day 19, 7:10:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~7:10 AM: Korvash's nat-20 Intimidation unnerved the two scouts; they backed off and one let slip the Foreman ordered them to follow and count, not fight, and that a rider already went to Gorrak Vael at Cinder Ford: Vael will be on the road by dusk. Scouts shadow the column from afar."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: The boy goes pelting down the track and you climb the rubble heap with shield high and sword out. Then you let go the whole of the old noise, in Goblin first and then Common, pitched to ring off every wall of the gully: two grey cloaks, a camp's worth of you already past, come down and learn what a Tally's axe is worth, or go tell your Foreman that Dargan's son walked ninety-four children out of his mine.
+
+It carries. The archer takes a half step back and his string slackens. The swordsman looks at the length of the gully, at the tiny figure on the rubble that has not so much as flinched, and at what the camp's alarm bell must have sounded like from here, and he does not move.
+
+"We're not paid to die on slate," he calls down at last, flat and sour, in Goblin. "Foreman's orders were follow and count. Not fight." He spits over the edge. "Rider's gone to Cinder Ford already, for the Tally captain. Vael will be on this road by dusk, and he can fetch you himself."
+
+They do not come down. They do not go away either. They melt back from the lip of the ridge, and for the next half hour you catch a grey shape or two on the skyline, always the same distance behind, always keeping count.
+
+It is a little after seven. The column is a mile down the track now, and the children have been walking in silence since the bell. Tessa has dropped back to walk beside you, her hood up, watching the ridge. The stream and the high road are an hour ahead. Vael and his hobgoblins are somewhere on that road by dusk, and Harrowmere is nearly three days off for small feet. You are at 2 hit points, and the ledger sits behind you in its chest.
+
+What does Korvash do?
+
+== ROUND 58 ==
+PLAYER: I fall in beside Tessa and say quietly, "Gorrak Vael will be on this road by dusk, and I swore to stand before him with the ash on my hands, so I won't run from that. At the stream I'll stop the column, let the little ones drink and rest, and wait for him on open ground with the children behind me."
+
+I look at her sideways. "You said he saw you the night of the raid and let you live, Tess. If it comes to blades, tell me honestly: will he be ours, or the Foreman's?"
+  [game] time: 1 hour later: Day 19, 8:10:12 AM
+  [DM write_lore (hidden)] {"entry": "Tessa", "add_to_description": "Day 19 ~7:15 AM: Asked whether Gorrak Vael will be ally or the Foreman's, she said honestly she does not know: he let her go the night of the raid, but he fears the Foreman and the ledger counts him too. Day 19 ~8:10 AM: column reached the stream at the foot of the east track; Korvash chose to halt and wait for Vael there."}
+  [game] notebook: updated Tessa
+DM: Tessa walks a dozen paces without answering, eyes on the track and her small hands tucked up her sleeves. When she does, her voice is level and careful, the way you speak about a thing you have turned over too many nights.
+
+"I don't know, Kor. I'd like to say ours." She shakes her head. "He saw me go over the ledge, and he let me. A man who wants a hand for the quota doesn't do that. But he took the pass, and he took the children, and when the Foreman says a number, Vael's rod is the one that's counted against it. A man can owe two masters. I don't think he's loyal to the Foreman. I think he's afraid of him. That's not the same, and it's not the same as ours either." She glances at the ridge. "Don't wait for him with your blade out. And don't count on him to be gentle."
+
+Then the track drops, the gully opens, and you come down to the stream, a bright shallow braid of snowmelt over cobbles with a pale grass flat on its near bank and the high road a long way beyond. The children go to the water like a flock of lambs. Ninna posts older ones as lookouts without being asked and starts counting again. Somebody gives the smallest ones the last of the bread. On the ridge behind you, one grey shape stays against the sky, dark and patient.
+
+It is just past eight in the morning. You can have an hour here to rest, and a hit die to spend on your wounds, if you want it, though it puts you an hour closer to dusk. You have two hit points, the column is huddled at your back, and Vael is somewhere on the road ahead.
+
+What does Korvash do?
+
+== ROUND 59 ==
+PLAYER: I take the hour. I drink at the stream, spend a hit die while the children rest, and eat a strip of what's left of the dried goat meat with Tessa, shield propped against a boulder where I can reach it.
+
+DM: Ahead of Vael's arrival, how many hit dice do I have left after that long rest, and do I still have the key ring and Dargan's horn charm on me?
+  [game] sheet: short rest; spent 1 hit die (0/1 left): roll 1d12 and add the CON modifier (CON 14 (+2)), then pass the total as heal; the player decides whether to spend another after the roll; 1 hour later: Day 19, 9:10:12 AM
+  [game] dice Korvash hit die healing (short rest): 1d12+2 = 1d12 [1] + 2 = 3
+  [game] sheet: healed 3: HP 2 → 5
+DM: Out of game, to answer you: it was a short rest, not a long one. You have 0 of your 1 hit die left, and the roll was poor, so you're at 5 of 14 hit points. The rest did bring your breath weapon back. Rage is still 0 of 2 and won't return until a long rest. And yes, the key ring and Dargan's carved horn charm are both still on your belt.
+
+You drink at the stream with your muzzle in the cold water, then sit on the cobbles with your shield propped against a boulder where you can reach it. You share the last strips of Veshra's goat meat with Tessa, and she eats hers in tiny bites, like someone who has learned never to finish a meal first. Nobody speaks much. The children sleep in the grass in heaps, and Ninna, who does not sleep, sits on a rock with her chin on her knees, watching the ridge. The grey shape on the skyline is still there.
+
+It is a little after nine in the morning. The sun is full on the water and the high road lies bare beyond the far bank, nothing on it yet. Your breath is back in your chest, and the rest of you is stiff and hurting but standing.
+
+Vael will be here by dusk, or sooner if he rode hard. What does Korvash do?
+
+== ROUND 60 ==
+PLAYER: The rest is done and every hour nearer Greyshaft's hounds is an hour wasted, so I get the column on its feet. "Up, little ones, we cross here and take the high road home, and anyone too tired rides on my back."
+
+I send Tessa ahead along the road hooded and quick to scout for Vael's column, and I walk the rear with the shield on my arm and my breath weapon ready, so that if Gorrak arrives it's on the open road with the children well behind me.
+  [game] time: 4 hours later: Day 19, 1:10:12 PM
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~1:10 PM: met Korvash's column on the high road beyond the stream with about twenty Iron Tally hobgoblins; halted his column and came forward with Sergeant Ushk, rod in hand. Foreman's scouts shadow the column from the ridges."}
+  [game] notebook: updated Gorrak Vael
+DM: You get them up. They rise out of the grass like a flock being shaken awake, and Ninna has the count before the last of them has found their feet. You wade the stream with a small girl on your back, two more hanging off your belt, and the shield bumping your knees. Tessa slips off ahead along the road, a rust-red shadow in a grey hood, and is gone round the first bend before you've reached the far bank.
+
+The high road is a pale ribbon through dry grass and boulder-fields, wide and open, the mountains on your left and the long fall of the lowlands on your right. The children walk. You carry whoever stops, one and then another. A grey cloak keeps pace on the ridge, always the same distance behind. By midday the children's feet are bleeding in their wrappings and nobody is crying, which is worse.
+
+A little after one in the afternoon, Tessa is back, running low along the verge, and she stops at your elbow with her breath coming short. "Half a mile. They're on the road, in column. Twenty, maybe more, mostly Tally-sworn, and Ushk's with them. The mask is in front." She wets her lips. "They've seen us."
+
+You see them a minute later where the road tops a rise: a long dark line of hobgoblins in iron and red-and-tin cloaks, spears upright, marching in step. Then a horn sounds one note, low and level, and the line halts. A single tin-masked figure walks out ahead of it with a heavy-shouldered sergeant at his side, and in his hand a rod notched from top to bottom catches the sun. He stops forty paces off, in the open, and waits.
+
+Ninety-four children are behind you on a road with no cover. You are at 5 hit points with a sword, a shield, and your breath in your chest. Gorrak Vael is looking at you through the slits of his mask. What does Korvash do?

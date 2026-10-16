@@ -1,0 +1,275 @@
+## Hob (17 sentences in 13 rounds)
+R9: At the last bend, where the trees thin and the dark shape of a squat stone lamp-house crouches ahead against the sky, Hob's free hand rises and falls across your chest like a gate.
+R11: Hob stands about 10 feet behind you, rigid, the pale lantern shaking in his fist.
+R13: Hob had tried to bind his wounds with shaking dead hands, and he could not stop the bleeding.
+R20: Hob stands in its light a long time, looking south, his unlit lantern held toward a road he cannot walk.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R23: Hob keeps watch on the step the whole night.
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+R39: You lay it out simply: Hob keeps the Lamp, but a man who is dead cannot be asked to bear it forever, and a light needs hands that can fetch oil and trim a wick.
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R40: You tell her about the arrows and the burning oil, and that Hob, the dead keeper, wept for him in his own dry way and kept the light burning over him.
+R40: It is about half past eleven in the morning, and you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first.
+R41: Hob sits on the step as he sat in the night, lantern in his lap.
+R42: The five candles stand in a row on the step, and Hob looks down at them and then up at you.
+R43: You could say your name and that you come from Hob, and that the shawl is in your pack, before you tell her the harder thing.
+R47: I said, 'Hob, you'll die in that damned lamp-house and nobody'll know for a month.
+R48: At last she wipes her face with her sleeve and looks at you with Hob's steady eyes in a living face.
+R48: Hollow Reach has its rota, Hob has his sister, and the road runs on in two directions.
+
+## Cal (17 sentences in 12 rounds)
+R9: Cal goes first with his bow strung and a hooded lantern, shuttered to a sliver.
+R9: Cal has stopped too, bow half-raised.
+R11: Cal is crouched in the ferns off your left, roughly 20 feet from them, bow in hand with the oil jar and lit hooded lantern beside him.
+R11: Their reach is 5 feet and they move 30 feet a turn, so they can be on you before Cal gets two arrows off.
+R11: You could hurl oil yourself (throw range 20 feet), have Cal handle it on his turn, throw it, shoot your crossbow, hold the path with your shield, or something else.
+R13: At 0 HP you were out cold, stable but unconscious, and Cal went down beside you.
+R13: The last ghoul's claws came down on Cal while he lay paralyzed, and he did not get up.
+R14: You have 1 HP, no spells, and Cal's body.
+R15: Or go now, at 1 HP, with no spells, carrying Cal, or leaving him under the lamp's light for the Widow's folk to fetch.
+R16: You tuck Cal's coat around him and fold his hands, and speak the short prayer for the dead over him, with the lamp's steady gold light across his face.
+R17: Cal's jar shattered at the ghoul's feet and burned out in two rounds.
+R22: Because of the game's two nights of horror, the world will remember what happened to Brannoc and Cal.
+R25: Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while.
+R32: You tie the four of them onto Dobb's handcart with their coats tight around them, lay Cal's longbow beside, and take up the shafts.
+R40: Nessa Tarn is a small, weathered woman with Cal's quick dark eyes, and she looks at the bow in your hands before she looks at your face.
+R40: " She will put Cal's name on the rota and go up with the others, and she asks that you leave her Edda's hymn, the one you hummed, because she heard it from the barn the first night and it was the only thing that let her sleep.
+R48: She asks about the village, and you tell her about the Reach and the barn, about Cal and the others, and the five candles on the step.
+
+## Greywater (10 sentences in 9 rounds)
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R40: The rota is underway, and Greywater lies a day's walk down the valley, with a weaver there who doesn't know her brother is dead.
+R40: It is about half past eleven in the morning, and you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first.
+R41: Greywater is a day's walk.
+R42: About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole.
+R44: His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days.
+R45: In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+R46: At about nine, the road bends and Greywater comes into view below, a cluster of slate roofs along the river, with racks of dyed wool drying red and blue and ochre in rows along the bank, and a weir turning white across the water.
+R49: Three people in Greywater are suffering with no one to see to them.
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+
+## Hollow Reach (9 sentences in 8 rounds)
+R13: Hollow Reach is a mile south, with fifteen people behind a barred door and a boy with a fevered bite who needs you by dawn.
+R20: Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R32: If you want it lit all night, you will need more oil from Hollow Reach, and someone to tend it.
+R32: At the edge of Hollow Reach the dogs bark once, and then people come out, one door at a time, women with their sleeves still floury, two old men, children held back by the wrist.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+R48: Hollow Reach has its rota, Hob has his sister, and the road runs on in two directions.
+R53: Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+
+## Tam (8 sentences in 7 rounds)
+R1: A big man, Tam's father, has a torn, bound thigh and a gray face.
+R1: Tam tugs your hand toward his father.
+R5: Behind you, in the dim, Tam is whispering to his father.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R33: Tam presses against his father's side.
+R35: You see Tam on the barn step with his father's crutch across his knees, watching you, and when you nod he lifts a hand.
+R38: Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you.
+R42: Tam runs alongside for half a field, calls "Come back!
+
+## Wil (8 sentences in 7 rounds)
+R2: The two quiet ones are brothers, Pell and Dorrin Harrow, Wil's elder brothers.
+R2: "Joss and the old man were struck near dusk last night, and Wil at the fence just before dawn.
+R7: But it is also a dead keeper wrapped in rags at your door, and Wil is feverish, and the dark outside is deepening, and something called the hungry ones is under the stones of a shrine a mile north.
+R14: A full night's rest would restore your prayers, but it would be morning before you reached Wil.
+R15: You would wake at full HP with both prayers back, and Wil's wound would have had a full night to fester.
+R22: Resting first would have cost Wil a few hours of fever, and you would have walked in at dawn with both prayers and full hit points.
+R35: You carry Edda's amulet, a cart of the dead has gone to its rest, and your long rest can begin at midnight beside Wil's bed, in the Harrow barn, by the hearth.
+R38: Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you.
+
+## Edda (6 sentences in 6 rounds)
+R14: The hymn comes without your deciding it, the low one Edda sang over the dead, and it steadies your breathing.
+R20: After a while he takes Edda's plain wooden amulet from your chest, wipes it clean on his sleeve, and carries it back to the barn in both hands, to the one person left there who knows how to pray.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R35: You carry Edda's amulet, a cart of the dead has gone to its rest, and your long rest can begin at midnight beside Wil's bed, in the Harrow barn, by the hearth.
+R40: " She will put Cal's name on the rota and go up with the others, and she asks that you leave her Edda's hymn, the one you hummed, because she heard it from the barn the first night and it was the only thing that let her sleep.
+R54: You also teach her the first line of Edda's hymn, and she hums it badly and with great seriousness.
+
+## Wren (8 sentences in 6 rounds)
+R49: Her name is Wren, a dyer's daughter of twelve or so, and she looks at you directly.
+R50: You show Wren how to change the dressing each morning and each night, with boiled water and fresh honey, and she nods gravely and repeats every step back to you.
+R50: Wren takes you next to a low house on the village's east lane, where a thin, tired woman stands in the doorway with a baby on her shoulder.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R51: Perrin Gale is waiting in the dye-sheds, the one who won't let anyone look at his fall, and Wren stands in the lane with her basket, watching you.
+R54: Whether she'd take Wren is another matter, and one the dyer's daughter's parents must also answer.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R56: Wren stirs at the first full light, blinks at your blanket, and sits up in alarm as if she had overslept her own life.
+
+## Hit Die (5 sentences in 5 rounds)
+R15: A short rest of 1 hour, in which you could spend your one Hit Die (1d8 + 2) to recover some HP.
+R16: Your Hit Die is spent, and 8 hit points have come back to you.
+R30: Your next long rest can't count until about midnight, so you have no spells until tomorrow, and you have 1 HP, a Hit Die, a mace, and a shield.
+R35: Your Hit Die is back to one of two.
+R38: You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity ready, and a Hit Die back, so you now have both.
+
+## Day (5 sentences in 5 rounds)
+R16: It is now 1 AM on Day 2.
+R38: It is 8 AM on Day 3, and the long rest is done.
+R45: It is twenty past midnight on Day 4.
+R48: It is a quarter to eleven on Day 4.
+R56: It is twenty past six on Day 5.
+
+## Fenner (6 sentences in 5 rounds)
+R16: Somewhere out there, two ghouls are hunting low, and the cut bank by the Fenner fields lies on the way.
+R17: About forty feet ahead, where the track meets the ditch below the Fenner fields, a long gray shape stands upright in the middle of the road.
+R24: And the two ghouls are still somewhere under the Fenner fields, and a barrow with a second mouth lies a few hundred yards from this barn.
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R30: The two Fenner cousins fought on with a pick and a sledge, and they hurt it badly, but they were farm lads, and they died there too.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+
+## Brannoc (5 sentences in 5 rounds)
+R20: Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+R22: Because of the game's two nights of horror, the world will remember what happened to Brannoc and Cal.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+R54: How does Brannoc spend the last of the evening, and which prayers does he prepare?
+R57: She says "Yes, sir," and then, after a moment, "Brannoc," and you both smile at it.
+
+## Dobb (5 sentences in 5 rounds)
+R23: Dobb said the barn held through the night.
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R28: The oil is gone, and Dobb is rubbing his shoulder and muttering about a second beam.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R32: You tie the four of them onto Dobb's handcart with their coats tight around them, lay Cal's longbow beside, and take up the shafts.
+
+## Maud (5 sentences in 5 rounds)
+R43: As for what you say first to Maud, that is yours to decide, but the simple truth is probably kindest.
+R49: You thank Maud once more, and she gives your hand a last squeeze and shoos you out.
+R50: You wash it with warm salt water, trim the dead skin back to the clean edge with the small knife from your pack, and spread honey thin over the raw places, honey from Maud's own jar.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+
+## Mother Aldith (5 sentences in 5 rounds)
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R57: Mother Aldith's house is somewhere in the town, and Perrin's hip is a promise you carry.
+R58: Tobin, a boy of nine, has a badly crushed ankle that will need Mother Aldith's setting, and he is shivering with shock.
+
+## Hennet (6 sentences in 4 rounds)
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R30: Hennet did drag you back from the gap, and he put a hand to your throat and your side and stabilized you with his first aid.
+R30: Hennet pulled you clear, saved your life, and was killed where he knelt.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R32: A girl of eight or nine looks at Hennet's boots on the end of the cart and begins very quietly to cry.
+
+## Marl (5 sentences in 4 rounds)
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R28: Marl strikes flint to a rag and flicks it in after, and the gap blooms orange.
+R30: Its claws took Marl before he could turn, a single stroke, and he fell.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+
+## Stonebridge (8 sentences in 4 rounds)
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+R53: Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+R55: Stonebridge is a day's walk down the valley.
+R56: You tell her you are going to Stonebridge with her letter, and that her parents should hear it from her first, before any road is chosen.
+R56: " At last they agree, on conditions: a one-month trial only, with Maud Marrow to go with her to Stonebridge when the weather holds, and a return at harvest if either of them wishes it.
+R56: You have all three prayers, a letter delivered, a hip to speak for, and the valley road down to Stonebridge, a day's walk, which you could take now.
+R57: Your questions: Stonebridge is a day's walk by the valley road, about eight hours at a steady pace, and you will arrive in the afternoon.
+R57: At twenty past two the town rises out of the valley haze: Stonebridge, a walled huddle of timber and tile at the foot of a long stone bridge of seven arches.
+
+## Pell (4 sentences in 3 rounds)
+R2: The two quiet ones are brothers, Pell and Dorrin Harrow, Wil's elder brothers.
+R2: Pell is asleep with a deep gash on his arm and is simply exhausted, but Dorrin lies still with his eyes half open, barely waking when you say his name, and his skin is cold and damp.
+R25: Pell wakes while you work, a lanky lad with his mother's jaw, and watches the torn edges of his arm knit together under your hand as if it were happening to someone else.
+R39: Pell speaks first, awkwardly.
+
+## Dobb Harrow (3 sentences in 3 rounds)
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+R25: Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+
+## Good (3 sentences in 3 rounds)
+R35: Two that might fit what you've seen are Protection from Evil and Good, which turns aside undead among other things, and Detect Poison and Disease.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R39: It is enough for three castings of Protection from Evil and Good.
+
+## Evil (3 sentences in 3 rounds)
+R35: Two that might fit what you've seen are Protection from Evil and Good, which turns aside undead among other things, and Detect Poison and Disease.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R39: It is enough for three castings of Protection from Evil and Good.
+
+## Hesper (4 sentences in 3 rounds)
+R44: Hesper says the cough started three days ago, that he brings up a thick yellow-gray phlegm in the morning, and that no one else in the inn is sick.
+R44: You could sit up with him, check him through the night, ask more of Hesper, or try a different approach tomorrow.
+R45: You eat Hesper's onion-and-barley stew, standing, and are back at the boy's side before the bowl is cold.
+R46: Hesper wakes you at first gray with a mug of hot tea.
+
+## Tessa (5 sentences in 3 rounds)
+R51: The baby is Tessa, a girl of four months, round-faced and flushed, with a damp little fist knotted in her mother's collar.
+R51: Tessa has caught her mother's cough, and is likely to mend as her mother mends.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R54: Tessa sleeps easy on her mother's shoulder both times, the rattle looser than before.
+R56: Before you go you count Tessa's breaths again, a slow sixty by the window.
+
+## Perrin (3 sentences in 3 rounds)
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R57: Mother Aldith's house is somewhere in the town, and Perrin's hip is a promise you carry.
+
+## Tobin (4 sentences in 3 rounds)
+R58: Tobin, a boy of nine, has a badly crushed ankle that will need Mother Aldith's setting, and he is shivering with shock.
+R58: Round Tobin's ankle, under the swelling, are long gray finger-marks, four of them, spread wide, with a cold, blue-white burn at each tip like frost-bite.
+R59: Imma has little to give back, since her knock has taken her nearly to nothing, and so does Tobin.
+R60: The niches on the arch hold two empty lamp-flasks and one overturned, and beside the third niche, on the stone, are long gray finger-marks, four of them, spread wide, like the ones on Tobin's ankle.
+
+## Joss (2 sentences in 2 rounds)
+R2: "Joss and the old man were struck near dusk last night, and Wil at the fence just before dawn.
+R33: Joss says four hands could put it over the gap before dark, but he cannot go himself, and every strong young man the Reach had is lying in a row on a cart.
+
+## Widow (2 sentences in 2 rounds)
+R15: Or go now, at 1 HP, with no spells, carrying Cal, or leaving him under the lamp's light for the Widow's folk to fetch.
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+
+## Widow Harrow (2 sentences in 2 rounds)
+R24: " Inside, Widow Harrow looks as if she has not slept in two days, and she does not waste a word.
+R39: Widow Harrow brings a tarnished silver thimble, her grandmother's, and says, "It's no use to a dead woman, and less to a living one.
+
+## Ned (2 sentences in 2 rounds)
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R32: Ned's body and the wound: the drag-trail goes down the scree and into the dark at an angle, and you can see only about twenty feet of it before it vanishes under the roof.
+
+## Wat (2 sentences in 2 rounds)
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+
+## Nessa Tarn (2 sentences in 2 rounds)
+R39: He lived with his widowed mother, Nessa Tarn, in a house at the lane's far end, and she hasn't come out yet.
+R40: Nessa Tarn is a small, weathered woman with Cal's quick dark eyes, and she looks at the bow in your hands before she looks at your face.
+
+## Maud Marrow (2 sentences in 2 rounds)
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R56: " At last they agree, on conditions: a one-month trial only, with Maud Marrow to go with her to Stonebridge when the weather holds, and a return at harvest if either of them wishes it.
+
+## The Millstone Inn (2 sentences in 2 rounds)
+R42: About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole.
+R43: At ten to seven, with the sun low and gold behind you, the Millstone Inn comes up out of the river mist: a big old mill of gray stone, its waterwheel still turning, lamps lit in every window, smoke rising from two chimneys.
+
+## Garn (2 sentences in 2 rounds)
+R44: His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+
+## Piper (2 sentences in 2 rounds)
+R45: In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+R49: It ends one disease or one condition (blinded, deafened, paralyzed, or poisoned), so it would have broken Piper's lung fever outright, and it would end a ghoul's paralysis on you or an ally.
+
+## Perrin Gale (2 sentences in 2 rounds)
+R49: And old Perrin Gale, who dyes in the sheds, fell from a rack and hasn't walked straight since, and he won't let anyone look at it.
+R51: Perrin Gale is waiting in the dye-sheds, the one who won't let anyone look at his fall, and Wren stands in the lane with her basket, watching you.
+
+## Ilsa (2 sentences in 2 rounds)
+R51: Ilsa's cough is dry and deep, of a fortnight's standing, with an ache under the ribs and a night sweat.
+R54: You sweep the chapel with her, you set the kettle on for Ilsa, and you go twice to the low house on the east lane to count the baby's breaths against a slow sixty.
+
+## Brother Ansel (2 sentences in 2 rounds)
+R57: It is a small hospice of twelve beds with a plain shrine, kept by a Brother Ansel, and under Shelter of the Faithful you and any companions can expect free healing and care there, provided you bring any material components yourself.
+R58: Inside, Brother Ansel, a lean, gray, bright-eyed man in his sixties with a bandage roll in one hand and a bowl of water in the other, looks up and sees the amulet.
+
+## Hodd (3 sentences in 2 rounds)
+R59: By half past three there is a lamp lit by every cot, and a bowl of oil beside each, and his apprentice, a freckled boy named Pip, runs to fetch Hodd.
+R60: By a quarter past four you are on the bridge with Hodd and the guards, looking over the parapet at the second arch.
+R60: Perception (14): the stair door is as Hodd said, a rusted grating, but a rusted chain hangs loose and the padlock is not rusted through; it has been forced from inside.

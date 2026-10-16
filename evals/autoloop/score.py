@@ -1,5 +1,6 @@
 """Unblind the judges' verdicts (blind.py's key.json + judge*.jsonl in the same folder): per arm, how many replies had
-a contradiction, repeated the original one, or acted for the PC; and per round.
+a contradiction, repeated the original one, acted for the PC, ended in a menu, read out the sheet or ended
+unclearly (JUDGE.md); and per round.
     py -3.12 evals/autoloop/score.py <blind folder>"""
 import json
 import sys
@@ -18,8 +19,9 @@ for f in d.glob("judge*.jsonl"):
         arm, rnd = key[v["code"]], v["code"].split("-")[0]
         t = tot[arm]
         t["n"] += 1
-        for k in ("contradiction", "repeats_original", "agency"):
-            t[k] += int(v.get(k) or 0)
+        for k in ("contradiction", "repeats_original", "agency", "menu", "sheet_readout", "unclear_end"):
+            if k in v:
+                t[k] += int(v.get(k) or 0)
         p = per[(rnd, arm)]
         p[0] += 1
         p[1] += int(v.get("contradiction") or 0)

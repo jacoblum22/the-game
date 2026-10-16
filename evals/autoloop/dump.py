@@ -11,7 +11,8 @@ name, first, last, out = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), Path(s
 meta = json.loads((GAMES / f"{name}.meta.json").read_text(encoding="utf-8"))
 save = json.loads((GAMES / Path(meta["save"]).name).read_text(encoding="utf-8"))
 t = save["transcript"]
-lines = [f"CHARACTER: {save['sheet']['name']}, {save['sheet']['summary']}"]
+lines = [f"CHARACTER: {save['sheet']['name']}, {save['sheet']['summary']} (as the sheet is now, after the last round; the level and HP"
+         " may have been lower earlier)"]
 opening = "\n\n".join(e["text"] for e in t[meta["play_starts"]:] if e["kind"] == "dm" and not any(
     x["kind"] == "player" for x in t[meta["play_starts"]:t.index(e)]))
 if first == 1:

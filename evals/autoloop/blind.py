@@ -1,6 +1,6 @@
 """Blind packets for judging replay replies: per round, the three rounds before it (as dump.py writes them), what the
 readers found there, and every arm's replies shuffled under codes. The key (code -> arm) is written separately.
-    py -3.12 evals/autoloop/blind.py <replay folder> <out folder>"""
+    py -3.12 evals/autoloop/blind.py <replay folder> <out folder> [block, e.g. 61-120; default 1-60]"""
 import json
 import random
 import re
@@ -10,6 +10,7 @@ from pathlib import Path
 
 READ = Path(__file__).parent / "games" / "read"
 src, out = Path(sys.argv[1]), Path(sys.argv[2])
+BLOCK = sys.argv[3] if len(sys.argv) > 3 else "1-60"
 out.mkdir(exist_ok=True)
 by_round: dict[tuple[str, int], list[tuple[str, dict]]] = defaultdict(list)
 for f in sorted(src.glob("*.json")):
@@ -20,10 +21,10 @@ for f in sorted(src.glob("*.json")):
 key = {}
 rng = random.Random(7)
 for (game, k), runs in sorted(by_round.items()):
-    dump = (READ / f"{game}-1-60.txt").read_text(encoding="utf-8")
+    dump = (READ / f"{game}-{BLOCK}.txt").read_text(encoding="utf-8")
     parts = re.split(r"\n(?=== ROUND \d+ ==)", dump)
     before = [p for p in parts if (m := re.match(r"== ROUND (\d+) ==", p)) and k - 3 <= int(m.group(1)) < k]
-    found = [x for x in (READ / f"{game}-1-60.findings.txt").read_text(encoding="utf-8").splitlines()
+    found = [x for x in (READ / f"{game}-{BLOCK}.findings.txt").read_text(encoding="utf-8").splitlines()
              if x.startswith("{") and json.loads(x)["round"] == k]
     rng.shuffle(runs)
     lines = [f"GAME {game}, ROUND {k}", "", "THE THREE ROUNDS BEFORE (the original game):", *before, "",

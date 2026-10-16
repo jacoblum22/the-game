@@ -1,0 +1,1257 @@
+CHARACTER: Wren Ashgrove, Half-Elf bard 1, acolyte background
+== OPENING ==
+Your character is complete.
+
+Marrowford sits where the slow brown Marrow River bends under a stone bridge, a town of grain barges, tallow-chandlers and market stalls that never quite close. The lands around it are old and quarrelsome. Minor noble houses hold the river-farms, trade in favours, and pay well for stories that make their lineages look older than they are.
+
+Wren Ashgrove is nineteen, half-elf, a bard with a quick grin and a sharper tongue. She was raised by Corvin Tallowmere, who taught her to spin tales and sell them. A few weeks ago she slipped away from his caravan at a river crossing in the night. She took his ledger of forged tales, its pages now hidden in the binding of her road-psalter, a few of his best forgeries, and a head start. She also carries a brass lantern-shaped reliquary of the Lantern-Bearer, the gentle road-god of travelers and tale-tellers, with a curl of old parchment inside that may be a true blessing or just another forgery.
+
+Dusk settles over Marrowford's square. Lamps are being lit along the stalls, and the smell of river fish and woodsmoke hangs in the air. At the square's far edge, half in shadow, stands a wagon painted with a shrine-lantern sigil you know too well. Corvin's. There's no sign of the man himself.
+
+A weathered driver lounges on the box, picking his teeth. Before him a young page in a minor noble's livery, pale and sweating, is pressing a sealed letter into his hand and glancing over his shoulder. The wax seal is one you've seen in the ledger. On the tailboard behind them sits a locked, iron-bound strongbox, begging to be poked at.
+
+The crowd is thin enough that you could slip closer unseen, march up with a grin, or wait and watch. What does Wren do?
+
+== ROUND 1 ==
+PLAYER: I keep to the shadow of a grain-stall and slip closer, trying to stay unseen and get near enough to hear what the page says to the driver. While I'm at it, I pull out my road-psalter and flip to the margin notes to check whose seal that is in the ledger.
+  [DM lookup (hidden)] {"name": "Hiding"}
+  [game] dice Wren's Stealth check sneaking close, vs driver's passive Perception 10 (DC 10): 1d20+2 = 1d20 [12] + 2 = 14
+  [game] dice Wren's Investigation check to identify the seal in the ledger, DC 10: 1d20+2 = 1d20 [6] + 2 = 8
+  [DM write_lore (hidden)] {"create": "House Verrel", "kind": "group", "description": "Minor river-farm noble house, seat at Thornhallow. Lord Edric Verrel bought a forged lineage tale from Corvin. His page is frightened because a royal assessor will verify the house's lineage charter in three days.", "relationships": ["client of [[Corvin Tallowmere]]", "sent [[The Frightened Page]] with [[The Sealed Letter]]"]}
+  [game] notebook: created an entry for House Verrel; added 2 relationships to House Verrel
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Overheard: page serves Lord Edric Verrel of Thornhallow; letter is for Corvin's hand only; an assessor comes to Thornhallow in three days to check the Verrel lineage charter. Driver says Corvin went upriver and will return in a day or two; he took the letter and a coin. Page left toward the bridge."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 10 minutes later: Day 1, 6:40 PM
+DM: Your Stealth check was a 14. You slide from stall to stall, a sack of barley and a hanging rack of tallow candles covering you, and end up crouched behind a water barrel six feet from the wagon's wheel.
+
+The page's voice shakes. "It's for Master Tallowmere's hand only, understand? From Lord Edric Verrel of Thornhallow. The assessor arrives in three days to inspect the lineage charter, and my lord says the tale *must* be mended before then. He said Master Tallowmere would know what he meant."
+
+The driver turns the letter over, unimpressed. "Master's gone upriver. Back in a day, maybe two. I'll see he gets it." He holds out a palm, and the page drops a coin into it. The boy hesitates, then hurries off toward the bridge, looking over his shoulder the whole way.
+
+Meanwhile, you flipped open the psalter and thumbed the binding pages by the dimming light. Your Investigation check was an 8. You know you've seen a seal like that in the ledger, but the ink is cramped and the light is poor, and you couldn't place it before the page was done talking. With the ledger open and a lamp, you'd settle it.
+
+The driver tucks the letter inside his coat, hops down, and wanders toward a tavern across the square, leaving the wagon unattended, with the strongbox on its tailboard. The page is still visible, crossing the bridge. Dusk is deepening.
+
+What does Wren do?
+
+== ROUND 2 ==
+PLAYER: Mage Hand first, I send the spectral hand over to test the strongbox's latch and see if it's actually locked or just looks it, while I stay hidden behind the barrel. If the coast is clear, I'll slip over and look at the lock for a Sleight of Hand attempt, though I don't have thieves' tools, so I'll improvise with the dagger tip or a hairpin from my diplomat's pack.
+  [DM lookup (hidden)] {"name": "Mage Hand", "kind": "spell"}
+  [DM lookup (hidden)] {"name": "Thieves' Tools"}
+  [game] dice Wren's Dexterity check to pick the strongbox lock with a hairpin (no thieves' tools proficiency), DC 15: 1d20+2 = 1d20 [10] + 2 = 12
+  [game] time: 3 minutes later: Day 1, 6:43 PM
+DM: You cast Mage Hand, and a pale, shimmering hand drifts out from behind the barrel, low along the cobbles. It tugs at the strongbox's latch. The latch rattles but holds, so the box really is locked. You dismiss the hand before it can draw an eye.
+
+The driver has vanished into the tavern, and the square's traffic is thinning. You slip over, kneel at the tailboard, and go to work on the lock with a hairpin. It's a good lock, heavy and well oiled, with a tight keyway. Your check was a 12 against a DC 15. The pin slips, bends, and snaps with a thin *tink*, leaving a sliver of metal wedged in the keyway.
+
+A fishwife three stalls down glances up at the sound, then goes back to counting her coin. Nobody else notices, but the lock is now harder to pick. You'd need a better tool than a hairpin, and the damage will be obvious to anyone who looks.
+
+Meanwhile the page is still crossing the bridge, and the driver will return to his wagon sooner or later. The wagon is Corvin's, so there's a chance he left more than a box here.
+
+What does Wren do?
+
+== ROUND 3 ==
+PLAYER: I give up on the box and quietly check the wagon itself, slipping around to the back and peeking under the canvas flap for anything else Corvin left, like a satchel, a second ledger, or a shrine altar. If I find nothing in a minute or two, I'll tail the page across the bridge and ask him a few friendly questions about Lord Verrel's "mended tale."
+  [game] dice Wren's Investigation check searching the wagon interior, DC 12: 1d20+2 = 1d20 [17] + 2 = 19
+  [DM write_lore (hidden)] {"entry": "Corvin's Wagon", "add_to_description": "Inside under the canvas: a folding travelling shrine of the Lantern-Bearer with a false back panel; behind it a flat leather case of blank vellum, seals-in-wax impressions (a Verrel seal among them), and a half-written draft letter in Corvin's hand, \"to be mended before the assessor\", with a list of three noble houses and sums owed. A sleeping c
+  [game] notebook: updated Corvin's Wagon
+  [game] time: 5 minutes later: Day 1, 6:48 PM
+  [DM lookup (hidden)] {"name": "Forgery Kit"}
+DM: Your Investigation check was a 19. You lift the canvas flap and slip inside the cramped wagon. Under the smell of lamp oil and old wool, your trained eye finds what a casual one wouldn't.
+
+A small folding travelling shrine of the Lantern-Bearer stands against the front panel. Its back panel sits a hair proud of the frame, and behind it is a flat leather case. Inside are sheets of blank vellum, a tin of wax-impressions, a Verrel seal among them, and a half-finished draft in Corvin's neat, unmistakable hand. It reads: *"...to be mended before the assessor arrives. The Verrel charter's third descent must hold, or the ink on the whole line will not."* Beneath it is a list of three noble houses with sums beside them, two struck through and one circled: Verrel.
+
+So Corvin is fixing his own forgery, and he knows it's about to be exposed. There's no second ledger and no satchel, only a cot, a cloak, and the case. You could take the draft, copy it, or leave it as you found it. The sealing-wax impressions would be useful to a forger.
+
+Outside, the tavern door bangs. The driver hasn't come back yet, but a minute or two is all you have. The page is still on the far side of the bridge, getting smaller.
+
+What does Wren do with the case, and then do you still tail the page?
+
+== ROUND 4 ==
+PLAYER: I snatch the wax-impression tin and quickly copy the draft's key lines onto a sheet of my own paper with my pen, then slip the original back behind the shrine panel exactly as I found it so Corvin never knows. Then I slide out the back of the wagon, keep to the shadows, and tail the page across the bridge.
+  [game] dice Wren's Stealth check slipping out and tailing the page, vs passive Perception 10 (nervous page, glancing back): 1d20+2 = 1d20 [7] + 2 = 9
+  [game] sheet: lost 1 × Paper (one sheet); gained 1 × Tin of wax seal impressions; gained 1 × Copy of Corvin's draft letter
+  [game] time: 7 minutes later: Day 1, 6:55 PM
+  [DM write_lore (hidden)] {"entry": "The Frightened Page", "add_other_names": ["Tobin"], "add_to_description": "Spotted Wren tailing him on the bridge. Boy of about fourteen, nervous, called Tobin; goes by Tobin Reed once he speaks."}
+  [game] notebook: updated The Frightened Page
+DM: You work fast. The tin goes into your pouch, and your pen scratches the key lines of the draft onto a sheet of your own paper. You tuck the original back behind the shrine panel exactly as it was, then ease out the rear flap and into the lengthening shadows.
+
+The tail goes badly. The page is on the middle of the bridge when a barge horn blasts below, and your shoe scuffs a loose cobble. Your Stealth check was a 9, just under his alertness, and the boy spins around. For a heartbeat you're two figures facing each other across twenty feet of lamplit stone, with the water sliding by underneath.
+
+He's about fourteen, freckled and ink-stained at the fingers, and he looks ready to bolt. One hand is on a belt-knife far too big for him. "Who's there? Did Master Hale send you?" he says, voice cracking. "I delivered it! I swear I gave it to the driver!"
+
+Whoever Master Hale is, the boy clearly fears him, and the boy thinks you might be him or work for him. He hasn't run yet.
+
+What does Wren say or do?
+
+== ROUND 5 ==
+PLAYER: I step into the lamplight with my hands open and a warm, lopsided grin, keeping my voice low and friendly. "Easy, easy, I'm nobody's Master Hale. I'm just a storyteller who saw a brave lad deliver a letter under a lot of pressure. Put the knife down, and tell me, who is Master Hale, and what's he got on you that has you so scared?"
+  [game] dice Wren's Persuasion check to calm and win over Tobin, DC 12: 1d20+5 = 1d20 [2] + 5 = 7
+  [DM write_lore (hidden)] {"create": "Master Hale", "kind": "person", "description": "Someone Tobin fears; Tobin thought Wren might be him or his agent. Role unknown; Tobin says Hale's people \"smile too.\" Possibly the assessor's man, a creditor, or a rival of the Verrels.", "relationships": ["feared by [[The Frightened Page]]"]}
+  [game] notebook: created an entry for Master Hale; added 1 relationship to Master Hale
+  [game] time: 2 minutes later: Day 1, 6:57 PM
+DM: You step into the lamplight, hands open, with your best lopsided grin. It doesn't land. Your Persuasion check was a 7.
+
+Tobin's eyes flick over you: the rapier at your hip, the road-worn cloak, the smile. His knuckles whiten on the knife hilt. "That's what they all do," he says, voice tight. "Hale's men smile. Hale's men always smile." He takes a step back along the bridge rail. "I told you, I gave it to the driver. That's all I was told to do. Leave me alone or I'll shout for the bridge-warden."
+
+Behind him, at the far end of the bridge, a bored-looking warden with a lantern pole leans in a doorway, thirty paces off. One yell and he'll be here.
+
+You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin. The boy is a hair from bolting, and he clearly won't be talked round by charm alone.
+
+What does Wren do?
+
+== ROUND 6 ==
+PLAYER: I drop the grin completely and lower my voice, speaking plainly. "You're right, Hale's men smile, so I won't. I'll tell you the truth: I'm the one running from Corvin Tallowmere, and I know what that letter's worth. I'll leave my rapier right here on the bridge rail where you can see it, and I'll give you a silver piece to buy your supper, no strings."
+  [game] dice Wren's Persuasion check, honest plea with rapier laid down, DC 10: 1d20+5 = 1d20 [18] + 5 = 23
+  [game] sheet: money -1 sp: now 14 gp 9 sp
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Per Tobin: Hale is the Verrel household's steward-clerk who handles Lord Edric's money, a cold smiling man. He has been pressing Tobin to learn what Lord Edric sends to Corvin and to whom. Tobin suspects Hale means to sell the Verrel secret to the assessor's side, or to Lord Edric's rival, for gain."}
+  [game] notebook: updated Master Hale
+  [DM write_lore (hidden)] {"entry": "The Frightened Page", "add_to_description": "Now trusts Wren somewhat. Tobin Reed, servant to Lord Edric. Knows the Verrel charter was bought from Corvin years ago and that Lord Edric is terrified. Lord Edric is sending him on to Thornhallow tonight; Tobin is lodging at the Drowned Candle inn in Marrowford."}
+  [game] notebook: updated The Frightened Page
+  [game] time: 10 minutes later: Day 1, 7:07 PM
+DM: You unbuckle the rapier and lay it on the stone rail between you, then flick a silver piece into the lamplight. Your Persuasion check was a 23.
+
+Tobin stares at the blade, the coin and your face. Whatever he's looking for in it, the smile isn't there, and that seems to be what he needed. The knife drops an inch, then two. "You're... *running* from him?" His voice goes small. "Master Tallowmere frightened me worse than anyone. He looked at me like he was reading me." He pockets the coin and steps back toward you, still wary. "Take your sword. I'm not a fool. I only don't want to be left alone with this."
+
+Once you sit on the bridge rail, it comes out in a rush.
+
+Master Hale is Lord Edric's steward-clerk, a cold, smiling man who keeps the household's money and has been "asking" Tobin what his lord sends to the storyteller, and to whom. Tobin thinks Hale means to sell the secret, either to the assessor's side or to a rival of Lord Edric's. The charter, he says, was bought from Corvin years ago, and Lord Edric has barely slept since the assessor's letter came. Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done. He's lodging for the night at the Drowned Candle, an inn on the near bank, and is meant to leave at dawn.
+
+He adds, quieter, "If Hale learns it was delivered, my lord is ruined. If he learns I talked to you, so am I."
+
+The bridge-warden has lost interest in you. The lamps are lit and the river is dark below.
+
+What does Wren do next?
+
+== ROUND 7 ==
+PLAYER: I pick up the rapier, buckle it back on, and give Tobin a small, serious nod. "Then I'll keep your secret, and you keep mine. Tell me this, Tobin: if Hale wanted to get at Lord Edric's charter before the assessor does, where would he keep it, and would your lord trust a stranger who could mend that third descent before it's inspected?"
+  [DM write_lore (hidden)] {"entry": "House Verrel", "add_to_description": "Thornhallow is a day's walk downriver from Marrowford by the river road. The lineage charter is kept in an iron-bound chest in Lord Edric's study; the key is on his neck-chain, but Master Hale keeps a copy. Lord Edric trusts only Corvin; years ago he saw a young girl with Corvin who sang for his table (Wren, possibly). Tobin can vouch for a stranger
+  [game] notebook: updated House Verrel
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Tobin: charter is in a locked chest in Lord Edric's study at Thornhallow; Hale has a spare key. Lord Edric would likely trust Corvin's apprentice. Thornhallow is a day's walk downriver; the assessor comes in three days."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 5 minutes later: Day 1, 7:12 PM
+DM: You buckle the rapier back on. Tobin watches you do it, then chews his lip, thinking hard in the way of someone who has never been asked a question like this.
+
+"The charter's in an iron chest in my lord's study, at Thornhallow, under the window. The key's on a chain around his neck. But Hale has a copy; I've seen him use it when my lord's asleep." He swallows. "As for trust... my lord doesn't trust strangers. He doesn't trust anyone but Master Tallowmere, and he's frightened because Master Tallowmere hasn't answered him in a month."
+
+He glances at your lute, and something stirs in his face. "There was a girl once. Years back, before I served there. The old cook still tells it. A storyteller came to Thornhallow with a girl who sang at my lord's table, and my lord wept at the last verse and gave her a ribbon. Was that... you?"
+
+He doesn't wait for an answer. "If you came to my lord as the storyteller's apprentice, with a word or a token only that circle would know, he might listen. Thornhallow's a day's walk downriver, and the assessor comes in three days. I leave at dawn on a hired mule. I could say nothing of you, or I could say a friend of Master Tallowmere is coming."
+
+The night is quiet, and the market lamps are going out one by one behind you. You hold a copy of Corvin's draft, a tin of his seal impressions, and a ledger of his lies in your psalter binding. Whatever you choose to do about Verrel's third descent, you can do it with all of them.
+
+What does Wren decide? Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+
+== ROUND 8 ==
+PLAYER: Tell him to say a friend of Master Tallowmere is coming, nothing more, not my name, and not a word to Hale. I'll sleep at the Drowned Candle tonight on the same inn's floor as Tobin so I can keep an eye on him, then set out on foot for Thornhallow at first light. DM: what was the ribbon Lord Edric gave the girl at his table, do I remember its color, and do I still have it?
+  [DM lookup (hidden)] {"name": "Lodging"}
+  [DM lookup (hidden)] {"name": "Food, Drink, and Lodging"}
+  [game] sheet: money -1 sp 6 cp: now 14 gp 7 sp 4 cp
+  [game] time: 20 minutes later: Day 1, 7:32 PM
+DM: Tobin nods fast, relief plain on his face. "A friend of Master Tallowmere is coming. Nothing else. Not your name, not a word to Hale." He says it twice more under his breath, as if learning a verse.
+
+The Drowned Candle is a low, crooked inn on the near bank, with a lantern in a bottle-glass window. It smells of boiled eel and peat smoke. For a silver piece you get floor space by the hearth in the common room, and for six more copper a bowl of fish stew and a heel of bread. Tobin takes a straw pallet against the wall near you, one hand never far from his knife. That's 1 sp 6 cp spent, and you have 14 gp 7 sp 4 cp left.
+
+As for the ribbon, that's your past, so it's your call rather than mine. Tobin only repeated the cook's tale, and I won't decide what you remember. Tell me, if you like:
+- Do you remember that night at Thornhallow at all?
+- What color was the ribbon, and do you still have it? It could be the token that gets you a hearing, or it could be a thing you never thought twice about.
+
+Once you've said, I'll move you through the night and into the morning road.
+
+== ROUND 9 ==
+PLAYER: I remember it faintly: a high-ceilinged hall, a fire, a weeping lord, and a deep green velvet ribbon that Corvin pocketed and never gave me. But I kept a scrap of it, because I slit the hem of my old caravan cloak to hide the end of it, and I've worn it there ever since without thinking much of it.
+
+I settle in by the hearth, eat my stew, and keep one eye half-open on Tobin's pallet through the night.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; gained 1 × Scrap of green velvet ribbon (sewn in cloak hem); 8 hours later: Day 2, 3:32 AM
+  [DM write_lore (hidden)] {"create": "Green Velvet Ribbon", "kind": "item", "description": "Deep green velvet ribbon Lord Edric Verrel gave Wren as a child after she sang at his table in Thornhallow. Corvin pocketed the ribbon; Wren kept a scrap sewn into her old caravan cloak's hem. Possible token to win Lord Edric's trust.", "relationships": ["given by [[House Verrel]]'s Lord Edric to Wren", "kept by Wren, hidden in her 
+  [game] notebook: created an entry for Green Velvet Ribbon; added 2 relationships to Green Velvet Ribbon
+  [game] time: 2 hours 30 minutes later: Day 2, 6:02 AM
+DM: You unpick a stitch of the hem and there it is, a worn thumb's-length of deep green velvet, soft with years. It's the only thing from that hall you ever kept. You press it back under the stitching and settle by the hearth with one eye half-open, and the night passes quietly. Tobin mutters in his sleep and the hearth burns low. Nobody climbs the stairs, and no smiling man comes through the door.
+
+By the time grey light creeps through the bottle-glass window, you've slept, though lightly, and you're rested. HP and spell slots are restored, and Bardic Inspiration is back to 3 uses.
+
+Tobin is already awake, tying his bundle, and a hired mule stamps in the yard. He gives you a nod and a small, nervous half-smile. "A friend of Master Tallowmere is coming," he mutters, then slips out the door to ride ahead.
+
+The river road to Thornhallow runs downriver from the bridge, a day's walk through farmland and willow-banks. It's six in the morning, you have 14 gp 7 sp 4 cp, and the assessor is two days and some hours away.
+
+Corvin's driver and wagon are still on the square. Corvin himself is somewhere upriver. You can head straight down the river road, or take a few minutes in Marrowford first for supplies, a better lockpick set, or anything else you want.
+
+What does Wren do?
+
+== ROUND 10 ==
+PLAYER: I'll take a few minutes in the market to buy thieves' tools if any stall has them, and a day's worth of bread and cheese for the walk. Then I'll head down the river road to Thornhallow, keeping an eye out for Master Hale's smiling men.
+  [game] dice Wren's Perception check watching the river road for smiling followers, DC 12: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+  [game] sheet: gained 1 × Bread loaf; gained 1 × Cheese, hunk; money -1 sp 2 cp: now 14 gp 6 sp 2 cp
+  [DM write_lore (hidden)] {"create": "Smiling Follower", "kind": "person", "description": "Unnamed lean man in a tradesman's brown coat, one of Master Hale's agents. Wren rolled a natural 1 on Perception on the river road and did not notice him. He followed her out of Marrowford, having seen her speak with Tobin on the bridge, and will track her to Thornhallow.", "relationships": ["works for [[Master Hale]]", "follows Wren
+  [game] notebook: created an entry for Smiling Follower; added 2 relationships to Smiling Follower
+  [game] time: 9 hours 15 minutes later: Day 2, 3:17 PM
+DM: The market is just waking, with stalls unshuttering and the smell of hot dough in the cold air. A tinker with a tray of picks, files and tiny mirrors has a proper set of thieves' tools, but he wants 25 gp for it, and you have under fifteen. You could haggle some other day. Instead you spend 1 sp 2 cp on a loaf and a hunk of cheese, and that's your breakfast and lunch.
+
+The river road runs down the Marrow's north bank through willow-banks, wheat fields gone gold, and stone farmsteads with smoke rising. You keep your eyes on the road, on every cart, every tradesman, every man whose smile lingers a beat too long. You see nothing. For a moment you wonder whether that's good luck or just poor looking, and you can't be sure which. Your Perception check was a natural 1, and nothing you saw tells you either way.
+
+You walk through the day with your lute on your back, stopping to eat on a milestone and refill your waterskin at a roadside trough. The sun is slanting low when the road tops a rise and the land opens out. Below sits Thornhallow: a small walled manor on a bend of the river, grey stone with a slate roof, a gatehouse flying a green and white pennant, and a village of thatched cottages leaning against its wall like children against a parent. Smoke curls from the chimneys. It is a quarter past three.
+
+There's a guard at the gate, and the manor is quiet. Somewhere inside, Tobin has arrived, and a worried lord is waiting for a friend of Corvin Tallowmere.
+
+What does Wren do?
+
+== ROUND 11 ==
+PLAYER: I smooth my cloak, put on a calm, slightly weary smile, and walk up to the gate guard. "Good afternoon. I'm a friend of Master Corvin Tallowmere, come at Lord Edric's request; Tobin should have said I was on the road. Tell your lord the girl who sang at his table years ago has come, and that she remembers the green ribbon."
+  [game] dice Wren's Persuasion check with the gate guard, DC 10 (Tobin has warned of her): 1d20+5 = 1d20 [8] + 5 = 13
+  [DM write_lore (hidden)] {"create": "Lord Edric Verrel", "kind": "person", "description": "Master of Thornhallow, minor noble, sleepless and frightened about the assessor's inspection of his lineage charter. Wept when Wren, as a child, sang at his table and gave her a green velvet ribbon. Trusts only Corvin.", "relationships": ["head of [[House Verrel]]", "master of [[The Frightened Page]]", "gave [[Green Velvet Ribbon]] 
+  [game] notebook: created an entry for Lord Edric Verrel; added 3 relationships to Lord Edric Verrel
+  [DM write_lore (hidden)] {"create": "Thornhallow", "kind": "place", "description": "Small walled grey-stone manor on a bend of the Marrow, a day's walk downriver of Marrowford. Gatehouse with a green and white pennant, thatched village huddled against the wall. Seat of House Verrel.", "relationships": ["seat of [[House Verrel]]"]}
+  [game] notebook: created an entry for Thornhallow; added 1 relationship to Thornhallow
+  [game] time: 20 minutes later: Day 2, 3:37 PM
+DM: Your Persuasion check was a 13, enough. The guard is a stout, grey-whiskered man in a green tabard. He hears you through, chews on the word "ribbon," and his face changes. "Wait here," he says, and he sends a boy running across the yard.
+
+Twenty minutes later you're led through the gate and across a cobbled courtyard where hens scatter, then in through a side door and up a narrow stair to a study. It's a plain room, stone-walled, with a lit fire despite the warm day and a heavy desk covered in unsealed papers. Under the window sits an iron-bound chest, just as Tobin said.
+
+Lord Edric Verrel stands when you enter. He is a narrow, stooped man of perhaps fifty, with ink on his cuffs and shadows under his eyes. Tobin hovers at his shoulder, pale and watching you.
+
+"I was told a friend of Master Tallowmere was coming," Lord Edric says. His voice is thin and careful. "Tobin tells me you remember a ribbon. Many people could have learned that from a servant's gossip. Show me, if you would, what you have."
+
+Beside the desk, in a shadowed corner, a man you haven't seen before sits quietly with a ledger open on his knee. He is neat, middle-aged and softly spoken, and he gives you a courteous, perfectly warm smile. He hasn't been introduced.
+
+What does Wren do?
+
+== ROUND 12 ==
+PLAYER: I keep my eyes on Lord Edric and ignore the smiling man in the corner. I slip the scrap of green velvet from my cloak hem and lay it on the desk. "The hem-end of what Corvin pocketed that night, my lord. I'd rather say the rest of it to you alone, since Tobin tells me this house has many ears." Then I turn and give the man in the corner a pleasant nod. "And forgive me, sir, I don't believe we've been introduced?"
+  [game] dice Wren's Insight check reading Master Hale's smile, DC 13: 1d20+3 = 1d20 [18] + 3 = 21
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Met Wren in Lord Edric's study at Thornhallow: neat, middle-aged, soft-voiced steward-clerk with a warm smile. Wren's Insight (21): the smile never changes, yet his eyes went to the iron chest when the ribbon was laid down and again to the door; he already knew Wren was coming and who she was (\"the apprentice\"). He is afraid of her, not for Lord Ed
+  [game] notebook: updated Master Hale
+  [game] time: 5 minutes later: Day 2, 3:42 PM
+DM: The scrap of velvet sits on the desk like a drop of old forest. Lord Edric stares at it. His hand rises, hovers, and finally touches it with one finger. His mouth works for a moment before any sound comes. "That... that is from the hall's own bolt. We never found the rest." His eyes lift, wet and bright. "You are the child."
+
+Then you turn to the man in the corner, and your Insight check, a 21, tells you what the smile hides. It hasn't changed in all the time you've watched it. It's fixed, practised, and a little too exact. When the ribbon touched the desk his eyes went to the iron chest under the window, then to the door, then back, quick as a bird. He knew you were coming, and he knows who you are.
+
+"Master Hale, steward and clerk of the household," the man says, rising with a small bow. His voice is soft and pleasant. "I keep my lord's accounts. And you, mistress, I gather, are the storyteller's apprentice. I must say my lord has been quite beside himself. Perhaps I should remain, to keep a record of whatever is agreed."
+
+Lord Edric hesitates, glancing from you to his steward, and his hand closes over the ribbon. He's a man who has leaned on others for a long time. "Hale... leave us. A moment. I will call you."
+
+"My lord," Hale says gently, "the matter of the assessor touches the whole house..."
+
+"I said leave us."
+
+Hale inclines his head. He goes slowly, and the door closes behind him with a soft, exact click. You hear his footsteps retreat along the corridor, but not quite all the way.
+
+Tobin hovers by the hearth, miserable. Lord Edric looks at you with a lost, hopeful face. "Tell me, child. Is the charter lost? Can it be mended? What did Corvin do?"
+
+You have a copy of the draft, the ledger in your psalter, and a tin of seal impressions. Hale may be listening at the door. What does Wren say or do?
+
+== ROUND 13 ==
+PLAYER: I walk to the door and open it quickly, as if to check the corridor, and let Hale's listening ear be caught or at least startled. If he's there, I give him a sweet smile and say, "Master Hale, my lord asked for privacy, I'll fetch you myself." Then I shut it, and I tell Lord Edric in a low voice, "My lord, the charter's third descent is a forgery, and Corvin knows it will fail the assessor's inspection. I came to help you before it does, but first I need to know who else has seen the charter, and whether Hale has a copy."
+  [DM write_lore (hidden)] {"entry": "House Verrel", "add_to_description": "Lord Edric admits (Day 2): Corvin sold him the charter as a \"restoration\" from true records, and he has half-suspected the third descent (grandsire's marriage into the Aldermere line) might be false. Only Lord Edric, Corvin, Hale and the old chaplain Brother Osric have seen it. Hale keeps a spare key and has had it copied by a scribe in Marrowford
+  [game] notebook: updated House Verrel
+  [DM write_lore (hidden)] {"create": "Dame Ilsabet Crowe", "kind": "person", "description": "Royal assessor coming to Thornhallow at noon on Day 4 to inspect the Verrel lineage charter. Known as exacting and incorruptible.", "relationships": ["inspects [[House Verrel]]'s charter at [[Thornhallow]]"]}
+  [game] notebook: created an entry for Dame Ilsabet Crowe; added 1 relationship to Dame Ilsabet Crowe
+  [game] time: 5 minutes later: Day 2, 3:47 PM
+DM: You cross the room in three quick steps and swing the door wide. Master Hale is there, a pace from the frame with his head cocked, and for half a breath the smile is not on his face. Then it is, perfectly, as though it had never gone. "Master Hale," you say, sweet as honey, "my lord asked for privacy. I'll fetch you myself." He bows without a word, his eyes resting on yours a moment longer than they should. His footsteps go away down the corridor, and this time they keep going. You shut the door.
+
+Lord Edric has sunk into his chair. When you tell him the third descent is a forgery, he doesn't protest. He just closes his eyes. "I thought it might be. I did not want to know." Then, in a low, hurried voice, he answers you.
+
+Corvin sold him the charter as a restoration "from true records, long scattered." The whole line rests on the third descent, his grandsire's marriage into the old Aldermere house. Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale. Hale has the spare key, and Lord Edric admits, with a flush, that he once saw Hale's hand on the copy "for safekeeping." He thinks a scribe in Marrowford made a duplicate.
+
+The assessor is Dame Ilsabet Crowe, who arrives at noon on the day after tomorrow. "She has broken two houses already," he says. "She says a forged line is a forged crown."
+
+Tobin is staring at you from the hearth as though you might fix this by speaking. Lord Edric leans forward. "Can it be mended? I will pay whatever Corvin was owed, and more. I will not lose Thornhallow."
+
+You have until noon on Day 4, a copy of Corvin's draft, a tin of seal impressions, and a ledger of his methods. Hale knows you're here. What does Wren say or do?
+
+== ROUND 14 ==
+PLAYER: "It can be mended, my lord, but not by another forgery, not against someone like Dame Crowe. First, I need to see the charter itself and the old Aldermere marriage records, if your chaplain, Brother Osric, kept any, so I can build the repair on something true." I glance at Tobin. "And Tobin, keep watch on the corridor for me, quietly, and tell no one, Hale least of all, that I asked."
+  [game] dice Wren's Investigation check examining the charter's third descent, DC 12: 1d20+2 = 1d20 [7] + 2 = 9
+  [DM write_lore (hidden)] {"entry": "House Verrel", "add_to_description": "Charter examined by Wren (Day 2, Investigation 9): third descent is in a hand close to the others and aged with tea-wash, but she cannot tell whether the marriage itself was invented or merely its name. Needs Brother Osric's parish register in the Thornhallow chapel vestry. Brother Osric is old, half-deaf, and keeps the register in the chapel on the
+  [game] notebook: updated House Verrel
+  [game] time: 25 minutes later: Day 2, 4:12 PM
+DM: Tobin nods, slips out into the corridor, and pulls the door nearly closed behind him with a look of grim determination. Lord Edric fumbles a chain out from inside his collar and unlocks the iron chest under the window. The lid rises with a groan.
+
+The charter is a long scroll of good vellum, heavy with ribbon-bound seals. You spread it on the desk and work through it by the window's light and a candle, tracing the descents one by one with a fingertip. Your Investigation check was a 9. The third descent is in a hand very close to the others, with the same iron-gall ink, aged with a tea-wash, and the vellum has been scraped and rewritten at the edges. You can tell it's wrong, but you can't tell *how* wrong. Was the marriage invented outright, or was it real and only its name or date altered? Without a true record to set beside it, you can't say.
+
+Lord Edric watches you, hands knotted. "Brother Osric keeps the parish register in the chapel vestry, on the green," he says. "He's old and a little deaf, but he was here when my grandsire's marriage was supposedly made. If there's a true record anywhere, it's his."
+
+Outside the window the sun is sliding west, and the village beyond the wall looks quiet. Tobin is in the corridor. Hale has gone somewhere. The assessor is a little over a day and a half away.
+
+What does Wren do?
+
+== ROUND 15 ==
+PLAYER: "Then I'll visit Brother Osric now, my lord, before Hale thinks to get there first." I copy the third descent's names and dates onto a fresh sheet, roll the charter back into its chest, and tell Lord Edric to lock it and keep the key on his neck. "Tobin, you're with me, and if anyone asks, I'm a pilgrim wanting to see the vestry and light a candle for the Lantern-Bearer."
+  [game] dice Wren's Persuasion check with old Brother Osric, a fellow servant of road-gods, DC 11: 1d20+5 = 1d20 [5] + 5 = 10
+  [game] sheet: lost 1 × Paper (one sheet); gained 1 × Notes: names and dates of the Verrel charter's third descent
+  [DM write_lore (hidden)] {"create": "Brother Osric", "kind": "person", "description": "Old, half-deaf chaplain of Thornhallow's green chapel who keeps the parish register. Master Hale visited him earlier that day and warned him that \"a clever young charlatan\" would come asking; Osric is therefore wary of Wren. Persuasion 10 failed narrowly. He keeps a Lantern-Bearer wayside lamp lit in the chapel porch.", "relationships
+  [game] notebook: created an entry for Brother Osric; added 2 relationships to Brother Osric
+  [game] time: 20 minutes later: Day 2, 4:32 PM
+DM: You copy the third descent's names and dates onto a clean sheet, and Lord Edric rolls the charter back into the chest and locks it, the key going back inside his collar. Then you and Tobin slip out through the kitchen yard and across the green to the chapel.
+
+It's a low stone building with a slate roof and a crooked bell-cote. In the porch burns a small brass wayside lamp, the sort travellers leave burning for the Lantern-Bearer, and your heart does an odd little turn at the sight of it. Inside it smells of beeswax and damp stone. Brother Osric is on his knees at a bench, a bent, white-haired man in a patched brown robe, polishing a pewter cup with great slowness.
+
+You say your piece about the candle, the pilgrim, the vestry. Your Persuasion check was a 10, and it falls just short.
+
+Osric's pale eyes lift. He cups one ear and makes you say it twice. Then he says, in a thin, careful voice, "Master Hale came by this morning. Said a clever young charlatan would come asking after my register. Said she'd talk sweetly." He doesn't say you're that charlatan. He doesn't say you aren't, either. He sets the cup down. "The register stays in the vestry, child. I don't open it to every pilgrim with a pretty tongue, however well she lights a candle."
+
+He isn't hostile, only stubborn and afraid, and he's looking at the Lantern-Bearer's lamp in the porch as he says it. You carry a reliquary of that same god, and he hasn't seen it yet. Tobin shifts at your elbow, unsure whether to speak.
+
+What does Wren do?
+
+== ROUND 16 ==
+PLAYER: I drop the pilgrim act, kneel beside him, and take the brass lantern reliquary from my pack, setting it in his hands. "Hale's right that I'm a liar, Brother, and that's why I won't lie to you now: I stole this from a shrine wagon, and I've never known if the parchment inside is a true blessing or a forgery. You'd know a real one better than I would. Look at it, and then decide whether I get the register."
+  [DM write_lore (hidden)] {"entry": "Brother Osric", "add_to_description": "Examined Wren's reliquary: the parchment is genuine, an old road-priest's blessing (\"Let none who bear this lamp walk unlit; let the false word fall from their tongue and the true one light the road\"). Osric wept, gave Wren the register. Truth of the third descent: in the register Lord Edric's grandsire Aldous Verrel married Maud Fenn, a miller's
+  [game] notebook: updated Brother Osric
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 2: Brother Osric's register shows the third descent's marriage was real but to Maud Fenn, miller's daughter, not an Aldermere. The Verrel claim to Aldermere blood is false; the manor itself is held by plain land-grant. Wren's reliquary parchment is a genuine blessing of the Lantern-Bearer. Hale tried to see the register and was refused."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 40 minutes later: Day 2, 5:12 PM
+DM: You kneel on the flagstones and set the little brass lantern in his knotted hands. You tell him what it is, where it came from, and that you've never known if what it holds is true. For a long moment Brother Osric says nothing. His thumb moves over the worn etching on the lid, a lamp with rays, and his lips shape a prayer you almost know.
+
+He opens it with care and draws out the yellowed curl. The old man holds it close to the porch lamp's light and reads, slowly, tracing the lines with a fingertip. "That is a road-priest's hand," he says at last, very softly. "A real one. I trained beside a brother who wrote the same loops." He reads it aloud, and the words are plain: *"Let none who bear this lamp walk unlit. Let the false word fall from their tongue, and the true one light their road."* His eyes are wet. "Whoever wrote that meant it. It's a true blessing, child, and you carried it a long way without knowing."
+
+You don't know what to do with your hands, so you hold still. Tobin looks away.
+
+Osric returns the parchment to its case, folds your fingers around it, and gets to his feet with a groan. "Come."
+
+In the vestry, from a chest under the altar stone, he lifts a thick register bound in cracked calfskin and a second, thinner copy written in his own cramped hand. He finds the page without searching, because he has read it many times. The entry is short. Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow. There is no Aldermere in it, no great house, and no blood of the old line. Corvin changed the bride's name and her family.
+
+"The manor was granted to the Verrels by plain deed," Osric says. "The descent was only ever for precedence and the tax-right. The land is theirs without it." He hesitates. "Master Hale asked to see this. I refused him."
+
+It is five-twelve in the evening. You have the truth in hand, a day and a half before Dame Crowe arrives, and you can't be sure Hale hasn't another way into the chapel.
+
+What does Wren do?
+
+== ROUND 17 ==
+PLAYER: I copy the entry carefully onto a fresh sheet, and ask Brother Osric if he'd be willing to attest it in writing and in person before Dame Crowe. "DM: how many sheets of paper do I have left, and did I keep the dagger or just the rapier? I want to know what I can spare for a second copy."
+  [game] sheet: lost 1 × Paper (one sheet); gained 1 × Copy of Brother Osric's register entry (Verrel–Fenn marriage)
+  [game] time: 20 minutes later: Day 2, 5:32 PM
+  [DM write_lore (hidden)] {"entry": "Brother Osric", "add_to_description": "Agreed to attest the true register entry in writing and in person before Dame Crowe, on condition the Verrels are not ruined by it."}
+  [game] notebook: updated Brother Osric
+DM: You copy the entry carefully, Osric's cramped hand and the date and the bride's plain name, onto a clean sheet, and blow on the ink until it dries.
+
+You have 2 sheets of paper left. You've still got both the rapier and the dagger, both listed on your sheet. The dagger is still at your belt, and the paper is easy to spare, with a bottle of ink and your pen besides.
+
+Osric watches you work, then nods slowly. "I'll set my name to it, in writing and in person, before this Dame Crowe, so long as it's the truth you mean to tell and not another tale." He lays a hand on the register. "A false line is a sin. A plain one is not. The Verrels are good people, and a miller's daughter was a good woman."
+
+The shadows are long across the green now. Tobin shifts nervously at the vestry door. Hale is somewhere in the manor, and the assessor is a day and a half away.
+
+You hold two true copies, a witness, and a blessing. What does Wren do next?
+
+== ROUND 18 ==
+PLAYER: "Brother, would you write your attestation tonight and sign it with your own seal, and keep the register locked where Hale can't reach it? Tobin and I will walk the copy back to Lord Edric and tell him the truth, that the land is his by plain deed and the Aldermere line was never real." Then, quietly to Tobin as we leave: "Keep your eyes sharp on the green, I don't want Hale getting to my lord before I do."
+  [game] dice Wren's Perception check crossing the green, DC 12: 1d20+1 = 1d20 [11] + 1 = 12
+  [DM write_lore (hidden)] {"entry": "Smiling Follower", "add_to_description": "Day 2, 5:50 PM: Wren spotted him by the village well on the green, brown tradesman's coat; he turned toward the manor gate when she left the chapel, evidently to report to Hale."}
+  [game] notebook: updated Smiling Follower
+  [game] time: 20 minutes later: Day 2, 5:52 PM
+DM: Osric nods. "I'll write it tonight by my own lamp, sign it and seal it with my chapel's seal, and the register goes under the altar stone with the bolt shot. Hale will not have it." He presses your hand in both of his, dry and warm, and the vestry door closes behind you with the sound of a bolt.
+
+You and Tobin step out onto the green with the light going amber. Your Perception check was a 12, and it catches what the dusk hides. By the village well stands a lean man in a plain brown tradesman's coat, doing nothing in particular, with an easy half-smile that doesn't reach his eyes. It's a smile you've seen before, or one very like it. As soon as you leave the chapel porch he turns away, unhurried, and heads for the manor gate, keeping to the shade of the wall.
+
+Tobin has seen him too. His voice drops to a whisper. "That's... that's one of Hale's men. He came to the kitchens yesterday, asking for work." He swallows. "He's going to tell Hale where you've been."
+
+The manor gate is a hundred paces off, and the man is already thirty ahead of you. Lord Edric is in his study with the chest and the key at his neck. Hale is in the house, and he knows you went to the chapel.
+
+You carry the copy, Osric's promise, and Tobin's fear. What does Wren do?
+
+== ROUND 19 ==
+PLAYER: "Tobin, run the back way through the kitchen yard to Lord Edric's study and tell him I'm coming and he's to lock the door and let no one in but me, not even Hale." I take the other path straight across the green at a brisk walk, cutting the brown-coated man off in the open before he reaches the gate, and call out warmly, "Friend! Forgive me, you look like a man who knows the way to the manor kitchens, I'm told there's supper there for pilgrims."
+  [game] dice Wren's Deception check to delay the brown-coated man, DC 13: 1d20+5 = 1d20 [15] + 5 = 20
+  [DM write_lore (hidden)] {"entry": "Smiling Follower", "add_other_names": ["Garrow"], "add_to_description": "Gave his name as Garrow, a \"hedge-carpenter looking for work\", when Wren (Deception 20) walked him to the manor kitchens, delaying him ~15 minutes. Let slip that he came upriver from Marrowford the same day as Wren and \"keeps an eye on the road for the steward.\""}
+  [game] notebook: updated Smiling Follower
+  [game] time: 15 minutes later: Day 2, 6:07 PM
+DM: Tobin goes off like a startled hare, pelting for the kitchen yard, and you take the long way across the open green at an easy, unhurried pace, cutting the angle neatly. Your Deception check was a 20.
+
+"Friend!" you call, warm as a hearth. "Forgive me, you look like a man who knows the way to the kitchens. I'm told there's supper for pilgrims."
+
+The brown-coated man stops. His smile doesn't waver, but you see him weigh the thing, an honest pilgrim and a dozen eyes on the green. He lets the moment go. "Garrow, mistress. Hedge-carpenter, looking for work." He glances toward the gate, then back at you. "The kitchens are this way, aye. Round by the dovecote."
+
+You walk him there, chatting the whole way about the Marrow's ferries, the price of bread, a pilgrim's blisters, and the smile slowly becomes a puzzled, polite thing. He lets slip that he came upriver from Marrowford the same day you did, and that he "keeps an eye on the road for the steward," then catches himself and laughs it off. By the time you reach the kitchen door, a quarter of an hour has gone, and Tobin has had all the time he needed.
+
+The kitchen is warm, loud with pans and a spit turning over a fire. As you step in, a figure rises from a bench by the wall, neat and soft-voiced and smiling: Master Hale. He's holding a cup of cider as though he'd been there all evening.
+
+"Mistress Ashgrove," he says pleasantly. "My lord is indisposed. He's asked not to be disturbed. Perhaps you'd care to sit and take supper with me, and we might talk like sensible people."
+
+Behind him, through the passage, you can hear a door slam and a bolt shoot. That's Lord Edric's study, and Tobin got there first.
+
+What does Wren do?
+
+== ROUND 20 ==
+PLAYER: I give Hale my brightest grin and sit right down across from him, helping myself to a heel of bread. "Sensible people, Master Hale, my favourite kind. Let's talk, then: you tell me what you think I came here for, and I'll tell you whether you're warm or cold."
+
+While he answers, I'll keep my hands in plain sight on the table and watch his eyes for what he reaches for first, the chest, the door, or his purse.
+  [game] dice Wren's Insight check watching Hale's tells as he talks, DC 14: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Day 2 evening in the Thornhallow kitchen: Hale offers Wren a \"sensible\" bargain: hand over Corvin's ledger from her road-psalter and he will see Lord Edric's charter \"quietly made right\" and pay her well. Reality: Hale has been Corvin's inside man in House Verrel for years, selling Corvin word of what clients can pay; he wants the ledger so no on
+  [game] notebook: updated Master Hale
+  [game] time: 10 minutes later: Day 2, 6:17 PM
+DM: You sit and take the bread, and Hale folds his hands on the table with a look of mild, pleased attention. The cook clatters pans at the far end of the kitchen, out of hearing. Your Insight check was a natural 1, so what you read in him may well be wrong.
+
+You think you see his eyes drift to the door and linger there, and his fingers twitch against his cup. To you he looks uncertain, like a man bluffing who isn't sure what you carry or what you know.
+
+"Mistress Ashgrove," he says, gently. "I think you came to Thornhallow for the same reason as I did, to take care of my lord. I don't intend any harm to him or to you. Corvin Tallowmere's work has made a great many people comfortable. It would be a shame if it were... *disturbed*." He lets that sit. "I understand you carry something of his in your road-psalter. A book. If you let me look at it, I'll see that the charter is made right, quietly and kindly, without any assessor's help. And you would be well paid."
+
+His smile never changes. He doesn't ask whether you have it. He just says where it is.
+
+The smell of bread and onions fills the room, and the spit turns. Through the passage you hear nothing from Lord Edric's study. Tobin is behind that bolted door, and Garrow has slipped in by the dovecote entrance to stand near the pantry, not quite watching you.
+
+What does Wren say or do?
+
+== ROUND 21 ==
+PLAYER: I laugh softly and tear off a piece of bread. "Master Hale, you flatter me. The psalter's not on me, it's with a friend in Marrowford who has instructions to carry it straight to Dame Crowe if I'm not back to fetch it by noon on the day after tomorrow, so I'd think carefully about anything unkind happening to me or my lord's household." I smile sweetly. "Now, since we're being sensible, who exactly pays me well, you or whoever is paying you?"
+  [game] dice Wren's Deception check bluffing Hale about the psalter and a friend in Marrowford, DC 15 (Hale is sharp and suspects it's on her): 1d20+5 = 1d20 [3] + 5 = 8
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Wren's Deception (8) failed to convince him her ledger is elsewhere. He pointed out that Garrow saw her put the psalter back in her pack at the Drowned Candle. He nodded to Garrow, who now stands at the kitchen's back door. Hale did not draw a weapon; he wants the book without scandal."}
+  [game] notebook: updated Master Hale
+  [game] time: 2 minutes later: Day 2, 6:19 PM
+DM: You laugh, you spin it, and you ask your clever closing question. Your Deception check was an 8 against his sharpness, and it doesn't land.
+
+Hale's smile doesn't change, but his eyes warm very slightly, the way a cat's might. "That's a lovely story, mistress. A friend in Marrowford." He takes a sip of cider. "I'd wager you've no friend in Marrowford at all. Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since." He doesn't look at Garrow, but he nods very slightly. By the back door, the carpenter shifts a pace to stand across the exit, hands loose, still wearing his easy smile.
+
+"I don't want to hurt anyone," Hale says. "Truly. A book, a quiet word, and your road in the morning. My lord keeps his manor, you keep your head and a pouch of silver. The alternative is that the assessor arrives to find a girl who stole a ledger from a respected storyteller and bribed a country chaplain to counterfeit a register." He spreads his hands. "Which of us do you think she'd believe?"
+
+The kitchen is warm, loud, ordinary, a cook with her back turned and a boy scraping pots. Nobody has drawn a weapon. The study's bolted door is thirty paces down the passage. Garrow is at the back door and Hale is across the table, calm, hands visible.
+
+What does Wren do?
+
+== ROUND 22 ==
+PLAYER: I stand up, push the stool back loudly, and pitch my voice to carry across the whole kitchen. "Master Hale, did I hear that right? You'll pay me a pouch of silver to hand over my lord's papers and be gone before the assessor comes?" I turn to the cook and the pot-boy with a bright, scandalized look. "Good people, you're all witnesses to the steward of Thornhallow offering a bribe to a pilgrim!"
+
+Then I keep my hand off my rapier and walk steadily down the passage toward Lord Edric's study, calling, "My lord, it's Wren, open the door, the whole kitchen's heard your steward!"
+  [game] dice Wren's Performance check playing the kitchen and the room, DC 12: 1d20+5 = 1d20 [7] + 5 = 12
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Publicly exposed in the kitchen at Thornhallow (Day 2, ~6:25 PM) by Wren's Performance (12): the cook, a pot-boy and a kitchen-maid heard him offer a pouch of silver to Wren to hand over \"my lord's papers\" and leave before the assessor came. Hale denied it with perfect calm (\"a misunderstanding\"), but he cannot now act openly in front of the hous
+  [game] notebook: updated Master Hale
+  [game] time: 5 minutes later: Day 2, 6:24 PM
+DM: The stool scrapes loudly and your voice rings across the kitchen like a bell. Your Performance check was a 12, just enough. The cook's ladle stops. The pot-boy's scraping stops. A kitchen-maid by the window turns with wide eyes, and every face in the room swings to Master Hale.
+
+For the first time since you met him, the smile slips, only for a moment, a flicker of stone under the water. "A misunderstanding," Hale says evenly. "The pilgrim's overtired. I was merely..."
+
+But the room has already decided. The cook folds her arms. The pot-boy mutters, "I heard 'silver,'" and nobody tells him to hush. Garrow, by the back door, shifts uneasily and glances at his master, and he doesn't step to block you. He can't do it in front of twelve pairs of eyes.
+
+You walk down the passage steadily, hand well clear of the rapier, calling Lord Edric's name. Behind you Hale's chair scrapes and his soft, even footsteps follow at a polite distance. You reach the study door and hear the bolt rasp. It swings open an inch, then wide, and Tobin's pale face appears, and behind him Lord Edric stands with the key chain clutched at his neck.
+
+"Child?" he says. "What is it? What did they hear?"
+
+Hale arrives at your shoulder, composed again, hands folded. "My lord," he says quietly, "the girl has been telling tales in the kitchens. I thought it best to attend you."
+
+The room is quiet. You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other. What does Wren say or do?
+
+== ROUND 23 ==
+PLAYER: I step inside and put the register copy straight into Lord Edric's hands, then stay between him and Hale. "My lord, read this first. Your grandsire Aldous married Maud Fenn, a miller's daughter, in your own chapel, and Brother Osric will swear to it before Dame Crowe. The land is yours by plain deed, and the Aldermere line was Corvin's invention."
+
+I turn to Hale with a bright smile. "And while you read, my lord, ask your steward why he wanted the book in my psalter, and why a man who 'merely attends' brought a hedge-carpenter named Garrow from Marrowford."
+  [DM write_lore (hidden)] {"entry": "Lord Edric Verrel", "add_to_description": "Day 2 evening: read the register copy, accepted that the land is his by plain deed and the Aldermere line was invented. Ordered Hale to stay in the study while Edric questions him. Hale, cornered, said Wren stole Corvin's ledger and that he's been \"protecting\" the house from her. Edric now looks to Wren to explain the ledger."}
+  [game] notebook: updated Lord Edric Verrel
+  [game] time: 10 minutes later: Day 2, 6:34 PM
+DM: Lord Edric takes the sheet with both hands and reads it standing by the window, lips moving. Twice he stops, then goes back to the top. When he looks up his face has changed. It isn't the grey, hunted look any more, but something older and quieter.
+
+"Aldous married Maud Fenn," he says. "My grandmother. I remember her hands. She smelled of flour." He laughs, a short, wet, startled sound. "I was ashamed of nothing. And Corvin sold me a shame to carry." He lowers the paper. "The land is mine by plain deed?"
+
+"By a deed older than the charter, my lord. Osric will swear to it."
+
+Then Lord Edric turns to Hale, who hasn't moved from your shoulder, and for the first time the steward's smile has gone entirely. In its place is an expression you can't read, a flat, thoughtful look.
+
+"Hale. The book in her psalter. The man Garrow."
+
+Hale lets out a slow breath. "My lord," he says quietly, "I'll be plain, since the girl has made plainness fashionable. Corvin Tallowmere's ledger is a record of the forgeries he sold to three houses. It would ruin Verrel in the right hands, and Dame Crowe's would be the right hands. This girl stole it from her master and has carried it here. I have been trying, for your sake, to take it from a thief and burn it before it harmed you." His eyes slide to you. "Ask her if it's true that she took it. Ask her what she means to do with it."
+
+Tobin makes a small, frightened sound by the hearth. The kitchen has gathered quietly in the passage, listening. Lord Edric looks at you, and his voice is gentle, almost afraid. "Child. Is it so? Do you have Corvin's ledger?"
+
+The lie that would be easiest isn't what any of them are waiting for. What does Wren say or do?
+
+== ROUND 24 ==
+PLAYER: "Yes, my lord, I have it, and I'll not lie to you about that." I take the psalter from my pack, work the binding open, and slide out only the Verrel pages. "I took the ledger because I couldn't stomach what Corvin had done, and I came to find the people he'd cheated. This is your house's page. Burn it in the hearth, my lord, in front of everyone, because it's yours to burn, not Hale's."
+
+I close the psalter again and look at Hale. "The other pages belong to two other houses, and I'll decide what's right for them myself, not by a steward's say-so. But I notice he wanted it burned *before* you saw it, and you're the one it concerns."
+  [game] sheet: XP +100: 100
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Day 2 ~7 PM: Verrel ledger page bore Hale's marginal initials and sums, his cut as Corvin's informant inside the house. Lord Edric burned the page himself in the study hearth, then had Hale locked in the cellar store under guard of the old gate-guard until the assessor comes. Garrow slipped over the wall in the confusion and fled upriver toward Marro
+  [game] notebook: updated Master Hale
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 2 ~7 PM: Lord Edric burned the Verrel ledger page. Hale confined; Garrow fled toward Marrowford to warn Corvin. Remaining: Dame Crowe arrives noon Day 4 (Lord Edric to confess the plain truth with Osric's attestation); Corvin will return; two other houses in the ledger (names not yet read) are still owed truth or restitution."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 40 minutes later: Day 2, 7:14 PM
+DM: You don't flinch. You take out the psalter, work the stitched binding open with a thumbnail, and slide free a single folded leaf, then close the book again in plain view of the whole passage. The room stays utterly still.
+
+"This is your house's page, my lord. It's yours to burn, not Hale's."
+
+Lord Edric unfolds it. Corvin's neat hand lists dates, the sum paid and the descent altered. In the margin, in a smaller and different ink, run neat little initials and tallies: *H. — 2s. in the pound.* He reads them through, and you watch his shoulders go slowly straight.
+
+"Two shillings in the pound," he says. "Out of my own purse."
+
+He crosses to the hearth and drops the page onto the coals. It curls, browns, blooms briefly orange, and is gone. No one speaks. Then he turns to the doorway. "Master Hale will wait in the cellar store with the gate-guard at the door until the assessor comes. Nobody will lay a hand on him. Nobody will leave him without bread and water." His voice cracks only a little. "Take him."
+
+Hale goes without a word, the smile folded away like a handkerchief. In the confusion Garrow is gone, over the dovecote wall into the dusk. Tobin thinks he went toward the Marrowford road, probably to carry word upriver to Corvin.
+
+Lord Edric sits down heavily. He looks at you for a long time. "I'll tell Dame Crowe the plain truth," he says, "with Osric's name beside mine. If I lose the precedence, I lose it. A miller's granddaughter's bread was never a shameful thing." Then, softly: "What do I owe you, child?"
+
+You have gained 100 XP, bringing you to 100 of 300. It's a quarter past seven on Day 2. Corvin is somewhere upriver and may learn that his forgery has failed, and two other houses in your psalter are still owed the truth.
+
+What does Wren do?
+
+== ROUND 25 ==
+PLAYER: I shake my head with a crooked smile. "Nothing, my lord, but a bed for the night, a hot supper, and two promises: that you'll keep Osric safe until the assessor comes, and that if a storyteller named Corvin shows up here, you'll send word to me before you open the door." I glance at the psalter in my hands. "The other two houses in this book are next, and I'd like to know their names and where they hold, so I'll sleep, then start on them at first light."
+  [DM write_lore (hidden)] {"create": "House Thistlewood", "kind": "group", "description": "Minor house of Lady Maren Thistlewood at Ashby Weir, two days upriver of Marrowford. Corvin forged her a tale of a heroic ancestor holding a river ford, to claim ferry-toll rights. Already paid; page struck through in Corvin's draft. Toll rights are being contested by neighbouring village.", "relationships": ["client of [[Corvin Tall
+  [game] notebook: created an entry for House Thistlewood; added 2 relationships to House Thistlewood
+  [DM write_lore (hidden)] {"create": "House Dray", "kind": "group", "description": "House of Sir Corwen Dray at Saltmarsh Keep, near the estuary, three days downriver of Thornhallow. Corvin forged a betrothal contract and a vow tale tying Dray's heir to a wealthy merchant family; the merchants have since begun to doubt. Page struck through in Corvin's draft.", "relationships": ["client of [[Corvin Tallowmere]]", "named in 
+  [game] notebook: created an entry for House Dray; added 2 relationships to House Dray
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 2 night: Wren read the two other pages. House Thistlewood (Lady Maren, Ashby Weir, two days upriver of Marrowford; forged ford/toll tale) and House Dray (Sir Corwen, Saltmarsh Keep, estuary three days downriver; forged betrothal contract). Both paid and \"struck through\" in Corvin's draft; Corvin planned to mend only Verrel."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 11 hours 45 minutes later: Day 3, 6:59 AM
+DM: Lord Edric stares, then laughs shakily. "A bed, a supper, and two promises. Child, I'd have given you the south field." But he gives his word on both, hand on the table. Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+
+Supper is mutton and barley bread and a cup of cider, eaten at the kitchen table among cooks who now treat you like a visiting saint, or perhaps like a small, dangerous animal. Tobin sits at your elbow and doesn't say much, but he keeps pushing the best bits of the mutton toward you. He's asleep on a bench before the cider is gone. You're given a clean bed in a small room under the eaves.
+
+Before sleeping you spread the two remaining leaves under a candle. The names are there in Corvin's neat hand. Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights. Sir Corwen Dray of Saltmarsh Keep, out on the estuary some three days downriver of here, bought a betrothal contract and a vow-tale tying his heir to a wealthy merchant family, and those merchants have begun to doubt. Both pages are struck through as paid. Corvin meant to mend only Verrel.
+
+You sleep, and the night is quiet. It's just before seven now on Day 3, with the sun rising over a clean, cold morning. The assessor arrives tomorrow at noon. Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+
+What does Wren do?
+
+== ROUND 26 ==
+PLAYER: I pack my psalter, thank the kitchen for the mutton, and find Lord Edric before breakfast. "My lord, lend me a mule and a short letter in your hand saying I act with your blessing. I'm going upriver through Marrowford to Lady Thistlewood at Ashby Weir, because that's where Corvin will be heading once Garrow finds him, and I'd rather meet him on my road than on his." On my way out I give Tobin a wink and slip him the last of my bread. "Keep your head down, Tobin, and if Osric needs anything, you're his legs."
+  [game] sheet: lost 1 × Bread loaf; gained 1 × Letter under Lord Edric Verrel's seal, vouching for Wren; gained 1 × Mule (lent by Lord Edric Verrel)
+  [DM write_lore (hidden)] {"entry": "Corvin's Wagon", "add_to_description": "Day 3 ~1:30 PM: gone from Marrowford's square. A fishwife reports Garrow (brown coat) arrived at dawn on a lathered horse, spoke to the driver, and the wagon left at once north-upriver on the Ashby road with the driver whipping the team. Strongbox and everything went with it."}
+  [game] notebook: updated Corvin's Wagon
+  [game] time: 6 hours 30 minutes later: Day 3, 1:29 PM
+DM: Lord Edric is at the kitchen table in his shirt-sleeves with a bowl of porridge, looking ten years younger. He hears you through, nods, and writes the letter himself with an ink-stained thumb and a flourish, sealing it with his signet in green wax. "To all whom it concerns: the bearer, Wren Ashgrove, acts with my full blessing and my gratitude." He also has the stable-boy saddle a placid grey mule called Biscuit.
+
+Tobin takes the last of your bread with both hands, as if it were a medal, and nods fiercely. "I'll be Brother Osric's legs. I promise." Then, lower: "Thank you. For not being smiling."
+
+You ride out of the gate into the cold bright morning with the Marrow glinting at your left hand. The road upriver is the same one you walked down, but it looks different under a mule's nodding head, wide and ordinary and slow. By half past one you're clattering over the stone bridge into Marrowford.
+
+The square is busy with market-day trade, but your eye goes at once to the far corner. The place where Corvin's painted wagon stood is empty, with only a scatter of straw and a dark patch of oil on the cobbles. A fishwife by the tailor's stall sees you looking and wipes her hands. "Looking for the shrine-wagon, love? Gone at dawn. A man in a brown coat came in on a lathered horse, shouted at the driver, and off they went up the Ashby road like the river was on fire." She sniffs. "Strongbox and all."
+
+So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule. It's half past one on Day 3.
+
+What does Wren do?
+
+== ROUND 27 ==
+PLAYER: I toss the fishwife a copper and lean down from Biscuit's back. "Thank you, love. Was Corvin himself aboard, or only the driver and the man in the brown coat, and did either of them ask after a young woman with a lute?" Then I turn the mule toward the Ashby road, keeping to a steady walk so I don't spend him, and think it over as I go: the wagon is hours ahead, so I'd rather arrive after them and watch Lady Thistlewood's gate than ride in on their heels.
+
+DM: how much coin do I have now, and is the tinker's set of thieves' tools still 25 gp if I pass back through here?
+  [game] sheet: money -1 cp: now 14 gp 6 sp 1 cp
+  [DM write_lore (hidden)] {"create": "Lantern's Rest", "kind": "place", "description": "Small wayside shrine-house of the Lantern-Bearer on the Ashby road, half a day's ride north of Marrowford. A stone hut with a bunkroom, a hearth, and a brass lamp kept lit. Run by a lay-keeper named Marta Pell, a cheerful widow. Offers free bed and bread to Lantern-Bearer faithful (Wren's Shelter of the Faithful).", "relationships": ["o
+  [game] notebook: created an entry for Lantern's Rest; added 1 relationship to Lantern's Rest
+  [game] time: 5 hours 10 minutes later: Day 3, 6:39 PM
+DM: You flip her a copper and she snatches it neatly out of the air. "Only the driver and the brown-coated one," she says. "Not the master, not that I saw. The brown coat asked the stall-folk whether a young half-elf with a lute had come through, and he wasn't sweet about it. Sharp-faced fellow. Take care, love."
+
+You have 14 gp 6 sp 1 cp now, down a copper. And the tinker, if you ask, still wants his 25 gp for the thieves' tools. He hasn't moved his tray, and it's the same price, so it's out of reach for now.
+
+You turn Biscuit up the Ashby road at an easy walk and let the afternoon pass. The road climbs away from the river, runs through hop fields, then oak woods, then open heath. You keep the pace steady and the mule unhurried, watching for dust or wheel-ruts. About half past six, with the sky going the colour of a bruise, a thin thread of smoke and a small glowing lamp appear ahead where the road forks.
+
+It's a squat stone shrine-house with a tiled roof and a lantern hung on a pole by its door, a brass lamp with rays carved into the shutters, the Lantern-Bearer's sign. A hand-painted board by the gate says **LANTERN'S REST: BED, BREAD, AND A LIGHT FOR ANY WHO WALK.** A plump, grey-haired woman in a green apron is raking the yard and looks up as you approach.
+
+There are fresh wheel-ruts in the soft ground by the gate, two wheels, heavy, turned in and out. Wagon ruts, and recent.
+
+What does Wren do?
+
+== ROUND 28 ==
+PLAYER: I dismount, pat Biscuit's neck, and walk up with the reliquary held openly in my palm so the lamp catches its brass. "Evening, Mother. A traveler of the Lantern-Bearer asks shelter for herself and a mule, and if you've bread to spare, I'd be glad of it." Then, glancing at the ruts, lightly: "Looks like a wagon came through ahead of me. Did a shrine-wagon stop here, and did its driver say where they'd sleep?"
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 3: Corvin lodged at Lantern's Rest the night before and joined his wagon there at noon, charming the keeper Marta Pell. He left a sealed note for \"a young woman with a lute\" (Wren) in Marta's keeping, then took the wagon toward Ashby Weir with Garrow and the driver. He seems to have expected her."}
+  [game] notebook: updated Corvin Tallowmere
+  [DM write_lore (hidden)] {"entry": "Lantern's Rest", "add_to_description": "Keeper Marta Pell, grey-haired, plump, green apron, warm and talkative. Corvin is a regular guest and has charmed her; she holds his sealed note for Wren. She gives Wren free bed and bread as a follower of the Lantern-Bearer."}
+  [game] notebook: updated Lantern's Rest
+  [game] sheet: gained 1 × Sealed note from Corvin Tallowmere (unopened)
+  [game] time: 15 minutes later: Day 3, 6:54 PM
+DM: The woman's face crinkles into a smile at the sight of the little brass lantern. "Bless me, a real one! Marta Pell, keeper here these fourteen years. Come in, love, come in. There's a bunk and a bowl of barley broth and your mule can have the lean-to." She takes Biscuit's rein herself and clucks at him like an old friend. The bed and the bread are free, as the shrine's custom is for any of the faithful.
+
+As she leads the mule round the side, she answers you without needing to be asked twice. The wagon came through at noon, painted lantern and all, with a brown-coated man shouting at the driver. "But Master Tallowmere was already here. He's lodged with me the night before, the dear man, and he's been coming through these seven years. He gave that lamp over the door." She nods to the brass lantern. "He said he'd a lady to see about a ford, up at Ashby Weir, and took the wagon straight on. Left in a great hurry, the brown one in a terrible taking."
+
+She stops, wipes her hands on her apron, and fishes in a pocket. "And he left this for a young woman with a lute, if she should come by. 'Tall, half-elf, quick with a smile,' he said. I thought you'd be her the moment you rode up." She pushes a small, folded square of vellum into your hand, sealed with a blob of blue wax and the shrine-lantern stamped on it.
+
+Inside, a fire crackles in the hearth, and the smell of barley broth drifts out. Corvin knew you were coming, or guessed. He stayed one step ahead of you here.
+
+You can open the note now, take a moment with Marta first, or sleep on it. What does Wren do?
+
+== ROUND 29 ==
+PLAYER: I check the seal carefully under the lamp for signs of tampering or anything odd, like a pin-prick, powder or a trap, then break the wax and read it by the lantern's light. Whatever it says, I'll keep my face still, because Marta's watching and I'd like to hear it from my own head first.
+  [game] dice Wren's Investigation check examining the seal and vellum for tampering or a trap, DC 12: 1d20+2 = 1d20 [3] + 2 = 5
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Note to Wren (Day 3): affectionate, cool. Says she \"took the wrong book\" and that he is not angry; invites her to meet him at Ashby Weir's ford at dusk on Day 5 with the ledger, alone, \"to talk like family.\" Adds that the curl of parchment in her reliquary is NOT his work: \"I never wrote it. Ask yourself who did, and why I let you carry it
+  [game] notebook: updated Corvin Tallowmere
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: Corvin's note invites Wren alone to the ford at Ashby Weir at dusk on Day 5 with the ledger; claims the reliquary parchment isn't his. New thread: who wrote it and why Corvin let her keep it."}
+  [game] notebook: updated The Sealed Letter
+  [game] sheet: lost 1 × Sealed note from Corvin Tallowmere (unopened); gained 1 × Corvin's note to Wren (opened)
+  [game] time: 10 minutes later: Day 3, 7:04 PM
+DM: You turn the little square of vellum under the lamp, searching for a pin-prick, a dusting of powder, a thread of poison. Your Investigation check was a 5, and you can't tell either way. The wax looks ordinary, the vellum smells faintly of his clove-and-ink, and you can't be sure of anything.
+
+You break it with your thumbnail anyway, keep your face still, and read in the lantern's light. Marta is polishing a cup and pretending not to watch.
+
+*Wren, my girl.*
+
+*You took the wrong book. I'm not angry. A father isn't angry when a clever child proves she's clever. Come to the ford at Ashby Weir at dusk on the fifth day, alone, and bring it. We'll talk like family and see what can be mended, you and I, before someone less gentle than I am gets the idea of reading it for themselves.*
+
+*One thing more, for the road. That curl of parchment in your little brass lantern is not my work. I never wrote it. Ask yourself who did, and why I let you carry it all this way.*
+
+*C.* There's a tiny drawn lantern beneath the initial.
+
+The room feels quiet in a strange way. He knew about the reliquary, and about the parchment. He's telling you it's real, and that he let you keep it, and nothing about that note is the voice of a man who thinks he has lost.
+
+The fifth day is two days away. The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork. Marta has set a bowl of barley broth by the hearth for you.
+
+What does Wren do?
+
+== ROUND 30 ==
+PLAYER: I fold the note, tuck it into the psalter next to the ledger pages, and sit down to the broth with a calm face. "Mother Pell, you've known Corvin seven years. Did he ever mention who gave him the brass lantern-case, or a road-priest who wrote blessings in a looped hand? I'd also like a look at the lamp he gave you, if you'll let me, and I'll tell you a good story for it after supper."
+  [game] dice Wren's Religion check examining the lamp's inscription and craftsmanship, DC 12: 1d20+2 = 1d20 [12] + 2 = 14
+  [DM write_lore (hidden)] {"create": "The Road-Priest's Hand", "kind": "legend", "description": "Marta Pell: Corvin once said the brass lantern over her door and Wren's reliquary came from \"the same hand\", an old road-priest of the Lantern-Bearer who walked the river country about twenty years ago and vanished. Lamp base bears a tiny scratched mark: a lantern with a crooked flame and the letters \"E.A.\", same loops as t
+  [game] notebook: created an entry for The Road-Priest's Hand; added 3 relationships to The Road-Priest's Hand
+  [game] time: 45 minutes later: Day 3, 7:49 PM
+DM: You fold the note into the psalter beside the ledger pages and sit to the broth like a girl with nothing on her mind. Marta settles across from you with her mending.
+
+She thinks a moment. "Who gave him the lantern-case? He never said, love. But I'll tell you something. The first year he stopped here, he sat up all night over that brass lamp over my door, turning it in his hands and saying, 'The same hand, Marta. The same hand.' I took it for a figure of speech." She nods at the lamp. "Take it down, if you like. It's no use hanging up there to be admired."
+
+The lamp comes down on a stool, and you turn it in the firelight. Your Religion check was a 14. The brass is old and soft with age, with cast rays on the shutters like the ones on your own reliquary, and on the base, so tiny you almost miss it, a scratched mark. It's a lantern with a crooked flame and two letters, *E.A.*, in the same looped hand as the blessing in your reliquary. Whoever made one made the other, and Corvin got both.
+
+You tell Marta a story for the lamp, one about a tinker's daughter and a lantern that wouldn't go out, and she laughs and wipes her eyes at the end. The fire burns down. She puts you in the bunkroom, alone, and the shutters are barred. Biscuit snuffles in the lean-to.
+
+It's near eight now on Day 3. The assessor reaches Thornhallow tomorrow at noon. Corvin's rendezvous is dusk on Day 5. The wagon is a few hours ahead on the road. You haven't decided yet whether to rest here or ride on.
+
+What does Wren do?
+
+== ROUND 31 ==
+PLAYER: I decide to sleep here, since I'll be no use to anyone half-dead on a mule, but first I copy the "E.A." mark and the crooked-flame lantern onto a scrap of paper to keep in the psalter. Then I ask Marta whether any road-priest named E.A. ever passed through, or whether there's an old shrine register or a travelers' book here I could skim in the morning.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; lost 1 × Paper (one sheet); gained 1 × Sketch of the E.A. lantern mark; 8 hours later: Day 4, 3:49 AM
+  [game] dice Wren's Investigation check skimming the shrine's travellers' book, DC 13: 1d20+2 = 1d20 [9] + 2 = 11
+  [DM write_lore (hidden)] {"entry": "The Road-Priest's Hand", "add_to_description": "Day 4 morning: Lantern's Rest's travellers' book has the leaves for the season about twenty years ago cut out with a blade, cleanly, long ago (Marta never noticed; she took over fourteen years ago). The former keeper, old Hob Crannock, retired to a cottage near the ford at Ashby Weir; he might remember E.A."}
+  [game] notebook: updated The Road-Priest's Hand
+  [game] time: 2 hours 41 minutes later: Day 4, 6:30 AM
+DM: You copy the lantern-with-the-crooked-flame and the two looped letters onto a scrap and tuck it into the psalter. Marta frowns, then shakes her head. No road-priest named E.A. that she knows, but there is the shrine's travellers' book on the shelf above the hearth, kept since before her time, and you're welcome to it in the morning.
+
+You sleep. The bunk is narrow and the blankets smell of lavender and woodsmoke, and no dreams trouble you. At dawn Marta brings hot porridge and a heel of cheese, and the book, a fat, battered volume with a cracked leather spine. You're rested, your spells and Bardic Inspiration are restored, and the clock reads half past six.
+
+You turn the pages carefully. Your Investigation check was an 11, but it's enough to find what's wrong: the leaves for the season about twenty years back have been cut out with a blade. The cuts are clean, close to the stitching, and the stitching has gone dark with age. Marta never noticed. She took over the shrine fourteen years ago. "Old Hob Crannock kept it before me," she says, frowning at the gap. "Retired to a cottage by the ford at Ashby Weir. He'd remember. Though his wits go in and out like the tide."
+
+The ford at Ashby Weir is where Corvin wants to meet you on the fifth day. The assessor, if Lord Edric has told the truth, arrives at Thornhallow at noon today. Biscuit is fed and saddled in the yard, and the Ashby road runs north under a white morning mist.
+
+What does Wren do?
+
+== ROUND 32 ==
+PLAYER: I thank Marta, leave a silver piece in the shrine's offering box despite the free bed, and ride out on Biscuit toward Ashby Weir. I'll look for old Hob Crannock's cottage by the ford first, before Corvin's wagon or Lady Thistlewood, and keep an eye out for Garrow's brown coat on the road.
+  [game] dice Wren's Perception check watching the Ashby road for Garrow's brown coat, DC 13: 1d20+1 = 1d20 [2] + 1 = 3
+  [game] sheet: money -1 sp: now 14 gp 5 sp 1 cp
+  [DM write_lore (hidden)] {"entry": "Smiling Follower", "add_to_description": "Day 4: Wren failed Perception (3) on the Ashby road and did not see Garrow shadowing her from the heath/copses, hat low. He reports to Corvin's camp near Ashby Weir. He now knows she is going to the ford."}
+  [game] notebook: updated Smiling Follower
+  [DM write_lore (hidden)] {"create": "Ashby Weir", "kind": "place", "description": "Small river village on the upper Marrow where the old stone weir and ford cross; seat of House Thistlewood (Lady Maren). Ferry-toll bridge disputed. Old Hob Crannock's cottage lies by the ford. A reed-thatched inn, the Heron and Net.", "relationships": ["seat of [[House Thistlewood]]", "place of Corvin's rendezvous on Day 5 at dusk"]}
+  [game] notebook: created an entry for Ashby Weir; added 2 relationships to Ashby Weir
+  [game] time: 10 hours 30 minutes later: Day 4, 5:00 PM
+DM: You drop a silver piece in the shrine's offering box despite the free bed, and Marta presses a warm bun into your hand with a look that says she'll pray for you whether you ask or not. Then Biscuit plods out onto the Ashby road under the white morning mist.
+
+The road climbs through heath, dips into oak woods, and follows a stream. You keep your eyes open for a brown coat or a flash of the wagon's painted lantern, but your Perception check was a 3, and the road gives you nothing. Biscuit eats the miles patiently. You rest him at noon by a trough, and the afternoon lengthens. If someone is watching from the copses, you wouldn't know it.
+
+By five in the evening the road tops a low rise and the land opens. Below lies Ashby Weir. A long, low stone weir holds back a pale gleam of river, and downstream of it the ford spreads wide and shallow, studded with stepping stones. A cluster of thatched cottages leans along the bank, with smoke rising from them and a larger inn, the Heron and Net, at the centre. Upstream, a grey manor house stands on a spur among willows, the Thistlewood seat. Nearer, at the water's edge by the ford, a small crooked cottage with a green door sits beside a heap of lobster pots and a drying rack of nets.
+
+There's no wagon in sight. There's no sign of Corvin. The ford is two days of walking from Marrowford, and you've made it with a day to spare. Dusk is two hours away.
+
+What does Wren do?
+
+== ROUND 33 ==
+PLAYER: I leave Biscuit tied at the lobster pots, knock on the green door, and call out in a friendly, unhurried voice, "Master Crannock? A traveler of the Lantern-Bearer, sent by Mother Pell at Lantern's Rest, who says you keep the best memory on the river." If he opens, I'll hold up the reliquary and the sketch of the crooked-flame E.A. lantern, and ask him about the pages cut from the shrine book twenty years back.
+  [game] dice Wren's Persuasion check with old Hob Crannock, reliquary and sketch in hand, DC 12 (his wits come and go): 1d20+5 = 1d20 [8] + 5 = 13
+  [DM write_lore (hidden)] {"create": "Hob Crannock", "kind": "person", "description": "Old retired keeper of Lantern's Rest, lives in a crooked cottage with a green door by the ford at Ashby Weir. Wits come and go. Remembers a road-priest named Elowen Ashgrove (the E.A.) who passed through Lantern's Rest about twenty years ago carrying a baby wrapped in a green blanket. She asked him to cut the pages of the travellers' boo
+  [game] notebook: created an entry for Hob Crannock; added 3 relationships to Hob Crannock
+  [DM write_lore (hidden)] {"entry": "The Road-Priest's Hand", "add_to_description": "E.A. = Elowen Ashgrove, a road-priest of the Lantern-Bearer, who passed Lantern's Rest ~20 years ago carrying a baby in a green blanket. Wren shares her surname (Corvin gave Wren that name; Wren's origins otherwise unknown). Elowen cut the shrine book pages herself, left lamp and blessing, went upriver to Ashby Weir, vanished. Corvin came 
+  [game] notebook: updated The Road-Priest's Hand
+  [game] time: 40 minutes later: Day 4, 5:40 PM
+DM: You tie Biscuit among the lobster pots and knock on the green door. Nothing, then a shuffle, then the bolt. The door opens a hand's width on a face like a dried apple, with white whiskers and bright, watery eyes. "Who's that? Is it the tax-man?"
+
+"A traveler of the Lantern-Bearer, sent by Mother Pell, who says you keep the best memory on the river." You hold up the reliquary so the dying sun catches its rays, and then the sketch. Your Persuasion check was a 13, and the eyes sharpen.
+
+"The crooked flame," he whispers. The door opens, and he draws you into a smoky room that smells of tar and pipe-weed. He sits you by the hearth and takes the sketch in a shaking hand, and for a moment you think his wits have drifted off. Then they come back like a boat on a tide.
+
+"Elowen," he says. "Elowen Ashgrove. A road-priest of the Lantern, proper, with a lamp-staff and a looped hand. She came through the shrine twenty years back with a babe wrapped in a green blanket, hungry and cold, and she asked me to cut the book's pages for that season. I said it was a sin, and she said it was a mercy. So I did, with her own knife." He wipes his eye. "She left the lamp over the door, and a curl of blessing in a little brass case, and said she was going upriver to Ashby Weir, to a house she trusted. And that was the last of her. I never saw her again."
+
+His gaze settles on your face for a long moment. "A storyteller came asking after her the next spring. Silver-tongued. Too many questions. I told him nothing, and he went off sulking. That would have been your Master Tallowmere, would it?"
+
+He says her surname the same way the world has said yours since you were small. *Ashgrove.* You have no memory of a name before it, and the old man is watching your face for what you'll do with it.
+
+Dusk is over an hour away. You could ask him what house she trusted, what became of the baby, or who else knew. What does Wren do?
+
+== ROUND 34 ==
+PLAYER: My voice comes out smaller than I mean it to, and I hold the reliquary a little tighter. "Master Crannock, which house did she trust? Was it the Thistlewoods up on the spur, and the babe in the green blanket... was there a ribbon with it, green velvet?" I take the scrap from my cloak hem and lay it on his knee. "Please, take your time. I'd rather have it slow and true than quick."
+  [DM write_lore (hidden)] {"entry": "Hob Crannock", "add_to_description": "Told Wren (Day 4): the blanket was edged with deep green velvet, a noble house's bolt, same as the scrap Wren holds. Elowen said she was going \"to the lady on the spur\", old Lady Agnes Thistlewood (now dead; her daughter Lady Maren rules there). He believes Elowen left the child in Lady Agnes's keeping; some months later a storyteller (Corvin) tur
+  [game] notebook: updated Hob Crannock
+  [DM write_lore (hidden)] {"entry": "House Thistlewood", "add_to_description": "Link to Wren: old Lady Agnes Thistlewood (Maren's mother, dead) was \"the lady on the spur\" whom Elowen Ashgrove trusted; she probably took in a baby in a green-velvet-edged blanket about 20 years ago, then Corvin appeared with a girl-child afterward. Lady Maren may know more or may have been a child herself then."}
+  [game] notebook: updated House Thistlewood
+  [game] time: 30 minutes later: Day 4, 6:10 PM
+DM: You lay the scrap of green velvet on his knee and tell him to take his time. The old man doesn't touch it at first. He looks at it for a long while with his mouth working, and the fire pops, and a gull cries on the weir. You wait.
+
+"Green velvet," he says at last, very softly. "Aye. The blanket was edged in it, deep as moss, a good bolt, a noble's cloth. It was too fine for a priest's baby. I remember thinking that." He lifts the scrap with one thumb and forefinger as if it might bruise. "She said she was going to the lady on the spur. Old Lady Agnes Thistlewood, the grandmother of the house, may she rest. She was kind. Good to the road. Elowen said, 'Agnes will keep her safe till I can come back.'" His voice thins. "But she never came back, as far as I ever heard, and I don't know what Lady Agnes did with the child. Only..."
+
+He frowns, hunting for the thread. "Some months after, a storyteller came down the Marrowford road with a little girl of about that age on his cart. Said he found her at a roadside shrine, wrapped in a blanket. Pretty talker. I thought nothing of it then." He looks up at you and doesn't say the rest, because he doesn't need to.
+
+"Lady Maren rules the spur now, her daughter," he adds. "A fair woman, but afraid of the village over the ferry-toll, and not much liked. She was only a girl herself then. She might remember, or she might not."
+
+The fire burns low. Outside, the light has turned gold and slanting over the ford. It's ten past six, and dusk is an hour away. Corvin's meeting is tomorrow at dusk, and the Thistlewood house is on the spur above the village.
+
+What does Wren do?
+
+== ROUND 35 ==
+PLAYER: I thank Hob warmly, tuck the scrap of velvet back into my hem, and ask him one more thing: whether he'd be willing to speak for Elowen's mark if a lady asked him. Then I ride Biscuit up the spur to the Thistlewood gate, with Lord Edric's sealed letter in hand and the psalter pages for Lady Maren's house at the ready, and ask to see her tonight on a matter of her family's honor and her mother's kindness to a road-priest.
+  [game] dice Wren's Persuasion check at the Thistlewood gate with Lord Edric's letter, DC 11: 1d20+5 = 1d20 [8] + 5 = 13
+  [DM write_lore (hidden)] {"create": "Lady Maren Thistlewood", "kind": "person", "description": "Mistress of the Thistlewood manor at Ashby Weir, a tired, straight-backed woman in her forties, daughter of old Lady Agnes. Afraid of her village over the ferry-toll, which rests on Corvin's forged ford tale. Received Wren at dusk on Day 4 after reading Lord Edric's letter.", "relationships": ["head of [[House Thistlewood]]", "
+  [game] notebook: created an entry for Lady Maren Thistlewood; added 3 relationships to Lady Maren Thistlewood
+  [game] time: 50 minutes later: Day 4, 7:00 PM
+DM: Hob nods, slow and certain. "If a lady asks me, I'll say what I saw, and swear it on Elowen's lamp. I owe her that." He walks you to the green door and watches you go.
+
+The spur path winds up through willows, and Biscuit takes it without complaint. The gatehouse of the Thistlewood manor is shut for the evening. A pair of tired-looking men-at-arms in faded blue peer down at you, and your Persuasion check was a 13. Lord Edric's green-waxed letter does most of the work, passed up on the point of a halberd and carried inside. You wait with the mule among the cooling stones while the dusk gathers, and a bat flits over the wall. Then the wicket opens.
+
+You're led across a small, worn courtyard into a long, panelled hall, hung with faded banners and a single great painting of a stern man at a ford, with the river gleaming behind him, the hero of Corvin's tale, you realise. At the far end, by a fire too large for the room's warmth, sits a straight-backed woman in her forties in a grey gown, with ink-stained fingers and a worn expression of guarded politeness. This is Lady Maren Thistlewood.
+
+She has your letter open on her knee. "Lord Edric Verrel writes that the bearer acts with his blessing," she says. "He doesn't say why. I'm told you spoke of my mother's kindness to a road-priest." Her gaze is steady, a little tired. "I'm not often visited by anyone at this hour who isn't asking for the toll. Sit, Mistress Ashgrove. I'd like to hear what you have to say."
+
+You have the ledger pages in your psalter, Hob's story, and Corvin's note. Corvin himself meets you tomorrow at dusk. Somewhere out in the dark Garrow's eyes may be on you.
+
+What does Wren say?
+
+== ROUND 36 ==
+PLAYER: I sit, keep my hands visible, and tell her plainly. "My lady, I'm a storyteller's apprentice, and I've come to give you the truth about the hero at the ford in that painting: Corvin Tallowmere sold your family a tale, and I have his own page recording the sale." I place the Thistlewood leaf on the arm of her chair, then add more gently, "And a second matter, if you'll allow it: your mother once took in a road-priest called Elowen Ashgrove, with a babe wrapped in green velvet. I think that babe grew up to sit before you."
+  [DM write_lore (hidden)] {"entry": "Lady Maren Thistlewood", "add_to_description": "Day 4 night: Read the Thistlewood ledger leaf, accepts the ford tale is forged (she half suspected). Remembers Elowen Ashgrove staying at the manor ~20 years ago with a baby (Maren then in her twenties). Her mother Lady Agnes kept the child three months. Then Corvin arrived with a \"letter in Elowen's hand\" (forged) asking for the child, 
+  [game] notebook: updated Lady Maren Thistlewood
+  [DM write_lore (hidden)] {"create": "Elowen's Coffer", "kind": "item", "description": "Small iron-bound coffer in the Thistlewood strongroom, scratched with a lantern and \"E.A.\". Left by Elowen Ashgrove \"for the girl when she is grown.\" Locked; the key was given to Corvin twenty years ago. Contents unknown.", "relationships": ["kept at [[House Thistlewood]]", "left by Elowen Ashgrove ([[The Road-Priest's Hand]])", "it
+  [game] notebook: created an entry for Elowen's Coffer; added 3 relationships to Elowen's Coffer
+  [game] time: 30 minutes later: Day 4, 7:30 PM
+DM: She reads the leaf by the firelight, once, then again, her ink-stained thumb moving along Corvin's neat hand. When she looks up there isn't surprise in her face, only a deep weariness, as of a debt long expected. "I wondered," she says. "I'd sit under that painting and think, no man ever looked so tidy in a river." She folds the leaf and holds it as if it weighed a great deal. "The ford tale held for twenty years because no one dared look. Now the village will."
+
+Then your second matter lands, and the weariness changes into something stranger. She is quiet for a long time. She looks at your face, your eyes, the way you hold your hands.
+
+"I was twenty-four when she came," she says. "A road-priest, thin as a heron, with a baby in a blanket the colour of a forest. My mother was sick that year, and she took them in without a question. The child slept in my own old cradle by that fire for three months, until the road-priest went out one evening and didn't come back." Her voice catches. "Then a man arrived, a storyteller, charming, silver-tongued, with a letter in the priest's hand asking for the child to be given to him. My mother was ill and she believed it. She gave him the baby, and the key to a coffer the priest had left behind 'for the girl when she's grown.' I watched him ride away with her." She presses her lips together. "I've wondered for twenty years if I should have said something."
+
+She rises. "The coffer is still here. Mother wouldn't send it away, and the key went with the storyteller. Come."
+
+She leads you down a stair to a small stone strongroom, and by the light of her candle you see it on a shelf: a little iron-bound coffer scratched with a lantern and the letters *E.A.* It is no bigger than a bread-box. Locked.
+
+You've heard Corvin's name linked to this twice in a day. He has the key, and he'll be at the ford at dusk tomorrow.
+
+What does Wren do?
+
+== ROUND 37 ==
+PLAYER: "Thank you, my lady. Twenty years is a long time to carry that, and I won't hold any of it against you." I set the candle on the shelf and kneel at the coffer, running a fingertip over the lantern scratches and the keyhole, then turn the brass reliquary over in my hand. "May I try something odd first? Elowen made this case and this coffer, and I wonder if the lantern's foot or the ring on its base is more than ornament. If it isn't, I'll ask you for a smith's fine awl and a steady hour, and I'll not force the lid."
+  [game] dice Wren's Investigation check examining the reliquary's foot against the coffer's keyhole, DC 14: 1d20+2 = 1d20 [16] + 2 = 18
+  [DM write_lore (hidden)] {"entry": "Elowen's Coffer", "add_to_description": "Opened Day 4 night by Wren: the brass reliquary's lantern-foot is the true key (Corvin's iron key was a decoy Elowen sent with him). Inside: a letter from Elowen to \"my wren\", a small silver lantern pendant, and a folded, sealed commission-paper naming Wren as Elowen's heir to her road-priest's lamp-staff. Letter: Corvin Tallowmere was Elowen's
+  [game] notebook: updated Elowen's Coffer
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Per Elowen's letter: was her apprentice, became a forger who sold her true blessings as noble pedigrees; she was going to confront him when she vanished. Whether he killed her or merely took the child is unknown. He fears the coffer and the true key; his note's \"who wrote it\" hinted at this."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] sheet: gained 1 × Elowen's letter to her daughter; gained 1 × Silver lantern pendant; gained 1 × Sealed commission-paper naming Wren Elowen's heir
+  [game] time: 40 minutes later: Day 4, 8:10 PM
+DM: You kneel on the cold stones with the candle on the shelf above you and turn the little brass lantern in your hands. Your Investigation check was an 18. Under the base, hidden among the cast rays, a boss of metal stands a hair proud, and it isn't a decoration. It has teeth. It's a key.
+
+You hold your breath and fit it to the coffer's keyhole. It slides in with a small, soft click, as if it had been waiting twenty years, and turns. Lady Maren catches her breath behind you. The iron key Corvin carried off was never going to fit.
+
+The lid rises. Inside, on a bed of faded green velvet, lie three things: a small silver pendant shaped like a lantern, a folded paper sealed with plain wax and marked with a lamp-staff, and a single letter in a looped hand you know from the parchment in your reliquary. It's addressed on the outside: *To my wren.*
+
+You read it kneeling, with a hand over your mouth. It isn't long. Elowen writes that Corvin Tallowmere was her own apprentice, that he turned her blessings into pedigrees and sold the road's mercy to men who wanted it for their vanity, and that she meant to confront him. If she did not return, she wrote, he would come for the child with false letters and a pleasant face. *Light the road, don't sell it. You'll know what that means when you're old enough to be ashamed.* Beneath the signature, a lantern with a crooked flame. The folded paper is a commission, naming you heir to her lamp-staff and her calling, if you want it.
+
+You've gained the letter, the pendant, and the commission, and learned more than you came for. It's ten past eight on Day 4. Corvin is a day's wait away at the ford, and he knows it is true.
+
+Lady Maren waits quietly, hand on the door. What does Wren do?
+
+== ROUND 38 ==
+PLAYER: I fold the letter against my chest for a long moment, then wipe my face with my sleeve and put the pendant on. "My lady, may I ask for a bed, a pen, and a few hours alone with this? Tomorrow I'm going to meet the man who raised me, and I'd like to know what I'll say before I open my mouth."
+
+DM: what's my total XP now and how many Bardic Inspiration uses do I have left?
+  [game] sheet: XP +75: 175
+  [DM write_lore (hidden)] {"entry": "Lady Maren Thistlewood", "add_to_description": "Gave Wren a guest room, pen, and privacy on Day 4 night. Offered to stand witness against the forged ford tale before the village and will not burn the Thistlewood ledger leaf until Wren says so. Hob Crannock also willing to swear to Elowen's mark."}
+  [game] notebook: updated Lady Maren Thistlewood
+  [game] time: 10 hours 50 minutes later: Day 5, 7:00 AM
+DM: You fold the letter against your chest for a long moment, wipe your face with your sleeve, and clasp the little silver lantern around your neck. Lady Maren says nothing at all. She only nods once, the way you might nod to a stranger on a long road, and leads you up a narrow stair to a small, clean guest room with a bed, a table, a pen, and a candle. She sets a jug of water and a heel of bread by your hand and withdraws, closing the door softly behind her.
+
+You write for a while. You write what you'd say to him, then scratch it out, then write it again plainer. By the time the candle gutters you have a few lines you can say aloud, and you sleep better than you expected.
+
+To answer your questions: you're at 175 XP, out of 300 for the next level. I gave you 75 for finding Elowen's trail and opening the coffer. Bardic Inspiration is at 3 of 3, none spent.
+
+It's seven in the morning on Day 5 now, and the village has been up for an hour. Down in the yard Biscuit is munching oats, and the ford is a bright, fast thread beyond the willows. Dusk is eleven hours off. Lady Maren has left word with the household that you're to be given anything you ask for.
+
+Corvin will be there at dusk, perhaps with Garrow and the driver. You have today to prepare, and the ledger, the commission, the pendant, and the village's trust, if you want it.
+
+What does Wren do with the day?
+
+== ROUND 39 ==
+PLAYER: I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.
+
+In the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.
+  [game] dice Wren's Persuasion check telling the village the truth about the ford hero in the Heron and Net, DC 13 (angry, suspicious villagers): 1d20+5 = 1d20 [2] + 5 = 7
+  [game] dice Wren's Perception check scouting the ford and its banks for watchers, DC 13: 1d20+1 = 1d20 [5] + 1 = 6
+  [DM write_lore (hidden)] {"create": "Ashby Weir Common-Room Confession", "kind": "event", "description": "Day 5 midday: Wren told the Heron and Net's crowd the truth about the ford hero. Persuasion 7: the villagers erupted, some shouting at Lady Maren to drop the toll at once, others cursing Wren as a liar paid by a rival; a man threw a tankard; the men-at-arms hustled Wren out. Word spread through the village, and Garrow
+  [game] notebook: created an entry for Ashby Weir Common-Room Confession; added 3 relationships to Ashby Weir Common-Room Confession
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 5: Corvin's people (Garrow, the driver) have already come to the ford before Wren's scouting; she failed Perception (6) and saw nothing. Wagon is hidden in a tithe-barn a quarter mile up the Ashby road."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] time: 10 hours later: Day 5, 5:00 PM
+DM: Lady Maren listens over her porridge with her cup halfway to her mouth. "You want me to hand my own village to you at noon," she says slowly. Then something in her face settles. "Do it. Better from a girl who found the page than from a man with a seal." She gives the order, and by eleven the Heron and Net's common room is jammed with fishermen, ferry-hands, weavers and children.
+
+It goes badly. Your Persuasion check was a 7. You stand on a bench and tell them all of it, the forged hero, the toll, the tale of a man at a ford, and you can see it land. But a crowd that has paid its toll for twenty years doesn't thank the bearer of that news. Someone shouts that you're a liar paid by the Dunmere ferry. Someone else shouts that the Thistlewoods should refund every penny. A tankard flies. Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar. By afternoon it's across the village that the ford tale is a lie, the toll is cursed, and that Lady Maren must answer for it. It's not what you meant, but it isn't gone back into the bottle, either.
+
+In the afternoon you scout the ford. Your Perception check was a 6, and it tells you only that the stones are wet and the willows thick and quiet. There's nothing to see. The best place, you decide, is the broad, flat stone midway across, within hail of Hob's cottage and the bank where a few villagers have gathered, uneasily, to watch. Alder and Kit go quietly into the willows with Lady Maren's blessing. Hob Crannock sits by his green door with a pipe, as if he's merely taking the air.
+
+You eat a little, you check your rapier, and you smooth the pendant at your throat. The sun drops behind the spur and the river turns copper. It's five in the evening, dusk is an hour off. In the green and gold light, down the Ashby road, comes the creak of a wagon, a painted lantern swinging on its side, and a lean man walking before it in a brown coat.
+
+What does Wren do?
+
+== ROUND 40 ==
+PLAYER: I walk out to the flat stone mid-ford and wait there with my hands empty and the pendant bright at my throat, the psalter tucked under my arm in plain sight. When the wagon stops on the bank, I call across the water, calm and clear enough for Hob and the villagers to hear. "Master Tallowmere, you wrote to me, so you can come to me. Bring your own two feet and leave Garrow on the bank."
+  [game] dice Wren's Insight check reading Corvin as he speaks across the ford, DC 15 (a master liar): 1d20+3 = 1d20 [9] + 3 = 12
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk, at the ford: walked out alone to Wren, a silver-haired man in his fifties with ink-black gloves and a warm, rueful voice. Wren's Insight (12) could not tell truth from lie. He claims: (1) he never harmed Elowen; she left him \"to walk the road alone\" and he took the child to keep her safe; (2) Elowen is alive and he knows where, so
+  [game] notebook: updated Corvin Tallowmere
+  [game] time: 20 minutes later: Day 5, 5:20 PM
+DM: Your voice carries clear across the water, and for a moment the whole ford holds still. On the bank the wagon halts, the painted lantern swinging on its side, and the brown-coated man looks up, then at the figure climbing down from the driving-box.
+
+Corvin Tallowmere is exactly as you left him. He's a tall man in his fifties, silver-haired, in a good dark coat and ink-black gloves, with a face that always looks as though it's on the verge of being kind. He says something quiet to Garrow, who stops where he is with a glance at the willows, and then, alone, he steps onto the stones. He crosses with the unhurried grace of a man who has done it a thousand times, and he stops two stones from yours and spreads his gloved hands in the lamplight.
+
+"Wren," he says, softly enough that only the water carries it beyond you. "You've grown. Even your scowl has grown." A rueful, warm smile. "You've been busy. I heard about Verrel, and about the common room. A wonderful speech, I'm told, if poorly received."
+
+Your Insight check was a 12, and it isn't enough to tell you what's real in him. His voice is warm and level and sorry, and it gives you nothing at all. He tells you he never harmed Elowen Ashgrove. She walked away from him, he says, to travel the road alone, and he took the child to keep her safe. He says the blessings were only ever paper, but that he kept the faith in his own way. And then, so gently it's almost a kindness:
+
+"She's alive, Wren. I know where. Give me the ledger, and I'll burn the Thistlewood and Dray pages with my own hands, make good what I can, and take you to her myself." The silver in his hair catches the last light. At his throat, on a cord, hangs a small iron key. "That's the whole bargain. A book for a mother."
+
+Behind him on the bank, the driver has put a crossbow across his knees, and Garrow rests a hand on a short sword under his coat. Hob puffs at his pipe. Alder and Kit hold very still in the willows. The villagers murmur.
+
+What does Wren say or do?
+
+== ROUND 41 ==
+PLAYER: I keep my voice pitched to carry to the bank, and I smile at him without warmth. "Master Tallowmere, you've a crossbow across your driver's knees and a sword under Garrow's coat, which is a strange way to take a girl to meet her mother. Here's my bargain, so everyone on this bank can hear it: tell me her name and the town she's in, tonight, and the ledger stays sealed in Lady Maren's keeping until I've met her myself."
+
+I lift Elowen's letter just enough for the lamplight to show the looped hand. "She wrote that you'd come for me with false letters and a pleasant face. So prove her wrong, Master, and name the town."
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk: answered Wren's challenge by naming \"Saltmarsh\" as where Elowen is (the estuary town beneath Saltmarsh Keep, seat of House Dray; true or lie unknown). Then demanded the ledger \"now\", and signalled the driver (crossbow) and Garrow (short sword). Alder and Kit (Thistlewood men-at-arms) stepped out of the willows."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] time: 3 minutes later: Day 5, 5:23 PM
+DM: The ford is very quiet. Even the water seems to hush. Corvin's gaze lingers on the letter in your hand, on the looped hand you both know, and for the space of one breath his face loses all its warmth and becomes only a thing at rest, thoughtful and cold. Then the kindness comes back like a lamp being turned up.
+
+"Saltmarsh," he says. "She's in Saltmarsh, below the keep on the estuary. You know I wouldn't lie about her." He says it just loud enough for the bank. "There, child. A town, as you asked." His gloved hand opens toward you, palm up. "Now the book. Tonight. Not in Lady Maren's keeping, not in anyone's keeping but mine, where it can be put right before it hurts the innocent."
+
+You can't tell whether he's lying. It's the one thing he taught you that you never learned to see through from the outside.
+
+Behind him there's a click, the crossbow being cocked, and the driver lifts it from his knees with its point just short of you. Garrow draws the short sword halfway from under his coat. On the near bank, two shapes step out of the willows, Alder and Kit with their spears levelled, and the villagers' murmur sharpens into a shout. Hob, at his green door, takes the pipe from his mouth.
+
+You stand on a flat stone in the middle of a shallow ford, ten hit points, a rapier, and a lute on your back, with Corvin two stones away and his hand still open.
+
+What does Wren do?
+
+== ROUND 42 ==
+PLAYER: I don't draw the rapier. I flick two fingers at the driver and cast Vicious Mockery in a ringing, theatrical voice: "You've a crossbow, friend, and the aim of a man who's lost his own feet!" Then, for the whole bank to hear, I add, "Everyone heard Master Tallowmere name Saltmarsh, so if anything happens to me, you all know exactly where to look for him."
+  [DM lookup (hidden)] {"name": "Vicious Mockery", "kind": "spell"}
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Bandit", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Guard", "kind": "monster"}
+  [game] dice Wren's initiative: 1d20+2 = 1d20 [15] + 2 = 17
+  [game] dice Bandits' initiative (driver and Garrow, group roll): 1d20+1 = 1d20 [4] + 1 = 5
+  [game] dice Guards' initiative (Alder and Kit, group roll): 1d20+1 = 1d20 [3] + 1 = 4
+  [game] fight: Fight started. Order: Wren Ashgrove (17), Driver (5), Garrow (5), Alder (4), Kit (4). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [refused] dice: no combatant named 'pc'; in the fight: Wren Ashgrove, Driver, Garrow, Alder, Kit
+  [game] dice Driver's Wisdom saving throw vs Vicious Mockery, DC 13: 1d20+0 = 1d20 [16] + 0 = 16
+  [game] fight: Wren Ashgrove has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Driver. Driver (initiative 5): HP 11/11, AC 12 Driver's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Driver's light crossbow attack on Wren (AC 13): 1d20+3 = 1d20 [18] + 3 = 21 (Driver has used its action: no more actions this turn.)
+  [game] dice Driver's crossbow damage on Wren: 1d8+1 = 1d8 [5] + 1 = 6
+  [game] sheet: took 6 damage: HP 10 → 4
+  [game] fight: Round 1, now: Garrow. Garrow (initiative 5): HP 11/11, AC 12 Garrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Garrow's scimitar attack on Wren (AC 13), after wading across the ford: 1d20+3 = 1d20 [14] + 3 = 17 (Garrow has used its action: no more actions this turn.)
+  [game] dice Garrow's scimitar damage on Wren: 1d6+1 = 1d6 [2] + 1 = 3
+  [game] sheet: took 3 damage: HP 4 → 1
+  [game] fight: Round 1, now: Alder. Alder (initiative 4): HP 11/11, AC 16 Alder's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Alder's spear attack on Garrow (AC 12): 1d20+3 = 1d20 [1] + 3 = 4 (natural 1) (Alder has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Kit. Kit (initiative 4): HP 11/11, AC 16 Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's spear attack on Garrow (AC 12): 1d20+3 = 1d20 [15] + 3 = 18 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's two-handed spear damage on Garrow: 1d8+1 = 1d8 [1] + 1 = 2
+  [game] fight: Garrow took 2: HP 11 → 9
+  [game] fight: Round 2, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your insult sails past the driver like a gull past a post. He's too steady, and the ringing words don't take. Then the ford explodes.
+
+His crossbow thrums, and a bolt punches into your side below the ribs and spins you half around, six points of pain. Before you can find your feet, Garrow comes splashing across the shallows with his short blade, and a slash opens your arm, three more. You're down to 1 hit point, swaying on the stone.
+
+Behind him, Alder's spear-thrust goes wide as he slips on the weedy stone. Kit's spear finds Garrow's thigh and he grunts, but he's still coming. Corvin has stepped back two stones and watches with an odd, stilled expression, no longer smiling. Hob is on his feet at the door, shouting for the villagers to get back. The ford is a tangle of cold water and shouting, and it's your turn.
+
+You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+
+What does Wren do?
+
+== ROUND 43 ==
+PLAYER: I gasp, press a hand to my side, and cast Healing Word on myself as a bonus action, a quick breath of the Lantern-Bearer's mercy. Then I snap Vicious Mockery straight into Garrow's face: "Hedge-carpenter! Even your joints are cut crooked!"
+  [DM lookup (hidden)] {"name": "Healing Word", "kind": "spell"}
+  [game] dice Healing Word on Wren herself (1d4 + CHA 3): 1d4+3 = 1d4 [3] + 3 = 6
+  [game] dice Garrow's Wisdom saving throw vs Vicious Mockery, DC 13: 1d20+0 = 1d20 [17] + 0 = 17
+  [game] sheet: Wren casts Healing Word at level 1; healed 6: HP 1 → 7; level-1 spell slots: 1/2 (Wren Ashgrove has used its bonus action: no more bonus actions this turn.)
+  [game] fight: Wren Ashgrove has used its action: no more actions this turn.
+  [game] fight: Round 2, now: Driver. Driver (initiative 5): HP 11/11, AC 12 Driver's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Driver's light crossbow attack on Wren (AC 13): 1d20+3 = 1d20 [6] + 3 = 9 (Driver has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Garrow. Garrow (initiative 5): HP 9/11, AC 12 Garrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Garrow's scimitar attack on Wren (AC 13): 1d20+3 = 1d20 [6] + 3 = 9 (Garrow has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Alder. Alder (initiative 4): HP 11/11, AC 16 Alder's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Alder's spear attack on Garrow (AC 12): 1d20+3 = 1d20 [14] + 3 = 17 (Alder has used its action: no more actions this turn.)
+  [game] dice Alder's two-handed spear damage on Garrow: 1d8+1 = 1d8 [2] + 1 = 3
+  [game] fight: Garrow took 3: HP 9 → 6
+  [game] fight: Round 2, now: Kit. Kit (initiative 4): HP 11/11, AC 16 Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's spear attack on Garrow (AC 12): 1d20+3 = 1d20 [16] + 3 = 19 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's two-handed spear damage on Garrow: 1d8+1 = 1d8 [8] + 1 = 9
+  [game] fight: Garrow took 9: HP 6 → 0 (0 HP)
+  [game] fight: Garrow removed from the fight. Order: Wren Ashgrove (17), Driver (5), Alder (4), Kit (4)
+  [game] fight: Round 3, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM write_lore (hidden)] {"entry": "Smiling Follower", "add_to_description": "Died at the ford at Ashby Weir, Day 5, speared by Kit (Thistlewood man-at-arms) while attacking Wren."}
+  [game] notebook: updated Smiling Follower
+DM: You gasp, press a hand to your side, and breathe the Lantern-Bearer's name. The little silver lantern at your throat warms, and the pain in your side eases. You're upright again, with 7 hit points. Your Healing Word cost one slot, and you have one left. Then you spit the insult at Garrow, who shrugs it off with a snarl. It rolls off him like rain.
+
+The driver's crossbow thrums, and the bolt snaps off the stone by your boot. Garrow's blade comes round in a flat arc and misses by a hand's breadth. Then Alder's spear takes him in the ribs and Kit's goes in under the arm, and he stops, staring at the point, and folds quietly into the shallows. The brown coat spreads in the current. The smile never made it to his face.
+
+Now there's only the driver on the bank, with the crossbow cocked and his face gone a nasty shade of grey, and Corvin, two stones away, perfectly still. The villagers are very quiet. Alder and Kit stand in the water with their spears levelled at the bank, breathing hard.
+
+It's your turn, round 3, and you're at 7 hit points with one spell slot left.
+
+What does Wren do?
+
+== ROUND 44 ==
+PLAYER: I draw my rapier at last and set its point lightly against the hollow of Corvin's throat, my eyes on the driver. "Drop the crossbow, friend. Master Tallowmere's the one who'll pay for it if you don't, and Alder and Kit are very close."
+
+Without turning my head I add, softly, "Master Tallowmere, tell him. You always had the better voice."
+  [game] dice Wren's Intimidation check on the driver with a rapier at Corvin's throat, DC 12: 1d20+3 = 1d20 [3] + 3 = 6 (Wren Ashgrove has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Driver. Driver (initiative 5): HP 11/11, AC 12 Driver's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Driver's light crossbow attack on Wren (AC 13): 1d20+3 = 1d20 [20] + 3 = 23 (natural 20) (Driver has used its action: no more actions this turn.)
+  [game] dice Driver's crossbow damage on Wren (critical hit): 2d8+1 = 2d8 [6, 4] + 1 = 11
+  [game] sheet: took 11 damage: HP 7 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [DM lookup (hidden)] {"name": "Death Saving Throws"}
+  [game] fight: Round 3, now: Alder. Alder (initiative 4): HP 11/11, AC 16 Alder's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Alder's spear attack on the Driver (AC 12): 1d20+3 = 1d20 [4] + 3 = 7 (Alder has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Kit. Kit (initiative 4): HP 11/11, AC 16 Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's spear attack on the Driver (AC 12): 1d20+3 = 1d20 [11] + 3 = 14 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's two-handed spear damage on the Driver: 1d8+1 = 1d8 [5] + 1 = 6
+  [game] fight: Driver took 6: HP 11 → 5
+  [game] fight: Round 4, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Wren's death saving throw (round 4): 1d20 = 1d20 [13] = 13
+  [game] sheet: death save successes: 1/3
+  [game] fight: Round 4, now: Driver. Driver (initiative 5): HP 5/11, AC 12 Driver's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Driver's crossbow attack on unconscious Wren (advantage; AC 13): 1d20+3 (advantage) = 1d20 [7, 1]→7 + 3 = 10 (Driver has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Alder. Alder (initiative 4): HP 11/11, AC 16 Alder's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Alder's spear attack on the Driver (AC 12): 1d20+3 = 1d20 [2] + 3 = 5 (Alder has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Kit. Kit (initiative 4): HP 11/11, AC 16 Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's spear attack on the Driver (AC 12): 1d20+3 = 1d20 [15] + 3 = 18 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's two-handed spear damage on the Driver: 1d8+1 = 1d8 [7] + 1 = 8
+  [game] fight: Driver took 8: HP 5 → 0 (0 HP)
+  [game] fight: Driver removed from the fight. Order: Wren Ashgrove (17), Alder (4), Kit (4)
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 5, 5:23:24 PM.
+  [game] dice Alder's Wisdom (Medicine) check to stabilize Wren, DC 10: 1d20+0 = 1d20 [6] + 0 = 6
+  [game] dice Hob Crannock's Medicine check to stabilize Wren, DC 10: 1d20+1 = 1d20 [2] + 1 = 3
+  [game] dice Wren's death saving throw (next round, out of initiative): 1d20 = 1d20 [10] = 10
+  [game] dice Kit's Medicine check to stabilize Wren, DC 10: 1d20+0 = 1d20 [2] + 0 = 2
+  [game] sheet: death save successes: 2/3
+  [game] dice Wren's death saving throw (following round): 1d20 = 1d20 [20] = 20 (natural 20)
+  [game] dice Alder's second Medicine check to stabilize Wren, DC 10: 1d20+0 = 1d20 [4] + 0 = 4
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; XP +50: 225
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk: the fight at the ford killed Garrow and the driver. Corvin vanished into the dusk during the fight, taking a wagon horse and leaving the wagon and strongbox. He named \"Saltmarsh\" as where Elowen is. He holds the decoy iron key. His whereabouts unknown; probably riding downriver toward Saltmarsh."}
+  [game] notebook: updated Corvin Tallowmere
+  [DM write_lore (hidden)] {"entry": "Corvin's Wagon", "add_to_description": "Day 5 dusk: abandoned on the Ashby road bank by the ford after the fight; one horse of the team missing. Strongbox still locked on the tailboard. In Lady Maren's custody."}
+  [game] notebook: updated Corvin's Wagon
+  [game] time: 25 minutes later: Day 5, 5:48:24 PM
+DM: The rapier's point had barely touched his collar when Corvin's eyes flicked over your shoulder. Your Intimidation check was a 3, and the driver took no heed of it. You see Corvin's mouth begin to curve, and he says nothing. He doesn't give the order. The bolt strikes before you can turn.
+
+It's a critical hit. Eleven points of damage drop you off the stone and into the cold ford, and the world goes grey at the edges. You hear shouting, the splash of boots, water in your ears. One bolt more flies past you and misses. Then Alder's spear goes wide, and Kit's finds the driver, and he folds beside Garrow in the shallows.
+
+You lie at the bottom of the dark. Twice you hear Alder's voice and Hob's wheeze over you, hands pressing at your wound and failing, and Kit swearing in a language you don't know. You make your death saves in the dark, one ten, then a thirteen before it, and the next round something bright and fierce answers in you: a natural 20. You come up gasping into the lamplight with one hit point and a mouthful of river.
+
+Corvin is gone. When you turn your head, the flat stone is empty, a wet footprint drying on it. One of the wagon's horses is missing from the picket line, and the dusk has swallowed him. The wagon stands on the bank with its painted lantern, abandoned, and the strongbox sits on its tailboard, still locked.
+
+You are alive. It's nearly six now, on Day 5. You're at 1 hit point, 1 spell slot left, and 225 XP, 75 short of the next level. I gave you 50 XP for the fight. Garrow and the driver are dead, and the villagers are gathered quietly on the bank, looking at you with a different face than they wore at noon. Lady Maren is hurrying down from the spur.
+
+Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+
+What does Wren do?
+
+== ROUND 45 ==
+PLAYER: I let Alder and Kit haul me onto the bank, cough up half the river, and manage a croaky "Thank you, both, and you, Hob." Then I ask Lady Maren for a bed, and while I'm lying propped up I send Kit to search the driver's belt and pockets for the strongbox key, and Hob to keep an eye on the wagon until morning.
+
+"In the morning," I add weakly, "I'm opening that strongbox, and then I'm riding for Saltmarsh."
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; gained 1 × Thieves' Tools; gained 1 × Forgery Kit; gained 1 × Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'; money +60 gp: now 74 gp 5 sp 1 cp; 8 hours later: Day 6, 1:48:24 AM
+  [DM write_lore (hidden)] {"entry": "Corvin's Wagon", "add_to_description": "Day 6 morning: strongbox opened with the driver's key by Wren. Contents: 60 gp in mixed coin, a good set of thieves' tools, a forgery kit, and a note in Corvin's hand: \"The Salt Gull, Saltmarsh, the ninth.\" Wren took them; Lady Maren keeps the wagon until the dead men's kin are found."}
+  [game] notebook: updated Corvin's Wagon
+  [DM write_lore (hidden)] {"create": "The Salt Gull", "kind": "place", "description": "Tavern or inn in Saltmarsh named in Corvin's note, with a meeting set for \"the ninth\" (Day 9). Corvin intends to be there; Elowen may be too.", "relationships": ["in Saltmarsh, below the keep of [[House Dray]]", "named in a note found in [[Corvin's Wagon]]"]}
+  [game] notebook: created an entry for The Salt Gull; added 2 relationships to The Salt Gull
+  [game] time: 1 hour 30 minutes later: Day 6, 3:18:24 AM
+  [game] time: 3 hours 42 minutes later: Day 6, 7:00:24 AM
+DM: Alder and Kit haul you up the bank like a netted fish, and you cough up what feels like half the Marrow. You manage a croaky "Thank you, both, and you, Hob," and Hob only snorts around his pipe, wiping his eyes with a knuckle. Lady Maren arrives at a run with a lantern and a blanket, takes one look at you, and says nothing at all for a moment. Then she orders a litter.
+
+Before they carry you off, you send Kit to the driver, and he comes back with a dead man's belt-pouch. Inside is a small iron key, a few coppers, and a scrap of vellum folded small. Hob takes the wagon watch with a rug over his knees and his pipe, and Alder stays at his side.
+
+You sleep in the same small room under the eaves, in a clean bed with a jug of water and a heel of bread. It's a long, heavy sleep, and when you wake the window is full of white morning. You're whole again: all your hit points and your spell slots, and Bardic Inspiration back at three. The night has passed without trouble.
+
+At seven you go down to the yard with Kit. The wagon stands by the tithe-barn, its painted lantern faded in the daylight, and the strongbox sits on its tailboard. The little iron key fits. Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.*
+
+That's Day 9. You've pocketed the money, the kit and the tools, and the note. The tools you wanted at the tinker's are now yours, 74 gold and some silver in all.
+
+Lady Maren stands at your elbow, her hands clasped. "The village is quiet this morning," she says. "They saw you take a bolt for the truth. I think they'll listen now." She hesitates. "Will you ride for Saltmarsh? Sir Corwen Dray is a hard man, I hear, and proud. You'll want something to carry in front of you."
+
+You have three days before the ninth. Saltmarsh is some five days' ride by the river road, so you won't make it by Day 9 without hard riding and a lucky road. You're at 225 XP, 75 short of level 2.
+
+What does Wren do?
+
+== ROUND 46 ==
+PLAYER: "I'll ride for Saltmarsh, my lady, and I'll have to ride hard to make the ninth." I tuck the thieves' tools and forgery kit into my pack, and for once I keep the forgery kit for honest work. "If you can spare a swift horse in place of Biscuit, and a letter under your own seal naming me your friend and Elowen Ashgrove's daughter, it'll open doors in Saltmarsh that Lord Edric's letter won't."
+
+I turn to Kit with a grin. "And if Alder can spare you for a week, I'd gladly buy your spear on the road, a lady needs a second pair of eyes when she's chasing a man who nearly watched her die."
+  [DM srd_options (hidden)] {"race": "human", "class": "fighter"}
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- base_scores: give all six of STR, DEX, CON, INT, WIS, CHA as whole numbers, before racial increases
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+- choices: not needed for this character: class.equipment.2 > a martial weapon
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2: no option 'None'; options: a) [choose 1: a martial weapon] + Shield; b) [choose 2: two martial weapons]
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2: no option 'a) [choose 1: a martial weapon] + Shield'; options: a) [choose 1: a martial weapon] + Shield; b) [choose 2: two martial weapons]
+- choices: not needed for this character: class.equipment.2 > a martial weapon
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2: choose exactly 1 (got 2)
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+- choices: not needed for this character: class.equipment.2.a
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+- choices: not needed for this character: class.equipment.2.1, class.equipment.2.a.0, class.equipment.2.a.1
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2 > a martial weapon: choose exactly 1 (got 0)
+- choices: not needed for this character: class.equipment.2 > a martial weapon
+  [DM srd_options (hidden)] {"race": "human", "class": "rogue"}
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- choices.class.equipment.2: no option 'None'; options: a) [choose 1: a martial weapon] + Shield; b) [choose 2: two martial weapons]
+  [game] party: Kit joined the party, Human fighter 1, acolyte background
+  [DM write_lore (hidden)] {"create": "Kit", "kind": "person", "description": "Thistlewood man-at-arms, a stocky freckled woman of thirty, dry, loyal, few words. Joined Wren as a companion (Human fighter) after the fight at the ford; speared Garrow and the driver. Wears a faded blue Thistlewood tabard over chain mail, carries a longsword and shield and a light crossbow.", "relationships": ["companion of Wren", "served [[Hou
+  [game] notebook: created an entry for Kit; added 2 relationships to Kit
+  [game] sheet: lost 1 × Mule (lent by Lord Edric Verrel); gained 1 × Riding horse (lent by Lady Maren Thistlewood); gained 1 × Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter
+  [game] time: 45 minutes later: Day 6, 7:45:24 AM
+DM: Lady Maren doesn't answer at once. She looks at the wagon, at the faded lantern, at Alder leaning on his spear, and then at you. "A horse, yes. My father's grey, Ember, who's too good for this village and bored with it. And a letter." She goes into the manor and returns within a quarter of an hour with a sealed square of vellum, and she hands it over with both hands, as if it were heavier than it looked. She has written it in her own square hand, naming you her friend and Elowen Ashgrove's daughter, "with every claim on the house of Thistlewood that her mother had, and gladly given."
+
+Biscuit goes back to the stable with the promise that Lord Edric's stable-boy will fetch him when the dust settles. Ember is a tall grey with a white blaze and an opinion of himself, and he regards you the way a cat regards a puddle.
+
+Then she turns to Kit. "I'll not order it. I'll ask." Kit says nothing for a moment, one thumb in her sword-belt. She looks at the wagon, at the ford, at you. "Aye," she says at last. "I've never been past the weir. Time I saw where the river goes." Alder claps her on the shoulder, and Lady Maren pays her a month's wage in advance without being asked. Kit stows her shield on her back, shoulders a pack, and gives you a brief, dry nod, no speech.
+
+Kit is a human fighter, a solid companion with chain mail, a shield, a longsword, a light crossbow and a steady head. She has her own character sheet now and takes her turns as herself in a fight, on your orders if you give them.
+
+It's quarter to eight on Day 6. Saltmarsh is days away, and the Salt Gull meeting is on Day 9. The river road runs down past Marrowford and Thornhallow, and you can leave now, or stop on the way.
+
+What does Wren do?
+
+== ROUND 47 ==
+PLAYER: "Then let's ride, Kit. You take the first watch tonight and I'll take the second, and I'll teach you a song to pass the miles." I swing up onto Ember, who snorts at me in disdain, and pat his neck. "We'll stop at Thornhallow on the way, because I'd like to see how Dame Crowe judged the Verrels, and ask Lord Edric whether Tobin and Brother Osric are safe."
+  [game] dice Wren's Performance check teaching Kit a road song: 1d20+5 = 1d20 [13] + 5 = 18
+  [DM write_lore (hidden)] {"entry": "House Verrel", "add_to_description": "Day 7 at Thornhallow: Dame Crowe came Day 4, heard Lord Edric's confession and Osric's attestation. Ruling: the Aldermere precedence and tax-right are struck from the Verrel charter and a fine levied; the plain land-grant stands, so the manor is kept. Crowe wants Corvin Tallowmere and the ledger. Hale is held for the assessor's court. Tobin and Osri
+  [game] notebook: updated House Verrel
+  [game] time: 1 day 8 hours later: Day 7, 3:45:24 PM
+DM: Ember sulks for the first mile and then, as you sing, begins to keep time with his ears. Your Performance check was an 18. Kit says nothing through the first verse, hums the second under her breath, and by the third is bellowing the chorus flat and cheerful. You pass the night at Lantern's Rest, where Marta feeds you both and refuses payment, and ride on through Marrowford the next day.
+
+You reach Thornhallow at a quarter to four on Day 7. The green and white pennant still flies. Tobin sees you from the gate and runs the whole courtyard, nearly knocking Kit over. Lord Edric meets you in the study with his shirt-sleeves rolled, and tells it quickly.
+
+Dame Crowe came on the fourth day, at noon exactly. She heard his confession and Osric's sworn word and went through the register herself. Her ruling: the Aldermere line is struck from the charter, the precedence and tax-right are forfeit, and a fine is levied. But the land-grant is plain and old, and the manor stands. "I am still lord of Thornhallow," he says, wondering, "and I sleep." Hale is held for her court. Tobin and Osric are safe, and Osric has taken to reading the register aloud to anyone who stands still.
+
+Crowe also left a message for you: she wants the storyteller Corvin Tallowmere, and the ledger, brought to her. She says a girl who confesses unprompted is worth hearing, and that she will be at the Marrowford assize at month's end.
+
+The road to Saltmarsh runs on three days further, and the ninth is two days off. You and Kit have a night's bed here if you want it.
+
+What does Wren do?
+
+== ROUND 48 ==
+PLAYER: I take a hot meal and a few hours' sleep, but I tell Lord Edric we ride before dawn, since the ninth is two days off and the road to Saltmarsh is three. Before we go I ask him to keep Osric and Tobin close, and I give Tobin a quick hug and the silver lantern's blessing, a thumb pressed to his forehead.
+
+DM: on Sir Corwen Dray's ledger page, which merchant family was the betrothal tied to, and was a sum or a date written beside it?
+  [DM write_lore (hidden)] {"entry": "House Dray", "add_to_description": "Ledger leaf details (Day 7): betrothal tied Sir Corwen's heir, his daughter Isaude Dray, to the Vantry merchant-house of Saltmarsh (wool and salt trade). Written beside it: sum 140 marks paid, and a date, the ninth of the month, circled, \"the wedding-contract to be sealed before witnesses.\" That is the same ninth as the Salt Gull note."}
+  [game] notebook: updated House Dray
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; Kit: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 7, 11:45:24 PM
+DM: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice. Before you go you press a thumb to Tobin's forehead and say the Lantern-Bearer's short blessing. He goes red to the ears and says nothing, which for Tobin is eloquent.
+
+You take out the Dray leaf by the candle to check it again before the road. Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt. Beside it, 140 marks paid, and a date circled hard: the ninth, "the wedding-contract to be sealed before witnesses."
+
+That's the same ninth as the note from the strongbox. Corvin isn't just meeting someone at the Salt Gull. The forged contract is to be sealed that day, and he plans to be there.
+
+The rest has put you at full strength, with spells and Inspiration restored. It's near midnight now on Day 7. Two days remain, and the road is three. You'll need to ride hard, and likely through the night.
+
+What does Wren do?
+
+== ROUND 49 ==
+PLAYER: I roll the Dray leaf away and look at Kit. "Then we ride now, and we trade off dozing in the saddle. If the Vantry contract is sealed on the ninth, Corvin will be in the room, and I'd rather arrive with one tired horse than miss him by an hour."
+
+I check Ember's girth, tie the saddlebags tight, and ask Kit to take the front for the first stretch while I hum the road song low to keep us both awake.
+  [game] dice Wren's Survival check keeping the night road and pace, DC 12: 1d20+1 = 1d20 [17] + 1 = 18
+  [game] dice Kit's Perception on the night road, DC 13: 1d20+3 = 1d20 [11] + 3 = 14
+  [DM lookup (hidden)] {"name": "Forced March"}
+  [game] dice Wren CON save, forced march hour 9, DC 11: 1d20+2 = 1d20 [3] + 2 = 5
+  [game] dice Wren CON save, forced march hour 10, DC 12: 1d20+2 = 1d20 [13] + 2 = 15
+  [game] dice Wren CON save, forced march hour 11, DC 13: 1d20+2 = 1d20 [9] + 2 = 11
+  [game] dice Kit CON save, forced march hour 9, DC 11: 1d20+4 = 1d20 [10] + 4 = 14
+  [game] dice Kit CON save, forced march hour 10, DC 12: 1d20+4 = 1d20 [4] + 4 = 8
+  [game] dice Kit CON save, forced march hour 11, DC 13: 1d20+4 = 1d20 [4] + 4 = 8
+  [DM lookup (hidden)] {"name": "Exhaustion"}
+  [game] sheet: condition added: Exhaustion 2
+  [game] sheet: Kit: condition added: Exhaustion 2
+  [game] time: 1 day 10 hours later: Day 9, 9:45:24 AM
+DM: You ride through the night with Kit in front and the road song humming between you. Your Survival check was an 18, so the road is kept and the pace is good, and Kit's sharp eyes (a 14) catch nothing worse than a fox. But a hard pace costs. After eight hours you push on four more, and the river country blurs: Constitution saves at the ninth, tenth and eleventh hour. Wren failed the ninth and the eleventh. Kit failed the tenth and eleventh.
+
+You are both at exhaustion level 2: disadvantage on ability checks, and speed halved. That's the rule, and it's why the last miles drag. You stop at a lock-keeper's cottage in the afternoon for a few hours' sleep and some bread, then limp on through Day 8's evening and dawn along the widening river as the air turns to salt and gull-cry.
+
+It's a quarter to ten on the morning of the ninth. Saltmarsh spreads below you on a grey estuary: slate roofs, drying nets, a stone quay, the squat bulk of Saltmarsh Keep on a rise to the north. Banners of white and blue hang from the keep. In the town below, a bell has begun to toll the hour, and a small crowd is moving toward a hall by the quay marked with the Vantry scales.
+
+The Salt Gull is a tarred inn at the quay's end, its sign a swinging gull. You're stiff, tired, and at a disadvantage on any skill check, with the contract sealing sometime today.
+
+What does Wren do?
+
+== ROUND 50 ==
+PLAYER: I dismount stiffly, hand Ember to a quay-boy with a copper, and tell Kit, "Salt Gull first, shield on your back and sword out of sight, and no speeches." Inside I take a corner table with a view of the stairs and the door, order two bowls of fish chowder, and quietly ask the innkeeper if a silver-haired storyteller in black gloves has taken a room, saying only that I'm a friend with a message from Ashby Weir.
+  [game] dice Wren's Persuasion with the innkeeper (exhaustion 2: disadvantage on ability checks), DC 13: 1d20+5 (disadvantage) = 1d20 [3, 15]→3 + 5 = 8
+  [game] sheet: money -1 sp: now 74 gp 4 sp 1 cp
+  [DM write_lore (hidden)] {"entry": "The Salt Gull", "add_to_description": "Day 9: the innkeeper, a wary woman named Bess Harl, would not confirm any guest. She did glance at the stair and at a locked back room, then said \"no storyteller here, love\" too quickly. A back room upstairs is paid up through the ninth under the name \"Master Lamplighter\"."}
+  [game] notebook: updated The Salt Gull
+  [game] time: 20 minutes later: Day 9, 10:05:24 AM
+DM: You hand Ember to a quay-boy with a copper, and Kit tucks her shield across her back under a cloak. The Salt Gull is low and tarred, smelling of fish, smoke and wet rope. You take the corner table with sightlines to the stair and the door, and order two bowls of chowder, which costs a silver piece.
+
+Then you lean on the bar and ask your question, soft and friendly. Your Persuasion check was an 8 with disadvantage from exhaustion. The innkeeper, Bess Harl, a broad wary woman with scarred forearms, doesn't bite. "No storyteller here, love," she says, much too quickly. But her eyes touched the stair first, and then a door at the top of it, closed, with a new brass lock.
+
+You eat, slowly. Kit sits with her back to the wall and her eyes on the stair. Down the quay the bell has stopped tolling, and the crowd has gone into the Vantry hall. The contract sealing will be happening in there, perhaps within the hour.
+
+At a quarter past ten, a man in good black gloves comes down the stairs from that locked room, carrying a leather case under his arm. He's not Corvin. He's younger, tidy, with ink on his cuffs, and he doesn't see you. He heads out toward the Vantry hall at a quick walk.
+
+What does Wren do?
+
+== ROUND 51 ==
+PLAYER: I murmur to Kit, "Follow the clerk with the case and don't lose him, and if he reaches the Vantry hall, get close and listen." Then I finish my chowder, pay Bess with a warm smile, and drift up the stair as if I were looking for the privy, kneel at the new brass lock on the closed door with my thieves' tools, and set to work as quietly as I can.
+  [game] dice Wren's Dexterity check picking the brass lock with thieves' tools (not proficient; exhaustion disadvantage), DC 15: 1d20+2 (disadvantage) = 1d20 [7, 9]→7 + 2 = 9
+  [game] dice Kit's Stealth tailing the clerk in chain mail (disadvantage armor + exhaustion no further stack), vs clerk passive 11: 1d20+2 (disadvantage) = 1d20 [10, 5]→5 + 2 = 7
+  [DM write_lore (hidden)] {"entry": "The Salt Gull", "add_to_description": "Day 9 ~10:30 AM: Wren's pick failed on the back-room lock (9). Bess Harl came up the stair and caught her at it. Kit, tailing the clerk (Stealth 7), was noticed by him and he quickened toward the Vantry hall."}
+  [game] notebook: updated The Salt Gull
+  [game] time: 10 minutes later: Day 9, 10:15:24 AM
+DM: Kit rises with a dry nod and goes out after the clerk. Chain mail and a tired step make a poor shadow, though. Her Stealth was a 7, and at the turn of the quay the young man glances back, sees a stocky woman in a blue tabard, and picks up his pace toward the Vantry hall's wide doors.
+
+You pay Bess with a smile and drift up the stair. The brass lock is new and good. Your Dexterity check was a 9, with disadvantage from exhaustion and no proficiency with the tools. The pick skids off the pin. A heavy tread comes up behind you, and Bess Harl stands on the landing with her scarred arms folded.
+
+"I don't know what you think you're doing, mistress," she says quietly, "but that lock is paid for through the ninth, and the man who paid had a crossbow in his bag and a way of saying please." She doesn't raise her voice. "Be on your way, and I'll say nothing to the watch."
+
+Below, through the window, you can see the Vantry hall's doors, and Kit standing at the edge of the crowd, looking back toward you.
+
+What does Wren do?
+
+== ROUND 52 ==
+PLAYER: I pocket the pick, lower my voice, and meet Bess's eye plainly. "Then I'll be honest, since you've no reason to like me: the man in that room sells forged pedigrees, and a wedding contract of his will be sealed in the Vantry hall within the hour, a lie that will ruin two families. I carry a letter under Lady Maren Thistlewood's seal, and here are ten gold pieces for one favour, which is to tell me whether he's in that room right now, and how many are with him."
+  [game] dice Wren's Persuasion with Bess Harl, honest plea plus letter and 10 gp (exhaustion disadvantage), DC 13: 1d20+5 (disadvantage) = 1d20 [4, 18]→4 + 5 = 9
+  [DM write_lore (hidden)] {"entry": "The Salt Gull", "add_to_description": "Day 9: Bess Harl refused Wren's gold (Persuasion 9). She says the man in the room keeps her inn afloat and has paid for her silence; she will not say who is inside. She is frightened, not loyal. She did say, grimly, that \"the wedding folk at the hall will be done by noon.\""}
+  [game] notebook: updated The Salt Gull
+  [game] time: 5 minutes later: Day 9, 10:20:24 AM
+DM: You keep your voice low and plain, and you lay the Thistlewood letter in her hand with the coins beside it. Bess reads the seal, and for a breath something moves behind her eyes. Your Persuasion check was a 9 with disadvantage, and it isn't enough.
+
+She pushes the gold back at you without counting it. "No." The word is quiet and tired. "He pays for this roof, and for my silence, and he's a man who remembers who talks. I'll not say who's in that room or how many." She hesitates, then adds, grimly, almost against her will, "I'll say the wedding folk at the hall will be done by noon. After that I can't say what comes down my stair."
+
+She isn't a villain. She's frightened, and she's given you the one thing she can: the hour. It's twenty past ten. At noon the contract is sealed, and whoever is behind the brass lock has until then to be somewhere else.
+
+Down on the quay, Kit is a blue spot at the edge of the crowd before the Vantry hall. The clerk with the case has gone inside.
+
+What does Wren do?
+
+== ROUND 53 ==
+PLAYER: I scoop the coins back with a nod of thanks and leave Bess be, then slip into the alley by the stairs and cast Disguise Self, making myself a tidy, ink-stained notary's junior with a wax-tablet satchel and a sober face. I catch Kit's eye outside the Vantry hall, murmur, "You're my escort from the guildhouse, so look bored and stern," and walk us both straight through the doors as if we were late.
+
+Inside I hold the Dray leaf ready under the psalter and find a place near the sealing table to see who holds the contract.
+  [DM lookup (hidden)] {"name": "Disguise Self", "kind": "spell"}
+  [game] sheet: Wren casts Disguise Self at level 1; timer Wren's Disguise Self: 1 hour; level-1 spell slots: 1/2
+  [game] dice Wren's Deception bluffing past the hall door as a notary's junior with escort (exhaustion disadvantage), DC 12: 1d20+5 (disadvantage) = 1d20 [2, 20]→2 + 5 = 7
+  [DM write_lore (hidden)] {"create": "Vantry Hall", "kind": "place", "description": "Wide-doored counting-and-sealing hall of the Vantry merchant-house on Saltmarsh's quay, marked with scales. Betrothal contract of Isaude Dray and the Vantry heir is to be sealed there at noon on Day 9. Doorman is a stout man in Vantry grey who demands a guild token or warrant. Side door by the salt-store opens on the clerks' passage.", "re
+  [game] notebook: created an entry for Vantry Hall; added 2 relationships to Vantry Hall
+  [game] time: 10 minutes later: Day 9, 10:30:24 AM
+DM: Behind the alley wall you make the quick gestures and the Lantern-Bearer's small trick takes hold. Your face thins and pales, ink blooms on your fingers, and a wax-tablet satchel hangs from your shoulder. One spell slot spent, and the disguise holds for an hour. You catch Kit's eye and murmur the plan, and she gives a bored, stern look that is no act at all.
+
+The door is another matter. Your Deception check was a 7 with disadvantage, and the doorman, a stout man in Vantry grey with a ledger of his own, isn't fooled by a story, only unconvinced by a notary's junior who has no token. "Which guildhouse? Whose warrant? Mine says all notaries were seated at nine." He doesn't doubt your face, just your paperwork. "No token, no entry. Come back with the master."
+
+You're not unmasked, and you've still got the hour. Kit, who has the better eyes, tips her head very slightly. Along the hall's flank, past a stack of salt-barrels, is a small side door propped on a brick, and through it a clerk with a tray of inkpots is moving in. Voices carry out of the high windows, a dry formal cadence: the reading of terms. It's half past ten, and you've fifty minutes of disguise.
+
+What does Wren do?
+
+== ROUND 54 ==
+PLAYER: I give the doorman a prim little nod, say "Then I'll fetch the master," and walk Kit round the corner past the salt-barrels. At the propped side door I lift a spare tray of ink-pots from the stack by the wall, hold it like it belongs to me, and slip in behind the other clerk with Kit a pace behind as my "escort," eyes down and mouth shut.
+  [game] dice Wren's Deception slipping in the side door as a clerk with an ink-pot tray (exhaustion disadvantage), DC 12: 1d20+5 (disadvantage) = 1d20 [2, 3]→2 + 5 = 7
+  [game] time: 5 minutes later: Day 9, 10:35:24 AM
+  [DM write_lore (hidden)] {"entry": "Vantry Hall", "add_to_description": "Day 9 ~10:40 AM: Wren (Disguise Self as a notary's junior, Deception 7) and Kit got in by the side door via the clerks' passage. A senior Vantry clerk, Master Orrel Pike, stopped them, took the ink-pot tray, and kept Wren standing at the passage mouth near the dais curtain while Kit was told to wait by the door. From there Wren can see the sealing ta
+  [game] notebook: updated Vantry Hall
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CVKbrqB2DGnFHywcXE
+
+Message ID: msg_011Cg5CVKuU6osj3z8FwEuAs
+
+== ROUND 55 ==
+PLAYER: The DM's reply seems to have been cut off by an error, so I'll pick up from my last move. I keep my head down, ink-pot tray steady, and murmur to Kit, "If anyone challenges us, you're the Vantry's hired guard and I'm bringing the extra ink for the seal." Then I edge along the wall toward the sealing table, keeping the Dray leaf ready under my psalter.
+
+DM: sorry, I think your last message got eaten by an error. Can you repeat what happened at the side door?
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CVrK4yrj5WtyHQzpV2
+
+Message ID: msg_011Cg5CVs6wbQmHVFf1mS9k6
+
+== ROUND 56 ==
+PLAYER: DM: It looks like your messages are coming through as an error on my end, so I'm not getting the scene. Could you resend what happens after Kit and I slip in the side door of the Vantry hall, with the ink-pot tray, and my failed Deception roll of 7?
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CWKd8HGB4yEPwPZhdY
+
+Message ID: msg_011Cg5CWLkb48vFTyuWaskQW
+
+== ROUND 57 ==
+PLAYER: DM: I'm still only getting an error message instead of your narration, so I'm going to hold my position just inside the side door of the Vantry hall, tray in hand, Kit at my shoulder, until the scene comes through. Please resend when you can, or tell me what the clerk at the door and the room ahead look like.
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CWnqjmWQK4R6ospo2z
+
+Message ID: msg_011Cg5CWokJQq7h29oGnC22D
+
+== ROUND 58 ==
+PLAYER: DM: Still just getting the error text on my side, so no scene yet. I'm staying quietly inside the Vantry hall's side door with the ink-pot tray, and as soon as you can resend the narration I'll pick up from there.
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CXJ6PLK6NGbYDvnEye
+
+Message ID: msg_011Cg5CXJqXvLwXADTo8JnxF
+
+== ROUND 59 ==
+PLAYER: DM: Same error again on my end, so I still can't see the scene. I'll keep Wren waiting inside the Vantry hall's side door, ink-pot tray in hand and Kit beside me, until a proper narration comes through.
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CXYzaVTMn7hifdX764
+
+Message ID: msg_011Cg5CXZmDNGKqBmrnFF7aT
+
+== ROUND 60 ==
+PLAYER: DM: Your last message arrived as another error, so I still have no scene to react to. Wren is holding position inside the Vantry hall's side door with Kit, and I'll act the moment real narration comes through.
+DM: API Error: Sonnet 5.5's safeguards flagged this message (https://www.anthropic.com/legal/aup). This sometimes happens with safe, normal conversations. Claude Code can't respond to this message with Sonnet 5.5.
+
+Try rephrasing the request in a new session or change your model.
+
+Learn more: https://support.claude.com/en/articles/8106465
+
+Details: `[reasoning_extraction]`
+
+Request ID: req_011Cg5CXy1CSDL72wCCHMemH
+
+Message ID: msg_011Cg5CXzMp6TFnm5XKFLFat

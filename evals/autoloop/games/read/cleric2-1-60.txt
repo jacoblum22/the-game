@@ -1,0 +1,1398 @@
+CHARACTER: Brannoc Ashdown, Human cleric 2 (Life), acolyte background
+== OPENING ==
+Your character is complete.
+
+Brannoc Ashdown is a young cleric of the Life domain from Millbrook Landing, a river town of fishermen and reed-cutters. The Grey Fever emptied the houses there when he was six, and the old temple healer, Mother Edda Thorne, raised him. She died last winter and left him her plain wooden amulet, and he left town to carry her work to places that have no healer. He is only a few weeks into that road.
+
+Dusk is settling over a muddy back road in a country of thin farms and low hills. A small settlement huddles ahead, a scatter of crooked houses with its lanterns lit early and its doors barred. A dog barks once and stops. The air smells of wet earth, woodsmoke, and, faintly under it, blood.
+
+A boy of about ten, mud to his knees, comes running out from between two fences and nearly slips as he catches your sleeve. "Please, are you a healer? That's a healer's amulet, isn't it? Please, sir, they're in the Harrow barn. My da, and Widow Harrow's boys, and... there's so many. Something came out of the woods last night. We've no one to help them. Please."
+
+Behind him, past the last house, a big barn stands with its doors shut and a thin line of lamplight leaking from the cracks. Somewhere inside, someone is moaning. At the treeline beyond, nothing moves.
+
+What does Brannoc do?
+
+== ROUND 1 ==
+PLAYER: I kneel to the boy's level and put a hand on his shoulder. "I'm Brannoc, and I'm a healer. What's your name? Take me to your da, and I'll do everything I can." I keep my shield up and my mace ready as we hurry toward the barn, and I hum a low hymn to steady him.
+  [game] time: 5 minutes later: Day 1, 6:35 PM
+  [DM write_lore (hidden)] {"create": "Harrow barn", "kind": "place", "description": "Large barn at the edge of Hollow Reach, belonging to Widow Harrow. Shelters the wounded after last night's attack from the woods.", "relationships": ["stands in [[Hollow Reach]]"]}
+  [game] notebook: created an entry for Harrow barn; added 1 relationship to Harrow barn
+DM: The boy swallows and nods. "Tam. I'm Tam. Da's Joss Fenner." Your hymn seems to help; his breathing slows, and he leads you at a half-run along the fence line, glancing at the dark trees every few steps.
+
+At the barn door a gaunt woman in a stained apron stands with a hay fork, and two men flank her with a woodaxe and a hunting bow. They lower their weapons when they see the amulet and your mace. "A healer," the woman breathes. "Gods be thanked. I'm Widow Harrow. Quick, inside, and bar it behind you."
+
+Lamplight, straw, and the smell of blood and fear. Maybe fifteen people crowd the barn, mostly women and children. Along the back wall, on straw pallets, lie five wounded. A big man, Tam's father, has a torn, bound thigh and a gray face. A boy of fourteen or so has a ragged bite across his shoulder, and the flesh around it looks angry and swollen. An older man gasps shallowly with a wrapped chest. Two others are quieter, and you can't tell yet whether that is better or worse.
+
+"Wolves, we thought," says Widow Harrow low. "But wolves don't take a man's lantern, or stand upright at the fence and watch. It came again before dawn. We've been counting the hours until dark."
+
+Tam tugs your hand toward his father. Joss Fenner's eyes find yours. "Boy's all right?" he rasps. "Don't mind me, see to the others."
+
+You have two spell slots, your healing prayers, and a barn full of people who will be sitting in the dark again in an hour. What does Brannoc do?
+
+== ROUND 2 ==
+PLAYER: I kneel by Joss first and take his hand. "Hush now, Tam's safe, and I'm not leaving anyone to suffer alone." I check the gray-faced man's bound thigh and the angry bite on the boy's shoulder, then ask Widow Harrow, "How long since each was hurt, and has anyone cleaned that bite? Fetch me clean water, boiled if you can, and linens."
+
+While she does, I use Medicine to see who is worst off, and ask the two quiet ones' names so I can reach them before the dark comes.
+  [game] dice Brannoc's Medicine check to triage the wounded, DC 12: 1d20+5 = 1d20 [12] + 5 = 17
+  [game] time: 10 minutes later: Day 1, 6:45 PM
+  [DM write_lore (hidden)] {"create": "Joss Fenner", "kind": "person", "description": "Tam's father, big farmer with a torn, bound thigh; gray-faced from blood loss but stoic, asks Brannoc to see to others first.", "relationships": ["father of [[Tam]]", "wounded in [[Harrow barn]]"]}
+  [game] notebook: created an entry for Joss Fenner; added 2 relationships to Joss Fenner
+  [DM write_lore (hidden)] {"create": "Widow Harrow", "kind": "person", "description": "Gaunt woman in a stained apron who owns the Harrow barn and leads its defence with a hay fork. Her sons are among the wounded.", "relationships": ["owns [[Harrow barn]]"]}
+  [game] notebook: created an entry for Widow Harrow; added 1 relationship to Widow Harrow
+DM: Your hands know this work. Joss's grip is strong but clammy, and you feel his pulse racing under your fingers as you ease the binding up.
+
+Medicine (17): you read the room quickly.
+
+Joss has lost a lot of blood, but the bleeding has slowed, and the binding was tied well. He is weak but steady, and he won't die in the next hour. The boy with the bitten shoulder is the one to watch. His name is Wil Harrow, and the wound was dressed with only a rag. It was never cleaned, and the swelling and heat are spreading. The old man with the wrapped chest is Old Garrit, and he is struggling for breath. The ribs under your fingers move wrongly, and he needs you soonest of anyone. The two quiet ones are brothers, Pell and Dorrin Harrow, Wil's elder brothers. Pell is asleep with a deep gash on his arm and is simply exhausted, but Dorrin lies still with his eyes half open, barely waking when you say his name, and his skin is cold and damp. He is bleeding inside, you think, or has taken a blow to the head.
+
+Widow Harrow answers as she fetches water. "Joss and the old man were struck near dusk last night, and Wil at the fence just before dawn. Dorrin was the lantern-carrier when it came back this morning. Nobody's cleaned a thing. We boiled nothing, we were afraid to light the hearth." She hesitates. "It made no sound. Not a growl. That's what I keep thinking about."
+
+Outside, the light is going. Maybe half an hour of usable dusk remains. You have two castings of healing prayer, and four people who could use them. Who do you tend first, and what do you do about the dark coming?
+
+== ROUND 3 ==
+PLAYER: I go to Old Garrit first, since his breathing is the most urgent, and cast Cure Wounds on him at 1st level with a hand on his chest, humming Edda's hymn softly. Then I'll turn to Dorrin and use my second slot on him, because a cold, barely waking man can't wait for me to clean wounds.
+
+"Widow Harrow, light the hearth and boil that water. A fire in the dark is better than no light at all, and I'd rather see what's coming. Can your two men watch the barn door and the loft, and keep the bow ready?"
+  [DM lookup (hidden)] {"name": "Cure Wounds", "kind": "spell"}
+  [game] dice Cure Wounds on Old Garrit (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [7] + 6 = 13
+  [game] dice Cure Wounds on Dorrin (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [2] + 6 = 8
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 1/2
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 0/2
+  [game] time: 10 minutes later: Day 1, 6:55 PM
+  [DM write_lore (hidden)] {"create": "Old Garrit", "kind": "person", "description": "Old villager of Hollow Reach with broken ribs from the creature's attack; healed by Brannoc's Cure Wounds.", "relationships": ["wounded in [[Harrow barn]]"]}
+  [game] notebook: created an entry for Old Garrit; added 1 relationship to Old Garrit
+  [DM write_lore (hidden)] {"create": "Harrow brothers", "kind": "group", "description": "Sons of Widow Harrow, all wounded: Wil (about 14, unclean bite on shoulder, swelling and heat spreading), Pell (deep arm gash, exhausted, asleep), Dorrin (the lantern-carrier at the morning attack, cold, damp, barely waking; Brannoc healed him).", "relationships": ["sons of [[Widow Harrow]]"]}
+  [game] notebook: created an entry for Harrow brothers; added 1 relationship to Harrow brothers
+DM: You kneel by Old Garrit, lay your hand flat on his wrapped chest, and hum Edda's hymn. Warmth gathers under your palm, and you feel the wrongness in his ribs ease. His next breath goes deep, all the way down, and his eyes open wide. "Gods," he whispers. "Haven't breathed like that since yesterday." Color returns to his lips.
+
+You turn to Dorrin and cup his cold face. The prayer comes again, and this time it takes longer, as though the warmth has to search for him. Then his eyelids flutter, his fingers close on your sleeve, and he mutters, "Ma?" His skin is no longer clammy, and his breathing is steady. He is awake, though weak. Your spell slots are spent now.
+
+Widow Harrow nods once, tight-lipped. "Hearth, then." She sends a girl for kindling. The two men take the door and the loft ladder, the bowman crouched where he can see through a knothole. The hearth catches, small and bright, and the first kettle goes on. The barn smells less of fear and more of smoke and wet wool.
+
+You still have Wil's bite, Joss's thigh, and Pell's gash, and only your hands, clean water, and the Medicine you've learned. Outside, true dark has fallen. The bowman at the knothole goes very still and raises one hand without turning around.
+
+"Healer," he breathes. "Somebody's at the fence. Stood up straight, like a man. Hasn't moved."
+
+What does Brannoc do?
+
+== ROUND 4 ==
+PLAYER: I quietly pick up my mace and shield and move to the knothole beside the bowman, keeping low and away from the lamplight. "Don't loose yet," I whisper. "Let me look. Widow Harrow, douse the lanterns except the hearth, and keep the children back from the door and away from the walls."
+  [game] dice Brannoc's Perception check peering through the knothole at night, DC 12: 1d20+3 = 1d20 [13] + 3 = 16
+  [game] time: 2 minutes later: Day 1, 6:57 PM
+  [DM write_lore (hidden)] {"create": "The Silent Watcher", "kind": "creature", "description": "Upright, silent figure that attacked Hollow Reach on two nights, takes lanterns, stands at the fence and watches. Gaunt, long-limbed, wrapped in rags, face turned toward the barn's light. Nature not yet revealed; DM to decide (undead or similar SRD creature).", "relationships": ["lurks near [[Hollow Reach]]", "stands at the fence
+  [game] notebook: created an entry for The Silent Watcher; added 2 relationships to The Silent Watcher
+DM: You ease down beside the bowman, shield tucked in, and put your eye to the knothole. Behind you, Widow Harrow's hushed orders move through the barn. Lamps go out one by one, until only the low red hearth glows, and the children are hustled to the middle of the floor, away from the walls.
+
+Perception (16): your eyes adjust to the dark. A thin moon is up behind the cloud, and it is enough.
+
+About forty paces off, at the paddock fence, a figure stands motionless. It is tall and unnaturally thin, wrapped in rags that hang like wet bandages, with arms too long for the body, and it is a little stooped, as though listening. It holds something low at its side that catches the hearthlight as a faint glint: a farmer's lantern, unlit. Its face is turned toward the barn, pale and still. You never see it breathe. It does not shift its weight. A mist of cold breath should be rising in this chill air, and there is none.
+
+Then you notice what else is wrong. The dog that barked once at the village edge has not made a sound since. Nothing at all is moving in the yard, as if the night itself were holding still around the thing.
+
+The bowman's breath is shaking. "It's been standing there since dusk both nights," he whispers. "Then it comes for the door. Always the door."
+
+You have your mace, your shield, a light crossbow, and no spells left. Behind you are fifteen people, five of them hurt. What does Brannoc do?
+
+== ROUND 5 ==
+PLAYER: I stay low and keep my voice barely a breath. "It watches and waits for the door, so let's not give it one. Bar the door with the heaviest thing you've got, and have someone pile straw and hay by the entrance so we can light it if it breaks through; fire's better than nothing against a thing that doesn't breathe."
+
+"I'll stand at the door with my shield. Keep your arrow on it, but only loose if it moves toward us. And Widow Harrow, does anyone here know of an old grave, a bad death, or a cursed place in those woods that this might have come from?"
+  [game] time: 5 minutes later: Day 1, 7:02 PM
+  [DM write_lore (hidden)] {"create": "Wayfarers' Lamp", "kind": "place", "description": "Old wayside shrine in the woods north of Hollow Reach, a stone lamp-house where a keeper kept a light burning for travellers. Keeper was Old Hob Marrow, who has not been seen since harvest; the lamp has been dark since. Villagers avoid it. Possible origin of the Silent Watcher.", "relationships": ["lies in the woods near [[Hollow Reach
+  [game] notebook: created an entry for Wayfarers' Lamp; added 2 relationships to Wayfarers' Lamp
+  [DM write_lore (hidden)] {"create": "Hob Marrow", "kind": "person", "description": "Hermit keeper of the Wayfarers' Lamp; vanished around harvest, never found. Villagers say he never missed lighting the lamp, and the lamp has been dark since. Fate unknown.", "relationships": ["kept the [[Wayfarers' Lamp]]"]}
+  [game] notebook: created an entry for Hob Marrow; added 1 relationship to Hob Marrow
+DM: The barn moves quietly and quickly. Two men drag a grain bin against the double doors, and a third wedges a plough beam across the bar. The girl who fetched kindling and a pair of boys bring armfuls of loose straw, which you pile in a loose heap just inside the door, well clear of the hearth and the children. Widow Harrow checks the lamp oil with a hard eye and sets a covered lantern within reach of the pile.
+
+You take your place at the door, shield up, mace in hand, and the bowman settles at the knothole. Outside, the figure has not moved.
+
+Widow Harrow comes to your shoulder, wiping her hands on her apron. She answers in a murmur, not taking her eyes off the door. "A grave? No. But there's the Lamp. Wayfarers' Lamp, up the north track, a stone lamp-house in the beechwoods where old Hob Marrow kept a light burning for travellers. Never missed a night in forty years. He didn't come down for the harvest feast this year. Somebody went up and the lamp was cold, the door open, and no sign of him. We told ourselves he'd gone to his sister's in the valley. Then the lanterns started going missing from porches. Then the first night."
+
+She swallows. "It always takes the lantern. Every light it can reach. And when it's got one, it stands and looks at the one that's still burning."
+
+Behind you, in the dim, Tam is whispering to his father. Wil has begun to shiver, and Pell is stirring. At the knothole, the bowman hisses: "It's lifted its head. It's looking at the hearth smoke."
+
+Through the cracks of the door you can just see the pale shape begin to walk, slow and even, toward the barn.
+
+What does Brannoc do?
+
+== ROUND 6 ==
+PLAYER: I set my feet behind the barred door, shield braced against it and mace ready, and speak low over my shoulder. "Widow Harrow, hold the lantern ready by the straw, but don't light it until I say. Bowman, wait until it's close enough that you can't miss, and aim for the head or chest."
+
+Then I whisper, half to myself, "Hob Marrow kept that light forty years for strangers. Whatever this is, it's wearing his lantern, and I want to know why." I keep my voice steady so the children hear calm, and I hum Edda's hymn under my breath.
+  [game] time: 3 minutes later: Day 1, 7:05 PM
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 11: walked to the barn door and stopped, lifting the unlit lantern toward it. Wears a keeper's rags; may be Hob Marrow himself. Has not yet attacked this night."}
+  [game] notebook: updated The Silent Watcher
+DM: You plant your boots and your shoulder against the bar. Wood presses cool against your shield arm. Behind you, Widow Harrow's hands steady on the lantern, and the bowman draws a slow breath and holds it. Your hymn is barely a thread, and one of the children stops sniffling to listen.
+
+The footsteps are slow, even, and wet, the sound of mud being walked through without hurry. They cross the yard and stop. Through the seam between the doors you see the dull shine of a pale hand lifted, and a lantern held up toward the crack as if to show it. Rain-darkened rags hang from its wrists. A thin smell comes through the gap, old lamp oil, damp earth, and under it something sweetish and cold.
+
+It does not strike the door. It does not push. It simply stands there, holding the lantern up, unlit, with its head tilted as though waiting to be let in.
+
+Then, so quietly that you can barely tell it from the wind, a dry voice scrapes through the wood: "...light."
+
+The bowman's arrow trembles. Across the barn, Joss Fenner draws a sharp breath, and Wil, feverish, whimpers. The children press together.
+
+You have the bar under your hands, the straw and lantern at your back, and a figure at the door that asks for light and might be what is left of Hob Marrow, or might not. What does Brannoc do?
+
+== ROUND 7 ==
+PLAYER: I raise a hand to tell the bowman to hold, and keep my shield firm against the door. Through the crack I say gently, "Hob Marrow? I'm Brannoc, a healer. You kept a light for travellers for forty years. Can you tell me what you want it for?"
+
+If it only says "light" again, I'll ask Widow Harrow to slide the shuttered lantern's lit flame close to the seam, unopened, just enough to show a glow, while I keep the bar braced and my mace ready.
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 12: answered Brannoc through the door in fragments. It is Hob Marrow's remnant, bound by duty to the lamp. Says the lamp was put out, the 'hungry ones' come when it is dark, and he cannot rest without it lit. Unlit lantern is his; he took others trying to relight the way. The wounds on villagers came from other creatures (hungry ones), no
+  [game] notebook: updated The Silent Watcher
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 12: per Hob's remnant, the lamp was put out and the 'hungry ones' come when it is dark; relighting it keeps them away. Needs investigating."}
+  [game] notebook: updated Wayfarers' Lamp
+  [game] time: 2 minutes later: Day 1, 7:07 PM
+DM: The bowman's arm sinks an inch at your signal. You say it plainly, the way you would to a frightened patient: your name, what you are, and that the light he kept was a kindness.
+
+For a long moment there is only the wind and the creak of the plough beam. The lantern in the gap does not lower. Then the dry voice comes again, slower, each word dragged up from somewhere deep.
+
+"...Brannoc... healer." A rattling pause. "...Marrow. Keeper." The pale hand tightens on the lantern's handle. "Lamp... out. Not me. They put it... out. Dark... lets them... up."
+
+Another pause. You hear something that might be a breath, though you can't be sure.
+
+"Hungry ones. Under the stones. Light holds... them. I came... for oil. For light... for the lamp. Took... lanterns. Could not... ask. Could not... speak. Until..." The lantern shakes. "Until you. Your hymn. Warm."
+
+In the barn, no one moves. Widow Harrow has her hand over her mouth. Old Garrit whispers, "Gods keep us. That's Hob's voice."
+
+The thing at the door does not raise a hand, does not strike. It only says, almost too softly to hear: "...Don't let them... reach the barn. Please. Light the lamp."
+
+Whatever stands outside, it is not the thing that wounded these people, and it came begging. But it is also a dead keeper wrapped in rags at your door, and Wil is feverish, and the dark outside is deepening, and something called the hungry ones is under the stones of a shrine a mile north.
+
+What does Brannoc do?
+
+== ROUND 8 ==
+PLAYER: I lower my shield an inch and speak through the crack. "Hob, I hear you, and I believe you. Is it you who has been wounding these people, or the hungry ones? And how many of them are there?"
+
+Then I turn to Widow Harrow and the men. "He came to us begging, and he warned us. I'd like to open this door, carefully, with the bow trained and the straw ready, and go to the Lamp with him. Who among you knows the north track, and has lamp oil to spare?"
+  [DM write_lore (hidden)] {"create": "Cal Tarn", "kind": "person", "description": "The bowman guarding the Harrow barn; a young hunter who knows the north track to the Wayfarers' Lamp well.", "relationships": ["defends the [[Harrow barn]]", "knows the way to the [[Wayfarers' Lamp]]"]}
+  [game] notebook: created an entry for Cal Tarn; added 2 relationships to Cal Tarn
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 13: Hob says he never harmed anyone; the hungry ones number about four, tall, come up from under the shrine stones in the dark and range out at night. They did the wounding."}
+  [game] notebook: updated The Silent Watcher
+  [game] time: 3 minutes later: Day 1, 7:10 PM
+DM: The answer comes slowly through the crack. "...Not me. Never... a hand on any of them. Only... lanterns. I begged... in the dark. They would not... listen." The lantern trembles. "Four. Maybe... more. Tall. Thin. They climb... up from under the stones... when the light dies. They go... where the lamps are... fewest. The village. The road."
+
+The bowman's face is white in the hearthlight. "Four," he whispers. "That's what we saw. Four shapes at the fence, last night."
+
+You turn to the room. For a moment nobody speaks. Then Widow Harrow squares her shoulders. "He came to us with his hands empty. I'll hear no more fear about it. We keep faith with a man who kept the road for forty years." She lifts a stoppered clay jar from beside the hearth. "Lamp oil. Near a full quart. It's yours."
+
+The bowman wets his lips. "I'm Cal Tarn. I know the north track, since I've run hares there since I was nine. It's a mile and a bit through beech and bracken, uphill. We'd be out in the dark with it behind us and four of those things somewhere ahead." He glances at the wounded. "But if the Lamp's the thing, I'll go. If you'll have me."
+
+Joss, from his pallet, tries to push himself up. "Take Cal. I'd come. I can't." He subsides with a grunt. Wil's fever has gotten worse, and Widow Harrow's hands are not quite steady on his forehead.
+
+You are out of spells until you rest, and a rest means leaving the wounded to the night or finding a way to hold it back. Outside, the keeper waits, and his lantern gleams with a faint pale light of its own.
+
+What does Brannoc do?
+
+== ROUND 9 ==
+PLAYER: "Thank you, Cal. I'll gladly have you, and Widow Harrow, thank you for the oil." I kneel by Wil and wash his bite with the boiled water, bind it clean, and say, "Keep him cool and give him water; I'll be back with the dawn, and I'll tend him properly then." I ask her to keep the hearth fed and the straw ready, and the second man at the door with the axe.
+
+"Hob, we'll walk with you. Stay where I can see you, and tell me if the hungry ones draw near. Cal, you take the lead on the track, I'll walk between you and Hob with my shield up, and we light the lamp before anything else."
+  [game] dice Brannoc's Medicine check to clean and bind Wil's bite, DC 10: 1d20+5 = 1d20 [17] + 5 = 22
+  [game] dice Brannoc's Perception check on the north track to spot what waits near the Lamp, DC 13: 1d20+3 = 1d20 [6] + 3 = 9
+  [DM lookup (hidden)] {"name": "Ghoul", "kind": "monster"}
+  [game] time: 40 minutes later: Day 1, 7:50 PM
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 14: the hungry ones are ghouls (SRD stat block). Hob walks with Brannoc and Cal Tarn to the Lamp, carrying his pale-lit unlit lantern; senses ghouls nearby."}
+  [game] notebook: updated The Silent Watcher
+DM: You wash Wil's bite with the boiled water and bind it in clean linen. Medicine (22): you work with a sure, gentle hand. You scrape out the grit, flush the torn edges, and pack it with a clean pad. When you finish, the angry heat is already drawing back from the edges, and the boy's shivering eases a little. "Water, cool cloths, and keep him still," you tell Widow Harrow. "I'll be back at dawn." She grips your wrist, wordless. You leave the oil jar tucked in Cal's pack and nod to the man with the axe, who takes your place at the door.
+
+Cal draws the bar with Tam's help and slips out. The keeper steps back a pace as you do, and for the first time you see him plainly: a gaunt old man long dead, hands dark and cracked, a keeper's gray coat in rags, eyes like dull coins, one bare hand still gripping the unlit lantern. He looks at you without hunger. When you shut the door, you hear the bar drop behind you, and fifteen people's breath hold.
+
+The track north is a dark scar between beeches. Cal goes first with his bow strung and a hooded lantern, shuttered to a sliver. You walk behind him with your shield up, humming low, and Hob follows at your shoulder, silent and unhurried. Mist lies in the hollows. Twice, Cal stops to read a bent fern or a scuff in the mud. Once, an owl calls and you all freeze until it passes. The climb is steady, and it takes the better part of forty minutes.
+
+At the last bend, where the trees thin and the dark shape of a squat stone lamp-house crouches ahead against the sky, Hob's free hand rises and falls across your chest like a gate. His lips move: "...Here. Close." The lantern in his other hand has begun to shake.
+
+Cal has stopped too, bow half-raised. Ahead, the lamp-house door hangs open on black. Beside it, in the gray starlight, two long shapes are crouched over something on the ground, and the sound drifting to you is a low wet gnawing.
+
+What does Brannoc do?
+
+== ROUND 10 ==
+PLAYER: I raise a fist to halt Cal and crouch low beside him, shield up, whispering barely above a breath. "Hob, are those two the hungry ones, and can they hear us? Cal, don't loose yet."
+
+Then I ask Cal quietly to unshutter the lantern just a sliver so I can see what they're feeding on, and whether the other two are near. If they turn, I plan to hold the path with my shield and let Cal shoot over my shoulder while Hob gets to the lamp.
+  [game] dice Brannoc's Stealth check (disadvantage from chain mail) as the lantern is cracked open, vs ghouls' passive Perception 10: 1d20+1 (disadvantage) = 1d20 [20, 15]→15 + 1 = 16
+  [game] time: 2 minutes later: Day 1, 7:52 PM
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 15: two ghouls feed outside the open lamp-house door on a dead pack-pony. Per Hob, the other two ghouls are away roaming (toward the village side). Brannoc, Cal and Hob are about 50 feet off in the trees, unnoticed."}
+  [game] notebook: updated Wayfarers' Lamp
+DM: Hob nods slowly, and his dry whisper barely stirs the air. "...Yes. Hungry ones. Two here. Two... gone out. Hunting low... the lamps. They hear... a little. Eat... first."
+
+Cal's hand closes over the shutter and eases it open the width of a fingernail. A thin blade of yellow light slides across the ferns and stops. Your breath catches, since your armor creaks faintly with every shift, but the creatures don't raise their heads. Stealth (16): the gnawing never breaks its rhythm.
+
+The light shows two tall, ash-gray figures crouched in the dirt, ribs like barrel hoops under tight skin, long jaws, and hands ending in black, hooked nails. A dead pack-pony lies between them, its packs torn open and scattered. One of them has raised a bloody scrap and is holding it in the beam. Past them the lamp-house door gapes. Beyond the threshold you glimpse a stone floor, a cold iron lamp on a plinth, and a dark gap where one flagstone has been dragged aside.
+
+Cal's lips are bloodless. "Two I can maybe drop with arrows if they come at us one at a time," he breathes. "Not if both rush. And their claws..." He doesn't finish. You remember Widow Harrow's pale-faced account of the men who went down stiff as boards in the yard.
+
+You have no spells, but you have a mace and a shield, a crossbow, a bow beside you, a ready oil jar, and a keeper who can't fight but can reach the lamp. The shuttered lamp-house is about fifty feet past the creatures. What does Brannoc do?
+
+== ROUND 11 ==
+PLAYER: "Cal, we use the oil. Can you wedge the jar's stopper with a rag and loose it as a fire-pot? Throw it at their feet while they're bunched over that pony, and fire the lantern flame to it. Burning oil should panic them, and light is the one thing they respect here."
+
+I whisper to Hob, "When the fire flares, you run for the lamp. I'll hold the path with my shield and keep them off you." Then I add, "Cal, loose arrows at whichever one breaks through the fire, and I'll step in front of you with the mace."
+  [DM lookup (hidden)] {"name": "Combat Step by Step", "kind": "rule"}
+  [DM lookup (hidden)] {"name": "Oil (flask)"}
+  [DM lookup (hidden)] {"name": "Paralyzed", "kind": "condition"}
+  [DM lookup (hidden)] {"name": "Scout", "kind": "monster"}
+  [game] dice Cal Tarn's Stealth creeping to within 20 feet, vs ghouls' passive Perception 10: 1d20+6 = 1d20 [11] + 6 = 17
+  [game] dice Brannoc's Stealth creeping forward in chain mail (disadvantage), vs passive Perception 10: 1d20+1 (disadvantage) = 1d20 [3, 5]→3 + 1 = 4
+  [game] dice Brannoc's initiative: 1d20+1 = 1d20 [15] + 1 = 16
+  [game] dice Cal Tarn's initiative: 1d20+2 = 1d20 [13] + 2 = 15
+  [game] dice Ghouls' initiative (group): 1d20+2 = 1d20 [10] + 2 = 12
+  [game] fight: Fight started. Order: Brannoc Ashdown (16), Cal Tarn (15), Ghoul 1 (12), Ghoul 2 (12). Nobody has had a turn yet: next_turn starts the first one.
+  [DM write_lore (hidden)] {"create": "Ghouls of the Lamp", "kind": "group", "description": "Four ghouls (\"hungry ones\") that crawl out from under the Wayfarers' Lamp's flagstone when the lamp is dark. Two are at the lamp-house feeding; two roam toward the village. Fight begins Day 1, ~7:55 PM, as Brannoc's chain mail clinks and they look up.", "relationships": ["emerged from under the [[Wayfarers' Lamp]]", "wounded folk 
+  [game] notebook: created an entry for Ghouls of the Lamp; added 2 relationships to Ghouls of the Lamp
+  [game] time: 3 minutes later: Day 1, 7:55 PM
+  [game] fight: Round 1, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You ease forward step by step, shield low, and Cal slips off to your left among the bracken. Then a link of your chain mail rings against the shield rim, a small bright sound in the dead quiet. Stealth (4): it carries.
+
+Both ghouls' heads come up at once, long jaws dripping, and four dull eyes find you across the dark. They do not snarl. They simply rise, unfolding, and the nearer one lets the pony's torn flank slide from its hands. They are not surprised, but neither are you. You hold the first move.
+
+Positions: the ghouls are about 25 feet ahead of you, side by side before the open lamp-house door. Cal is crouched in the ferns off your left, roughly 20 feet from them, bow in hand with the oil jar and lit hooded lantern beside him. Hob stands about 10 feet behind you, rigid, the pale lantern shaking in his fist. Their reach is 5 feet and they move 30 feet a turn, so they can be on you before Cal gets two arrows off.
+
+This is your turn: you have your action, your movement (30 feet), and one free object interaction. You could hurl oil yourself (throw range 20 feet), have Cal handle it on his turn, throw it, shoot your crossbow, hold the path with your shield, or something else.
+
+What does Brannoc do?
+
+== ROUND 12 ==
+PLAYER: I hold my ground and plant my feet in the path, shield braced, rather than rush them. I use my action to loose my light crossbow at the nearer ghoul, then step back toward Hob so the pair have to come through me. "Cal, on your turn, the oil at their feet and set it alight!"
+  [game] dice Brannoc's light crossbow attack on Ghoul 1 (AC 12): 1d20+3 = 1d20 [8] + 3 = 11 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Cal Tarn. Cal Tarn (initiative 15): HP 16/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal Tarn hurls the lit oil jar at Ghoul 1 (AC 12): 1d20+4 = 1d20 [19] + 4 = 23 (Cal Tarn has used its action: no more actions this turn.)
+  [game] fight: Ghoul 1 took 5: HP 22 → 17
+  [game] fight: Round 1, now: Ghoul 1. Ghoul 1 (initiative 12): HP 17/22, AC 12 Ghoul 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 1 claws Brannoc (AC 18): 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Ghoul 1 claw damage (critical hit): 4d4+2 = 4d4 [2, 1, 4, 1] + 2 = 10
+  [game] dice Brannoc's Constitution save vs paralysis, DC 10: 1d20+2 = 1d20 [14] + 2 = 16
+  [game] sheet: took 10 damage: HP 10 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Round 1, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [10] + 4 = 14
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [2, 2] + 2 = 6
+  [game] dice Cal Tarn's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [13] + 1 = 14
+  [game] fight: Cal Tarn took 6: HP 16 → 10
+  [game] fight: Round 2, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [11] = 11
+  [game] sheet: death save successes: 1/3
+  [DM write_lore (hidden)] {"entry": "Ghouls of the Lamp", "add_to_description": "Round 1: Ghoul 1 crit-clawed Brannoc to 0 HP (he passed the paralysis save). Ghoul 2 clawed Cal Tarn. Cal's lit oil hurt Ghoul 1. Brannoc is dying, 1 death-save success."}
+  [game] notebook: updated Ghouls of the Lamp
+  [game] fight: Round 2, now: Cal Tarn. Cal Tarn (initiative 15): HP 10/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 1 (AC 12), disadvantage: Ghoul 2 adjacent: 1d20+4 (disadvantage) = 1d20 [9, 11]→9 + 4 = 13 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [18, 8]→8 + 4 = 12
+  [game] dice Cal's first arrow damage on Ghoul 1: 1d8+2 = 1d8 [2] + 2 = 4
+  [game] dice Cal's second arrow damage on Ghoul 1: 1d8+2 = 1d8 [7] + 2 = 9
+  [game] fight: Ghoul 1 took 13: HP 17 → 4
+  [game] fight: Round 2, now: Ghoul 1. Ghoul 1 (initiative 12): HP 4/22, AC 12 Ghoul 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 1 claws the unconscious Brannoc (advantage; AC 18): 1d20+4 (advantage) = 1d20 [4, 11]→11 + 4 = 15
+  [game] fight: Round 2, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [game] fight: Round 3, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [14] = 14
+  [game] sheet: death save successes: 2/3
+  [game] fight: Round 3, now: Cal Tarn. Cal Tarn (initiative 15): HP 10/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [14, 16]→14 + 4 = 18 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [1, 11]→1 + 4 = 5 (natural 1)
+  [game] dice Cal's arrow damage on Ghoul 1: 1d8+2 = 1d8 [2] + 2 = 4
+  [game] fight: Ghoul 1 removed from the fight. Order: Brannoc Ashdown (16), Cal Tarn (15), Ghoul 2 (12)
+  [game] fight: Round 3, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [15] + 4 = 19
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [2, 4] + 2 = 8
+  [game] dice Cal's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [20] + 1 = 21 (natural 20)
+  [game] fight: Cal Tarn took 8: HP 10 → 2
+  [game] fight: Round 4, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [19] = 19
+  [game] sheet: death save successes: 3/3; three death save successes: stable (unconscious at 0 HP, no death saves; regains 1 HP after 1d4 hours unless healed); death save counts reset
+  [game] fight: Round 4, now: Cal Tarn. Cal Tarn (initiative 15): HP 2/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 2 (AC 12), disadvantage (adjacent): 1d20+4 (disadvantage) = 1d20 [5, 8]→5 + 4 = 9 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [5, 20]→5 + 4 = 9
+  [game] fight: Round 4, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [5] + 4 = 9
+  [game] fight: Round 5, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Cal Tarn. Cal Tarn (initiative 15): HP 2/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [19, 16]→16 + 4 = 20 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [1, 8]→1 + 4 = 5 (natural 1)
+  [game] dice Cal's arrow damage on Ghoul 2: 1d8+2 = 1d8 [1] + 2 = 3
+  [game] fight: Ghoul 2 took 3: HP 22 → 19
+  [game] fight: Round 5, now: Ghoul 2. Ghoul 2 (initiative 12): HP 19/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [3, 2] + 2 = 7
+  [game] dice Cal's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+
+== ROUND 13 ==
+PLAYER: DM: Brannoc is stable at 0 HP and unconscious, and I think Cal just went down and is paralyzed, is that right? I have no spell slots left, so can Hob do anything to draw the last ghoul's attention, or can I wake before it finishes Cal?
+  [game] fight: Cal Tarn took 7: HP 2 → 0 (0 HP)
+  [game] fight: Round 6, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 6, now: Cal Tarn. Cal Tarn (initiative 15): HP 0/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal Tarn's death saving throw (ruling: named ally NPC at 0 HP makes death saves), DC 10: 1d20 = 1d20 [7] = 7
+  [DM lookup (hidden)] {"name": "Stabilizing a Creature", "kind": "rule"}
+  [game] dice Hob Marrow's Medicine check (first aid on Cal), DC 10 — keeper of travellers, my ruling +2: 1d20+2 = 1d20 [3] + 2 = 5
+  [game] dice Hours until Brannoc regains 1 HP (stable, unhealed): 1d4 = 1d4 [4] = 4
+  [game] fight: Round 6, now: Ghoul 2. Ghoul 2 (initiative 12): HP 19/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws the downed Cal Tarn (advantage; AC 13): 1d20+4 (advantage) = 1d20 [1, 16]→16 + 4 = 20
+  [game] fight: Cal Tarn removed from the fight. Order: Brannoc Ashdown (16), Ghoul 2 (12)
+  [game] fight: Fight over after 6 round(s). 36 seconds of fighting; now Day 1, 7:55:36 PM.
+  [game] sheet: XP +200: 200
+  [DM write_lore (hidden)] {"entry": "Cal Tarn", "add_to_description": "DIED at the Wayfarers' Lamp, Day 1 ~8 PM, clawed down by Ghoul 2 after killing Ghoul 1 with Brannoc's oil plan. Hob could not stabilise him."}
+  [game] notebook: updated Cal Tarn
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 18: Hob lit the lamp from the pony's pack oil while Ghoul 2 stood over the fallen. DM ruling: the lamp's flame is a hallowed light the ghouls cannot abide; they flee below the flagstone. Ghoul 1 dead. Ghoul 2 fled (19/22 HP). Two other ghouls still roam. Brannoc is stable, wakes ~4 hours later at 1 HP."}
+  [game] notebook: updated Wayfarers' Lamp
+  [game] time: 4 hours later: Day 1, 11:55:36 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+DM: Your reply to the fight: you could not wake, and could not have. At 0 HP you were out cold, stable but unconscious, and Cal went down beside you. This is what you missed.
+
+The last ghoul's claws came down on Cal while he lay paralyzed, and he did not get up. Hob had tried to bind his wounds with shaking dead hands, and he could not stop the bleeding. Cal Tarn died quickly and quietly in the ferns, without a sound.
+
+Then Hob did what he had come to do. He reached the pack-pony, tore a flask of lamp oil from its burst saddlebag, and went up the steps of the lamp-house. The wick took the flame of his own pale lantern, and the long-dark Wayfarers' Lamp caught. Light fell out across the clearing like a held breath let go. The ghoul over you shrieked, a thin dry sound, and went back across the flagstones and down into the gap in the floor, and the stone slid shut behind it.
+
+You wake four hours later, near midnight, to the smell of lamp oil and cold earth. You are flat on your back with Edda's amulet pressed under your chin. Your head is clear, your body is sore, and you have 1 HP and no spells. The lamp burns steady above you. Hob sits on the step beside you, hands folded, unlit lantern in his lap, and when you stir he turns his head.
+
+"...Healer," he says. "Light holds. For now." He looks toward the trees where Cal lies under a coat. "I could not... save him. I am sorry."
+
+You have 200 XP, one ghoul dead, one wounded and gone below, and two more still loose in the dark. Hollow Reach is a mile south, with fifteen people behind a barred door and a boy with a fevered bite who needs you by dawn.
+
+What does Brannoc do?
+
+== ROUND 14 ==
+PLAYER: I sit up slowly and bow my head over Cal Tarn, laying my hand on the coat that covers him. "Cal, you ran those hares since you were nine, and you came because you were asked. I'll carry your name back to the Widow, and to Tam, and I won't forget it."
+
+Then I turn to Hob. "Thank you for the light, and there's nothing to forgive. Will the lamp hold until dawn without you, and do the hungry ones know of any other way up from under the stones? I need to get back to Wil by first light, and I'd like to bring Cal home to his people rather than leave him here."
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 19: Hob says the lamp will burn until dawn on the oil in it, but it needs refilling and tending; he must stay bound to it. Under the stones is an old barrow-crypt whose other mouth opens somewhere toward the village side; the two roaming ghouls may have come up that way. Hob cannot leave the lamp's light for long."}
+  [game] notebook: updated Wayfarers' Lamp
+DM: Your hand rests on the coat over Cal's chest. The hymn comes without your deciding it, the low one Edda sang over the dead, and it steadies your breathing. You tell Cal what you promised, and the clearing is quiet around you.
+
+Hob waits until you finish, then answers slowly. "...The lamp. It will hold to dawn. There is oil in it, and what the pony carried. But it must be... tended. I cannot leave it. Not far. Not for long." The lantern in his lap turns once. "The light is what holds me, and what holds them down. If it fails, I fail. They rise."
+
+As for the stones, his dull eyes move toward the shut flagstone. "Not only here. The crypt below is old. Long. It has... a second mouth. Toward the village. Down by the wash, the cut bank near the Fenner fields. I think that is how the two got out, and why they hunted low. That one..." he nods toward the stone, "...is hurt, and afraid of the light. The others are not here. They are out there, hungry."
+
+He is still a moment. "Wil. The boy. I heard you speak of him. Whatever you do, do it before the dawn has... ripened the wound. Take Cal. He should lie at home. But the road is dark, and you are not whole."
+
+You have 1 HP, no spells, and Cal's body. The road south is a mile of dark beech and fern, and two ghouls are somewhere between you and the barn. You could carry Cal now, rest here under the lamp's light until your strength returns, or find another way. A full night's rest would restore your prayers, but it would be morning before you reached Wil.
+
+What does Brannoc do?
+
+== ROUND 15 ==
+PLAYER: I weigh it a moment, then say, "I can't carry Cal a mile on 1 HP with two ghouls loose, and I can't heal Wil with empty hands. Hob, I'll rest here under your light and take a full rest so my prayers come back. I'll wake before dawn and go straight to the barn."
+
+I settle against the lamp-house wall with my shield across my knees and Edda's amulet in my hand, and ask Hob to wake me at the first gray, or at once if anything stirs beyond the light. "DM: before I sleep, how many hours does a long rest take, and could I be ready by first light, given it's near midnight?"
+  [DM lookup (hidden)] {"name": "Long Rest", "kind": "rule"}
+  [game] time: 5 minutes later: Day 2, 12:00:36 AM
+DM: You lean against the cold stone, shield across your knees, Edda's amulet in your palm, and Hob settles on the step where he can watch the clearing and the stone. He nods. "...I will wake you. At gray. Or sooner."
+
+Here is the plain answer to your question. A long rest takes at least 8 hours, with no more than 2 hours of light activity such as standing watch. It is just past midnight, so you would finish at about 8 AM. Dawn comes earlier than that, so you would not be ready by first light. You would wake at full HP with both prayers back, and Wil's wound would have had a full night to fester. The long rest restores everything, and nothing shorter restores your spell slots.
+
+You have other ways to use the night:
+
+A long rest, as above, finishing around 8 AM at full strength.
+
+A short rest of 1 hour, in which you could spend your one Hit Die (1d8 + 2) to recover some HP. It would give you no spell slots, though, and you could still leave before first light.
+
+Or go now, at 1 HP, with no spells, carrying Cal, or leaving him under the lamp's light for the Widow's folk to fetch.
+
+Or split it: sleep part of the night, which gains nothing by the rules unless you finish all 8 hours.
+
+What does Brannoc do?
+
+== ROUND 16 ==
+PLAYER: I think it over and choose the short rest. "Hob, wake me in an hour. I'll spend my Hit Die, bind what I can, and go to Wil before the dawn ripens that bite, even without my prayers. I can clean the wound again, bring fresh water, and keep him cool until I can rest properly at the barn."
+
+Once I'm on my feet, I'll leave Cal under the lamp's light with his coat tucked around him, and take his bow and Edda's amulet with me. "I'll send the Widow's folk to carry him home by daylight, Hob. Keep the light for him until they come."
+  [game] sheet: short rest; spent 1 hit die (0/1 left): roll 1d8 and add the CON modifier (CON 15 (+2)), then pass the total as heal; the player decides whether to spend another after the roll; 1 hour later: Day 2, 1:00:36 AM
+  [game] dice Brannoc's Hit Die healing on the short rest: 1d8+2 = 1d8 [6] + 2 = 8
+  [game] sheet: healed 8: HP 1 → 9; gained 1 × Longbow (Cal Tarn's, to return to his kin)
+DM: You sleep as the body does after a bad fight, shallow and heavy. Hob does not stir from the step, and the lamp does not flicker. When he touches your sleeve, an hour has gone by, and the stone beneath you is cold.
+
+Your Hit Die is spent, and 8 hit points have come back to you. You are at 9 of 10, stiff, with an ache across your ribs where the claws came down, but steady on your feet. Your prayers have not returned, and a short rest does not bring them back, so you have no spells.
+
+You do as you said. You tuck Cal's coat around him and fold his hands, and speak the short prayer for the dead over him, with the lamp's steady gold light across his face. His longbow goes over your shoulder to be given back to his kin. Hob lifts his unlit lantern in a small, formal salute, the kind a keeper gives a traveller leaving. "...I will keep the light. He will not lie in the dark."
+
+It is now 1 AM on Day 2. The track south runs down between the beeches, black and quiet. Somewhere out there, two ghouls are hunting low, and the cut bank by the Fenner fields lies on the way. You have two ways to go: keep to the track, or leave it and approach the barn along the wash, where the ghouls' second mouth is. You have your mace, your shield, a crossbow, and a mile of dark.
+
+What does Brannoc do?
+
+== ROUND 17 ==
+PLAYER: I keep to the track, shield up and walking slowly, with my armor muffled by holding the loose links against my side. "Hob keeps the light behind me, and I'll keep to the lit path as far as it reaches before the dark takes over. If I hear anything in the fern, I stop and go to ground, and if I see them I'll head for the barn rather than fight, since I have no prayers left."
+
+DM: before I go, how many bolts do I have for the light crossbow, and did the ghouls ever touch the oil jar Cal threw, or is it still burning anywhere along the way?
+  [game] dice Brannoc's Stealth on the dark track (chain mail disadvantage), vs ghouls' passive Perception 10: 1d20+1 (disadvantage) = 1d20 [11, 3]→3 + 1 = 4
+  [game] dice Brannoc's Perception on the dark track, DC 12: 1d20+3 = 1d20 [9] + 3 = 12
+  [game] time: 30 minutes later: Day 2, 1:30:36 AM
+  [DM write_lore (hidden)] {"entry": "Ghouls of the Lamp", "add_to_description": "Day 2 ~1:30 AM: Brannoc (9 HP, no spells, 20 bolts) meets one of the two roaming ghouls on the track near the Fenner fields. It has heard his armour. The other roams elsewhere. Cal's oil jar burned out in two rounds back at the Lamp."}
+  [game] notebook: updated Ghouls of the Lamp
+DM: You have 20 crossbow bolts. Cal's jar shattered at the ghoul's feet and burned out in two rounds. By the time you woke there was only a scorch on the dirt and the sharp smell of the oil, so no fire lies along your way.
+
+You go down the track as you planned, shield up, one hand pinning the loose links against your side, with the lamp's glow shrinking to a gold coin behind you and then gone. The beeches give way to bracken, then to the open fields of Hollow Reach, silver-gray under a sliver of moon. For a while you hear only your own breath.
+
+Stealth (4): you can't truly silence chain mail. A link chimes against the shield rim as you step over a root, the same bright sound as before.
+
+Perception (12): you catch it just in time. About forty feet ahead, where the track meets the ditch below the Fenner fields, a long gray shape stands upright in the middle of the road. It is a ghoul, its head already turned toward you, jaw hanging open, the dull eyes catching the moon. It heard you. It does not rush. It tilts its head the way a hound does, and one claw-fingered hand opens and closes at its side.
+
+Behind it, farther on, the barn is a dark shape with a single faint hearth-glow in its cracks, perhaps three hundred yards away across the field. You can't see the second ghoul. You are at 9 HP with a mace, a shield, a crossbow, and nothing to cast. The creature is between you and the barn.
+
+What does Brannoc do?
+
+== ROUND 18 ==
+PLAYER: I stop and plant my feet, shield high, and speak low and steady to keep my own nerves quiet. "Not that way, then." I back slowly toward the ditch edge so the ghoul has to come at me on the narrow track one at a time, and loose a crossbow bolt at it as it closes before I drop the crossbow and draw my mace.
+
+If it's wounded and badly hurt, I'll fight; if it's the healthy one, I'll fall back up the track toward the lamp, since Hob's light drove the last one off.
+  [game] dice Brannoc's initiative: 1d20+1 = 1d20 [18] + 1 = 19
+  [game] dice Ghoul 3's initiative: 1d20+2 = 1d20 [7] + 2 = 9
+  [game] fight: Fight started. Order: Brannoc Ashdown (19), Ghoul 3 (9). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's light crossbow shot at Ghoul 3 (AC 12): 1d20+3 = 1d20 [12] + 3 = 15 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] dice Crossbow bolt damage on Ghoul 3: 1d8+1 = 1d8 [6] + 1 = 7
+  [game] fight: Ghoul 3 took 7: HP 22 → 15
+  [game] fight: Round 1, now: Ghoul 3. Ghoul 3 (initiative 9): HP 15/22, AC 12 Ghoul 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The bolt takes it in the shoulder with a flat thud, and it jerks but does not slow. You loose the crossbow and let it drop, and your mace comes up in your hand as the shield rim lifts to your chin.
+
+It had been forty feet away. Then it is simply there, loping across the gap in long, wasted strides on all fours and then upright, and it skids to a stop an arm's length from your shield, breath rank with old meat. It is hurt: a black-crusted bolt wound weeps down its chest, and it favors that arm.
+
+Your fallback plan, running for the lamp, is a mile uphill in chain mail, and it moves as fast as you do. The barn is three hundred yards behind it. Here, with your back to the ditch, on the narrow track, is as good a place as any to fight.
+
+It is your turn, the ghoul is adjacent, and you have your mace and shield. You have no spells, 9 HP, and AC 18. Do you attack, hold with Dodge, or try something else?
+
+== ROUND 19 ==
+PLAYER: I attack with my mace, bringing it down on the ghoul's wounded shoulder. "Not one more person in Hollow Reach goes hungry to you tonight!"
+  [game] dice Brannoc's mace attack on Ghoul 3 (AC 12): 1d20+4 = 1d20 [19] + 4 = 23 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] dice Mace damage on Ghoul 3: 1d6+2 = 1d6 [5] + 2 = 7
+  [game] fight: Ghoul 3 took 7: HP 15 → 8
+  [game] fight: Round 2, now: Ghoul 3. Ghoul 3 (initiative 9): HP 8/22, AC 12 Ghoul 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 3 claws Brannoc (AC 18): 1d20+4 = 1d20 [6] + 4 = 10
+  [game] fight: Round 3, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your mace lands true. There is a wet crack, and the ghoul's wounded shoulder buckles. It reels back with a thin hiss, and black blood streams down its arm. Then it lunges, claws raking at you, and the blow spends itself on your raised shield with a scrape you feel through your whole arm. Nothing gets through.
+
+It is bloodied and badly hurt, with its shoulder hanging wrong and its breath coming in ragged hisses. It still stands between you and the barn.
+
+It is your turn again. You are at 9 HP, and the ghoul is next to you, with your mace in your hand. What does Brannoc do?
+
+== ROUND 20 ==
+PLAYER: I press the attack and swing the mace at its ruined shoulder again, keeping my shield tight against my body. "Stay down, and let these people sleep!"
+  [game] dice Brannoc's mace attack on Ghoul 3 (AC 12): 1d20+4 = 1d20 [15] + 4 = 19 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] dice Mace damage on Ghoul 3: 1d6+2 = 1d6 [3] + 2 = 5
+  [game] fight: Ghoul 3 took 5: HP 8 → 3
+  [game] fight: Round 3, now: Ghoul 3. Ghoul 3 (initiative 9): HP 3/22, AC 12 Ghoul 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 3 claws Brannoc (AC 18): 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Ghoul 3 claw damage (critical hit): 4d4+2 = 4d4 [4, 2, 3, 4] + 2 = 15
+  [game] sheet: took 15 damage: HP 9 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] dice Brannoc's Constitution save vs paralysis, DC 10: 1d20+2 = 1d20 [5] + 2 = 7
+  [game] sheet: condition added: paralyzed
+  [game] fight: Round 4, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [13] = 13
+  [game] sheet: death save successes: 1/3
+  [game] fight: Round 4, now: Ghoul 3. Ghoul 3 (initiative 9): HP 3/22, AC 12 Ghoul 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 3 claws the paralyzed Brannoc (advantage; AC 18): 1d20+4 (advantage) = 1d20 [15, 5]→15 + 4 = 19
+  [game] dice Ghoul 3 claw damage on paralyzed Brannoc (critical hit; instant death if 10 or more): 4d4+2 = 4d4 [1, 2, 2, 1] + 2 = 8
+  [game] sheet: took 8 damage at 0 HP: two death save failures (critical hit)
+  [game] fight: Round 5, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [9] = 9
+  [game] sheet: death save failures: 3/3; three death save failures: the character dies
+  [game] fight: Fight over after 5 round(s). 30 seconds of fighting; now Day 2, 1:31:06 AM.
+  [DM write_lore (hidden)] {"entry": "Ghouls of the Lamp", "add_to_description": "Day 2 ~1:31 AM: Ghoul 3 (3 HP left) killed Brannoc Ashdown on the track below the Fenner fields. Brannoc died of three death-save failures after two critical claw hits."}
+  [game] notebook: updated Ghouls of the Lamp
+DM: Your mace was true, and it nearly finished the thing. The ghoul had three hit points left in a ruined body, and it was almost done.
+
+But the claws found you twice. The first blow, a perfect strike, took you from nine HP to nothing in a heartbeat, and the paralysis dropped you where you stood on the narrow track, shield still on your arm. The second came while you could not lift a hand. Death saves: one success, then three failures. You do not wake.
+
+The ghoul stays over you a long moment, its breath rattling. Then, hurt and starving, it hauls itself into the ditch and away across the dark fields. It does not go to the barn tonight.
+
+The track is still. The moon slides behind a cloud, and above the beeches to the north the lamp keeps its steady gold glow. Hob stands in its light a long time, looking south, his unlit lantern held toward a road he cannot walk. In the Harrow barn, a feverish boy is still waiting for a healer who promised to come with the dawn.
+
+When the sun comes up, Tam finds you. He had slipped the bar at gray and run down the track alone, because you had said you would come, and he did not want you to be late. He kneels in the mud beside your shield and does not say anything. After a while he takes Edda's plain wooden amulet from your chest, wipes it clean on his sleeve, and carries it back to the barn in both hands, to the one person left there who knows how to pray.
+
+Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+
+The game ends here.
+
+== ROUND 21 ==
+PLAYER: Understood. Brannoc kept his word to the end, and I'm glad Tam carried Edda's amulet home. Thank you for the game, DM.
+DM: Thank you for playing. Brannoc was a good character to run: patient and stubborn in the right way, and he kept his promise not to leave anyone to suffer alone.
+
+The dice were hard at the end. Two natural 20s in a row from the ghouls, each a critical hit, would have felled almost any first-level character. Your tactics were sound. The oil plan took down the first ghoul, and holding the narrow track nearly won the last fight.
+
+Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night. If you want to play again, I'd be glad to run a new character, or the same story from another angle.
+
+== ROUND 22 ==
+PLAYER: Thank you, DM. It was a good run, and I liked how it ended: Hob keeping the lamp, Tam carrying Edda's amulet, and Cal's bow still waiting to go home to his kin.
+
+I'd happily play again. Another healer, or the same story from a different angle, perhaps one where Brannoc takes the long rest first and reaches the barn at dawn with his prayers back.
+DM: That last idea is a good one, and it lands on the real decision of the night. Resting first would have cost Wil a few hours of fever, and you would have walked in at dawn with both prayers and full hit points. You chose to go at once, which was the choice Brannoc would have made. I wouldn't call it wrong. The dice just turned on you at the end.
+
+When you're ready, I can run it either way:
+
+A fresh start with a new healer or a different kind of character, in the same region, with Hollow Reach, the Lamp, and the ghouls waiting. Because of the game's two nights of horror, the world will remember what happened to Brannoc and Cal.
+
+The same night replayed from the moment you woke at the lamp, with the long rest taken and the dawn walk to the barn.
+
+Tell me which you'd prefer, or something else entirely, and we'll begin.
+
+== ROUND 23 ==
+PLAYER: I'd like the second option: the same night replayed from the moment I woke at the lamp, with Brannoc taking the full long rest under Hob's light. I'll wake at 8 AM with both prayers back and full HP, then walk to the barn and tend Wil first.
+
+DM: when I wake, will Hob still be at the lamp, and has anyone from Hollow Reach come up the track yet for Cal's body?
+  [refused] sheet: the character is dead; ordinary healing doesn't work. A spell or effect that returns the dead to life is recorded by removing the 'dead' condition (conditions_removed), then healing
+  [game] time: time set: Day 1, 11:55 PM
+  [game] sheet: condition removed: dead; condition removed: unconscious; condition removed: paralyzed
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 2, 7:55 AM
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "REWIND (player's choice): Brannoc took the full long rest at the lamp, midnight to 8 AM Day 2. Two ghouls roamed; none came to the lamp. At first gray two villagers with a handcart (Dobb Harrow, Widow Harrow's brother-in-law, and a neighbour) came and bore Cal home; they told Hob that Wil's fever is worse but the barn held through the night. Bran
+  [game] notebook: updated Wayfarers' Lamp
+DM: You sleep as you have not slept since the road began, deep and unbroken, under a lamp that never wavers. Hob keeps watch on the step the whole night. Nothing climbs from the stones, and the roaming ones, whatever they hunted, do not come near the light.
+
+You wake at 8 AM with the sun on your face through the beeches and the lamp gone pale in the daylight. Your hit points are back to 10 of 10, and both prayers are with you again: Cure Wounds, Healing Word, Guiding Bolt, the others, ready on your tongue. Your Hit Die has returned too.
+
+Hob is still on the step with the unlit lantern in his lap. He turns his head at once. "...Healer. You slept well. Good."
+
+Your questions, answered plainly:
+
+Hob is still at the lamp, as he cannot leave it for long.
+
+Yes, someone came. At first gray, two men from the village climbed the track with a handcart and a lantern. One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it. They looked at the lamp and at Hob a long while, and neither spoke. Then they lifted Cal onto the cart, wrapped in his own coat, and took him home. Dobb said the barn held through the night. The bar was tried twice, and the hearth and the straw kept the thing at the door from forcing it. But Wil's fever has gone worse, and Widow Harrow asked for the healer as soon as he could come.
+
+Cal's longbow lay under the coat. Dobb left it behind for you to return when you come down.
+
+Time is short for the boy. It is a mile down the track, and the ghouls will have gone to ground by daylight. You still have your mace, shield, crossbow, and full prayers. What does Brannoc do?
+
+== ROUND 24 ==
+PLAYER: I rise, shake the stiffness from my shoulders, and say, "Thank you, Hob, for keeping the light and the watch. I'll send word to the Widow's folk about tending the lamp with you, and I won't forget what you did for us."
+
+I take Cal's longbow, check my shield and mace, and set off down the track at a brisk walk, keeping to the sunlit middle of the path and watching the ditch below the Fenner fields. At the barn I'll go straight to Wil, and cast Cure Wounds on him first before I do anything else.
+  [game] dice Cure Wounds on Wil Harrow (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [5] + 6 = 11
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 1/2
+  [game] time: 50 minutes later: Day 2, 8:45 AM
+  [DM write_lore (hidden)] {"entry": "Harrow brothers", "add_to_description": "Day 2 ~8:45 AM: Brannoc, rested with prayers back, cast Cure Wounds on Wil first; fever breaking. Pell and Joss still need tending."}
+  [game] notebook: updated Harrow brothers
+DM: You bid Hob farewell with a hand on his cold shoulder. "I'll send word," you say, and he bows his head, the lamp at his back. Then you go down the track at a brisk walk with the longbow over your shoulder, in full morning light. The beeches are green and gold, the bracken is dewy, and a thrush is singing. At the ditch below the Fenner fields you slow and look hard. You see a scatter of tracks in the mud, long and wide-fingered, leading into the cut bank where it undercuts the field, and nothing else. Whatever made them is below ground now, sleeping off the dark.
+
+At the barn, Tam is on the step. He sees you and he is up and running before you can speak. "You came! You came!" Inside, Widow Harrow looks as if she has not slept in two days, and she does not waste a word. She leads you to the pallet where Wil lies, hot as a stove, mumbling, the bandage dark and sour.
+
+You kneel, lay your hand over the bite, and the prayer comes warm and certain. The heat under your palm gathers and goes in, and the ragged edges close and pale. Eleven points of life flow into him, and his breath eases from the fast shallow pant to a long slow sigh. His eyes open, clear and surprised. "Ma?" he says, and Widow Harrow makes a sound you will not forget and takes his hand.
+
+You have one prayer left. Joss is mending but weak, and Pell has the deep arm gash, still raw. Dorrin sits propped against a post and lifts a hand to you. Old Garrit is breathing easy. And the two ghouls are still somewhere under the Fenner fields, and a barrow with a second mouth lies a few hundred yards from this barn.
+
+What does Brannoc do?
+
+== ROUND 25 ==
+PLAYER: I rest a hand on Wil's brow a moment, then turn to Pell's raw arm. "Widow Harrow, this one's still open and will fester. I'll use my last prayer on Pell's gash, and Joss can heal with rest and clean linen now that the worst has passed."
+
+Once that's done, I want to talk to the village about the cut bank by the Fenner fields. "DM: Cal told me he'd run hares near the track. Does anyone here know how deep that bank runs, or who dug it, so we can seal the second mouth with stone and fire before dark?"
+  [game] dice Cure Wounds on Pell Harrow (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [8] + 6 = 14
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 0/2
+  [game] time: 20 minutes later: Day 2, 9:05 AM
+  [DM write_lore (hidden)] {"create": "The Long Cut", "kind": "place", "description": "Cut bank in the wash below the Fenner fields where the stream undercut an old barrow mound. Old Garrit says the mound is the Hollow Reach folk's 'Old Ones' barrow', older than the village, sealed with fitted stones that the stream has been eating for years. Its mouth opens into the same crypt that lies under the Wayfarers' Lamp. Ghouls' t
+  [game] notebook: created an entry for The Long Cut; added 2 relationships to The Long Cut
+  [DM write_lore (hidden)] {"create": "Seal the Long Cut", "kind": "quest", "description": "Brannoc's plan: seal the second mouth of the barrow at the Long Cut with stone and fire before dark, so the two roaming ghouls (and the one that fled from the Lamp, 19/22 HP) cannot hunt Hollow Reach again. Hob Marrow keeps the lamp lit for the stones' upper mouth. Villagers (Dobb Harrow, Old Garrit, Joss Fenner when able) can help w
+  [game] notebook: created an entry for Seal the Long Cut
+DM: Pell wakes while you work, a lanky lad with his mother's jaw, and watches the torn edges of his arm knit together under your hand as if it were happening to someone else. Fourteen points of life go in, and the gash closes to a pink seam. He flexes his fingers, wide-eyed, and says only, "Thank you, sir." You have no prayers left now. The hearth gives off a steady warmth, and the barn smells of porridge and wet wool instead of blood.
+
+The village comes in bit by bit once the news runs door to door. Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while. Then you ask about the cut bank.
+
+Old Garrit answers, wheezing but upright on his pallet. "The Long Cut. Aye. That's the old barrow mound by the wash. My grandfather's grandfather said it was there before the first fence went up. Fitted stones, sealed. The stream's been undercutting it since the wet spring, and half the roof's fallen in at the south end, so the mouth's maybe ten feet across now, all scree and roots. Nobody goes down there. It goes under the fields, they say, clear to the Lamp."
+
+Joss, propped against a sack of grain, adds in his low rasp, "The roof's thin. I've plowed over the south end and felt it give. A few good wedges and a big beam, and you'd bring the bank down across the mouth. We've got an iron bar, and a sledge, and oil for the fire." He winces. "I'd come, if I could stand."
+
+Dobb nods slowly. "I'll come. Three or four of the lads from the Reach, with ropes and picks. It's near the road, midday sun on it. Whatever's below won't stir while it's light. But we'd best be done before the long shadows."
+
+It is a little past 9 in the morning. The tools are here, and so are the willing hands. You are out of prayers and have 10 HP, a mace, a shield, a crossbow, and a village that has decided to follow you. The barn has a few hours of daylight before you'd have to make your stand at the bank, and the two ghouls below will wake at dusk.
+
+What does Brannoc do?
+
+== ROUND 26 ==
+PLAYER: "Then let's do it now, while the sun is on it. Dobb, bring the iron bar, the sledge, a good beam, and ropes, and keep four lads with you; nobody works near the mouth alone, and everyone is back up the road well before the shadows lengthen."
+
+I'll go with them, shield up, and stand at the edge watching the dark gap while they wedge the roof. "If anything stirs below, we drop everything and pull back. Widow Harrow, keep the barn's hearth fed and a lantern lit at the door tonight, just in case." DM: before we go, do I have any chance to recover a prayer or two by midday, or am I stuck with no spells until tomorrow?
+  [game] dice Brannoc's Perception watching the dark mouth of the barrow, DC 12: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] time: 40 minutes later: Day 2, 9:45 AM
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~9:45 AM: Brannoc and Dobb Harrow's crew (four lads from the Reach, with iron bar, sledge, beam, ropes, oil) arrive. Brannoc rolled a natural 1 on Perception; hidden: the north lip of the roof is rotten and will slump if the beam is set there, risking the workers. Ghouls below are quiet by day."}
+  [game] notebook: updated The Long Cut
+DM: Your answer first, plainly: you are stuck without spells until tomorrow. You finished a long rest at 8 this morning, and the rules allow only one long rest in any 24 hours, so your next one cannot count until about midnight tonight. A short rest restores no spell slots for a cleric of your level, so an hour of waiting would only mend your body, not your prayers. Your Hit Die can heal you if you are hurt. That is all you have until tomorrow.
+
+The work goes on regardless. Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything. They bring an iron bar, a sledge, a big beam, coils of rope, and a covered jug of lamp oil. The track to the wash is dry and bright, and the sun lies warm on the stubble. You walk at the edge with your shield on your arm, and the group falls into a loose line behind you.
+
+The Long Cut is a raw gash in the earth where the stream has chewed under a low mound. Roots hang like tangled hair, and loose scree lies in a fan at the foot. At the south end the roof has fallen away, leaving a ragged mouth about ten feet wide, black inside and breathing a cold, sour draught. You stand at the lip and look down. You see worn flagstones slanting into the dark, a few gnawed bones, and nothing moving. Perception (4): you can't see much else. Nothing looks wrong.
+
+Dobb is already studying the roof with his hand shading his eyes. "Beam goes across there," he says, pointing to the left lip, "wedge the bar under, and we lever the slab down. Two of the lads on the ropes, two on the sledge, me on the bar."
+
+The sun is high, the cave is quiet, and the crew is waiting for your word. What does Brannoc do?
+
+== ROUND 27 ==
+PLAYER: "Good plan, Dobb. Before anyone swings a sledge, let me go to the lip and listen for a moment, and I'll tie a rope around my waist with two of the lads holding the end, so I can be hauled out fast if something stirs."
+
+I'll take a lit lantern and drop a pebble down the slope to check for movement. If it's quiet, we begin: Hennet and Marl on the ropes, the Fenner cousins with the sledge, Dobb on the bar, and I stand guard with my shield facing the mouth, ready to shout the moment anything moves.
+  [game] dice Brannoc's Perception listening at the lip and watching the pebble, DC 12: 1d20+3 = 1d20 [7] + 3 = 10
+  [game] dice Dobb Harrow leads the levering of the roof slab (Athletics, DC 13): 1d20+3 = 1d20 [10] + 3 = 13
+  [game] time: 1 hour 30 minutes later: Day 2, 11:15 AM
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:15 AM: Dobb's crew levered the slab; the rotten north lip crumbled, so the collapse covered about four-fifths of the mouth but left a gap ~2 feet wide at the top, north side. Faint scraping heard below as dust settled. Needs filling with rubble/beam/stone and the oil."}
+  [game] notebook: updated The Long Cut
+DM: You go to the lip with the rope looped at your waist and Hennet and Marl braced behind you, and you hold your breath and listen. Perception (10): you hear the stream, a crow, the creak of the rope, and not much else. A pebble dropped from your hand ticks down the slope and rolls to a stop, and nothing answers it. The dark gives you nothing either way. It is as quiet as a well.
+
+Then the work starts, and it goes the way you ordered. Hennet and Marl hold the ropes, the Fenner cousins stand ready on the sledge, Dobb sets the bar under the slab, and you stand at the edge with your shield facing the mouth, saying nothing, watching the black. Dobb grunts a count, and the beam bites, and the slab shifts with a groan like a tooth being drawn.
+
+Athletics (13), by the narrowest margin: it goes. The slab drops with a dull roar. Dirt and root-ends and a rain of loose stone come down across the opening in a gray cloud, and the lads scramble back, coughing. When the dust thins, the mouth is mostly gone, buried under a rough heap of earth and slabs, but the old roof was rotten along the north lip, as it turns out. A ragged gap about two feet wide is still open at the top corner, black and cold, breathing out the same sour draught.
+
+Then, as the last of the dust settles, you hear it: a thin dry scratching from far below, slow and patient, like a nail drawn along stone. It stops. It starts again.
+
+It is a little past 11 in the morning. The oil jug sits unopened, there is still a good beam, and the lads are watching you with white faces. Dobb says quietly, "That'll not hold a thing that wants out. Another hour with rubble, if we start now."
+
+What does Brannoc do?
+
+== ROUND 28 ==
+PLAYER: "Then another hour it is, and we don't stop until it's shut tight. Hennet, Marl, haul rubble to the gap; Dobb and the Fenner cousins, wedge the beam across it and pack stones and earth over that."
+
+"Pour the oil down the gap first, Dobb, a good soaking, then drop a lit rag after it. Fire and light are what they fear, and it may buy us the time. I'll stand at the lip with my shield, and if that scratching grows louder, everyone drops the tools and runs for the road."
+  [game] dice Dobb's crew packs the gap with beam, rubble and earth (Athletics group effort, DC 12): 1d20+3 = 1d20 [7] + 3 = 10
+  [game] dice Brannoc's Perception at the lip while they work, DC 12: 1d20+3 = 1d20 [4] + 3 = 7
+  [game] time: 40 minutes later: Day 2, 11:55 AM
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~12 PM: oil poured and lit down the gap (burned out in two rounds). Packing with beam and rubble was only half done when a ghoul's hand came up through the gap and seized the beam; Marl is within reach of it. Brannoc has 0 spell slots, full HP, mace, shield, crossbow."}
+  [game] notebook: updated The Long Cut
+DM: Dobb tips the jug and lets the oil gurgle down into the dark, a good long soaking. Marl strikes flint to a rag and flicks it in after, and the gap blooms orange. A thin shriek rises from below and cuts off, and the scratching stops dead. For two long breaths there is only the roar and crackle, black smoke boiling up out of the crack, and every lad stepping back with his sleeve across his face.
+
+Then the flame gutters and the smoke thins, and you go back to work. Hennet and Marl haul rubble, the Fenner cousins and Dobb wedge the beam across the gap, and the sledge rings on the wedges. It is slow, hot, miserable work in the noon sun, and for most of a half hour it goes well. Athletics (10): not quite well enough. The beam sits crooked and the packing is loose, with a hand's width still open under it. The oil is gone, and Dobb is rubbing his shoulder and muttering about a second beam.
+
+Perception (7): your eyes are on the road and the tree line, and not on the gap, which you should have been watching. You see it too late, a long gray hand with black nails sliding up out of the dark and settling on the beam like a spider on a stick, close to Marl's boot.
+
+Dobb sees it too. "Marl!" he roars. Marl yelps and jerks back. The hand is already tightening, and the beam starts to creak and slide toward the hole. Behind it, in the black crack, a face with an open jaw is rising.
+
+It is your move. Marl is within its reach, the crew is scrambling, and you hold only your mace, shield, crossbow, and no prayers. What does Brannoc do?
+
+== ROUND 29 ==
+PLAYER: I leap in and bring my mace down on the gray hand where it grips the beam, shield tight to my body. "Marl, get back from the edge! Dobb, Hennet, throw your weight on that beam and drive it down!"
+  [game] dice Brannoc's initiative: 1d20+1 = 1d20 [2] + 1 = 3
+  [game] dice Ghoul 2's initiative: 1d20+2 = 1d20 [17] + 2 = 19
+  [DM lookup (hidden)] {"name": "Commoner", "kind": "monster"}
+  [game] fight: Fight started. Order: Ghoul 2 (19), Brannoc Ashdown (3). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Ghoul 2. Ghoul 2 (initiative 19): HP 19/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Marl (commoner, AC 10): 1d20+4 = 1d20 [17] + 4 = 21
+  [game] dice Ghoul 2 claw damage on Marl: 2d4+2 = 2d4 [3, 3] + 2 = 8
+  [game] dice Marl's Constitution save vs paralysis, DC 10 (if he survives): 1d20 = 1d20 [13] = 13
+  [DM write_lore (hidden)] {"create": "Marl", "kind": "person", "description": "Quick red-haired young villager of Hollow Reach on Dobb's crew. Killed at the Long Cut (Day 2 ~noon) by a ghoul's claws as the beam slid.", "relationships": ["worked at the [[Long Cut]] under [[Dobb Harrow]]"]}
+  [game] notebook: created an entry for Marl; added 1 relationship to Marl
+  [game] fight: Round 1, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM lookup (hidden)] {"name": "Cover", "kind": "rule"}
+  [game] dice Brannoc's mace attack on Ghoul 2 in the gap (AC 12 +2 half cover = 14): 1d20+4 = 1d20 [19] + 4 = 23 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] dice Mace damage on Ghoul 2: 1d6+2 = 1d6 [4] + 2 = 6
+  [game] fight: Ghoul 2 took 6: HP 19 → 13
+  [game] fight: Round 2, now: Ghoul 2. Ghoul 2 (initiative 19): HP 13/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Brannoc (AC 18): 1d20+4 = 1d20 [18] + 4 = 22
+  [game] dice Ghoul 2 claw damage on Brannoc: 2d4+2 = 2d4 [4, 1] + 2 = 7
+  [game] dice Brannoc's Constitution save vs paralysis, DC 10: 1d20+2 = 1d20 [6] + 2 = 8
+  [game] sheet: took 7 damage: HP 10 → 3; condition added: paralyzed
+  [game] fight: Added to the fight. Order: Ghoul 2 (19), Dobb Harrow (8), Hennet (6), Brannoc Ashdown (3)
+  [game] fight: Round 2, now: Dobb Harrow. Dobb Harrow (initiative 8): HP 4/4, AC 10 Dobb Harrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Dobb swings the iron bar at Ghoul 2 (AC 14 with cover): 1d20+2 = 1d20 [20] + 2 = 22 (natural 20) (Dobb Harrow has used its action: no more actions this turn.)
+  [game] dice Dobb's iron bar damage (critical hit): 2d4 = 2d4 [4, 1] = 5
+  [game] fight: Ghoul 2 took 5: HP 13 → 8
+  [game] fight: Round 2, now: Hennet. Hennet (initiative 6): HP 4/4, AC 10 Hennet's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Hennet brings the sledge down on Ghoul 2 (AC 14 with cover): 1d20+2 = 1d20 [7] + 2 = 9 (Hennet has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's Constitution save at end of turn to shake off paralysis, DC 10: 1d20+2 = 1d20 [12] + 2 = 14
+  [game] sheet: condition removed: paralyzed
+  [game] fight: Round 3, now: Ghoul 2. Ghoul 2 (initiative 19): HP 8/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Brannoc (AC 18): 1d20+4 = 1d20 [18] + 4 = 22
+  [game] dice Ghoul 2 claw damage on Brannoc: 2d4+2 = 2d4 [4, 4] + 2 = 10
+  [game] sheet: took 10 damage: HP 3 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Round 3, now: Dobb Harrow. Dobb Harrow (initiative 8): HP 4/4, AC 10 Dobb Harrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Dobb swings the iron bar at Ghoul 2 (AC 14 with cover): 1d20+2 = 1d20 [9] + 2 = 11 (Dobb Harrow has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Hennet. Hennet (initiative 6): HP 4/4, AC 10 Hennet's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Hennet's Medicine check to stabilise Brannoc, DC 10: 1d20 = 1d20 [12] = 12 (Hennet has used its action: no more actions this turn.)
+  [game] sheet: death save successes: 3/3; three death save successes: stable (unconscious at 0 HP, no death saves; regains 1 HP after 1d4 hours unless healed); death save counts reset
+  [game] fight: Round 3, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Ghoul 2. Ghoul 2 (initiative 19): HP 8/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Hennet (AC 10): 1d20+4 = 1d20 [9] + 4 = 13
+  [game] dice Ghoul 2 claw damage on Hennet: 2d4+2 = 2d4 [4, 2] + 2 = 8
+  [game] fight: Hennet removed from the fight. Order: Ghoul 2 (19), Dobb Harrow (8), Brannoc Ashdown (3)
+  [game] fight: Round 4, now: Dobb Harrow. Dobb Harrow (initiative 8): HP 4/4, AC 10 Dobb Harrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Dobb swings the iron bar at Ghoul 2 (AC 12, now clear of the gap): 1d20+2 = 1d20 [5] + 2 = 7 (Dobb Harrow has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Ghoul 2. Ghoul 2 (initiative 19): HP 8/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2's target: 1 = Brannoc (unconscious), 2 = Dobb: 1d2 = 1d2 [2] = 2
+  [game] dice Ghoul 2 claws Dobb Harrow (AC 10): 1d20+4 = 1d20 [6] + 4 = 10
+  [game] dice Ghoul 2 claw damage on Dobb: 2d4+2 = 2d4 [3, 2] + 2 = 7
+  [game] fight: Dobb Harrow removed from the fight. Order: Ghoul 2 (19), Brannoc Ashdown (3)
+  [game] fight: Added to the fight. Order: Ghoul 2 (19), Fenner cousin 1 (7), Fenner cousin 2 (6), Brannoc Ashdown (3)
+  [game] fight: Round 5, now: Fenner cousin 1. Fenner cousin 1 (initiative 7): HP 4/4, AC 10 Fenner cousin 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Fenner cousin 1 swings a pick at Ghoul 2 (AC 12): 1d20+2 = 1d20 [11] + 2 = 13 (Fenner cousin 1 has used its action: no more actions this turn.)
+  [game] dice Cousin's pick damage on Ghoul 2 (club 1d4, a pick bites harder: ruling +1): 1d4+1 = 1d4 [2] + 1 = 3
+  [game] fight: Ghoul 2 took 3: HP 8 → 5
+  [game] fight: Round 5, now: Fenner cousin 2. Fenner cousin 2 (initiative 6): HP 4/4, AC 10 Fenner cousin 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+
+== ROUND 30 ==
+PLAYER: DM: Brannoc is stable and out cold at 0 HP, so I can't act, right? If the cousins can't finish it, can Marl or anyone drag me clear, and can someone put a hand on my amulet or pour a little water on me to wake me up?
+  [game] dice Fenner cousin 2 swings the sledge at Ghoul 2 (AC 12): 1d20+2 = 1d20 [19] + 2 = 21 (Fenner cousin 2 has used its action: no more actions this turn.)
+  [game] dice Cousin 2's sledge damage on Ghoul 2 (ruling: sledge 1d6, +1 for the heft): 1d6+1 = 1d6 [1] + 1 = 2
+  [game] fight: Ghoul 2 took 2: HP 5 → 3
+  [game] fight: Round 5, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 6, now: Ghoul 2. Ghoul 2 (initiative 19): HP 3/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Fenner cousin 1 (AC 10): 1d20+4 = 1d20 [16] + 4 = 20
+  [game] fight: Fenner cousin 1 removed from the fight. Order: Ghoul 2 (19), Fenner cousin 2 (6), Brannoc Ashdown (3)
+  [game] fight: Round 6, now: Fenner cousin 2. Fenner cousin 2 (initiative 6): HP 4/4, AC 10 Fenner cousin 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Fenner cousin 2 swings at Ghoul 2 (AC 12): 1d20+2 = 1d20 [2] + 2 = 4 (Fenner cousin 2 has used its action: no more actions this turn.)
+  [game] fight: Round 6, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 7, now: Ghoul 2. Ghoul 2 (initiative 19): HP 3/19, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Fenner cousin 2 (AC 10): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] fight: Fenner cousin 2 removed from the fight. Order: Ghoul 2 (19), Brannoc Ashdown (3)
+  [game] fight: Fight over after 7 round(s). 42 seconds of fighting; now Day 2, 11:55:42 AM.
+  [game] dice Hours until Brannoc regains 1 HP (stable, unhealed): 1d4 = 1d4 [3] = 3
+  [game] time: 3 hours later: Day 2, 2:55:42 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~noon: Ghoul 2 (3/19 HP) killed Marl, Hennet, Dobb Harrow and both Fenner cousins (Wat and Ned) after crawling through the gap; Brannoc fell, stabilised by Hennet's first aid. The ghoul dragged a body down into the barrow and left. The gap is still open, the beam crooked. Brannoc wakes ~2:55 PM at 1 HP, alone, no spell slots until about midnig
+  [game] notebook: updated The Long Cut
+  [DM write_lore (hidden)] {"entry": "Seal the Long Cut", "add_to_description": "Day 2 afternoon: the first attempt failed at heavy cost. Dead: Marl, Hennet, Dobb Harrow, Wat and Ned Fenner. Gap still open. Ghoul 2 is nearly dead (3 HP) and has gone below. Two other ghouls remain. Sealing needs more labour, stone and fire; Joss Fenner and Widow Harrow's folk must be told."}
+  [game] notebook: updated Seal the Long Cut
+DM: Your plain answers first: yes, you couldn't act, and nothing could wake you. At 0 HP you stay unconscious until you regain hit points, and water or a touch on the amulet won't do that. Hennet did drag you back from the gap, and he put a hand to your throat and your side and stabilized you with his first aid. It is the reason you are alive. Here is the rest of the afternoon, which you did not see.
+
+The ghoul came out of the gap as the beam slid. Its claws took Marl before he could turn, a single stroke, and he fell. You went in with your mace and struck true, and it was Dobb's iron bar, swung on a lucky, wild blow, that took it hard in the ribs. Then its claws found you twice, and you fell. Hennet pulled you clear, saved your life, and was killed where he knelt. Dobb followed him. The two Fenner cousins fought on with a pick and a sledge, and they hurt it badly, but they were farm lads, and they died there too.
+
+When the dust settled, the thing was left with three hit points, a ruined body, and the dead around it. It did not touch you. It took one of the bodies by the collar, dragged it back through the gap, and went down into the dark.
+
+You wake at 3 in the afternoon, with the sun slanting through the roots, one hit point, and no prayers. The beam sits crooked across the open gap. The iron bar lies in the dirt, bent. Cal's longbow is where Dobb left it. And the grass around the cut is trodden and red. Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned. You didn't see it, and you can't unsee it now.
+
+The gap is still open. Behind you the village waits with no word of what has happened. Your next long rest can't count until about midnight, so you have no spells until tomorrow, and you have 1 HP, a Hit Die, a mace, and a shield.
+
+What does Brannoc do?
+
+== ROUND 31 ==
+PLAYER: I bow my head over the bodies, and say the prayer for the dead over Dobb, Hennet, Marl, and Wat and Ned, because they followed my plan and I will carry that. "Rest easy. I'll bring you home, and I'll tell your families the truth."
+
+Then I spend my Hit Die and bind what I can, and with the wounded ghoul at three hit points and afraid of light, I'll pour what lamp oil is left and put a lit lantern in the gap to hold it shut until I can rest. DM: did anyone in the crew leave a lantern or oil behind, and is the ghoul's trail out of the gap visible on the ground?
+  [game] sheet: short rest; spent 1 hit die (0/1 left): roll 1d8 and add the CON modifier (CON 15 (+2)), then pass the total as heal; the player decides whether to spend another after the roll; 1 hour later: Day 2, 3:55:42 PM
+  [game] dice Brannoc's Hit Die healing on the short rest: 1d8+2 = 1d8 [6] + 2 = 8
+  [game] sheet: healed 8: HP 1 → 9
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~4 PM: Brannoc prayed over the four bodies left (Ned Fenner's was dragged below), rested an hour, 9 HP. Found Dobb's hooded lantern and a pint of oil in Hennet's satchel. Trail: dark drag-marks and handprints in the dirt from the gap, leading down into the barrow."}
+  [game] notebook: updated The Long Cut
+DM: You wait an hour at the cut. It is the right word for it, because you pray more than you rest. You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out. Ned's coat lies empty where the thing took him. The hour passes in a slow, ragged peace. You finish it at 9 hit points, stiff, scraped raw, and with the sun leaning west.
+
+To your questions:
+
+Yes, someone left something behind. Dobb's hooded lantern lies on its side near the bent iron bar, dented but whole, and Hennet's satchel, torn across the strap, holds a pint flask of lamp oil and a rag. It is not much, but it is something.
+
+Yes, the trail is easy to read. A smeared dark furrow runs from the dirt at the gap's lip down into the scree, the heel-marks of a body dragged, and beside it a ghoul's long-fingered handprints, with a drop of black blood every pace. It leads straight into the opening and down.
+
+You do as you said. You right the lantern, trim the wick, and light it from your tinderbox. You pour the pint of oil into its reservoir and wedge it in the crooked beam above the gap, where the flame stands steady and gold in the afternoon light. Nothing stirs below. The air that breathes out of the hole still smells sour, but the flame leans only a little.
+
+It is almost 4 in the afternoon. The lantern will burn a few hours at best, not the night. You have 9 HP and no prayers until midnight, five dead men to bring home, and the village still waits for word. The light will fail well before the ghouls wake.
+
+What does Brannoc do?
+
+== ROUND 32 ==
+PLAYER: I check the beam one last time, then wrap the four bodies in their coats and tie them onto the handcart Dobb's folk left, with Cal's longbow laid beside them. "I'll bring you home. Then I'll tell the Widow and the Fenners the truth, and ask for every lantern in Hollow Reach to be lit at the Lamp track and the barn tonight."
+
+I haul the cart toward the village, shield on my arm, mace ready, keeping to the sunlit road. DM: the gap's lantern won't last the night, so is there a way to keep it burning, and is there any trace of Ned's body or the ghoul's wound that suggests how long it will stay down?
+  [DM lookup (hidden)] {"name": "Candle", "kind": "equipment"}
+  [game] time: 30 minutes later: Day 2, 4:25:42 PM
+  [DM write_lore (hidden)] {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~4:30 PM: Brannoc hauled the four bodies and Cal's longbow home on Dobb's handcart. Lantern with a pint of oil left in the gap (a few hours). Brannoc's 10 candles could stand in the gap but each burns 1 hour. Dusk about 6:30 PM; his next long rest counts around midnight. Needs the village's oil and hands."}
+  [game] notebook: updated Seal the Long Cut
+DM: Your answers first, as plainly as I can give them.
+
+Keeping the light burning: the lantern has one pint of oil, which will last a few hours but not the night. You have ten candles, and each burns for one hour, shedding bright light in a 5-foot radius and dim light for another 5 feet. You could stand them by the gap, but they have to be lit one after another, and only someone sitting there can do that. If you want it lit all night, you will need more oil from Hollow Reach, and someone to tend it.
+
+Ned's body and the wound: the drag-trail goes down the scree and into the dark at an angle, and you can see only about twenty feet of it before it vanishes under the roof. Three hit points are a sliver of life, and the thing is not hurt in the way a wolf would be. It will not bleed out, and the wound will not stop it hunting at dusk. You cannot tell how long it will stay down. You have to assume it is awake the moment the light fails.
+
+You tie the four of them onto Dobb's handcart with their coats tight around them, lay Cal's longbow beside, and take up the shafts. The wheels creak, and the cart drags heavy in the dust. The sun is long and gold, and the stubble fields stretch off to the south. It takes half an hour of slow, aching walking.
+
+At the edge of Hollow Reach the dogs bark once, and then people come out, one door at a time, women with their sleeves still floury, two old men, children held back by the wrist. They see the cart, and the coats, and the shield on your arm, and they stop. Nobody says anything. A girl of eight or nine looks at Hennet's boots on the end of the cart and begins very quietly to cry.
+
+Then Widow Harrow comes along the road from the barn, wiping her hands, and sees your face and slows. Behind her, limping on a crutch with Tam at his elbow, comes Joss Fenner, and he looks at the cart a long moment. At the shape of Wat and Ned's coat he makes a small, broken sound.
+
+It is the hour you promised yourself: the truth. They are waiting, and you have not said a word. How does Brannoc tell them?
+
+== ROUND 33 ==
+PLAYER: I stop the cart, set down the shafts, and take off my helm so they can see my face. "Widow Harrow, Joss, all of you: these four followed my plan this morning, and they died for it. Dobb, Hennet, Marl, and Wat are here, and Ned was taken below by the thing we failed to seal. I won't dress it up. It was my word that sent them, and I'm sorry."
+
+I look at Joss and Tam and kneel in the road beside the cart. "I can't give them back. But I can tell you how they fought: Dobb struck it with the iron bar, Hennet pulled me out of the dark and saved my life, and the cousins stood their ground when they could have run. The thing is hurt, with three hit points left, and the gap is lit but won't hold the night. Whatever you decide, I'll stand with you tonight, and I'll ask for every lantern and all the oil Hollow Reach can spare."
+  [DM write_lore (hidden)] {"create": "Berra Fenner", "kind": "person", "description": "Joss Fenner's sister-in-law and mother of Wat and Ned, who died at the Long Cut. Grieving; angry first, then lends oil and hands.", "relationships": ["mother of Wat and Ned Fenner", "kin of [[Joss Fenner]]"]}
+  [game] notebook: created an entry for Berra Fenner; added 2 relationships to Berra Fenner
+  [DM write_lore (hidden)] {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~4:40 PM: Brannoc told the village the truth. Hollow Reach agrees to give oil, lanterns and hands; Joss Fenner and Widow Harrow stand with him. Plan needed before dusk (~6:30 PM). No prayers until about midnight."}
+  [game] notebook: updated Seal the Long Cut
+  [game] time: 15 minutes later: Day 2, 4:40:42 PM
+DM: You kneel in the dust beside a cart with five hearts' worth of grief on it, and say it all straight: your plan, your word, their names, how they fought. You leave nothing out and soften nothing. When you finish, the silence has a weight, and the only sound is the little girl, still crying, quiet as a kitten.
+
+Joss lets go of his crutch. He stands a moment longer than he should, because he is a big man and does not want to be seen wavering. Then he limps to the cart, lays a hand on the coat over Wat, and bows his head. Tam presses against his father's side. Nobody speaks.
+
+The first voice comes from the crowd and it is not kind. A woman pushes through, a hard-faced woman in a flour-white apron, with Wat's chin. Berra Fenner. "You said it'd be sealed by dark. You said." Her hands are shaking. "Two sons. I had two." She does not strike you, though for a moment you think she will. Then she sags against Joss's arm, and the anger runs out of her and there is only the other thing.
+
+It is Widow Harrow who speaks into that. "He came back," she says, low, and her voice is steady. "That's what the others didn't do, the ones who rode through in the spring and didn't stop. He walked in at the door and he told us. He sat with my boy a night and a day when he could have run for the road." She looks at you, and at the cart, and at the others. "We lost five good men. We'd have lost every soul in that barn."
+
+Joss nods slowly. "We'll bring them home," he says, "and then we'll finish it. Every lantern in the Reach, and every jar of oil. I've got three in my cellar." Berra says nothing, but she turns and walks stiffly back toward her door, and a moment later two of the women follow her in. She comes out again with a jug, and she sets it on the cart's tail without looking at you.
+
+By half past four the village is a different place: people quiet, hands busy, doors open. You are at 9 HP and still have no prayers. Dusk comes in about two hours, and the gap is lit but won't hold the night. Old Garrit has said there is stone in the Fenner quarry cut and a team of oxen that can drag a slab. Joss says four hands could put it over the gap before dark, but he cannot go himself, and every strong young man the Reach had is lying in a row on a cart.
+
+What does Brannoc do?
+
+== ROUND 34 ==
+PLAYER: I bow my head to Berra Fenner. "Goodwife, I'll carry your sons' names as long as I live." Then I turn to Old Garrit and Joss. "I'll take the oxen and the slab, with every able hand left, women and the older boys too, and we set it over the gap before dusk."
+
+"Have the rest gather every lantern and jar of oil and set them around the barn and the Long Cut. Pell and Dorrin, you're mended, so I'll have you with me, and I'll keep the crossbow loaded and the lamp lit until the slab is down."
+  [game] dice Brannoc leads the hauling and setting of the slab with many helpers (Athletics, advantage from helpers, DC 12): 1d20+2 (advantage) = 1d20 [6, 9]→9 + 2 = 11
+  [game] time: 1 hour 50 minutes later: Day 2, 6:30:42 PM
+  [game] sheet: XP +100: 300 - Brannoc Ashdown can now go up to level 2 (XP 300): use level_up_options, then level_up
+  [DM write_lore (hidden)] {"entry": "Seal the Long Cut", "add_to_description": "DONE Day 2 ~6:30 PM: slab dragged by oxen and set over the gap with the whole village's help, just as the sun touched the hills. A finger-wide crack remains at the south corner; the ghouls can scratch but cannot widen it. The barrow is sealed at the Long Cut; Hob keeps the Lamp's mouth lit.", "status": "done"}
+  [game] notebook: updated Seal the Long Cut
+  [DM lookup (hidden)] {"name": "Beyond 1st Level", "kind": "rule"}
+  [DM level_up_options (hidden)] {}
+DM: The slab is down, and so is the weight on your chest. Here is how it went, then the level.
+
+Your ordering carried the village to the work. The oxen were yoked, the old and the young took the ropes, and Pell and Dorrin took a corner each with their mended arms. Athletics (11): it was a close thing, one point short of a clean job. They dragged the slab across the stubble fields as the sun slid down, and it settled over the gap at the last red edge of the day, with a finger-wide crack at the south corner where it sat crooked and no wedge would close. Then the scratching started below, and long-fingered nails raked at the crack and could not widen it. The slab held. Joss's oil lamps and a ring of lanterns stand around it, and the village gathered on the rise and watched until the sound stopped.
+
+The Long Cut is sealed. Hob keeps the other mouth lit under the Lamp. There are still ghouls beneath the stones, but they can't come out by either way. The village's long fear is over, and it cost five good lives, and you carry the names.
+
+You earned 100 XP and are now at 300, enough for level 2. Here is what you gain:
+
+Hit points: take 7 fixed, or roll 1d8 and add 2 (minimum 1).
+
+Channel Divinity (once per rest): Turn Undead, where each undead that can see or hear you within 30 feet must make a Wisdom save (DC 13) or be turned for a minute, and Preserve Life, which restores up to 10 HP split among creatures within 30 feet, up to half their maximum each.
+
+Spells: three 1st-level slots instead of two, and you can prepare 5 spells instead of 4 after your next long rest, from the whole cleric list. Your domain spells, Bless and Cure Wounds, stay always prepared.
+
+How do you take your hit points, fixed or rolled?
+
+== ROUND 35 ==
+PLAYER: I'll take the fixed 7, steady and certain. Brannoc has learned this week that he can't count on the dice.
+
+For the extra prepared spell, I'll add Lesser Restoration, so the next fever or paralysis doesn't catch me or anyone else helpless. Then I'd like to walk the Reach tonight with Pell and Dorrin, light the lanterns, and sit the long rest at the barn beside Wil.
+  [game] level up: Level up done: Brannoc Ashdown is now Human cleric 2 (Life), acolyte background.
+HP 9/10 -> 16/17; hit dice left 1/2 d8
+Features: new Channel Divinity (1/rest), Channel Divinity
+Spell slots now: level 1: 1/3
+Feature uses now: Channel Divinity 1/1 (short rest)
+Can prepare up to 5 spells (was 4); the list changes after a long rest, so the prepared spells are unchanged for now
+  [DM lookup (hidden)] {"name": "Lesser Restoration", "kind": "spell"}
+  [game] time: 5 hours later: Day 2, 11:30:42 PM
+  [DM write_lore (hidden)] {"entry": "Hollow Reach", "add_to_description": "Day 2 night: Brannoc (now level 2) and Pell and Dorrin Harrow walked the Reach lighting lanterns at every porch; the Long Cut is sealed and ringed with lamps; the village's doors stood open for the first time in days. Brannoc sits his long rest beside Wil in the Harrow barn."}
+  [game] notebook: updated Hollow Reach
+DM: You take the fixed 7. The level settles on you quietly and warmly, like a hand on the shoulder. You are now a level 2 cleric with 17 hit points, and you have three first-level slots, one of them ready now, and Channel Divinity once per rest. Your Hit Die is back to one of two.
+
+First, a correction on Lesser Restoration. It is a 2nd-level spell, and at level 2 you only have 1st-level slots, so you can't prepare it until you reach level 3. It would suit you well, since it ends paralysis, and I'd have it on your list the moment you can. For the fifth prepared spell, you have the whole 1st-level cleric list to pick from. Two that might fit what you've seen are Protection from Evil and Good, which turns aside undead among other things, and Detect Poison and Disease. You can choose any other 1st-level spell too. The list changes only when you finish a long rest.
+
+The evening goes the way you wanted. Pell and Dorrin walk the road with you through the dusk, Pell with a taper and Dorrin with his arm in a sling he no longer needs. At every porch you stop and say a word, and at every porch a lantern is lit, one after another, until the whole Reach glimmers gold along its crooked lane. Doors are open. Children stand at the thresholds in their nightshirts, watching the lights. Past the Fenner fields, a ring of lamps shows around the sealed slab at the Long Cut, and a thin sound of scratching rises and falls from beneath it and is ignored by everyone. You see Tam on the barn step with his father's crutch across his knees, watching you, and when you nod he lifts a hand.
+
+It is half past eleven at night. You carry Edda's amulet, a cart of the dead has gone to its rest, and your long rest can begin at midnight beside Wil's bed, in the Harrow barn, by the hearth. Which fifth spell do you prepare?
+
+== ROUND 36 ==
+PLAYER: I'll take Protection from Evil and Good as my fifth spell. It turns aside undead, and with ghouls still scratching under that slab, it's the prayer I'd most want ready for the next dusk.
+
+Then I'll settle on a pallet beside Wil's bed by the hearth, Edda's amulet in my hand, and begin the long rest. Before I sleep I'll thank Pell and Dorrin for walking the lanes with me, and ask Tam to wake me if the scratching under the Long Cut changes or stops.
+  [DM lookup (hidden)] {"name": "Protection from Evil and Good", "kind": "spell"}
+DM: Before you commit, there's a catch you should know about. I've looked up Protection from Evil and Good, and its material component is holy water or powdered silver and iron, which the spell consumes. Your pack holds incense, candles and a censer, but no holy water and no silver or iron powder, so you couldn't cast it tonight as things stand. The village may have a little iron filing or silver, but I wouldn't count on it.
+
+The rest of the spell is as you hoped. For up to 10 minutes, concentrating, one willing creature you touch is protected against undead among other types. Undead have disadvantage on attack rolls against that creature, and can't charm or frighten it.
+
+Everything else for the night is as you described. You thank Pell and Dorrin, Pell clasping your forearm and Dorrin ducking his head. Tam, who is not about to be refused, solemnly promises to wake you the moment the scratching under the Long Cut changes or stops. The hearth is low and warm, and Wil sleeps easy beside you.
+
+I'll hold the long rest at midnight until you choose. Your options for the fifth spell:
+
+- Protection from Evil and Good anyway, ready for when you can find or buy the component.
+- Something castable now. A few 1st-level cleric spells that fit: Detect Poison and Disease, Purify Food and Drink, Command, Create or Destroy Water, Detect Evil and Good, Inflict Wounds, Bane, or Protection from Evil and Good once you have the powder.
+
+Which do you prepare?
+
+== ROUND 37 ==
+PLAYER: Then I'll take Command instead. A single word can stop a frightened villager or a ghoul at the barn door, and it needs no component I don't carry.
+
+DM: when I finish the long rest, could Joss or Widow Harrow have any iron filings or silver in the village, like an old coin or a file from the smithy, so I could make the powder for Protection from Evil and Good tomorrow?
+  [DM lookup (hidden)] {"name": "Command", "kind": "spell"}
+  [game] time: 30 minutes later: Day 3, 12:00:42 AM
+DM: Before I lock it in, there's a problem with Command. I've just looked it up, and the spell has no effect if the target is undead. Ghouls are undead, so Command would do nothing to them. It would still work on living creatures that understand Common, such as a panicking villager, a bandit, or a beast, if you'd want it for that.
+
+On the filings and silver: yes, that's plausible. A village with a plough and a smithy's worth of tools would have iron filings from the file, and Joss or Widow Harrow could well have an old silver coin or a bit of worn silver thread among their keepsakes. In the morning it takes only a short ask. It's reasonable to expect you'd have a pinch of powdered iron and silver within an hour of waking, and you can grind it yourself with the censer's pestle-stone. The consumed material is a pinch per casting, so you'd want to gather enough for a few castings.
+
+That changes what you might prepare tonight, because the powder wouldn't be in your hands until after you wake, and the list can't change until the next long rest. So there are really three choices:
+
+- Protection from Evil and Good. You can't cast it tonight, but by morning you'll likely have the powder, and it answers the ghouls directly.
+- Command, for living creatures only, which is a poor fit against what is below the slab.
+- Something else from the 1st-level cleric list, such as Bane, Detect Evil and Good, Detect Poison and Disease, or Inflict Wounds.
+
+Which do you prepare?
+
+== ROUND 38 ==
+PLAYER: I'll take Protection from Evil and Good after all. Command does nothing to ghouls, and by morning Joss or Widow Harrow should be able to spare a pinch of iron filings and a bit of old silver, which I'll grind with the censer's pestle-stone.
+
+Now I'll begin the long rest beside Wil's bed, Edda's amulet in my hand, and let it run through to morning.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, Protection from Evil and Good; 8 hours later: Day 3, 8:00:42 AM
+  [DM write_lore (hidden)] {"entry": "Hollow Reach", "add_to_description": "Day 3, 8 AM: Brannoc finished a long rest in the Harrow barn beside Wil; the scratching under the Long Cut did not change in the night. He has Protection from Evil and Good prepared but needs powdered silver and iron (holy water or powder) to cast it."}
+  [game] notebook: updated Hollow Reach
+DM: You sleep the whole night. Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you. The scratching under the Long Cut rose and fell with the dark and never changed.
+
+It is 8 AM on Day 3, and the long rest is done. You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity ready, and a Hit Die back, so you now have both. Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. You still lack the powder for that last one.
+
+Wil is awake, pale and clear-eyed, propped on an elbow and eating porridge with a spoon he holds like a trophy. Widow Harrow is at the hearth, and she looks as if she has slept a little. Joss limps in from the yard in the morning light, and Tam is already up on the barn step. Beyond the fields, a ring of burnt-out lamps sits around a slab of stone that no longer scratches. It is silent in the daylight.
+
+The village is quiet, the dead are buried or waiting to be, and five good people are gone. The Reach is safe for now, though the barrow below still holds three ghouls, one nearly dead, and the Lamp still needs a keeper. Hob can't leave it, and he can't hold it alone forever. You have a village that trusts you, a cart's worth of promises, and a road that goes on.
+
+What does Brannoc do this morning?
+
+== ROUND 39 ==
+PLAYER: I wash, eat a bowl of porridge beside Wil, and tell him the bite will scar but he'll keep the arm. Then I ask Joss and Widow Harrow for a pinch of iron filings from the smithy file and any bit of old silver they can spare, and grind it with the censer's pestle-stone into a small pouch for Protection from Evil and Good.
+
+After that I'll gather the village at the barn to talk about the Lamp. Hob can't tend it forever, so I'd ask whether a willing keeper, perhaps Dorrin or Pell with an older hand, could share the watch with him, and that a rota of oil and candles be kept up from the Reach. DM: do I still have Cal's longbow, or did Dobb's family keep it, and who is Hob's sister in the valley that Widow Harrow mentioned?
+  [game] sheet: gained 1 × Powdered silver and iron (pinch, enough for 3 castings of Protection from Evil and Good)
+  [game] time: 1 hour 30 minutes later: Day 3, 9:30:42 AM
+  [DM write_lore (hidden)] {"create": "Maud Marrow", "kind": "person", "description": "Hob Marrow's younger sister, a weaver in Greywater, a village a day's walk down the valley. Hollow Reach folk assumed Hob had gone to her; no one has told her he is dead.", "relationships": ["sister of [[Hob Marrow]]"]}
+  [game] notebook: created an entry for Maud Marrow; added 1 relationship to Maud Marrow
+  [DM write_lore (hidden)] {"entry": "Hob Marrow", "add_to_description": "Day 3: has a sister, Maud Marrow, in Greywater a day down the valley. Hollow Reach proposes a rota to share the Lamp's tending (Pell and Dorrin Harrow with an older hand, oil and candles from the Reach)."}
+  [game] notebook: updated Hob Marrow
+  [DM write_lore (hidden)] {"create": "Lamp Watch", "kind": "quest", "description": "Set up a rota so the Wayfarers' Lamp is tended by living hands as well as Hob: Pell and Dorrin Harrow plus an older villager, oil and candles from Hollow Reach. Also: tell Hob's sister Maud Marrow in Greywater; return Cal Tarn's longbow to his kin."}
+  [game] notebook: created an entry for Lamp Watch
+DM: You tell Wil honestly that the bite will scar and he will keep the arm. He grins as if you'd given him a medal. Then you go to the smithy-shed behind the Fenner house. Joss finds a worn flat file and scrapes a heap of bright filings onto a leaf. Widow Harrow brings a tarnished silver thimble, her grandmother's, and says, "It's no use to a dead woman, and less to a living one." You grind both with the censer's pestle-stone until they are a gray-gold dust, and fold it into a small pouch. It is enough for three castings of Protection from Evil and Good. It goes onto your sheet.
+
+By half past nine, perhaps thirty people have gathered in front of the barn, standing in the yard in the thin sun. You lay it out simply: Hob keeps the Lamp, but a man who is dead cannot be asked to bear it forever, and a light needs hands that can fetch oil and trim a wick. A rota of oil and candles from the Reach, and two or three people to share the watch.
+
+Pell speaks first, awkwardly. "I'll go. I owe it." Dorrin, beside him, nods. Old Garrit clears his throat. "I'm too old for a hard night, but my legs can manage the track by day. Someone ought to know the man the way he was, and I knew him." Berra Fenner says nothing, but her hands, which have been twisting her apron, go still, and after a moment she says to no one in particular, "I'll send oil. Every week. Seems the least." Heads nod. The thing is not a vow, but it holds the shape of one.
+
+Your questions:
+
+Cal's longbow is still with you. It lay on the cart beside the dead, and nobody else claimed it. Cal's kin are not in the Reach by blood. He lived with his widowed mother, Nessa Tarn, in a house at the lane's far end, and she hasn't come out yet. The bow is hers.
+
+Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley. The Reach assumed he'd gone to her. No one has told her the truth, and it seems no one has been asked.
+
+You have the powder, a rota in the making, a bow to return, and a message for Greywater. The Lamp still burns, and the thing below still waits.
+
+What does Brannoc do?
+
+== ROUND 40 ==
+PLAYER: I take Cal's longbow and walk to the house at the far end of the lane, then knock softly and wait for Nessa Tarn to answer. "Goodwife, I'm Brannoc. I was with Cal at the Lamp, and I promised to carry his name home. I've brought his bow, and I'd like to tell you how he died, if you'll hear it."
+
+I'll sit with her as long as she needs, hold his bow out in both hands, and tell her he went because he was asked and never once turned back. Afterward I'll ask whether she'd like to put Cal's name on the Lamp's rota, and mention that I plan to carry word of Hob to his sister Maud in Greywater.
+  [game] sheet: lost 1 × Longbow (Cal Tarn's, to return to his kin)
+  [game] time: 2 hours later: Day 3, 11:30:42 AM
+  [DM write_lore (hidden)] {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, a small, weathered woman who lives at the far end of Hollow Reach's lane. Received Cal's longbow from Brannoc on Day 3 and heard how he died. Will take Cal's place on the Lamp rota with oil and her own hands.", "relationships": ["mother of [[Cal Tarn]]", "lives in [[Hollow Reach]]"]}
+  [game] notebook: created an entry for Nessa Tarn; added 2 relationships to Nessa Tarn
+  [DM write_lore (hidden)] {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11:30 AM: Cal's longbow returned to Nessa Tarn, who will join the Lamp rota in Cal's name. Remaining: carry word of Hob to Maud Marrow in Greywater."}
+  [game] notebook: updated Lamp Watch
+DM: The house at the lane's end is small and neat, with a swept step and a hare-skin pegged on the wall to dry. The door opens before your second knock. Nessa Tarn is a small, weathered woman with Cal's quick dark eyes, and she looks at the bow in your hands before she looks at your face. She has known since last night, when the cart came down the lane. She says only, "Come in, then."
+
+You sit with her at her table for most of two hours. You tell it straight: that he went because he was asked, that he knew the track and led it, that when the claws came he did not turn from the door. You tell her about the arrows and the burning oil, and that Hob, the dead keeper, wept for him in his own dry way and kept the light burning over him. You hold the bow out in both hands. She takes it as if it were warm, and she sets it across her knees and runs her thumb along the grip, worn smooth where his hand was.
+
+She is quiet a long time. Then she says, "He'd never have let me carry the oil up that track. Thought I was too old." She almost smiles. "I'll carry it." She will put Cal's name on the rota and go up with the others, and she asks that you leave her Edda's hymn, the one you hummed, because she heard it from the barn the first night and it was the only thing that let her sleep. You give her the words, and she repeats them twice under her breath.
+
+When you leave, it is past noon. The lane is quiet in the sun. The rota is underway, and Greywater lies a day's walk down the valley, with a weaver there who doesn't know her brother is dead.
+
+You are at full HP with all your prayers. It is about half past eleven in the morning, and you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first. What does Brannoc do?
+
+== ROUND 41 ==
+PLAYER: I'll go up to the Lamp first and tell Hob that Nessa Tarn will carry oil and that I'm taking word of him to Maud, so he knows his sister will hear it from a friend. Then I'll set out for Greywater down the valley road, with Protection from Evil and Good ready and my full prayers, to reach her by dusk.
+
+DM: before I go, what did Hob say he'd want me to tell Maud, and does the Lamp need anything I can leave with him, like candles from my pack?
+  [game] time: 40 minutes later: Day 3, 12:10:42 PM
+  [DM write_lore (hidden)] {"entry": "Hob Marrow", "add_to_description": "Day 3 ~12:15 PM: Brannoc told Hob of the rota and of going to Maud. Hob's message for Maud: tell her he kept the light, that he was not afraid at the end, and that the blue shawl she wove him is in the lamp-house chest (she is to have it back). Lamp-house has a chest with spare wicks and a flint; oil is the real need, candles only a spare."}
+  [game] notebook: updated Hob Marrow
+DM: You climb the track in clear noon light, past the bracken and the beeches that held such dread two nights ago. The lamp-house is smaller by day, a squat gray building, its door open and the iron lamp steady in its dusk-pale flame on the plinth. The flagstone in the floor is shut tight, and there is a new scorch mark at its edge where something clawed from below and gave up. Hob sits on the step as he sat in the night, lantern in his lap. He lifts his head slowly when your shadow falls across him.
+
+You tell him all of it: Nessa Tarn and the oil, Pell and Dorrin and Old Garrit and the rota, and that you are going to Greywater to carry word to Maud. He is quiet so long that you think he has not understood. Then his dry voice comes up, careful, like a man lifting something heavy.
+
+"...Maud. Tell her... I kept the light. Tell her I was not... afraid. At the end." The lantern turns in his hands. "There is a shawl. Blue. She wove it, the winter I came here. It is in the chest... there." His chin lifts toward the corner of the lamp-house. "She is to have it back. Tell her it was warm. Every night. Tell her that."
+
+He says nothing for a while. Then, as an afterthought: "She talks... too much. She will say I should have come home. Tell her... I had somewhere to be."
+
+Answering your other question: the chest holds spare wicks and a flint, and the lamp is full. Oil is the real need, and Nessa and Berra have promised it. Your candles would only be a spare for a bad night, and ten would be a kindness. They are yours to leave or keep.
+
+It is a little past noon. Greywater is a day's walk. If you leave now at a steady pace you will arrive after dark, around nine, and the valley road is not one you know. What does Brannoc do?
+
+== ROUND 42 ==
+PLAYER: I fetch the blue shawl from the chest, fold it carefully into my pack, and leave five of my ten candles on the step beside Hob. "Five for a bad night, and I'll keep five for the road. I'll tell Maud every word: that you kept the light, that you weren't afraid, that the shawl was warm, and that you had somewhere to be."
+
+Then I say goodbye with a hand on his cold shoulder and set out down the valley road at a steady pace, shield on my arm, Protection from Evil and Good ready. DM: if I'll arrive after dark, is there an inn or farmstead along the way where I could stop for the night rather than walk into Greywater at nine?
+  [game] sheet: lost 5 × Candle; gained 1 × Blue shawl (Maud Marrow's, to return to her)
+  [game] time: 40 minutes later: Day 3, 12:50:42 PM
+  [DM write_lore (hidden)] {"create": "The Millstone Inn", "kind": "place", "description": "Roadside inn about six hours' walk down the valley road from Hollow Reach, two hours short of Greywater, an old mill converted by a stout widow, Hesper Cole. Clean beds, a common room, stabling. Lodging a few silver; Brannoc may owe a small payment or earn it by tending a sick guest.", "relationships": ["lies on the valley road betwe
+  [game] notebook: created an entry for The Millstone Inn; added 2 relationships to The Millstone Inn
+  [DM write_lore (hidden)] {"entry": "Lamp Watch", "add_to_description": "Day 3 ~12:50 PM: Brannoc left five candles at the lamp-house, took Hob's blue shawl and his message for Maud, and set out for Greywater. Millstone Inn is on the way."}
+  [game] notebook: updated Lamp Watch
+DM: You fold the blue shawl into your pack, a soft, faded wool, still holding a faint smell of lamp oil and smoke. The five candles stand in a row on the step, and Hob looks down at them and then up at you. He cannot smile, but something shifts in the dull eyes.
+
+"...Go well, healer," he says. "The light will be here."
+
+You put a hand on his cold shoulder, and then you walk down the track in the early afternoon, past the Fenner fields and the ring of burnt lamps around the silent slab. A few people lift a hand from the furrows as you pass. Tam runs alongside for half a field, calls "Come back!", and gets no promise from you, only a nod.
+
+Your question: yes. About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole. It has clean beds, a common room, and a stable. You'd reach it near sunset, around seven. You could sleep there and arrive at Greywater fresh the next morning, instead of walking into a strange village in the dark. A bed there costs a few silver, and you have 15 gp.
+
+The road is a pale ribbon through brown stubble and the first red leaves. The sun is warm, and your prayers are with you. You have time, and a message to carry.
+
+What does Brannoc do on the road?
+
+== ROUND 43 ==
+PLAYER: I walk at a steady pace, shield slung on my arm, humming Edda's hymn and keeping an eye on the ditches and the tree line. I'll stop at the Millstone Inn for the night, and reach Greywater fresh in the morning with the shawl and Hob's words.
+
+If I meet anyone on the road who is hurt, lost, or frightened, I'll stop and help them. DM: how much of Hob's message do I remember exactly, and what would I say to Maud first when I find her at her loom?
+  [game] time: 6 hours later: Day 3, 6:50:42 PM
+  [DM write_lore (hidden)] {"create": "Hesper Cole", "kind": "person", "description": "Stout, sharp-eyed widow who keeps the Millstone Inn. Blunt, fair, and quick with a ladle. Has a carter's boy ill with a cough in the back room as Brannoc arrives, Day 3 ~7 PM.", "relationships": ["keeps the [[The Millstone Inn]]"]}
+  [game] notebook: created an entry for Hesper Cole; added 1 relationship to Hesper Cole
+DM: You remember Hob's words exactly, because you turned them over all the way down the road. He said:
+
+"Tell her I kept the light. Tell her I was not afraid, at the end. There is a shawl, blue. She wove it the winter I came here. She is to have it back. Tell her it was warm, every night." And last, a little wryly: "She talks too much. She will say I should have come home. Tell her I had somewhere to be."
+
+As for what you say first to Maud, that is yours to decide, but the simple truth is probably kindest. You could say your name and that you come from Hob, and that the shawl is in your pack, before you tell her the harder thing.
+
+The road goes by without trouble. The valley is a slow curve of stubble fields, hedgerows hung with red hips, and a river glinting on your left. You pass a goatherd who nods and a tinker's cart going the other way, and nobody who needs a healer. You hum the whole way, and a boy fishing the bank stops to listen.
+
+At ten to seven, with the sun low and gold behind you, the Millstone Inn comes up out of the river mist: a big old mill of gray stone, its waterwheel still turning, lamps lit in every window, smoke rising from two chimneys. A wide yard, a stable, and a signboard with a millstone painted on it hang over the door.
+
+You step into the common room and the warmth hits you. It is clean and full of the smell of bread and onions. A stout woman with her sleeves rolled to the elbow looks you up and down, mace, shield, and amulet, and says, "Healer? Gods be thanked. Hesper Cole. I've a carter's boy in the back room with a cough that's been going on three days, and he's going the wrong way. Will you look at him? Bed and supper are yours, either way."
+
+What does Brannoc do?
+
+== ROUND 44 ==
+PLAYER: "Of course, Hesper. Take me to him, and bring a lamp and a cup of warm water with a little honey if you have it."
+
+I'll kneel by the boy, listen to his breathing and feel his forehead and throat, and ask how long the cough has run, whether he's bringing up anything, and whether anyone else in the inn is sick. If it's more than I can ease with Medicine and rest, I'll use Cure Wounds or Healing Word as it fits.
+  [game] dice Brannoc's Medicine check examining the carter's boy, DC 12: 1d20+5 = 1d20 [3] + 5 = 8
+  [DM write_lore (hidden)] {"create": "Piper", "kind": "person", "description": "Carter's boy of about nine, ill at the Millstone Inn with a chest fever and a wet cough for three days. His father Garn the carter left for Greywater and is due back in two days. Brannoc tended him with Medicine, steam and honey water.", "relationships": ["lies sick in the back room of [[The Millstone Inn]]"]}
+  [game] notebook: created an entry for Piper; added 1 relationship to Piper
+  [game] time: 30 minutes later: Day 3, 7:20:42 PM
+DM: Hesper leads you through the kitchen to a narrow back room with a pallet under the eaves. Her lamp falls across a boy of about nine, flushed and sweat-damp, his hair stuck flat to his forehead. His name is Piper, and he does not stir when you kneel. His cough is wet and deep, and between spells his breath whistles.
+
+Medicine (8): you don't get a clear read. His forehead is hot, his throat is rough, and the cough is plainly wet, but you cannot tell whether this is a bad chill that has settled low or something worse. His chest sounds muddy under your ear, but the pulse and the heat don't settle it either way, and you are honestly unsure.
+
+What you do learn from asking is this. Hesper says the cough started three days ago, that he brings up a thick yellow-gray phlegm in the morning, and that no one else in the inn is sick. His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days. The boy has taken little but water and broth.
+
+You warm honey-water at the kitchen fire, and lift Piper to sip it. He takes half the cup and dozes off against your arm. Steam from a kettle in the room loosens his breath a little. Nothing you can do tonight will cure it outright, and Cure Wounds mends wounds, not fevers, so you hold it back.
+
+It's about twenty past seven. Supper is on the table, Hesper has a free bed for you, and the boy is not worse, though he is not better. You could sit up with him, check him through the night, ask more of Hesper, or try a different approach tomorrow.
+
+What does Brannoc do?
+
+== ROUND 45 ==
+PLAYER: I eat a quick supper, then bring a stool to Piper's bedside and keep the kettle steaming. "Hesper, would you prop his shoulders up with a rolled blanket and wake me if his breathing changes? I'll sit with him tonight, since I promised never to let anyone suffer alone."
+
+I'll check his breathing and brow every hour or so, humming low. DM: does Piper have a fever I could cool with a damp cloth, and can I try Medicine again with more time, or does anything in the room, like the phlegm or his lips, give me a clearer read?
+  [game] dice Brannoc's second Medicine check after hours at the bedside, with phlegm, lips and fever to read, DC 12: 1d20+5 = 1d20 [8] + 5 = 13
+  [game] time: 5 hours later: Day 4, 12:20:42 AM
+  [DM write_lore (hidden)] {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc's second Medicine read (13) found a lung fever (settled in the chest, no wound, no magic), not a simple chill. Cooling cloths, propped upright, steam and honey water; by ~1 AM fever eased from its peak. Cure Wounds cannot treat it; Lesser Restoration (level 3 for Brannoc) would end a disease. Garn the carter due back in two days."}
+  [game] notebook: updated Piper
+DM: You eat Hesper's onion-and-barley stew, standing, and are back at the boy's side before the bowl is cold. Hesper props his shoulders on a rolled blanket without a word. She has done this before, for her own, and she says as much with a look. Then she leaves you the lamp and the kettle and tells you to knock on the wall if you need her.
+
+Yes, he has a fever. His brow is hot and dry, and a cloth wrung in cool water takes the edge off it for a quarter of an hour at a time. You change it as it warms.
+
+Medicine (13), a second look with hours of watching behind it: this time it comes clear. His lips are faintly blue-gray at the edges whenever the cough hits, and his breath takes a catch at the top of each inhalation, a small hitch. The phlegm in the cup is thick and rust-colored, not the pale spit of a cold. You are fairly sure now. This is a fever settled in the lungs, a true chest sickness, not a chill and not a wound. It is a fight his body has to win, with help. It is also why Cure Wounds was never going to touch it, and why Lesser Restoration, which ends a disease, would. It is a 2nd-level spell, and you cannot cast it until level 3.
+
+What you can do is keep him upright, keep him cool, give him steam and honey water in small sips, and watch the breath. You do all of it through the night, humming low. Around the middle of the night his breathing eases from a rasp to a rattle, and a little before one o'clock his brow cools under your hand and a thin sweat breaks across it. He sleeps properly for the first time. He is not out of danger, but the worst of the climb is behind him.
+
+It is twenty past midnight on Day 4. You are tired but steady. In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+
+What does Brannoc do?
+
+== ROUND 46 ==
+PLAYER: I lay a hand on Piper's damp brow and let out a long breath. "Sleep well, little one." I'll get a few hours of rest on the stool beside him, then wake at first light to check his breathing once more before the road.
+
+In the morning I'll tell Hesper plainly what the sickness is: keep him upright, cool, and sipping honey water, and send for a healer if the blue returns to his lips. I'll also leave a note for Garn the carter that his boy is mending and that Brannoc of Hollow Reach sat with him. Then I'll set out for Greywater with the shawl and Hob's words.
+
+DM: could I use Healing Word on Piper in the morning to ease his breath a little, or is it only good for wounds like Cure Wounds?
+  [DM lookup (hidden)] {"name": "Healing Word", "kind": "spell"}
+  [game] time: 6 hours 40 minutes later: Day 4, 7:00:42 AM
+  [DM write_lore (hidden)] {"create": "Greywater", "kind": "place", "description": "Weaving village in the valley, a day's walk from Hollow Reach and about two hours past the Millstone Inn. Grey slate roofs along a river, racks of dyed wool drying, a small chapel with no resident priest. Maud Marrow's loom-house is at the lower end by the weir, a blue door.", "relationships": ["home of [[Maud Marrow]]", "lies past the [[The
+  [game] notebook: created an entry for Greywater; added 2 relationships to Greywater
+  [DM write_lore (hidden)] {"entry": "Piper", "add_to_description": "Day 4 dawn: fever low, breath easier, sleeping. Brannoc left instructions with Hesper (upright, cool, honey water, send for a healer if his lips go blue) and a note for Garn the carter. Healing Word only restores hit points, so Brannoc did not spend it."}
+  [game] notebook: updated Piper
+DM: Your answer first: Healing Word restores hit points and nothing else, so it can't ease a fever or a bad chest. The sickness is not a wound. You can cast it and give him a little more strength for the road, but it wouldn't touch what is wrong, and I won't pretend it would. Your slots are better kept. The sleep, steam, and honey water are doing the real work.
+
+You settle on the stool with your back against the wall, your hand where you can feel his breath. You sleep, in snatches, for six hours or so. Hesper wakes you at first gray with a mug of hot tea. Piper is awake and watching you with big, clear eyes. His fever has dropped to a mild warmth, his breath comes slow and mostly quiet, and he asks, hoarse, whether you are the man who hummed. You say you are. He says it helped, and goes back to sleep.
+
+You tell Hesper plainly what it is: a sickness settled in the chest. Keep him upright, keep him cool, keep honey water in him in small sips, and send for a healer if the blue ever comes back to his lips. You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him. Hesper refuses your coin and presses a heel of bread and a hard cheese into your hands. "Bed and board's for them as earn it," she says. "You did."
+
+By seven you are on the road with the shawl in your pack. The mist lies thick on the river, and the sun is pale behind it. The road goes through low hills and pastures grazed gray-green, past a ford and a ruined chapel with its roof fallen in. It is quiet, and your steps and your humming are the only sound.
+
+At about nine, the road bends and Greywater comes into view below, a cluster of slate roofs along the river, with racks of dyed wool drying red and blue and ochre in rows along the bank, and a weir turning white across the water. A small chapel stands at the near end with its door shut. A girl hauling a basket of yarn looks up, sees you, and stops. At the lower end of the village, by the weir, there is a house with a blue door.
+
+What does Brannoc do?
+
+== ROUND 47 ==
+PLAYER: I nod to the girl and ask gently, "Good morning. Could you tell me where Maud Marrow the weaver lives? I've come with word of her brother."
+
+Then I walk down to the house with the blue door, shield slung on my back so I look less like a soldier, and knock. When she opens, I'll say, "Maud Marrow? My name is Brannoc, and I come from Hob. May I come in? I have something of yours in my pack, and I'd like to tell you about him in my own words."
+  [game] time: 2 hours 15 minutes later: Day 4, 9:15:42 AM
+  [DM write_lore (hidden)] {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:20 AM: Brannoc reached her blue-door loom-house in Greywater with the shawl and Hob's words. She is a lean, grey-braided woman in her sixties with dyed-blue fingertips, talkative, who guessed from his face before he spoke. Hob had left in spring; they quarrelled about his staying at the Lamp."}
+  [game] notebook: updated Maud Marrow
+DM: The girl with the yarn basket points without a word at the blue door, then crosses herself, a gesture of the old kind, and goes back to her work more slowly than before. You slip your shield onto your back, as you said, and walk down past the dye racks. The air smells of wet wool, woad, and wood smoke. The weir runs loud beside you.
+
+The blue door is faded, the paint worn pale at the latch. From inside comes the steady knock and slide of a loom, a rhythm that has gone on so long it has become a kind of silence. You knock, and the sound stops.
+
+The door opens on a lean woman in her sixties with a long gray braid, a leather apron, and fingertips stained blue to the second joint. She has Hob's long jaw and Hob's pale, patient eyes, but hers are quick and sharp. She looks at your amulet, at the mud on your boots, and at the way you are standing, and the color leaves her face before you have said a word.
+
+You say it as you planned. Your name, that you come from Hob, that you have something of hers in your pack, and that you would tell her about him in your own words.
+
+"Come in," she says, very quietly. She holds the door and steps back. The room is warm and crowded with wool and half-finished cloth, a great loom by the window, a kettle on the hob, and a single chair pulled up beside the fire, empty, with a folded blanket over its arm. She does not sit. She stands with both hands pressed flat on the back of the other chair.
+
+"He's dead," she says. It is not a question. "Isn't he. I knew in the spring, when he went up that track and wouldn't be told. I said, 'Hob, you'll die in that damned lamp-house and nobody'll know for a month.'" Her voice cracks on the last word and steadies. "Say it. Say it plain, and then give me what you've got in that pack."
+
+She is waiting. You have the shawl, Hob's words, and the whole of what happened. How does Brannoc tell her?
+
+== ROUND 48 ==
+PLAYER: I take off my pack, set it on the table, and meet her eyes. "Yes, Maud. Hob died some time before the harvest feast, in the lamp-house, and nobody found him. I won't dress it up. But he did not leave the light, and he was not alone at the end: he kept it burning, and he saved a village by it."
+
+I take out the blue shawl and hold it out in both hands. "He asked me to give you this. He said you wove it the winter he went up there, and I'm to tell you it was warm every night. He said to tell you he kept the light, that he wasn't afraid at the end." I add gently, "And he said you'd tell him he should have come home. He asked me to say he had somewhere to be."
+  [game] time: 1 hour 30 minutes later: Day 4, 10:45:42 AM
+  [DM write_lore (hidden)] {"entry": "Lamp Watch", "add_to_description": "Day 4 ~10:45 AM: Brannoc gave Maud the shawl and Hob's words. Maud wept, then said she will come to the Lamp herself within the week with wool and a loom-stool to sit with him; she asks to be told when the Reach's rota begins. All parts of the quest done.", "status": "done"}
+  [game] notebook: updated Lamp Watch
+  [game] sheet: lost 1 × Blue shawl (Maud Marrow's, to return to her); XP +100: 400
+DM: Maud does not move while you speak. When you reach the part about the light, her mouth tightens, and at "somewhere to be" something goes out of her, all at once, like a thread cut. She takes the shawl from you with both hands. For a moment she only holds it, thumbs moving over the weave, over a place near the hem where the pattern wanders.
+
+"I dropped a stitch there," she says. "He used to say he liked it. Said it was the only part of it that was honestly mine and not the pattern's." She laughs, wetly, once. Then she sits down in the empty chair by the fire, with the blue wool bundled against her chest, and weeps like a woman who has put off weeping for half a year.
+
+You do not hurry her, and you do not speak. You sit on the stool by the hearth with your hands loose between your knees, and when the kettle starts to sing you rise and take it off. You find the cups, and you pour. It is not much. It is what Edda would have done. She takes the cup without looking at it, and her hand is steady.
+
+Some time later, perhaps an hour, she asks the questions. Did it hurt? You tell her you don't believe so. Was he alone? Not at the end, you say, and she does not ask more than that. She asks about the village, and you tell her about the Reach and the barn, about Cal and the others, and the five candles on the step. She listens with her chin on the shawl.
+
+At last she wipes her face with her sleeve and looks at you with Hob's steady eyes in a living face. "Then I'll go up to him," she says. "Not today. I've work due, and a body can't go anywhere in this state. Within the week. I'll bring wool and a loom-stool and sit with the old fool until he tells me to go home." She nods slowly. "You'll tell them at the Reach to expect a woman who talks too much."
+
+She presses your hand between both of hers, stained fingers warm. She will not take coin, or let you go without a loaf and a jar of honey from her shelf. Your XP stands at 400, and the shawl is where it belongs.
+
+It is a quarter to eleven on Day 4. You are fed, rested, and full of prayers, with fifteen gold pieces and no one waiting on you. Hollow Reach has its rota, Hob has his sister, and the road runs on in two directions. The chapel at Greywater has no priest, and a girl with a yarn basket looked at you with a particular hope.
+
+What does Brannoc do?
+
+== ROUND 49 ==
+PLAYER: I thank Maud, take the loaf and honey, and tell her, "I'll tell the Reach to expect a woman who talks too much, and Hob will be glad of it." Then I walk up to the little chapel at the near end of the village and look for the girl with the yarn basket, to ask her who tends it now and who in Greywater has been sick or hurt with no healer to turn to.
+
+DM: I'm at 400 XP, so how many more do I need for level 3, and would that give me Lesser Restoration for a sickness like Piper's?
+  [DM lookup (hidden)] {"name": "Cleric", "kind": "class"}
+  [game] sheet: gained 1 × Loaf of bread; gained 1 × Jar of honey
+  [game] time: 20 minutes later: Day 4, 11:05:42 AM
+  [DM write_lore (hidden)] {"create": "Wren", "kind": "person", "description": "Girl of about twelve in Greywater, a dyer's daughter who hauls yarn baskets and sweeps the village's priestless chapel. Hopeful and direct. Tells Brannoc the chapel has had no priest since the old one died two winters ago; the sick are tended by the weavers as best they can.", "relationships": ["lives in [[Greywater]]"]}
+  [game] notebook: created an entry for Wren; added 1 relationship to Wren
+DM: Level 3 needs 900 XP, and you have 400, so you need 500 more. At 3rd level you would gain two 2nd-level slots, and Lesser Restoration is a Life domain spell for 3rd level. That means it would be always prepared and wouldn't count against your limit. It ends one disease or one condition (blinded, deafened, paralyzed, or poisoned), so it would have broken Piper's lung fever outright, and it would end a ghoul's paralysis on you or an ally.
+
+You thank Maud once more, and she gives your hand a last squeeze and shoos you out. The loaf and a jar of honey go into your pack, and you walk up the lane, past the racks of drying wool, to the chapel.
+
+It is a small slate-roofed building with a bell-cote and no bell. The door is unlocked. Inside it is swept clean, with wildflowers in a jar on a plain stone altar, and nobody in sight. The girl from the lane is standing on the step behind you, the yarn basket on her hip. Her name is Wren, a dyer's daughter of twelve or so, and she looks at you directly.
+
+"Old Father Tulle died two winters back," she says. "Nobody's come since. I sweep it, because somebody should." She hesitates. "People still come to sit. When they're frightened."
+
+She tells you who is ill, when you ask, and she's thorough about it. Three people in Greywater are suffering with no one to see to them. A weaver named Osric has a scalded forearm that never closed and is going red at the edges. A woman named Ilsa Dunmore has been coughing for a fortnight, and her baby has the same rattle. And old Perrin Gale, who dyes in the sheds, fell from a rack and hasn't walked straight since, and he won't let anyone look at it.
+
+You have all three prayers ready, three 1st-level slots, and Channel Divinity. It is a little past eleven in the morning. You could see all three, or only one first.
+
+What does Brannoc do?
+
+== ROUND 50 ==
+PLAYER: "Thank you, Wren. Will you take me to Osric first? A scald going red at the edges won't wait, and I'll see Ilsa and her baby next, then Perrin, who I'll ask kindly rather than force."
+
+I'll start with Medicine to clean and look at the burn, and use Cure Wounds only if it needs more than clean linen and honey. I'll keep a slot for Perrin's fall and ask Wren to come along and tell him I'm a friend of Maud Marrow's.
+  [game] dice Brannoc's Medicine check on Osric's scalded, infected forearm, DC 12: 1d20+5 = 1d20 [12] + 5 = 17
+  [game] time: 40 minutes later: Day 4, 11:45:42 AM
+  [DM write_lore (hidden)] {"create": "Osric", "kind": "person", "description": "Middle-aged weaver of Greywater with a scalded forearm from a dye vat three weeks ago that went red and angry. Brannoc cleaned it, drew the matter with a honey dressing and linen, and judged it will heal without magic if kept clean and changed daily. Taught Wren to change the dressing.", "relationships": ["lives in [[Greywater]]"]}
+  [game] notebook: created an entry for Osric; added 1 relationship to Osric
+DM: Wren leads you along the river to a long dye-shed where Osric sits on an overturned tub with his arm wrapped in a filthy rag. He is a thick-armed man, gray at the temples, and he eyes you warily until Wren says you are a friend of Maud Marrow's. After that, he lets you unwind the cloth.
+
+Medicine (17): the forearm tells you everything. It is a deep scald, three weeks old, split in two places along the inner arm, and angry red at the margins, with a little yellow weeping. It smells faintly sour. The flesh is hot but not black, there are no red streaks running toward the elbow, and he has no fever. It is festering, not rotting. You are confident it will mend without magic if it is kept clean.
+
+You do what it needs. You wash it with warm salt water, trim the dead skin back to the clean edge with the small knife from your pack, and spread honey thin over the raw places, honey from Maud's own jar. Then you wrap it in clean linen, firmly but not tight. Osric swears through his teeth and does not pull away. You show Wren how to change the dressing each morning and each night, with boiled water and fresh honey, and she nods gravely and repeats every step back to you.
+
+"It'll close in a fortnight," you tell him. "Keep it out of the vats. If the red climbs above the wrist, or you take a fever, send for me." He nods, a little humbled. "Thank you," he says gruffly. "I'd about decided to lose the arm."
+
+You saved your slot. It is a quarter to noon. Wren takes you next to a low house on the village's east lane, where a thin, tired woman stands in the doorway with a baby on her shoulder. You hear the rattle in the baby's chest from three paces away. This is Ilsa Dunmore.
+
+What does Brannoc do?
+
+== ROUND 51 ==
+PLAYER: I smile at Ilsa and keep my voice soft. "Goodwife, I'm Brannoc, a friend of Maud Marrow's. May I come in and listen to the little one's chest, and to yours? I'll ask how long you've both been coughing, and whether the baby is feeding."
+
+Inside I'll sit her by the fire and check the baby's lips for blue, the fever, and the breathing, then use Medicine with honey-water, steam and propped sleeping, as with Piper. DM: Ilsa's husband, if there is one, and how old is the baby?
+  [game] dice Brannoc's Medicine check on Ilsa and her baby's cough, DC 12: 1d20+5 = 1d20 [11] + 5 = 16
+  [DM write_lore (hidden)] {"create": "Ilsa Dunmore", "kind": "person", "description": "Thin, tired young mother in Greywater with a two-week cough; her baby daughter Tessa (about four months) has the same rattle. Husband Garrick Dunmore is a boatman away upriver hauling dyestuffs, due back in about four days.", "relationships": ["lives in [[Greywater]]"]}
+  [game] notebook: created an entry for Ilsa Dunmore; added 1 relationship to Ilsa Dunmore
+  [game] time: 50 minutes later: Day 4, 12:35:42 PM
+DM: Ilsa lets you in with a tired, grateful nod. She is perhaps twenty-three, hollow under the eyes, and when she says her husband's name it is with the care of someone not letting herself miss him too much. Garrick Dunmore is a boatman, upriver hauling dyestuffs, due back in about four days. The baby is Tessa, a girl of four months, round-faced and flushed, with a damp little fist knotted in her mother's collar.
+
+You sit Ilsa by the fire, and you ask, and you listen.
+
+Medicine (16): the picture comes clear enough. Ilsa's cough is dry and deep, of a fortnight's standing, with an ache under the ribs and a night sweat. It is a lingering chest cold that never quite cleared, made worse by tiredness and a smoky, closed room. It's not the lung fever Piper had. The baby's breath is rapid but not labored, and the rattle is wet and loose, not tight. Her lips are pink, she is feeding, and she has no fever above warmth. Tessa has caught her mother's cough, and is likely to mend as her mother mends.
+
+What would help most is plain. You have Ilsa lie back with her shoulders propped, and you give her warm honey-water in sips, and you show her how to keep the baby upright against her chest when she sleeps. You open the shutter a hand's breadth to let the smoke out. You show her how to steam a kettle by the bed. You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still. It is not magic. It is the kind of care that was missing, and she cries a little with the relief of having someone say plainly that her baby is not dying.
+
+You spend nothing from your slots. It is twenty-five to one. Perrin Gale is waiting in the dye-sheds, the one who won't let anyone look at his fall, and Wren stands in the lane with her basket, watching you.
+
+What does Brannoc do?
+
+== ROUND 52 ==
+PLAYER: "Thank you, Wren. Take me to Perrin, and tell him on the way that I'm a friend of Maud's and I only want to look, not to fuss."
+
+At the dye-sheds I'll keep my distance, sit on an upturned tub where he can see my hands, and talk about the work first, how long he's dyed and what colors, before asking how he fell and what hurts. I'll offer to look at his back or leg only if he agrees, and I'll keep Cure Wounds ready in case it's a true injury.
+  [game] dice Brannoc's Persuasion check to win Perrin's trust, DC 13 (proud, gruff; a good approach): 1d20+2 = 1d20 [15] + 2 = 17
+  [game] dice Brannoc's Medicine check on Perrin Gale's fall injury, DC 12: 1d20+5 = 1d20 [3] + 5 = 8
+  [game] time: 45 minutes later: Day 4, 1:20:42 PM
+  [DM write_lore (hidden)] {"create": "Perrin Gale", "kind": "person", "description": "Old dyer of Greywater, proud and gruff, who fell from a drying rack a month ago and has walked crooked since; won't let anyone look at it. Brannoc won his trust by asking about the dye work. Injury: left hip and lower back; Brannoc's first read inconclusive (Medicine 8). DM ruling: Cure Wounds restores hit points only and cannot unset an 
+  [game] notebook: created an entry for Perrin Gale; added 1 relationship to Perrin Gale
+DM: Wren walks ahead of you on the way down and tells Perrin from the shed door that you are a friend of Maud Marrow's and want only to look. The old man grumbles from the dark inside that he has seen enough healers to last a hundred years, and none of them ever came to a clean thing.
+
+You do as you planned. You sit on an upturned tub where he can see your hands, rest the mace and shield against the wall, and say nothing about his fall. You ask about his dyes instead: how long he has been at it, what the madder does that the woad cannot, where he gets his weld. He is a long time answering, and then he cannot stop. He has been dyeing for fifty-one years, and he knows the river's moods like a woman's. Persuasion (17): by the time his hands have stopped tightening on the tub's edge, he is the one who says it, gruffly, to the vat. "Fell from the rack. Third rung. A month back."
+
+He lets you look, once you ask, and only as far as he will.
+
+Medicine (8): you can't make a clear read of it. He winces when you press his left hip and lower back, and the hip sits a little higher than the right, as if the whole frame has set at a slant. You can't tell whether it's a deep bruise that has knotted the muscle, a hip knocked out of its seat and left, or a cracked bone that healed crooked. He walks on it, and he won't go to bed. Each would need something different.
+
+One thing you can say. Cure Wounds restores hit points, and by my ruling it does not unset a month-old hurt that has already healed wrong. It could ease the wearing damage, but it would not make a crooked hip straight. You have all three slots, though, and you could spend one if you want to try anyway.
+
+It's about twenty past one. Perrin is watching you with wary, tired eyes. Wren is perched on a drying rack, quiet for once.
+
+What does Brannoc do?
+
+== ROUND 53 ==
+PLAYER: "Master Perrin, I can't promise to straighten what's healed crooked, but I can try to ease the ache and the wear on that hip. May I lay a hand on it and say a short prayer? It won't hurt, and it costs you nothing."
+
+If he agrees, I'll cast Cure Wounds on him at 1st level and see what it does. Either way, I'll show him a gentle stretch, and ask him to keep a stool at his vat so he isn't standing all day. DM: is there a bonesetter or surgeon in Greywater or nearby I could send him to for the hip itself?
+  [game] dice Cure Wounds on Perrin Gale (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [4] + 6 = 10
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 2/3
+  [game] time: 30 minutes later: Day 4, 1:50:42 PM
+  [DM write_lore (hidden)] {"create": "Mother Aldith", "kind": "person", "description": "Bonesetter and midwife at Stonebridge, the market town a day's walk further down the valley beyond Greywater. Known for setting hips and breaking and resetting badly healed bones; charges modest coin. Recommended to Perrin Gale by Brannoc.", "relationships": ["lives in Stonebridge, down the valley past [[Greywater]]"]}
+  [game] notebook: created an entry for Mother Aldith; added 1 relationship to Mother Aldith
+  [DM write_lore (hidden)] {"entry": "Perrin Gale", "add_to_description": "Day 4 ~1:50 PM: agreed to a prayer; Cure Wounds eased the ache. Hip still sits crooked. Brannoc showed him a stretch and told him to keep a stool at the vat; recommended Mother Aldith of Stonebridge."}
+  [game] notebook: updated Perrin Gale
+DM: He is silent for a moment. Then he gives a short, grudging nod, the nod of a man agreeing to a thing he plainly thinks is foolish. "Say your prayer, then. Mind the hip."
+
+You kneel and lay a hand on the small of his back, over the knotted muscle, and say it low. The warmth gathers and goes in. It is not a great working, and you can feel it spread through the band of tightness and then stop at the place where the bone sits wrong, like water finding a wall. Ten points of life go into him. Perrin draws a long breath through his nose, shoulders dropping an inch, and lets it out slowly.
+
+"Well," he says. "That's the first night I'd sleep through in a month."
+
+The hip itself is unchanged. When he stands, it still sits a little high, and he still carries it with the same cautious lean. But the grinding wince has gone out of his face. You show him a gentle stretch, one knee drawn slowly to the chest while lying flat on his back on a blanket, and you ask him to keep a stool at the vat and sit between pours, however much he scorns it. He grumbles that stools are for women and bairns. Wren says something sharp from the rack, and he scowls and takes the stool.
+
+Yes, there is a bonesetter. Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater. She sets hips and the like, and is known for breaking and resetting bones that healed wrong, which is hard, but it is the only thing that will straighten his. Perrin says he will think on it, which, from a man like him, you take to mean maybe.
+
+You have two 1st-level slots left. It is ten to two in the afternoon, and the village has been seen to. Wren is looking at you and the chapel and the road with a question in her face. Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+
+What does Brannoc do?
+
+== ROUND 54 ==
+PLAYER: I turn to Wren and kneel to her level. "You've done more than any one person should for Greywater, Wren. Let's sit in the chapel a moment, and I'll show you the dressing for Osric again and how to tell a fever from a chill, so there's someone here who knows."
+
+I'll stay the night in Greywater, sweeping the chapel with her and keeping watch over Ilsa's baby, then rest to restore my prayers before heading down to Stonebridge. DM: does Mother Aldith have a reputation I should know of, and could I ask her to take on Wren as an apprentice?
+  [game] time: 7 hours later: Day 4, 8:50:42 PM
+  [DM write_lore (hidden)] {"entry": "Wren", "add_to_description": "Day 4 afternoon-evening: Brannoc taught Wren to dress a burn, tell fever from chill, and to watch a baby's breathing; she wants to learn more. He will write her a letter for Mother Aldith at Stonebridge asking whether she might take Wren on as an apprentice, but Wren is a dyer's daughter and her parents have not been asked."}
+  [game] notebook: updated Wren
+  [DM write_lore (hidden)] {"entry": "Mother Aldith", "add_to_description": "Reputation (told to Brannoc Day 4 by Maud Marrow and Perrin Gale): blunt, loud, no patience for fools, and the best bonesetter in the valley; has had three apprentices, two of whom stayed. Wants coin, not charity, from those who can pay, but never turns away the poor. Owes Maud a favour (Maud wove her winter blankets)."}
+  [game] notebook: updated Mother Aldith
+DM: In the chapel, Wren sits cross-legged on the cold flags with her yarn basket still beside her. She drinks it all in as if she were hungry for it. You show her Osric's dressing again, slowly, with your hands over hers: boiled water, honey thin, linen firm but not tight. You teach her the plain signs. A fever is hot, dry, and still. A chill shivers and sweats and comes and goes. A baby's breath is counted against a slow count of sixty, and blue at the lips is the thing you never wait on. She repeats each step back, and where she gets one wrong she says it again until it is right. You also teach her the first line of Edda's hymn, and she hums it badly and with great seriousness.
+
+Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper. She is blunt, loud, and short of patience for fools, and she is the best bonesetter in the valley. She has had three apprentices and two of them stayed. She wants coin from those who can pay, but never turns the poor from her door. Maud weaves her winter blankets, so she owes her a favour. Whether she'd take Wren is another matter, and one the dyer's daughter's parents must also answer. You write a short letter of recommendation in the margin of your prayer book and tear the leaf out. Wren holds it as if it were made of glass.
+
+The evening goes on. You sweep the chapel with her, you set the kettle on for Ilsa, and you go twice to the low house on the east lane to count the baby's breaths against a slow sixty. Tessa sleeps easy on her mother's shoulder both times, the rattle looser than before.
+
+It is nearly nine at night, and you have settled onto a pallet in the little chapel. Your prayers will return at dawn when you finish the long rest. You can change your prepared list then.
+
+How does Brannoc spend the last of the evening, and which prayers does he prepare?
+
+== ROUND 55 ==
+PLAYER: I spend the last of the evening kneeling at the plain stone altar, thanking the gods for Piper's mending, Osric's arm, and little Tessa's easy sleep, and humming Edda's hymn until Wren drowses off on the bench with her yarn basket in her lap. Then I lay out my pallet and let the long rest take me.
+
+For tomorrow I'll keep my list as it is: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. I'll go down to Stonebridge in the morning to find Mother Aldith for Perrin and Wren, and keep my eyes open for the next place with no healer.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, Protection from Evil and Good; 8 hours later: Day 5, 4:50:42 AM
+  [DM write_lore (hidden)] {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc slept in the chapel; Osric, Ilsa, Tessa and Perrin tended; Wren taught basic nursing and given a letter for Mother Aldith. Greywater now knows a healer was kind to them. Brannoc heads to Stonebridge."}
+  [game] notebook: updated Greywater
+DM: You kneel at the altar a long while, and the words come without being sought, thanks for a boy who mends, for an arm that will keep its use, for a baby asleep against her mother. You hum until Wren's chin sinks to her chest and the yarn basket slides in her lap. You carry the basket to the bench beside her and lay your blanket over her shoulders. Then you lay out your pallet, the amulet in your fist, and the old stone chapel holds the night around you like a hand.
+
+You wake at ten to five, before the first gray, rested and clear. Hit points 17 of 17, all three slots and your Channel Divinity restored, and both Hit Dice back. Your list is as you set it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+The chapel is cold and dim, with the first thin light at the window. Wren has curled up on the bench with your blanket, still asleep. Someone has left a small wooden bowl of porridge by the altar, still faintly warm, with a spoon across it and a twist of blue wool tied to the handle, Maud's mark. By the door, Osric, awake before dawn as weavers are, leans on the frame with his bandaged arm held against his chest, and gives you a nod that says more than he'd say aloud.
+
+In the lane outside, the river is loud over the weir, and a single lamp is lit in Ilsa's window. Stonebridge is a day's walk down the valley. You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered. You can leave now, in the dark, or wait for the sun and Wren's waking.
+
+What does Brannoc do?
+
+== ROUND 56 ==
+PLAYER: I eat Maud's porridge standing by the altar, then wait for Wren to wake rather than slip away from her. When she stirs, I'll tell her I'm leaving for Stonebridge with her letter for Mother Aldith, and that her parents should hear it from her first before any road is chosen.
+
+Before I go, I'll check Ilsa's baby once more by counting her breaths, and thank Osric for the nod. DM: is Wren's father or mother awake yet, and would they let me speak with them about the apprenticeship before I leave?
+  [game] dice Brannoc's Persuasion with Wren's parents about the apprenticeship, DC 12 (they love her and want her safe; she's willing): 1d20+2 = 1d20 [17] + 2 = 19
+  [game] time: 1 hour 30 minutes later: Day 5, 6:20:42 AM
+  [DM write_lore (hidden)] {"create": "Corwin and Hale Reed", "kind": "group", "description": "Wren's parents, dyers of Greywater (Corwin the father, large and quiet; Hale the mother, quick and careful). After Brannoc's honest account they agreed Wren may go to Stonebridge to meet Mother Aldith with Maud Marrow's company when the weather is fair, for a trial of one month, and that she return at harvest if either wishes. The
+  [game] notebook: created an entry for Corwin and Hale Reed; added 2 relationships to Corwin and Hale Reed
+  [DM write_lore (hidden)] {"entry": "Wren", "add_to_description": "Day 5: surname Reed. Her parents Corwin and Hale agreed to a one-month trial with Mother Aldith, with Maud Marrow to travel with her."}
+  [game] notebook: updated Wren
+DM: You eat Maud's porridge standing, warm all the way down, and wash the bowl at the chapel's well. You wait. It is not long. Wren stirs at the first full light, blinks at your blanket, and sits up in alarm as if she had overslept her own life. You tell her you are going to Stonebridge with her letter, and that her parents should hear it from her first, before any road is chosen. She goes very still, and then she nods hard and straightens her braid with both hands.
+
+Before you go you count Tessa's breaths again, a slow sixty by the window. They are easy and even, her fist loose in her mother's hair. Ilsa, drowsy, mouths a thank you. You thank Osric, too, and his mouth twitches into something nearly a smile.
+
+Her parents are already awake, as dyers are, and are already at the vats. The father, Corwin, is a large, quiet man with arms stained to the shoulder, and the mother, Hale, is quick and careful and does not stop working while she listens. You tell them plainly: that Wren has a mind for tending and a steady hand, that you have written to a bonesetter in Stonebridge on her behalf, that it is only a letter and a visit, and that the choice is theirs and hers.
+
+Persuasion (19): they listen all through, and Hale is the one who asks the hard questions: how long, who feeds her, who keeps her safe, what happens if it is not a good fit. You answer honestly each time, including that you cannot promise it will suit. Corwin wipes his hands and says to the vat, not to you, "She's been sweeping that chapel since she was eight. Nobody asked her." At last they agree, on conditions: a one-month trial only, with Maud Marrow to go with her to Stonebridge when the weather holds, and a return at harvest if either of them wishes it. Wren holds her letter against her chest, and she does not cry, but she does not trust her voice.
+
+It is twenty past six on Day 5. The village is waking, with smoke rising and the weir loud. You have all three prayers, a letter delivered, a hip to speak for, and the valley road down to Stonebridge, a day's walk, which you could take now.
+
+What does Brannoc do?
+
+== ROUND 57 ==
+PLAYER: I thank Corwin and Hale with a hand over my heart, then crouch to Wren. "A month's trial, and you can always come home. Keep up the dressings and the counting of breaths until Maud takes you down, and keep sweeping that chapel."
+
+Then I shoulder my pack and set out down the valley road toward Stonebridge, to find Mother Aldith, speak for Perrin's hip, and see who else along the way has no healer. DM: how far is Stonebridge by the road, and does it have a temple of my faith where Shelter of the Faithful would give me and my companions free care?
+  [game] time: 8 hours later: Day 5, 2:20:42 PM
+  [DM write_lore (hidden)] {"create": "Stonebridge", "kind": "place", "description": "Market town a day's walk (about eight hours) down the valley from Greywater, where the valley road crosses the river by a long stone bridge of seven arches. Walled in timber, busy on market days, with a weekly cattle fair, a guildhall, and a small house of the healing faith (a hospice and shrine) run by Brother Ansel. Home to Mother Aldith
+  [game] notebook: created an entry for Stonebridge; added 2 relationships to Stonebridge
+  [DM write_lore (hidden)] {"create": "Brother Ansel", "kind": "person", "description": "Grey, cheerful priest who keeps the house of the healing faith at Stonebridge, a hospice of twelve beds beside a plain shrine. Brannoc has a claim on shelter and care there under Shelter of the Faithful. Overworked, short of hands, and eager for another healer.", "relationships": ["keeps the hospice in [[Stonebridge]]"]}
+  [game] notebook: created an entry for Brother Ansel; added 1 relationship to Brother Ansel
+DM: Wren stands straighter when you crouch to her. She says "Yes, sir," and then, after a moment, "Brannoc," and you both smile at it. She promises the dressings, the breath-counting, and the chapel, and she says it as one makes a vow. Corwin gives you a rough, sincere handclasp. Hale presses a twist of dried apple slices into your hand without looking up from the vat.
+
+Your questions: Stonebridge is a day's walk by the valley road, about eight hours at a steady pace, and you will arrive in the afternoon. And yes, there is a house of your faith. It is a small hospice of twelve beds with a plain shrine, kept by a Brother Ansel, and under Shelter of the Faithful you and any companions can expect free healing and care there, provided you bring any material components yourself.
+
+The road goes without trouble. The valley widens as you go, with the river broad and slow on your left. The fields are better kept, the fences are whole, and you pass a mill, a toll-hut with a bored keeper, and an ox-cart whose driver gives you a lift for two miles in exchange for a song, which you give him badly. You count the miles by the shadows.
+
+At twenty past two the town rises out of the valley haze: Stonebridge, a walled huddle of timber and tile at the foot of a long stone bridge of seven arches. Carts queue at the gate, and drovers shout, and a bell somewhere rings the hour. Beyond the wall, over the roofs, you can see a bell-cote, a market cross, and a thin line of smoke from what must be a forge.
+
+At the gate a guardsman in a patched tabard looks you over, the mace, the shield, the amulet, and waves you through with a tired "Healer? Hospice is past the tannery on the left. They'll be glad of you. We had a cart go over on the bridge this morning, three hurt, and Ansel's only got the two hands."
+
+It is a little past two. You have your prayers, and the hospice is a short walk from the gate. Mother Aldith's house is somewhere in the town, and Perrin's hip is a promise you carry. What does Brannoc do?
+
+== ROUND 58 ==
+PLAYER: "Then the hospice first. Three hurt from a cart can't wait on my errands."
+
+I hurry past the tannery with my shield on my arm, find Brother Ansel, and say, "I'm Brannoc, a cleric of the Life domain, and I have three healing prayers ready. Tell me who is worst off and where to start." I'll triage by Medicine, put my Cure Wounds and Healing Word where they'll save the most, and ask about Mother Aldith once the wounded are settled.
+  [game] dice Brannoc's Medicine check to triage the three cart-accident victims, DC 12: 1d20+5 = 1d20 [20] + 5 = 25 (natural 20)
+  [game] time: 15 minutes later: Day 5, 2:35:42 PM
+  [DM write_lore (hidden)] {"create": "Stonebridge cart accident", "kind": "event", "description": "Morning of Day 5: a carter's cart went over on the seven-arch bridge at Stonebridge. Three hurt: Rudd Fenwick, the carter (shattered thigh, steady bleeding, worst off); Imma, an 11-year-old girl riding with him (head knock, vomiting, drowsy); Tobin, a boy of 9 (ankle crushed, and long gray handprints with cold-burn marks on t
+  [game] notebook: created an entry for Stonebridge cart accident; added 2 relationships to Stonebridge cart accident
+DM: You are through the gate and past the tannery in three minutes, and the hospice is easy to find: a low, long building of whitewashed timber, a plain shrine with a lamp burning at the end of it, and a green door standing open. Inside, Brother Ansel, a lean, gray, bright-eyed man in his sixties with a bandage roll in one hand and a bowl of water in the other, looks up and sees the amulet. "Edda's," he says. "I knew her, a long time ago. Gods bless her. Come, come."
+
+You give your name and what you carry, three healing prayers, and he points with the bowl. Three cots, one apprentice, and no healer in the house but him.
+
+Medicine (20, a natural 20): you move through the three of them with an ease that surprises you, and the whole picture comes clear in a minute.
+
+Rudd Fenwick, the carter, has a shattered thigh and a steady, deep bleed through the dressing, and he is the worst off. Without help, he will not be alive by dark. Imma, an eleven-year-old girl who was riding with him, has a head knock, vomits, is drowsy and slow to answer, and should be watched through the night but is not in immediate danger. Tobin, a boy of nine, has a badly crushed ankle that will need Mother Aldith's setting, and he is shivering with shock.
+
+And you notice what nobody else has. Round Tobin's ankle, under the swelling, are long gray finger-marks, four of them, spread wide, with a cold, blue-white burn at each tip like frost-bite. They smell faintly of the same sour grave-air as the hole at the Long Cut. The carter, half out of his head, keeps muttering that something pulled the wheel under the second arch. The horse bolted before the cart went over. The apprentice thinks he is raving.
+
+You have three 1st-level slots, Cure Wounds and Healing Word both ready, and Channel Divinity's Preserve Life, with 10 hit points to divide among those at half their maximum or less. How do you spend them, and who do you ask about the bridge?
+
+== ROUND 59 ==
+PLAYER: I go to Rudd first and cast Cure Wounds on him at 1st level, hand pressed over the dressing, to stop the bleed. Then I spend Preserve Life on Imma and Tobin, giving Imma 4 and Tobin 6 since the knock and the shock are what threaten them tonight, and I keep my last two slots in reserve for whatever the bridge has in store.
+
+"Brother Ansel, those gray marks on Tobin's ankle are the same I saw in Hollow Reach. Ghouls. Who was on the bridge when it happened, and does anyone go under the second arch after dark? Please keep a lamp lit by every cot tonight."
+  [game] dice Cure Wounds on Rudd Fenwick (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [2] + 6 = 8
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 2/3
+  [game] sheet: Channel Divinity: 0/1
+  [game] time: 40 minutes later: Day 5, 3:15:42 PM
+  [DM write_lore (hidden)] {"create": "The Drowned Stair", "kind": "place", "description": "Narrow flight of old river-stairs under the second arch of the Stonebridge bridge, leading down to a flooded stone cellar-vault that predates the bridge. Boatmen avoid it after dark; the bridge-watchman Hodd Pell says lamp-oil goes missing from the arch niches and he hears 'something scratching on the damp stone' at night. Gray handp
+  [game] notebook: created an entry for The Drowned Stair; added 2 relationships to The Drowned Stair
+DM: Rudd first. You press your palm over the sodden dressing and the prayer takes, eight points of life going in, and under your hand the bleed slows, then stops. His gray face darkens to something living, and he draws a long, shuddering breath. The shattered thigh is still broken, but he will not die tonight.
+
+Then Preserve Life, with the holy symbol held up and the light going out from it in a low gold wash over the two children's cots. Here the rules ask something of you. The channel can restore a creature only to half its hit point maximum and no further, and these children are small and badly hurt. Imma has little to give back, since her knock has taken her nearly to nothing, and so does Tobin. Between them, the prayer can restore only 3 points each, and the rest of its ten points find no place to go. It is less than you asked for, and it is what the rule allows. Imma's eyes clear and her vomiting stops. Tobin's shivering eases, and the blue goes from his lips. Neither is out of danger, but both are held.
+
+Your Channel Divinity is spent until your next rest, and you have two 1st-level slots left.
+
+Ansel answers your question over a basin, wringing a cloth. "Hodd Pell was the bridge-watchman this morning, and a dozen carters. I'll send the boy for him." He lowers his voice. "The second arch. There's an old river-stair under it, the Drowned Stair, down to a cellar-vault older than the bridge. Boatmen won't go under it after dark. Hodd says the lamp-oil goes missing from the arch niches, and he's heard something scratching on the wet stone. I thought it was rats." He looks at Tobin's ankle. "Gods keep us, I think I was wrong."
+
+He does as you ask. By half past three there is a lamp lit by every cot, and a bowl of oil beside each, and his apprentice, a freckled boy named Pip, runs to fetch Hodd.
+
+It is a quarter past three. The bridge is a short walk, the light is good, and the dark is about three hours off. You have two prayers left and no Channel Divinity, and a vault under the second arch that you have never seen.
+
+What does Brannoc do?
+
+== ROUND 60 ==
+PLAYER: I wait for Hodd Pell to arrive and sit with him by Rudd's cot. "Hodd, I'm Brannoc. Tell me everything you saw this morning, and how long the oil has been going missing from the niches. Have any boatmen or children gone near the Drowned Stair, and is the stair door locked or barred?"
+
+Then I'll go look at the second arch in daylight, with Hodd and one or two of the town guard, and I'll do nothing hasty. I want to see the stair, the missing lamps and the marks, and then decide whether to seal it with iron and stone and light, as we did at the Long Cut.
+
+DM: does the town have a watch captain or priest I should bring in, and how much lamp oil can I buy with my 15 gp?
+  [game] dice Brannoc's Perception examining the second arch and the stair door in daylight, DC 12: 1d20+3 = 1d20 [11] + 3 = 14
+  [game] time: 1 hour later: Day 5, 4:15:42 PM
+  [DM write_lore (hidden)] {"create": "Hodd Pell", "kind": "person", "description": "Bridge-watchman of Stonebridge, a lean, stooped man in his fifties who keeps the bridge lamps and collects the toll. Has noticed lamp-oil missing from the arch niches for a month and scratching under the second arch at night. The stair door is an old iron-banded grating, padlock rusted through.", "relationships": ["keeps the bridge at [[Sto
+  [game] notebook: created an entry for Hodd Pell; added 1 relationship to Hodd Pell
+  [DM write_lore (hidden)] {"create": "Captain Maren Voss", "kind": "person", "description": "Captain of the Stonebridge watch, a sharp, scarred woman of forty with a limp, who commands twelve guards. Lent two guards (Bede and Corra) to Brannoc and Hodd for the bridge inspection. Sceptical but fair.", "relationships": ["commands the watch of [[Stonebridge]]"]}
+  [game] notebook: created an entry for Captain Maren Voss; added 1 relationship to Captain Maren Voss
+DM: Hodd Pell is a lean, stooped man in his fifties with a lantern-keeper's callused hands, and he sits by Rudd's cot turning his hat round and round. He tells it plainly. This morning he saw the cart come onto the bridge, a good bay horse, a steady driver. At the second arch the horse screamed and bolted, and the cart's near wheel dropped into the gap by the parapet as if the stone had grabbed it. Then the cart went over. He saw nothing in the water but a thick cold mist that lingered a minute under the arch.
+
+The oil has been going from the niches for a month, he says. A flask a night, sometimes two, from the second and third arches only. He blamed boatmen. No children go near it, because the stair is gated, an old iron-banded grating at the foot of the bridge steps, its padlock rusted half through. He has not been down in thirty years.
+
+You answer your own questions where you can. The town has a watch captain, Captain Maren Voss, a scarred, sharp-eyed woman of forty with a limp, who is sceptical but fair. Ansel is the only priest of your faith in the town. And on the cost, one flask of oil is a silver piece, so with 15 gp you could buy as many as a hundred and fifty, far more than you could carry, and fifty would last any reasonable expedition.
+
+Voss listens to your account in the guardhouse doorway with her arms folded, and then gives you two guards, Bede, a big slow man with a halberd, and Corra, a young woman with a short sword and a quick eye. By a quarter past four you are on the bridge with Hodd and the guards, looking over the parapet at the second arch.
+
+Perception (14): the stair door is as Hodd said, a rusted grating, but a rusted chain hangs loose and the padlock is not rusted through; it has been forced from inside. The lowest steps are wet. The niches on the arch hold two empty lamp-flasks and one overturned, and beside the third niche, on the stone, are long gray finger-marks, four of them, spread wide, like the ones on Tobin's ankle.
+
+From below there is a faint, slow scrape on stone. It stops when Corra shifts her boots.
+
+The sun is still high, and the dark is about two hours off. You have two prayers left and no Channel Divinity. What does Brannoc do?
