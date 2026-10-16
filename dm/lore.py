@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import copy
 import difflib
+import os
 import re
 from typing import Any
 
@@ -466,4 +467,31 @@ def notes(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[s
             for n in tasks)
     if out:
         text += "\n[Notebook: names from the last turns]\n" + "\n".join(out)
+    if SAID and seen:
+        said = said_before(lore, transcript, seen)
+        if said:
+            text += "\n[Said in play before, about names in the last turns]\n" + "\n".join(said)
     return lore, text + "\n" + REMINDER
+
+
+# Trial (autoloop, 2026-10-16), off unless DM_SAID is set: the DM wrote 217 notebook entries in 180 rounds and read
+# none, and most contradictions were with words said in play. This gives it those words: for the names in the last
+# turns, the latest sentences of its own earlier replies (before the last SAID_AFTER turns) that name them.
+SAID = bool(os.environ.get("DM_SAID"))
+SAID_AFTER = 3  # turns too recent to repeat: they're in the conversation as it is
+SAID_EACH, SAID_MAX = 2, 8  # sentences per name, and in all
+_SENTENCE = re.compile(r"[^.!?\n]+[.!?]?")
+
+
+def said_before(lore: dict[str, Any], transcript: list[dict[str, Any]], names: list[str]) -> list[str]:
+    pats = {n: _pattern(_names(lore, n)) for n in names}
+    got: dict[str, list[str]] = {n: [] for n in names}
+    last = now(transcript) - SAID_AFTER
+    for t, e in reversed(turns(transcript)):
+        if t > last or e["kind"] != "dm":
+            continue
+        for s in reversed(_SENTENCE.findall(e["text"])):
+            for n, p in pats.items():
+                if len(got[n]) < SAID_EACH and p.search(s):
+                    got[n].insert(0, f"{n}, turn {t}: {s.strip()}")
+    return [x for n in names for x in got[n]][:SAID_MAX]
