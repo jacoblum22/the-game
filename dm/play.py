@@ -340,7 +340,9 @@ class Game:
         @tool("change_party", "A companion joins or leaves the party (the PC and at most 2 companions). add: the "
               "companion's full set of level-1 choices, in the form build_character takes (name, race, class, "
               "ability_method standard_array, base_scores, choices, cantrips, spells, prepared, alignment, personality, "
-              "appearance); srd_options gives the ids. Then level_up them (who) to the PC's level. remove: a companion's "
+              "appearance); srd_options gives the ids. choices is {id: [entries]}, each entry an option letter or "
+              "exact name, or {option, picks} for an option with a further choice ({\"option\": \"a\", \"picks\": "
+              "[\"Longsword\"]}). Then level_up them (who) to the PC's level. remove: a companion's "
               "name, when they leave or die.",
               {"type": "object", "properties": {"add": {"type": "object"}, "remove": {"type": "string"}}})
         async def change_party(a: dict[str, Any]) -> dict[str, Any]:
@@ -661,6 +663,11 @@ LATE = ("Your reply has already gone to the player as written; nothing you write
         "your tool calls before your reply.")
 STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing has been shown to the player yet. '
             "Write your full reply to their last message now; it replaces that line.")
+# A turn can stop before the reply is written (autoloop, 2026-10-16): a fight run on while the PC lay unconscious used
+# up the 40 model calls of a reply, and the player saw only dice and tracker lines (2 of 180 rounds). The DM is asked
+# once for the reply.
+CUT_SHORT_ASK = ("[Not from the player] Your turn stopped before you wrote your reply ({}). The player has seen only "
+                 "the game's lines since their last message. Write your full reply to it now.")
 
 
 async def turn(game: Game | Creation, text: str) -> None:
@@ -704,7 +711,13 @@ async def turn(game: Game | Creation, text: str) -> None:
     failed = await ask(game, text, said)
     if isinstance(game, Game):
         tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
-        if not failed and tools and game.reply_len < FULL_REPLY:
+        if failed and tools and game.reply_len < FULL_REPLY:
+            game.log("failed", failed)  # kept in the save, never shown
+            if held:
+                game.log("stub", "\n\n".join(held))
+            held[:], game.reply_len = [], 0
+            failed = await ask(game, CUT_SHORT_ASK.format(failed), said)
+        elif not failed and tools and game.reply_len < FULL_REPLY:
             stub = "\n\n".join(held)
             game.log("stub", stub)  # kept in the save, never shown
             held[:], game.reply_len = [], 0

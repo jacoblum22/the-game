@@ -1,5 +1,5 @@
 """A block of an autoloop game as text, round by round, for reading: the player's line, the game's lines, the DM's
-hidden notebook writes and lookups (marked), and the reply. Earlier rounds are summarised by the notebook only.
+hidden notebook writes and lookups (marked), and the reply. Only the rounds asked for (the opening too, from round 1).
     py -3.12 evals/autoloop/dump.py <name> <first> <last> <out.txt>"""
 import json
 import sys
@@ -28,7 +28,7 @@ for n, r in enumerate(rounds(t, meta["play_starts"])[first - 1:last], first):
             lines.append(f"  [refused] {e['text']}")
         elif k == "call":
             lines.append(f"  [DM {e['tool']} (hidden)] {json.dumps(e.get('input'), ensure_ascii=False)[:400]}")
-        elif k in ("stub", "hidden"):
+        elif k in ("stub", "hidden", "failed"):
             lines.append(f"  [{k}, not shown] {e['text']}")
         elif k == "dm":
             lines.append(f"DM: {e['text']}")

@@ -114,9 +114,11 @@ def test_failed_call_can_go_on(monkeypatch: Any, tmp_path: Path) -> None:
 
 def test_too_many_rounds(monkeypatch: Any, tmp_path: Path) -> None:
     g = new_game(tmp_path)
-    _, said = run(monkeypatch, [reply(use(f"t{i}", "next_turn"), stop="tool_use") for i in range(model.MAX_ROUNDS)],
+    # the reply is asked for once (CUT_SHORT_ASK), and that runs out of calls too
+    _, said = run(monkeypatch, [reply(use(f"t{i}", "next_turn"), stop="tool_use") for i in range(2 * model.MAX_ROUNDS)],
                   g, "go")
     assert any(f"more than {model.MAX_ROUNDS}" in s for s in said)
+    assert len([t for t in g.transcript if t["kind"] == "failed"]) == 1
     assert g.messages[-1]["role"] == "user"  # the results are kept; the next line joins them
 
 
@@ -370,6 +372,28 @@ def test_stub_is_asked_for_again(monkeypatch: Any, tmp_path: Path) -> None:
     assert not any("Both are recorded" in s for s in said) and any(WHOLE in s for s in said)
     asked = fake.calls[2]["messages"][-1]["content"]
     assert play.STUB_ASK.format("Both are recorded on your sheet.") in json.loads(json.dumps(asked))[-1]["text"]
+
+
+def test_reply_cut_short_is_asked_for(monkeypatch: Any, tmp_path: Path) -> None:
+    """A turn that runs out of model calls after tool calls, with no reply written: the DM is asked once for it."""
+    g = new_game(tmp_path)
+    monkeypatch.setattr(model, "MAX_ROUNDS", 2)
+    fake, said = run(monkeypatch, [
+        reply(use("t1", "roll", dice="1d20", reason="claw"), stop="tool_use"),
+        reply(use("t2", "roll", dice="1d20", reason="claw"), stop="tool_use"),
+        reply(text(WHOLE)),
+    ], g, "I hold my ground")
+    assert [t["text"] for t in g.transcript if t["kind"] == "failed"] == ["the reply took more than 2 model calls"]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE] and any(WHOLE in s for s in said)
+    asked = json.dumps(fake.calls[2]["messages"][-1]["content"])
+    assert "Your turn stopped before you wrote your reply (the reply took more than 2 model calls)" in asked
+    assert "t2" in asked  # the last tool results and the ask go in the same user turn
+
+
+def test_failure_without_tools_is_not_asked_again(monkeypatch: Any, tmp_path: Path) -> None:
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [reply(text("Half a"), stop="max_tokens")], g, "I look")
+    assert len(fake.calls) == 1 and not any(t["kind"] == "failed" for t in g.transcript)
 
 
 def test_note_before_tool_calls_is_not_shown(monkeypatch: Any, tmp_path: Path) -> None:

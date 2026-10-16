@@ -39,6 +39,7 @@ def block(name: str, first: int, last: int) -> dict:
         c["stub (lost reply, re-asked)"] += kinds["stub"]
         c["hidden (text after a late call)"] += kinds["hidden"] > 0
         c["refused tool calls"] += kinds["refused"]
+        c["turn stopped (failed)"] += kinds["failed"]
         c["rounds with no reply"] += not dm
         c["rounds with bullets"] += bool(BULLET.search(dm))
         c["rounds with bold"] += "**" in dm
