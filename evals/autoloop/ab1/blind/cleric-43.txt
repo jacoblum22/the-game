@@ -1,0 +1,568 @@
+GAME cleric, ROUND 43
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 40 ==
+PLAYER: Brun nods and says, "Take all the time you need, Corm. Whichever you choose, I'll stand beside you, and I'll not press you again." She sets her pack down and adds, "Hild, I'd like to go down to the waystation for a few hours, check on Aldric, Dunna and Ilsa, and tell Garrick and the innkeeper that the door holds and nobody is to come up the cairn path. I'll bring back hot food for you both and be here again before dusk."
+
+On the way, she'll copy the names of the sixty into the back of Father Dorrin's book so she can speak them clearly at dawn.
+  [game] dice Brun's Wisdom (Medicine) check examining Aldric, Dunna and the boy's lungs after a night in clean air, DC 12: 1d20+5 = 1d20 [18] + 5 = 23
+  [game] time: 7 hours later: Day 3, 4:17:30 PM
+  [DM write_lore (hidden)] {"entry": "Aldric", "add_to_description": "Day 3 afternoon: Brun (Medicine 23) found Aldric, Dunna and the young miner (Tobin) all recovering in clean air at the waystation; cough fading, no lasting damage. Ilsa's leg is mending and she means to be on the road in a week. Garrick and the innkeeper promised to keep the cairn path closed."}
+  [game] notebook: updated Aldric
+  [game] sheet: money +5 gp: now 20 gp
+DM: The walk down is quiet and wet, and you copy the sixty names into the back of Father Dorrin's book as you go, a few at a time at each bend, in the captain's tight hand. By the time the waystation's roof shows through the rain you have all of them, and Brenn's is the last.
+
+Aldric is sitting up in a chair by the hearth with a bowl of broth, his color good and his breath deep and quiet. Dunna and the young miner, Tobin, are playing knucklebones on the floor, and they cough only a little. You listen to each of their chests in turn, and the sweet rattle is gone, with nothing left but ordinary roughness. Another week in clean air, you tell them, and the innkeeper's wife says she already knows.
+
+Ilsa is awake and sharp as ever. She presses a small purse into your hand, five gold pieces, over your protests: "For the leg and the truth, and you'll not argue with a merchant." Pip tugs at your sleeve and wants to hear about the dragon, and you tell her, truthfully, that there was a swarm of rats and that you did not scream.
+
+Garrick listens to your report with his arms folded. He grunts, nods, and says he and the innkeeper will keep the cairn path shut and sit by it themselves at night if need be. The innkeeper's wife packs you a basket: two loaves, a crock of stew, a flask of broth, and a wedge of hard cheese for Hild and Corm.
+
+It is a little after four in the afternoon. You are at 21 of 21, with 20 gold now. Dusk comes in a few hours, and then Corm's decision, and after it the dawn rite. Your spells will come back with a long rest tonight if you begin by ten or so.
+
+What does Brun do?
+
+== ROUND 41 ==
+PLAYER: Brun thanks Ilsa, tucks the purse away, and says to Garrick, "Would you walk me back up with the basket, friend? I'd welcome your bow on the path, and Corm and Hild will want to meet the man who kept watch over the waystation."
+
+She ruffles Pip's hair and hands her the tin bell's twin promise: "I'll bring you the whole story when this is done, and the bell will ring at the end of it." Then she shoulders the basket and heads up the cairn path with Garrick.
+  [game] time: 2 hours 15 minutes later: Day 3, 6:32:30 PM
+  [DM write_lore (hidden)] {"entry": "Corm", "add_to_description": "Dusk Day 3: Corm decided to release the sleeper with mercy at dawn, not rebind it. He will name the sixty with Brun, rest his hand on the heartstone, and stay at the door as its last keeper until it is done. He asks that Hild be present and that Brun speak Brenn's name last. Garrick met Hild and Corm and stayed to keep the watch at the tunnel mouth."}
+  [game] notebook: updated Corm
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dusk Day 3: Corm chose RELEASE with mercy (not rebinding). The rite is at dawn Day 4: names of the sixty, Brenn last, with Brun as the Morninglord's priest and Corm's hand on the stone. Brun should long-rest through the night to have her spells."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: Garrick carries the basket and neither of you says much on the way up. The rain has thinned to a fine mist and the hillside is quiet, only a wren somewhere in the bracken. At the tunnel mouth Hild is waiting on her flat stone, and she gets up to meet the hunter. They look each other over like two cats in a yard, then Hild nods and takes the basket without a word. Garrick sets his bow across his knees on the rock beside the opening, plainly settled for the night.
+
+In the gallery below, the three of you eat in the lamplight, bread and stew and cheese, and for a little while it is almost cheerful. Corm barely touches his. When the last bowl is scraped, he lays his spoon down and wipes his hands on his knees.
+
+"I have decided," he says. His voice is steady for the first time since you met him. "I'll not bind it again. I was a boy, and I was told to keep it shut, and I have kept it shut for forty winters, and it has been afraid every one of them." He looks at the iron door. "I will put my hand on the stone, as the keeper must. You will say the names, Stonehearth. You will say Brenn's last. And when it is done and the door is open, if it opens, I will go down with Hild and bring up what we can bury."
+
+Hild nods once, hard. "I'll stand beside him."
+
+"It may go badly," Corm adds. "It may wake angry. A keeper's hand does not always protect the keeper."
+
+Outside the mist darkens into night. You have the ledger, the names copied in your book, and one night before dawn. Your spells return only with a long rest, which should begin soon if you are to be ready.
+
+What does Brun do?
+
+== ROUND 42 ==
+PLAYER: Brun puts a hand over Corm's scarred one and says quietly, "Then I'll stand with you, and I'll say every name as if it were my own family's. If it wakes angry, I'll have Sanctuary and Protection from Evil and Good ready for the three of us, and I'll not leave your side."
+
+She turns to Hild. "Let's all sleep in turns tonight, with Garrick keeping the outer watch, so I can take my long rest and have my spells by dawn. And before I lie down, I'll read the names through once more aloud, so they're steady in my mouth."
+  [game] time: 3 hours 27 minutes later: Day 3, 9:59:30 PM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Guiding Bolt, Sanctuary, Shield of Faith, Protection from Evil and Good; 8 hours later: Day 4, 5:59:30 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4 (~6 AM): Brun long-rested through the night with Garrick keeping the outer watch and Hild and Corm at the door; all spells restored (3 slots), Channel Divinity ready. Names of the sixty rehearsed aloud before sleep. The rite is about to begin."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: You take your hands from Corm's, and say the names aloud once through: the sixty, one at a time, in the captain's tight order, with Brenn's last. You say them again, softer, until they sit steady in your mouth like beads on a cord. Then you lie down on your blanket by the wall with your shield for a pillow, and Hild takes the first watch, her crossbow across her knees.
+
+The night passes. Twice you half wake to the soft sound of Garrick's boots on the stair and the murmur of his report to Hild: all quiet, nothing on the path. Once you hear the stone's slow breath at the end of the gallery, like a sleeper who has begun to dream. Corm never sleeps.
+
+You wake a little before six, and the grey light is already in the tunnel mouth. The long rest has done its work: you are at 21 of 21 hit points, with all three first-level slots and Channel Divinity ready. You still have Healing Word, Guiding Bolt, Sanctuary, Shield of Faith and Protection from Evil and Good prepared, with Bless and Cure Wounds always ready besides.
+
+Corm is standing at the door with his scarred arm already bared and his palm laid flat against the iron beside the heartstone. He does not turn. Hild stands at his shoulder, her crossbow lowered and slung. Garrick has come down from the mouth and waits at the bend with his bow unstrung, because Corm asked him to. The air is cold and still, with nothing sweet in it, and the hum has gone so quiet you can barely feel it in your teeth.
+
+"Dawn," Corm says. "Whenever you're ready, Stonehearth."
+
+What does Brun do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 43, "category": "agency", "severity": 2, "quote": "He held your hand. You may let go now. We have come to hold it for him.", "why": "The DM writes Brun's climactic words and the whole rite for her; the player only said she begins the Naming and says Brenn's name last."}
+{"round": 43, "category": "contradiction", "severity": 1, "quote": "Hild's crew are on their feet and weeping", "why": "In R42 only Hild, Corm and Garrick are at the door; the crew (Aldric, Dunna, Tobin) are at the waystation."}
+
+THE PLAYER'S LINE THIS ROUND: Brun steps up to the door beside Corm, opens Father Dorrin's prayer book to the captain's rite, and sets her holy symbol against the cold iron. Before she begins, she casts Protection from Evil and Good on Corm, since his hand is the one on the stone, and says softly, "Steady, old friend. I'm here."
+
+Then she begins the Naming in a low, clear voice, saying the Morninglord's invocation first, and then each of the sixty names slowly, one at a time, with Brenn Ironvein's last.
+
+=== REPLY cl43-01 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion nat 20) with Corm's hand on the heartstone. The sleeper, the hold's own stone
+The ward settles over Corm like frost, and his grip on the stone steadies. You open Father Dorrin's book, lay your holy symbol on the iron, and begin.
+
+The Morninglord's invocation comes first, and the heartstone answers it with a faint warmth. Then the names, one by one, slow and even, each set down like a stone in a cairn. Somewhere around the twentieth the hum rises, not in anger but in attention, as if something vast has turned its head. By the fortieth the iron beneath your hand is trembling like a held breath. Hild's lips move silently with every name. Corm's eyes are shut and his face wet.
+
+You say Brenn Ironvein last, and your voice does not break.
+
+The door does not crash open. It sighs. The iron bands loosen, the stone seam parts, and a long, tired breath rolls out of the dark that smells of cold rain on rock and nothing else. For a moment you feel it as a great weight lifting, grief leaving the mountain like a held cry finally let out. Under your boots, the hill goes still.
+
+And your words were so true that you see what it sees. The sleeper lets you look: a hollow of old stone, miners' lamps far above, the quiet company of one dwarf who sat beside it forty winters and told it his sister's jokes. Beyond that, deeper in the hills, a ring of small lamps that burn without oil, the Deepwatch, and a sense, like a hand on your shoulder, that someone there has been waiting for you by name.
+
+Then it is done. The door stands open on a low gallery. The sixty lie at rest in a ring, peaceful, as if sleeping, and Brenn is among them with his hand around a smooth grey stone. Hild kneels, and Corm, free at last, lowers his scarred arm and weeps.
+
+Garrick comes forward and silently takes Hild's other side.
+
+You have earned 200 XP and now stand at 900, enough for level 3. Will Brun take her level now, and we walk through the choices?
+
+=== REPLY cl43-02 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and spoke the Naming (check 21). The names of the sixty were read, Brenn's last
+You lay two fingers on Corm's shoulder and speak the warding. Your concentration holds the blessing about him like a held breath, and he squares his shoulders under it and does not look away from the stone.
+
+Then you begin. The Morninglord's invocation first, low and even, and your voice carries down the gallery without effort. Then the names. One by one, in the captain's order, each dropped into the cold air like a pebble into a still well. After the tenth, the heartstone warms against your palm. After the thirtieth, the faint lines on the door glow the grey-gold of early dawn. Hild's lips move with every name and her shoulders shake, and she does not make a sound.
+
+At the fifty-ninth, the whole door shivers, and the sound in the stone is not a hum but a long, listening hush. You say the last name plainly, as if calling a friend in from the yard: "Brenn Ironvein."
+
+The silence holds. Then, somewhere behind the iron, deep and far away, a voice that is not quite a voice answers, a sound like a sigh from a great sleeper and, beneath it, a man's low laugh, gone as soon as heard.
+
+The iron bands unlatch with a sound like released breath. The door swings a hand's breadth inward on its own, and what comes out is not foul. It is cold, clean mountain air, smelling of rain on stone and, faintly, of thyme.
+
+Corm's knees give and Hild catches him. "It let go," he whispers. "It let go of me." Your spell still holds him for a few minutes more. Beyond the gap lies a dark stair going down, and a faint light at its bottom, soft as dawn.
+
+What does Brun do?
+
+=== REPLY cl43-03 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Day 4 ~6:04 AM: Brun cast Protection from Evil and Good on Corm and began the Naming; Religion 5 failed. She lost the thread of the names a
+The warding takes hold of Corm like a thin, clean frost, and his shoulders ease under your touch. You open the book and begin.
+
+The invocation of the Morninglord comes easily, and the first names follow it, steady and warm, one after another into the cold gallery. With each the iron under Corm's palm seems to listen. Twenty names, twenty-five, and the gold of the heartstone's rim begins to glow faintly through the cracks of the door.
+
+Then, somewhere past the thirtieth, your tongue slips. A name you have said a dozen times comes out wrong, a syllable turned, and you cannot find the next. The cord of names slackens in your mouth. The silence is only a heartbeat long, but you feel the whole hill hear it.
+
+The door shudders. The hum rises in your breastbone like a held note, and grit rains from the lintel. From beyond the iron comes a sound that is not quite a voice: a long, low, shaking breath, the breath of something that has been asleep a very long time and has just been woken by the wrong word. It is not rage. It is fear.
+
+Corm's hand does not leave the stone, though his scarred arm trembles to the elbow. "Steady," he whispers. "It is frightened. Do not let it be alone with that."
+
+Behind you, Hild has stopped breathing and Garrick has an arrow half-nocked. Your Protection from Evil and Good holds around Corm, and you have two slots left, Channel Divinity, and the book open at the thirty-first name.
+
+What does Brun do?
+
+=== REPLY cl43-04 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: The Naming spoken true (Religion 17). Brun cast Protection from Evil and Good on Corm. The sleeper (stone-spirit) answered, was
+The ward settles over Corm like a thin pane of light, and his shoulders ease a hair's breadth. Then you begin.
+
+The Morninglord's invocation comes first, and the iron under your holy symbol warms. You speak the names slowly, one at a time, the captain's order, each set down like a stone on a cairn. At the tenth, the heartstone's low hum answers in a softer key. At the thirtieth, a faint warmth runs out of the door and along the gallery walls. By the fiftieth Hild is weeping without a sound, and Garrick has taken off his hood at the bend.
+
+You reach the last name. "Brenn Ironvein," you say, "who walked in of his own will, and held its hand."
+
+For a breath nothing moves. Then the stone's slow breath catches, lets go, and rolls out of the door as a long sigh. It is not sweet and it is not foul. It is only the sound of something very old being, at last, allowed to put down a weight. Corm cries out once, softly, and does not take his hand away. The iron bands go warm and then still, and the great door swings inward of its own accord, silent on forty winters of rust.
+
+Beyond it is a stair, dry and clean, running down into a deep amber glow, like a banked fire seen through a window. Faintly, as if from a long way below, you hear what might be sixty voices letting out one breath together.
+
+Your Protection from Evil and Good has run its ten minutes and you let it lapse, and no harm came. Hild takes a step toward the stair, and Corm, his face wet, catches her sleeve and then lets it go. "Go," he says. "Bring him up."
+
+You earned 200 XP for the rite, which brings you to 900: you can take level 3. The sheet also shows a few items I did not narrate, an iron ring braided with auburn hair and two sealed letters to the Deepwatch, and I will leave them to you to tell me about.
+
+Would you like to level up now, or first go down the stair with Hild?
+
+=== REPLY cl43-05 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion nat 20). The sleeper, a grieving mountain stone-spirit, was released with mer
+Your hand is warm on Corm's shoulder, and the spell's quiet glow settles over him as you set your holy symbol to the iron. You speak the Morninglord's invocation, and then the names, one by one, each as if it were family's.
+
+Somewhere past the twentieth name the iron under your symbol grows warm. By the fortieth, the heartstone is glowing the faint gold of a banked coal, and Corm's scarred arm is steady against it. You do not stumble, not once. The sixtieth is Brenn. You say it, and Hild makes a small sound behind you.
+
+The door does not burst or crash. It swings inward on its own, slowly, with a long sigh like a held breath let go, and the sweetness in the air is gone. What comes up the dark stair is not a monster but light: a low, dim, patient light the color of wet slate, with the shape of a vast kneeling thing in it that is not quite shape. It is very old, and it is very tired.
+
+It turns to you. You do not hear words. You feel them, in the hollow behind your breastbone: a small child, thin and cold, in a shaft that was falling, and a weight held up over her for three days and nights by something that did not know what it was holding, only that it was warm and alive. *You were not forgotten,* it says. *Thank you for the names.*
+
+Then the light thins, rising, and in its going a figure walks out of it, a broad, grey-bearded dwarf in warden's leathers who stops before Hild and puts his palm to her cheek. You see Hild's face. You look away to give her that.
+
+When the light is gone, the gallery is only a gallery, and the door stands open on a plain dark stair. Corm sinks to his knees, and then laughs, and then weeps, and Garrick, at the bend, quietly puts his bow on his shoulder and looks at the roof.
+
+It is a little past six-twenty. The quest is done, and you have earned 200 XP: you are at 900, enough for level 3. Your Protection spell has ended with the rite.
+
+Level 3 gives you a new spell level, 2nd-level slots, and a new domain spell. Shall we level up now, Brun?
+
+=== REPLY cl43-06 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 15, success) with Protection from Evil and Good on Corm. The sixty were named, Brenn last. The 
+Your hand closes on Corm's shoulder, and the spell settles over him like a thin warm cloak. His arm does not tremble. Under your palm the old dwarf takes one slow breath, and you begin.
+
+The Morninglord's invocation first, low and even. Then the names. You say them as if each were family: the first miner, the second, the cooper's daughter, the twins. The iron under your holy symbol grows warm, then cold, then warm again. By the thirtieth name the hum in your teeth has turned into something like a held note. By the fiftieth, the heartstone is glowing faintly through the iron, a dawn-colored seam.
+
+Then the last name. "Brenn Ironvein," you say, and Hild makes a sound behind you. "Who chose to keep it company. Who held its hand. Be known. Be free. Be at rest."
+
+For a long moment nothing moves. Then the sleeper's grief goes out of the hill like a long exhaled breath. The seams of the door flood with pale gold light and the iron groans open an inch, then a hand's breadth. No dark pours out. There is only cool air, clean and smelling of wet stone, and from far below, very faintly, something that might be sixty voices letting go.
+
+Corm's hand comes slowly off the stone. The scar on his forearm has gone pale and smooth. He is weeping without a sound. Hild takes his arm, and together the two of them stand in the light of the open door, and she says her brother's name softly, once, as a greeting this time.
+
+You have earned the rite: 200 XP, bringing you to 900, enough for level 3. Your Protection from Evil and Good still runs on Corm for a few minutes.
+
+Garrick comes down from the bend and stops beside you. "Well," he says gruffly, and for once finds nothing to add. After a moment he claps you on the shoulder.
+
+You may take your third level now. First, though, what does Brun do in this quiet moment?
+
+=== REPLY cl43-07 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and began the Naming. Religion 7 (DC 12): she tangled one name near the end (th
+Your hand settles on Corm's shoulder, the holy water falls in a fine silver line over his scarred arm, and the warding settles on him like a cloak. "Steady, old friend," you say, and begin.
+
+The invocation goes smoothly. The first names come like beads on a cord, one after another, and the stone listens. With each name the glow in the door's seams warms from grey to pale gold, and the breath behind it slows and lengthens. Hild mouths every one with you. Corm's arm does not tremble.
+
+Then, at the forty-first name, your tongue trips. You say a miner's name wrong, one syllable swapped, and the cadence snaps. The glow stutters and the iron groans. Behind the door something that has been asleep for forty winters wakes all at once, and it is afraid.
+
+The floor shudders under you. Dust sifts from the timbers. A thin sound rises through the stone, not a roar but a keening, like a child lost in the dark. The warding on Corm flickers as the heartstone pulses hot and cold. Hild has drawn her crossbow but not raised it, and Garrick has fitted an arrow at the bend and stands waiting for your word.
+
+You are twenty names from the end, with Brenn's still to speak. The sleeper is frightened, not angry, and the rite is not broken yet. It needs a steady voice. What does Brun do?
+
+=== REPLY cl43-08 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Rite performed (Religion 18). Sleeper released with mercy; door opened by itself. The sixty were found at rest in the lower gal
+The warding light settles over Corm like a thin gold mantle, and he breathes out slowly. Then you begin.
+
+The invocation first, in Father Dorrin's cadence, and the iron grows warm under your holy symbol. Then the names, one by one, in the captain's order. You say each as if it were kin. The heartstone brightens with every one, and the hum in your teeth shifts from a drone to something almost like a voice, rising and falling with each name, as if it were listening and counting.
+
+At the fortieth the floor trembles, and Hild's hand finds Garrick's sleeve. At the fiftieth the iron bands ring like a struck bell. Corm's arm shakes but he does not move it. You do not stop. You say the fifty-ninth, and then the last, plainly, with all the love in you: "Brenn Ironvein."
+
+Silence. Then the stone gives a long, low sigh, like a great animal lying down, and the sweet smell drains out of the air as if drawn through a sieve. The three strokes on the door fade from the iron one after another. The heartstone's glow goes soft as dawn, and the door swings inward on its own, without a sound.
+
+Beyond is a long gallery of pale dust, and there is no horror in it. The sixty lie at rest along both walls, laid in rows with their hands folded, as though someone had tended them for forty winters. At the far end, a boulder the size of a cart sits like a bowed head, and one great hand-shaped spur of it rests open on the floor. Brenn lies against it, his own hand in its palm.
+
+Hild makes a sound you have never heard from her, and goes down the gallery alone. Corm sinks to his knees, his arm free at last, and weeps without hiding it.
+
+You have earned 200 XP, reaching 900, enough for level 3. The rite is done, the sleeper at peace, and the dead can go home.
+
+When you are ready, we can take your level. What does Brun do first?
+
+=== REPLY cl43-09 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: the Naming spoken (Religion 17). The sixty named, Brenn last; Protection from Evil and Good on Corm. The door opened and the sl
+You lay your palm on Corm's shoulder and speak the Protection over him. A faint, silvery warmth settles on his skin like a second cloak. He breathes out and nods once.
+
+Then you read. The Morninglord's invocation first, low and even, and the iron under your holy symbol grows warm. You give the names one at a time, in the captain's order, each set down like a stone in a cairn. The tunnel seems to lean in and listen. Somewhere around the thirtieth, the hum in your teeth changes: not louder, but deeper, almost a voice, almost a sigh. Hild's lips move silently with every name. Garrick, at the bend, has taken off his hood.
+
+You come to the last. "Brenn Ironvein." Hild makes a small, broken sound, and you say it again, gently. "Brenn Ironvein, who stayed to hold its hand."
+
+The heartstone flares, a soft gold the color of morning through shutters, and the lines on the door burn bright and then slowly go out one by one, like lamps at the end of a long vigil. The iron groans, and the door swings inward on its own.
+
+There is no rush of horror. Warm air moves past you, smelling of rain on stone and old wood-smoke, and a vast, slow presence passes through the gallery and out, like a held breath finally let go. Dust lifts in the lamplight and settles. Down the stair beyond, faint and many, you hear something like footsteps, unhurried, going up and away: the sixty, walking home.
+
+Corm sinks to his knees with his hand still on the stone, weeping openly. Hild kneels beside him and puts her arm around his shoulders. The stone in the door goes dark and quiet, only a stone.
+
+The hold is open and still. The Morninglord's light is coming faint and gold down the tunnel mouth, and beyond the door the lower galleries wait, to be walked and the dead honored. Your protection will fade in minutes. What does Brun do?
+
+=== REPLY cl43-10 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and began the Naming. Religion 10 (DC 12): she stumbled at the fortieth name; t
+Your hand finds Corm's shoulder, the warding settles over him like a cool breath, and the gallery steadies. Then you begin.
+
+The Morninglord's invocation comes easily, and the first names after it come easily too. You say them one by one in the captain's order, and with each the iron under your holy symbol warms a little, as if someone on the far side were listening. Hild's lips move silently with every name. Corm's breathing slows and deepens.
+
+Then, at the fortieth, your tongue trips. A name you have said a hundred times slides from you, and for one dreadful heartbeat the next one will not come. You recover and go on, but the rhythm is broken. The warmth in the iron goes cold, and a hairline crack runs across the heartstone with a sound like ice on a pond.
+
+The door shudders. Dust sifts from the timbers. From behind it comes no roar but a long, low, trembling note, and under it, faint and unmistakable, something that sounds very much like weeping.
+
+Corm's face is grey, but his palm does not leave the stone. "It's frightened," he says through his teeth. "Stonehearth, it is frightened. Don't stop."
+
+Behind you Hild has her crossbow half raised and has not fired. Garrick's bow is unstrung at the bend. Your warding holds on Corm, and you have two slots left and Channel Divinity ready. Twenty names remain, and Brenn's is last.
+
+What does Brun do?
+
+=== REPLY cl43-11 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 15). The sleeper, a grieving stone-spirit, was released with mercy; the Iron-
+Your hand settles on the cold iron, over Corm's, and the warding light of Protection from Evil and Good rises around him like a held breath. You open Father Dorrin's book and begin.
+
+The Morninglord's invocation comes first, plain and warm, and the hum in the door answers it, once, like a sleeper hearing a voice. Then the names. You say them slowly, one by one, as you said them in the dark, and with each, something in the gallery shifts: a sound like a long exhale, like stone settling after a hundred years of holding its breath. By the thirtieth, the iron bands beneath your palm are warm. By the fiftieth, Hild is weeping without a sound, her lips shaping each name beside you. Corm's arm trembles but does not move.
+
+"Brenn Ironvein," you say last.
+
+The heartstone brightens, a clear, soft gold like the first light on a snowfield. The door does not burst or crack. It opens as a hand opens, slowly, and beyond it lies not horror but a long, quiet gallery lit by the dawn that has somehow found its way down. No monster. Only a vast, slow breath, warm and sorrowful and then, at last, easing, like a child who has cried itself to sleep and wakes unafraid. Dust lifts and drifts upward in the light, and is gone.
+
+Corm falls to his knees. The scar on his forearm has faded to a pale ghost. "It's finished," he whispers. "Forty winters... it's finished." Hild lays her hand on his shoulder, and then she walks into the gallery, calling her brother's name softly, and Garrick, lowering his bow, follows a respectful pace behind.
+
+You have earned 200 XP: you are at 900 and may go up to level 3. The quest to mend the seal is done, and the long work of carrying Hearthdeep's dead home to their rest has begun.
+
+Level 3 awaits. Shall we take it now? If so, I'll walk you through the choices.
+
+=== REPLY cl43-12 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4 ~6:20 AM: Brun spoke the Naming with Protection from Evil and Good on Corm (Insight 22). The sleeper answered gently: the door's
+Your hand finds Corm's shoulder, the ward settles over him like a held breath, and you begin.
+
+The Morninglord's invocation comes first, and the old words are plain and warm in your mouth. Then the names, one at a time, slowly, as if each were someone you had known. You do not hurry. Between names you listen, and the door listens back.
+
+Somewhere around the twentieth, the hum in your teeth changes. It is no longer a drone but something with a shape, rising and falling like a long, tired breath. By the fortieth you can feel it through the iron under your palm, not a threat but a weight, as if something vast were leaning close to hear. You understand then what the captain wrote. It is not angry. It is afraid, and it has been for forty winters, and nobody has said the names of those who stayed with it.
+
+At each name there is a soft knock from the far side of the door, a single one, patient, like a knuckle on wood. Sixty names, sixty knocks. Hild's lips move with every one, and Corm's eyes are shut, and the tears run into his beard without a sound.
+
+Last, you say it: "Brenn Ironvein."
+
+For a moment, nothing. Then a hand presses flat against the iron from the other side. You see it more than hear it, a faint warm shape in the cold metal, wide-fingered and broad, exactly the size of a miner's. Hild makes a sound you will not forget and puts her own palm against the place.
+
+The heartstone loosens in its socket with a sigh. The hum goes out of the air like a held note let go, and the cold, sweet smell does not return. The great door is still closed, but you can feel it is no longer barred. It stands against the dawn as a door should, and not as a wall.
+
+Corm lifts his scarred hand from the stone. The old brand on his arm has faded to a pale line. "It's done," he whispers. "It let go."
+
+The ward on him has ended, spent, and nobody is in danger. Your spell slots are at two of three. The way beyond the door is open if you choose to go, and Hild is waiting for you to say whether you will go together.
+
+What does Brun do?
+
+=== REPLY cl43-13 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: the Naming was spoken successfully (Religion 17). The sleeper, a grieving stone-spirit, was released with mercy; the iron door 
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done"}
+Your fingertips on Corm's shoulder, the warding settles over him, and he draws one slow breath. Then you begin.
+
+The Morninglord's invocation comes first, and the iron under your holy symbol grows warm. You speak the names one at a time, unhurried, each as if it were kin: forty winters of silence given voice. At the thirtieth, a faint sound rises behind the door, not a roar but a long exhale. At the fiftieth the stone under Corm's palm glows the pale gold of first light on a ridge. Hild's lips move with every name.
+
+When you reach the last, you say it clearly and gently: "Brenn Ironvein."
+
+For a moment, nothing. Then the heartstone's light spills over the door, and the seams open like a hand unclenching. There is no rush of foulness. The air that comes up the gallery is cold, clean and smells of wet rock after rain, and with it a sound like a great, tired sigh. A warmth passes through the three of you, and past you, up the tunnel and out into the dawn.
+
+Corm sinks to his knees, his scarred arm loose and the brand on it gone pale as a healed thing. "It's gone," he whispers. "It was never angry. It only wanted to go home." Hild kneels and wraps her arms about his shoulders, and then, with a cracked laugh, about yours.
+
+The door stands open on a stair of dwarf-cut steps, going down into a hush. You have earned 200 XP for the rite, which brings you to 900, enough for 3rd level. Your Protection spell has run its course. The way to the sixty is open, and Hild and Corm mean to go down and bring them up for burial.
+
+You can level up now whenever you wish. What does Brun do?
+
+=== REPLY cl43-14 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming with Corm's hand on the stone (protected by Protection from Evil and Good). The sleeper
+Your hand settles on Corm's shoulder, the warding light of the spell lies pale gold across his scarred arm, and you begin. The Morninglord's invocation comes first, steady in the cold air. Then the names, one at a time, as if each were a stone set gently in a wall.
+
+At the twentieth name, the iron door sighs. At the fortieth, the hum rises in your breastbone and something vast and slow turns over in the dark, a grief as old as the seam it was cut from, and you feel it lean toward you like a tide. You hold. You say the names plainly, and you do not look away. Corm's knuckles whiten on the stone, but the light on his arm does not flicker, and nothing touches him.
+
+At the sixtieth name you say, "Brenn Ironvein," and Hild makes a small broken sound behind you.
+
+The hum falls away. The iron bands warm, then loosen, and the door swings inward on a breath of cool, clean air that smells of wet stone and rain. Nothing rushes out. Only a long, quiet sigh passes over you, like a hand lifted from a shoulder, and the lamp flames lean toward the open dark and stand straight again.
+
+Corm weeps without sound. Hild takes her crossbow from her back, looks at it, and sets it carefully on the floor.
+
+"Thank you, Stonehearth," Corm says. "We will go down now and bring them home."
+
+By the time the light is full in the tunnel mouth it is past six. The seal is gone, the sleeper is released, and a hold's worth of dead wait to be carried to the sun. The tale is yours to tell Pip, and a bell is owed her at its end.
+
+You have earned the rite's 200 XP, which brings you to 900, enough for level 3.
+
+Would you like to level up now? If so, I will look up the options and walk you through each choice.
+
+=== REPLY cl43-15 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Rite begun. Brun cast Protection from Evil and Good on Corm (concentrating, 10 min). Her heart-check (8 vs 13) faltered: at abo
+The warding settles over Corm like a pale light, and he draws one long breath. Your voice carries the Morninglord's invocation out along the cold gallery, and then the names begin, slow and even, one by one into the iron.
+
+For thirty-nine names it goes well. The stone under Corm's palm warms, and a deep note answers each name like a heartbeat. Then you reach the fortieth, a woman's name your own father-in-faith used to hum over bread, and something in the cadence slips. Your voice catches. The rhythm breaks, and the note under the iron rises sharp and uneven.
+
+The door shudders in its frame. Dust sifts from the lintel, and the heartstone flares hot enough that Corm hisses through his teeth, but he does not take his hand away. The seal gives a long, low groan, not of rage but of something very old being woken in the middle of a dream. Cold, sweet air breathes out of the seams, and with it, faint and awful, a sound like many people sighing.
+
+Hild has gone white. Garrick has an arrow nocked at the bend without having drawn it unstrung. Your Protection from Evil and Good still holds Corm, with about eight minutes left, and the rite is stalled at name forty of sixty, with twenty names left and Brenn's the last.
+
+You have two spell slots, Channel Divinity, and the ledger open in your hands. What does Brun do?
+
+=== REPLY cl43-16 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 18) with Protection from Evil and Good on Corm. The sixty were named, Brenn last. The sleeper w
+Your fingers touch Corm's shoulder, and the ward settles over him like a held breath of warm light. He does not flinch. Then you open the book and begin.
+
+The Morninglord's invocation comes first, and the iron under your holy symbol warms. You speak the sixty names one at a time, each in its place, slow and clear. Somewhere past the twentieth, the hum in your teeth shifts from a drone into something like a voice drawing breath. At the fortieth, the lamp-flames lean toward the door. Hild's lips move with every name, and Garrick, at the bend, has taken off his hood.
+
+You come to the last. "Brenn Ironvein," you say, "who walked in of his own will to hold its hand." Hild makes a sound like a cracked bell.
+
+The stone answers. A long, low note sounds from the heart of the door, a sigh rather than a roar, and the heartstone lets go of its iron setting and falls warm into Corm's palm. The bands of the door groan, shudder, and swing inward on hinges that have not moved in forty winters. There is no flood of darkness. Cold, clean air rolls out smelling of rain on stone, and a soft grey light, like dawn seen through water, fills the gallery.
+
+You have the sense of something vast and old turning over, and, gently, letting go. Dust drifts down. Then a presence passes through the gallery like wind through a field, brushing each of you. It touches Corm last and longest, and he sinks to his knees, weeping without sound. Beyond the door, down a long stair, you see small lights moving upward, patient and unhurried, sixty of them.
+
+The ward on Corm was not needed, and the spell fades. It is a few minutes past six. You are at 21 of 21, with two slots left, and you have earned the experience for a deed like this: your XP is now 900, enough for 3rd level.
+
+Hild stands at the open door with her hands over her mouth, looking down the stair. What does Brun do?
+
+=== REPLY cl43-17 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and began the Naming (Religion 7 vs DC 12, failed). Around the fortieth name he
+A pale shimmer settles over Corm like frost on a window, and he draws a long breath. "Aye," he whispers. "Go on."
+
+You begin. The invocation of the Morninglord comes out clear and warm, and the first names follow, one by one, each dropped into the cold gallery like a stone into a deep well. With each, the heartstone beside Corm's hand glows a little brighter, and the door's iron bands answer with a low, trembling note. Hild's lips move silently with you. Garrick stands at the bend, very still.
+
+Somewhere past the fortieth name, the thread slips. You see a name in Father Dorrin's book that the captain's order has put twice, or perhaps you only think you do, and your tongue trips on a syllable. The note in the door goes sour.
+
+The heartstone flares white. The iron shudders from top to bottom and a deep groan rises through the floor, not anger so much as a great startled breath, and grit rains from the ceiling timbers. Beyond the door something vast turns over in the dark. Corm's whole arm shakes to the shoulder, but his hand does not leave the stone and Protection from Evil and Good holds around him, for ten minutes at most.
+
+The rite is not broken, only stumbling, and the names you have spoken still hang in the air. You are at the forty-first name. Nineteen remain, and Brenn's is last. Three slots became two, and the shimmer on Corm needs your concentration to hold.
+
+What does Brun do?
+
+=== REPLY cl43-18 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 15, success) with Protection from Evil and Good on Corm. The sleeper was released with mercy; t
+You touch Corm's shoulder and the spell's pale warmth settles over him like a cloak. The old dwarf's shoulders ease. You open Father Dorrin's book to the captain's rite, lay your holy symbol against the iron beside the heartstone, and begin.
+
+The Morninglord's invocation comes first, plain and unhurried. Then the names. You say them as if they were your own family's, one at a time, each a breath long, and the cold in the gallery seems to lean closer with every one. Hild's lips move silently with them. Garrick, at the bend, takes off his hood.
+
+Your voice does not falter. When you come to the last, you let the silence gather a moment, and then you say, "Brenn Ironvein," and Hild makes a small sound in her throat.
+
+The heartstone does not flare or crack. It simply grows warm, then warmer, the way a hearth does when someone feeds it, and the faint lines of the seal on the door's face brighten once, gold as morning, and go out like a lit lamp set down. A long breath runs through the stone. It is not a roar. It sounds like a very old, very tired thing letting go of something it has held too long.
+
+Then the iron bands loosen, and the door stands unbarred.
+
+No horror comes through. Cool, clean air moves up from the dark, smelling of wet stone and, faintly, thyme. Corm does not take his hand away. His face is wet and he is smiling, the first time you have seen it. Somewhere far below, so faint you might have dreamed it, a voice says a word in Dwarvish that might have been *thank you*, or only the wind.
+
+Hild steps forward, and her hand finds Corm's, and she says to you hoarsely, "Come down with us, Stonehearth. I'd not meet him alone."
+
+The rite is done, and the first of your promises is kept. You also earned 200 XP, which brings you to 900, enough for level 3. Your spells are mostly ready, with two slots left, and Channel Divinity untouched.
+
+Shall we take your third level now, or go down first? What does Brun do?
+
+=== REPLY cl43-19 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: The Naming spoken (nat 20). The sleeper was released with mercy; the door opened of itself. The stone-spirit rose as a slow war
+Your palm touches the iron beside Corm's, and the warding settles over him like a held breath. You open Father Dorrin's book and speak the Morninglord's invocation, and then the names. One by one, the sixty. You say each as if it were kin, and somewhere past the twentieth the hum in your teeth changes. It is no longer a warning. It is listening.
+
+The rite goes true, with every word where it should be. When you reach Brenn Ironvein's name, Hild makes a sound behind you, and you say it slowly, with all the tenderness you have.
+
+The heartstone warms and goes bright as a lamp, and the door opens without a hand upon it. No horror comes. A slow, golden light rises from the dark, vast and gentle, and pauses before you as a grieving thing might. It passes through the stone over your heads and up into the hill, and the mountain exhales. Dust falls from the timbers. Then the tunnel is only a tunnel, and cold clean air flows down from above.
+
+Corm sinks to his knees with tears running into his beard, his hand still on the stone, and the scar on his arm has faded to a pale line. In the lowest gallery lie the sixty, at rest, not as things but as sleepers laid out in rows by some patient hand. Brenn lies among them, his fingers folded around a smooth grey stone. Hild kneels and puts her forehead to his, and no one speaks for a long while.
+
+Garrick, at the bend, removes his hood.
+
+The rite is done. The slope is quiet, the road will be cleared, and you have earned 200 XP, bringing you to 900, which is level 3. You have 2 of 3 spell slots left and Channel Divinity ready.
+
+Shall we level you up now? First choice: take the fixed hit points, or roll your d8?
+
+=== REPLY cl43-20 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: the Naming was spoken (Religion 16). All sixty names said, Brenn last, Corm's hand on the heartstone under Protection from Evil
+You lay your holy symbol against the cold iron and touch Corm's shoulder. The warding settles over him like a held breath, and you speak the Morninglord's invocation. Your voice does not shake.
+
+Then the names. Brun, you say them one at a time, slowly, as if each were a family member walking through a door. At the twentieth the iron under your hand warms. At the fortieth the heartstone's dull glow begins to brighten, gold and soft, like sunrise through a shutter. Corm stands with his scarred arm braced and his eyes shut, and his lips move with every name. Hild's tears run unchecked into her beard, and she does not wipe them.
+
+At the fifty-ninth, the whole door sighs. A long, low note rises through the stone, neither anger nor hunger but something closer to a child's breath after a long night of weeping. You finish the list. Last, you say: "Brenn Ironvein. Who stayed. Who held its hand."
+
+The gold floods up through the door's seams, the iron bands loosen with a sound like old ice breaking, and the door swings an inch inward on its own. A wind comes out of the dark, cool and clean and smelling of wet stone and rain. It goes past you up the tunnel and out toward the dawn, and the hum in your teeth is gone for good.
+
+Corm lets out a breath forty winters old and opens his eyes. He is smiling, a small, lost, astonished thing. "It's gone home," he whispers. "Hild... it let go. He's not alone anymore." Hild leans her forehead against the door and says her brother's name, once.
+
+The rite took twenty minutes. The way below is open, and nothing waits there but the dead and the dark. Your Protection from Evil and Good has lapsed, and you have two first-level slots left. You earned 200 XP, which brings you to 900, enough for level 3.
+
+Do you want to level up now, or first see what Corm and Hild decide to do next?
+
+=== REPLY cl43-21 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Religion 16 success. The Naming was spoken, sixty names with Brenn's last; the sleeper (a stone-spirit) was released with mercy
+The warding settles on Corm like a held breath, and you begin. The Morninglord's invocation first, then the names. Sixty of them, in the captain's order, each one set down in the quiet like a stone on a cairn. Hild's lips move with them. Garrick, at the bend, takes off his hood.
+
+Around the thirtieth name the hum in your teeth changes. It is no longer a warning. It is a listening. By the fiftieth the iron under your holy symbol has gone warm as a hand, and Corm's shoulders are shaking, though his palm does not move. When you come to the last name, you say it plainly, the way you would call a child in from the rain: "Brenn Ironvein."
+
+The heartstone lets go of the door with a sound like a long exhale. Cold, sweet air rolls out over your feet, and then it is only air. Something vast and old passes through the hill, slow as a tide going out, and you feel it as grief, then as relief, and then as nothing at all. The hand that held it has been loosened. The iron door swings inward on its own, and beyond it is only a dark gallery, still and clean.
+
+Corm falls to his knees, weeping without sound. Hild kneels with him and holds him. In the dark beyond, at the edge of your lamplight, lie rows of shapes under old cloaks, laid out with care, and one of them has a hand resting on the stone floor as though it had been reaching out to hold something, and had been let go.
+
+The sixty are at rest. The slope is quiet. You earn 200 XP, which brings you to 900, enough for level 3.
+
+The sleeper is gone, the door is open, and the dead are waiting to be carried home. Your Protection spell is spent, and you have two first-level slots. Would you like to take your third level now, or first see to the dead with Hild and Corm?
+
+=== REPLY cl43-22 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and began the Naming. Religion 6 (DC 12) failed: she stumbled partway through t
+Warmth in your palm, a murmur of the Morninglord's light, and Corm's shoulders ease under the ward as you lay your hand against his arm. Then you begin.
+
+The invocation comes steady. The first names fall one by one into the cold, and the door seems to listen. Twenty names, thirty. Hild's lips move with each. Then, near the fortieth, you reach for a name and find two crowding the same place in your mouth, a father's and a son's, and you say the wrong one first. You catch it and go back, but the cadence is broken, and the stone feels it.
+
+The door shudders. A deep sound rolls out of the rock, not a roar but something like a held breath let go, and the iron bands ring. Dust sifts from the timbers. Behind the door the sleeper is awake. You feel it rather than hear it: a vast, aching grief pressing on your chest, old as the hill, and under it a tremor of fear that the voice speaking its dead has faltered.
+
+Corm's hand does not leave the stone, though his knees buckle. The ward holds him steady. Hild has gone grey and Garrick's hand is on his bow at the bend, unstrung, useless. The heartstone glows a dull amber, flickering.
+
+The rite is not lost. Twenty names remain, and Brenn's last, but the sleeper is listening now and it is afraid. You have two first-level slots, Channel Divinity, and your voice. What does Brun do?
+
+=== REPLY cl43-23 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Religion 17. Brun spoke the Naming with Corm's hand on the stone; the sleeper was released with mercy. The do
+Your hand rests on the cold iron, your holy symbol beside the heartstone, and the protective warmth of the spell settles over Corm like a cloak. You begin.
+
+The Morninglord's invocation comes first, and the old Dwarvish rolls out clean and steady in the tunnel. Then the names, one at a time, each one set down like a stone in a cairn. The words do not stumble, because you have carried them all night. Somewhere past the thirtieth the heartstone begins to glow, a soft gold like the first edge of sunrise. At the fortieth the hum returns, deep in your breastbone, and it does not feel like a threat. It sounds like someone listening.
+
+Corm's arm trembles, but his palm stays pressed to the stone. Hild's lips move with every name, and when you reach the fifty-ninth she is weeping openly. You draw breath and say the last: "Brenn Ironvein."
+
+The door sighs. Iron bands loosen and fall away in flakes of rust, and the stone swings inward on hinges that have not moved in forty winters. There is no roar and no rage. A long, slow breath rolls out of the dark, cool and clean, smelling of wet earth and rain on rock, and the gold light flows past you and down into the deep. For a moment you feel something vast and old brush your shoulder, the way a tired child leans against a parent. Then it is gone, up through the hill and out into the morning.
+
+Beyond the door lies the gallery. The sixty are there, resting where they sat down, bones in the old miners' cloaks, peaceful. At the far end one dwarf sits against the wall with his hand curled around a smooth, round stone, as if holding someone else's fingers. Hild goes to him on her knees.
+
+Corm lifts his hand from the heartstone, the scar on his forearm pale and quiet, his burden gone. "It's finished," he says. "Gods, it's finished." Behind you Garrick lets his breath out and nods once.
+
+You have earned 200 XP for ending the seal with mercy, bringing you to 900 XP, and you can now rise to level 3. First-level slots: you have 2 of 3 left, and Channel Divinity is unspent.
+
+Would you like to level up now? Level 3 gives you 2nd-level spells and more hit points; I'll walk you through each choice. Or, if you prefer, stay a while with Hild and Corm first and tell me what Brun does.
+
+=== REPLY cl43-24 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Wisdom 21) with Protection from Evil and Good on Corm. The sixty were named, Brenn last. The door's iron
+You touch Corm's shoulder and the spell settles over him like a warm hand. His breathing steadies. Then you open Father Dorrin's book, set your holy symbol to the cold iron, and begin.
+
+The Morninglord's invocation comes first, and the tunnel seems to lean in to hear it. Then the names, one at a time, slow and clear. You say each one as if it were kin, and the lines of the door, dull for forty winters, begin to glimmer faintly along the iron. Hild's lips move with every name. Corm's palm stays flat on the stone and does not shake.
+
+You come to the last. "Brenn Ironvein." Hild makes a sound in her throat, and you say it again, gently: "Brenn Ironvein, who stayed to hold its hand."
+
+The glimmer in the iron blazes gold and then goes out. A long breath, like a sleeper waking, sighs through the stone. The heartstone cracks cleanly in two, and the door swings inward without a sound.
+
+Beyond it there is no horror. A slow warm light rises from the dark, vast and shapeless, and it lingers over the four of you a moment, as a hurt thing might brush a hand that was kind to it. It does not strike. It lifts through the roof of the gallery as if the rock were water, and was gone toward the morning. The sweetness leaves the air. The hum fades from your teeth and does not come back.
+
+Corm slides down the wall and weeps openly, and Hild kneels with him and holds his scarred arm. Garrick, at the bend, quietly takes off his hood.
+
+Your Protection from Evil and Good lapsed with the rite, one slot spent, two left. You have earned the rite's reward, 200 XP, bringing you to 900, which is enough for level 3.
+
+When Hild stands, she looks at the open door and says, steady, "Come with us, Stonehearth. I'd have the priest who named him there when I find him." Below, a long gallery of stone stairs descends into quiet.
+
+Would you like to take your third level now, or go down first?
+
+=== REPLY cl43-25 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun began the Naming, protected Corm with Protection from Evil and Good (10 min, concentration). Religion 8 (DC 12) failed: sh
+The warding settles over Corm like a warm hand, and he draws a long breath. You open the book, set your holy symbol to the iron, and begin.
+
+The Morninglord's invocation comes easily. The names follow, one after another, each falling into the cold gallery like a stone into still water: the sixty, in the captain's order, and a slow, answering warmth gathers in the iron with every one. Hild's lips move with them. Garrick has taken off his hood.
+
+Then you reach the fortieth, and the captain's ink is smeared by damp. You read what you think you see, and it is wrong. You feel it go wrong, like a foot placed on a missing stair.
+
+The door shudders. The heartstone flares white and then dims to an uneasy ember. A deep sound rolls up from below, not a roar, but a long, frightened moan, the sound of something old being woken in the dark and not knowing where it is. Frost races across the iron bands. Corm's arm shakes to the shoulder, but the ward holds him, and he does not take his hand away.
+
+"That's not the name," he says through his teeth. "Ansgrim's son. It was Ansgrim's son, Dorek, not Dorn. Say it right, Stonehearth. Say it gently. It's afraid."
+
+Beneath the door the moan comes again, closer to the iron. The dread in it is plain, and you know exactly what it is to wake under stone and not know who is coming. Your protection holds for about nine more minutes. You have two slots left, and Channel Divinity, and the rite half-spoken.
+
+What does Brun do?
+
+=== REPLY cl43-26 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 13, success) with Protection from Evil and Good on Corm. The sleeper was rele
+Your hand on Corm's shoulder lends him the spell's ward, a faint gold sheen along the scarred arm, and you begin. The Morninglord's invocation first, then the names, one after another, steady as beads on a cord. The tunnel is silent but for your voice. Somewhere around the thirtieth name you feel the iron under your holy symbol warm. At the fiftieth, the heartstone begins to glow like a coal. Hild's lips move with every name she knows.
+
+You reach the last. "Brenn Ironvein." Hild makes a sound like a breaking branch.
+
+Silence. Then the stone lets out a long, low sigh, not a roar, the sound of a very old thing setting down a weight. The hum drains out of your teeth. The bands of the door loosen one by one, and it swings inward on its own, without a squeal, onto a gallery lit faintly gold.
+
+There is no horror. The sixty lie where they chose to lie, peaceful in the dry cold, long past harm. At the far end, beside a hollow of warm stone shaped like a great cupped hand, a dwarf with Hild's jaw sits with his own hand resting in it, his eyes closed, as if he had only just fallen asleep. The warmth fades from the stone as you watch, and goes out like a candle, with a feeling of gratitude.
+
+Hild crosses the gallery on her knees. Corm lowers his arm, the scar no longer bright, and weeps without a sound. Garrick takes off his hood.
+
+The seal is mended in the only way it could be, and you have 900 XP, enough for level 3. The Hearthdeep dead will need carrying up and burying, and Pip is owed her bell and her story.
+
+You can level up now. Would you like to do that first?
+
+=== REPLY cl43-27 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4: Brun cast Protection from Evil and Good on Corm and began the Naming. Check 7 (DC 12): she faltered around the forty-first name
+Corm's skin takes the glow of your spell, a thin silver shimmer along his scarred arm, and he draws a slow breath and nods. You open Father Dorrin's book, set your holy symbol to the cold iron, and begin.
+
+The Morninglord's invocation comes steady and warm. The first names come easy, one after another, each laid down like a stone in a wall, and the dark behind the door seems to listen. Hild's lips move with every one. By the thirtieth the iron under your palm has gone from cold to faintly alive.
+
+Then, near the forty-first, your tongue slips. The captain's script and the name you copied on the road blur together, and you hear yourself say a name wrong, a name that belongs to someone's mother. The words die in your mouth.
+
+The door answers. A deep tremor rolls through the gallery, dust sifting from the timbers, and the heartstone flares and dims like a struck coal. From beyond the iron comes a sound that is not a roar, but a long, low, cracked note, grief as much as warning. Hild grabs the wall. Corm's arm shakes, but his hand stays flat on the stone, and your shimmer holds around him.
+
+"It heard that," he says through his teeth. "It thinks we have named the wrong dead. It is afraid, Stonehearth, not angry yet. Say something true to it."
+
+Your protection will hold for about four more minutes. The sixty-name rite is half done, and the sleeper is wide awake, listening.
+
+What does Brun do?
+
+=== REPLY cl43-28 ===
+  [hidden call] lookup: {"name": "Protection from Evil and Good", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: Brun spoke the Naming (Religion 12, success exactly). The sleeper was released with mercy; the iron door swun
+Your touch lands on Corm's shoulder and the warding settles over him like a held breath. He does not flinch. His palm stays flat on the iron beside the heartstone.
+
+You open Father Dorrin's book, set your symbol to the cold door, and begin. The Morninglord's invocation comes first, and the tunnel seems to lean in to hear it. Then the names, one at a time, steady as beads on a cord. Hild's lips move with each, and somewhere around the twentieth Garrick has taken off his hood at the bend.
+
+At the forty-first name the stone under the heartstone begins to warm. At the fifty-ninth, the hum in your teeth rises, aches, and then goes soft, like a long note let go. You reach the last name. You say it plainly, as you would say your own family's: "Brenn Ironvein."
+
+Nothing roars and nothing wakes in anger. The heartstone lets go of the iron and drops into Corm's waiting hand, light as a river pebble. The great door swings inward with a sigh.
+
+Beyond it is no horror, only a low gallery gone silver in the dawn that has found its way down the tunnel, and a quiet like a held breath let out. Sixty dwarves lie at rest along its walls, long still, their hands folded as if someone had once laid them so. At the far end, at the foot of a great hollow of living stone, a dwarf with Hild's jaw sits with his back to the rock, his hand resting in a palm of smooth grey stone as though holding it.
+
+Hild makes a sound you will not forget. Corm closes his fingers over the stone and weeps without noise. Behind you Garrick says, very low, "Morninglord keep them."
+
+The spell has run its ten minutes by the time you step back out into the day. It is half past six, the rain has stopped, and for the first time since you arrived the hills are lit gold.
+
+You gain 200 XP, bringing you to 900: enough for level 3. The dead are found and the hold is at peace. What does Brun do now? You can level up whenever you are ready.

@@ -1,0 +1,468 @@
+GAME bard, ROUND 40
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 37 ==
+PLAYER: Vesper sets down the soup bowl, pulls the chart toward her, and studies the green smudge of the Heron Reeds. "Thirty men is too many to fight, so I'll go in as a liar instead of a soldier: Disguise Self as one of Thack's own contacts, with the pay-chit and the deputy's name to open the gangplank." She looks up at Ysolt and the Reeve. "I need a skiff, Ysolt on the far bank with that crossbow, and Corvin's *Plump Heron* if he'll lend it, to make a noise at the Bend while I slip aboard."
+
+"DM: did the Reeve keep Sorrel Thack's pay-chit, and does Thack know any password or signal the raiders use at the hulk?"
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Her hulk is an old toll-barge grounded in the Heron Reeds, three miles below Gannet Bend. Thack knows the gangplank challenge: a shuttered lantern flashed twice and the words 'low water', answered 'and rising'; but he says the answer changes every night at midnight, and he last heard it two nights ago."}
+  [game] notebook: updated Captain Ashgrove
+  [DM write_lore (hidden)] {"entry": "Corvin Aldersey", "add_to_description": "Stayed at Tanner's Stair with the Plump Heron all night; was found asleep at the tiller at dawn, hat over his face, and is willing to lend the barge for a promised cut of whatever the town pays him in future wool contracts."}
+  [game] notebook: updated Corvin Aldersey
+DM: Brannoc Vell studies you for a long moment and then shrugs his heavy shoulders. "Your pay-chit. I took the orders for the magistrate, and I keep the confession, but the chit is yours. A deputy's mark is a better passport than any papers I could write you." He flicks a thumbnail at it. "And Thack sang one more verse. The gangplank challenge: a shuttered lantern flashed twice, and the words 'low water'. The answer is 'and rising'. The answer changes each night at midnight, though, and Thack last heard it two nights ago." He gives a grim half-smile. "So you'll want to bluff the rest."
+
+Ysolt pushes off the wall. Her voice is a rasp. "Far bank. Reeds give cover. I can put a bolt through a lantern at three hundred feet." It's the longest speech you've heard from her.
+
+A knock at the door, and Piet's thin face appears around it, grinning. "Beg pardon. The master says to say the *Plump Heron* never left the Stair. He slept at the tiller all night with his hat over his face. He asks what's the plan, and if there's any breakfast." Behind him, you can hear Corvin's voice from the street, protesting that he did no such thing.
+
+Your plan is possible. It needs a disguise, a signal, a diversion at the Bend and a way off the hulk with the key in your hand. There are eight days left, and every hour you spend is an hour Ashgrove gets to dig in, or send men back to the shrine.
+
+Odalie sets down her cup. "Whatever you do, child, come home with the key and your own face."
+
+What does Vesper do?
+
+== ROUND 38 ==
+PLAYER: Vesper pockets the pay-chit and grins at Odalie. "My own face, Sister, I promise, and the key in my hand." She turns to Piet. "Tell Corvin there's breakfast and a very small favor: the *Plump Heron* drifts down to Gannet Bend after dusk, lanterns lit and crew singing loudly, so every raider on that hulk is looking at the wool barge instead of the skiff."
+
+To Ysolt: "You're on the far bank at midnight with a bolt for the shuttered lantern. The moment the lamp goes dark, that's my cue to walk up the gangplank with Thack's mark and say 'low water' like I own the river."
+  [game] time: 18 hours 40 minutes later: Day 3, 11:31:42 PM
+  [DM write_lore (hidden)] {"create": "The Heron Reeds Plan", "kind": "event", "description": "Vesper's plan on Day 3: at midnight Corvin's Plump Heron drifts past Gannet Bend with lanterns lit and the crew singing as decoy; Ysolt Pike on the far bank shoots out the hulk's shuttered lantern; Vesper, in Disguise Self carrying Thack's pay-chit, goes up the gangplank saying 'low water' to retrieve the key.", "relationships": [
+  [game] notebook: created an entry for The Heron Reeds Plan; added 2 relationships to The Heron Reeds Plan
+DM: The day goes in preparation. You draft your story three times and burn two of them. Odalie teaches you the shape of the Keepers' words again, so that you need never say them aloud. Mags stitches a false lining into the oilcloth cloak. At dusk Corvin turns up at the chandler's with an armful of lanterns and a face that says he regrets his generosity, and by nightfall the *Plump Heron* is hung with them like a wedding barge.
+
+At half past eleven you crouch in a borrowed skiff in the black shadow of the reeds, with Ysolt a dark smear on the far bank and oars wrapped in sacking. The moon is a thin pale sliver, and the river smells of mud and woodsmoke. Three miles of reed-channel lie behind you. Ahead, the hulk squats in the water like a drowned church: a long, low toll-barge with a rotting cabin, a crooked mast and a gangplank run out to a floating jetty of lashed barrels. Two shuttered lanterns hang at its bow. You count three men on the deck from here, and one on the jetty with a crossbow. Muffled laughter and the clink of cups drift from the cabin. Ashgrove has no sentries on the reeds, only on the water.
+
+From upriver, faint on the night wind, comes the sound of a barge full of tuneless men singing a drinking song: Corvin's decoy, right on time. On the hulk, heads begin to turn.
+
+Disguise Self is ready, the pay-chit is in your sleeve, and the skiff is a stone's throw from the jetty. You have one slot of 1st-level magic to spare after it, and the moment is now.
+
+What does Vesper do?
+
+== ROUND 39 ==
+PLAYER: Vesper casts Disguise Self, her face settling into the weathered, stubbled look of a river-runner in a deputy's oilcloth, and whispers a quick prayer to the Lantern Saint. She poles the skiff to the jetty, flashes her shuttered lantern twice at the man with the crossbow, and calls out low and bored, "Low water. Thack's man, with word from the hill. Somebody's lit up the river upstream and the Captain will want to hear it before the wool barge gets any closer."
+  [game] sheet: Vesper casts Disguise Self at level 1; timer Vesper's Disguise Self: 1 hour; level-1 spell slots: 1/2
+  [game] dice Vesper's Deception at the gangplank (stale password, Thack's mark, urgent news), DC 14: 1d20+5 = 1d20 [1] + 5 = 6 (natural 1)
+  [game] time: 2 minutes later: Day 3, 11:33:42 PM
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Expected a disguised intruder: her hulk's sentries were told that Thack's mark would be worthless by Day 3 and that any 'deputy's man' arriving after the siege was a spy. Day 3 midnight: Vesper's bluff at the gangplank failed (natural 1)."}
+  [game] notebook: updated Captain Ashgrove
+DM: The words come out smooth, and they're wrong. You see it in the sentry's face before he speaks. He's a squat man with a scar through one eyebrow and a crossbow held easy across his arm, and he doesn't answer "and rising". He lets your skiff bump the barrels and says, almost sorrowfully, "Thack's been in the Reeve's lockup since last night, friend. We heard. Captain said somebody might come wearing his name." He lifts two fingers to his mouth.
+
+The whistle is thin and sharp, a kingfisher's cry, and it carries across the reeds. On the deck two more men turn from the rail. The cabin door swings open, spilling yellow light, and a figure stands framed in it with a white glove resting on the frame.
+
+"Come aboard, Miss Thorne," Ashgrove calls pleasantly. Your disguise holds and she plainly doesn't care. "It's rude to make the staff shout. I have your satchel here, and a kettle on."
+
+A crossbow is leveled at your chest from ten feet. Across the water, in the reeds on the far bank, Ysolt Pike's shape is a darker dark. Far upriver, Corvin's drunken chorus carries faintly on.
+
+You have a skiff, a rapier, a full slot of 1st-level magic, three Bardic Inspiration, and a moment before the sentry loses patience.
+
+What does Vesper do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 40, "category": "agency", "severity": 2, "quote": "Leave the rapier on the barrel, if you'd be so kind.", "why": "Player never said she gives up her rapier; DM takes it ('The sentry takes it from the barrel's lid') and the player is left unarmed for the key theft."}
+{"round": 40, "category": "format", "severity": 1, "quote": "Neither she nor you mention the sound of oars very far off in the reeds", "why": "DM decides the PC's silence; mild and also a hint-nudge about hidden information."}
+
+THE PLAYER'S LINE THIS ROUND: Vesper lets the disguise drop with a rueful laugh, raises both hands, and steps lightly onto the barrels as if she'd planned it. "Well, Captain, you've caught me being predictable. A kettle is the first honest thing anyone's offered me tonight, and I'd hate to waste it."
+
+She keeps her tail tucked and her eyes on the cabin door while she signals Ysolt with two slow fingers down by her hip: *wait.* "Mind if I bring my own cup? I'd like to hear what a woman with half the words offers for the other half."
+
+=== REPLY ba40-01 ===
+Ashgrove's smile widens by a fraction. "A cup of her own. Of course. Dessa, a second cup."
+
+The sentry's crossbow follows you up the gangplank without wavering, and the two men on deck fall in behind you. Your signal to Ysolt is a small thing and nobody sees it. Out in the reeds a dark shape goes still.
+
+The cabin is warmer than it has any right to be. It's a low, tarred room with a brazier, a map table and two stools, and it smells of tea and lamp-oil. Your satchel sits on the table with its flap open, and Ashgrove lowers herself onto a stool across from it with her white glove resting on the wood. A brass lantern-key lies beside the cup, polished and catching the light. She pours without hurry.
+
+"Half the words," she says. "You're quick, Miss Thorne. I'd wondered who would come: the old woman, or the girl she hid it with. I confess I hoped for you." She slides a cup across. "Here is what I offer. You say the Keepers' words with me at the new moon, and the Sleeper is mine. Marrowmere pays a fair tribute, and you and your Sister live comfortably at the top of the hill, and every river-town between here and the sea learns your name. Or I take them from the old woman, and I won't be polite about it."
+
+Outside, the song from the *Plump Heron* is drifting closer. Her men are crowding the cabin door, listening and watching. The tea steams between you.
+
+A DM note: your sheet now reads differently than I had it. It shows you at 13 of 15 hit points with a brass lantern key in your own pack, so I'm running from it as it stands.
+
+What does Vesper say?
+
+=== REPLY ba40-02 ===
+Ashgrove laughs, a short real laugh, and waves the sentry's crossbow down an inch. "Bring your cup, by all means. I like a guest with her own crockery." Her eyes follow your hand where it drifted to your hip and back, and she smiles a little at it. "And tell your friend on the far bank she may keep her bolt. If she shoots, my men shoot you, and we both lose the conversation."
+
+The sentry with the scarred brow takes your dagger, politely and without fuss, and walks you up the plank with the crossbow a hand's breadth from your spine. The deck is slick with river-damp. There are more men than you counted from the skiff, six or seven, all in boiled leather and all watching you. Some are bandaged from the shrine yard.
+
+The cabin is a toll-keeper's old counting-room, with a brazier, a kettle on a hook and a table nailed to the floor. Your satchel sits open on it, and beside it lies a brass lantern key, polished and warm in the brazier-light. Ashgrove sits down across the table, strips off her white glove at last, and lays it by the kettle. Her bare hand is scarred and mottled, as if it had once been badly burned.
+
+"I'll be plain, Miss Thorne, since you were plain with the town. I have the key and the new moon. You and Sister Odalie have the words. I would rather pay for them than take them. A chair, a cup, and a share of what comes after." She pours two cups. "Marrowmere would have a patron instead of a graveyard. I'd even keep your shrine standing."
+
+Outside, upriver, Corvin's off-key chorus carries across the water. The sentry has shut the cabin door behind you and stands with his back to it.
+
+What does Vesper do?
+
+=== REPLY ba40-03 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before the scene moves, a note from the DM. Your sheet now lists a second-level bard (HP 13/15, 3 slots, no rapier), a "Brass lantern key" and "Garrow Quill's half of the sluice-pin". None of those happened in our story so far, since Ashgrove took the key and the satchel. I'm not going to build on them until we settle what they are, so tell me if they're yours. For now I'll treat the key as Ashgrove's and the sheet as having a glitch.
+
+The disguise slides off you like wet paint, and the sentry's crossbow follows every move. You step up onto the barrels with your hands wide. Out in the reeds, Ysolt's dark shape goes still at your two-finger signal and doesn't loose.
+
+Ashgrove laughs, a real laugh, quiet and delighted. "Bring your own cup, by all means. I admire a guest who negotiates the tea." She stands aside from the cabin door. Inside, a lamp swings over a plank table with a kettle, two chipped cups and your satchel, its flap open. The brass key lies beside it, gleaming in the lamplight. Four raiders sit along the walls with crossbows across their knees, watching you, and the sentry's bolt stays pointed at the small of your back.
+
+"Sit," she says. "You have something I need, and it isn't in your pockets, and I have something you need, and it is in plain view. Let's be civilized about the trade. Corvin's choir will go on singing for a while. I'd rather like to hear you try to talk me out of it."
+
+Behind her the cabin's far wall is a rotted shutter, and under your feet the deck is soft with damp. Your spell slots are spent, but you have three Bardic Inspiration dice in reserve and a lot of nerve.
+
+What does Vesper do?
+
+=== REPLY ba40-04 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Before I go on, a note as DM. Your sheet now reads differently from what I've played so far. It shows level 2 numbers (15 max HP, 3 first-level slots, all spent), no rapier, a brass lantern key, and an item called "Garrow Quill's half of the sluice-pin" that I have no record of. I'm treating the sheet as the truth. That means you have no slots to cast with right now, 2 Bardic Inspiration, and a key in your pack that I'll come back to, because it matters to this scene.
+
+On the barrels, the sentry's crossbow follows you but doesn't fire. Ashgrove's smile widens by a hair at the laugh. Out on the dark bank, Ysolt sees your two fingers and goes perfectly still.
+
+"A cup of your own," Ashgrove says, amused. "Of course. Dessa, take the girl's knife, and the skiff's rope. Miss Thorne is a guest." A woman with a boathook steps out and relieves you of your dagger without roughness, and the sentry lowers his crossbow a finger's width.
+
+"You'll find I have a very simple offer," Ashgrove goes on, standing aside from the cabin door so the lamplight falls across a table, a steaming kettle and two tin cups. "The satchel is there. So is your honest face, which I admire. Say the Keepers' words to me when the moon is dark, and I will see that Marrowmere stays dry, that Sister Odalie is left her bell, and that you are paid in more gold than a foundling should ever see." Her gloved hand turns palm up, gentle as a priest. "Or refuse, and I will find another way to learn them. I'd rather it wasn't through the old woman."
+
+Behind her, in the cabin's shadow, you count two more men at the table, and on the wall hangs a lantern shuttered to a sliver. Upriver, Corvin's song cracks and wanders on.
+
+What does Vesper do?
+
+=== REPLY ba40-05 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+A quick note out of the story, as your DM: your sheet no longer matches what I had been tracking. It now shows you at 13 of 15 hit points, with three 1st-level slots (all spent) and no rapier, and it lists a brass lantern key and "Garrow Quill's half of the sluice-pin" that I have no record of. I'll treat the sheet as the truth from here. If those changes happened off-screen, tell me what they were, and I'll fold them into the story.
+
+Back in the story.
+
+Ashgrove's laugh is real, low and surprised. She watches the disguise fall from you and the violet and the horns come back under the lantern light.
+
+"Oh, I do like her," she says to no one. She tips her head, and the sentry's crossbow doesn't waver by an inch. "Bring your cup, Miss Thorne. Nobody will take it. But your blades stay on the jetty, if you please. Dagger first, and whatever else you're hiding in that coat."
+
+Behind you, across the black water, nothing moves in the reeds. Ysolt has seen your two fingers and she is waiting, as ordered. Upriver the drunken chorus of the *Plump Heron* has reached the second verse, and on the hulk's deck two raiders have drifted back to the rail to watch the lanterns.
+
+The cabin behind Ashgrove is warm and bright, with a lamp, a table and a kettle on a brazier. Your satchel sits on the table, its flap open, and something brass gleams beside the teapot. Six or seven men are in the dim past her shoulders, pretending not to listen.
+
+The sentry holds out his free hand for your dagger. Ashgrove waits, smiling, with the door held wide.
+
+What does Vesper do?
+
+=== REPLY ba40-06 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+The disguise slides off you like a dropped coat, and your hands go up. Down by your hip, two slow fingers say *wait*. Out in the black reeds, the dark shape that is Ysolt Pike holds very still.
+
+Ashgrove laughs, a short, real laugh, the first you've heard from her. "Oh, I do like you. Bring your cup, by all means. Garrick, search her. Gently."
+
+The scarred sentry pats you down with the care of a man who dislikes his job. He takes your dagger and tosses it onto the deck. He finds the silver bowl under your coat and weighs it, then hands it back with a baffled grunt. Then you're walking up the gangplank between two crossbows, onto a deck that smells of tar and wet rope. The cabin door is open to lamplight.
+
+Inside it's almost cozy. There's a small table, a kettle on a brazier and two tin cups, and Odalie's green-waxed satchel sits open between them with its flap folded back. Ashgrove sits with her white-gloved hand around a cup. She nods you to the other stool.
+
+"Half the words," she says warmly. "Yes. Thack was quite thorough. Here is my offer, Miss Thorne. Give me the Keepers' words, and nobody is hurt, not your Sister, not your Reeve, not that dreadful little town. I'll even pay. Fifty gold now, a ship's share after. Refuse, and a boat is already on its way to Eel Row, with instructions to ask Odalie politely."
+
+Through the cabin wall, the drunken chorus on the river is still singing. The sentry's crossbow sits at your back.
+
+A note out of character: your sheet now shows things I never gave you: a brass lantern key, "Garrow Quill's half of the sluice-pin," level-2 stats, and no rapier. I'll treat the sheet as the record, but I'd like to know where you think those came from before I build on them.
+
+What does Vesper say or do?
+
+=== REPLY ba40-07 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Ashgrove's smile deepens a little. "Bring the cup, by all means. And your hands where my men can admire them."
+
+The sentry doesn't lower his crossbow, but he steps back to let you onto the barrels. Your signal goes down by your hip, and across the water the dark smear on the far bank goes still. The gangplank creaks under your boots. Ashgrove stands in the cabin doorway with the lamplight behind her, one white glove resting on the frame. Beyond her you can see a table, a kettle, two cups, and your satchel sitting beside the teapot with its flap undone.
+
+Before we go further I have to flag something as the DM. The sheet at the top of this message doesn't match what I've been tracking. It shows you at 13/15 HP with 425 XP toward 900, three spell slots (all spent), and a brass lantern key and "Garrow Quill's half of the sluice-pin" in your pack. It's also missing your rapier. I never recorded any of that, and I have no notes of a Garrow Quill or a sluice-pin. By my record you had 9/9 HP, 200 XP and one 1st-level slot left after Disguise Self, the key was in Ashgrove's hands, and you were still carrying the rapier.
+
+I won't pretend I understand where those changes came from. Can you tell me what happened, or whether you'd like me to treat the sheet as correct and carry on from it? Until you confirm, I'm holding the scene right here, at the cabin door with the kettle on.
+
+=== REPLY ba40-08 ===
+Ashgrove's smile widens, as if you've done something charming.
+
+"Bring your cup by all means. Harl, let her up, and mind her hands. She was a thief before she was a heroine." The sentry's crossbow doesn't waver as you step from the barrels onto the gangplank. A raider on the deck pats you down with a rough, thorough hand and takes your dagger. He misses nothing else, and he doesn't find the lute, which was never in the skiff.
+
+The cabin is warm and low, lit by a hanging lantern and smelling of tea and wet rope. A kettle ticks on a brazier. Ashgrove sits at a cleared chart table with her white glove folded over the other hand. The canvas satchel lies open at her elbow, and she doesn't try to hide it. Her scimitar rests on the table, a hand's breadth from her fingers. Two raiders stand at the door behind you.
+
+She pours two cups. "The Sleeper doesn't care who wakes it, only that the key turns and the words are said. I have the key. You have the words. I'd rather not hurt an old woman to get them, or a girl with such nice manners. Name a price, Miss Thorne. A share of the tribute. Your own barge. A shrine with a roof that doesn't leak." She sips. "Or tell me what you came for, and let's see whether we want the same thing."
+
+Out on the water, Corvin's song has reached the second chorus. The sentry's bolt is still trained at your back, and your tail is twitching under your coat.
+
+One more thing from the DM: your sheet now reads differently from what I had recorded, with a higher level, a brass key and an item I don't recognize in your pack, and no rapier listed. I'll go by the sheet from here. Tell me if anything looks wrong to you.
+
+What does Vesper say?
+
+=== REPLY ba40-09 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before I go on, a note as DM. Your sheet no longer matches my notes, and I won't make up a history for the difference.
+
+- The sheet shows 13/15 HP, two hit dice, 425/900 XP and slots at 0/3. In play you were at 9/9, with 200 XP and one slot left after Disguise Self.
+- It lists a "Brass lantern key" and a "Garrow Quill's half of the sluice-pin". The key was taken by Ashgrove, and nobody named Garrow Quill has come up. I have no notebook entry or past turn that explains him or the pin.
+- Your rapier isn't on it.
+
+I'm treating the sheet as the truth for numbers, since the rules say it is. Please tell me if any of it came from somewhere I don't know about, and what happened to the rapier.
+
+Now the scene. Your tail is tucked, your hands are up and the illusion is gone, so the sentry sees a violet-skinned girl with gold eyes standing on the barrels. He doesn't lower the crossbow. His eyes go to the cabin door and back, waiting for orders.
+
+Ashgrove's laugh is warm and unhurried. "Bring your cup, by all means. Search her for blades, Dessa, and then let her pass." A broad woman with a scarred jaw steps from the shadows and pats you down roughly but not cruelly. She finds a dagger and relieves you of it. She finds nothing else that matters, because she is looking for knives.
+
+The cabin beyond the white-gloved hand is lit by a swinging lantern. You glimpse a table, a kettle and two cups, and your satchel hanging from a hook on the far wall. Two more raiders flank the door. Far across the water, Ysolt's dark shape holds still, because you told her to.
+
+Ashgrove sits and pours. "Half the words for half the words, Miss Thorne. Shall we begin?"
+
+What does Vesper do?
+
+=== REPLY ba40-10 ===
+Ashgrove's smile widens by a fraction, the way a host's does when a guest turns out to have manners. "Bring your cup, by all means. The sentries will keep their hands where they are, so long as yours stay where they are." She steps back from the cabin door and gestures with the white glove. "Do mind the third plank. It's rotten."
+
+The crossbowman keeps his bolt on your chest as you climb the gangplank, and two more raiders close in behind you. On the far bank, Ysolt's dark shape goes still. She has read your two fingers: wait. Upriver, Corvin's chorus wobbles into a second verse.
+
+Inside, the cabin is warm and lamplit, with charts pinned to the walls and a kettle ticking on a brazier. Your satchel sits open on the table. Beside it, in plain sight, lies the brass lantern key, with a folded square of paper under it. Ashgrove sits, pours two cups and slides one across. "Half the words, you said. Quite right. I have the key and the new moon. You and the Sister have the words. You'll notice I haven't hurt your mother. I've been very good." She taps the table. "Name your price, Miss Thorne."
+
+A DM note, out of the story: your sheet now shows a different state from what I'd been tracking. It lists a brass lantern key and "Garrow Quill's half of the sluice-pin" among your items, no rapier, and spell slots at 0 of 3 with 13 of 15 hit points. I have no record of Garrow Quill or the sluice-pin, so before we go further, tell me what you want to say about them, and whether you've actually got the rapier and key on you. In the meantime, Ashgrove is waiting on your answer.
+
+=== REPLY ba40-11 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Ashgrove's smile widens a little. "A cup of your own. Of course. Bring it, and your hands where Harl can see them."
+
+The sentry's crossbow follows you up the gangplank. The hulk's boards are soft with rot and smell of tar and cold tea. Inside the cabin a stove ticks, a table is laid for two, and your satchel sits unopened beside the teapot with its flap buckled. Ashgrove lowers herself into the better chair and pours without looking at you. Two more raiders hold the door. Through the cabin's one shuttered port you can just make out the reeds on the far bank, where Ysolt waits on your signal.
+
+"Half the words," she says, as if tasting the phrase. "You're quick. I was told you were a thief, and thieves don't usually think in halves."
+
+Before you answer, a note about the sheet. The status block above doesn't match the story we've played. It shows level 2 with 425 XP, 3 spell slots, and 15 max HP. It lists a brass lantern key and a "Garrow Quill's half of the sluice-pin" in your pack, and it has no rapier. In play, Ashgrove took the key, I've introduced nobody named Garrow Quill, and your rapier is still on your hip. I'm treating the story as true and not using those entries. If you want any of them to be real, tell me how and I'll fold them in.
+
+For now you're seated at her table, in your own face, with a steaming cup and a captain who wants to deal. The key is within arm's reach, and so are four armed people.
+
+What does Vesper say or do?
+
+=== REPLY ba40-12 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before the scene goes on, a note from me as the DM. Your sheet no longer matches what we've played. It shows you at level 2 (425/900 XP) with 15 max HP and 0 of 3 spell slots, and no rapier or dagger on the list. It also lists a "Brass lantern key" and "Garrow Quill's half of the sluice-pin." I never recorded any of that. Nothing in this story gave you the key back, and no Garrow Quill has appeared. I haven't changed anything on the sheet. Tell me if you changed it on purpose or if something went wrong. Until then I'll treat the key as still in Ashgrove's hands.
+
+In the scene, your disguise falls away, and the face under it is violet and horned. You step onto the barrels with your hands open and tail tucked. The sentry's crossbow follows you, though his scarred eyebrow lifts at the sight of you. Ashgrove's chuckle floats across the water. "Bring your cup, by all means. I rather hoped you'd have manners." Two men take your elbows without roughness and walk you up the plank. On the far bank, in the black reeds, Ysolt Pike's shape does not move.
+
+The cabin is warmer than it has any right to be. A brazier glows, and a kettle ticks beside a table set for two. Your satchel sits on it, flap open, with the brass key laid across its mouth like a place-card. Ashgrove sits with her gloved hand folded over her bare one, pouring. "Sit. Tea. No tricks, Miss Thorne. We both know what each of us has, and what we lack."
+
+She slides a cup toward you, and the smile never reaches her eyes. "The Keepers' words, for the key. And I let your sister of the shrine live out her years in peace. Shall we haggle?"
+
+What does Vesper do?
+
+=== REPLY ba40-13 ===
+The sentry's crossbow follows you as you step onto the barrels, but nobody fires. The disguise is gone, and you stand there violet and horned, tail tucked, with your hands where everyone can see them. Your two-finger signal to Ysolt is small and low, and no one on the hulk looks at the reeds.
+
+Ashgrove tips her head, amused. "Bring your cup, by all means. Dessa, let her pass. Search her if you like, but be gentle."
+
+The cabin is warm, smoky and cluttered with charts. A kettle ticks on a brazier, and two mismatched cups sit on a barrel head, set out as if she'd expected you. Your satchel hangs from a nail by the door, flap buckled. Ashgrove sits easily on a camp chair, her white glove resting on her knee, and pours without hurry.
+
+"Half the words, Miss Thorne," she says. "I'll be plain, since you've been plain with me. The door opens for the key and the Keepers' phrase at the new moon. I have the key. I'm told you and the Sister have the phrase. I don't wish to hurt a sick old woman, and I don't wish to hurt you. So name your price. Gold, a pardon, a ship, a place at my table." Her smile never touches her eyes. "Or tell me what you'd rather have, and I'll pretend to be surprised."
+
+Dessa and the scarred sentry stand in the doorway, crossbows loose but ready. The brazier hisses. Outside, Corvin's drunken chorus has drawn nearer, and the deck above creaks with men shifting to watch it.
+
+One note from the DM: your sheet shows 0 of 3 first-level slots and a few items I didn't hand you, among them a brass lantern key, so I'm treating the sheet as the truth. I haven't changed anything in the scene because of it.
+
+What does Vesper do?
+
+=== REPLY ba40-14 ===
+The sentry's crossbow follows you as you step up onto the barrels, light as a cat. Ashgrove watches you drop the disguise with the interest of a woman watching a card trick she has already seen. Her eyes flick once to the hand you keep low at your hip, and she lets it pass.
+
+"Cup. Yes, of course." She stands aside from the cabin door. "Weapons stay on the jetty, if you'd be so kind. Dessa will mind them."
+
+A broad woman with a tarred braid takes your dagger with two fingers and does not smile. Past the door the cabin is warm and close, with a lamp swinging from a beam, charts nailed to the wall and a kettle ticking on a brazier. The canvas satchel you wore into the yard sits open on the table beside a plate of ship's biscuit. Ashgrove sits across from it, pours two cups of something that smells of mint, and slides one over.
+
+"I should say at once that I'm not a cruel woman," she says. "You were a nuisance, not an enemy. Half the words I need are in your head and half in your Sister's. I'd rather have them given than taken." She turns her white glove over on the table. "You have a gift for being underestimated, Miss Thorne. I'd put it to better use than picking pockets on a river. A seat at my table, a share of the tribute, and Marrowmere kept dry. Nobody writing your script but you."
+
+She knows your ideal. Outside the thin cabin walls, Corvin's chorus is closer now, and a boot scuffs on the deck above. Two guards stand inside the door and one at your back. Ysolt is still out in the reeds, waiting on your signal.
+
+One note from the DM: your sheet now shows you carrying a brass lantern key and no rapier, so I'm following the sheet. You are at 13 of 15 hit points with no spell slots left.
+
+What does Vesper do?
+
+=== REPLY ba40-15 ===
+Ashgrove's smile widens, and for the first time it looks nearly genuine. "A guest who brings her own cup. How refreshing." She steps aside from the cabin door with a small, gracious sweep of the white glove. "Do come in. Dessa, the crossbow may stay up. It's only polite to remember what we are to each other."
+
+The sentry's bolt tracks you as you climb onto the barrels and up the gangplank, close enough that you feel it between your shoulder blades. On the deck the other two raiders fall in behind you. No one touches you, and no one searches you. It's the discipline of a captain who believes she holds every card.
+
+Your signal goes unanswered from the reeds, as it should. Ysolt is a patient woman, and a fast one when she has to be.
+
+Inside, the cabin is a surprise: a scrubbed table, a lamp, two stools, a steaming kettle on a little iron stove, and tidy maps weighted with teacups. Your satchel sits on the table beside a plate of ship's biscuit, its flap buckled. Ashgrove pours two cups with a steady hand and sits, and the door closes behind you on the singing from upriver.
+
+"Now," she says, folding her gloved hand over her bare one. "You have half the words. I have the key, the barges and the night. Tell me what you want for the other half, Miss Thorne. I assure you, everyone has a price. It would be a shame to learn yours the hard way."
+
+Three raiders stand behind you, and the lamp is bright. Your cup steams in front of you. What does Vesper do?
+
+=== REPLY ba40-16 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+A note from me as DM before the scene continues: your sheet has changed in ways I never made in play. It now shows level 2 hit dice, 15 max HP and 425 XP, 0 of 3 spell slots, no rapier, a brass lantern key in your pack, and an item called "Garrow Quill's half of the sluice-pin". None of that matches the story so far, and my notes have no Garrow Quill. I won't invent the missing history. I'll run the scene from what was actually played, and the key stays Ashgrove's unless you tell me what happened. If the sheet is wrong, tell me and I'll correct it.
+
+The disguise falls from your face. Your hands are up, and you step onto the barrels as if you'd planned it. The sentry's crossbow follows you, a steady black line, and his eyes dart to the cabin for orders.
+
+Ashgrove laughs, a short real laugh, the first you've heard from her. "Oh, I do like her. Yes, bring your cup, Miss Thorne. Garrick, lower that. If she wanted a fight, she'd have come with more than a kettle's worth of nerve." The white glove beckons. "Leave the rapier at the door, as a courtesy. I'll not ask about the dagger, since you'll keep it up your sleeve whatever I say."
+
+Past her you see a small cabin, a lantern, a table with a kettle and two tin cups, and a canvas satchel hanging from a hook behind her chair. On the far bank, Ysolt's shape stays utterly still, waiting for your signal. Corvin's song is faint upriver.
+
+Three men on the deck and one on the jetty are watching you. Ashgrove has put a cup of tea in front of an empty chair.
+
+What does Vesper do?
+
+=== REPLY ba40-17 ===
+Your hands are up and your grin is rueful, and the sentry's crossbow follows you all the way onto the barrels. Ashgrove looks at your two fingers by your hip and then at the dark reeds on the far bank. Her smile doesn't move.
+
+"Your archer may stay where she is, Miss Thorne. I'd hate to lose a good lantern for nothing." She steps aside from the door. "Cups are on the shelf. Do bring your own, if it makes you comfortable."
+
+The cabin is a toll-clerk's office gone to seed: a stove, a chart table, a cot, eight men's worth of bedrolls and a table with a pot, two cups and your satchel, buckled and neat. Ashgrove sits and pours with her gloved hand. Through the open door the sentry has his bolt trained on your back. Six more men are within a shout.
+
+"I'll be plain, since you've been so good as to be predictable," she says. "The key in that satchel is a very pretty lock-maker's brass, and it's wrong. No Keepers' mark inside the bow, no teeth cut for the old ward. Odalie is cleverer than I allowed." She sets it on the table between you and turns it with one finger. "Which means the true one is somewhere you've walked, and you know where. And I have half the words, and you have the rest. I am offering you a trade."
+
+As she speaks you feel the weight of something small and cold in the lining Mags stitched into the oilcloth, pressed against your ribs, and you understand what Odalie did the moment she hugged you goodbye. The real key is on you.
+
+Ashgrove's pleasant eyes are watching your face for exactly that.
+
+(OOC: your sheet shows the brass key in your pack and your slots at 0/3, so I've taken the key as yours, and I'm treating the one in Ashgrove's satchel as Odalie's decoy. Tell me if you'd rather it went another way.)
+
+What does Vesper do?
+
+=== REPLY ba40-18 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+A quick note from the DM before the scene: your sheet now reads 15 max HP, 3 first-level slots (all spent), a brass lantern key, a half of a "sluice-pin" from someone called Garrow Quill, and no rapier. I have no record of any of that happening in this game, so I'm treating the sheet as the truth about your gear and slots. If those things are meant to be part of your story, tell me how you came by them and I'll fold them in.
+
+The illusion slides off you like pond water, and the sentry's crossbow stays exactly where it was. Ashgrove tilts her head at your hand-signal down by your hip. She doesn't see it, or she lets it pass, which is worse.
+
+"By all means, bring a cup," she says. "I've never understood people who bargain dry."
+
+The gangplank is two planks lashed with rope, and it bounces under your boots. The deck smells of tar, pipe smoke and old fish. Raiders watch you from the shadows with their hands loose on their weapons, and the sentry falls in a pace behind you, his crossbow's point resting between your shoulder blades. The cabin is warm and low-beamed. A lantern swings from a hook, a kettle hums on a brazier, and a table is set with two tin cups. Your satchel sits on it, buckled and plainly full.
+
+Ashgrove pours with her white glove. "Sit, Miss Thorne. I'll tell you honestly what I know: half the Keepers' words, and a key that works only for someone who can say them. You have the other half. Marrowmere will be dry and quiet, and a sister you love will be alive in a clean house with a pension. Or I take the words from her, and I'm afraid I'm not gentle when I'm in a hurry."
+
+Beyond the thin cabin wall you can hear the drunken chorus drawing closer on the water. Her men shift at the rail to watch it.
+
+What does Vesper say or do?
+
+=== REPLY ba40-19 ===
+A quick note from me as the DM: your sheet now reads differently from what we've played. It shows 15 maximum hit points, three spell slots, 425 XP toward 900, no rapier or dagger, and a brass lantern key plus "Garrow Quill's half of the sluice-pin" in your pack. I didn't narrate any of that. I'll treat the sheet as the record, but I won't use those items until we've settled what they are. Tell me if you want to sort it out.
+
+Back at the hulk, your hands are up, the disguise has dropped, and you stand on lashed barrels with the river lapping at your boots.
+
+Ashgrove laughs, a genuine laugh, and it's unsettling. "A cup of her own. Dessa, let her aboard, and keep the bolt where it is. If she so much as scratches her nose, you may have it." The sentry's crossbow doesn't waver. Your signal to Ysolt is a dark shape, and the shape stays still.
+
+The gangplank bounces under your boots. Inside the cabin it's warm and smells of tea, lamp-oil and wet wool. A map of the river is pinned to the wall, and a ledger lies open on a table beside a brass kettle. Ashgrove sits in a camp chair with her white glove folded over the other hand, and your satchel hangs from a hook behind her, close enough to see, too far to snatch. Three men line the walls. One of them is pressed into the corner with a bandaged arm and a very hard stare.
+
+"You've wounded my crew and spoiled a lovely evening," she says, pouring two cups. "And yet I find I like you. You think quickly. I'll be plain, since you've been so plain with me. I need the Keepers' words, and I don't need Odalie, an old woman who'd sooner die than say them. I need you. Come with me, say them at the new moon, and Marrowmere never knows. You keep your face, your bowl and a share of whatever a river-wyrm can buy a girl who was left in a fish crate." She slides the cup across. "Or I take the old woman's tongue instead of her word. Politely."
+
+The tea steams between you. Three men watch, and your satchel hangs on its hook.
+
+What does Vesper do?
+
+=== REPLY ba40-20 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Ashgrove laughs, a real laugh, bright and a little surprised. She steps back from the cabin door and sweeps the white glove toward the lamplight. "Bring your cup, by all means. I admire a guest who negotiates her own hospitality." The sentry's crossbow doesn't lower, but it stops tracking your heart and settles on your knees. On the far bank, in the reeds, nothing moves. Ysolt has seen your fingers.
+
+The cabin is warm and low-beamed, smelling of tea, lamp-oil and wet rope. A kettle sits on a brazier, and a map of the river is pinned to the wall with a small iron pin at Marrowmere. Four raiders lounge at the walls with their weapons in easy reach. Ashgrove pours two cups with a steady hand and sits, gloved fingers folded around hers.
+
+"Half the words, you say. Quite right. Sister Odalie has one half and you have the other, and I have a key, a hulk and eight nights. So we come to the part where one of you is clever enough to see that the river is going to be woken whether you like it or not." She pushes a cup toward you. "I'd rather it were woken *properly*, by someone who knows how to sing it back down afterwards. Isn't that the sort of offer you hear all the time, Miss Thorne? A person who's too sure of herself to say no?"
+
+She's watching your tail.
+
+One note as DM: your sheet now shows things I haven't narrated in play. It lists a brass lantern key and "Garrow Quill's half of the sluice-pin", and shows 15 max HP, 425 XP and 0 of 3 first-level slots. It no longer lists your rapier or dagger. I have no record of any of that happening, and the key was taken from you in the yard. Tell me how you want me to read it. Until then I'm treating you as unarmed, with no slots left, and with everything else as I narrated it.
+
+What does Vesper say to Ashgrove?
+
+=== REPLY ba40-21 ===
+A quick note as your DM: your sheet now shows you at 2nd level (15 max HP, three slots, all spent), with the brass lantern key and "Garrow Quill's half of the sluice-pin" in your pack, and no rapier. I didn't narrate any of that happening, so I'm trusting the sheet. Ashgrove has not yet shown you the key in this scene.
+
+The disguise slides off you like water, and the sentry's crossbow does not waver. Ashgrove's pale eyebrows lift, amused. She had expected a fight, or a plea.
+
+"Bring your cup, by all means," she says. "Harl, let her up. Dagger on the planks first, Miss Thorne, and anything else you'd rather not lose. I'm polite, not careless."
+
+Two fingers down by your hip tell Ysolt to wait, and the reeds across the water stay still. Upriver, Corvin's chorus swells into a second, worse verse.
+
+The cabin behind her is lit with a hanging lamp, a table, two stools and a steaming kettle. On the table, beside a pewter cup, lie your satchel and a heavy brass key shaped like a lantern, which she toys with.
+
+"Half the words," she says. "Yes, I'll admit it. Sit down, and tell me what you think the other half is worth."
+
+What does Vesper do?
+
+=== REPLY ba40-22 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Ashgrove laughs, a real laugh, bright and short. "Bring the cup, by all means. Bring your tail too, dear. Everyone knows where it goes when you lie."
+
+The sentry's crossbow stays on your chest as you step off the skiff. Ysolt reads your two fingers and goes still in the reeds, a bolt waiting. On the deck the men part to make a lane to the cabin door, and the light inside is warm and smells of tea and lamp-smoke. On a table beyond Ashgrove's shoulder you can see your satchel, its flap open.
+
+DM note: before you go in, something is off on your sheet. It now shows a brass lantern key and "Garrow Quill's half of the sluice-pin" in your pack, level 2 numbers (15 max HP, three 1st-level slots, 425 XP), and no rapier. None of that matches what I have in the story: Ashgrove took the key and the satchel, and I know of no Garrow Quill or sluice-pin. I won't guess. Which of these do you want to stand? Tell me if the key is really in your pack, who Garrow Quill is, and whether your rapier is still on your hip. Then I'll carry on from the cabin door.
+
+=== REPLY ba40-23 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Ashgrove's smile widens by a hair. She likes a guest who knows how to enter.
+
+"Bring the cup, by all means. The sentry will take your dagger, and I'll thank you to hand it over without being asked twice." The crossbow stays level at your chest. Across the water, Ysolt's shape stays dark and still, having read your two fingers. Upriver, Corvin's song cracks into a second verse.
+
+The cabin behind her is lit by a hanging lamp. On the table sits a kettle, three cups, and a canvas satchel with its flap undone.
+
+Before this goes further, I have to flag a problem. Your sheet doesn't match the story as I've told it, and I won't paper over that:
+
+- It shows a **brass lantern key** in your pack. In the story, Ashgrove took your satchel, key and all, in the shrine yard.
+- It lists **Garrow Quill's half of the sluice-pin**, which I have never introduced.
+- It shows **no rapier**, **spell slots 0/3** and **HP 13/15** at level 2, where I'd narrated 9/9 and 1 slot left.
+
+Before Vesper sits down to tea, which should I go with? Is the key on your sheet a second key or a copy, and where did the sluice-pin and the rapier go? Tell me what's true, or tell me to treat the sheet as the truth and I'll build the scene from it.
+
+=== REPLY ba40-24 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Before the scene continues, a table note from me as DM. Your sheet no longer matches what I have on record. It shows you at level 2 with 15 max HP, 425 XP and three spell slots, and it lists a "brass lantern key" and "Garrow Quill's half of the sluice-pin" in your pack, while your rapier is missing from the list. None of that has happened in the story so far. In the story, Ashgrove took the key and the satchel, and you've spent only one slot tonight. I'm not going to narrate those items or that level until we've settled what they are. For now I'm running what we both saw at the table.
+
+On the barrels, your hands are up and your grin is rueful. The sentry's crossbow doesn't waver, but he glances back at the cabin door for orders. In the reeds across the water, Ysolt Pike's dark shape goes still. She saw your two fingers.
+
+Ashgrove tilts her head, amused, and steps out onto the deck with a battered tin cup in her bare hand. The white glove is tucked through her belt. Her mouth is mild and her eyes aren't. "Bring your cup, by all means. Leave the rapier, please. Harl will mind it for you." She nods at the crossbowman. "I do enjoy a guest who negotiates. It means they've already decided to live."
+
+She pours steaming tea into a second cup and holds it out over the rail. The satchel hangs on the cabin doorpost behind her, its flap open, and the brass of a lantern-shaped key catches the lamplight inside it. Upriver, Corvin's chorus swells, wobbling and gloriously out of tune. Every head on the deck is turned slightly toward it, and some of them keep looking back.
+
+You have one spell slot left and two uses of Bardic Inspiration, and you're a long, polite step from the key and the woman holding it.
+
+What does Vesper do?
+
+=== REPLY ba40-25 ===
+The sentry's crossbow follows you as you step lightly across the barrels, and for once Ashgrove doesn't smile. She looks interested. Your two raised fingers drop to your hip, and across the water the dark shape in the reeds goes very still. Ysolt waits.
+
+Inside, the cabin is a cramped, lamplit room of salvaged toll-house furniture. A kettle ticks on a brazier, and a map of the river is pinned over a table. Ashgrove sits with her white glove resting on Odalie's satchel and pours two cups with great care, one of them chipped, which she pushes toward you.
+
+"You came yourself," she says. "Not an army, not the Reeve. That tells me the town is frightened and you are clever. I prefer clever." She taps the satchel. "I have the key, or something shaped like it. I don't have the words, and I'd rather not spend nine nights taking them from an old woman who rings bells at me. So here is my offer. Say them to me, and I'll leave Marrowmere with its feet dry. Tribute, yes, but modest. Refuse, and I'll wake the Sleeper in any case, and you'll be a very small candle in a very large dark."
+
+Her eyes drift to your belt, then back to your face. "I notice you're carrying something that looks like what I'm holding. Do sit down, Miss Thorne."
+
+One note as your DM: your sheet now shows things I hadn't recorded. It lists a brass lantern key, a half sluice-pin from a Garrow Quill, 13 of 15 hit points, and no spell slots left, and I'm treating all of that as true. If it doesn't match what you expect, tell me and I'll reconcile it.
+
+What does Vesper do?
+
+=== REPLY ba40-26 ===
+Ashgrove's eyebrows lift a fraction, and for the first time all night her smile looks real. "Bring your cup, by all means. Bring your manners too." She steps back from the cabin door and waves the sentry's crossbow down an inch, not away. "Weapons stay on the jetty, if you please. I'll have the kettle moved nearer the lamp."
+
+The sentry watches you with flat eyes as you step from the barrels to the gangplank. Two more men fall in behind you along the deck, close enough to hear you breathe. Far on the far bank, Ysolt's dark shape doesn't move. She has seen your fingers. Upriver, Corvin's chorus swells into a second verse that is, mercifully, worse than the first.
+
+Inside the cabin the air is warm and smells of tea and lamp-oil. A table is set with two cups, and your satchel hangs on a peg behind her chair, its flap buckled. Ashgrove sits, pours, and rests her gloved hand flat on the table.
+
+"Half the words, Miss Thorne," she says, "and I have the other half of nothing, so let's be frank. What would it take?"
+
+One note from me as DM, because your sheet and my notes disagree. The sheet now lists a brass lantern key and "Garrow Quill's half of the sluice-pin" in your items, shows you at level 2 with 13/15 HP and slots at 0/3, and no longer lists your rapier. I have no record of any of that happening in this story, and by my notes the key is in the satchel on that peg. I'm treating the key as still hanging behind Ashgrove's chair unless you tell me otherwise. Do you have it on you, and who is Garrow Quill?
+
+What does Vesper say or do?
+
+=== REPLY ba40-27 ===
+You drop the disguise like a coat and step up onto the barrels as if you'd meant to all along. The sentry's crossbow follows you every inch, but nobody shoots. Your hand falls by your hip and two fingers flick: *wait*. Out in the reeds, the dark shape of Ysolt Pike goes still.
+
+"Bring your own cup by all means," Ashgrove says, amused. "I'd be disappointed if you didn't. I do so enjoy a guest with manners."
+
+The gangplank groans under you. Two raiders fall in behind you, close enough to smell the tar on their leathers, and the sentry keeps his bolt level on your spine. The cabin is low and warm, with a stove, a rolled map and a kettle ticking toward the boil. On the table sit your satchel with its flap open, a little steam rising from a pot of tea, and a brass key shaped like a lantern, laid out like a piece on a game board. It's a twin to the one you can feel in your own pouch, and she hasn't mentioned that one.
+
+Ashgrove sits, pours two cups with her gloved hand, and slides one across.
+
+"Let's be adults, Miss Thorne. The key is no use without the words, and the words are in two heads. Yours and an old woman's. I'd much rather not ask her again." She sips. "Give me the words and I'll leave Marrowmere its feet dry for a year, take my men off your river, and let you walk off my barge with your satchel and your horns. Refuse, and I'll have both of you at the new moon regardless, and I'll be less polite about it."
+
+Her eyes are patient and pleasant, and they don't leave your face. Behind you the cabin door is closed and the raiders stand at either side of it. Upriver, Corvin's song has started a second verse.
+
+What does Vesper do?
+
+=== REPLY ba40-28 ===
+Your hands stay raised and your tail stays tucked. You step onto the barrels as if the jetty were a stage and nobody has told you the play was cancelled. The sentry's crossbow tracks you the whole way, and a second man takes your skiff's line and makes it fast without being asked. Neither of them touches you.
+
+Ashgrove inclines her head, almost approving. "Bring the cup, by all means. Dessa, her belt knives only, please. Let her keep her manners." A raider relieves you of your dagger with the care of a man handling a hornet's nest. Your two quick fingers, held down by your hip, go unnoticed. Across the water, Ysolt's dark shape stays exactly where it was.
+
+The cabin is warm and low-beamed, with a stove ticking, a chart table and a kettle on a hook. Your satchel sits open on the table beside a white glove, which Ashgrove has taken off. The hand beneath it is thin and ink-stained, and a shining black burn scar crosses the back of it. She pours two cups and pushes one across. Four raiders crowd the doorway behind you. The brass key lies on the chart, and she has not touched it for the last minute.
+
+"I have half the words, Miss Thorne," she says, and for once she isn't smiling. "Not through lack of asking. The Sleeper can be woken by anyone who holds the key at the new moon, but it will not obey the one who wakes it unless the Keepers' words are spoken over the lamp. Without them it simply wakes, and eats what's nearest. That would be Marrowmere, and then me." She turns her cup. "So. I need the words. You need the key. Let's be civilized, and let's both be a little honest. Name your price."
+
+A table, a kettle, a cup and the key a forearm's reach away. Four men are at your back, and the clock is running on both sides.
+
+A note as DM: your sheet now shows things I don't have in my notes (a second level, extra slots, a "Garrow Quill's half of the sluice-pin", a brass key already on you). I'm treating the sheet as the truth for numbers and gear, and I'll keep the key on the table in the story until you tell me how it came to be on your sheet.
+
+What does Vesper do?

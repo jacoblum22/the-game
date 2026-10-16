@@ -1,0 +1,1194 @@
+CHARACTER: Grukka Ironhide, Half-Orc barbarian 1, acolyte background
+== OPENING ==
+Your character is complete.
+
+The border town of Thornwick sits where the farmed valleys give way to the wild marches. Caravans, outlaws, and old grudges all pass through its gates, and the only steady things in it are its walls and the little stone temple at the heart of its market. Grukka Ironhide, left behind by her orc father's warband as a babe, was raised in that temple by an old priestess who taught her prayers while the other children taught her to fight with their fists.
+
+Dusk settles over the market square. Lanterns flicker on, but half the stalls are overturned, and melons and shattered crockery are strewn across the cobbles. At the temple steps, six men in grey sashes marked with a black handprint have cornered a trembling young acolyte and two vendors, an old woman clutching a cash box and a lanky boy behind a broken cart. The apparent leader, a scarred man with a cudgel, taps it against his palm.
+
+"Tithes are doubled tonight, little priest," he sneers. "Hand it over, or we start on the doors." Another kicks a stall to splinters. The temple door behind them is barred, and no watchman is in sight.
+
+Grukka stands at the edge of the square, greataxe on her back, a hundred feet away. What does she do?
+
+== ROUND 1 ==
+PLAYER: I pull a handaxe free and stride across the square, bellowing in Common loud enough to rattle the shutters: "Doubled tithes? Try taking it from the temple that raised me!" I stop about thirty feet from the scarred leader, hand on the greataxe, and let rage settle in as I glare him down.
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Bandit", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Thug", "kind": "monster"}
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [9] + 2 = 11
+  [game] dice Thug leader initiative: 1d20+0 = 1d20 [13] + 0 = 13
+  [game] dice Bandits initiative (group): 1d20+1 = 1d20 [5] + 1 = 6
+  [game] fight: Fight started. Order: Scarred Leader (13), Grukka Ironhide (11), Bandit 1 (6), Bandit 2 (6). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Scarred Leader. Scarred Leader (initiative 13): HP 32/32, AC 11 Scarred Leader's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Leader mace attack 1 vs AC 15: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Leader mace attack 2 vs AC 15: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Leader mace crit damage 1: 2d6+2 = 2d6 [5, 1] + 2 = 8
+  [game] dice Leader mace crit damage 2: 2d6+2 = 2d6 [4, 1] + 2 = 7
+  [game] sheet: took 14 damage: HP 15 → 1; Relentless Endurance: 0/1
+  [DM write_lore (hidden)] {"entry": "Ash-Mark Gang", "add_to_description": "Led by a scarred cudgel-wielding man (mace). Six members at the square; the leader and two bandits engaged Grukka first."}
+  [game] notebook: updated Ash-Mark Gang
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The scarred man doesn't wait for your speech to finish. He covers the thirty feet at a dead run, and his cudgel, a spiked mace, comes down twice in two heartbeats, both blows landing true on your ribs and shoulder. The world goes white and your knees buckle. The old priestess's prayers hum in your skull and you refuse to fall. You stay up, barely, at 1 HP, with the leader looming right in front of you, grinning, while two more grey-sashed men peel off from the others and start toward you. The acolyte shrieks behind him.
+
+It's your turn, and you have a handaxe in hand with the leader within reach. You're alive, but one more hit will drop you. Rage would give you resistance to bludgeoning, piercing and slashing damage, which would halve the mace blows, and it's a bonus action. What does Grukka do?
+
+== ROUND 2 ==
+PLAYER: I roar and go into a Rage as my bonus action, then swing the handaxe at the scarred leader's face with everything I've got. "You hit like a farmhand!"
+  [game] sheet: Rage: 1/2; condition added: Raging (Grukka Ironhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Grukka handaxe attack vs Leader AC 11: 1d20+6 = 1d20 [2] + 6 = 8 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Bandit 1. Bandit 1 (initiative 6): HP 11/11, AC 12 Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Bandit 1 scimitar vs AC 15: 1d20+3 = 1d20 [16] + 3 = 19 (Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Bandit 1 scimitar damage (halved by rage resistance): 1d6+1 = 1d6 [5] + 1 = 6
+  [game] sheet: took 3 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious; condition removed: Raging
+  [game] fight: Round 1, now: Bandit 2. Bandit 2 (initiative 6): HP 11/11, AC 12 Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Scarred Leader. Scarred Leader (initiative 13): HP 32/32, AC 11 Scarred Leader's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [18] = 18
+  [game] sheet: death save successes: 1/3
+DM: The second bandit's scimitar finds you, and your rage dies with it. You hit the cobbles with your cheek against cold stone and the axe slips from your fingers. The roar of the square shrinks to a ringing hum.
+
+Through half-lidded eyes you see the scarred leader standing over you. He nudges your ribs with his boot, spits, and says to his men, "Leave the pup. A dead one brings the watch, and I want the coin, not a hanging." Behind him the old vendor woman cries out as a bandit wrenches the cash box from her arms, and the acolyte is dragged by the collar toward the temple door.
+
+You are unconscious and dying, but your priestess's prayers still hum in you. Your first death save, a natural 18, is a success (1 of 3). You can't act, and I'll roll again each turn. Someone might yet come to your aid, though nobody has yet. The square is yours to wake in, if you can hold on.
+
+== ROUND 3 ==
+PLAYER: I can't act, so I just cling to that humming prayer and keep breathing, one shallow breath at a time. Behind my eyelids I picture the old priestess's face and silently promise her I'll get back up.
+
+DM: How many handaxes and javelins do I still have on me, and is the greataxe still on my back?
+  [game] fight: Round 2, now: Bandit 1. Bandit 1 (initiative 6): HP 11/11, AC 12 Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Bandit 2. Bandit 2 (initiative 6): HP 11/11, AC 12 Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Scarred Leader. Scarred Leader (initiative 13): HP 32/32, AC 11 Scarred Leader's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [5] = 5
+  [game] sheet: death save failures: 1/3
+DM: You still have everything. Both handaxes are at your belt (the one you drew lies on the cobbles by your hand), all four javelins are in your pack, and the greataxe is still strapped to your back. Nobody has stripped you yet.
+
+You hold on. The prayer hums, but the breath catches and your chest stutters. That death save is a 5, a failure (1 success, 1 failure).
+
+Out past the ringing, the gang is busy. The leader's voice barks, "Grab the box and the girl's purse, then we're gone before the bells," and boots scatter among broken crates. The old woman's sobbing is closer, and a small hand is tugging at your sleeve, the lanky vendor boy. "Please, big one, wake up, please." Nobody has done anything to help you yet, and your next death save is coming.
+
+== ROUND 4 ==
+PLAYER: I can't move or speak, so I just hold on to that tugging little hand in my mind and try to breathe. Come on, Grukka, don't let the priestess's temple fall to these ash-handed dogs.
+  [game] fight: Round 3, now: Bandit 1. Bandit 1 (initiative 6): HP 11/11, AC 12 Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Bandit 2. Bandit 2 (initiative 6): HP 11/11, AC 12 Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Scarred Leader. Scarred Leader (initiative 13): HP 32/32, AC 11 Scarred Leader's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Vendor boy's Wisdom (Medicine) check to stabilize Grukka, DC 10: 1d20 = 1d20 [8] = 8
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [10] = 10
+  [game] sheet: death save successes: 2/3
+DM: The boy's shaking fingers press at your throat and wrist, but he doesn't know what he's looking for. "I... I don't know how, I'm sorry, I'm sorry," he whispers, and the attempt comes to nothing.
+
+Your own body does the work instead. You roll a 10, a success. Death saves: 2 successes, 1 failure. One more success and you stabilize.
+
+Across the square the grey sashes are retreating. The leader hauls the acolyte's satchel over his shoulder and barks at the others to move. Heavy boots fade toward the east gate. In the sudden quiet you hear the temple's bar scrape and a door groan open, and an old, cracked voice cries your name.
+
+You are still unconscious at 0 HP. Your next death save comes on your next turn.
+
+== ROUND 5 ==
+PLAYER: I can't do anything but lie there, but I cling to that cracked voice calling my name and fight to keep the next breath coming. If I wake, the first thing I'm doing is going after that scarred bastard and getting the acolyte's satchel back.
+  [game] dice Old priestess's Wisdom (Medicine) check to stabilize Grukka, DC 10: 1d20+5 = 1d20 [16] + 5 = 21
+  [DM lookup (hidden)] {"name": "Cure Wounds", "kind": "spell"}
+  [DM write_lore (hidden)] {"create": "Old Priestess", "kind": "person", "description": "The old priestess of Thornwick's temple who raised Grukka and taught her prayers. Cracked voice. Barred the temple door during the shakedown, opened it after the gang left.", "relationships": ["raised [[Grukka Ironhide]]", "keeps the temple in [[Thornwick]]"]}
+  [game] notebook: created an entry for Old Priestess; added 2 relationships to Old Priestess
+  [game] dice Priestess's Cure Wounds on Grukka: 1d8+3 = 1d8 [8] + 3 = 11
+  [refused] sheet: condition 'unconscious' is not on the sheet; conditions now: none
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 1, 6:30:24 PM.
+  [game] time: 1 minute later: Day 1, 6:31:24 PM
+  [game] sheet: healed 11: HP 0 → 11; conscious again; death saves reset
+DM: Warmth floods your chest, and light spills red through your eyelids. A gnarled hand rests on your brow, and a cracked voice murmurs a prayer you've known since you were small.
+
+"There you are, my stubborn girl. Breathe. Breathe."
+
+You come up out of the dark on the cobbles of the market square with the old priestess kneeling over you, her grey braid fallen across her shoulder, her palm glowing faintly. The vendor boy is crying with relief. The gang is gone, and so is the acolyte's satchel. Her Medicine check had steadied you, and her Cure Wounds brought you back: you're at 11 HP, conscious, death saves reset. Your Relentless Endurance is spent, and you have one Rage left until a long rest.
+
+"That was foolish and brave and exactly like you," the priestess says, pressing your shoulder when you try to rise. "Those men took Brother Aldric's tithe satchel and dragged the girl Merra toward the east gate. They wear the black hand. I don't know why they're here."
+
+It's about a minute past half-past six, dusk deepening. The old woman is bundling her broken stall, the boy is picking up your fallen handaxe and holding it out to you with both hands, and the priestess awaits your answer. What does Grukka do?
+
+== ROUND 6 ==
+PLAYER: I take the handaxe from the boy with a nod and a gruff "Good lad," then push myself up on one knee and grip the priestess's hand. "Mother, I'm going after them through the east gate, and I'm bringing Merra and Brother Aldric's satchel back. Tell me anything you know about where the Black Hand camp is, and get me a waterskin and a bite of bread, because I'm not dying twice in one night."
+  [game] sheet: condition removed: Unconscious
+  [DM write_lore (hidden)] {"create": "Merra", "kind": "person", "description": "Young temple acolyte of Thornwick, dragged toward the east gate by the Ash-Mark Gang (Black Hand).", "relationships": ["taken by the [[Ash-Mark Gang]]"]}
+  [game] notebook: created an entry for Merra; added 1 relationship to Merra
+  [DM write_lore (hidden)] {"create": "Brother Aldric", "kind": "person", "description": "Temple brother of Thornwick whose tithe satchel was stolen by the Black Hand gang.", "relationships": ["tithe satchel stolen by the [[Ash-Mark Gang]]"]}
+  [game] notebook: created an entry for Brother Aldric; added 1 relationship to Brother Aldric
+  [DM write_lore (hidden)] {"create": "Rescue Merra", "kind": "quest", "description": "Follow the Black Hand gang through Thornwick's east gate, rescue the acolyte Merra and recover Brother Aldric's tithe satchel. Priestess says the gang's camp is at the abandoned toll-house on the east road."}
+  [game] notebook: created an entry for Rescue Merra
+  [game] time: 5 minutes later: Day 1, 6:36:24 PM
+DM: The boy beams at your "Good lad." The priestess clicks her tongue but doesn't stop you. She was never one to argue with a Grukka whose jaw is set, and she helps you to your feet instead.
+
+"Eat first. Walk second." She presses a heel of bread and a hard wedge of cheese into your hand while the boy runs to the temple and returns with a full waterskin. You wolf the bread down, drink deep, and the fog clears. In the five minutes it takes, she tells you what she knows.
+
+"The black hand sashes came in three nights ago, squatting in the old toll-house a mile out on the east road, the one the caravans abandoned when the bridge washed out. They've been taking 'tithes' from the farms out there too. Fourteen of them, maybe more. I counted six in the square, so there are others waiting out there." She grips your wrist. "And the scarred one, he isn't their master. I heard one of his men call him 'Gaunt's dog'. I don't know a Gaunt, child, but these men answer to someone."
+
+You're at 11 of 15 HP, rested enough to move but not whole, and you have a Rage left, a greataxe, two handaxes, four javelins, and ten torches. Dusk is turning to dark, and the east gate stands open at the end of the street. A short rest of an hour would let you spend your Hit Die to mend before you go, though Merra has none to spare. What does Grukka do?
+
+== ROUND 7 ==
+PLAYER: I tighten the greataxe strap and shake my head. "No time for an hour, Mother, Merra doesn't have one. I'll go now, quiet and low in the dark, scout the old toll-house, and look for a way in before I start swinging. And I'll find out who this Gaunt is."
+
+I strike out through the east gate, torches stowed so I can lean on my darkvision.
+  [game] dice Grukka Stealth approaching the toll-house vs sentries' passive Perception 10: 1d20+2 = 1d20 [5] + 2 = 7
+  [game] dice Grukka Perception scouting the toll-house: 1d20+3 = 1d20 [5] + 3 = 8
+  [game] time: 25 minutes later: Day 1, 7:01:24 PM
+  [DM write_lore (hidden)] {"create": "Old Toll-House", "kind": "place", "description": "Abandoned toll-house a mile out on the east road from Thornwick, near a washed-out bridge. Black Hand gang's camp. Priestess says fourteen or more; they answer to someone called Gaunt.", "relationships": ["camp of the [[Ash-Mark Gang]]", "a mile east of [[Thornwick]]"]}
+  [game] notebook: created an entry for Old Toll-House; added 2 relationships to Old Toll-House
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "At dusk: a two-storey stone toll-house beside a washed-out stone bridge, a campfire in its yard, a lamp in an upper window, a sentry on the road. A sentry heard Grukka approaching."}
+  [game] notebook: updated Old Toll-House
+DM: The east road is a pale ribbon in the dark, and with darkvision you pick your way along its weedy verge, a big shape moving from shadow to shadow. A mile out, past a stand of crooked alders, the toll-house rises against the last grey of the sky: a squat two-storey block of stone beside the broken stub of a bridge, its yard lit by a campfire, a lamp burning in one upper window. Wagons and crates are stacked in the yard, and you count at least four figures around the fire, with laughter and the clink of cups.
+
+You don't see the sentry until too late. Your boot scuffs loose gravel at the edge of the alders, a poor Stealth roll of 7, and a man sitting on a barrel at the bridge's end, a crossbow across his knees, lifts his head sharply.
+
+"Who's there?" he calls, not loud yet, and stands. "Show yourself, or I put a bolt in the dark."
+
+He's about forty feet off, between you and the yard, and has not yet raised the alarm. You're at 11 of 15 HP, with your greataxe on your back and a handaxe at your belt. What does Grukka do?
+
+== ROUND 8 ==
+PLAYER: I drop low and call out in a hoarse, slurring voice in Common, "Easy, friend, it's just me, Dagga, back from the east farms. Hold your bolt, the Gaunt's dog sent me." Then I keep my hands wide and shuffle toward him, ready to close the forty feet and put a handaxe in him if he doesn't buy it.
+  [game] dice Grukka Deception, posing as 'Dagga' in the dark, DC 13: 1d20+1 = 1d20 [13] + 1 = 14
+  [DM write_lore (hidden)] {"entry": "Ash-Mark Gang", "add_to_description": "Grukka bluffed a toll-house sentry by claiming to be 'Dagga' sent by 'the Gaunt's dog'. The scarred leader is called Harl by gang members (name from sentry)."}
+  [game] notebook: updated Ash-Mark Gang
+DM: The sentry's crossbow dips an inch. In the dark, with your slur and the bulk of you hunched low, he can't see much beyond a big shape.
+
+"Dagga?" he mutters. "Thought you were out at the Marsh farm till morning. Gaunt's dog, you say? Harl's back already, then, and brought the girl?" He grunts, half laughing, and lowers the crossbow to his hip. "Come on, come on, into the light, you ox. Did Harl get a bad lump or something? Word is some temple lummox put up a fight." He glances back toward the fire and then at you, still squinting.
+
+Your Deception of 14 held. He's relaxed, not convinced. You're about forty feet from him, with the yard and four men at the fire beyond, and the lamp-lit window above. What does Grukka do?
+
+== ROUND 9 ==
+PLAYER: I keep my head low and shuffle closer, grunting a laugh. "Aye, a lummox gave Harl a lump, and she got what was coming. Where's the girl, upstairs?" When I'm within arm's reach I'll clamp a hand over his mouth and slam him into the barrel, no noise if I can help it.
+  [DM lookup (hidden)] {"name": "Grappling"}
+  [DM lookup (hidden)] {"name": "Contests in Combat"}
+  [game] dice Grukka Deception to answer the sentry's question while closing: 1d20+1 = 1d20 [6] + 1 = 7
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [12] + 2 = 14
+  [game] dice Sentry initiative: 1d20+1 = 1d20 [3] + 1 = 4
+  [game] fight: Fight started. Order: Grukka Ironhide (14), Sentry (4). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] time: 1 minute later: Day 1, 7:02:24 PM
+DM: Your answer comes out wrong. The sentry's smile freezes at "she got what was coming" (Deception 7, a poor roll). Nobody told him the lummox was a woman, and nobody in Harl's crew calls the girl Merra's captor "she." His crossbow comes back up, but you've already closed to about ten feet, low and quick, and he's an instant slower than you.
+
+"Hold it, you're not..." he starts, and his eyes widen as the firelight catches your tusks.
+
+The sentry is a bandit with a crossbow, in leather, facing you from ten feet away at the end of the broken bridge. The four men at the fire, sixty feet behind him, haven't turned yet. You won initiative, so you act first. You're at 11 of 15 HP, with a Rage left, a handaxe at your belt and a greataxe on your back. What does Grukka do?
+
+== ROUND 10 ==
+PLAYER: I charge the last ten feet, rage roaring up in me as a bonus action, and swing the greataxe off my back in one sweep at his neck before he can shout. "Tell Gaunt the lummox says hello!"
+  [game] sheet: Rage: 0/2; condition added: Raging (Grukka Ironhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Grukka greataxe attack vs Sentry AC 12: 1d20+6 = 1d20 [1] + 6 = 7 (natural 1) (Grukka Ironhide has used its action: no more actions this turn.)
+  [DM lookup (hidden)] {"name": "Ranged Attacks in Close Combat"}
+  [game] fight: Round 1, now: Sentry. Sentry (initiative 4): HP 11/11, AC 12 Sentry's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry crossbow vs AC 15 (disadvantage, adjacent foe): 1d20+3 (disadvantage) = 1d20 [16, 16]→16 + 3 = 19 (Sentry has used its action: no more actions this turn.)
+  [game] dice Sentry crossbow damage (halved by rage): 1d8+1 = 1d8 [5] + 1 = 6
+  [game] sheet: took 3 damage: HP 11 → 8
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You tear the greataxe free and charge the last ten feet, but the sentry's head jerks aside and the blade whistles through empty air, hacking splinters from his barrel (a natural 1). He yells "Black Hands, to me, there's a—" and fires point-blank. The bolt slams into your shoulder with a punch of pain, and the rage dulls it to a mere 3 HP. You're at 8 of 15.
+
+At the fire, the four men are on their feet, shouting and grabbing weapons, about sixty feet back. The sentry is reloading in front of you, wide-eyed. You're raging, with no rages left, and it's your turn. What does Grukka do?
+
+== ROUND 11 ==
+PLAYER: I step in and swing the greataxe again, a brutal overhand chop straight down at him, roaring so loud the whole yard hears it. "Your boss's dog hit like a farmhand, and so do you!"
+  [game] dice Grukka greataxe attack vs Sentry AC 12: 1d20+6 = 1d20 [16] + 6 = 22 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Greataxe damage (1d12+4 +2 rage): 1d12+6 = 1d12 [9] + 6 = 15
+  [game] fight: Sentry removed from the fight. Order: Grukka Ironhide (14)
+  [game] dice Yard bandits initiative (group): 1d20+1 = 1d20 [4] + 1 = 5
+  [game] fight: Added to the fight. Order: Grukka Ironhide (14), Yard Bandit 1 (5), Yard Bandit 2 (5), Yard Bandit 3 (5), Yard Bandit 4 (5)
+  [game] fight: Round 2, now: Yard Bandit 1. Yard Bandit 1 (initiative 5): HP 11/11, AC 12 Yard Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Yard Bandit 1 crossbow vs AC 15: 1d20+3 = 1d20 [19] + 3 = 22 (Yard Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Yard Bandit 1 crossbow damage (halved by rage): 1d8+1 = 1d8 [8] + 1 = 9
+  [game] sheet: took 4 damage: HP 8 → 4
+  [game] fight: Round 2, now: Yard Bandit 2. Yard Bandit 2 (initiative 5): HP 11/11, AC 12 Yard Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Yard Bandit 2 crossbow vs AC 15: 1d20+3 = 1d20 [9] + 3 = 12 (Yard Bandit 2 has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Yard Bandit 3. Yard Bandit 3 (initiative 5): HP 11/11, AC 12 Yard Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Yard Bandit 3 crossbow vs AC 15: 1d20+3 = 1d20 [19] + 3 = 22 (Yard Bandit 3 has used its action: no more actions this turn.)
+  [game] dice Yard Bandit 3 crossbow damage (halved by rage): 1d8+1 = 1d8 [5] + 1 = 6
+  [game] sheet: took 3 damage: HP 4 → 1
+  [game] fight: Round 2, now: Yard Bandit 4. Yard Bandit 4 (initiative 5): HP 11/11, AC 12 Yard Bandit 4's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Yard Bandit 4 crossbow vs AC 15: 1d20+3 = 1d20 [11] + 3 = 14 (Yard Bandit 4 has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your axe bites deep and the sentry folds, dead before he hits the planks. You've no time to enjoy it. Four bolts hiss across the yard from the fire, where the Black Hand men have formed a ragged line sixty feet off, crossbows up, and two of them find you. Rage soaks most of it, but you're at **1 HP** (of 15).
+
+The rage that's carrying you only holds if you keep fighting. The scene looks like this:
+
+- Four crossbowmen at the fire, about 55 feet away, reloading. They'll shoot again next round.
+- Your rage is spent for the day, and your Relentless Endurance is already used.
+- Between you and them is open yard. Behind you are the alders and the dark road, and the broken bridge's stone parapet is beside you, with crates and wagons stacked in the yard, so there is cover to be had.
+- A lamp burns upstairs in the toll-house, where Merra is likely held.
+
+It's your turn. What does Grukka do?
+
+== ROUND 12 ==
+PLAYER: I'm at 1 HP and four crossbows are about to reload, so I'm not charging that line. I dive behind the bridge's stone parapet and the nearest wagon for cover, then use the crates and shadow to work my way toward the toll-house's side door, keeping out of their sightline and heading for Merra's lamp-lit window.
+  [DM lookup (hidden)] {"name": "Cover", "kind": "rule"}
+  [DM lookup (hidden)] {"name": "Hiding"}
+  [game] dice Grukka Stealth slipping behind parapet and wagon vs passive Perception 10: 1d20+2 = 1d20 [16] + 2 = 18
+  [game] fight: Round 3, now: Yard Bandit 1. Yard Bandit 1 (initiative 5): HP 11/11, AC 12 Yard Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Yard Bandit 1 Perception search vs Grukka's Stealth 18: 1d20 = 1d20 [14] = 14 (Yard Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Yard Bandit 2 Perception search vs Stealth 18: 1d20 = 1d20 [11] = 11
+  [game] dice Yard Bandit 3 Perception search vs Stealth 18: 1d20 = 1d20 [1] = 1 (natural 1)
+  [game] dice Yard Bandit 4 Perception search vs Stealth 18: 1d20 = 1d20 [3] = 3
+  [game] fight: Round 3, now: Yard Bandit 2. Yard Bandit 2 (initiative 5): HP 11/11, AC 12 Yard Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Yard Bandit 3. Yard Bandit 3 (initiative 5): HP 11/11, AC 12 Yard Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Yard Bandit 4. Yard Bandit 4 (initiative 5): HP 11/11, AC 12 Yard Bandit 4's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Grukka killed the sentry at the bridge and slipped behind the parapet and wagon; four crossbow bandits at the fire are searching the dark. Side door of the toll-house lies beyond the wagons; lamp-lit upper window."}
+  [game] notebook: updated Old Toll-House
+DM: You throw yourself behind the stone parapet and slide on your belly to the nearest wagon, and the dark swallows you. You rolled an 18 on Stealth. The bandits can't see you, though the yard is far from quiet:
+
+"Where'd he go? Lummox went over the bridge!" "Check the alders, Dunn, take the lamp." "Bring a torch, you fool. No, don't spread out!"
+
+Their searches pass over you: four rolls of 14, 11, 1 and 3, none beating your 18. Two of them are drifting toward the alders on the road side, one is checking the bridge, and the fourth hangs back by the fire, crossbow raised. Their torches throw jittery light across the yard, and the wagons' shadows are deep between them and you.
+
+You're crouched at 1 HP, still raging, behind a loaded wagon about thirty feet from the toll-house's weathered side door, which stands in shadow beyond a stack of crates. Above it the lamp-lit window glows. Your rage lasts only while you keep fighting or taking damage, so it will end soon if you don't strike. What does Grukka do?
+
+== ROUND 13 ==
+PLAYER: I stay low and creep from the wagon to the crate stack, then along its shadow to the side door, testing the latch as quietly as I can. If it opens, I slip inside and ease it shut behind me, then head up toward Merra's lamp-lit window.
+  [game] dice Grukka Stealth creeping to the side door and slipping in vs passive Perception 10: 1d20+2 = 1d20 [13] + 2 = 15
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 1, 7:02:48 PM.
+  [game] sheet: condition removed: Raging
+  [game] time: 1 minute later: Day 1, 7:03:48 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Ground floor: dim storeroom with sacks and barrels, a stair going up. Grukka is inside, unseen, at 1 HP, rage over."}
+  [game] notebook: updated Old Toll-House
+DM: You move like a shadow with an axe, and the latch lifts without a sound. A 15 on Stealth is enough. The door yields an inch, then wide enough for your shoulders, and you ease it shut behind you. The shouting in the yard dims to a muffled bark.
+
+You're in the toll-house's ground floor, a low stone storeroom that smells of tar, damp sacking and stale beer. Barrels and stacked grain sacks make a maze in the gloom, and your darkvision paints it all in grey. Across the room a narrow wooden stair climbs into the dark, with a thin seam of lamplight at its head. Your rage has faded, and with it the last of its resistance. You're at 1 HP, with no Rage or Relentless Endurance left.
+
+From above come muffled voices: a man's low growl you think belongs to Harl, and a girl's thin voice that might be Merra, though you can't make out words. A board creaks overhead, and something heavy is dragged across the floor.
+
+You could creep up the stairs, listen at the head of them first, or take a moment to bind your wounds. What does Grukka do?
+
+== ROUND 14 ==
+PLAYER: I'm at 1 HP, so I'm not climbing into a room with Harl like this. I slip behind a stack of grain sacks, drink what's left of the waterskin and bind my wounds, and I'll try for a short rest here if the bandits outside don't come looking. Once I've spent a Hit Die, I'll creep up the stairs and listen at the top before I move.
+  [DM lookup (hidden)] {"name": "Short Rest"}
+  [game] dice Does a searching bandit enter the storeroom during the hour? (1-10 yes): 1d20 = 1d20 [17] = 17
+  [game] sheet: short rest; 1 hour later: Day 1, 8:03:48 PM
+  [game] sheet: spent 1 hit die (0/1 left): roll 1d12 and add the CON modifier (CON 16 (+3)), then pass the total as heal; the player decides whether to spend another after the roll
+  [game] dice Grukka Hit Die healing: 1d12+3 = 1d12 [12] + 3 = 15
+  [game] sheet: healed 15: HP 1 → 15
+  [game] dice Grukka Stealth creeping up the stairs: 1d20+2 = 1d20 [15] + 2 = 17
+  [game] dice Grukka Perception listening at the top of the stairs: 1d20+3 = 1d20 [6] + 3 = 9
+  [game] time: 2 minutes later: Day 1, 8:05:48 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Grukka rested an hour in the storeroom (unfound), healed to full, and crept to the stairhead at about 8:06 PM. Upstairs: a door at the stairhead with lamplight, at least Harl, Merra and a third unidentified voice."}
+  [game] notebook: updated Old Toll-House
+DM: Behind the grain sacks you tend yourself in the dark. You drink the last of the waterskin, bind your shoulder with a strip of your own clothes, and settle in with the axe across your knees. Outside the bandits' voices wander and stray, torches pass the shutters twice, and nobody opens the door. After an hour, a short rest and a Hit Die roll of 12 (+3) bring you back to full: **15/15 HP**. Your Rage and Relentless Endurance are still spent until a long rest, and your Hit Die is used.
+
+The stairs are old and loud, but your 17 on Stealth picks the quiet boards and you reach the top without a creak. A plank door stands at the head with lamplight leaking beneath it. You press an ear to it, but a 9 on Perception doesn't give you much. You catch a low, bored growl you're fairly sure is Harl's, a girl's thin murmur that sounds like she's praying, and another voice, smoother, which you can't place. Words blur into the wood. Someone paces, and a chair scrapes. One sentence cuts through: "...before Gaunt arrives, so you'll keep her quiet." Nothing else is clear.
+
+It's about 8:06 PM. Below, the yard is quieter now, the bandits having given up the hunt for a lummox in the dark. You're at the upstairs door with the axe in hand and nobody yet aware of you. What does Grukka do?
+
+== ROUND 15 ==
+PLAYER: I ease the door open an inch with my fingertips to peek through the crack and count heads: how many in there, where Merra is, and where Harl is standing. If it's just Harl and one other, I'll burst in with the greataxe before Gaunt shows up.
+  [game] dice Grukka Stealth easing the door open vs passive Perception 10: 1d20+2 = 1d20 [16] + 2 = 18
+  [DM write_lore (hidden)] {"create": "Pell", "kind": "person", "description": "Smooth-voiced thin clerk in the upper room of the toll-house, tallying the stolen tithes in a ledger for Gaunt. Unarmed but for a knife. Not a fighter.", "relationships": ["works for Gaunt, who is expected at the [[Old Toll-House]]", "present with Harl and [[Merra]]"]}
+  [game] notebook: created an entry for Pell; added 2 relationships to Pell
+  [DM write_lore (hidden)] {"entry": "Ash-Mark Gang", "add_to_description": "Upper room of the toll-house holds: Harl (scarred leader, 32 HP thug), one bandit guard, Pell the clerk, and Merra (bound). Harl is called Gaunt's dog. Gaunt is expected soon."}
+  [game] notebook: updated Ash-Mark Gang
+DM: The door gives without a whisper, and an 18 on Stealth keeps the hinges quiet. You ease it open a finger's width and look through.
+
+It's a long upper room with a lantern hanging from a beam, a table with a ledger and a stack of coin sacks, and Brother Aldric's tithe satchel slumped open on it, with silver spilling out. Merra sits on a stool against the far wall, wrists bound in front of her with cord and ankles tied, her lips moving in prayer. She looks unhurt but pale.
+
+You count three captors:
+
+- Harl, the scarred leader, leaning on the table with his spiked mace across his knees, back half-turned to the door, about twenty feet from you.
+- A bandit in leather by the window, scimitar at his hip and crossbow slung, watching the yard through the shutters.
+- A thin man in an ink-stained coat seated at the ledger, tallying coins with a quill. That's the smooth voice. He's no fighter, but he's quick with figures.
+
+No Gaunt yet. "Quiet," Harl says without turning. "A couple more days and your temple's tithe is paying for new boots, little priest." Merra keeps praying. The window shutters are barred, and a second door at the room's far end is shut. You still have surprise on your side, with the greataxe in your hands and nobody looking your way.
+
+What does Grukka do?
+
+== ROUND 16 ==
+PLAYER: I kick the door wide and charge Harl first, greataxe up, roaring as I close the twenty feet to him. "You hit like a farmhand and you left me breathing, Harl, so now I'm returning the favour!"
+  [DM lookup (hidden)] {"name": "Commoner", "kind": "monster"}
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [10] + 2 = 12
+  [game] dice Harl initiative: 1d20+0 = 1d20 [15] + 0 = 15
+  [game] dice Bandit guard initiative: 1d20+1 = 1d20 [12] + 1 = 13
+  [game] dice Pell initiative: 1d20+0 = 1d20 [14] + 0 = 14
+  [game] fight: Fight started. Order: Harl (15), Pell (14), Bandit Guard (13), Grukka Ironhide (12). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Harl. Harl (initiative 15): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Pell. Pell (initiative 14): HP 4/4, AC 10 Pell's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Bandit Guard. Bandit Guard (initiative 13): HP 11/11, AC 12 Bandit Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka greataxe vs Harl AC 11 (advantage: unseen attacker, surprised): 1d20+6 (advantage) = 1d20 [2, 8]→8 + 6 = 14 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Greataxe damage on Harl: 1d12+4 = 1d12 [6] + 4 = 10
+  [game] fight: Harl took 10: HP 32 → 22
+  [game] fight: Round 2, now: Harl. Harl (initiative 15): HP 22/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace attack 1 vs AC 15: 1d20+4 = 1d20 [15] + 4 = 19 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace attack 2 vs AC 15: 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Harl mace damage 1: 1d6+2 = 1d6 [3] + 2 = 5
+  [game] dice Harl mace damage 2: 1d6+2 = 1d6 [6] + 2 = 8
+  [game] sheet: took 13 damage: HP 15 → 2
+  [game] fight: Round 2, now: Pell. Pell (initiative 14): HP 4/4, AC 10 Pell's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Bandit Guard. Bandit Guard (initiative 13): HP 11/11, AC 12 Bandit Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Bandit Guard scimitar vs AC 15: 1d20+3 = 1d20 [2] + 3 = 5 (Bandit Guard has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Both hit (15 meets AC 15).
+DM: You kick the door wide and cross the twenty feet in a heartbeat. Taken by surprise, the room doesn't move until your axe lands, biting Harl across the ribs for 10 damage, and he roars, blood running down his side. Then he's on you. Both mace blows connect, 5 and 8 damage, and you reel back with a ringing skull. You're down to **2 of 15 HP**.
+
+Pell has fallen off his stool and is scrabbling for the far door with the ledger clutched to his chest. The bandit guard swung his scimitar and missed wildly, a 5. Harl is bloodied but still on his feet, and the bandit is at your flank.
+
+You have no Rage and no Relentless Endurance left, and this is your turn. Harl and the bandit are both within reach. What does Grukka do?
+
+== ROUND 17 ==
+PLAYER: I'm at 2 HP and not backing down from this scarred bastard. I plant my feet and swing the greataxe at Harl again, going for the kill. "Twenty-two hit points left in you, Harl, let's see you spend them!"
+  [game] dice Grukka greataxe vs Harl AC 11: 1d20+6 = 1d20 [2] + 6 = 8 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Harl. Harl (initiative 15): HP 22/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace attack 1 vs AC 15 (Pack Tactics advantage): 1d20+4 (advantage) = 1d20 [15, 13]→15 + 4 = 19 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace damage: 1d6+2 = 1d6 [4] + 2 = 6
+  [game] sheet: took 6 damage: HP 2 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious
+  [game] fight: Round 3, now: Pell. Pell (initiative 14): HP 4/4, AC 10 Pell's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Bandit Guard. Bandit Guard (initiative 13): HP 11/11, AC 12 Bandit Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [11] = 11
+  [game] sheet: death save successes: 1/3
+  [refused] write_lore: no entry 'Harl'
+entries whose description mentions it:
+Ash-Mark Gang (group): Armed toughs wearing stranger's colors (grey sashes with a black handprint), shaking down the temple market for 'tithes' and smashing stalls. Led by a scarred…
+Old Toll-House (place): Abandoned toll-house a mile out on the east road from Thornwick, near a washed-out bridge. Black Hand gang's camp. Priestess says fourteen or more; they answer…
+  [DM write_lore (hidden)] {"create": "Harl", "kind": "person", "description": "Scarred leader of the Black Hand gang, 'Gaunt's dog'. Wields a spiked mace. Left Grukka alive at the toll-house so Gaunt can see her.", "relationships": ["leads the [[Ash-Mark Gang]]", "answers to Gaunt"]}
+  [game] notebook: created an entry for Harl; added 2 relationships to Harl
+DM: The axe slips from your hands. Harl's mace lands again, and this time the world goes red, then black. You hit the boards face-down at 0 HP, unconscious.
+
+Through the roar in your ears you hear him, breathing hard, bloodied: "Don't. Don't finish her. Gaunt will want to see this one with his own eyes." A boot kicks your axe across the floor. "Tie her. Hands and feet. And Pell, stop crying and fetch the cord."
+
+Nobody has struck you again. Your death save this round is an 11, a success. You have 1 success and 0 failures. You're still unconscious, and the room around you is a blur of boots and the lamp's yellow glow. Merra's praying has stopped. Her voice, small and furious, cuts through: "Get away from her, you animals."
+
+Your next death save comes on your turn. What does Grukka do?
+
+== ROUND 18 ==
+PLAYER: I can't act, so I just keep clinging to that small furious voice and hold on to my breath. Merra's got more fight in her than the whole Black Hand, and I'm not going to let her down.
+  [game] fight: Round 4, now: Harl. Harl (initiative 15): HP 22/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Pell. Pell (initiative 14): HP 4/4, AC 10 Pell's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Bandit Guard. Bandit Guard (initiative 13): HP 11/11, AC 12 Bandit Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [2] = 2
+  [game] sheet: death save failures: 1/3
+DM: Cord bites your wrists and ankles, hauled tight by the bandit guard while Harl stands over you, breathing like a bellows. Pell hovers with the ledger, whispering, "She'll bleed out, sir. The temple girl's the one Gaunt wanted, not this."
+
+"She'll live or she won't," Harl growls. "Gaunt can have the corpse."
+
+Your death save is a 2, a failure. You have 1 success and 1 failure. You're unconscious and bound, still at 0 HP, and nobody has done anything to stop your dying. In the dimness you hear Merra's bound feet scrape the floor as she shuffles closer on her stool, and a whisper that is almost a prayer: "Please, please, hold on." Whether she can do anything bound as she is, I can't say yet. Your next death save is on your next turn.
+
+== ROUND 19 ==
+PLAYER: I can't move, so I just fight to keep breathing, the priestess's prayer humming under the ringing in my skull. Merra, if you can hear me, keep praying, I'm still here.
+  [game] dice Merra's Wisdom (Medicine) check to stabilize Grukka with bound hands, DC 10: 1d20+3 = 1d20 [9] + 3 = 12
+  [game] dice Hours until the stable Grukka regains 1 HP: 1d4 = 1d4 [2] = 2
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 1, 8:06:12 PM.
+  [DM lookup (hidden)] {"name": "Stabilizing a Creature"}
+  [game] time: 2 hours later: Day 1, 10:06:12 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; lost 1 × Greataxe; lost 2 × Handaxe; lost 4 × Javelin
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Grukka was beaten by Harl, bound and stripped of her weapons (greataxe, handaxes, javelins now held by the gang, likely in the upper room). She was stabilized by Merra and woke at about 10:06 PM bound with 1 HP. Gaunt expected to arrive."}
+  [game] notebook: updated Old Toll-House
+DM: Small fingers fumble at your throat and wrist. A bound girl's hands, shaking, but they know what they're doing. "Don't die, don't die, you stubborn ox," Merra whispers, pressing her ear to your chest. It takes her a hundred ragged heartbeats, and with the bandits turned away, arguing over the ledger, her Medicine check of 12 succeeds. You're stable. No more death saves.
+
+Time slips past you. When you surface it's about 10 PM, two hours on, and you have 1 HP.
+
+You're lying on cold stone in a cramped cellar under the toll-house, wrists and ankles tied with cord, a lump on the back of your skull and your ribs a map of bruises. Your greataxe, handaxes and javelins are gone, along with Brother Aldric's satchel. The cord has been tied by someone who knew how. A single stub of candle burns in an alcove. Merra sits beside you, her own wrists bound in front, a bruise darkening her cheek. A heavy trapdoor sits above, with muffled voices through it and a thin line of lamplight around the edges.
+
+"They went up to meet someone," she breathes. "A man named Gaunt is coming tonight. Harl was frightened, Grukka. I've never seen him frightened." She swallows. "I couldn't free my hands, but they didn't take my prayer beads, and the knot at your wrists is a poor one. I think I can loosen it, if you can stay quiet."
+
+You're at 1 HP, unarmed, bound, with no Rage and no Relentless Endurance until a long rest. You still have your pouch, backpack and everything else not taken, though your waterskin is empty. What does Grukka do?
+
+== ROUND 20 ==
+PLAYER: Merra, you saved my hide, and I won't forget it. Loosen the knot, quiet as you can, and then I'll work yours free with my teeth if I have to. Once we're loose, I'm listening at that trapdoor before we do anything else, because I'm not walking out unarmed at 1 HP.
+  [game] sheet: condition removed: Unconscious
+  [game] dice Merra's Dexterity (Sleight of Hand) loosening Grukka's cord, DC 12: 1d20+2 = 1d20 [5] + 2 = 7
+  [game] dice Grukka Perception listening at the trapdoor: 1d20+3 = 1d20 [12] + 3 = 15
+  [game] time: 5 minutes later: Day 1, 10:11:12 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Cellar: stone, cramped, trapdoor above bolted from above (heard bolt thrown). Above, Harl, Pell and two guards wait for Gaunt, who is due around midnight. Grukka's weapons are in an iron-banded chest by the table. Merra loosening cords; first attempt failed."}
+  [game] notebook: updated Old Toll-House
+DM: Merra works at the knot with her bound fingers and her teeth, whispering a prayer every time the cord bites. A check of 7 isn't enough: the knot only tightens and she nearly yelps. "It's wet cord," she hisses. "Harl soaked it so it'd shrink. Give me a moment, I can try again." Five minutes pass, thick with the smell of old stone and your own blood.
+
+You slide yourself close to the trapdoor and press your ear against the boards. A 15 on Perception serves you well. Through the planks you hear:
+
+Harl, hoarse and short of temper, wincing: "Midnight, Pell. He said midnight. If he sees us waiting with our thumbs in our arses he'll have us all in the river."
+
+Pell, nervous: "The ledger's balanced, sir. And the temple girl's tithe is more than we asked for. He may be pleased."
+
+A third voice, one of the guards, bored: "What about the big one in the cellar? Gaunt wants her? Why?" Harl doesn't answer for a long moment. Then: "Because he asked for any who'd defend that temple. She's proof there's something there worth defending." A boot scuffs. The bolt on the trapdoor is thrown from above, and you catch the clank of something heavy being set on the lid, a barrel perhaps. Your weapons, you gather, are in the iron-banded chest by the table up there.
+
+It's about 10:11 PM, with roughly two hours until Gaunt arrives. At 1 HP, you can't take a short rest properly while bound, but you can rest quietly, and a long rest is out of the question for now. Merra is ready to try the knot again. What does Grukka do?
+
+== ROUND 21 ==
+PLAYER: Tell her to try again, slow and steady, and I'll hold perfectly still and keep my breathing quiet while she works. "Take your time, Merra, we've got till midnight, and if that knot won't give, I'll chew the cord myself."
+
+DM: Was it Harl who said Gaunt wants anyone who'd defend the temple, and do I still have my pouch with the 15 gp?
+  [game] dice Merra's second attempt, Sleight of Hand on the cord, DC 12 (taking her time): 1d20+2 = 1d20 [1] + 2 = 3 (natural 1)
+  [game] time: 10 minutes later: Day 1, 10:21:12 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Merra's second attempt at the cords failed badly (nat 1); a guard thumped the trapdoor to demand quiet. Cellar has a rusted iron ring in the wall and a broken crate of tar-barrel staves. Time about 10:21 PM."}
+  [game] notebook: updated Old Toll-House
+DM: Yes, it was Harl who said it: "Because he asked for any who'd defend that temple. She's proof there's something there worth defending." And yes, your pouch is still at your belt with its 15 gp. They took only the weapons.
+
+Merra tries again, slow and steady, and for a while it seems to go well. Then her fingers slip on the wet cord (a natural 1), her elbow cracks into a loose stave from a broken crate, and the clatter rings off the stone. Both of you freeze. Overhead a boot thumps the trapdoor hard enough to dust your hair with grit. "Quiet down there, or I'll come down and quiet you!" The weight of the barrel shifts and settles. Nobody opens the lid.
+
+You hold your breath for a long minute. Merra's fingers are bleeding from the cord and she's crying quietly, furious with herself. The knot is now tighter than before. It's 10:21 PM.
+
+You do have options. A rusted iron ring is set in the wall about shoulder height, its edge worn rough with age, and the broken crate has jagged staves. Your Strength is considerable, though the noise of straining is a risk. The bandits are still above, and Gaunt comes at midnight. What does Grukka do?
+
+== ROUND 22 ==
+PLAYER: I whisper to Merra to rest her hands and not to blame herself, then scoot over to the rusted iron ring and start sawing the cord slowly back and forth against its worn edge, pausing every time a boot moves overhead. "Slow and steady, no strain. Once I'm loose I'll cut yours on a jagged stave of that crate."
+  [game] dice Grukka Strength (Athletics) sawing cord on the iron ring, DC 12: 1d20+6 = 1d20 [15] + 6 = 21
+  [game] dice Grukka Stealth, keeping the sawing quiet vs guards' passive Perception 10: 1d20+2 = 1d20 [4] + 2 = 6
+  [game] time: 9 minutes later: Day 1, 10:30:12 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "At about 10:30 PM Grukka cut her wrist and ankle cords on the iron ring (Athletics 21) but a guard heard the scraping (Stealth 6) and is moving the barrel and drawing the bolt to look in. Merra is still bound."}
+  [game] notebook: updated Old Toll-House
+DM: You work the cord against the iron ring a hair's breadth at a time, pausing whenever a boot shifts overhead, and with an Athletics of 21 it parts at last, strand by strand, in a slow nine minutes. The loop around your wrists drops free, and you rub the circulation back before you free your ankles the same way. You're loose, but at 1 HP and unarmed.
+
+You didn't keep it quiet enough. Your Stealth of 6 isn't enough: a thin rasping tells the guard above what you've been doing. A grunt, then the scrape of the barrel dragged off the trapdoor and the iron clank of the bolt sliding back. "Something's wrong down there," a voice mutters, and a bar of lamplight cuts into the cellar as the trapdoor lifts a hand's breadth.
+
+You have a few heartbeats. Merra is still bound beside you, frozen. The cellar is cramped stone with a crate of broken staves against one wall, the iron ring, and a short ladder under the trapdoor. A single guard is coming down, lantern in one hand and a scimitar in the other, with at least Harl and Pell above. You have your hands free and the shadows. What does Grukka do?
+
+== ROUND 23 ==
+PLAYER: I slide into the shadow beside the ladder, plant my back against the wall, and grab a jagged stave from the broken crate. When the guard's boots reach the last rung, I swing it hard at his head from the dark, then wrench the scimitar out of his hand, and whisper to Merra to stay down.
+  [DM lookup (hidden)] {"name": "Improvised Weapons"}
+  [game] dice Grukka Stealth, hiding in shadow beside the ladder vs guard's passive Perception 10: 1d20+2 = 1d20 [2] + 2 = 4
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [10] + 2 = 12
+  [game] dice Cellar Guard initiative: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+  [game] fight: Fight started. Order: Grukka Ironhide (12), Cellar Guard (2). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka stave (club-like) attack vs Cellar Guard AC 12: 1d20+6 = 1d20 [4] + 6 = 10 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Cellar Guard. Cellar Guard (initiative 2): HP 11/11, AC 12 Cellar Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cellar Guard scimitar vs AC 15: 1d20+3 = 1d20 [2] + 3 = 5 (Cellar Guard has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The stave whips out of the dark, but your Stealth of 4 gave you away. The guard's head turns and your swing glances off his shoulder instead of his skull (10 against AC 12, a miss). He stumbles back against the ladder, drops the lantern to its hook, and slashes at you in a panic. His scimitar whistles past your ear, a 5, no hit. Neither of you has scored.
+
+The lantern swings on its hook and throws moving shadows across the cellar, where Merra has curled against the wall. The guard is at the foot of the ladder and has not yet shouted, though he's drawing breath to. Overhead, boots shift.
+
+You're at 1 HP with a jagged stave in your hands and the guard within arm's reach. It's your turn. What does Grukka do?
+
+== ROUND 24 ==
+PLAYER: I drop the stave, lunge in and clamp one hand over his mouth while the other seizes his sword wrist, then drive my forehead into his nose and slam him against the ladder to choke off his shout. "Not a sound, friend, or I'll finish this the hard way."
+  [game] dice Grukka Athletics grapple vs Cellar Guard: 1d20+6 = 1d20 [12] + 6 = 18 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Cellar Guard Acrobatics contest vs grapple: 1d20+1 = 1d20 [5] + 1 = 6
+  [game] fight: Cellar Guard: Grappled
+  [game] fight: Round 2, now: Cellar Guard. Cellar Guard (initiative 2): HP 11/11, AC 12, Grappled Cellar Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cellar Guard scimitar vs AC 15 (grappled, mouth covered): 1d20+3 = 1d20 [4] + 3 = 7 (Cellar Guard has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your hand clamps over his mouth and your other fist seizes his sword wrist. You roll an 18 on the grapple against his 6, and he's yours, pinned against the ladder with the shout dying in his throat as a muffled grunt. (The headbutt and the slam are flavor, since the grapple is your whole action.) He gets one wild swing at you in the dark, a 7, and it misses.
+
+Overhead there's no new sound. The boots haven't moved. The lantern sways on its hook, and Merra stares at you with her mouth open. The guard is grappled, with the scimitar still in his hand.
+
+You're at 1 HP, still holding him. It's your turn again. What does Grukka do?
+
+== ROUND 25 ==
+PLAYER: I tighten my grip on his sword wrist and wrench it back until the scimitar clatters free, then drive my forehead into his nose. "Sleep, friend," I hiss, and choke him out while I keep my hand over his mouth.
+  [game] dice Grukka Athletics, choking the grappled guard unconscious (DM ruling: contested): 1d20+6 = 1d20 [11] + 6 = 17 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Cellar Guard Athletics/Acrobatics to resist the choke: 1d20+1 = 1d20 [19] + 1 = 20
+  [game] fight: Round 3, now: Cellar Guard. Cellar Guard (initiative 2): HP 11/11, AC 12, Grappled Cellar Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cellar Guard scimitar vs AC 15: 1d20+3 = 1d20 [8] + 3 = 11 (Cellar Guard has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You drive your forehead into his nose and lock your forearm around his throat, but he has more fight in him than you reckoned. Your Athletics of 17 loses to his 20. He writhes, gets his chin down, bites the heel of your hand, and the choke slips. He's still grappled and mouth-covered, though, and his next wild slash (an 11) falls short against your AC 15.
+
+The scimitar is still in his hand, wrist in yours. He's snarling against your palm and kicking at the ladder, which creaks. Above, a chair scrapes: someone heard. You have one more turn before the noise grows.
+
+You're at 1 HP and the guard is at full strength, bloodied only in the nose. It's your turn. What does Grukka do?
+
+== ROUND 26 ==
+PLAYER: I stop playing nice, slam his sword wrist against the ladder rung until the scimitar drops, then snatch it before it hits the floor and put the pommel hard behind his ear. "Down you go," I growl through my teeth.
+  [game] dice Grukka Athletics, slamming guard's wrist to strip the scimitar (DM ruling: contested): 1d20+6 = 1d20 [15] + 6 = 21 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Cellar Guard Athletics to keep hold of scimitar: 1d20+0 = 1d20 [15] + 0 = 15
+  [game] sheet: gained 1 × Scimitar
+  [game] fight: Round 4, now: Cellar Guard. Cellar Guard (initiative 2): HP 11/11, AC 12, Grappled Cellar Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cellar Guard unarmed strike vs AC 15: 1d20+2 = 1d20 [2] + 2 = 4 (Cellar Guard has used its action: no more actions this turn.)
+  [game] fight: Round 5, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You slam his wrist against the ladder rung, a 21 on the contest against his 15, and the scimitar rattles loose. You snatch it out of the air with your free hand before it hits the floor. (It's now in your hands; the pommel strike will have to be your next action.)
+
+The unarmed guard flails a fist at you and misses with a 4. He's still pinned, nose bleeding, eyes wide, mouth covered. Above, boots move toward the trapdoor. The sound is coming closer.
+
+You hold the scimitar in one hand and the guard in the other, at 1 HP. It's your turn. What does Grukka do?
+
+== ROUND 27 ==
+PLAYER: I flip the scimitar and drive the pommel hard behind his ear, then drag him down out of sight against the wall as he drops. "Merra, get behind the crate and stay quiet, whoever's coming gets the blade."
+  [game] dice Grukka pommel strike (scimitar, improvised, grappled target AC 12): 1d20+6 = 1d20 [13] + 6 = 19 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Pommel strike damage (improvised 1d4 +4 STR, bludgeoning): 1d4+4 = 1d4 [4] + 4 = 8
+  [game] fight: Cellar Guard took 8: HP 11 → 3
+  [game] fight: Round 5, now: Cellar Guard. Cellar Guard (initiative 2): HP 3/11, AC 12, Grappled Cellar Guard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cellar Guard escape attempt (Acrobatics) vs Grukka's grapple: 1d20+1 = 1d20 [14] + 1 = 15 (Cellar Guard has used its action: no more actions this turn.)
+  [game] dice Grukka Athletics holding the grapple: 1d20+6 = 1d20 [11] + 6 = 17
+  [game] fight: Round 6, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You flip the scimitar and the pommel cracks behind his ear for 8 damage. It's a big blow, but he doesn't go down, and he's still on his feet, dazed, swaying in your grip. He claws at your arm to wrench free, and you hold him with a contest of 17 to his 15.
+
+He's hurt badly now, a thin red line down his temple, and he won't take much more. Above, a voice calls down through the trapdoor: "Dunn? You got the big bitch quiet or not?" Boots are at the lip of the trapdoor. It's Harl's voice, close, and his shadow falls across the rungs. He hasn't come down yet.
+
+Merra is crouched against the wall behind the crate. The guard is still grappled, mouth covered. You have the scimitar and 1 HP, and it's your turn. What does Grukka do?
+
+== ROUND 28 ==
+PLAYER: I slam the pommel behind his ear again to drop him quiet, then shove his limp body against the wall so it looks like he's slumped on watch. In a low, rough voice, imitating Dunn, I call up, "She's quiet, boss, she's out cold."
+  [game] dice Grukka pommel strike on Cellar Guard AC 12: 1d20+6 = 1d20 [14] + 6 = 20 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Grukka Deception, mimicking Dunn's voice to Harl, DC 14 (Harl knows the voice, through a trapdoor): 1d20+1 = 1d20 [6] + 1 = 7
+  [game] dice Pommel strike damage on Cellar Guard (3 HP left): 1d4+4 = 1d4 [3] + 4 = 7
+  [game] fight: Cellar Guard removed from the fight. Order: Grukka Ironhide (12)
+  [game] dice Harl initiative (joins fight): 1d20+0 = 1d20 [17] + 0 = 17
+  [game] fight: Fight over after 6 round(s). 36 seconds of fighting; now Day 1, 10:30:48 PM.
+  [game] time: 1 minute later: Day 1, 10:31:48 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Grukka knocked out the cellar guard (Dunn) with a scimitar pommel and took his scimitar; Harl realized the voice was wrong, slammed and rebarred the trapdoor and barrel, and is rousing the gang. Gaunt due at midnight; time about 10:32 PM. Dunn lies unconscious in the cellar with a crossbow and lantern."}
+  [game] notebook: updated Old Toll-House
+DM: The pommel cracks behind his ear again, a 20 to hit and 7 damage. This time Dunn goes limp and slides down the wall, breathing but out cold. (Rules note: you reduced him to 0 HP with a melee attack and chose to knock him out rather than kill him.) You prop him against the wall like a man dozing on watch and call up in a rough imitation of his voice, "She's quiet, boss, she's out cold."
+
+It's a bad imitation (Deception 7). There's a long silence. Then Harl: "Dunn doesn't talk like a scalded cat." The trapdoor slams down so hard that grit rains over you, the bolt shoots home and a heavy weight scrapes onto it. Then, muffled but unmistakable: "Bandits! Everyone! The cellar, she's loose! Bring torches and crossbows! Pell, send the lad to the road to watch for Gaunt!"
+
+Boots thunder overhead and the lamplight beneath the lid goes dark as shadows pass back and forth. They know you're loose, but they haven't come down yet, and the way up is blocked.
+
+It's 10:32 PM, with about ninety minutes until Gaunt. You're at 1 HP, holding a scimitar. At your feet is the guard Dunn, out cold with a crossbow slung on his back, a lantern on a hook, and a belt pouch. Merra, still bound, is behind the crate, white-faced but steady. The cellar is a stone box with one way out. What does Grukka do?
+
+== ROUND 29 ==
+PLAYER: I cut Merra's cord with the scimitar, then strip Dunn of his crossbow, bolts and belt pouch. "Stay behind me, Merra. Before they come down I'm checking these walls and floor for any other way out, a drain, a loose stone, anything, because I'm not fighting a whole gang through one trapdoor at 1 HP."
+  [game] dice Grukka Perception, searching the cellar walls and floor for another exit, DC 12: 1d20+3 = 1d20 [10] + 3 = 13
+  [game] sheet: gained 1 × Light Crossbow; gained 10 × Crossbow bolt; gained 1 × Pouch (Dunn's)
+  [game] sheet: money +6 gp: now 21 gp
+  [game] time: 2 minutes later: Day 1, 10:33:48 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Cellar has a rusted iron drain grate at the foot of the north wall behind the crate, opening onto an old sluice culvert that runs under the washed-out bridge to the river. Grukka now has Dunn's light crossbow, ten bolts, and 6 gp."}
+  [game] notebook: updated Old Toll-House
+DM: The scimitar parts Merra's cord in a single stroke, and she rubs her wrists and nods. You strip Dunn of his light crossbow, ten bolts, and his belt pouch, which holds 6 gp. You now have 21 gp.
+
+Then you search. A 13 on Perception pays off. Behind the broken crate, low against the north wall, the candle flame leans toward a gap you'd have missed: an old iron drain grate set into the stone, rusted red, about two feet across. A damp, river-smelling draught breathes through it. Beyond the bars is a sluice culvert that, by the sound of the trickle in it, runs down toward the river under the washed-out bridge. Someone built this to drain the cellar in flood season.
+
+The grate is held by four rusted bolts, and the iron groans if you lean on it. Pulling it free would take Strength, and noise. Overhead, boots drum on the boards. The barrel on the trapdoor scrapes as more weight is added, and you hear Harl: "Torches. Four of you at the lid, two at the stair door. And somebody get out to the yard in case she's got another way." They're thinking about it.
+
+It's 10:34 PM, and Merra is at your elbow. You're at 1 HP with a scimitar, a crossbow, and a guard asleep at your feet. What does Grukka do?
+
+== ROUND 30 ==
+PLAYER: I grab the grate with both hands, brace a boot against the wall, and heave with everything my Strength has, then check Merra can squeeze through behind me. "Merra, the moment it gives, you go first, down the culvert toward the river, and don't stop for me."
+  [game] dice Grukka Strength (Athletics) wrenching the rusted drain grate free, DC 15: 1d20+6 = 1d20 [19] + 6 = 25
+  [game] time: 3 minutes later: Day 1, 10:36:48 PM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "At about 10:37 PM Grukka tore the cellar drain grate free (Athletics 25), opening the sluice culvert. Dunn left unconscious in cellar."}
+  [game] notebook: updated Old Toll-House
+DM: Your hands close around the cold iron and you heave, boot braced against the stone. A 25 is more than the rust can bear. Three of the four bolts snap with a flat crack like frozen twigs, the fourth bends, and the whole grate comes out of the wall in your arms in one long groan. You lower it to the floor before it can clang, and the noise above, a gang shouting at each other over the barrel, swallows the rest.
+
+Beyond the opening is a low sluice culvert, slick with moss and about a foot of cold water, running north into dark. The air smells of mud and the river. It's a tight crawl for a big woman, but you'd fit, and Merra goes through it like an eel with only a glance back.
+
+You've got a minute or two before they decide to come down. The options are open: follow Merra out toward the river, go back for Dunn's belt pouch or tie him up so he can't raise the alarm, or even wait in the dark by the ladder for the first man to come down and take his weapon too. At 1 HP, you can't afford much, and Gaunt is due in an hour and a half. What does Grukka do?
+
+== ROUND 31 ==
+PLAYER: I tie Dunn's wrists and ankles quick with the cut cord and stuff a rag in his mouth, then wriggle into the culvert after Merra, dragging the grate in behind us to hide our trail. Once we're clear at the river I want a safe hollow to rest, because I'll need a proper long rest before I take on Harl again.
+  [DM lookup (hidden)] {"name": "Long Rest"}
+  [game] dice Grukka Stealth leaving the culvert and finding a hidden hollow, vs searchers' passive Perception 10: 1d20+2 = 1d20 [6] + 2 = 8
+  [game] dice Do searchers find the hollow during the night? (1-6 yes): 1d20 = 1d20 [18] = 18
+  [game] time: 25 minutes later: Day 1, 11:01:48 PM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 2, 7:01:48 AM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Grukka and Merra escaped by culvert, tied Dunn, rested the night in an undercut riverbank hollow downstream of the bridge. A lookout glimpsed movement at the culvert mouth at ~10:40 PM and a patrol went upstream; they passed. At midnight a horse and a rider with a bell-harness were heard arriving (Gaunt?). Day 2 7 AM Grukka is at full HP; Rage and
+  [game] notebook: updated Old Toll-House
+  [DM write_lore (hidden)] {"create": "Gaunt", "kind": "person", "description": "The master of the Black Hand gang. Harl's employer. Wanted anyone who would defend the Thornwick temple. Arrived near midnight at the toll-house on a horse with a bell-harness (heard, not seen).", "relationships": ["employs [[Harl]]", "his men hold the [[Old Toll-House]]"]}
+  [game] notebook: created an entry for Gaunt; added 2 relationships to Gaunt
+DM: You tie Dunn at wrists and ankles with the cut cord, stuff a rag in his mouth, and wriggle into the culvert after Merra, dragging the grate in behind you. The crawl is cold, black and slick, with a foot of river-water that smells of mud and iron. It spits you out under the broken bridge's stone arch, at the water's edge, among reeds and dead leaves.
+
+Your Stealth of 8 is a hair too noisy. A lookout on the bridge's far end catches a flicker of movement and shouts. For ten tense minutes you lie flat in the reeds while torches search the bank upstream, but you slip downriver on all fours with Merra, and a lucky draw on the night's luck means nobody comes near the undercut bank you finally find, a dry hollow beneath a willow's roots where the river has gnawed the earth away. You wedge in with the crossbow, the scimitar, and Merra's shoulder against yours, and sleep.
+
+Near midnight you hear hoofbeats on the east road, the jingle of a bell-harness, and a deep, unhurried voice carrying across the water that you can't make out. Then nothing, and the long dark.
+
+You wake at **7:01 AM on Day 2** in grey light. The long rest has restored you: **15/15 HP, Rage 2/2, Relentless Endurance 1/1**, with one Hit Die back as well. Merra is shivering but alive and has been awake for an hour, watching the water. You've got a scimitar, a light crossbow with ten bolts, 21 gp, and the clothes on your back and in your pack. Your greataxe, handaxes, javelins and Brother Aldric's satchel are still inside the toll-house, and Gaunt is there now.
+
+Upstream, a thin column of cookfire smoke rises above the alders. What does Grukka do?
+
+== ROUND 32 ==
+PLAYER: I ask Merra in a low voice what she saw and heard through the night, and whether she got a look at Gaunt or heard his name spoken in anything but fear. Then I eat a ration, check the crossbow, and tell her, "I'm going to scout that toll-house from the alders and find out who rode in, and then I'm getting my axe back."
+  [game] sheet: lost 1 × Rations (1 day)
+  [game] dice Grukka Stealth approaching the toll-house through the alders vs passive Perception 10: 1d20+2 = 1d20 [18] + 2 = 20
+  [game] dice Grukka Perception scouting the toll-house yard: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] time: 40 minutes later: Day 2, 7:41:48 AM
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "Merra overheard Pell calling the tithes a pretext: Gaunt's true interest is whatever lies beneath the temple (an old reliquary/crypt). Merra never saw him. At 8 AM Day 2 his black mare with bell-harness is tied among the wagons at the toll-house; a tall man in a grey greatcoat is at the upper window."}
+  [game] notebook: updated Gaunt
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "Day 2 morning: Grukka scouted (Stealth 20, Perception nat 1: counted only two men in the yard though more are inside). Black mare tied by wagons."}
+  [game] notebook: updated Old Toll-House
+DM: Merra keeps her voice to a thread. She was upstairs for most of the night and heard more than she saw. Gaunt's name was only ever said in fear. Harl kept looking at the door. Pell, when he thought she was asleep, muttered that the tithes were a pretext. What Gaunt really wanted was whatever lay under the temple, an old reliquary or crypt that the priestess's order had sealed generations ago. "He never said what. Just 'under the temple.' And that someone who'd stand and fight for it was worth a look." She never saw his face, only a long grey coat at the head of the stairs and the sound of him: slow boots, no hurry at all.
+
+You eat a ration, check the crossbow's string, and promise her that you'll be back. Then you ease through the alders with a Stealth of 20 that nobody could have bettered, up to the lip of the ground where the toll-house yard opens below you.
+
+Your Perception is another story. A natural 1 means you catch only scraps. The yard looks nearly empty: two men sitting at the cold fire with their backs to you, a wagon, the sentry's overturned barrel. You think. What you do pick out clearly is a tall black mare tied among the wagons with a bell-harness on her bridle, and a man in a long grey coat standing at the upper window, quite still, looking out at the road toward Thornwick. You can't see his face from here. Whether more men are inside or in the shadows, you can't say.
+
+It's about 7:45 AM. You're at 15/15 HP with both Rages, a scimitar, a light crossbow and ten bolts. Your axe is likely in that iron-banded chest upstairs. What does Grukka do?
+
+== ROUND 33 ==
+PLAYER: I stay flat in the alders and take a long, slow second look, since my first glance was botched. I count the men I can actually see, mark the doors and windows, and watch how that grey-coated man at the window moves before I commit to anything.
+  [game] dice Grukka Perception, a long careful second look at the toll-house: 1d20+3 = 1d20 [9] + 3 = 12
+  [game] time: 20 minutes later: Day 2, 8:01:48 AM
+  [DM write_lore (hidden)] {"entry": "Old Toll-House", "add_to_description": "8 AM Day 2 second look (Perception 12): yard has two men at the cold fire, one asleep beneath a wagon, a sentry on the bridge end; Harl (bandaged) and Pell visible inside; Gaunt (tall, lean, grey greatcoat, gloved) at the upper window watching the Thornwick road. Gang starting to load two wagons and saddle horses, apparently moving out toward Thor
+  [game] notebook: updated Old Toll-House
+DM: You make yourself take a slow breath and look properly. A Perception of 12 is plenty this time.
+
+In the yard: two men at the cold fire, one nursing a cup and the other flicking pebbles, a third asleep on the ground under the nearest wagon with his hat over his face, and a sentry on the barrel at the bridge's end, new since last night (Dunn's replacement). That's four. At the upper window, Harl appears briefly with a bandaged ribcage and his mace on his hip, speaking to someone you can't see, then steps back. Pell scurries past a lower window with a ledger tucked under his arm. You don't see the two guards from last night, nor the others from the gate: there may be more inside, and you can't count them.
+
+The grey-coated man at the window is tall and lean, and wears gloves despite the morning's warmth. A silver clasp glints at his collar. He moves slowly, with the patience of a man who has never had to hurry. He watches the east road toward Thornwick, then the yard, then you: his gaze passes over the alders without pausing, though your pulse jumps. He's looking for something, and it isn't you. He turns away.
+
+Around 8:00 the yard begins to stir. Two horses are led out and saddled, the sleeper is kicked awake, and boxes and crates are carried from the toll-house to the two wagons. They're packing up, and from the heading of the wagon tongues, they mean to go west, toward Thornwick.
+
+It's 8:02 AM. Your axe, javelins and the tithe satchel are likely in that chest or loaded on the wagon. What does Grukka do?
+
+== ROUND 34 ==
+PLAYER: I ease back from the lip and circle through the alders to the road bend ahead of them, where I can set an ambush from cover as the wagons pass. I'll aim the crossbow at the lead driver, then charge the rear wagon once the horses panic, hoping to get my greataxe and Brother Aldric's satchel out of it.
+
+DM: How many bolts do I have left for the crossbow, and did anyone see Merra and me leave the culvert last night?
+  [game] dice Grukka Stealth circling through the alders to the road bend vs passive Perception 10: 1d20+2 = 1d20 [6] + 2 = 8
+  [game] time: 20 minutes later: Day 2, 8:21:48 AM
+  [DM write_lore (hidden)] {"entry": "Ash-Mark Gang", "add_to_description": "8:20 AM Day 2: gang column leaving the toll-house toward Thornwick: an outrider on horseback ahead, two wagons, Harl and others, Gaunt (grey coat) on his black mare at the rear. Outrider noticed movement in alders at the road bend where Grukka hid (Stealth 8)."}
+  [game] notebook: updated Ash-Mark Gang
+DM: You have ten crossbow bolts, a full quiver. And yes, someone saw something: the lookout on the bridge caught a flicker at the culvert mouth last night, but only a shape in the dark, nothing he could name. Harl guessed the rest, which is why the trapdoor slammed. Nobody saw Merra's face or yours, and nobody followed you downriver.
+
+You circle through the alders and reach the road bend a mile on from the toll-house, where the track dips between a bank and a stand of birch. You crouch in the brush above the road and settle the crossbow across a root. The Stealth is a poor 8, though, and it costs you. The column comes down the road at about 8:25 AM: one outrider on a bay horse far ahead, then two wagons with drivers, Harl on a cob with his ribs bound, three men on foot at the sides, and, at the rear on the black mare with her bell-harness, the grey-coated man. Up close he is older than you thought, with a long face and quiet, hooded eyes, one gloved hand resting loose on the reins.
+
+The outrider reins in thirty feet before the bend, head cocked, eyes on the birch above you. He sniffs the air like a hound. "Something up there," he calls back, not loudly. "Something big." His hand drifts toward his crossbow.
+
+You've got the crossbow aimed, a Rage in reserve, 15 HP, and about a dozen foes with Gaunt among them. The lead driver is in your sights and so is the outrider. What does Grukka do?
+
+== ROUND 35 ==
+PLAYER: I put the bolt into the outrider before he can shout, then roar into a Rage and vault down the bank at the nearest wagon, going for the iron-banded chest with my greataxe in it. "Black Hand! You took my axe and a priest's tithe, so come and take them back!"
+  [DM lookup (hidden)] {"name": "Bandit Captain", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Rage", "kind": "feature"}
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [4] + 2 = 6
+  [game] dice Outrider initiative: 1d20+1 = 1d20 [17] + 1 = 18
+  [game] dice Foot bandits initiative (group of 3): 1d20+1 = 1d20 [2] + 1 = 3
+  [game] dice Harl initiative: 1d20+0 = 1d20 [15] + 0 = 15
+  [game] dice Gaunt initiative: 1d20+3 = 1d20 [17] + 3 = 20
+  [game] fight: Fight started. Order: Gaunt (20), Outrider (18), Harl (15), Grukka Ironhide (6), Foot Bandit 1 (3), Foot Bandit 2 (3), Foot Bandit 3 (3). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Gaunt. Gaunt (initiative 20): HP 65/65, AC 15 Gaunt's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Outrider. Outrider (initiative 18): HP 11/11, AC 12 Outrider's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Outrider crossbow vs Grukka AC 15 +2 half cover from the bank = 17: 1d20+3 = 1d20 [13] + 3 = 16 (Outrider has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Harl. Harl (initiative 15): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl heavy crossbow vs AC 17 (half cover): 1d20+2 = 1d20 [7] + 2 = 9 (Harl has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka light crossbow vs Outrider AC 12: 1d20+6 = 1d20 [16] + 6 = 22 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] sheet: Rage: 1/2; condition added: Raging (Grukka Ironhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Light crossbow damage on Outrider (1d8 + DEX 2): 1d8+2 = 1d8 [6] + 2 = 8
+  [game] sheet: lost 1 × Crossbow bolt
+  [game] fight: Outrider took 8: HP 11 → 3
+  [game] fight: Round 1, now: Foot Bandit 1. Foot Bandit 1 (initiative 3): HP 11/11, AC 12 Foot Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Foot Bandit 1 scimitar vs AC 15: 1d20+3 = 1d20 [16] + 3 = 19 (Foot Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Foot Bandit 2 scimitar vs AC 15: 1d20+3 = 1d20 [8] + 3 = 11
+  [game] dice Foot Bandit 3 scimitar vs AC 15: 1d20+3 = 1d20 [20] + 3 = 23 (natural 20)
+  [game] dice Foot Bandit 1 scimitar damage (halved by rage): 1d6+1 = 1d6 [6] + 1 = 7
+  [game] dice Foot Bandit 3 scimitar CRIT damage (halved by rage): 2d6+1 = 2d6 [3, 2] + 1 = 6
+  [game] sheet: took 6 damage: HP 15 → 9
+  [game] fight: Round 1, now: Foot Bandit 2. Foot Bandit 2 (initiative 3): HP 11/11, AC 12 Foot Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Foot Bandit 3. Foot Bandit 3 (initiative 3): HP 11/11, AC 12 Foot Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Gaunt. Gaunt (initiative 20): HP 65/65, AC 15 Gaunt's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Gaunt dagger throw 1 vs AC 15 (long range, disadvantage): 1d20+5 (disadvantage) = 1d20 [14, 10]→10 + 5 = 15 (Gaunt has used its action: no more actions this turn.)
+  [game] dice Gaunt dagger throw 2 vs AC 15 (long range, disadvantage): 1d20+5 (disadvantage) = 1d20 [16, 8]→8 + 5 = 13
+  [game] dice Gaunt dagger damage (halved by rage): 1d4+3 = 1d4 [2] + 3 = 5
+  [game] sheet: took 2 damage: HP 9 → 7
+  [game] fight: Round 2, now: Outrider. Outrider (initiative 18): HP 3/11, AC 12 Outrider's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Outrider crossbow vs AC 15: 1d20+3 = 1d20 [19] + 3 = 22 (Outrider has used its action: no more actions this turn.)
+  [game] dice Outrider crossbow damage (halved by rage): 1d8+1 = 1d8 [4] + 1 = 5
+  [game] sheet: took 2 damage: HP 7 → 5
+  [game] fight: Round 2, now: Harl. Harl (initiative 15): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace 1 vs AC 15 (Pack Tactics advantage): 1d20+4 (advantage) = 1d20 [12, 10]→12 + 4 = 16 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace 2 vs AC 15 (Pack Tactics advantage): 1d20+4 (advantage) = 1d20 [17, 19]→19 + 4 = 23
+  [game] dice Harl mace damage 1 (halved by rage): 1d6+2 = 1d6 [4] + 2 = 6
+  [game] dice Harl mace damage 2 (halved by rage): 1d6+2 = 1d6 [6] + 2 = 8
+  [game] sheet: took 4 damage: HP 5 → 1; Relentless Endurance: 0/1
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "Statted as a bandit captain (65 HP). First seen in combat on Day 2 at the road bend: throws daggers at range, wants Grukka alive."}
+  [game] notebook: updated Gaunt
+DM: Your crossbow bolt takes the outrider in the thigh, knocking him half out of the saddle and leaving him barely holding on. A moment later you've dropped the bank at a dead run, Rage roaring through you. Then the road closes in on you like a fist.
+
+The foot bandits are on you first, scimitars scoring across your hide (a critical on one, but rage halves it all). A dagger from the grey-coated man on his mare, thrown from fifty feet, grazes you. The outrider, hanging on one-legged, puts a bolt into you too. Then Harl, bandaged and hate-eyed, gets his mace in twice with a bandit at your side giving him the edge. The last blow would have dropped you, but Relentless Endurance drags you back up with 1 HP.
+
+You're at **1 HP**, raging (one Rage left, Relentless Endurance spent), standing at the lead wagon with a scimitar and a crossbow. You count three foot bandits and Harl around you, the outrider wounded behind them, a driver cowering on the box, and the man in the grey coat, no longer idle, walking his mare forward, daggers in both gloved hands. You still have your move and your action. The iron-banded chest is on the second wagon, about thirty feet farther down.
+
+What does Grukka do?
+
+== ROUND 36 ==
+PLAYER: At 1 HP I'm not trading blows with Harl and a dozen men, so I slash the lead wagon's traces with the scimitar and bellow, slapping the horses so they bolt straight through the foot bandits. In the chaos I dash for the birch and the bank, drawing them away from Merra, and then I circle back to hit the second wagon's chest when they scatter.
+  [DM lookup (hidden)] {"name": "Disengage"}
+DM: Before I roll anything, here's the catch in that plan, because at 1 HP it's worth getting right.
+
+Slashing the traces and spooking the team is your action. Running for the birch is your move, and every foe whose reach you leave gets an opportunity attack as a reaction. That's Harl and the three foot bandits, and any hit takes you to 0 HP (you've already spent Relentless Endurance). The bolting horses may scatter them, but I can't promise that, since they're all adjacent to you right now.
+
+Your choices are:
+
+1. Do it as stated: cut the traces and slap the horses (an Animal Handling check, DC 10 with your roar behind it), then run. You take up to four opportunity attacks with advantage for Harl's pack tactics, and the rage still halves each hit.
+2. Disengage as your action, then run for the birch and bank without provoking anything, but the wagon stunt waits for another turn.
+3. Cut the traces and stay put behind the lead wagon, using it as cover against the crossbow and Gaunt's daggers, and spook the horses so they trample the bandits on that side.
+
+Which do you choose, or do you want a different plan?
+
+== ROUND 37 ==
+PLAYER: Option 2. I Disengage and run for the birch and the bank, since I'm no use to Merra or the temple dead. Once I'm clear I'll circle back for the chest when they scatter.
+  [refused] sheet: nothing to change: pass at least one field
+  [game] fight: Round 2, now: Foot Bandit 1. Foot Bandit 1 (initiative 3): HP 11/11, AC 12 Foot Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Foot Bandit 2. Foot Bandit 2 (initiative 3): HP 11/11, AC 12 Foot Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Foot Bandit 3. Foot Bandit 3 (initiative 3): HP 11/11, AC 12 Foot Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Foot Bandit 3 pursues and strikes at Grukka on the bank, AC 15 +2 half cover = 17: 1d20+3 = 1d20 [5] + 3 = 8 (Foot Bandit 3 has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Gaunt. Gaunt (initiative 20): HP 65/65, AC 15 Gaunt's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Gaunt dagger 1 vs AC 17 (half cover), disadvantage long range: 1d20+5 (disadvantage) = 1d20 [20, 12]→12 + 5 = 17 (Gaunt has used its action: no more actions this turn.)
+  [game] dice Gaunt dagger 2 vs AC 17, disadvantage: 1d20+5 (disadvantage) = 1d20 [2, 10]→2 + 5 = 7
+  [game] dice Gaunt dagger damage (halved by rage): 1d4+3 = 1d4 [1] + 3 = 4
+  [game] sheet: took 2 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious; condition removed: Raging
+  [game] fight: Round 3, now: Outrider. Outrider (initiative 18): HP 3/11, AC 12 Outrider's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Harl. Harl (initiative 15): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [13] = 13
+  [game] sheet: death save successes: 1/3
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "Dropped Grukka with a thrown dagger at the road bend (Day 2, ~8:23 AM). Has ordered his men not to kill her."}
+  [game] notebook: updated Gaunt
+DM: Disengaging works, and no one gets an opportunity attack as you clear the wagon and drive for the birch with the bank at your back. You get as far as the roots. One scimitar-man chases and misses (8 against your cover). Then the grey-coated man lifts a gloved hand and a dagger leaves it like a thrown shadow. The first dagger meets your AC 17 exactly, and even halved by the rage it's enough. The ground tilts, the rage drains out of you, and you fall into the leaves at the foot of the birch, **0 HP and unconscious**. Relentless Endurance was spent last round.
+
+Through the roaring dark you hear his voice for the first time: low, unhurried, almost kind. "Enough. Nobody touches her. Dunn's wrists and Harl's ribs are the price of that, and I'll collect it from her, not from a corpse." Boots crunch up the bank. Your death save this round is a 13, a success (1 success, 0 failures).
+
+You're unconscious and can't act. Nobody has struck you since you went down, and the man in the grey coat is walking toward you. Somewhere up the bank, Merra is hidden where you left her. Your next death save comes on your next turn.
+
+== ROUND 38 ==
+PLAYER: I can't act, so I just hold on to that slow, unhurried voice and keep breathing, with Merra's hiding place the only thing in my head. Don't come out, Merra, don't you dare come out.
+  [game] dice Gaunt's Wisdom (Medicine) check to stabilize Grukka, DC 10: 1d20+0 = 1d20 [8] + 0 = 8
+  [game] fight: Round 3, now: Foot Bandit 1. Foot Bandit 1 (initiative 3): HP 11/11, AC 12 Foot Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Foot Bandit 2. Foot Bandit 2 (initiative 3): HP 11/11, AC 12 Foot Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Foot Bandit 3. Foot Bandit 3 (initiative 3): HP 11/11, AC 12 Foot Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Gaunt. Gaunt (initiative 20): HP 65/65, AC 15 Gaunt's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Outrider. Outrider (initiative 18): HP 3/11, AC 12 Outrider's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Harl. Harl (initiative 15): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Gaunt second Medicine attempt to stabilize Grukka, DC 10: 1d20+0 = 1d20 [10] + 0 = 10
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [18] = 18
+  [game] dice Hours until stable Grukka regains 1 HP: 1d4 = 1d4 [4] = 4
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 2, 8:22:12 AM.
+  [game] time: 4 hours later: Day 2, 12:22:12 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; lost 1 × Scimitar; lost 1 × Light Crossbow; lost 9 × Crossbow bolt; lost 1 × Pouch (Dunn's)
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "Stabilized Grukka himself after she fell (Medicine 10) and took her alive. By ~12:20 PM Day 2 the gang column with Grukka bound in a wagon has reached the temple square in Thornwick; Gaunt demands something of the old priestess at the temple door. Merra was not found at the hollow (as far as Grukka knows)."}
+  [game] notebook: updated Gaunt
+DM: Your next breath is the first one that doesn't hurt. You're stable. Gaunt's second try at the Medicine check succeeded with a 10, and he bound the wound in your side with brisk, oddly careful hands. After four hours of nothing, your body drags in a pulse, and you have **1 HP**.
+
+You wake bound hand and foot on the bed of a wagon, under a canvas tarp that stinks of tar and old grain. The scimitar, crossbow and bolts are gone, along with the pouch, though your own pouch and 21 gp are still on your belt. Light leaks through the weave of the tarp, and the wagon is standing still. The warmth on the canvas says it's noon.
+
+You hear Thornwick around you: a crowd's murmur, gulls from the river, the particular echo of the temple's market square. Then a bell, the temple's own bell, tolling slow and wrong. Nearby, close enough that you can hear him breathe, Harl mutters to someone, "Four hours in the cart and she still hasn't died. Stubborn."
+
+Then another voice, level, polite, carrying to every corner of the square without being raised: Gaunt's. "Mother. I'd rather do this without anyone being hurt further. Your temple has something that belongs to me. Open the door, and give me the key to the old crypt, and I'll give you back your daughter." A pause. "Alive, as you see."
+
+And over it, small and cracked and furious, the old priestess's voice: "She is not mine to bargain with, and the crypt is not yours to open."
+
+You're at 1 HP and tied in a wagon in the square where you were raised. The rest of the gang is spread across the market in plain view of the town. Your Rage and Relentless Endurance are, respectively, one use left and spent. What does Grukka do?
+
+== ROUND 39 ==
+PLAYER: I stay perfectly still under the tarp and start sawing the cord against the iron strap on the wagon bed, the same trick that worked on the toll-house ring, pausing whenever Harl shifts. I listen hard for anything that tells me where Merra is and how many of them are in the square, because the old priestess raised me and I'm not letting Gaunt touch her.
+  [game] sheet: condition removed: Unconscious
+  [game] dice Grukka Athletics sawing cord on the wagon's iron strap, DC 12: 1d20+6 = 1d20 [9] + 6 = 15
+  [game] dice Grukka Stealth, keeping still and quiet vs Harl's passive Perception 10: 1d20+2 = 1d20 [10] + 2 = 12
+  [game] dice Grukka Perception, listening to the square: 1d20+3 = 1d20 [18] + 3 = 21
+  [game] time: 4 minutes later: Day 2, 12:26:12 PM
+  [DM write_lore (hidden)] {"entry": "Thornwick", "add_to_description": "Day 2 noon: Gaunt's gang holds the temple square; the town's doors are shut and the watch is absent. Grukka lies bound in a gang wagon at the square's edge (cut her cord free). Gaunt demands the key to the old crypt from the priestess in exchange for Grukka. Gang strength in the square: about eight men plus Harl, Pell, Gaunt."}
+  [game] notebook: updated Thornwick
+DM: Slowly, in the muffled dark under the tarp, you saw. A 15 on the Athletics is enough, and with a 12 on Stealth Harl doesn't notice. The cord parts in your wrists. You don't move it. Then you listen, and a Perception of 21 gives you the whole square.
+
+You count the sounds. Around the wagon are Harl, grunting and sipping from a flask, the wagon driver on the box, and two bandits idling at the tailgate. At the foot of the temple steps stand Gaunt, calm, Pell fussing at his elbow with the ledger, and three crossbowmen with their bows up at the closed door. Two more men are on the roof of the baker's stall to the east, covering the street. That's about nine, including the outrider, who is groaning on a barrel with his thigh bound.
+
+Windows and doors across the square are shuttered. Thornwick has gone to ground. No watchman is anywhere, and from the sound of a distant argument at the gate, the guard captain has been paid to keep his men in the barracks.
+
+You can't hear Merra and nobody speaks of her, but a bandit mutters near the tailgate, "Didn't find the temple brat in the river hollow, did we? Boss said leave it." You suppose she's still hidden, or running. From inside the temple, muffled through the door, a man's voice, old and steady, is reciting a prayer: Brother Aldric, alive.
+
+You're at 1 HP, with your hands free under the tarp, ankles still bound. The iron-banded chest, you think, is in the second wagon thirty feet away. What does Grukka do?
+
+== ROUND 40 ==
+PLAYER: I slip my ankles free next, as quietly as I can, and ease to the tarp's edge to watch. I'm waiting for the moment Gaunt turns his full attention to the temple door, when the two at the tailgate are looking away, to slide out the back, drop beneath the wagon and crawl for the second wagon and my greataxe in that chest.
+
+DM: The priestess called Gaunt's hostage "your daughter," so do they actually have Merra, or is that a bluff, going by what I just overheard?
+  [game] dice Grukka Stealth, sliding out under the wagon and crawling to the second wagon vs passive 10 (guards looking away): 1d20+2 = 1d20 [19] + 2 = 21
+  [game] time: 3 minutes later: Day 2, 12:29:12 PM
+  [DM write_lore (hidden)] {"entry": "Thornwick", "add_to_description": "12:30 PM: Grukka is under the second gang wagon, free of cords, beneath the iron-banded chest holding her weapons."}
+  [game] notebook: updated Thornwick
+DM: On your question, you've caught a muddled phrase. When the priestess said "daughter," she meant you. Gaunt's offer was to return Grukka, "alive, as you see," meaning you're the hostage, not Merra. That matches the bandit at the tailgate grumbling that the temple girl wasn't found. Nobody in the gang has Merra, and as far as you can tell she's still loose, probably still in the river hollow. Gaunt isn't bluffing about you, but he has no leverage over Merra.
+
+Then your plan goes smooth as oil. You slip your ankles free, and when Gaunt's voice rises to answer the priestess and every head turns to the temple door, you ease out the back of the wagon on your belly and drop beneath it. A Stealth of 21 can't be beaten by the two at the tailgate, who are watching the steps. Crawling flat on the cobbles between the spokes, you reach the second wagon in three agonizing minutes.
+
+It's 12:29 PM. Above your head, through the gap in the planks, you can feel the iron-banded chest's weight on the bed. Nobody is looking under the wagon yet. Gaunt is still talking, the bell still tolls, and the old priestess still holds the door. At 1 HP, you've got one Rage left. The chest's lid is above you, and you'd have to climb up onto the bed to open it, in the open air, with the two nearest bandits about twenty feet away. What does Grukka do?
+
+== ROUND 41 ==
+PLAYER: I ease up between the planks at the tailgate edge, staying low under the canvas flap, and test the chest's lid. If it's locked I pry it with my fingers or take a spoke's iron pin, and I grab the greataxe, Brother Aldric's satchel, and my handaxes, then slide back down before anyone turns.
+  [game] dice Grukka Dexterity (Sleight of Hand) working the chest's latch, DC 12: 1d20+2 = 1d20 [1] + 2 = 3 (natural 1)
+  [game] dice Grukka Stealth, rising under the canvas flap vs guards' passive Perception 10: 1d20+2 = 1d20 [19] + 2 = 21
+  [game] time: 1 minute later: Day 2, 12:30:12 PM
+DM: You slide up between the planks under the canvas flap, unseen (Stealth 21), and find the iron-banded chest with a stout padlock through its hasp. Your fingers go for the lock and the spoke's iron pin, and the pin snaps in the shackle with a flat, ringing clink (a natural 1). The padlock is jammed shut and half-ruined, and the chest isn't open.
+
+At the tailgate, one of the two bandits stops mid-sentence. "You hear that?" he says, and his boots start toward the second wagon, unhurried, a hand on his scimitar. The other follows two steps behind, grumbling. Across the square, Gaunt keeps talking and nobody else has turned.
+
+You're half-crouched in the wagon's shadow at 1 HP, with a jammed padlock under one hand and the canvas flap beside you. The bandit is ten feet away and coming. The chest is shut and you've got nothing in your hands but a bent spoke-pin. What does Grukka do?
+
+== ROUND 42 ==
+PLAYER: I'm out of quiet options, so I grit my teeth, drop into a Rage, and wrench the whole hasp off the chest's wood with both hands, Strength against a rotten staple. Then I'll haul out the greataxe and swing at the first bandit who rounds the tailgate. "Looking for me, lads?"
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [17] + 2 = 19
+  [game] dice Tailgate bandits initiative (group): 1d20+1 = 1d20 [8] + 1 = 9
+  [game] fight: Fight started. Order: Grukka Ironhide (19), Tailgate Bandit 1 (9), Tailgate Bandit 2 (9). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: Rage: 0/2; condition added: Raging (Grukka Ironhide has used its bonus action: no more bonus actions this turn.)
+  [game] dice Grukka Athletics (advantage, raging) ripping the chest's hasp off, DC 13: 1d20+6 (advantage) = 1d20 [1, 1]→1 + 6 = 7 (natural 1) (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] sheet: condition removed: Raging
+  [game] fight: Round 1, now: Tailgate Bandit 1. Tailgate Bandit 1 (initiative 9): HP 11/11, AC 12 Tailgate Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Tailgate Bandit 2. Tailgate Bandit 2 (initiative 9): HP 11/11, AC 12 Tailgate Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You drop into the Rage and seize the hasp with both hands, advantage and all, and the dice betray you: a double 1, a total of 7. The staple holds, the wood groans, and your shoulder pops with a sound like a knuckle. The chest is still shut. Because you didn't attack anyone or take a hit, the rage simply bleeds out of you at the end of the turn. That's the rule, and it was your last one until a long rest.
+
+The two bandits were still caught off guard, and they lose their opening turn to it: both are surprised and standing frozen at the tailgate. The nearer one's mouth is just starting to form a word. The square beyond them is still turning toward the sound, and Gaunt has stopped speaking.
+
+It's round 2 and your turn. You're at 1 HP, no Rage, no Relentless Endurance, and the chest still locked. The two bandits are ten feet from you, and a third of the gang will be on you within seconds. What does Grukka do?
+
+== ROUND 43 ==
+PLAYER: I lunge at the nearer bandit while he's frozen, slam a fist into his throat and rip the scimitar from his belt, then spin to put the wagon between me and the other one. "Thornwick! Your temple's under siege, so open your shutters and stand up!"
+  [game] dice Grukka unarmed strike at Tailgate Bandit 1 AC 12: 1d20+6 = 1d20 [7] + 6 = 13 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Unarmed strike damage (1 + STR 4 = 5; fixed): 1d4+4 = 1d4 [2] + 4 = 6
+  [game] fight: Tailgate Bandit 1 took 5: HP 11 → 6
+  [game] sheet: gained 1 × Scimitar
+  [game] fight: Round 2, now: Tailgate Bandit 1. Tailgate Bandit 1 (initiative 9): HP 6/11, AC 12 Tailgate Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Tailgate Bandit 1 (unarmed, scimitar stolen) strikes vs AC 15: 1d20+3 = 1d20 [10] + 3 = 13 (Tailgate Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Tailgate Bandit 2 scimitar vs AC 15 (half cover from wagon +2 = 17): 1d20+3 = 1d20 [16] + 3 = 19
+  [game] fight: Round 2, now: Tailgate Bandit 2. Tailgate Bandit 2 (initiative 9): HP 11/11, AC 12 Tailgate Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Tailgate Bandit 2 scimitar damage: 1d6+1 = 1d6 [1] + 1 = 2
+  [game] sheet: took 2 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [16] = 16
+  [game] sheet: death save successes: 1/3
+  [DM write_lore (hidden)] {"entry": "Thornwick", "add_to_description": "12:31 PM Day 2: Grukka shouted for Thornwick to stand up. Hit down again by a bandit at the second wagon; Gaunt has not yet reacted."}
+  [game] notebook: updated Thornwick
+DM: Your fist lands in his throat, a 13 against his AC 12, and he folds, choking, your 5 damage carrying him down to bloodied. The scimitar slides from his belt into your hand. You spin, shouting, "Thornwick! Your temple's under siege, so open your shutters and stand up!" and the whole square hears it.
+
+Then the second bandit comes round the wagon. His blade is a plain thing, a 19 against your AC 17 behind cover, but it's enough. You have 1 HP, and 2 damage puts you on the cobbles, **0 HP, unconscious**. A 16 on the death save is a success (1 success, 0 failures).
+
+As the dark closes you hear what the square does with your cry. For one heartbeat there's a stillness like a held breath. Then a shutter bangs open on the east side, then another, and the old vendor woman's voice, thin and cracked and furious: "That's the temple's Grukka! They've killed her!" The boy shouts. A stool crashes against a bandit's back, a wooden pail, a rolling-pin. You're lost in the noise of a town remembering it has hands.
+
+You're unconscious at 0 HP, with one death-save success. What happens next is out of your hands, and I'll tell you what the square does while you hang between breaths.
+
+== ROUND 44 ==
+PLAYER: I can't do anything but hold on, so I cling to that cracked old voice shouting my name and keep fighting for each breath. Keep throwing things, Thornwick, I'm still here.
+  [game] dice Old priestess's Cure Wounds on Grukka: 1d8+3 = 1d8 [5] + 3 = 8
+  [game] fight: Fight over after 3 round(s). 18 seconds of fighting; now Day 2, 12:30:30 PM.
+  [game] time: 5 minutes later: Day 2, 12:35:30 PM
+  [game] sheet: healed 8: HP 0 → 8; conscious again; death saves reset; XP +175: 175
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "12:35 PM Day 2: when Thornwick's townsfolk rose against his men, Gaunt withdrew calmly with his column (Harl, Pell, wagons), leaving the square. He said he would return for the key to the old crypt. The chest with Grukka's weapons and Brother Aldric's tithe satchel were left behind in the confusion (recovered)."}
+  [game] notebook: updated Gaunt
+  [DM write_lore (hidden)] {"entry": "Rescue Merra", "add_to_description": "Update Day 2: Merra was never found by the gang and is probably still hiding in the river hollow downstream of the toll-house bridge. Satchel recovered when townsfolk drove off the gang."}
+  [game] notebook: updated Rescue Merra
+  [game] sheet: gained 1 × Greataxe; gained 2 × Handaxe; gained 4 × Javelin; gained 1 × Brother Aldric's tithe satchel; condition removed: Unconscious
+DM: The square stops being a square and turns into a town. The old vendor woman's pail is the first thing to break a bandit's skull. After that come stools, rolling-pins, a fishmonger's boathook, and a hundred shuttered neighbours who've been waiting for someone to go first. The bandits at the tailgate are swallowed by shouting people and go down under them. The three crossbowmen on the temple steps find their targets sliding out of reach and their quarry's door standing open at their backs, and Brother Aldric comes out of it with a bench.
+
+Gaunt, you learn later, does not try to hold the square. He looks at the shutters opening one after another, takes in the numbers, and nods once as though a sum has come out the way he expected. "Another day, Mother," he says, politely, loud enough to carry. "I'm patient. The key will keep." He mounts the black mare, signals Harl, and the column withdraws toward the east gate with the wagons rattling and Pell clutching his ledger to his chest. Nobody is quite brave enough to stop them. You hear all of this later, in pieces, from the boy.
+
+Now you wake with the priestess's palm on your brow and warmth in your chest, a Cure Wounds for 8, and you're at **8 of 15 HP**. It's about 12:35 PM. You're back on the cobbles of the temple square with your greataxe, two handaxes, four javelins and Brother Aldric's tithe satchel beside you, all recovered from the abandoned wagon when the gang fled. Brother Aldric is kneeling at your side, weeping. The old woman is bundling a bleeding bandit with a bedsheet, and the vendor boy is sitting on a barrel with a boathook across his knees and a grin on his face.
+
+Your Rage and Relentless Endurance are spent until a long rest. You've earned **175 XP** (175 of 300). Merra, as far as anyone knows, is still hiding in the river hollow below the toll-house bridge. The old priestess has not let go of your hand.
+
+"Gaunt will be back," she says quietly. "And there's more I should have told you, child, about what sleeps beneath this temple. But first: where is the girl?"
+
+What does Grukka do?
+
+== ROUND 45 ==
+PLAYER: I squeeze her hand and sit up, then tell her everything: the toll-house, the cellar, the culvert, and the hollow under the willow roots where I left Merra. "I'm going to fetch her myself the moment I can stand, Mother, and then you're telling me everything about what's under this temple, starting with why Gaunt wants it." I strap the greataxe on, take a long drink from the boy's waterskin, and check Brother Aldric's satchel is still full of silver.
+  [DM write_lore (hidden)] {"create": "Old Crypt", "kind": "place", "description": "A sealed crypt beneath the Thornwick temple, which Gaunt seeks. Locked by a two-part key: the old priestess keeps one part, the other is hinted to be Grukka's prayer wheel. Priestess says it holds something sealed in by the temple's founders.", "relationships": ["beneath the temple of [[Thornwick]]", "sought by [[Gaunt]]"]}
+  [game] notebook: created an entry for Old Crypt; added 2 relationships to Old Crypt
+  [game] time: 20 minutes later: Day 2, 12:55:30 PM
+DM: You tell her everything in a low, rough voice while the square mops itself up around you: the cellar, the culvert, the willow hollow, the black-handprint men and the quiet grey one who cut you down with a thrown dagger and then bound your wound. The old priestess listens with her eyes closed, nodding at the end of each piece like a woman counting beads.
+
+"Merra's alive, then," she says. "That's the best news I've had since dawn. And she'll hold. That girl has more spine than the whole watch." She lifts a hand, and two broad young men from the bakery, the baker's sons, shoulder through the crowd. "Tomas, Wil: take the cart and the mule, go east along the river, under the willow below the toll-house bridge. Bring her home. And keep off the road if you see a grey coat." They nod and are gone. "You'll not outrun a cart on those legs, Grukka, and you'll not be of use to her half dead. Let them go."
+
+The satchel is mostly full. Silver and some copper still jingle in it, though a few coins are plainly missing, which Pell must have pocketed for Gaunt. Brother Aldric blesses you three times and cannot stop thanking you.
+
+Then the priestess draws you into the temple's cool dark, away from the people, and bars the door. In the lamplit nave she lowers her voice. "Under this floor is a crypt older than the town. It holds what our founders chose not to destroy: something bound, sealed by a two-part key. I have one half. The other, child, you've carried since you were small and never known it." Her eyes go to the pouch at your belt where your prayer wheel rests. "I gave it to you to keep it safe from men like Gaunt. I didn't think they'd come this soon."
+
+You're at 8 of 15 HP, without Rage, and still hungry and tired. It's about 1 PM. What does Grukka do?
+
+== ROUND 46 ==
+PLAYER: I pull the prayer wheel out of my pouch and turn it over in my scarred hands, staring at it as if I'd never really seen it. "This? I've spun it a thousand times, Mother. Show me how it's the key, and tell me what's sealed down there and why the founders didn't just destroy it."
+  [DM write_lore (hidden)] {"entry": "Old Crypt", "add_to_description": "Priestess's account: the temple's founders sealed a bound war-spirit called the Marchwarden, an ancient defender of the border whose fury turned on its own and could not be destroyed, only put to sleep. The seal needs two parts: the iron tongue (priestess's) and a bronze disc hidden in the inner drum of Grukka's prayer wheel. Gaunt wants to wake it and
+  [game] notebook: updated Old Crypt
+  [DM write_lore (hidden)] {"create": "Marchwarden", "kind": "creature", "description": "An ancient bound war-spirit of the borderlands sealed beneath the Thornwick temple by its founders, who could not destroy it. Its fury turned on those it defended.", "relationships": ["sealed in the [[Old Crypt]]", "sought by [[Gaunt]]"]}
+  [game] notebook: created an entry for Marchwarden; added 2 relationships to Marchwarden
+  [game] time: 10 minutes later: Day 2, 1:05:30 PM
+DM: The old priestess takes the wheel from your hands, thumbs the rim in a place you've worn smooth a thousand times and never thought about, and twists. The cap rotates a quarter-turn, then a half, and the inner drum slides free on a hidden thread. In its hollow lies a bronze disc the size of a coin, stamped with the temple's sigil, an open palm crossed by a bar. You've spun this thing a thousand times over a bar of bronze and never known it was there.
+
+"That's the first half," she says. "The iron tongue is the other, and it hangs under my robe. Together, turned in the door at the crypt's foot, they let the seal sleep, or wake." She closes your fingers back around it. "What lies down there the founders called the Marchwarden. In the old days the border towns had no walls, only a spirit that stood in the passes and tore apart whatever came over them: raiders, wolves, armies. It was a gift. Then the gift grew hungry, and what it protected began to look to it like what it hunted. It would not die. You cannot kill a thing made of fury and the will to guard. So they put it to sleep and built a temple over it, and swore that each generation of this house would keep both halves apart."
+
+She looks old for the first time in your memory. "Gaunt thinks he can wake it and bind it to his word. If he does, he'll own every border pass on the marches, and Thornwick will be its first meal. He doesn't have the half in my keeping, or yours, which is why he's been counting every man who'd defend this place. He wanted to know how hard we'd bite."
+
+It's about 1:05 PM, and the baker's sons are a few hours away with the mule. You're at 8 of 15 HP, and you've got your spent Rage and a tired body. The temple is bolted, the town half-asleep on its feet, and Gaunt is somewhere out on the road. What does Grukka do?
+
+== ROUND 47 ==
+PLAYER: I close my fist around the bronze disc and set my jaw. "Then Gaunt doesn't get either half, Mother. Hide the iron tongue somewhere he'd never look, I'll sleep a few hours to get my Rage back, and tonight we get Thornwick's strongest hands behind the walls, because he said he's patient and I don't believe a word of it."
+  [game] sheet: short rest; 1 hour later: Day 2, 2:05:30 PM
+  [game] sheet: spent 1 hit die (0/1 left): roll 1d12 and add the CON modifier (CON 16 (+3)), then pass the total as heal; the player decides whether to spend another after the roll
+  [game] dice Grukka Hit Die healing (short rest): 1d12+3 = 1d12 [4] + 3 = 7
+  [game] sheet: healed 7: HP 8 → 15
+  [DM write_lore (hidden)] {"entry": "Old Priestess", "add_to_description": "Day 2 afternoon: told Grukka of the crypt and the Marchwarden; holds the iron tongue (half the key) hidden under her robe, to be hidden elsewhere. Sent the baker's sons Tomas and Wil with a mule cart to fetch Merra from the river hollow. Grukka keeps the bronze disc in her prayer wheel and plans to gather Thornwick's strongest hands behind the wall
+  [game] notebook: updated Old Priestess
+DM: The old priestess almost smiles. "You've your father's stubborn jaw, and I thank the gods for it." She hides the iron tongue herself, and you don't ask where. A priest should never tell a fighter where she's hidden a thing, in case the fighter is caught.
+
+On the rest, a rule of the road: you finished a long rest at 7 this morning, and you can't gain the benefit of another within a 24-hour period. So the Rage and Relentless Endurance stay spent until about 7 tomorrow morning. What you can do is a short rest, and you take one. Brother Aldric brings broth, a stool, and a blanket, and you spend an hour with your boots off in the temple's quiet. You spend your Hit Die and roll 4 +3 for **7**, which puts you at **15/15 HP**. It's 2:05 PM.
+
+Out in the square, Thornwick is deciding what it is. The old vendor woman has organised a barricade across the east road out of overturned stalls and wagon wheels. The baker's boy is chalking names on a board for a night watch. The guard captain, who took Gaunt's coin to keep his men in barracks, has been marched out of them by his own sergeant. Some of the strongest hands in town have started to gather near the temple steps, men and women who've never held a spear but now hold hoes and hammers, looking at you.
+
+Merra will arrive by dusk, if the baker's sons find her. Gaunt, you suspect, will wait for night. You have the bronze disc in your wheel, your axe at your back, and a town that has decided to stand up. What does Grukka do?
+
+== ROUND 48 ==
+PLAYER: I walk out onto the temple steps, greataxe on my back, and talk to them straight and loud: "Gaunt wants what's under our temple, and he's coming back at night with nine or ten men and a grey coat that throws daggers. I need hands on the barricade, archers on the baker's roof, and the strongest of you inside the temple door with me."
+
+Then I ask the sergeant, "How many real fighters do you have, and will they follow you or the captain's purse?"
+  [game] dice Grukka Charisma (Persuasion) rallying Thornwick, DC 10 (they already rose once): 1d20+1 = 1d20 [11] + 1 = 12
+  [DM write_lore (hidden)] {"create": "Sergeant Tamm", "kind": "person", "description": "Sergeant Corvin Tamm, Thornwick's town watch sergeant, marched his men out of barracks after the captain took Gaunt's coin. Commands nine watchmen, six of them real fighters, loyal to him not the captain.", "relationships": ["serves the watch of [[Thornwick]]", "allied with [[Grukka Ironhide]] against [[Gaunt]]"]}
+  [game] notebook: created an entry for Sergeant Tamm; added 2 relationships to Sergeant Tamm
+  [game] time: 30 minutes later: Day 2, 2:35:30 PM
+DM: Your voice carries across the square the way it always has, loud and blunt, with nothing in it you'd call a speech. A 12 on Persuasion is enough, because the town has already stood up once and doesn't want to sit back down.
+
+A grey-bearded man with a bandaged forearm pushes through the crowd. He wears a watchman's grey tabard and a sergeant's knot on the shoulder. "Corvin Tamm," he says, shortly, and doesn't salute. "I've nine on the roster. Six I'd trust with my own children, three who'd run at a wet rag. The captain's in a back room with Gaunt's money and my boot-print on his arse, and they'll follow me, not him." His eyes go to the axe. "Are you the Ironhide the old women talk about? You take the temple door, then, and my six take the barricade. I'll put crossbows on the baker's roof, and I'll want a hundred torches by dusk. If Gaunt means to come at night, he'll come through the east road, because the west is all farms and bog."
+
+By 2:35 PM, under his bark and your volume, the square has a plan. A line of carts is dragged across the east road. The bakery roof sprouts hunting bows and three real crossbows. Twenty townsfolk with hoes and hammers are sorted into a line, and the rest are told which doors to bar. You count about forty hands.
+
+Gaunt hasn't been seen since the east gate. Merra and the baker's sons have not yet returned. It's the middle of the afternoon, you're at 15 of 15 HP with no Rage until tomorrow, and the night has hours to build. You've got time, a barricade, and a bronze disc in your pocket.
+
+What does Grukka do?
+
+== ROUND 49 ==
+PLAYER: I find the sergeant and ask him to post a scout on the east road to give us warning, then I walk the barricade with him checking it for gaps, and set the weakest fighters behind the carts with the six real ones at the front. "Tamm, if Gaunt's men get through, we fall back to the temple steps, and I hold the door. Nobody retreats past me."
+
+Then I send Brother Aldric to fill every waterskin we have and to find the boy to be our runner, because that boy has earned it.
+  [game] dice Grukka Perception, walking the barricade for gaps, DC 11: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] time: 2 hours 10 minutes later: Day 2, 4:45:30 PM
+  [DM write_lore (hidden)] {"entry": "Rescue Merra", "add_to_description": "Day 2 ~4:45 PM: Merra reached Thornwick safely with the baker's sons Tomas and Wil. Quest effectively done.", "status": "done"}
+  [game] notebook: updated Rescue Merra
+  [DM write_lore (hidden)] {"create": "Defend the Temple", "kind": "quest", "description": "Hold Thornwick's temple and keep the two halves of the crypt key (iron tongue and bronze disc in Grukka's prayer wheel) from Gaunt, who plans to wake the Marchwarden. Barricade on the east road, Sergeant Tamm's six fighters, bows on the baker's roof, Grukka at the temple door. Gaunt expected tonight.", "relationships": ["against [[Ga
+  [game] notebook: created an entry for Defend the Temple; added 2 relationships to Defend the Temple
+  [DM write_lore (hidden)] {"entry": "Defend the Temple", "add_to_description": "SECRET: Grukka rolled a natural 1 checking the barricade; she believes it sound but there is an unblocked gap at the tannery alley on the north side of the east road, which Gaunt's scouts will find."}
+  [game] notebook: updated Defend the Temple
+DM: Tamm grunts approval at the scout, a wiry girl named Pip who knows the marsh paths, and sends her east on a goat-track with a whistle and strict instructions to come back when she sees torches, not a minute after. You walk the barricade with him end to end, two carts deep and three wheels high, and place the fighters where you said: the six real ones at the front behind the carts with spears and short swords, the farm-hands and shopkeepers in the second line with hoes and hammers, a pair of bowmen above. Tamm answers "Nobody retreats past you" with a short nod that means more than a salute. You find the line sound. Your Perception check on the barricade was a natural 1, and the only thing it gave you is confidence.
+
+Brother Aldric trots off to fill every waterskin in town, and the vendor boy is made your runner with a scrap of grey cloth tied round his arm. He nearly bursts.
+
+At about 4:45 PM the baker's cart creaks back through the gate and Merra climbs down from the mule's tail, filthy, wrapped in a sack, and somehow upright. She sees you and just stands there. Then she walks across the square at a very deliberate pace and punches you in the arm. "That was for leaving me in the hollow. Thank you for the rest." She cries after that, a little, and then asks for soup. The priestess takes her inside.
+
+It's 4:45 PM. Your Rage will not return until tomorrow's dawn. The rescue is done, and the siege is still ahead. Dusk is about three hours off, Pip is out on the east road, and the town waits. What does Grukka do?
+
+== ROUND 50 ==
+PLAYER: I laugh, rub my arm, and say, "That was fair, little wolf, and I'll owe you one more." Then I head inside to eat, sit with Merra and the old priestess, and ask what she heard Gaunt say about the crypt, because every scrap of it might matter tonight. After that I'll sharpen the greataxe and sleep an hour on the temple steps so I'm fresh when Pip's whistle comes.
+  [game] sheet: lost 1 × Rations (1 day)
+  [refused] time: nothing to change: pass set, advance, add_timer or remove_timer
+  [game] time: 3 hours later: Day 2, 7:45:30 PM
+  [DM write_lore (hidden)] {"entry": "Gaunt", "add_to_description": "Merra overheard Gaunt say: the seal 'answers only to a hand that means it' (the disc must be turned willingly by its bearer, or by a hand broken to his will); he intends to bind the Marchwarden with a black glove-relic. This is why he kept Grukka alive and stabilized her. Harl's gang is merely 'a blade to test the temple' and his real strength is yet to co
+  [game] notebook: updated Gaunt
+DM: You eat a ration of dry bread and cheese in the temple's back kitchen while Merra, wrapped in a blanket and holding a bowl of soup like a lifeline, tells you what she can.
+
+She had it from where she lay bound upstairs, half-listening, while Gaunt talked to Harl and Pell as if she were furniture. He never raised his voice. "The seal answers only to a hand that means it," she repeats, slowly, frowning with the effort of remembering. "A willing hand, or one broken to his will. That's why he wanted the temple's champion, whoever stood up first. He said Harl's men were 'a blade to test the temple,' not the real hand. And he had something in a velvet bag, a black glove, he said, 'cut from the thing itself,' that was to bind it once it woke." She shivers. "That's why he took you alive, Grukka, and bound your wound himself. He didn't want a corpse. He wanted the disc's bearer breathing."
+
+The old priestess's mouth goes thin at that. She says only, "Then we keep the bearer from his hands." Her gaze lingers on the pouch at your belt.
+
+You sharpen the greataxe with the whetstone from your pack until it sings, and sleep an hour on the temple steps with your back against the door, your hand on the haft. It's not a rest that restores anything, but you wake clear-headed. The light has gone amber, then gold, then bruised blue. At 7:45 PM, the clouds low over the marsh, the first sound comes: a thin, high whistle from the east road, repeated twice, then a third time sharp.
+
+Pip's signal. Across the square, Tamm's men go to their carts and the bowmen string their bows. The vendor boy appears at your elbow, grey sash tight on his arm, breathless: "That's the scout! That's torches!"
+
+You're at 15/15 HP, with no Rage left, your greataxe, handaxes and javelins, and your post at the temple door. What does Grukka do?
+
+== ROUND 51 ==
+PLAYER: I stand, roll my scarred shoulders, and hoist the greataxe. "Boy, run to Tamm and tell him Grukka says hold the carts till they're close enough to see faces, then bows first, spears second. Then get yourself inside the temple with Merra and the old priestess and bar the door behind you."
+
+I take my place on the top step with a handaxe in my off hand, the bronze disc safe in my pouch, and wait for the torches. "Come on, Gaunt. Let's see what you've got."
+  [game] time: 10 minutes later: Day 2, 7:55:30 PM
+  [DM write_lore (hidden)] {"entry": "Defend the Temple", "add_to_description": "7:55 PM Day 2: Gaunt's column (Harl, eight or nine bandits, Pell, Gaunt) halted a hundred paces from the east-road barricade carrying torches; Grukka on the temple's top step with greataxe and a handaxe, bronze disc in her pouch. Gaunt is calling for parley while a small party scouts the tannery alley."}
+  [game] notebook: updated Defend the Temple
+DM: The boy is gone like a rabbit, and a minute later you hear Tamm's bark rolling along the carts: "Hold! Bows first, spears second, and not a hand moves till you see faces!" Brother Aldric and Merra hustle inside with the old priestess, and the temple door thunders shut behind them, the bar dropping with a sound you've known since childhood.
+
+You take the top step with the greataxe grounded at your right foot and a handaxe loose in your left hand. The bronze disc rides in your pouch, warm against your hip.
+
+They come the way Gaunt does everything: slowly. At 7:55 PM, as the sky goes the colour of an old bruise, a double line of torches spills down the east road, about a hundred paces off. You count eleven men, Harl in front on his cob with a fresh bandage and a worse temper, Pell on a mule with a lantern, and the black mare walking behind with the grey coat in the saddle, gloved hands folded on the pommel. The wagons are gone. They halt.
+
+Gaunt's voice floats clear across the dusk, level as a table. "Thornwick! Sergeant Tamm. Good evening. I've no quarrel with you or your neighbours. I want the Ironhide, and I want the tongue and the disc. Hand those over and I'll ride away. Refuse, and I'll still have them, but the cost will be paid in a coin I'd rather not spend." A pause. "You have until the torch at my right hand burns down."
+
+From where you stand you can see, beyond the line of carts, a flicker of movement at the mouth of the tannery alley to the north, two figures slipping in, small and quick. They're hard to read in the dark.
+
+You're at 15/15 HP, no Rage, the whole town at your back and the temple door barred behind you. What does Grukka do?
+
+== ROUND 52 ==
+PLAYER: I bellow back across the dusk, "Come and take them yourself, Gaunt, I'm standing right here!" Then, quieter, I call to Tamm to put two of his steadiest spears on the tannery alley to the north, because I saw two small shapes slip in there and I'm not getting flanked at the temple's back.
+  [DM write_lore (hidden)] {"entry": "Defend the Temple", "add_to_description": "8:00 PM: Grukka spotted the tannery-alley infiltrators; Tamm posted two spearmen there. Gaunt's parley refused; Harl's men start the charge on the east-road barricade."}
+  [game] notebook: updated Defend the Temple
+  [game] time: 5 minutes later: Day 2, 8:00:30 PM
+DM: "Come and take them yourself, Gaunt, I'm standing right here!" It rolls off the temple front and back down the east road, and in the pause that follows you hear a laugh in the dark that doesn't quite reach his eyes.
+
+Then, lower, to Tamm at the nearest cart: "Two of your steadiest spears on the tannery alley, north side. I saw two shapes go in." He doesn't ask twice. A big, slow carter named Brannoch and a lean woman from the fishery hurry that way with long boar-spears, and it is not a moment too soon. Within a minute you hear the alley ring with a short, ugly scuffle: a shout, a clatter, a body going over a rain barrel, and the spearwoman's flat voice: "Two. Both runners. One's down, the other's gone back." The flank is a flank no more. Gaunt's scouts were on the north gap after all, and now they know it's guarded.
+
+Down the east road the torch at Gaunt's right hand gutters to a stub and falls. He lifts a gloved hand. "Very well," his voice comes, quieter. "Harl."
+
+The line of torches breaks into a run. Eleven men charge, with bows loosing flights at the barricade and Harl's cob thundering at the front, mace high. At the carts the six spears brace and the hunting bows on the baker's roof hum. The first volley snaps out. Arrows and bolts cross in the dusk and the barricade shudders under the first impact, with shouts, a scream, and Tamm roaring orders. Gaunt himself sits his black mare at the back, unhurried, watching the temple door. Watching you.
+
+You're on the top step, at 15/15 HP, with a handaxe in your left hand and the greataxe at your right foot. Between you and the barricade is about fifty paces of empty square. You promised nobody retreats past you. What does Grukka do?
+
+== ROUND 53 ==
+PLAYER: I hold the top step like I promised, and stick two javelins point-down in the wood by my boot so I can snatch them fast. The moment any Black Hand man breaks over a cart into the square, I'll hurl javelins at him, and if Harl comes through I'm taking the axe to him myself. "Hold the carts, Tamm! Anything that gets past comes to me!"
+  [game] dice Does the barricade hold against the charge? (1-9 breach by Harl and two bandits; 10+ holds longer): 1d20 = 1d20 [4] = 4
+  [game] dice Grukka initiative: 1d20+2 = 1d20 [2] + 2 = 4
+  [game] dice Harl initiative: 1d20+0 = 1d20 [8] + 0 = 8
+  [game] dice Breaching bandits initiative (group of 2): 1d20+1 = 1d20 [15] + 1 = 16
+  [game] fight: Fight started. Order: Breach Bandit 1 (16), Breach Bandit 2 (16), Harl (8), Grukka Ironhide (4). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs AC 15: 1d20+3 = 1d20 [14] + 3 = 17 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 2 crossbow vs AC 15: 1d20+3 = 1d20 [6] + 3 = 9 (Breach Bandit 2 has used its action: no more actions this turn.)
+  [game] dice Breach Bandit 1 crossbow damage: 1d8+1 = 1d8 [5] + 1 = 6
+  [game] fight: Round 1, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: took 6 damage: HP 15 → 9
+  [game] dice Harl heavy crossbow vs AC 15: 1d20+2 = 1d20 [6] + 2 = 8 (Harl has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: A cart groans. One wheel goes and the second takes a spear-thrust, and the barricade's center sags (I rolled a 4, a breach). Through the gap pour two bandits at a run and Harl on his cob, hauling a heavy crossbow to his shoulder. The bandits stop in the square and fire from sixty paces, and one bolt scores your arm for 6, putting you at **9 of 15 HP**. Harl's bolt goes wide, a miss against your AC 15, wasted. Behind them the barricade is a roaring knot of spears, and Tamm's voice cuts through it, "Fall in on the gap!"
+
+Harl is about forty paces off, mounted, reloading. The two bandits are closer, and one is already thumbing a fresh bolt. You haven't acted this round (initiative 4), and Gaunt still sits his mare at the back, unmoved.
+
+You have two javelins in the wood by your boot, a handaxe in your off hand, and the greataxe at your foot. It's your turn. What does Grukka do?
+
+== ROUND 54 ==
+PLAYER: I fling a javelin at the bandit who put the bolt in my arm, long range and all, then step back into the temple door's stone alcove for cover. "Come on, Harl, you fat pig, come up these steps and finish what you started!"
+  [game] dice Grukka javelin at Breach Bandit 1 AC 12 (60 ft, beyond normal range: disadvantage): 1d20+6 (disadvantage) = 1d20 [10, 3]→3 + 6 = 9 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] sheet: lost 1 × Javelin
+  [game] fight: Round 2, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs AC 20 (three-quarters cover in alcove): 1d20+3 = 1d20 [2] + 3 = 5 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 2 crossbow vs AC 20: 1d20+3 = 1d20 [9] + 3 = 12 (Breach Bandit 2 has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace 1 vs AC 17 (half cover in alcove, adjacent): 1d20+4 = 1d20 [5] + 4 = 9 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace 2 vs AC 17: 1d20+4 = 1d20 [2] + 4 = 6
+  [game] fight: Round 2, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your javelin goes wide at long range, a 9 with disadvantage that skips off the cobbles, and you duck back into the stone alcove of the temple door, where the old carved lintel gives you three-quarters cover on the sides and above. The crossbows have a harder shot now: one bandit's bolt thunks into the lintel (5), and the other's goes by (12).
+
+Harl roars at the insult and spurs the cob straight up the temple steps, and the horse's hooves ring on the stone. He sweeps both blows at you with his mace, and nothing connects (a 9 and a 6 against your cover). His cob rears, snorting, hooves hammering on the steps. You can smell horse and sweat and old blood on his bandages.
+
+You're at 9/15 HP, Harl is right in front of you, mounted, bloodied from nothing yet, thirty-two hundred pounds of anger. The two crossbow bandits are fifty paces back, reloading. The square behind them is a roar of metal at the barricade. You've got your handaxe and greataxe, and a spare javelin by the door. It's your turn. What does Grukka do?
+
+== ROUND 55 ==
+PLAYER: I drop the handaxe, grab the greataxe in both hands and swing a full overhand chop at Harl himself, putting everything into one blow from the cover of the alcove. "Last time you left me breathing, Harl. That was your mistake!"
+  [game] dice Grukka greataxe vs Harl AC 11: 1d20+6 = 1d20 [2] + 6 = 8 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] fight: Round 3, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs AC 20: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1) (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Breach Bandit 2 crossbow vs AC 20: 1d20+3 = 1d20 [18] + 3 = 21
+  [game] dice Harl mace 1 vs AC 17: 1d20+4 = 1d20 [9] + 4 = 13
+  [game] dice Harl mace 2 vs AC 17: 1d20+4 = 1d20 [8] + 4 = 12
+  [game] dice Breach Bandit 2 crossbow damage: 1d8+1 = 1d8 [6] + 1 = 7
+  [game] fight: Round 3, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: took 7 damage: HP 9 → 2
+DM: Your overhand chop is the swing of someone with something to prove, and Harl simply isn't there: the cob jinks sideways on the stone and the blade hisses past his shoulder (an 8 against his AC 11, a miss). The axe's weight half-spins you, and the world seems to hold its breath.
+
+Harl's answer is two heavy mace swings that crack against the lintel and the doorpost, 13 and 12, neither enough to get past the alcove. A bolt from fifty paces off, though, does find you. The second bandit's shot, a 21, punches through your shoulder for 7. You're at **2 of 15 HP**. Blood is running into your sleeve and the world has an edge to it.
+
+Harl is still mounted and two paces away on the steps, breathing hard, bandage dark with fresh blood from his earlier injuries. The bandits are reloading. Behind them the barricade still roars, though you can't see who's winning. Your greataxe is in your hands and you've got no Rage, no Relentless Endurance, a handaxe at your feet, and a spare javelin by the door.
+
+At 2 HP any hit puts you down. It's your turn. What does Grukka do?
+
+== ROUND 56 ==
+PLAYER: I'm not stepping back an inch. I set my feet and swing the greataxe again at Harl, this time low at the cob's legs to bring the both of them down onto the steps, and I roar over my shoulder, "Mother, if you hear me, I'll need your hands when this is done!"
+  [DM lookup (hidden)] {"name": "Riding Horse", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Mounted Combat"}
+  [game] dice Grukka greataxe at Harl's cob (Riding Horse AC 10): 1d20+6 = 1d20 [20] + 6 = 26 (natural 20) (Grukka Ironhide has used its action: no more actions this turn.)
+  [DM lookup (hidden)] {"name": "Mounting and Dismounting"}
+  [game] dice Greataxe critical damage on the cob (2d12 crit + 1d12 Savage Attacks + 4): 3d12+4 = 3d12 [2, 9, 7] + 4 = 22
+  [game] fight: Round 4, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs AC 20: 1d20+3 = 1d20 [17] + 3 = 20 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Breach Bandit 2 crossbow vs AC 20: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] dice Harl mace 1 vs AC 17 (on foot, adjacent): 1d20+4 = 1d20 [9] + 4 = 13
+  [game] dice Harl mace 2 vs AC 17: 1d20+4 = 1d20 [5] + 4 = 9
+  [game] dice Breach Bandit 1 crossbow damage: 1d8+1 = 1d8 [4] + 1 = 5
+  [game] sheet: took 5 damage: HP 2 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious
+  [game] fight: Round 4, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [3] = 3
+  [game] sheet: death save failures: 1/3
+  [DM write_lore (hidden)] {"entry": "Defend the Temple", "add_to_description": "8:01 PM Day 2: Grukka dropped to 0 HP at the temple door after killing Harl's cob with a natural 20. Harl is on foot at the steps; two bandits shoot from the square. Tamm's barricade holds somewhere behind."}
+  [game] notebook: updated Defend the Temple
+DM: You don't give an inch. You swing low at the cob's legs and roll a natural 20. The axe takes the horse across both forelegs with all the weight you can put behind it and then some (22 damage, extra from Savage Attacks), and the animal goes down screaming on the temple steps. Harl, quick as a cat, uses his reaction to throw himself clear and lands on his feet beside the dead horse, cursing, mace still in hand.
+
+It costs you. The bandit's bolt is the first thing to come out of the dark at your back, and a 20 against the alcove's cover gets through. 5 damage on a body with 2 HP left, and you go down in the doorway with the greataxe clanging off the stone beside you. You're at **0 HP, unconscious**, with Relentless Endurance already spent. Harl's two blows follow, a 13 and a 9, and they miss only because he was angry and sloppy. The second bandit's bolt goes into the doorpost with a natural 1.
+
+Your death save is a 3, a failure. You have 0 successes and 1 failure. Behind the carved door you hear the old priestess's voice raised in a prayer, and her fists hammering at the bar. Harl stands over you, breathing hard, wiping blood from his lip.
+
+You're unconscious and dying. Nobody is on the steps to help you but Harl.
+
+== ROUND 57 ==
+PLAYER: I can't act, so I just cling to that hammering and that prayer through the door and keep dragging in breath. Get that bar up, Mother, I'm still here.
+  [game] fight: Round 5, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brother Aldric swings a temple bench at Harl, vs AC 11: 1d20+2 = 1d20 [7] + 2 = 9
+  [game] dice Old priestess's Cure Wounds on Grukka: 1d8+3 = 1d8 [1] + 3 = 4
+  [game] sheet: healed 4: HP 0 → 4; conscious again; death saves reset; condition removed: Unconscious
+  [game] dice Harl mace 1 vs AC 17 (Grukka prone, adjacent: advantage): 1d20+4 (advantage) = 1d20 [10, 3]→10 + 4 = 14 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace 2 vs AC 17 (advantage): 1d20+4 (advantage) = 1d20 [7, 12]→12 + 4 = 16
+  [game] sheet: condition added: Prone
+  [game] fight: Round 5, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The bar crashes up and the temple door bursts open at your back. Brother Aldric comes through it swinging a pew-end like a flail, a wild blow that Harl simply ducks (a 9 against AC 11, a miss). The old priestess is a step behind him, her palm already on your chest, and the red-gold warmth comes again, a Cure Wounds that is a poor one this time, 4 HP, but it's enough to drag you back above the line. The 4 HP pulls you up out of the dark, and your death saves reset.
+
+You're **conscious at 4 of 15 HP**, flat on the cold stone of the top step, prone, with your greataxe lying a hand's width from your fingers.
+
+Harl, wild-eyed, brings the mace down twice on his turn, favoured by your prone body. He rolls a 14 and a 16 against your cover-bolstered AC 17. Both fail by a hair. The mace cracks the step on either side of your head. He's breathing hard, with fresh blood on his bandages, and he's standing right over you, on foot now with his horse dead beside him.
+
+The two bandits in the square are reloading. Aldric is struggling to haul his pew-end back for another swing and the priestess is at your shoulder in the doorway, her hand still lifted. Beyond them, at the barricade, the noise has changed: more shouting, fewer clangs. You don't yet know who is winning.
+
+It's your turn. You're prone (standing up costs half your movement), at 4 HP, with no Rage and no Relentless Endurance, a greataxe an arm's length away, and the bronze disc in your pouch. What does Grukka do?
+  [game] conversation shortened: the DM's summary of turns 0 to 42, then turns 43 to 62
+
+== ROUND 58 ==
+PLAYER: I roll onto my knees, snatch the greataxe, and surge up with the haft across my chest, shoving Harl back down the steps with a shoulder and growling, "Aldric, Mother, behind me!" Then I put my back to the door frame and raise the axe, ready to cleave anything that comes up those stairs.
+  [DM lookup (hidden)] {"name": "Shoving a Creature"}
+  [DM lookup (hidden)] {"name": "Prone"}
+  [DM lookup (hidden)] {"name": "Thug", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Standing Up"}
+  [game] dice Grukka Athletics shove vs Harl: 1d20+6 = 1d20 [6] + 6 = 12 (Grukka Ironhide has used its action: no more actions this turn.)
+  [game] dice Harl Athletics contest vs shove: 1d20+2 = 1d20 [13] + 2 = 15
+  [game] fight: Round 6, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs AC 20 (alcove cover): 1d20+3 = 1d20 [10] + 3 = 13 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] fight: Round 6, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 2 crossbow vs AC 20: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1) (Breach Bandit 2 has used its action: no more actions this turn.)
+  [game] fight: Round 6, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace 1 vs AC 17 (alcove half cover): 1d20+4 = 1d20 [3] + 4 = 7 (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace 2 vs AC 17: 1d20+4 = 1d20 [13] + 4 = 17
+  [game] dice Harl mace damage: 1d6+2 = 1d6 [3] + 2 = 5
+  [game] sheet: took 5 damage: HP 4 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Round 6, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [9] = 9
+  [game] sheet: death save failures: 1/3
+DM: You surge up with the axe across your chest, get a shoulder into Harl and heave, and he doesn't move. He's braced on the step with a grunt, and his weight is simply more than you can shift. The axe is in your hands and your feet are under you, but the push does nothing.
+
+You've no breath to spare. A bolt from the square goes wide of the alcove (a 13), and the other skids off the stone (a natural 1). Harl's first mace swing is wild, and the second, a 17, catches you under the ribs for 5. Your legs fold. The greataxe rings on the step and you go down in the doorway for the second time tonight, **0 HP, unconscious**.
+
+Your death save is a 9, a failure. That's 0 successes and 2 failures. No, one failure: your first failure from before was wiped when Mother's Cure Wounds brought you up, so this is **1 failure**.
+
+Above you, Harl is breathing like a bellows. Brother Aldric is shouting the first words of a prayer, and the old priestess's hand is already reaching for your chest. Beyond them, at the barricade, the noise is still going.
+
+You're unconscious and dying. What happens next isn't yours to decide.
+
+== ROUND 59 ==
+PLAYER: I can't move, so I fight for every breath and cling to the old priestess's hand and Aldric's cracking prayer. Not yet, not on these steps.
+  [DM lookup (hidden)] {"name": "Unconscious", "kind": "condition"}
+  [game] fight: Round 7, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs Brother Aldric AC 10: 1d20+3 = 1d20 [18] + 3 = 21 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] dice Bandit 1 crossbow damage on Aldric: 1d8+1 = 1d8 [2] + 1 = 3
+  [game] fight: Round 7, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 2 crossbow vs Brother Aldric AC 10: 1d20+3 = 1d20 [15] + 3 = 18 (Breach Bandit 2 has used its action: no more actions this turn.)
+  [game] dice Bandit 2 crossbow damage on Aldric: 1d8+1 = 1d8 [3] + 1 = 4
+  [game] fight: Round 7, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Harl mace 1 vs Brother Aldric AC 10: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20) (Harl has used its action: no more actions this turn.)
+  [game] dice Harl mace 2 vs Brother Aldric AC 10: 1d20+4 = 1d20 [10] + 4 = 14
+  [game] dice Harl mace 1 critical damage on Aldric: 2d6+2 = 2d6 [2, 2] + 2 = 6
+  [game] dice Harl mace 2 damage on Aldric: 1d6+2 = 1d6 [2] + 2 = 4
+  [game] fight: Round 7, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grukka death saving throw: 1d20 = 1d20 [9] = 9
+  [game] sheet: death save failures: 2/3
+  [refused] fight: nothing to change: pass damage, heal, conditions or remove
+  [DM write_lore (hidden)] {"entry": "Defend the Temple", "add_to_description": "8:02 PM Day 2: Grukka at 0 HP again with 2 death-save failures on the top step. Brother Aldric was shot by both bandits and struck down by Harl's mace (dead or dying). The old priestess is at Grukka's shoulder in the doorway."}
+  [game] notebook: updated Defend the Temple
+DM: You can't move. You hold on to the old priestess's hand and to Aldric's cracking voice, and for a few heartbeats you have nothing else.
+
+Aldric doesn't get far into his prayer. A bolt from the square catches his sleeve, and a second takes him in the thigh. He still stands there with the pew-end, grey-faced, between you and the steps. Harl doesn't go for you. He goes through the old brother with a mace crack you feel in the stone, and a second blow that you hear and wish you hadn't. Aldric folds across your legs with the pew-end still in his fist, and the prayer stops mid-word.
+
+The priestess makes a sound you have never heard from her. Her palm is on your chest and the warmth is there, barely, but she is hauling at Aldric's collar with her other hand, and it isn't enough yet. Your pulse stutters. You've now failed two death saves, and one more takes you.
+
+Above you Harl is hauling in breath, wiping his mace on his sleeve. "Gaunt wants the girl breathing," he growls, almost to himself. "Fine. I can drag her breathing." His shadow falls across your face.
+
+Beyond the carts the noise of the barricade has stopped holding. It's 8:02 PM. You are at 0 HP, unconscious, with **0 successes and 2 failures**.
+
+== ROUND 60 ==
+PLAYER: I can't move or speak, so I hold on with everything left in me, one breath at a time. Aldric, Mother, I'm sorry, I'm still here, and I swear I'm getting back up.
+  [game] fight: Round 8, now: Breach Bandit 1. Breach Bandit 1 (initiative 16): HP 11/11, AC 12 Breach Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 1 crossbow vs old priestess (AC 10 + 5 three-quarters cover = 15): 1d20+3 = 1d20 [8] + 3 = 11 (Breach Bandit 1 has used its action: no more actions this turn.)
+  [game] fight: Round 8, now: Breach Bandit 2. Breach Bandit 2 (initiative 16): HP 11/11, AC 12 Breach Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Breach Bandit 2 crossbow vs old priestess AC 15 (cover): 1d20+3 = 1d20 [7] + 3 = 10 (Breach Bandit 2 has used its action: no more actions this turn.)
+  [game] fight: Round 8, now: Harl. Harl (initiative 8): HP 32/32, AC 11 Harl's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Old priestess's Cure Wounds on Grukka: 1d8+3 = 1d8 [5] + 3 = 8
+  [game] dice Harl Athletics, grapple on Grukka: 1d20+2 = 1d20 [4] + 2 = 6 (Harl has used its action: no more actions this turn.)
+  [game] dice Grukka Athletics, resisting Harl's grapple: 1d20+6 = 1d20 [4] + 6 = 10
+  [game] sheet: healed 8: HP 0 → 8; conscious again; death saves reset
+  [game] fight: Round 8, now: Grukka Ironhide. Grukka Ironhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You hold on, and it's the old priestess who pulls you back. Her palm on your chest and one shaking word, and the red-gold warmth pours into you again, an 8. Your lungs fill and your eyes open on the carved lintel and the torch-smoke beyond it.
+
+The bandits' bolts missed the doorway, a skip off the stone and a clean miss, both aimed at her and neither finding her. Harl reaches down for your collar, meaning to drag you off the steps by it, and you simply don't go. He gets a fistful of your tunic and nothing else, and you feel him wrench at you like a man pulling at a root.
+
+You're at **8 of 15 HP**, awake and still prone, with Harl bent over you, one hand fisted in your clothes. The greataxe lies a hand's width from your fingers. Aldric is a grey shape on the stone beside you, and the priestess is on her knees at your shoulder, breathing hard, with her hand still lifted. Harl has used his action, and the bandits are reloading out in the square. No Rage, no Relentless Endurance, and no second chance behind this one.
+
+It's your turn. What does Grukka do?

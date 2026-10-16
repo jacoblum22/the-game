@@ -1,0 +1,474 @@
+GAME bard, ROUND 45
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 42 ==
+PLAYER: Vesper sets her cup down, lets her tail uncurl for once, and gives Ashgrove her most honest-looking gold stare. "Two guards watching each other, I like that, Captain. Let me prove I mean it." She slides one hand toward the key as if to push it across the table to her, and with the other she casts Minor Illusion from her sleeve: the sound of Corvin's drunken chorus suddenly bellowing from right outside the stern window, "Ahoy the hulk, Thack sent us!"
+
+If every eye swings to the window, she snatches the key and goes for the open water through the stern window.
+  [game] dice Vesper's Sleight of Hand snatching the key while all eyes are on the window, DC 13: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Ashgrove's Perception: did she see the sleeve-cast illusion's source or the hand on the key (contested, DC = Vesper's roll): 1d20+0 = 1d20 [6] + 0 = 6
+  [game] sheet: gained 1 × Brass lantern key
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Her map-table in the hulk cabin shows a backup plan: the Weeping Locks flood-gates marked to be opened at the new moon to send the river over Marrowmere's lower town, and three barge landings pinned on the quays. Vesper saw this when she took the key back (natural 20 on Sleight of Hand)."}
+  [game] notebook: updated Captain Ashgrove
+  [game] time: 6 seconds later: Day 3, 11:38:48 PM
+DM: A natural 20. The sound lands like a thrown brick: Corvin's unmistakable bellow, rough with ale, "Ahoy the hulk, Thack sent us!", right under the stern window. The crossbowman spins and thrusts his weapon at the glass. The sentry at the door cranes toward it. The grey-braided mate jerks upright and knocks the lamp. Even Ashgrove's head turns, for the length of a heartbeat.
+
+Your fingers close on the key as if the table had passed it to you. It slides into your sleeve without a sound. And because you've never taken your eyes off anything in a room in your life, you see what lay under it: the corner of a chart, a pin through a small river-lock, with a note in the neat looping hand: *Weeping Locks, open at the new moon. The lower town floods. Wyrm's channel to the sea. If no words, then water.* Three more pins mark the quays of Marrowmere. She never needed you. The words are a convenience, and the flood is the guarantee.
+
+The illusion will hold for a minute. The stern window is a small leaded frame five paces away, and the crossbowman stands at it with his back half to you. The door behind you is blocked by the sentry. Ashgrove is turning from the window, her eyes already coming back to the table, and to you.
+
+Your rapier is on the barrel outside. The key is in your sleeve. You have one slot of magic, a lute at your back, and about a second.
+
+What does Vesper do?
+
+== ROUND 43 ==
+PLAYER: Vesper kicks the map-table hard into Ashgrove's lap so the lamp, tea, and chart go flying, and in the same breath she casts Sleep at the stern corner, centered on the crossbowman and the grey-braided mate. "Sorry, Captain, the kettle was lovely!" Then she vaults the table toward the stern window, shoulder first, tucking the key tight and diving for the black water.
+  [game] sheet: Vesper casts Sleep at level 1; timer Vesper's Sleep: 1 minute; level-1 spell slots: 0/2
+  [game] dice Sleep: hit points of creatures affected (crossbowman, mate, sentry within 20 ft): 5d8 = 5d8 [3, 7, 1, 6, 1] = 18
+  [game] dice Vesper's Acrobatics diving through the leaded stern window, DC 11: 1d20+2 = 1d20 [18] + 2 = 20
+  [game] time: 6 seconds later: Day 3, 11:38:54 PM
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Day 3 near midnight: Vesper kicked the map-table into her lap, put the stern-window crossbowman to sleep with Sleep (the mate and sentry stayed awake), and dived out the stern window with the brass key into the reeds. Ashgrove is alive, unhurt and now openly hunting her."}
+  [game] notebook: updated Captain Ashgrove
+DM: The table goes over with a crash that sounds like a dropped anvil. Tea, chart and lamp fly into Ashgrove's lap, and the lamp gutters. You vault, shoulder first, and your words come out in a breath: "...lullaby!" The sleep catches the crossbowman mid-turn. He slumps against the sill and slides down it like a sack of meal. You rolled only 18 on the dice, and that was just enough for one of them. The mate with the grey braid staggers and shakes his head, wide awake, and the sentry at the door is still on his feet.
+
+Then there is only the window. The leaded frame bursts around your shoulder in a spray of glass and lead, and you are through it and falling, tucked tight, the key a cold weight in your sleeve. The river hits you like a slap. It is cold and black and tastes of mud, and for a long, ugly second the oilcloth drags at you. Then you break the surface under the hulk's stern, gasping, in the cover of the reeds.
+
+You're unhurt. Above you the hulk erupts: the sentry's shout, the mate's bellow, Ashgrove's voice rising above both, no longer pleasant at all: "Boats! Lamps! She has the key!" Torches flare along the rail. A crossbow bolt smacks into the water a yard from your head.
+
+Across the water, a darker shape on the far bank rises, and a cold, thin voice carries a long way over still water. Ysolt Pike, who has been waiting for a lantern to go dark: "Left lantern, hold your breath." There is a crack. The left lantern at the hulk's bow goes out. A second crack, and the right one follows.
+
+The reeds are all around you, cold and thick. Shouts come from the deck above, and a skiff is being dropped. You have a key, a lute on your back, and no spells left. Corvin's decoy is still singing upriver, and your own skiff is tied at the jetty, thirty yards off.
+
+What does Vesper do?
+
+== ROUND 44 ==
+PLAYER: Vesper sucks in a breath, ducks under the surface, and swims through the reeds toward the far bank, keeping low and letting the black water hide her. "Ysolt, keep them blind, I'm coming to you!" she hisses once she's clear, then pushes through the cattails toward that dark shape, the key clamped tight in her fist.
+  [game] dice Vesper's Athletics swimming across in leather armor with the lute, DC 10: 1d20-1 = 1d20 [15] - 1 = 14
+  [game] dice Vesper's Stealth slipping through the reeds in the dark (vs raiders' passive Perception 10): 1d20+2 = 1d20 [17] + 2 = 19
+  [game] sheet: XP +100: 300 - Vesper Thorne can now go up to level 2 (XP 300): use level_up_options, then level_up
+  [game] time: 20 minutes later: Day 3, 11:58:54 PM
+  [DM lookup (hidden)] {"name": "Beyond 1st Level"}
+  [DM write_lore (hidden)] {"entry": "Retake the Key", "add_to_description": "DONE on Day 3 near midnight: Vesper retook the brass key from Ashgrove's hulk, learned of the backup flood plan at the Weeping Locks (open at the new moon) and dived out. New threat: Ashgrove, the Weeping Locks, three barge landings.", "status": "done"}
+  [game] notebook: updated Retake the Key
+  [DM level_up_options (hidden)] {}
+DM: Ysolt's hand finds your collar as you crawl up the mud of the far bank, and she hauls you into the cattails like a sack of wet nets. You lie there coughing river. She presses a finger to your lips and listens. A skiff is working along the reeds on the hulk's side with a lantern swinging. It passes a hundred yards off, then turns back. Ysolt's whisper is flat. "Two boats came to my bank an hour ago. One sank. One went home. I don't know how many are left." She almost smiles. "You're a terrible swimmer."
+
+For the next twenty minutes you crawl through reeds, a mile of mud and cold. Then Corvin's lanterns bob out of the dark. The *Plump Heron* has stopped singing, and Piet hauls you aboard by the belt. You sit in a heap on a wool bale with the key still clenched in your fist, dripping and alive, and Corvin presses a flask into your hand. "I told them Thack sent us," he says, hoarse with pride. "Did I do it right?"
+
+It's nearly midnight on Day 3. The key is yours, and you've also learned what Ashgrove truly wanted: the flood at the Weeping Locks, three landings on the quays, and an answer that does not need you at all.
+
+You've earned 100 XP, which brings you to 300, and you can go up to level 2.
+
+At level 2 you get: Jack of All Trades (half your proficiency bonus, rounded down, on checks that don't already use it), Song of Rest (an extra d6 healing on a short rest), a third 1st-level spell slot, and one new spell known. You may also swap one spell for another of the same level.
+
+Spells you could learn: Animal Friendship, Bane, Comprehend Languages, Cure Wounds, Detect Magic, Feather Fall, Healing Word, Heroism, Hideous Laughter, Identify, Illusory Script, Longstrider, Silent Image, Speak with Animals, Thunderwave, Unseen Servant.
+
+For hit points you can take the fixed 6, or roll a d8 and add 1 (at least 1). Which new spell do you want, do you want to swap one out, and do you take the fixed hit points or roll?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 45, "category": "contradiction", "severity": 2, "quote": "Tanner's Stair lies two hours on.", "why": "R6/R9/R12: the Weeping Locks were passed at 6 AM and Marrowmere only reached at 5:30 PM (R6 Corvin: Marrowmere 'by the next dusk'). Locks to Marrowmere is now two hours (also R51 'Three hours upriver')."}
+
+THE PLAYER'S LINE THIS ROUND: Level up! New spell: Healing Word, since I've nearly died once already and a heal at range beats a prayer. No swaps, and I'll take the fixed 6 hit points, because I don't trust my luck with a d8 after that natural 1 at the hulk.
+
+Then she holds up the key to the lantern light. "Corvin, drop us at Tanner's Stair by dawn. Ashgrove means to open the Weeping Locks at the new moon and drown the lower town, so I need Odalie, the Reeve, and a way to break that lock before then."
+
+=== REPLY ba45-01 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before you pick anything, the sheet disagrees with my last message. It already shows you at level 2, with 425 XP, 15 maximum hit points, three 1st-level slots, and Healing Word known. There's no level 2 choice left to make, and the next level needs 900 XP. Your spell choice and the fixed hit points are moot.
+
+Two other things on the sheet don't match what we played:
+
+- Your rapier is gone. That fits, since the sentry took it off the barrel at the hulk, and you never got it back.
+- A "Garrow Quill's half of the sluice-pin" is on your sheet. Nothing in play has mentioned it, so I won't invent where it came from. Was it something you set up, or an entry that arrived with the sheet?
+
+Meanwhile, the *Plump Heron* slides downriver through the small hours with the brass key in your fist. You have 13 of 15 hit points and no spell slots. Corvin tells Piet to keep the tiller straight, and the hills of Marrowmere rise ahead in the grey. By dawn you can be at Tanner's Stair with Odalie, the Reeve and Mags within an hour's walk, and the Weeping Locks lie upriver, where Ashgrove's flood waits for the new moon.
+
+What does Vesper do, and what's the story of that sluice-pin half?
+
+=== REPLY ba45-02 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before we go on, a note on the sheet, because it changes what you just asked for.
+
+You're already level 2. The sheet shows 15 max HP, 425 XP of 900, and 3 first-level slots. Healing Word was on your list of known spells from the start, so there's nothing to learn or swap now. Your next new spell comes at level 3 (900 XP), where you'd also choose a college and expertise. I'd rather not charge you a choice twice.
+
+Two items on the sheet need explaining:
+- **Your rapier is gone.** The sentry took it off the barrel at the hulk, and it's still there. You have your dagger, which is fine for now.
+- **"Garrow Quill's half of the sluice-pin"** is on your sheet, but I have no record of how it got there and never described it. Where did you find it? Tell me what you know, or whether you took it off the cabin table in the scramble, and I'll fit it into the story.
+
+You're also at 13/15 HP with no spell slots, so a full night's rest would be worth having.
+
+The scene itself: the Weeping Locks lie on the river between here and Marrowmere, about eight hours of drifting. Corvin can't get you to Tanner's Stair by dawn, but you'll pass the Locks around the same hour, in the grey before morning. Piet can keep watch while you sleep, and the *Plump Heron* will slide quietly past the lock-keeper's lamps.
+
+Ashgrove's flood needs the lock-gates opened at the new moon, eight nights off. What does Vesper do first: sleep on the bales, study the Locks, or something else?
+
+=== REPLY ba45-03 ===
+  [hidden call] level_up_options: {}
+Your sheet already shows you at 2nd level, with 15 maximum hit points and Healing Word among your spells known. Nothing was left to choose, so the level-up tool refused. The 6 hit points were already in your 15, and Healing Word was already on your list from the start. The next level is 3rd, at 900 XP, and you have 425.
+
+Corvin's flask warms you as the *Plump Heron* slides downriver through the last dark. You'll reach Tanner's Stair by dawn. Your sheet also shows that you're carrying a half of a sluice-pin, which belonged to a Garrow Quill. Your rapier isn't on the sheet right now. It was left on the hulk's barrel, and I should have recorded that earlier. You hold the brass key in one hand and the Keepers' words in your head, and you have a lock at the Weeping Locks to break before the new moon.
+
+What does Vesper do?
+
+=== REPLY ba45-04 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+A correction first, because the sheet knows something my narration didn't. You're already level 2, with 425 XP, so there is no level-up to take at this moment, and Healing Word is already on your list of spells known. Level 3 needs 900 XP. I'm sorry for the muddle. Your fixed-HP choice stands as a good instinct for next time.
+
+Two more things the sheet shows. Your rapier is gone. The sentry took it from the barrel on the hulk and it stayed there when you dived out, so you have only your dagger now. And the sheet lists "Garrow Quill's half of the sluice-pin", which I have no record of putting in your hands. I won't invent where it came from. Tell me if you know, and otherwise I'll treat it as something to figure out from the sheet.
+
+The *Plump Heron* poles upriver through the last of the night. You doze on the wool bales under Corvin's second-best cloak, still damp and still clutching the key, and wake to grey light on the water and the stink of hides. It's dawn on Day 4. Tanner's Stair is ahead, and the shrine hill above it has a calm line of chimney smoke.
+
+You have 13 of 15 hit points and no spell slots, as it's not yet been a night's rest. Five nights remain before the new moon. Corvin hands you a heel of bread and says nothing for once. Piet is already on the landing, looking up the stair.
+
+What does Vesper do?
+
+=== REPLY ba45-05 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Checking the sheet before I send anything, I found three things to sort out.
+
+**Level 2 is already on your sheet.** You're at 15 max HP (13 now), with 3 first-level slots and 2 hit dice, and the XP bar now reads 425 toward 900 for level 3. Nothing is left to apply, and your fixed-HP choice is already in. Your XP stands at 425, not the 300 I told you.
+
+**Healing Word was already one of your known spells.** It's on your original sheet, so it can't be your new pick. Your known spells are Charm Person, Disguise Self, Sleep, Faerie Fire and Healing Word. If you'd like a different fifth spell, say so. Otherwise you're set as is.
+
+**Your rapier is missing.** The sentry took it from the barrel at the hulk, and you left without it. You still have your dagger (+4, 1d4+2), plus the hatchet and crowbar. Odalie or the Reeve might find you a blade, and the hulk may still hold yours.
+
+I also have no record of the item "Garrow Quill's half of the sluice-pin" on your sheet. I never introduced that name, and it doesn't match anything I've established, so I won't treat it as real until you tell me where it came from.
+
+The scene itself is settled. The *Plump Heron* slides down the dark river toward Tanner's Stair with the key in your fist. Corvin steers by lantern, Piet dozes against a bale, and you have until dawn to plan how to reach Odalie, the Reeve and the Weeping Locks. The new moon is six nights off, since Day 3 is nearly over.
+
+Do you want to settle the rapier and that sluice-pin, or move straight on to the landing at Tanner's Stair?
+
+=== REPLY ba45-06 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"create": "Garrow Quill", "kind": "person", "description": "Lock-keeper of the Weeping Locks. The flood-gates there are held shut by a two-part iron sluice-pin; Quill kept one half and Ashgrove has t
+  [hidden call] write_lore: {"create": "Stop the Flood", "kind": "quest", "description": "Ashgrove means to open the Weeping Locks flood-gates at the new moon (about six nights from Day 4) to drown Marrowmere's lower town and op
+Nothing needs sending. Your sheet already shows you at level 2: 15 hit points, a third slot and Healing Word known. The next level is at 900 XP, and you have 425. When it comes you'll get Lore College, expertise in two skills and three bonus proficiencies, so think about those.
+
+Two other things on the sheet:
+
+- Your rapier is gone. You left it on a barrel at the hulk's jetty and the sentry took it. You still have the dagger. Getting a blade is worth thinking about.
+- You hold "Garrow Quill's half of the sluice-pin". I hadn't named it in play, so here's the ruling: Garrow Quill is the lock-keeper of the Weeping Locks. A two-part iron pin holds the flood-gates shut, and this was his half, tucked in the key's wrapping in the satchel. Without both halves the gates can't be opened on the new moon, so Ashgrove needs it, and Quill's fate is unknown.
+
+The *Plump Heron* drifts through the grey hours, and Corvin sleeps at the tiller and Piet takes the poles. At dawn on Day 4 you reach Tanner's Stair, damp and aching but whole. Mags's door opens before you knock, and Odalie hurries out and holds you hard enough to hurt. Then she sees the key in your hand and her face goes still. "Both," she says. "She's taken the whole plan out of your pocket, hasn't she?"
+
+You tell her about the Locks. She says nothing for a long moment, then turns and calls over her shoulder, "Brannoc. Bring the river chart again."
+
+Six nights remain to the new moon. You have the key, half a pin, and a family. What does Vesper do?
+
+=== REPLY ba45-07 ===
+  [hidden call] level_up_options: {}
+Before the boat moves, I have to correct the record on your level.
+
+Your sheet already reads level 2. Your hit die count is 2, your HP maximum is 15, and your XP is 425 of the 900 needed for level 3. So the level was applied, and there's no level-up left to send. Two things follow from that:
+
+- **Healing Word:** it was already one of the spells you knew from the start, so there is nothing new to learn at level 2. The same goes for the swap. I won't pretend a pick happened that didn't.
+- **Your next level:** at 900 XP you can reach level 3, which brings the College of Lore, Expertise and Cutting Words. That's 475 XP away, and I'll walk you through the choices when you get there.
+
+You have 13 of 15 HP, 0 of 3 first-level slots, and 2 of 3 Bardic Inspiration. Your rapier is still on the hulk's barrel, so you're carrying a dagger. Your sheet also lists "Garrow Quill's half of the sluice-pin", which I have no record of in my notes. Tell me where it came from, or let me know if it's a mistake, and I'll fold it into the story and the Weeping Locks plan.
+
+The *Plump Heron* slides downriver through the dark with the key warm in your hand. Corvin has agreed to be at Tanner's Stair by dawn.
+
+Do you rest on the way, or work at the plan with Corvin, Piet and Ysolt? Odalie and the Reeve are waiting at the end of the river.
+
+=== REPLY ba45-08 ===
+  [hidden call] level_up_options: {}
+Your sheet has moved ahead of my narration, so I haven't sent a level-up. The tool shows you are already level 2, and I won't run the same level twice.
+
+Here is what the sheet says:
+
+- **Level 2 is already taken.** You have 15 max hit points (13 now), 2 hit dice, Jack of All Trades, Song of Rest and three 1st-level slots, all spent after the Sleep. The next level needs 900 XP, and you have 425.
+- **Healing Word is already known.** It was on your original list: Charm Person, Disguise Self, Sleep, Faerie Fire, Healing Word. So there's no new spell to choose now. Your next spell and swap come at level 3.
+- **Your rapier is gone.** It was left on the barrel outside Ashgrove's cabin and the sentry took it. You still have a dagger, so you're armed lightly until you find or buy another.
+- **There's an item I didn't put there:** "Garrow Quill's half of the sluice-pin." It isn't in my notes. I'd rather ask than make it up. Did it come from something you set up, or do you want to say where it came from? It sounds like it fits the Weeping Locks.
+
+The scene stands. It's nearly midnight on Day 3 aboard the *Plump Heron*, with the brass key in your fist, a dagger at your belt and a flood planned for the new moon. Corvin is waiting to hear where he's steering, and Piet has the pole ready.
+
+What does Vesper do?
+
+=== REPLY ba45-09 ===
+  [hidden call] level_up_options: {}
+I need to correct myself before anything else. I made a mistake in my last message.
+
+Your sheet shows that Vesper was already a level 2 bard when this game began, and she still is. I gave you the XP from the last scene, but 300 XP was never a level-up threshold for her. Level 3 needs 900 XP, and you have 425. There is no level-up to take right now, so Healing Word can't be chosen as a new spell. You already know it. Nothing on your sheet changes. I'm sorry for the confusion.
+
+Here is where the sheet stands:
+- You have 13 of 15 hit points, and all 3 first-level slots are spent (0/3).
+- Your rapier is gone. The sentry took it off the barrel at the hulk, so you have your dagger and Vicious Mockery.
+- The sheet lists "Garrow Quill's half of the sluice-pin", which I don't recognize and can't account for in the story so far. If it's your own addition from somewhere, tell me where it came from. Otherwise I'll treat it as something you picked up on the hulk and ask you how.
+
+At level 3 you'd get the Lore college (three extra skills, Cutting Words, Expertise in two skills), a second spell level, and a new spell, so you're about 475 XP away.
+
+The story still stands. The *Plump Heron* slides downriver through the small hours, and Tanner's Stair is a few hours off. You have the key and your wits, but no slots, and Ashgrove's flood is waiting at the Weeping Locks.
+
+What does Vesper do?
+
+=== REPLY ba45-10 ===
+No level-up is needed. The sheet already shows you at 2nd level: 15 maximum HP, three 1st-level slots, and 425 of the 900 XP for 3rd. The tool refused another level for that reason, and nothing changed. Healing Word is already among your spells known. Your 6 fixed hit points were the right choice, and they're already counted.
+
+Two things on the sheet don't match what happened at the table, and I'm flagging them rather than hiding them:
+
+- Your rapier is not in your pack. The sentry took it off the barrel at the hulk, and it's still there. You have your dagger.
+- The sheet lists "Garrow Quill's half of the sluice-pin." I have no record of giving you that, and no notebook entry for Garrow Quill. I'd rather not invent its history. If you or a previous session meant something by it, tell me and I'll make it fit.
+
+Corvin takes you downriver in the dark. You doze on the wool with the key in your fist and Ysolt's cloak over you. At the first grey light the *Plump Heron* noses into Tanner's Stair. It is Day 4, and the new moon is seven nights off. Marrowmere smells of tar and woodsmoke, and the shrine bell rings for morning prayers, steady and untroubled in Odalie's hands.
+
+You have the key, the binding words in your head, and word of the flood at the Weeping Locks. On the quay Brannoc Vell is already waiting with a lantern and a ragged cheer from the watch.
+
+What does Vesper do?
+
+=== REPLY ba45-11 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Your sheet already shows you at level 2. Healing Word is on it as a known spell, along with the third 1st-level slot, Jack of All Trades and Song of Rest, so there's nothing left to send. Your hit points are 13 of 15, and you're on 425 of the 900 XP you need for level 3. Your spell slots are all spent, so you're running on lute and nerve until you rest.
+
+Two items on the sheet don't match what I have in my notes:
+
+- **The rapier is gone.** That fits, since the sentry took it off the barrel at the hulk and you never got it back. You still have the dagger.
+- **"Garrow Quill's half of the sluice-pin"** is on your sheet, but I have no record of who Garrow Quill is or how you came by it. Tell me where it came from, and I'll write it into the story.
+
+The rest stands. The brass key is in your fist, and Corvin's barge is wallowing through the dark with Piet at the pole. You know that Ashgrove's real plan is the Weeping Locks at the new moon. It drowns the lower town and opens a channel for the wyrm whether or not anyone says the words. The new moon is about seven nights off. Odalie, the Reeve and a way to break that lock are all waiting at the end of the river.
+
+Corvin eyes the flask you took from him. "Dawn at Tanner's Stair, then. If the river lets us."
+
+What does Vesper do?
+
+=== REPLY ba45-12 ===
+  [hidden call] level_up_options: {}
+  [hidden call] write_lore: {"create": "Garrow Quill's half of the sluice-pin", "kind": "item", "description": "Half of an iron sluice-pin stamped with the name Garrow Quill, pulled from Ashgrove's chart at the Weeping Locks mar
+Before we go on, a note from the DM. I checked your sheet, and it already reads level 2 with 15 hit points, 3 first-level slots and Healing Word known. The level was applied on its own, so there's no choice left to make now. Level 3 needs 900 XP and you have 425, so your fixed 6 hit points stay with you. The sheet also shows the sluice-pin you pulled from Ashgrove's chart, stamped with the name Garrow Quill. It's only half of one, so the other half is held by someone at the Weeping Locks. Your rapier is still on the hulk's barrel, where the sentry took it.
+
+Corvin nods and leans on the tiller, and the *Plump Heron* drifts through the grey end of the night. You doze on the wool bales with the key under your cheek and wake to the reek of lime and wet hide. It's dawn, and Tanner's Stair is slick with mist.
+
+Odalie is waiting on the bottom step in her soot-stained habit with a lantern, and Brannoc Vell and Ysolt Pike stand behind her. Odalie's face goes from fear to relief to a look you know well, the one she wore when she found the silk scarf in your pack. She says nothing. She takes your face in both hands and kisses your forehead, and then she takes the key and puts it in her sleeve.
+
+You show them the pin and tell them about the chart, the Weeping Locks, the three landings and the words *if no words, then water*. The Reeve's jaw goes hard. "The Locks are a day's ride up the old towpath. The keeper's a man called Garrow Quill, and I haven't heard from him in a week." He looks at the pin in your palm. "Nine nights was a lie. If she has him, she can open them whenever she likes."
+
+You're hurt, tired and out of spells, and it's morning. What does Vesper do?
+
+=== REPLY ba45-13 ===
+The level-up was refused, and the reason matters. Your sheet already shows you as a 2nd-level bard: 15 maximum hit points, 2 hit dice, three 1st-level slots, and 425 of the 900 XP that 3rd level needs. The next step is level 3, so there's nothing to take now. Your fixed-6 HP choice is already reflected in the max of 15.
+
+Healing Word was already on your sheet at the start as a spell you know, so it's covered. Hold your spell swap and new spell until 3rd level.
+
+Two other things on the sheet need explaining:
+
+- Your rapier is gone from your gear. That's right: the sentry took it off the barrel at the hulk, and it's still there. You have the dagger.
+- "Garrow Quill's half of the sluice-pin" is listed in your pack, but I have no record of who Garrow Quill is or how you got it. I'm not going to invent that now. It sounds like it fits the Weeping Locks, so I'll treat it as a clue you'll learn about once you reach Marrowmere.
+
+The night is nearly out. The *Plump Heron* slides down the river toward Marrowmere with the key in your hand and the flood plan in your head. You have no spell slots left until you rest, and 13 of your 15 hit points. By dawn you'll be at Tanner's Stair, with Odalie, the Reeve and the Locks all to deal with, and you have until the new moon.
+
+What does Vesper do on the way down the river?
+
+=== REPLY ba45-14 ===
+  [hidden call] level_up_options: {}
+  [hidden call] write_lore: {"create": "Weeping Locks", "kind": "place", "description": "Stone river-locks upriver of Marrowmere, walls beaded with dripping moss, kept by a lock-keeper who takes coin to look the other way. Ashgr
+Some housekeeping first, as your DM. The sheet shows you're already level 2: 425 XP, 15 maximum hit points, 3 first-level slots and 2 hit dice. The level was applied before your message, so there's nothing to send. Healing Word was already on your list of spells known, so you can't take it again. Your next level is at 900 XP, and it brings the 2nd-level spells and the College of Lore.
+
+Two other things on your sheet. Your rapier is gone, left on that barrel at the hulk, and the sentry kept it, so you have only your dagger. The sheet also lists "Garrow Quill's half of the sluice-pin," which I don't remember handing you, so tell me where you picked it up. Your HP is 13 of 15, and all three spell slots are spent.
+
+The *Plump Heron* drifts with the current through the dark and the grey morning. You sleep in snatches on the wool bales with the key in your fist. At seven the Weeping Locks rise ahead, dripping stone walls with a lock-keeper's hut and a sluice-gate wheel as tall as a man. Ashgrove's chart said the gates open here at the new moon, seven nights off. The lock-keeper's window is dark, and the hut door stands ajar. Corvin slows the barge, muttering.
+
+Marrowmere is most of a day beyond. What does Vesper do?
+
+=== REPLY ba45-15 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"entry": "Captain Ashgrove", "add_to_description": "Vesper's rapier was left on a barrel at the hulk's jetty and is now in Ashgrove's hands."}
+Your level-up is already done. The sheet shows you at 2nd level: 15 hit point maximum, three 1st-level slots, Healing Word on your list, Jack of All Trades and Song of Rest. Nothing more is needed, and the next level is at 900 XP (you have 425).
+
+Two things on the sheet need a word. Your rapier isn't there, because it was left on the barrel at the hulk's jetty and Ashgrove has it now. Your dagger is all you carry. The sheet also lists "Garrow Quill's half of the sluice-pin", and I have no record of where it came from. Tell me how it came to you, or whether it's something you picked up on the bank.
+
+The *Plump Heron* slides into Tanner's Stair as the sky greys at five in the morning. Corvin hands you down with a flourish and a promise to haul the whole lower town's wool free of charge if the river holds. Up the hill, the shrine bell is silent, but a lamp burns in Mags's window. You have the key, eight days of nights narrowed to six, and a flood plan at the Weeping Locks to break before the new moon.
+
+What does Vesper do?
+
+=== REPLY ba45-16 ===
+  [hidden call] level_up_options: {}
+Before anything else, a correction. The sheet shows you are already 2nd level. You started the game at level 2, and Healing Word is already among your spells known, so there's nothing to take now. My last message was wrong: you aren't leveling up yet. Level 3 needs 900 XP, and you have 425.
+
+The sheet also shows a spare item, Garrow Quill's half of the sluice-pin, which I haven't introduced in play. I'll treat it as a lead for the Weeping Locks when it comes up.
+
+What's real at this moment: the key is in your fist, you're soaked on Corvin's barge with 13 of 15 hit points, and your slots are spent. At level 3 you'll get College of Lore, two expertise picks, three bonus skills, Cutting Words, 2nd-level spells and one new spell. That's for later.
+
+The plan stands. Corvin takes the *Plump Heron* upriver through the dark and puts in at Tanner's Stair by dawn. You have eight days to the new moon, and you need Odalie, the Reeve and a way to break the Weeping Locks.
+
+Do you sleep on the barge while the river carries you, or work the plan out with Piet and Corvin first?
+
+=== REPLY ba45-17 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] write_lore: {"create": "Garrow Quill's half of the sluice-pin", "kind": "item", "description": "An item on Vesper's sheet at Day 3 near midnight, half of a pin tied to the Weeping Locks' sluice mechanism. Its ori
+A correction first, as the DM. Your sheet already shows you at level 2: 15 hit points, three 1st-level slots, Song of Rest, and Healing Word among your spells known. So there's no level-up left to send. Your next level is 3rd, at 900 XP, and you're at 425.
+
+Two other things on the sheet don't match what we played:
+
+- Your rapier is gone. The sentry took it off the barrel at the hulk, and you left it there. You have your dagger.
+- There is an item, "Garrow Quill's half of the sluice-pin," that I have no scene for. I don't know who Garrow Quill is or how you got it. Tell me what you want it to be, and I'll fold it in. I won't invent it for you.
+
+Your current state is 13 of 15 hit points, no spell slots (a long rest will bring them back), 2 uses of Bardic Inspiration, and the brass key.
+
+The *Plump Heron* slides down the dark river with her lanterns doused and Piet on the pole. Dawn is a grey seam over the roofs of Marrowmere when Corvin noses her into Tanner's Stair, a little before five on Day 4. The air smells of lime and wet hide, and the stair is empty. Eight nights remain until the new moon. Odalie, Mags, Tamsin and the Reeve are all within a short walk, and the Weeping Locks wait upriver with a flood on their pins.
+
+What does Vesper do?
+
+=== REPLY ba45-18 ===
+  [hidden call] level_up_options: {}
+Before you pick anything, I checked the sheet, and the level-up isn't pending.
+
+The sheet shows you're already a 2nd-level bard. You have 15 maximum hit points (13 now), three 1st-level slots (all spent), and 2 hit dice. Healing Word is already among your spells known, so there's no new spell to take and nothing to swap. Your XP reads 425, and 3rd level needs 900. I called it "300 XP, level 2" in my last message, and that was wrong. Nothing needs recording, and your good instincts about Healing Word stand.
+
+Two other things on the sheet:
+
+- Your rapier is gone, because the sentry took it off the barrel on the hulk. You still have the dagger, which is a poor trade.
+- You have an item called "Garrow Quill's half of the sluice-pin" that I don't remember giving you. Tell me where you picked it up and who Garrow Quill is, and I'll fold it into the story rather than guess.
+
+For the story: Corvin nods at the tiller and the *Plump Heron* turns upriver for Tanner's Stair, with Ysolt dozing against a bale and the key warm in your fist. You should reach the stair near dawn and have the day to work with. Six nights remain before the new moon, with the Weeping Locks to break or guard and Ashgrove still out there.
+
+What does Vesper do?
+
+=== REPLY ba45-19 ===
+  [hidden call] level_up_options: {}
+Before anything else, a correction. The sheet already shows you at level 2, with 15 maximum hit points, 3 first-level slots and 2 hit dice. The level was applied before your choices came through, so I can't take a new spell or a hit point roll now. Two things also fell out of that:
+
+- Healing Word is already one of your known spells, so choosing it again gains you nothing. You have Charm Person, Disguise Self, Sleep, Faerie Fire and Healing Word.
+- Jack of All Trades and Song of Rest are active.
+
+Two items on the sheet don't match what happened in play. Your rapier is missing from your items. Last I saw it, the sentry took it off the barrel at the hulk, so I'll treat it as left behind on the jetty. A "Garrow Quill's half of the sluice-pin" has also appeared, and I have no record of it in the story. Nothing in my notes says who Garrow Quill is or how you got that. Do you know where it came from, or should we treat it as something you picked up that I haven't described yet?
+
+Back to the river. You sit on the wool bale with 13 of 15 hit points, no spell slots, and the key in your fist. Corvin hauls on the tiller. "By dawn at Tanner's Stair, then. And girl, you owe me a rapier." Piet is already feeding the stern lantern. With the key, the flood plan and Odalie's words, you have six nights before the new moon and a lock to break.
+
+What does Vesper do?
+
+=== REPLY ba45-20 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"create": "Garrow Quill's half of the sluice-pin", "kind": "item", "description": "Half of a split iron pin, on Vesper's sheet after the hulk escape; apparently one half of the pin that secures the W
+A quick note from the DM before the story moves. Your sheet already shows you at level 2 with Healing Word known, and the level-up record I looked at agrees, so there's nothing left to send. The hit points and the third slot are in place (13 of 15 HP, and your slots are all spent from the hulk). Two things on the sheet need your word:
+
+- **Your rapier** is gone from your items. You left it on the jetty barrel when the sentry took it, so it's still on Ashgrove's hulk unless you say otherwise. You have a dagger, a hatchet and a crowbar.
+- **"Garrow Quill's half of the sluice-pin"** is on the sheet, but I have no record of where it came from. Tell me how you got it, or I'll say you lifted it from the grey-braided mate on your way out.
+
+The night passes on the *Plump Heron* with the lanterns doused and Piet watching the reeds. Corvin has stopped talking, which is the most worried you've seen him. At 5:30 on Day 4 the barge noses into Tanner's Stair under a grey sky. The tanneries are already steaming, and the bell on the hill is quiet. Odalie is waiting on the bottom step in her soot-stained habit, with Brannoc Vell beside her and Mags's lantern between them.
+
+You hold up the key. Seven nights remain before the new moon, a flood waits at the Weeping Locks, and the town's two best people are listening.
+
+What does Vesper do?
+
+=== REPLY ba45-21 ===
+  [hidden call] level_up_options: {}
+  [hidden call] lookup: {"name": "Garrow Quill"}
+A correction first, as the DM. Your sheet already shows you at level 2. Healing Word is on it, your hit points are 15 maximum and you have two hit dice, so the level was taken and nothing more needs choosing. Level 3 needs 900 XP, and you have 425. Your sheet also shows no rapier now. The sentry took it off the barrel at the hulk, and it's gone with the hulk.
+
+The sheet lists one item I don't have an entry for: "Garrow Quill's half of the sluice-pin." Tell me where you got it and who Garrow Quill is, and I'll fit it into the story. I'd rather not invent it over what you may already know.
+
+The *Plump Heron* noses into Tanner's Stair at 5:30 on the morning of Day 4, with a grey, mist-hung dawn over the tanneries. Corvin is asleep on his feet at the tiller. Four of the nine nights are gone, and the new moon is five nights away. You have the brass key, the Keepers' words in your head, and 13 of 15 hit points. You have no spell slots left until you rest.
+
+Odalie is waiting at the top of the stair with her shawl pulled tight, and behind her, Brannoc Vell's broad shape. Between you, a map of the Weeping Locks needs finding, and a lock needs breaking.
+
+What does Vesper do?
+
+=== REPLY ba45-22 ===
+  [hidden call] level_up_options: {}
+Good news first: your sheet already shows you at level 2. You're at 15 hit points maximum, with two hit dice, Jack of All Trades, Song of Rest, three 1st-level slots, and Healing Word among your spells known. Nothing further is needed for that level. Level 3 needs 900 XP, and you're at 425, so the next level-up is a way off.
+
+Two things on the sheet need a word. Your rapier is gone. You left it on the barrel at the hulk when Ashgrove's sentry took it, and it's still aboard. You have your dagger, which will have to do. The sheet also lists "Garrow Quill's half of the sluice-pin", which I have not introduced in play. Tell me where Vesper got it and what she knows of it, and I'll weave it in.
+
+The *Plump Heron* slides down the river through the cold small hours. You doze against a wool bale with the key under your hand, and Piet wakes you at first grey. Tanner's Stair rises out of the mist, reeking of lime and wet hide. Corvin has the tiller steady, and the lanterns have burned down to stubs. Mags's net-sheds sit dark on the Row. Above the roofs, the shrine bell rings thinly for the dawn office, and Odalie is the one ringing it.
+
+It is the morning of Day 4. Five nights remain before the new moon, by Odalie's count. You have the key, a flood to stop at the Weeping Locks, a Reeve to convince, and a few spell slots coming back after a rest.
+
+What does Vesper do?
+
+=== REPLY ba45-23 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"create": "Garrow Quill", "kind": "person", "description": "Lock-keeper of the Weeping Locks. A sluice-pin is a split iron pin; the lock-keeper's half and a second half together release the flood-gat
+The sheet already has you at 2nd level, so there's nothing to send as a level-up. Your XP is 425, Healing Word is already in your known spells, and you have 15 HP max and three 1st-level slots, which are empty right now. The next level is 3rd, at 900 XP. When you reach it, you'll choose a bard college, two expertise skills, three bonus skills and a new spell.
+
+Two things on the sheet to flag. Your rapier is gone: the sentry took it off the barrel at the hulk, so for now you have the dagger. You also carry "Garrow Quill's half of the sluice-pin," which is the iron pin that was stuck through the Weeping Locks on Ashgrove's chart. Quill is the lock-keeper there, and the flood-gates can't be opened without his half.
+
+The *Plump Heron* slides into Tanner's Stair at dawn, grey and cold. You've slept a few hours between the bales, and your HP is mostly back, but your spell slots will need a proper long rest. Odalie is waiting on the steps in a borrowed shawl with Brannoc Vell, Ysolt (who rowed ahead) and Tamsin leaning on a crutch. You hold up the key and the pin.
+
+"Seven nights to the new moon," the Reeve says. "The Locks are a day's ride upriver. I can raise a dozen watchmen, no more. Garrow Quill has kept those gates for thirty years and I'd have sworn on my own wife's grave he's honest."
+
+Odalie looks at the pin. "Then someone is holding his family, or his debts," she says.
+
+What does Vesper do?
+
+=== REPLY ba45-24 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Before I send anything: your sheet already shows you at level 2, so there's no level-up left for me to record.
+
+- **Healing Word** is already on your sheet as a spell known, so you have all five 1st-level spells: Charm Person, Disguise Self, Sleep, Faerie Fire and Healing Word. I have no pending choice to make, and I won't spend one by guessing.
+- **Hit points** are 13 of 15 and your hit dice are 2 of 2, so the fixed-6 choice is already built into your maximum.
+- **Spell slots** are 0 of 3 for now. They come back on a rest.
+- **Your next level** is level 3 at 900 XP. You're at 425, so it's a way off.
+- **Your rapier** isn't on the sheet. You left it on the barrel at Ashgrove's jetty, and the sentry took it. You still have your dagger.
+
+Something I need you to clear up: the sheet lists "Garrow Quill's half of the sluice-pin," and I have no record of that item or of anyone called Garrow Quill. I won't invent where it came from. If you know, tell me how you got it. Otherwise I'll treat it as something you found or were given that I missed.
+
+The plan stands. Corvin steers the *Plump Heron* upriver through the small hours toward Tanner's Stair, and you have a lamplit hour on a wool bale to think. Ashgrove still means to open the Weeping Locks at the new moon, and eight days remain. You have a key, a dagger, no spells and the fact that she needs neither you nor the words to drown the lower town.
+
+What does Vesper do, and where did that sluice-pin half come from?
+
+=== REPLY ba45-25 ===
+  [hidden call] level_up_options: {}
+Good news first. The level-up has already gone through on your sheet. You are a 2nd-level bard with 15 hit points at most, a third 1st-level slot, Jack of All Trades and Song of Rest. Healing Word is already on your list of known spells, so there's nothing left to choose or roll. The next level is at 900 XP, and you have 425.
+
+Two things on your sheet need a word from me. Your rapier isn't there. You left it on the barrel at the hulk when Ashgrove's sentry took it, so for now you have your dagger. And there's an item listed as "Garrow Quill's half of the sluice-pin" that I have no note of. Tell me what you want it to be, or whether you picked it up somewhere, and I'll make it fit.
+
+The *Plump Heron* slides through the dark past the Weeping Locks again. You can't help looking up at the great sluice-gates, black and dripping above the water, and you imagine the river pouring through them. Corvin sleeps at the tiller with his hat over his eyes, and Piet keeps watch. You nap in fits with the key in your fist.
+
+At six, grey light finds Tanner's Stair, stinking of lime and hide. The shrine hill is quiet. A thin, ordinary smoke rises from the sanctuary chimney. Nine nights became eight, and then seven. The new moon is close.
+
+You have the key. You know the plan: the locks, the lower town, the three landings. Odalie and the Reeve are a short climb away, and so is the question of how to stop a flood with a bard, a bowl and a very tired wool merchant.
+
+What does Vesper do?
+
+=== REPLY ba45-26 ===
+  [hidden call] level_up_options: {}
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Good news, and a correction from me: your sheet already shows you at level 2, so there is nothing left to send. Healing Word was already among your spells known, so no new pick is needed, and I didn't overwrite anything. You have 15 hit points maximum, 13 of them now, and two hit dice. You also have Jack of All Trades and Song of Rest. Your slots show 0 of 3 for now. They refill on a long rest, and the third slot comes with level 2. The next level is at 900 XP, and you're at 425.
+
+Two things on your sheet I should flag. Your rapier is gone, because you left it on the barrel at the hulk's jetty and the sentry kept it. You still have your dagger, so you aren't unarmed. The sheet also lists "Garrow Quill's half of the sluice-pin," and I have no record of where that came from. Tell me where you got it, because I don't want to invent that for you.
+
+Corvin takes the tiller with a grin, and the *Plump Heron* slides down the dark river toward Tanner's Stair with the key warm in your fist. It's the dead of night on Day 3. Dawn will find you in Marrowmere with eight nights to go until the new moon, and the Weeping Locks upriver.
+
+What does Vesper do on the way down?
+
+=== REPLY ba45-27 ===
+I can't send that level-up: the sheet has already moved past it.
+
+Your sheet now reads level 2, with 15 maximum hit points, 2 hit dice, three 1st-level slots and 425 XP. The tool says level 3 needs 900 XP, so there is no level-up to take. Healing Word was already on your sheet as a known spell, so you have it. I won't pretend I recorded a choice I didn't.
+
+Two things on the sheet I didn't put there:
+
+- Your **rapier is missing**. You left it on the barrel at the hulk's jetty, and the sentry took it. You're armed with only your dagger until you get it back or buy another.
+- The sheet lists **"Garrow Quill's half of the sluice-pin"**, and I have no record of it in the notebook. I don't know where it came from. I'll leave it on your sheet, but I won't invent its story until you tell me or it surfaces in play.
+
+You're at 13 of 15 hit points with all three slots spent, and the key is in your fist.
+
+Corvin laughs, wipes his eyes, and swings the tiller. "Tanner's Stair by dawn, then, and a bed for everyone who can't swim." The *Plump Heron* turns into the dark current, and the lanterns go out one by one.
+
+While you drift, Ysolt cleans her crossbow, Piet pours hot cider, and Corvin quietly asks if "the saint's bone" might do for a third wool contract. Sister Odalie, the Reeve and a plan to break the Weeping Locks wait at the end of the river. About seven nights remain until the new moon.
+
+What does Vesper do?
+
+=== REPLY ba45-28 ===
+  [hidden call] level_up_options: {}
+  [hidden call] write_lore: {"create": "Garrow Quill", "kind": "person", "description": "Lock-keeper of the Weeping Locks, in Ashgrove's pay. Holds one half of the split iron sluice-pin that must be drawn to open the flood-gates
+Good news first: the sheet shows you're already level 2, with Healing Word known, 15 maximum hit points and three 1st-level slots, so there's nothing left to send. Your fixed hit points and spell choice have gone through. Level 3 needs 900 XP and you have 425, so the next advance is a while off.
+
+Two things I should be honest about. Your rapier is gone. It was left on the barrel at the hulk when the sentry took it, so you're down to your dagger until you find another blade. And the sheet lists half of a sluice-pin that belongs to Garrow Quill, the Weeping Locks' keeper, whom Ashgrove has bought. You palmed it off her map-table with the key, a split iron pin that opens the flood-gates only when both halves are drawn together. Quill has the other half. Without both, the gates could only be forced.
+
+The *Plump Heron* poles upriver through the grey end of the night, past dark reed-beds and sleeping herons, and Corvin keeps a wary eye behind. By six the chimneys of Marrowmere stand against a pale sky. Tanner's Stair is quiet and stinks of lime. Odalie is waiting on the bottom step in her grey habit with a lantern gone pale in the dawn, and she lets out a breath when she sees you. Behind her stand Brannoc Vell and Ysolt Pike, each with a cup of something steaming.
+
+You have a key, half a pin, eight days minus one, and a flood to stop at the Weeping Locks. You are at 13 of 15 hit points with no spell slots until you rest.
+
+What does Vesper do?

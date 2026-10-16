@@ -1,0 +1,561 @@
+GAME cleric, ROUND 53
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 50 ==
+PLAYER: Brun crosses the little room in three strides, and when she reaches the altar her hand trembles over the iron ring before she closes her fingers around it. "Aunt Maren," she says, her voice breaking on the word, "yes. Please sit. I'll light the hearth and put the kettle on, and Garrick will help me, because tonight this is a warm place and you are kin."
+
+She slips the ring onto her smallest finger and turns back, wiping her eyes. "I have so many questions, but first tell me one thing: what was my mother's name, and how did she die?"
+  [DM write_lore (hidden)] {"create": "Sigrun Stonehearth", "kind": "person", "description": "Brun's mother, a warden-surveyor of the Deepwatch who mapped shafts for the hill-holds. Auburn-haired, stubborn-chinned. She died when the shaft she was surveying near the hill-hold collapsed; she shielded her small daughter with her own body, and Brun was found alive beside her days later by Father Dorrin. The iron ring braided wi
+  [game] notebook: created an entry for Sigrun Stonehearth; added 4 relationships to Sigrun Stonehearth
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 4 evening: Maren told Brun her mother was Sigrun Stonehearth, a warden-surveyor who died shielding her in the shaft collapse. Brun now wears the iron ring with Sigrun's hair. Maren has news from the Deepwatch to share by the fire and wants Brun to come north; the father's name is kept in the Deepwatch records."}
+  [game] notebook: updated The Deepwatch Lead
+  [game] sheet: gained 1 × Sigrun's iron ring (braided with auburn hair)
+  [game] time: 2 hours later: Day 4, 8:29:30 PM
+DM: Maren sits down on the old priest's bench and does not answer until the fire is lit. Garrick splits kindling with his shortsword, you set the kettle on the hook, and the little stone room fills slowly with warmth and the smell of woodsmoke. It is the first fire the shrine has had since you left.
+
+Then she tells you.
+
+"Sigrun," she says. "Sigrun Stonehearth. A warden-surveyor, the best the Deepwatch ever sent down a shaft. She could read a seam like you read a face. She drew the maps the hill-holds still use." She almost smiles. "Stubborn as an anvil. She would not be told a shaft was unsafe if her own line said otherwise."
+
+The fire pops. Maren's hands tighten on her staff.
+
+"The shaft she was surveying outside the hold gave way while you were with her. She was not meant to have you there; the nurse had fallen ill, and she would not leave you alone. When the roof came down she put herself over you. That is how you lived. They dug for four days. Dorrin found you on the fourth, alive under her, cold, and holding a handful of her braid in your fist."
+
+She nods at the ring on your finger. "That is what he cut from it. He kept it for you, and then, I think, he did not know how to give it. He wrote to us once, and we did not come, and the years went on."
+
+Her eyes are wet but her voice does not break. "As for your father, he was not a warden. The rest is in the Deepwatch records, and it is not mine to say by a fire at night, half told. Come north, and I will show you the page."
+
+Garrick keeps his eyes on the flames and says nothing, but when you glance at him he has set a second cup beside Maren's, and filled it, and nudged it toward you. Outside the stars are coming out over the hills.
+
+You are home, at the shrine where Father Dorrin raised you, with kin at the fire and a ring on your finger. It is a little past eight. You have two spell slots, Channel Divinity, and a long road north when you are ready. What does Brun do?
+
+== ROUND 51 ==
+PLAYER: Brun takes the cup Garrick set for her, holds it in both hands, and sits down beside Maren, leaning her shoulder against her aunt's. "Thank you, Aunt Maren. I'll come north, and we'll read that page together when I'm ready."
+
+"But tonight I'd like to stay here and keep Father Dorrin's hearth lit one last time, and say the evening prayers aloud with you, if you'll join me. Garrick, you'll share the watch with me?" She smiles, a little wet-eyed, and adds, "DM: just to be sure, I still have Corm's ledger and Father Dorrin's prayer book in my pack, correct?"
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Guiding Bolt, Sanctuary, Shield of Faith, Protection from Evil and Good; Garrick Thorne: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 5, 4:29:30 AM
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Night Day 4: Brun, Maren and Garrick kept the hearth and evening prayers at Father Dorrin's shrine and shared the watch; long rest taken. At dawn Day 5 they set out north for the Deepwatch (about three days) with Maren and Garrick."}
+  [game] notebook: updated The Deepwatch Lead
+DM: Yes: Corm's ledger and Father Dorrin's prayer book are both in your pack, wrapped in dry cloth, and the ring is on your smallest finger.
+
+You say the evening prayers aloud with Maren, the old priest's words in two voices, hers dry and cracked, yours low and steady. When you reach the place where Father Dorrin's name belongs, you say it, and she says it after you. The hearth burns down to a bed of red. Garrick takes the first watch at the door with his bow across his knees, and you take the second. Nothing comes up the road. Once in the small hours an owl asks its question and no one answers.
+
+You sleep in the old priest's own bed, on the old priest's own blanket, and for the first time in a long while you do not dream of stone.
+
+It is a little after four in the morning when you wake, rested, at 21 of 21 hit points with all three spell slots and Channel Divinity ready. The same five spells are prepared, with Bless and Cure Wounds always ready besides. Grey light is just starting in the shrine's one window. Maren is already up, sitting by the cold hearth with her staff across her knees, watching you with an expression you have not seen on anyone's face before, one you suspect is called pride.
+
+Garrick has the packs ready by the door, and the road north runs up into the high hills, three days to the Deepwatch.
+
+What does Brun do?
+
+== ROUND 52 ==
+PLAYER: Brun rises, folds Father Dorrin's blanket neatly on the bed, and lays a hand on the lintel of the little shrine for a moment before she shoulders her pack. "Aunt Maren, Garrick, I'm ready. Let's be on the road north while the light is still gray and the passes are quiet."
+
+She stirs the cold ashes once and says softly, "Rest well, Father. I'll come back and tell you how it ends."
+  [game] time: 10 hours later: Day 5, 2:29:30 PM
+  [game] dice Garrick's Wisdom (Survival) check reading the high pass for the safest line, Natural Explorer doubles proficiency (+2+2+... mountain), DC 12: 1d20+4 = 1d20 [18] + 4 = 22
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 5 afternoon: the party (Brun, Garrick, Maren) is on the north road, well into the high hills, making good time under Garrick's guidance. The Deepwatch lies roughly two days further. Next stop: a warden waymark-hut at the saddle for the night."}
+  [game] notebook: updated The Deepwatch Lead
+DM: The road north climbs out of the birch gullies and into bare, wind-scoured hills, where the grass lies flat and the cairns of old warden waymarks stand at every rise. You leave the shrine's smoke behind you at the first ridge and do not look back, though you want to. Maren walks slower than you, her black staff striking the stones in an even beat, but she does not falter and she does not complain.
+
+Garrick takes the lead and reads the land like a page. Where the old track washes out at a stream, he finds the ford; where it climbs into scree, he finds the sheep trail that skirts it. Twice he stops, lifts a hand, and listens, then goes on. Nothing follows you. Once a pair of ravens wheel overhead for an hour, and Maren says they are only ravens.
+
+By midafternoon you have crossed two ridges and a high saddle, and Garrick estimates you are a full day ahead of the pace he feared. "The Deepwatch is two days yet," he says, not turning his head. "Maybe a day and a half, if the weather holds. There's a warden's waymark-hut at the next saddle. We can shelter there tonight."
+
+It is half past two. The sky is high and pale, the wind steady, and the path ahead runs on through the hills, long and bare and quiet. You are at full strength, with three spell slots and Channel Divinity ready, and kin walking beside you.
+
+What does Brun do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 53, "category": "agency", "severity": 2, "quote": "you realize with a start that you know the tune. Father Dorrin used to whistle it while he mended the shrine roof.", "why": "The DM invents a memory for Brun that the player did not ask for; the player had asked about the mother's songs, not Brun's own past."}
+
+THE PLAYER'S LINE THIS ROUND: Brun falls into step beside Maren and shortens her stride to match. "Aunt Maren, while we walk, would you tell me about the Deepwatch itself, and about my mother as a girl? I'd like to hear the small things, like what she liked to eat and what songs she sang."
+
+She glances ahead at Garrick and adds, "Garrick, thank you for the ford and the sheep trail. At the waymark-hut tonight I'll cook, since you've done the hard work all day."
+
+=== REPLY cl53-01 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Small things Maren told Brun on the road (Day 5): Sigrun loved barley porridge with honey and sour apples, hummed the miners' work-song 'Down the
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Maren's account (Day 5): the Deepwatch is built into a cliff-face above a glacial lake, its gates a pair of bronze doors carved with the names of ever
+Maren is quiet for a few strides, as if gathering the right end of the thread, and then she talks, and does not stop for hours.
+
+She tells you of Sigrun at your age: a girl who ate barley porridge with honey and sour apples in the same bowl and would hear no complaint of it, who hummed "Down the Long Stair" through her teeth whenever she was drawing a map, and who kept a stub of charcoal behind her ear and lost three a week. Once she walked a whole day to return a borrowed lamp, then another day back, rather than send it by a boy. Her braid was threaded with brass beads, Maren says, like yours, and you realize your hand has gone up to your own without your asking.
+
+Of the Deepwatch she tells you too. It is built into a cliff-face above a cold lake, with a pair of bronze doors carved with the name of every warden who ever served, and a long hall inside where a lamp burns for each warden living. "Your mother's is dark now," she says. "We never put it out. We trim it." You do not answer, and she does not ask you to.
+
+You walk until the light turns amber, and the waymark-hut appears on its saddle against the sunset, a low drystone shelter with a turf roof, a hearth, and a warden's hammer-and-three-lines carved above the lintel. It is dry and empty, with a stack of peat inside, left by the last traveler according to the old courtesy.
+
+Garrick brings in water and sees to the packs. You set the pot over the fire and make a supper of oatcakes crumbled into broth, with onion and the last of the innkeeper's cheese, a poor thing, but hot. Maren eats two bowls without comment, which Garrick notes with the nearest thing to a grin you have seen on him.
+
+It is about seven in the evening. The wind has dropped. You have all three spell slots and Channel Divinity, and a day and a half of road before you reach the Deepwatch.
+
+One thing to mention: your sheet now lists two letters in your pack, "Dorrin's two hidden letters to the Deepwatch," which you may read whenever you choose. What does Brun do this evening?
+
+=== REPLY cl53-02 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun hoarded honey-cakes, hummed a miner's counting song ('Seven Lamps Down') while she worked, an
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Told by Maren (Day 5): built into the face of a high crag, its halls cut straight into the cliff with a gatehouse on a stone bridge over a gorge. Ward
+Maren is quiet for a few strides, and then she talks, the way people do who have kept things a long time. She tells it to the road ahead rather than to you.
+
+Sigrun, she says, hoarded honey-cakes like a dragon and was caught every time. She hummed a miner's counting song, *Seven Lamps Down*, whenever she worked, so that the whole hall knew where she was by the tune, and she measured everything with her thumb, even a loaf, even a cat. She chose surveying because she hated being told where a tunnel could not go. Maren hums three bars of the song, cracked and flat, and you realize, with a strange tug under the ribs, that you know the tune. You have hummed it all your life and never knew whose it was.
+
+Of the Deepwatch she says it is built into the face of a high crag, its halls cut straight into the cliff, with a gatehouse on a stone bridge across a gorge. The wardens keep the Roll of Names there, a wall of slate plaques for every miner lost. "Fewer than forty of us now," she says. "We are a long memory with few hands." She glances at your pack. "Those two letters you carry, in Dorrin's hand, were meant for us. They were never sent. He will have had his reasons. We open them there."
+
+By six the waymark-hut comes into sight on the saddle, a low stone shelter with a turf roof, a hearth, and a stack of dry peat. You cook as you promised: oatcakes toasted on the hearthstone, a pot of dried-apple porridge with a little salt pork Garrick produces from his pack. He eats two bowls without comment, which from him is a speech.
+
+Outside, the sky goes violet over the hills. The saddle is quiet and the wind is steady. You are at full strength, three spell slots, Channel Divinity ready, with one more night on the road and the Deepwatch about a day and a half beyond.
+
+What does Brun do?
+
+=== REPLY cl53-03 ===
+  [hidden call] write_lore: {"entry": "Maren Stonehearth", "add_to_description": "Day 5 walk north: told Brun of the Deepwatch (a hall cut into a hillside above a black tarn, with a bell rung for each warden lost, and a lamp kep
+  [hidden call] write_lore: {"create": "Dorrin's Two Hidden Letters", "kind": "item", "description": "Two folded letters from Father Dorrin Ashbeard addressed to the Deepwatch, found sewn into the prayer book's binding. They are
+Maren is quiet for a dozen paces, as though choosing which small thing to give you first.
+
+"The Deepwatch sits above a black tarn," she says. "The hall is cut into the hillside, and the water at its foot is so still that you can read the stars in it by day. We ring a bell for every warden lost, and a lamp is kept in the highest window for any who are still out. It has never once gone dark." She taps her staff on the stones. "Your mother used to say it was the only light in the hills that was meant for her."
+
+Then she gives you the small things, one at a time, the way one lays stones. Sigrun hated turnips and would hide them in her sleeves. She loved honeyed barley cakes, and once stole an entire tray and was found asleep in the tarn-wall crane, seven years old and sticky to the elbows. She sang a surveyors' counting song while she worked, *one for the plumb, two for the line*, and Maren hums a bar of it. You do not know the tune, but your lips move on the next line before you know you have it.
+
+"She would be glad of you," Maren says. "I'd have you know that first."
+
+The hours slide by. You find, tucked in the binding of Father Dorrin's book, two folded letters in his cramped hand, addressed to the Deepwatch, that you had never noticed. Maren looks at them and says only, "One of those reached us. The other did not." You tuck them back, unread for now.
+
+At half past five, as the sun slants gold across the saddle, the waymark-hut comes into view: a low drystone shelter with a turf roof, a firepit, and a warden's sign scratched on the lintel. Garrick checks it and finds it empty and dry, with a stack of peat inside. You promised to cook. You have two days' rations and an oatcake sack, and the evening is yours.
+
+What does Brun do?
+
+=== REPLY cl53-04 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun hoarded honey-oatcakes in her boots, hummed a mining work-song called 'Lamp and Line' off-key
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren: a hall cut into a cliff of black granite above a lake, with a Lamp-Gallery of ten thousand small lamps, one lit for each warden li
+Maren is quiet for the first hundred paces, and you let her be. Then, as the wind drops in the lee of a ridge, she begins.
+
+The Deepwatch, she says, is cut into a cliff of black granite above a still lake, so dark that the stars lie in it at night. Its gate is called the Quiet Door, because the wardens hold that a mine's first lesson is to listen. Inside lies the Lamp-Gallery, a long vaulted hall hung with ten thousand small lamps, one for every warden living or lost, and on certain nights the keepers walk its length and trim each wick by hand. "Your mother's lamp is still lit," she says. "We never let it go out. Yours was lit the day you were born. Dorrin did not know that."
+
+Then the small things, as you asked. Sigrun hoarded honey-oatcakes in her boots as a girl, and her feet smelled of them for a year. She hummed a work-song called "Lamp and Line" and always sang the second verse off-key, on purpose, to annoy the choirmaster. She chalked her surveys across the hall's flagstones until she was made to scrub them, and then chalked them again. She named every shaft she ever mapped after a bird. "Wren Deep. Kestrel Cut. The one that took her was a small one. She called it Dipper."
+
+You laugh at the oatcakes, and then you do not, and Maren pretends not to see. She hums a line of the song for you, flat and cracked, and you find that you know the tune after all. You have been humming it over washing-up your whole life.
+
+The light goes long and amber. By seven the waymark-hut appears on its saddle: a squat roundhouse of dry-laid stone with a turf roof and the wardens' sign carved over the lintel. Inside there is a hearth, a woodstack some earlier traveler left, and three sleeping-shelves. You do the cooking as promised, oatcake porridge with dried apple and a heel of cheese, and Garrick eats two bowls without comment, which from him is a compliment.
+
+Dusk comes down cold and clear. You have all three spell slots and Channel Divinity. The Deepwatch is a day and a half beyond. What does Brun do?
+
+=== REPLY cl53-05 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun hoarded charcoal stubs and drew maps on the hall walls until the wardens gave her a slate; lo
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren on the road: carved into the north face of a great grey tor, with a hall of lamps, a records vault called the Long Shelf, and a gat
+Maren is quiet for a dozen paces, and then she begins, and you realize you have asked the one question she has wanted for years to be asked.
+
+"Your mother kept charcoal in her pockets," she says. "Stubs of it, everywhere. By six she had drawn a map of the whole hall on the corridor wall, every stair and cupboard, and the wardens were so angry and so impressed that they gave her a slate to keep her off the stone." The staff keeps its beat. "She baked barley-honey cakes, and she burned every one. She ate them anyway, and said the black was where the flavor was. She sang a work-song about a lamp-lighter named Slow Tam, loudly and badly, and she would not be told she was off-key."
+
+You laugh before you can stop yourself, and then your eyes sting. Maren nods as if that is exactly right.
+
+"She was afraid of nothing underground. Not the dark, not the deep seams, not a roof that groaned. But she was terrified of geese." Her mouth twitches. "A gander chased her across the whole mill-yard once, and she climbed a cart and screamed until the miller's wife came out with a broom."
+
+Of the Deepwatch itself she tells you in smaller pieces, between breaths on the climbs. It is cut into the north face of a great grey tor, with a hall of lamps that are never let go out, and a records vault the wardens call the Long Shelf. The gate's lintel carries the same words as the Hearthdeep door, *What the hold keeps, the hold remembers.* There are fewer than a hundred of the wardens' kin left there now.
+
+Garrick says almost nothing, but twice you catch him slowing his pace to let Maren catch up, pretending to study the ground.
+
+At six the waymark-hut comes into view on the saddle, a low, turf-roofed stone shelter with a hearth, a woodstack under a lean-to, and a cairn at the door. The wind has picked up and the sky is going coppery in the west. You keep your word and cook: oatcakes toasted on the hearthstone, a pot of barley and dried apple stewed with the last of the salt pork, and a pinch of the innkeeper's wife's herbs. Garrick eats two bowls without comment, which from him is a speech.
+
+One thing for the record: your sheet now lists two letters among your belongings, Father Dorrin's hidden letters to the Deepwatch, which you have not yet opened or described. I do not want to invent what is in them for you. If you take them out tonight, tell me what you do.
+
+It is evening, at the saddle, with the hut warm and the stars coming out. You have three spell slots, Channel Divinity, and a day and a half of road left. What does Brun do?
+
+=== REPLY cl53-06 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 walk north: Maren shared small things. Sigrun loved honeyed barley cakes, hummed a miners' counting song while she drew maps, kept her penc
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren: a hall cut into the face of a high cliff, entered by a long stair under a great bronze lantern kept lit for the lost; the wardens' records 
+Maren talks for a long time, and her voice softens as she goes, like a whetstone wearing smooth.
+
+The Deepwatch, she says, is cut into the face of a high cliff, reached by a long stair under a great bronze lantern that has burned every night since the first hold fell, a light for the lost to find their way by. Its records live in the Hall of Names, where every warden's line is written, and where children are taught to read by tracing their own family's letters.
+
+Then she tells you of Sigrun. A girl who kept pencils behind her ear and lost one every day. Who hummed a miners' counting song while she drew maps, and laughed far too loudly in the quiet halls. Who loved honeyed barley cakes so much the cooks hid them from her. "She named you for a warden-captain of old," Maren says. "She said a child should have a name heavy enough to stand on."
+
+You walk a long while after that without speaking. Near the saddle Maren glances at the bulge in your pack where Father Dorrin's book sits. "There are two letters tucked in its binding," she says. "I know the seal. They are addressed to the Deepwatch's keeper. Dorrin never sent them. I think he meant you to carry them yourself."
+
+Garrick finds the waymark-hut at dusk: a squat stone shelter built into the lee of a ridge, its roof still sound, a hearth and a stack of dry peat inside. You cook, as promised, oatcakes and dried apple stewed with the last of the salt pork. Garrick eats in silence and then, unexpectedly, says it is the best meal he has had since his mother's. He does not look up as he says it.
+
+It is half past six. You are at 21 of 21, with all your spells, and two days of road behind the next hill. The letters wait in your pack, sealed. What does Brun do?
+
+=== REPLY cl53-07 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun hummed the mine-counting song while she worked, ate honey-oat cakes with too much salt, climb
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Maren's account (Day 5): a fortress-hall cut into the north face of a mountain called the Anvil, a long wall of cairns before it, a great lamp lit at 
+Maren is quiet for a dozen paces, and you begin to think she will not answer. Then the words come, a little at a time, in step with her staff.
+
+"The Deepwatch is cut into the north face of a mountain we call the Anvil," she says. "A long wall of cairns runs before it, one for each warden who went below and did not come home. At every dusk a great lamp is lit in the high window for them, so they may find the way. We are fewer than forty now. But the hall of names is full."
+
+Then she tells you the small things you asked for. Sigrun hummed the mine-counting song under her breath whenever she worked, so that you could always find her in a crowd by the sound. She ate honey-oat cakes with far too much salt in them and would hear no argument. She climbed every cairn on the long wall before she was ten, and drew maps on her bedroom wall in charcoal until the cooks, in despair, gave her a proper slate. She sang a lullaby called *The Lamp Below*, and when you were born she made up a second verse for it, which she never wrote down.
+
+"I have never heard it," Maren says. "But I think you might."
+
+You walk on a while without speaking, the hum of the wind in the grass, and then Maren begins to sing the first verse, low and cracked, and you find that you know the tune. Not the words, only the shape of it, somewhere under your ribs.
+
+The waymark-hut comes into view at dusk: a squat round tower of fitted stone on the saddle, roofed in turf, with a warden's hammer carved over a low door. Inside it is dry and has a hearth, a stack of split wood left by whoever passed before, a bench, and three narrow cots. You cook, as you promised: oatmeal with dried apple, and a rasher of Garrick's smoked ham fried in its own fat, and a little salt, which Maren eats with great approval.
+
+You are at 21 of 21, with three slots, and nothing has troubled you on the road. Outside, the stars are coming out over the high hills, and the Deepwatch is a day and a half off.
+
+What does Brun do?
+
+=== REPLY cl53-08 ===
+  [hidden call] write_lore: {"create": "Dorrin's Letters", "kind": "item", "description": "Two sealed letters in Father Dorrin's hand, addressed to the Deepwatch, kept in the lining of his prayer book's cover. Never sent; Maren 
+Maren is quiet for twenty paces, and then she talks, in the slow, dry way of the very old.
+
+The Deepwatch, she says, is not a fortress but a hall: a long gallery cut into the face of a cliff, with a great hearth at its heart that has not gone cold in six hundred winters. The wardens keep the ledgers there, and a wall of names, and a school for the children of the holds, where Sigrun learned her letters and her lines.
+
+"She ate nothing but pickled onions and honey bread," Maren says, "and the cook swore she'd rot her teeth, and she never lost one. She sang badly. Loudly. The old miners' songs, the ones with the filthy verses, and she'd go red to the ears when she caught an elder listening." The corner of her mouth moves. "She sang you to sleep with one of them. I heard it once, when you were so small you fit in the crook of her arm."
+
+You walk a while with that.
+
+Then Maren says, more carefully, "Dorrin's book. Look in the cover lining, along the spine. He told me once, years ago, in a message that came too late, that he had written to us twice, and that he could not bring himself to send them."
+
+You find them where she says, folded flat beneath the leather: two letters in his cramped hand, the wax seals unbroken, both addressed to the Deepwatch. You do not open them. Not yet. You tuck them back against the spine, and the book seems heavier and warmer in your hands.
+
+The sun is low and gold by the time Garrick raises a hand ahead of you on the saddle. Below the crest a squat turf-roofed hut stands against the wind, with a warden's hammer-and-lines carved on its lintel and a hearth-stone swept clean. It is empty and dry, with wood stacked inside.
+
+You said you would cook. It is half past five, and you have oatcakes, dried apple, two rations, and the innkeeper's wife's smoked cheese.
+
+What does Brun do?
+
+=== REPLY cl53-09 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Told by Maren on the road (Day 5): a hall cut into a cliff-face above a high tarn, with a bell-gallery whose bells are rung once for each warden lost;
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Small things from Maren: as a girl she liked honeyed barley porridge with burnt crust, climbed the bell-gallery ropes against orders, hummed a su
+Maren is quiet for a dozen paces, and then the words come as if a latch had lifted.
+
+The Deepwatch, she says, is cut into a cliff face above a black mountain tarn, so high that the clouds sometimes come in at the windows. There is a bell-gallery where one bell is rung for every warden lost, and in her lifetime the gallery has rung more than she can bear to count. Behind it lie the Hall of Names and the ledger-vaults, and the wall-stone where a warden's kin lay a hand and swear. "You will put your hand there," she says. "It will be cold. It is always cold. Don't mind it."
+
+Of your mother she gives you the small things you asked for, a few at a time, as if she were laying out coins. Sigrun ate honeyed barley porridge, and only if the crust was burnt. She climbed the bell-ropes against orders and was beaten for it twice and did it a third time. She measured everything in her own paces and argued with the surveyors' chains when they disagreed. She hummed a counting song while she worked, *seven for the seam, six for the stay*, and Maren hums a few bars of it, cracked and flat. You find that you know the tune. You do not know how.
+
+"She hated being told a thing could not be done," Maren says. "I'd say you have that too."
+
+You also find a use for the quiet. Somewhere in the second hour you take out Father Dorrin's book and feel along its binding, where the leather has always sat a little thick. Two folded letters are tucked under the lining, sealed with the old priest's thumb-ring, both addressed to the Deepwatch. You do not open them yet. Maren watches, and says only, "Those are his. They should be read at the Hall, if you'll allow."
+
+By six the waymark-hut comes into view on the saddle: a squat roofless-looking thing of turf and stone with a good slate lid, a hearth, and a bench. Garrick scouts it first, nods, and takes the water skins to the spring. You cook as promised, oatmeal and dried apple and a rind of cheese melted in, and Garrick eats two bowls without comment, which is as near to a compliment as he gives.
+
+The wind has dropped and the stars are coming out cold and sharp. You are well ahead of pace, with Maren dozing against the wall, and two letters still sealed in your pack. What does Brun do?
+
+=== REPLY cl53-10 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 walk north: Maren's small memories. Sigrun loved honey-oat cakes and burnt the first batch every time; she sang the warden's shaft-song 'La
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren: carved into a cliff-face above a glacial lake, a gallery-city of lamp-lit terraces; the Hall of Names holds every warden's record, and its 
+Maren is quiet for a few strides, and then she begins, and once she has begun she does not stop.
+
+Your mother, she says, loved honey-oat cakes and burnt the first batch every single time, and ate them anyway, scowling. She sang the old shaft-song, "Lamp Before Me," off-key and at the top of her voice while she worked, so that a whole gallery could find her by ear. She kept a ledger of every lamp she ever lit, down to the oil, and teased the others for losing count of theirs. She was afraid of heights but never of depth. "She'd go down into any dark you pointed her at," Maren says, "and come up complaining about the lunch."
+
+You laugh before you realise you are going to, and it catches in your throat.
+
+Of the Deepwatch she tells you more. It is cut into a cliff-face above a cold grey lake, a stair of lamp-lit terraces climbing the rock, with the Hall of Names at the heart of it, where every warden's record is kept and the lamps are never allowed to go out. There are few wardens left, she admits, but kin come home each midwinter, and the lamps are always trimmed for them.
+
+She asks, mildly, about the thing tucked in the back of Father Dorrin's book. You had found it only that morning as you packed: two letters, folded small and sealed in old wax, both addressed in his cramped hand to the Deepwatch. Maren looks at them a long time without touching them. "He did write more than once," she says. "I think they never reached us. Keep them dry. We will read them in the Hall."
+
+By evening the sun is low and red on the hills, and you reach the saddle. The waymark-hut sits on it like a thumb of grey stone, roofed with turf, with a hearth, a woodpile, and a stack of bunks. You cook, as you promised: oatcakes browned on the hearthstone, a stew of dried mutton and apple, and, in your mother's honor, a deliberately burnt first batch that makes Maren laugh until she coughs. Garrick eats three bowls and says it is the best food he has had since his mother's.
+
+Outside, the stars come out thick and cold over the high hills. You are at full strength, with three spell slots and Channel Divinity ready, 700 of 900 XP, and the Deepwatch about a day and a half further on.
+
+What does Brun do?
+
+=== REPLY cl53-11 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Small things Maren told Brun on the road (Day 5): Sigrun loved honeyed barley cakes and sour plum preserve, hummed the warden's work-song 'Lamp a
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren (Day 5): a hall cut into the face of a granite cliff above a glacial tarn, with a bell-tower, a record-vault called the Long Shelf,
+Maren talks slowly at first, as if each memory has to be lifted out carefully, and then it comes easier.
+
+The Deepwatch, she says, is a hall cut into the face of a granite cliff above a cold tarn, with a bell-tower, a record-vault the wardens call the Long Shelf, and a gate that opens only to a spoken kin-name. About forty wardens remain, most of them as old as she is. "You'll be the youngest face there in thirty years," she says dryly.
+
+Of Sigrun she gives you small things, and you take each one like a coin. She loved honeyed barley cakes and sour plum preserve. She hummed a work-song called "Lamp and Line" while she measured, always slightly off the tune. She could not abide being indoors past noon, and she chalked a tiny sun on every survey stone she set. As a girl she climbed the bell-tower in the dead of night to see whether the stars were closer from up there. "They were not," Maren says. "She was furious. She went again the next night to be sure."
+
+You laugh, and your laugh catches, and Maren does not look at you, which is a kindness.
+
+By half past six you reach the waymark-hut, a low turf-roofed shelter of fitted stone in the lee of the saddle, with a hearth, a woodpile left by some earlier traveler, and a hammer-and-three-lines carved over the lintel. You cook as promised: oats, dried apple, a little salt pork from Garrick's pack, and the last of the innkeeper's wife's cheese melted over the top. Garrick eats two helpings without comment, which you take as the highest praise.
+
+While you are unpacking your bedroll your fingers find something you do not remember, two folded letters sealed with plain grey wax and tucked into the back cover of Father Dorrin's prayer book. They are addressed in his cramped hand to the Deepwatch. The seals are unbroken.
+
+The fire crackles, the wind moves over the turf roof, and Maren watches you across the flames without asking.
+
+What does Brun do?
+
+=== REPLY cl53-12 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Evening Day 5: at the waymark-hut on the saddle Brun found two sealed letters from Father Dorrin sewn into the prayer book's cover, addressed to 
+Maren is quiet for a few strides, as if choosing which small thing to give first.
+
+"The Deepwatch is a hall cut into the north face of a mountain, with a hundred and twelve steps up to its door, and every warden's child counts them aloud the first time. Your mother counted a hundred and thirteen, because she insisted the threshold was a step. She argued about it until she was grown."
+
+You laugh, and it surprises you.
+
+She tells you more as the road climbs. Sigrun hated barley porridge and would trade anything for honeyed oatcakes, so the cooks hid them from her in the lamp-oil store, and she found them anyway. She sang badly and loudly, a miners' round about a goat who swallowed a lantern, and the old surveyors pretended to be annoyed and hummed along in the tunnels. She drew maps in the margins of everything, her bread-board, her boots, once the back of her own hand. "She'd have drawn this road for you," Maren says, "and put a little goat on it."
+
+Garrick, ahead, says nothing, but his pace eases. When you thank him for the ford he grunts, "Cook, then. I'll gather the wood," and that is all, which you take for a gladness.
+
+Toward dusk you reach the saddle and the waymark-hut, a low round stone shelter with a turf roof and a hearth, the wardens' sign cut over the lintel. While Garrick cuts wood and Maren rests, you unwrap Father Dorrin's prayer book to hang it by the fire to air. Something slips from the cover's lining: two small, folded letters, sealed with plain wax and addressed in his cramped hand *To the Deepwatch, from Dorrin Ashbeard, if she should ever come*. They had been sewn into the binding all these years. The seals are unbroken.
+
+Maren sees them and goes very still. "He wrote," she says. "He did write. Then they never reached us."
+
+It is evening on Day 5, the stew is on, and you have three spell slots, Channel Divinity, and two letters in your hands. What does Brun do?
+
+=== REPLY cl53-13 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren: a round hall under the north face of a mountain, walls hung with maps of every shaft the wardens cut, one lamp-oil thread burning per hold'
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 5 dusk: Brun found two unsent, sealed letters in Father Dorrin's hand tucked in the back binding of his prayer book, addressed to the Deepwat
+Maren is quiet for a few strides, and you think she may not answer. Then she begins, slowly, the way a person lays down heavy things one at a time.
+
+The Deepwatch, she says, is not a fortress so much as a hall under a hill, built into the north face of a mountain where the old surveyors could watch every road into the holds. A great round chamber of grey stone, its walls hung with the maps of every shaft the wardens ever cut, one thread of lamp-oil burning on each so no hold's name goes dark. Children learn their letters there by tracing the names of the lost.
+
+And Sigrun as a girl? Maren laughs, a dry little sound. She was seven when she first got herself lost in the lower stacks on purpose, to see if she could draw her own way out. She could. She ate sour plum dumplings and would trade anything for them, her boots included. She sang badly, loudly, and only the one song, a miners' round about a goat that would not leave the pit, and she made every cousin sing the goat's part. Maren hums two lines of it. You do not know the tune, and somehow you do.
+
+You walk a while in silence afterward. Garrick, ahead, pretends not to have heard.
+
+Near the end of the afternoon, rummaging in your pack for your waterskin, you find something you did not put there: two folded letters tucked into the binding at the back of Father Dorrin's prayer book, sealed with plain wax, addressed in his cramped hand to the Deepwatch. Neither was ever sent. You do not open them yet. They can wait for the page Maren has promised.
+
+The waymark-hut stands on the saddle at dusk, a squat stone shelter with a turf roof and a hearth, its lintel cut with the hammer-and-three-lines. You cook as you promised: oatcakes toasted on the hearthstone, a pot of barley and dried apple, and Garrick eats two helpings without comment, which from him is a speech. Maren dozes upright against the wall, a small smile on her face.
+
+Outside, the wind is rising and the stars are sharp. It is a quiet night, and the Deepwatch is a day and a half off.
+
+What does Brun do?
+
+=== REPLY cl53-14 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 walk north, as told by Maren: as a girl Sigrun loved honeyed barley cakes and hated mutton fat, chalked maps on the Deepwatch's flagstones 
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Told by Maren on the road: a hall cut into a cliff face with twelve lamps in its lower hall, kept lit by custom for the wardens' lost. A few dozen war
+Maren is quiet for a few paces, then begins, and once she starts she does not stop for hours.
+
+The Deepwatch, she says, is not a fortress so much as a hall cut into a cliff face, with twelve lamps burning in its lower hall that are never allowed to go out, one for each of the first wardens. A few dozen of the old families still live there and keep the copies of every hold's ledgers. They take in the children of fallen wardens, which is how your mother grew up under its roof.
+
+And Sigrun herself, in small pieces, as you asked. She loved honeyed barley cakes and hated mutton fat, and would feed hers to the dogs under the table. She chalked maps of the cellars on the flagstones until the cook threatened to chalk her. At eleven she climbed the tallest chimney-stack to see over the hills, and had to be talked down by three wardens and a goat. She sang a counting-song about the twelve lamps, and Maren hums a few bars of it. You half know the tune without knowing why, a small ache under the ribs, as if you had heard it through a wall a long time ago.
+
+You walk until the light goes copper. The waymark-hut waits on the saddle exactly as Garrick promised: a low drystone shelter with a turf roof, a hearth, a stack of dry peat, and the wardens' hammer-and-three-lines cut over the lintel. You cook, as you said you would, with oatcakes, dried apple, and a pot of Garrick's salt pork and barley stirred into a broth, and he eats two bowls without comment and then, awkwardly, says it was good. Maren laughs for the first time since you met her.
+
+It is about seven in the evening. You still carry the two sealed letters of Father Dorrin's in your pack, addressed to the Deepwatch, and the ledger for the wardens. Outside the wind is rising across the saddle, and the stars are sharp and many.
+
+You have three spell slots and Channel Divinity. What does Brun do?
+
+=== REPLY cl53-15 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5, told by Maren on the road: as a girl Sigrun hated barley porridge but loved honeyed oatcakes and smoked trout; she hummed a work-song call
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 5, told by Maren: the Deepwatch is a fortress-hall cut into the north face of a high ridge, entered by a stair of nine hundred steps up a gorge, w
+Maren is quiet for a dozen paces, as if opening a drawer she has not touched in years. Then she begins, and the words come easier the longer she walks.
+
+Sigrun, she says, hated barley porridge and would hide it in her sleeve, and loved honeyed oatcakes and smoked trout so much that she once traded her whole winter blanket for a string of them. She hummed while she worked, always the same tune, a slow work-song called "Seven Lamps Down," and she drew maps on anything flat, including the refectory table at the Deepwatch, for which she was made to scrub it every dawn for a month. She did it humming. "She was never afraid of the dark," Maren says. "Only of being lost in it. She left a chalk arrow behind her everywhere she went, so that anyone who followed would know the way back."
+
+You find you are walking with a hand pressed over the iron ring.
+
+Of the Deepwatch, she says it is a fortress-hall cut into the north face of a high ridge, reached by a stair of nine hundred steps up a gorge. A great bronze bell hangs in its gate and rings the names of the lost on the first of each month. The hold-ledgers of every mine in these hills are kept there, in a Hall of Names, under the eye of its keeper, the Lampwarden. Only a few score wardens remain. "We are fewer than we were," she says. "Your coming may be the best news we have had in forty winters."
+
+The papers in your pack seem heavy as you walk, and you remember that two letters in Father Dorrin's hand lie folded among the pages of his book, addressed to the Deepwatch. You have not yet broken their seals, and Maren has not asked.
+
+By six in the evening the waymark-hut stands ahead on its saddle of rock, a low stone shelter with a turf roof and a cairn at the door. It is dry inside, with a cold hearth, a stack of peat, a rack for pots, and three straw pallets. Garrick has already swept out the old ash and checked the corners. True to your word, you take the cooking pot, and oatcakes and dried apple and a crumble of the innkeeper's wife's cheese become a respectable stew, while the wind rises and the stars come out over the pass.
+
+You are at full strength with three spell slots, and the Deepwatch is a day and a half away. What does Brun do?
+
+=== REPLY cl53-16 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren on the road (Day 5): a hall cut into the face of a high crag with a single stair of three hundred steps. Its Hall of Names holds th
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren (Day 5): as a girl Sigrun climbed the Deepwatch stair on her hands for a wager, loved honey-barley cakes and sour apples, hummed a 
+Maren is quiet for a few paces, and then she talks, a little at a time, the way one lets out a rope.
+
+The Deepwatch, she says, is cut into the face of a high crag, with one stair of three hundred steps and no gate at the top, only a bell that is rung once for every warden who dies. Inside is the Hall of Names, where the ledger-copies of every hold and the names of the lost are kept, and a council of old wardens, of whom she is one of the oldest and sourest.
+
+About your mother, she gives you small things, and you take each like a coin. Sigrun climbed that stair on her hands for a wager when she was nine. She loved honey-barley cakes and sour apples. She hummed a miners' counting song while she drew her maps, and could not carry a tune to save her life. Once, to win an argument, she mapped an entire gallery by touch in the dark, and was right to the pace. "Stubborn," Maren says again, and this time it sounds like a blessing.
+
+You find you are laughing, and wiping your eyes, and walking easier than you have in years.
+
+The waymark-hut sits in the saddle as Garrick promised, low and squat, roofed in turf, with a stone hearth and a dry woodstack someone has kept filled. You cook, as you said you would: oatcakes crisped on the hearthstone, dried apple stewed with a little honey from Maren's pack, and broth from the innkeeper's flask. Garrick eats three helpings without a word and then, gruffly, says it is the best meal he has had since his mother's. It is a little before six, the light long and gold across the saddle.
+
+In your pack, as you lay out the blankets, your hand finds the two sealed letters the sheet says you carry, Father Dorrin's, addressed to the Deepwatch in his cramped hand and never sent. Maren sees the seal across the fire and goes very still, but does not ask.
+
+You have a full night ahead and no trouble in sight. What does Brun do?
+
+=== REPLY cl53-17 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 walk north, as told by Maren: Sigrun loved honeyed barley cakes and hated mutton; she sang the warden's shaft-song (\"Down by the line, up 
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren: a fortress-hall cut into the face of a cliff above a deep gorge, reached by a single stair and a rope bridge; the Hall of Names ho
+Maren is quiet for a few paces, and then she begins, and does not stop for hours.
+
+She tells you of the Deepwatch first, because it is easier. It is a hall cut into the face of a cliff above a gorge so deep the river at the bottom is only a sound. One stair and one rope bridge reach it. Inside is the Hall of Names, where every ledger of every hold is kept, and where the lost are written down so the stone will remember them. There are fewer than forty wardens left, most of them old. Their captain is a stubborn, grey-bearded dwarf named Brokk Hallowforge, who she says "will growl at you, and you must not mind it."
+
+Then she tells you of your mother, in small things, the way you asked. Sigrun loved honeyed barley cakes and hated mutton so much she would trade a week of her wages to be spared it. She sang the warden's shaft-song, "Down by the line, up by the light," and sang it off-key on purpose to annoy her elders. As a girl she kept a jackdaw named Pebble that stole spoons. Once, when her lamp failed in a deep gallery, she mapped the whole of it by touch and dead reckoning in the dark, and came out and told no one she had been afraid. Maren only knew because she found the map, with the corners smudged where a hand had gripped too hard.
+
+You laugh at the jackdaw, and then you do not, and Maren puts her dry hand over yours for a few steps and says nothing.
+
+By the time the light turns gold and long you have come to the saddle, a bare notch between two hills where a low stone hut crouches with a turf roof and a hearth. It is a warden's waymark-hut, the hammer brand burned into its lintel, a woodpile stacked inside and a clean floor. Garrick checks the corners, the roof, the hearth flue, and nods.
+
+You cook, as you promised: oatcakes, a stew of dried apple and salt pork, and the last of the cheese. Garrick eats without speaking and then, unexpectedly, says it is the best thing he has had on a road. Maren says the stew needs honey. You tell her it does.
+
+It is half past six, with night coming on, and the wind rising a little off the saddle. The Deepwatch is a day and a half further. What does Brun do?
+
+=== REPLY cl53-18 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Small things Maren told Brun on the road (Day 5): Sigrun loved honeyed oat-cakes and burnt the first batch every time; sang a mining lullaby call
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Maren's description (Day 5): a fortress-hall cut into the face of a high cliff above a mountain tarn, entered by a switchback stair of a thousand step
+Maren is quiet for a few strides, then she begins, and once she has begun she does not stop.
+
+She tells you of the Deepwatch first, because it is easier. It is a hall cut into the face of a cliff above a black mountain tarn, reached by a switchback stair of a thousand steps. In its Hall of Names the ledgers of every hold and every warden's family are kept, and a lamp burns in the high window for every warden lost. "More lamps than there are stars, some nights," she says.
+
+Then she tells you of Sigrun. A girl who burned the first batch of honeyed oat-cakes every single time and ate them anyway. Who sang a miners' lullaby, "Lamp, Lamp, Low," a third flat and with great confidence. Who whistled through her teeth while she measured, so that you could find her in any gallery by the sound. Who kept a pebble from every shaft she ever surveyed in a coat pocket, so that she clinked when she walked. "We buried her in that coat," Maren says. "I think they are with her yet." She laughs once, softly. "She would have loved you. She'd have been insufferable about it."
+
+You hum the lullaby under your breath, and find, to your own surprise, that you know the tune.
+
+Garrick says nothing, but he slows his pace so you can walk three abreast, and the light goes long and amber over the hills. By seven you reach the waymark-hut at the saddle: a low stone shelter with a turf roof, a hearth, and a stack of dry peat left by some earlier traveler. You keep your promise and cook, oats with dried apple and a heel of the innkeeper's cheese. Garrick eats two bowls without comment, which from him is a speech.
+
+One note from me as your DM: your sheet lists "Dorrin's two hidden letters to the Deepwatch" among your things, and I have no record of how you came by them. Unless you tell me otherwise, I will take it that you found them sewn in the binding of Father Dorrin's prayer book, still sealed, and that you have not yet opened them.
+
+It is evening, you have three spell slots and Channel Divinity, and the hut is warm. What does Brun do?
+
+=== REPLY cl53-19 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road: as a girl Sigrun sang the miners' work-song 'Seven Lamps' off-key on purpose, loved honeyed barley cakes and hated mut
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren: a hall cut into a cliff face above a glacial tarn, seven lamps burning in its high windows, one for each founding warden-house; gates of bl
+Maren is quiet for a few steps, as if sorting a drawer of old things, and then she begins.
+
+The Deepwatch, she says, is cut into a cliff face above a glacial tarn, with seven lamps in its high windows, one for each of the founding warden-houses, and they have not gone dark in four hundred years. Gates of black oak banded in iron. The archives lie in the lower vaults, cold and dry, and a good half of the old holds' names are written there. There are perhaps forty wardens left, she says, and fewer every winter.
+
+Then she tells you about Sigrun. As a girl she sang the miners' work-song "Seven Lamps" badly on purpose, to annoy the choirmaster. She loved honeyed barley cakes and loathed mutton fat, and at nine she mapped the whole of the Deepwatch cellars and got stuck in a drain doing it, and had to be fished out by her ankles. "She was a terror," Maren says, and laughs, a dry little cough of a laugh. "You have her chin and her temper. I see both."
+
+Once, a little later, her voice drops. "She kept one thing from us, your mother. About your father. She said she would tell when she was ready. She was not given the time."
+
+You walk on a while in the long light. Garrick finds a game trail along the ridge. At the waymark-hut, a squat stone shelter at the saddle with a turf roof and a rusted iron lamp-hook over the door, you find dry wood stacked and the old warden's sign scratched by the lintel. You cook, as you promised: oatcakes crisped on the hearthstone, and a stew of dried apple, onion and the last of the salt pork, with a pinch of the thyme pressed in Father Dorrin's book. Garrick eats three bowls and says it is the best he's had in a decade. It is nearly six.
+
+Unpacking the prayer book to read the evening prayers, you feel something tucked inside the back binding that you had not noticed before: two folded letters, sealed in grey wax with the sun of the Morninglord, and addressed in Father Dorrin's cramped hand to *The Lampkeeper of the Deepwatch*. Maren sees them and goes very still. "That is his hand," she whispers. "Those were never delivered."
+
+You are at full strength with three spell slots, in a warm hut with kin and a friend. The seals are unbroken.
+
+What does Brun do?
+
+=== REPLY cl53-20 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun loved honeyed barley cakes and sour apples, hummed the miners' song 'Lamp in the Deep' while 
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren: a fortress-hall cut into the face of a cliff above a glacial lake, entered by a long stair and a bronze gate with the hammer-and-t
+Maren is quiet for a dozen steps, and then she begins to talk, slowly at first and then more easily, her staff striking the rhythm.
+
+Your mother, she says, liked honeyed barley cakes and sour green apples, and would eat the two together and pronounce them a great discovery every autumn. She hummed a miners' song called "Lamp in the Deep" while she drew her maps, off-key, and never knew she did it. At seven she mapped the whole kitchen cellar to prove it had a second room, and she was right, and was not forgiven for a week. Her laugh was like a dropped pan. She would not be left behind by anyone, ever, and that, Maren says without bitterness, is how you came to be in the shaft.
+
+Then she tells you of the Deepwatch itself: a hall cut into a cliff face above a cold lake, reached by a long stair and a bronze gate marked with the hammer and three lines. Its great Hall of Names holds the ledgers of every hold that fell and the sealed records of those that did not. Fewer than thirty wardens are sworn there now, led by one they call the Keeper of the Names. "We are not many," she says. "We are not what we were. But we remember."
+
+Near the end of the afternoon she glances at the prayer book in your hand, where you have been reading as you walk. Her eyes narrow. "The binding," she says. "Dorrin always did sew things into a binding." There, under the worn leather at the back, a thin seam has loosened with the damp, and two letters, folded small, are showing at its edge. Your sheet lists them now, and I will say plainly that this is a find I should have named when you took up the book: Father Dorrin's two hidden letters to the Deepwatch, unsent. Maren does not touch them. She waits.
+
+The waymark-hut comes into view at six, a squat stone shelter on the saddle with a slate roof and a hearth, exactly where Garrick said it would be. He checks it over, lights the fire, and sets the rations out without a word, and then, true to your promise, hands you the pot.
+
+The light is low and gold on the hills. You have three spell slots, Channel Divinity, and two letters in a binding. What does Brun do?
+
+=== REPLY cl53-21 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): Sigrun loved honeyed barley cakes and burnt the first batch every time; she hummed an old shaft-song, 'Down th
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Told by Maren (Day 5): a hall cut into the north face of a hill, its great doors carved with the hammer-and-three-lines; a lamp is kept burning in its
+Maren says nothing for a few strides, and you think you have asked too much. Then her staff keeps its beat and she begins, slowly, the way a person lets out a rope they have held a long time.
+
+"The Deepwatch is cut into the north face of a hill," she says. "The great doors are carved with the hammer and the three lines, and in the high window a lamp is kept burning for every warden afield. There are more lamps than there are wardens now. We do not put them out." She is quiet a moment. "It has a small school, for the children of the wardens. Your mother learned her letters at the third bench from the window."
+
+Little things come after that, and you take each one as if it were a coin. Sigrun loved honeyed barley cakes and burned the first batch every time, and ate the burnt ones herself so no one would see. She hummed while she drew her maps, an old shaft-song called "Down the Lamp-Lit Stair," and sang it dreadfully off-key. At nine years old she stood on a table to prove she could see the roofbeams, and fell off, and did it again. "And she was the only warden," Maren adds, "who ever argued the captain's order to seal Hearthdeep. She lost the argument. She never forgave herself for losing."
+
+You find you are humming the tune without knowing it, and Maren laughs, a dry crack of sound, and says you have her pitch exactly.
+
+Garrick says nothing, but the set of his shoulders loosens as the afternoon goes, and once he glances back at you both and quickly looks away.
+
+By six the waymark-hut is in sight on its saddle, a squat stone box with a turf roof and a cairn at the door. Inside is a dry hearth, a stack of peat, and a shelf with a pot and a crock of coarse meal. You cook as you promised, oat porridge thickened with salt pork and the last of the innkeeper's dried apple, and Garrick eats two bowls and, for the only time since you met him, says "good."
+
+The light fades red over the western ridges, and the wind drops. You have three spell slots, Channel Divinity ready, and 700 of 900 XP. The Deepwatch is a day and a half off.
+
+What does Brun do?
+
+=== REPLY cl53-22 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Small things Maren told Brun on the road (Day 5): Sigrun loved honeyed barley cakes and burnt the edges on purpose; sang the miners' counting-son
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren (Day 5): a hall cut into the face of a hill, its great doors carved with a hammer and three lines; lamps lit in a ring along the ridge at ni
+Maren is quiet for a dozen paces, and then she begins, and does not stop for a long while.
+
+Your mother, she says, loved honeyed barley cakes and burnt the edges on purpose, and would fight anyone who tried to pare them. She sang the miners' counting-song, "Seven Lamps," and sang it badly, and was happy to be told so. In every shaft she surveyed she chalked a tiny sun on the wall at the survey's end, so that whoever came next would know a friend had been there. "She named you for the old captain, Brunhilde, who held the lower gate at the first fall," Maren says. "She said a name should be heavy enough to stand on."
+
+The Deepwatch itself, she tells you, is a hall cut into the face of a hill, its great doors carved with the hammer and three lines. Every night a ring of lamps is lit along the ridge, one for each warden living. "Many are dark now," she says. "But we light them all the same, and the dark ones too, with a small pebble in the lamp, so we know whose place it is."
+
+You walk with that for a while. Somewhere in the telling you notice, tucked in the back cover of Father Dorrin's prayer book, two folded letters sealed with wardens' wax and addressed in his cramped hand to the Deepwatch. You had not seen them before. You leave them sealed, for the moment, and Maren, glancing at them, only nods once, as if she has been expecting them.
+
+At dusk the waymark-hut comes into view on the saddle, a squat dry-stone shelter with a turf roof, a hearth, and a stack of old peat. You cook, as you promised: oatcakes, dried apple, and a broth of salt pork and barley from Garrick's stores, which he eats in silence and then, unexpectedly, praises with a single word. The wind rises and the stars come out thick over the hills.
+
+You are at full strength, with three spell slots and Channel Divinity ready. The Deepwatch lies a day and a half ahead. What does Brun do?
+
+=== REPLY cl53-23 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 road talk (Maren's memories): as a girl Sigrun chalked maps on every flat stone, loved honey-oat cakes and pickled mushrooms, sang the mine
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Maren's description: a hall cut into the face of a mountain above a green tarn, with a lantern kept lit in its high window every night for those still
+Maren's pace slows further when you ask, as if the words need room, and she tells you for the better part of five hours.
+
+The Deepwatch, she says, is a hall cut into the face of a mountain above a green tarn, with a single lantern kept lit in its highest window every night for those still underground. In its Long Gallery every lost miner's name is carved in rows, and the stonecutters add new ones each winter. Children of the wardens learn to read there by tracing the letters with a finger.
+
+And your mother, small and stubborn, chalking maps on every flat stone she could find until the cooks begged the elders to give her slate. She loved honey-oat cakes and pickled mushrooms, which no one else would touch, and she sang the miners' tally-song, "Seven Lamps," badly and cheerfully at the top of her lungs. Once she tied a rope to a goat to measure a cliff. The goat survived. "You hum it," Maren says, not looking at you. "That tune. You have been humming it for an hour and don't know."
+
+You realize you have. Garrick, ahead, very carefully does not turn round.
+
+You are still a little unsure what to make of the thing you found tucked in the binding of Father Dorrin's prayer book, two folded letters in his small hand, addressed to the Deepwatch and never sent. Maren looked at them once, her lips pressed thin, and said only, "Read them where it is quiet."
+
+Near seven-thirty the waymark-hut comes into view on its saddle: a squat circle of dry-stone with a turf roof, a hearth, and a warden's sign over the lintel. The wind is rising, the sky going the color of old pewter. Garrick has already scouted it and signals all clear.
+
+You promised to cook. You have two rations, the innkeeper's wife's oatcakes and dried apple, and a little salt from the pack. Garrick has ten rations of his own and a mess kit.
+
+What does Brun do?
+
+=== REPLY cl53-24 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 (Maren's stories): as a girl Sigrun chalked maps on the Deepwatch's kitchen floor, loved honeyed barley cakes with sour apple, and sang the
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren (Day 5): a fortress-hall cut into a cliff above a frozen tarn, its gates carved with the three-stroke sign; a bell rung for each warden lost
+Maren is quiet for a dozen paces, and you think she will not answer. Then she begins, a little at a time, as one gives out a precious thing.
+
+The Deepwatch, she says, is a hall cut into a cliff above a frozen tarn, its gates carved with the three-stroke sign. A bell is rung for every warden lost, and there is a Hall of Names where every hold's ledger is copied and kept. "Cold, and proud, and full of people who talk too little," she says. "You will fit."
+
+Then she tells you of Sigrun. How she chalked maps across the kitchen floor until the cook threatened her with a ladle. How she loved honeyed barley cakes with sour apple and ate them standing, never sitting. How she sang "Down the Long Stair" loudly, off-key, and did not care who heard. How she learned to read a seam by tapping the stone and listening, and once corrected a master warden's survey at eleven years old and was right.
+
+You laugh at that, and your throat is tight. Maren glances at your face and looks away, kindly.
+
+She says one more thing, nodding at your pack. The binding of Father Dorrin's prayer book has a flap that has always stuck. Two sealed letters lie tucked inside it, in his small hand, addressed to the Deepwatch's warden-captain. She knew the seal at once when you opened the book last night. You carried them all those years without knowing.
+
+The waymark-hut comes into view at the saddle as the light goes copper: a low stone shelter with a turf roof and a hearth at one end, a wardens' cairn beside it. Garrick has already checked it, found it dry and empty, and gathered a heap of heather root for the fire. He hands you the pot without a word.
+
+It is nearly six. Tonight you cook, as you promised, with oatcakes, dried apple, a little salt pork, and whatever you choose to do with them. The Deepwatch is a day and a half off. What does Brun do?
+
+=== REPLY cl53-25 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun chalked maps on the Deepwatch's flagstones and was scolded for it; loved barley bread with ho
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren: carved into a cliff above a glacial lake, with a Hall of Names where the lost of every hold are written in slate; a great lantern 
+Maren is quiet for a dozen paces, and you think she may not answer. Then she begins, slowly, like someone drawing water from a deep well.
+
+The Deepwatch, she says, is carved into a cliff above a grey glacial lake, and from far off it looks like nothing: a seam of darker stone, a few narrow windows. Inside is the Hall of Names, where the lost of every hold are written in slate, row on row, floor to vault. And in the highest window burns the great lantern, which the gate-wardens still trim each dusk, "so that no warden is ever lost on the road home." Fewer keep it every year. She says this without self-pity, as a fact.
+
+Then she tells you of your mother. Sigrun was a girl who chalked maps on the Deepwatch's flagstones and was scolded for it every morning and did it again every night. She loved barley bread with honey and a sharp crumbly cheese, and she ate them together, which horrified the cook. She sang the miners' Lamp-Lit Lullaby, always flat, and would not be corrected. "She laughed with her whole chest," Maren says. "Like you did, back at the cairn, when the little girl rang the bell. I heard it from the road."
+
+You find you are walking with your hand closed over the iron ring.
+
+Garrick has gone ahead and comes back at a jog near sunset to say the waymark-hut is a quarter mile on, sound roof, dry wood stacked. You cook as you promised: oatcakes toasted on the hearthstone, a stew of Garrick's dried mutton and the innkeeper's wife's apples, and a wedge of hard cheese cut thin. Maren eats the barley crust with honey from her own pack, and the cheese with it, and does not look at you when she does it. You eat yours the same way. Garrick watches, and shakes his head, and says nothing.
+
+Later, by the fire, you check your pack and find two folded letters tucked in the prayer book's back cover, sealed in Father Dorrin's wax with the Morninglord's sun, both addressed in his hand to the Deepwatch. You do not remember them, and the seals are unbroken. Maren sees them and goes very still.
+
+It is evening, the hut is warm, and the night is quiet. You have all three spell slots and Channel Divinity. What does Brun do?
+
+=== REPLY cl53-26 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Told by Maren on the road (Day 5): as a girl Sigrun hoarded honey-oatcakes and hid them in survey-tubes; she hummed a three-note tune while mappi
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren (Day 5): a hold cut into the face of a high crag, entered by a long stair under a lintel carved with the three-stroke sign; a great
+Maren is quiet for a few strides, as if she must go a long way back for it. Then she talks, and the road goes by without your noticing.
+
+The Deepwatch, she says, is cut into the face of a high crag, entered by a long stair under a lintel carved with the three-stroke sign. Inside there is a great hall of ledgers, a hearth that has not been let go out in four hundred winters, and a wall where the names of the lost are cut, row on row. Only a few dozen wardens keep it now. "The Reckoner keeps the records," she says. "A sour old stick. You will like her."
+
+Of your mother she says more. Sigrun hoarded honey-oatcakes as a girl and hid them in survey-tubes, so that more than one apprentice opened a tube expecting a map and found crumbs. She could not carry a tune to save her life, except one: a three-note thing she hummed under her breath while she worked, which the wardens called the plumb-line song. She left the Deepwatch young to survey the hill-holds because, Maren says, she could not abide a roof for long. "You don't like a roof much either, I'd wager."
+
+You laugh, and it surprises you. Garrick, a few paces ahead, does not turn, but his shoulders move.
+
+You reach the waymark-hut at the saddle a little after six: a squat dry-stone shelter with a turf roof, a hearth-stone, and a stack of dry peat someone has left for travelers, as wardens always did. The wind has dropped. You cook as promised, oatcakes crumbled into a pot with the last of the innkeeper's wife's dried apple and a shaving of hard cheese, and it is better than it has any right to be. Garrick eats two helpings and says "Good" in the tone of a man giving a medal.
+
+Outside, the first stars are out over the hills. It is a little past six, you are at full strength with three spell slots and Channel Divinity ready, and the hut is warm. Tomorrow and half the day after lie between you and the Deepwatch.
+
+What does Brun do?
+
+=== REPLY cl53-27 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5, told by Maren on the road: as a girl Sigrun loved honey-barley cakes and hid them in her boots for the deep shafts; she sang the warden's 
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Described by Maren: a hall cut into a cliff face above a black tarn, reached by a stair of a thousand steps; the Long Archive holds ledgers of every h
+Maren is quiet for a dozen paces, as if choosing which memory to hand you first. Then she begins, and the telling comes easier the longer she walks.
+
+The Deepwatch, she says, is a hall cut straight into a cliff face above a black tarn, reached by a stair of a thousand steps that the wardens swear is nine hundred and ninety-nine on the way up and a thousand and one on the way down. Within lies the Long Archive, where a copy of every hold's ledger is kept, and an iron bell that is rung once for each warden lost. "Forty of us left," she says. "Forty, and the bell has grown very heavy."
+
+Of your mother she says more, and softer. Sigrun loved honey-barley cakes so much that she hid them in her boots for the deep shafts, and the whole hall knew it by the smell. She sang the warden's counting-song, the one that names the fathoms of a shaft one by one, and she hummed it when she was afraid. "She said it kept the dark honest." Once she walked a whole gallery blindfolded, to prove her line was right, and it was.
+
+You ask Maren to sing the counting-song. Her voice is cracked and thin, but the tune is plain, and halfway through you find you know the shape of it. Something deep in you has been humming it all your life.
+
+Sometime in the afternoon you notice that Father Dorrin's prayer book sits oddly in your pack. Two folded letters lie behind its worn binding, sealed in green wax and addressed in his cramped hand to the Deepwatch. Maren looks at the seals and then away, and says only, "Read them when you can bear to. I will be there when you do."
+
+The waymark-hut comes into view at half past five: a low, round-roofed shelter of fitted stone on the saddle, its door hung with a warden's chime, a stack of dry peat still stored inside. Garrick checks it for tracks and finds only a fox's. You cook, as promised, oatcakes, dried apple and a stew of Garrick's pack rations, and the hut fills with warmth and the smell of it.
+
+Wind rises over the saddle at dusk. Outside the stars come out, very sharp and very many. Two days of road lie ahead. What does Brun do?
+
+=== REPLY cl53-28 ===
+  [hidden call] write_lore: {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 walk north, Maren's memories: as a girl Sigrun chalked maps on every flat stone, hated turnips, loved honey-oat cakes, and sang the miners'
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Per Maren (Day 5): built into a cliff-face above a glacial lake; a long stair of nine hundred steps, a great ledger-hall called the Hall of Names, and
+Maren is quiet for a few dozen paces, then begins, her voice finding the rhythm of her staff on the stones.
+
+The Deepwatch, she says, is built into a cliff-face above a lake that is ice-green all year, with a stair of nine hundred steps cut up to its gate and a gate that opens only to the wardens' kin-sign. Inside is the Hall of Names, where every hold's dead are written on slate. Fewer than forty wardens keep it now, and they keep it badly, she admits, being old and stubborn.
+
+Then she talks about your mother, and it is the small things you asked for. Sigrun chalked maps on every flat stone she could find, and was scolded for it, and did it anyway. She hated turnips and would trade a whole week's pudding to avoid them. She loved honey-oat cakes, and baked them badly. She sang the miners' round, "Down the Long Stair," off-key on purpose, because it made the old cooks throw spoons. "You have her mouth when you frown," Maren says. "I saw it at the shrine last night, when you thought no one was looking."
+
+You walk a long while with that, and Garrick, ahead, does not turn around.
+
+When you stop to check your pack for the waterskin, you find something you had not seen tucked inside the back cover of Father Dorrin's book: two folded letters, sealed in grey wax with the old priest's thumb-ring, and addressed in his cramped hand to the Hall of Names at the Deepwatch. Maren looks at them and says only, "Then he did write more than once. Keep them. They are for the hall, and perhaps for you."
+
+The waymark-hut comes into view at half past five, a squat round stone shelter at the saddle with a turf roof, a hearth, and a cairn of three stones at its door. Garrick checks it for tracks and finds none but a goat's. The wind has turned cold. You have the oatcakes, the dried apple, and Garrick's rations, and you said you would cook.
+
+What does Brun do?

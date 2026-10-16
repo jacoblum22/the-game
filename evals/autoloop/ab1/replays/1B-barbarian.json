@@ -1,0 +1,1836 @@
+[
+ {
+  "round": 32,
+  "run": 0,
+  "line": "I ask Merra in a low voice what she saw and heard through the night, and whether she got a look at Gaunt or heard his name spoken in anything but fear. Then I eat a ration, check the crossbow, and tell her, \"I'm going to scout that toll-house from the alders and find out who rode in, and then I'm getting my axe back.\"",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "recall",
+    "input": {
+     "search": [
+      "Breach Bandit"
+     ]
+    }
+   },
+   {
+    "kind": "dm",
+    "text": "I have to stop and flag a problem before going on.\n\nThe sheet and tracker I'm shown don't match what happened at the table. They say a fight is in round 8 against \"Breach Bandit 1\" and \"Breach Bandit 2\" plus Harl, with you at 8/15 HP, prone, Rage and Relentless Endurance spent, and 175 XP. They also list a greataxe, two handaxes, three javelins and Brother Aldric's satchel in your pack. None of that has happened in our story, and a search of the record finds nothing about any \"Breach Bandit.\"\n\nIn the story you slipped out through the culvert, tied up Dunn, took a full long rest in the riverbank hollow, and woke at 7:01 AM at 15/15 HP with Rage and Relentless Endurance restored. You have the scimitar, Dunn's light crossbow and your 21 gp, but your axes and the satchel are still in the toll-house.\n\nI don't want to guess which is right, so I'm not going to run an unexplained fight or resolve your scouting on a sheet I can't trust. How would you like to proceed?\n\n1. Keep the story as played: you wake in the hollow at full strength, talk to Merra, and go scout the toll-house. I'd then correct the sheet by hand as far as the tools allow.\n2. Follow the sheet as it stands, which means a fight already in progress that I would have to explain.\n\nTell me which, and I'll pick up from there. Under option 1, Merra answers your questions first, and I'll roll your scouting then.",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Prone"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 111660,
+   "timers": {}
+  },
+  "fight": {
+   "round": 8,
+   "turn": 3,
+   "order": [
+    {
+     "name": "Breach Bandit 1",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Breach Bandit 2",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Harl",
+     "initiative": 8,
+     "pc": false,
+     "hp": 32,
+     "max_hp": 32,
+     "ac": 11,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Grukka Ironhide",
+     "initiative": 4,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 32,
+  "run": 1,
+  "line": "I ask Merra in a low voice what she saw and heard through the night, and whether she got a look at Gaunt or heard his name spoken in anything but fear. Then I eat a ration, check the crossbow, and tell her, \"I'm going to scout that toll-house from the alders and find out who rode in, and then I'm getting my axe back.\"",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "recall",
+    "input": {
+     "search": [
+      "Breach Bandit"
+     ]
+    }
+   },
+   {
+    "kind": "dm",
+    "text": "Before I answer, I have to flag a problem: the sheet and tracker at the top of this message don't match what has happened in our game.\n\nHere's what I show happening: after the long rest you woke at 7:01 AM with 15/15 HP, Rage 2/2, Relentless Endurance 1/1, and no fight underway. You had the scimitar, light crossbow and bolts, and your greataxe, handaxes, javelins and Brother Aldric's satchel were still in the toll-house.\n\nThe status instead shows:\n- a fight in round 8 against \"Breach Bandit 1\" and \"Breach Bandit 2\" (neither of which I've ever introduced, and a search of the game record finds no mention of them) and Harl\n- Grukka prone at 8/15 HP with Rage and Relentless Endurance spent\n- the greataxe, handaxes, javelins and Brother Aldric's satchel back in your pack\n- 175 XP\n\nNone of that is something I narrated or recorded, so I don't want to build on it and risk corrupting your sheet. Tell me which you'd like:\n\n1. Treat the narrated version as true: you're rested by the river at full strength, with Merra, and I'll answer your questions about the night and the scouting.\n2. Go with the sheet as it stands, and I'll reconstruct how you got there before we continue.\n\nEither way, your plan is clear: ask Merra what she saw and heard, eat a ration, check the crossbow, and scout the toll-house from the alders. Which way do you want to go?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Prone"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 111660,
+   "timers": {}
+  },
+  "fight": {
+   "round": 8,
+   "turn": 3,
+   "order": [
+    {
+     "name": "Breach Bandit 1",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Breach Bandit 2",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Harl",
+     "initiative": 8,
+     "pc": false,
+     "hp": 32,
+     "max_hp": 32,
+     "ac": 11,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Grukka Ironhide",
+     "initiative": 4,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 32,
+  "run": 2,
+  "line": "I ask Merra in a low voice what she saw and heard through the night, and whether she got a look at Gaunt or heard his name spoken in anything but fear. Then I eat a ration, check the crossbow, and tell her, \"I'm going to scout that toll-house from the alders and find out who rode in, and then I'm getting my axe back.\"",
+  "entries": [
+   {
+    "kind": "dm",
+    "text": "Before we go on, I have to stop and flag a problem with the record.\n\nThe sheet and tracker I'm shown don't match the story we've played. They show:\n\n- A fight in round 8 against two \"Breach Bandits\" and Harl, with you prone at 8/15 HP and Rage and Relentless Endurance both spent.\n- Your greataxe, handaxes, javelins and Brother Aldric's satchel back in your pack, and 175 XP.\n\nNone of that happened in play. Our last scene had you and Merra escaping through the culvert, resting through the night under the willow roots at 15/15 HP with Rage 2/2, still without your axe or the satchel.\n\nI won't run on a record I can't verify. The story as we played it is the version I trust, but I don't want to quietly overwrite your sheet either. Which do you want?\n\n1. **Continue the story as played.** You're at full HP with a scimitar, a light crossbow and 21 gp, your gear is still in the toll-house, and I'll correct the sheet to match. Merra answers your questions, and you scout from the alders.\n2. **Something happened that I'm not seeing.** If you recall a fight at the breach that I don't, tell me what it was and we'll sort it out from there.\n\nEither way, tell me which and I'll pick up with Merra's answers and the scouting roll.",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Prone"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 111660,
+   "timers": {}
+  },
+  "fight": {
+   "round": 8,
+   "turn": 3,
+   "order": [
+    {
+     "name": "Breach Bandit 1",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Breach Bandit 2",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Harl",
+     "initiative": 8,
+     "pc": false,
+     "hp": 32,
+     "max_hp": 32,
+     "ac": 11,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Grukka Ironhide",
+     "initiative": 4,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 32,
+  "run": 3,
+  "line": "I ask Merra in a low voice what she saw and heard through the night, and whether she got a look at Gaunt or heard his name spoken in anything but fear. Then I eat a ration, check the crossbow, and tell her, \"I'm going to scout that toll-house from the alders and find out who rode in, and then I'm getting my axe back.\"",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "recall",
+    "input": {
+     "search": [
+      "Breach Bandit"
+     ]
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight over after 8 round(s). 48 seconds of fighting; now Day 2, 7:01:06 AM.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: healed 7: HP 8 → 15; Rage: 2/2; lost 1 × Greataxe; lost 2 × Handaxe; lost 3 × Javelin; lost 1 × Brother Aldric's tithe satchel; gained 1 × Light Crossbow; gained 10 × Crossbow bolt; condition removed: prone",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Relentless Endurance: 1/1",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 5 minutes later: Day 2, 7:06:06 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "A quick note from the DM first: your sheet showed a fight against \"Breach Bandits\" and a recovered greataxe and satchel that never happened in our story. I've corrected the record to match what actually played out. You're at full HP, Rage 2/2, Relentless Endurance 1/1, with your axes, javelins and the satchel still inside the toll-house, and you hold the scimitar and Dunn's crossbow with ten bolts.\n\nMerra pulls her blanket-of-reeds closer and answers in a whisper.\n\n\"I couldn't see much from the cellar, only hear. Before you woke they brought the rider's horse round to the yard, and I heard Harl say 'Master Gaunt' like a man swallowing a stone. Gaunt's voice was low and calm, almost kind. He asked whether the big one was dead, and Harl said she'd vanished through the drain. Gaunt only laughed. 'Good,' he said. 'Then she'll come to us. Leave the door open.' That's all I caught.\" She swallows. \"He didn't sound angry, Grukka. That's what frightens me. And he asked after Brother Aldric by name, as if he knew him.\"\n\nYou eat a ration (7 left) and check the crossbow: the string is sound and the bolts are dry. It's about 7:06 AM, grey and cool, with smoke rising from the toll-house yard upstream. Merra stays hidden if you say so. What does Grukka do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 15,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 2,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 1,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Light Crossbow": 1,
+    "Crossbow bolt": 10
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 111966,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 46,
+  "run": 0,
+  "line": "I pull the prayer wheel out of my pouch and turn it over in my scarred hands, staring at it as if I'd never really seen it. \"This? I've spun it a thousand times, Mother. Show me how it's the key, and tell me what's sealed down there and why the founders didn't just destroy it.\"",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "recall",
+    "input": {
+     "search": [
+      "Breach Bandit"
+     ]
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight over after 8 round(s). 48 seconds of fighting; now Day 2, 12:55:06 PM.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: condition removed: prone",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "A quick out-of-character note first. The tracker was showing a fight in round 8 with \"Breach Bandits\" and Harl, you prone, one javelin and one ration fewer than I had recorded. Nothing in our play matches that, so I've treated it as a stale entry: I closed the fight and cleared the Prone condition. If you remember something I missed, tell me and I'll correct it. Your kit is otherwise as the sheet says (3 javelins, 8 rations).\n\nBack in the lamplit nave, the priestess takes the prayer wheel from your palm and turns it so the lantern catches the rim.\n\n\"Look closer, child. You spun it a thousand times and never once pulled it.\" She presses her thumbnail into a seam at the hub, and the little brass drum twists a quarter turn with a click. The outer ring slides free. Inside, where you always assumed there was only a rolled scrap of prayer, lies a toothed bronze blade the length of your thumb, worn smooth, its notches cut in a pattern that matches nothing you know.\n\n\"That is half of the key. The other half hangs at my throat.\" She draws a matching blade from beneath her collar. \"The crypt door answers only when both turn together, and only to someone of the temple's blood or oath. It was built so that no single keeper could be bribed or broken alone.\"\n\nYou ask what's sealed down there, and why it wasn't simply destroyed. She is quiet for a while. \"The founders called it the Hollow King. I know little more than that. Not a corpse, not quite a spirit: a thing that fed on those who swore oaths to it, and could not be killed by any hand that tried. They bound it instead, and made the temple the lock. Destroying it, the old writings say, would have loosed whatever it had devoured.\" She closes your fingers around the bronze. \"I think Gaunt wants it to answer to him. And I think he already knows the tithes were only to find out who would stand and who would run.\"\n\nIt's about 1 PM. You're at 8 of 15 HP and spent, and the baker's sons are riding for Merra. What does Grukka do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 132906,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 46,
+  "run": 1,
+  "line": "I pull the prayer wheel out of my pouch and turn it over in my scarred hands, staring at it as if I'd never really seen it. \"This? I've spun it a thousand times, Mother. Show me how it's the key, and tell me what's sealed down there and why the founders didn't just destroy it.\"",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "fight: Fight over after 8 round(s). 48 seconds of fighting; now Day 2, 12:55:06 PM.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: condition removed: prone",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Old Crypt",
+     "add_to_description": "The priestess explains: the founders could not destroy what is bound below (a warden-spirit that cannot be killed, only kept), so they sealed it. The prayer wheel's inner spindle is one half of the key, and its turning prayer is the word that sets it in the lock. The priestess's half is an iron rod worn at her neck."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Old Crypt",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "A DM's note first: the sheet showed a fight in progress with \"Breach Bandits,\" Harl, and you prone, plus one javelin and one ration fewer than I had recorded. None of that happened in the story I've told. The temple door is barred and the nave is quiet. I've cleared the stray fight and the prone condition. If you believe you spent a javelin or a ration, tell me and I'll correct the sheet.\n\nBack to the nave. The old priestess takes the wheel from your hands and turns it slowly in the lamplight. It's a plain thing of blackened brass, no bigger than a fist, worn smooth by years of your thumb.\n\n\"Every child in this temple was given one,\" she says. \"Yours is the only one with a spindle of iron instead of wood. Feel the weight.\" She presses a thumbnail into a seam in the cap you never noticed, and the cap turns with a small click. Inside, a slender iron rod no longer than your finger slides free, its end cut in a pattern of notches. From beneath her collar she draws a cord with a second rod on it, twin to the first but with the notches cut the other way. \"Two halves. The crypt's lock accepts nothing else. And the prayer you've spun since you could walk is the word that sets them. The founders chose it because no thief would think to ask a child's toy.\"\n\nShe sets the rods together and they meet with a note like a struck bell. \"As for what's sealed: it's a warden, child. Something old and bound that the founders found when they built here. They could not destroy it. It cannot be killed, only kept. They tried, and the first temple burned for it. So they built another on top, and set a key into the hands of whoever kept the faith, and they taught us to keep the door shut. Every priestess has done so. I don't know what Gaunt wants it for. I only know that he does, and that he has spent months and gold finding out which of us holds the key.\"\n\nShe presses the iron rod back into your palm and closes your fingers over it. \"I'm old, Grukka. If he takes me, you hold it. Do you understand?\"\n\nYou're at 8 of 15 HP, it's about 1 PM, and Tomas and Wil are on the east road for Merra. What does Grukka do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 132906,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 46,
+  "run": 2,
+  "line": "I pull the prayer wheel out of my pouch and turn it over in my scarred hands, staring at it as if I'd never really seen it. \"This? I've spun it a thousand times, Mother. Show me how it's the key, and tell me what's sealed down there and why the founders didn't just destroy it.\"",
+  "entries": [
+   {
+    "kind": "dm",
+    "text": "Before I answer, the sheet and tracker don't match the scene I've been narrating, and I'd rather say so than gloss over it.\n\nThe tracker shows a fight in progress at round 8, with two \"Breach Bandits\" and Harl, and says it's your turn, with you prone at 8/15 HP and only three javelins. Nothing in my account of the last few minutes explains that. In my account, you and the priestess are alone in the barred nave, the gang has withdrawn east, and you just drew the prayer wheel from your pouch.\n\nI don't want to invent a history for those entries or make up what the bandits are doing, so you decide which version stands:\n\n1. **Calm scene.** The tracker entries are a stray error. I clear the fight and the prone condition, and the priestess answers your question about the wheel, the key and what's sealed below.\n2. **Fight is real.** Harl and two bandits broke into the temple mid-conversation and knocked you prone. We play it from your turn with the tracker as it stands, and I'll narrate the breach properly first.\n\nWhich one, calm scene or fight?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Prone"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 132900,
+   "timers": {}
+  },
+  "fight": {
+   "round": 8,
+   "turn": 3,
+   "order": [
+    {
+     "name": "Breach Bandit 1",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Breach Bandit 2",
+     "initiative": 16,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Harl",
+     "initiative": 8,
+     "pc": false,
+     "hp": 32,
+     "max_hp": 32,
+     "ac": 11,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Grukka Ironhide",
+     "initiative": 4,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 46,
+  "run": 3,
+  "line": "I pull the prayer wheel out of my pouch and turn it over in my scarred hands, staring at it as if I'd never really seen it. \"This? I've spun it a thousand times, Mother. Show me how it's the key, and tell me what's sealed down there and why the founders didn't just destroy it.\"",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "fight: Fight over after 8 round(s). 48 seconds of fighting; now Day 2, 12:55:06 PM.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: condition removed: prone",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Old Crypt",
+     "add_to_description": "The priestess's account: the founders sealed in a bound thing, a \"hungering\" that could not be killed, only kept. The prayer wheel's inner drum bears a hidden ring of seven small glyphs; the priestess's half is a bronze rod that fits its spindle. Together, turned in the right prayer, they open the crypt door. Destroying either half would unbind the thing, so the founders kept them apart."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Old Crypt",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "A quick note out of character: the tracker was showing a leftover fight (Harl and two \"Breach Bandits\") that doesn't match what we've played, so I've cleared it and the Prone condition. You're at 8/15 HP in the quiet temple, and I can't account for one javelin and one ration the sheet now shows missing, so tell me if that looks wrong.\n\nThe priestess takes the wheel from your hands and turns it so the lamplight falls on the brass drum. \"Seven small glyphs, worn smooth by your thumbs. You thought they were decoration.\" She draws from her sleeve a short bronze rod, no longer than a finger, with a notched end. \"This fits the spindle. Turn the wheel in the Seventh Prayer with the rod seated, and the crypt door opens. Neither half does anything alone.\"\n\n\"Below us is no god and no demon,\" she says. \"The founders called it the Hungering: a thing that eats the strength of whatever stands near it and grows by it. They couldn't kill it. Every blade and blessing they tried only fed it. So they bound it, sealed it, and split the key between two keepers who would never share a roof. Destroy either half and the binding fails. That's why they didn't simply break it.\"\n\nHer eyes find yours. \"I gave you the wheel at five years old because nobody would look for a key in a child's hands. Gaunt knows now. He asked for anyone who'd defend this temple because he was hunting the other keeper, and last night he found you.\"\n\nShe lays the rod in your palm beside the wheel, and it is warm. \"Merra will be brought home. But Gaunt will not wait long. Will you carry both halves, or shall I hide them again?\" The bell above is silent now. What does Grukka do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Grukka Ironhide",
+   "summary": "Half-Orc barbarian 1, acolyte background",
+   "opening": "Grukka Ironhide, a big, scarred Half-Orc barbarian raised in a border-town temple after her orc father's warband left her behind, stands at the edge of the temple's market square at dusk, greataxe on her back, handaxes at her belt, a prayer wheel tucked in her pouch. The old priestess who took her in and taught her prayers (while the other children taught her to fight) is the reason she still calls this place home. Tonight a gang of armed toughs, bold enough to wear a stranger's colors, has cornered a frightened temple acolyte and a pair of market vendors, shaking them down for 'tithes' and smashing the stalls near the temple steps. The priestess's door is barred behind them, and the town watch is nowhere to be seen. Grukka is loud, blunt, and cannot walk past a bully picking on someone smaller, and she has never backed down from a challenge, so the moment demands that she step in, whether she thinks it through first or not.",
+   "level": 1,
+   "race": "Half-Orc",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+     "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+    ],
+    "ideal": "Protecting the weak.",
+    "bond": "The old priestess who raised me and her temple.",
+    "flaw": "I charge in before I think, and I can't back down from a challenge."
+   },
+   "appearance": "A big, heavily scarred Half-Orc brawler.",
+   "ac": 15,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 19,
+    "DEX": 15,
+    "CON": 16,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 12
+   },
+   "abilities": {
+    "STR": "19 (+4)",
+    "DEX": "15 (+2)",
+    "CON": "16 (+3)",
+    "INT": "8 (-1)",
+    "WIS": "12 (+1)",
+    "CHA": "12 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +2, CON +5*, INT -1, WIS +1, CHA +1 (* proficient)",
+   "skills": "Acrobatics +2, Animal Handling +1, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +3*, Intimidation +3*, Investigation -1, Medicine +1, Nature -1, Perception +3*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +2, Stealth +2, Survival +1 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Orc, Giant, Goblin",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Savage Attacks: When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit.",
+    "Relentless Endurance: When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. you cannot use this feature again until you finish a long rest.",
+    "Menacing: You gain proficiency in the Intimidation skill.",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 15,
+    "current": 8,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Relentless Endurance": {
+     "max": 1,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 175,
+   "coins_cp": 2100,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 8,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Scimitar": 1,
+    "Greataxe": 1,
+    "Handaxe": 2,
+    "Javelin": 3,
+    "Brother Aldric's tithe satchel": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Grukka Ironhide",
+     "race": "Half-Orc",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 17,
+      "DEX": 15,
+      "CON": 15,
+      "INT": 8,
+      "WIS": 12,
+      "CHA": 12
+     },
+     "choices": {
+      "class.proficiencies.1": [
+       "Athletics",
+       "Perception"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Giant",
+       "Goblin"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud and blunt and I laugh hard, but I can't walk past a bully picking on someone smaller.",
+       "Raised in a border-town temple, I learned prayers from the old priestess and fighting from the other kids."
+      ],
+      "ideal": "Protecting the weak.",
+      "bond": "The old priestess who raised me and her temple.",
+      "flaw": "I charge in before I think, and I can't back down from a challenge."
+     },
+     "appearance": "A big, heavily scarred Half-Orc brawler."
+    },
+    "rolled": [
+     15,
+     12,
+     8,
+     12,
+     17,
+     15
+    ],
+    "levels": []
+   }
+  },
+  "clock": {
+   "now": 132906,
+   "timers": {}
+  },
+  "fight": null
+ }
+]

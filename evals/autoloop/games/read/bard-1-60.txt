@@ -1,0 +1,1151 @@
+CHARACTER: Vesper Thorne, Tiefling bard 2, acolyte background
+== OPENING ==
+Your character is complete.
+
+The river country of the Marrow Reach is a land of slow brown water, reed-choked fords and small shrines to saints nobody quite remembers. Travelers keep to the riverside roads. The road, as always, is where the coin is.
+
+Vesper Thorne is violet-skinned, gold-eyed and curl-horned, and she wears a silk scarf over those horns. She was a fish-crate foundling raised by Sister Odalie at the Shrine of the Lantern Saint in Marrowmere. She left at sixteen with the shrine's silver offering bowl, which she has never sold and still polishes. Now she's some days upriver with fifteen gold, a rapier, a lute and a talent for stories.
+
+Dusk settles over Hollin Ford. The Drowned Lantern, the ferry inn, is warm with smoke and lamplight, and the river mutters against the pilings outside. At the best table sits Corvin Aldersey, a wool merchant in a green cloak, loud and red-faced, with a fat purse he keeps patting. For half an hour you've been spinning him the tale of a holy finger bone of "Saint Brannoc." He's sweating, he's leaning in, and he's nearly sold. "Fifty gold, you say? For a saint? Hah! I've paid more for worse!"
+
+Then the inn door bangs open. A courier in a mud-caked river-warden's tabard staggers in, clutching a sealed satchel to a bleeding side. His eyes sweep the room and land on your lute, your horns and your face. "Lantern..." he rasps. "The Lantern Saint's shrine. Marrowmere. Is anyone here from... Is there anyone..." He sags against a post, and the room goes quiet.
+
+Corvin has a hand on your sleeve, his purse already open. "Well? Do we have a deal, girl?"
+
+What does Vesper do?
+
+== ROUND 1 ==
+PLAYER: Vesper slides Corvin's hand off her sleeve with a warm pat and a murmured, "Hold that thought, friend, the saint will keep a minute." She gets up, tucks her tail under her coat, and crosses to the courier fast, kneeling beside him and keeping her voice low and steady. "I'm from the Lantern Saint's shrine, Marrowmere, Sister Odalie raised me. Easy now, who sent you, and what's in the satchel?"
+  [DM write_lore (hidden)] {"create": "Tamsin Reeve", "kind": "person", "description": "Wounded river-warden courier who reached the Drowned Lantern in Hollin Ford carrying a sealed satchel from Sister Odalie. Was sent to find the violet-skinned, horned foundling girl.", "relationships": ["carries a satchel sealed by Sister Odalie of the [[Shrine of the Lantern Saint]]", "collapsed in the inn at [[Hollin Ford]]"]}
+  [game] notebook: created an entry for Tamsin Reeve; added 2 relationships to Tamsin Reeve
+DM: The courier's eyes find yours. They're glassy with pain, but they catch on the curve of your horns under the scarf, and something in his face breaks open with relief.
+
+"Violet," he whispers. "She said... violet, and horns, and gold eyes that look too honest." A bloody laugh catches in his throat. "Tamsin Reeve, river-warden. Sister Odalie put this in my hands four nights ago. She said, 'Find the girl I never caught stealing. Give it to no one else.'"
+
+He presses the satchel against your chest. Its flap is sealed in green wax stamped with a small lantern, and it's heavy with something that shifts like glass or metal. His hand is slick where it holds his side, and the blood is coming faster than it should.
+
+"Men came up the river after dark, with a barge and no lanterns. They want what's under the shrine." His grip tightens. "She's holding the door, but she can't hold it long. Tell her... tell her I got it through." His eyes flutter.
+
+Behind you the inn has gone still. Corvin Aldersey clears his throat, loudly and wounded. "Girl, my fifty gold is on this table!"
+
+Tamsin is fading. The satchel is sealed, the seal is Odalie's, and every eye in the room is on you.
+
+What does Vesper do?
+
+== ROUND 2 ==
+PLAYER: Vesper clamps the satchel inside her coat and presses a hand hard against Tamsin's bleeding side, not looking up. "Corvin, your fifty gold can wait, but this woman can't. Somebody fetch the innkeeper and clean cloth and any healer this ford has, now!" Then, low and fierce, to Tamsin, "Stay with me, warden, you got it through, and I'm not opening this seal until you've heard me say it's safe."
+  [game] dice Vesper's Medicine check to staunch Tamsin's wound, DC 10: 1d20+0 = 1d20 [15] + 0 = 15
+DM: Your hands know more than you expected. Years of patching up your own scrapes after bad marks pay off. You pack the wound and bear down, and the bleeding slows to a seep.
+
+The innkeeper, a broad woman named Hobb Marrin with flour on her forearms, shoves through the crowd with a bundle of linens and a bottle of sharp spirits. "Hollin Ford's healer is old Brother Pell, up at the mill chapel. My boy's already running." She and you bind the wound together, and Tamsin's breathing steadies into something ragged but real. His eyes find you once more. "Three barges," he murmurs. "Tell her... three."
+
+Corvin has gone quiet and a little pale, though his hand still rests on his purse. "Hmph. Well. A saint's bone can wait for a morning," he mutters, and for once he sounds almost decent.
+
+The satchel sits warm against your ribs, still sealed. At the window, the river is black and fast. Marrowmere is days away by road, but the ferry could carry you down by water, if anyone would cross at night.
+
+What does Vesper do?
+
+== ROUND 3 ==
+PLAYER: Vesper stands, wipes her hands on her coat, and turns to Hobb Marrin. "Who runs the ferry here, and what would it take to get me downriver tonight? I've got fifteen gold and a very good story." She glances back at Corvin, a slow grin forming. "And Corvin, my friend, you've got a fat purse and a conscience that just woke up. How much is a night passage worth to a man who wants to feel like a saint himself?"
+  [game] dice Vesper's Persuasion check on Corvin to fund a night passage, DC 12: 1d20+5 = 1d20 [5] + 5 = 10
+  [DM write_lore (hidden)] {"create": "Hobb Marrin", "kind": "person", "description": "Broad, floury-armed innkeeper of the Drowned Lantern in Hollin Ford. Sent her boy for Brother Pell, the mill chapel healer."}
+  [game] notebook: created an entry for Hobb Marrin
+  [DM write_lore (hidden)] {"entry": "Corvin Aldersey", "add_to_description": "Owns a wool barge moored at Hollin Ford bound downriver. Became suspicious of Vesper after her pitch (failed Persuasion), offers passage in exchange for the 'saint's bone' for free."}
+  [game] notebook: updated Corvin Aldersey
+DM: Hobb snorts. "Old Dunmore's ferry won't cross after dark, not for gold, not for the Saint herself. River's been wrong this week."
+
+Corvin's grin comes back, but there's a sharper edge on it now. The scare has cleared his head, and merchants who clear their heads start counting. "A night passage worth a saint's bone, you said? Funny. A girl with a saint's bone doesn't beg for fifteen gold." He leans back and taps his purse. "Here's my thought. My wool barge, the *Plump Heron*, sits at the lower dock, crewed and bound for Marrowmere on the morning tide. I'll cast off tonight, if the holy finger rides with me as my own. A gift. For my trouble and my soul."
+
+He's looking too closely at your face now, and your tail has twitched once under your coat.
+
+The satchel presses against your ribs. He's offering what you wanted, at the price of the relic, which was never real anyway, and of his suspicion. Or you could look for another way down.
+
+What does Vesper do?
+
+== ROUND 4 ==
+PLAYER: Vesper lets her face go soft and a little rueful, pressing a hand to her coat as if the bone itself lay there. "Corvin, you've caught me being a coward about letting it go, but a saint's finger belongs with a man who'll honor it. Cast off tonight, and it's yours, wrapped in my own prayer book's best blessing." She keeps her tail pinned flat and adds, quieter, "And the warden rides with us, if your crew can spare a bunk, he's earned a bed more than I've earned your trust."
+  [game] time: 1 hour later: Day 1, 7:30 PM
+DM: Corvin studies you a long moment, then laughs and slaps the table. "Honest as a bent coin, and I like you for it. Done!" He takes the bone, wrapped in a page torn from your prayer book, with the reverence of a man handling a hen's egg, and goes off bellowing for his crew.
+
+Within the hour the *Plump Heron* is hauled loose from the lower dock. It's a broad, squat barge stacked with wool bales, with a lantern at its prow and two grumbling deckhands on the poles. Brother Pell, a stooped man smelling of mint and poultice, has stitched Tamsin and pronounced him tough. Now Tamsin lies on a pallet between the bales, pale but breathing, with a blanket tucked to his chin. Hobb presses a heel of bread and cheese into your hands. "Go on. Tell your sister to bar her door."
+
+The black river takes the barge, and Hollin Ford's lights shrink behind you. Corvin sits near the stern with his cloak around him and a wary eye on you. The satchel is still sealed against your ribs, and three barges wait somewhere ahead in the dark.
+
+What does Vesper do?
+
+== ROUND 5 ==
+PLAYER: Vesper settles on a wool bale beside Tamsin, checks his bandage and tucks the blanket higher, then turns the sealed satchel over in her lap. "Corvin, friend, a favor: keep your eyes on the river and your crew quiet, and I'll open this where only the saint can see." She shields the seal with her coat and breaks the green wax, carefully, so the lantern stamp stays in one piece.
+  [DM write_lore (hidden)] {"create": "Odalie's Satchel", "kind": "item", "description": "Satchel sealed with green lantern wax by Sister Odalie. Contains: a letter to Vesper, a heavy brass lantern-shaped key (opens the crypt door under the shrine), and a small glass vial of lamp-oil that never burns out (the 'Saint's Flame'). Three barges of armed men came to take what lies beneath the shrine.", "relationships": ["carried 
+  [game] notebook: created an entry for Odalie's Satchel; added 2 relationships to Odalie's Satchel
+DM: The wax cracks cleanly, and the lantern stamp stays in one piece. Inside the satchel are three things.
+
+The first is a letter in Odalie's cramped, familiar hand, the same hand that wrote your name in the shrine ledger when you were small. The second is a brass key shaped like a lantern, as long as your palm and cold, heavier than it should be. The third is a stoppered glass vial of pale oil. In the barge lantern's light it doesn't reflect the flame. It holds a small, steady glow of its own.
+
+The letter reads:
+
+*Vesper. If this has reached you, then Tamsin is a better courier than I deserved. I know about the bowl. I always knew. Keep it. That is not why I write. Under the shrine is the undercroft the old Lantern Keepers sealed, and what sleeps there is not a relic to be sold. Men have come who know its name. The key opens the door, and the Saint's Flame keeps what lies behind it quiet. Don't give them either. Don't come back for me if it means the door opens. Come back for the door. — Odalie*
+
+Below it, in a shakier line: *You were never a thief to me, child. You were a lantern left on the step.*
+
+The barge creaks. Tamsin stirs but doesn't wake. Corvin watches from the stern and pretends not to.
+
+What does Vesper do?
+
+== ROUND 6 ==
+PLAYER: Vesper reads the last line twice, then folds the letter against her chest and pulls Odalie's old scarf from her pack to hold in her fist for a moment. She slips the key and the glowing vial back into the satchel, buckles it under her coat, and murmurs to the sleeping Tamsin, "She knew about the bowl, warden. All this time." Then she lifts her voice toward the stern, easy and bright. "Corvin, how long till Marrowmere on the morning tide, and does your *Plump Heron* have any trick for running faster in the dark?"
+  [game] time: 2 hours later: Day 1, 9:30 PM
+DM: Corvin sniffs, glad to be asked something he knows. "Trick? She's a wool barge, girl, not a racehorse. Current does the work. Two deckhands on the poles, me at the tiller. By dawn we'll be past the Weeping Locks, and with the tide, Marrowmere by the next dusk." He pauses, and his voice drops. "Unless something's in the way. The channel narrows at Gannet Bend. A barge sitting dark across it would take little effort to hold."
+
+The deckhands trade a look. One of them, a thin man called Piet, spits over the side. "River's been quiet tonight. Too quiet. No frogs."
+
+Two hours slide past under a thin moon. The reeds hiss, Tamsin sleeps, and the lantern at the prow throws a small gold circle on the water. Then ahead, past the bend, you see the faintest smudge of orange: a covered lantern, shuttered nearly shut, hanging low on a dark shape that lies across the channel.
+
+Piet hisses, "Barge. Dark. Right in the Bend."
+
+Corvin's hand goes white on the tiller. "Saints preserve us. Do we turn?"
+
+The current is carrying you toward it. What does Vesper do?
+
+== ROUND 7 ==
+PLAYER: Vesper is on her feet at once, hand on her rapier. "Don't turn, Corvin, and don't slow. Douse our prow lantern and bring us in dark and quiet, like a barge with nothing to hide." She quietly weaves a Minor Illusion in her mind: "Piet, can you see any crew on that deck, and how many poles do they have in the water?"
+  [DM lookup (hidden)] {"name": "Minor Illusion", "kind": "spell"}
+DM: Corvin swallows and snuffs the prow lantern with a pinch of his fingers. The *Plump Heron* slides on in the dark, with only the moon and the river's mutter to steer by.
+
+Piet crouches low at the bow, squinting. "Two... three on the deck, I make it. Lounging, one smoking a pipe. There's a long pole run out to the bank and another across the channel. It's a chain, or a rope, strung between them." He swallows. "They're not poling. They're *waiting*. Anchored. There's a second dark shape up behind them. Maybe a third, beyond the reeds."
+
+Your darkvision picks out more as you close. The nearest barge is low and black, with a covered brazier and men in boiled leather. One of them has a crossbow across his knees. The rope is stretched at the waterline, thick as your wrist, and the *Heron* will hit it in perhaps a minute. The gap beside it is a ten-foot slot hugging the bank, shallow and reed-clogged, which a wool barge might squeeze through if someone poled hard.
+
+Your Minor Illusion could throw a sound or a small image up to thirty feet away. You could also bluff, since they're waiting for something coming down the river, or you could try for the slot. You have a minute at most.
+
+What does Vesper do?
+
+== ROUND 8 ==
+PLAYER: Vesper crouches by the bow and whispers fast: "Piet, pole for the slot by the bank, hard and quiet, and Corvin, hold her steady." Then she casts Minor Illusion on the far side of the channel, a sound of a barge scraping the reeds and a man's muffled voice swearing, "Lantern's out, Harl, back off the line, it's the wrong boat!" to draw the three men's eyes and crossbow toward the opposite bank while we squeeze through.
+  [game] dice Piet and Corvin squeezing the Plump Heron through the reed slot, DC 13: 1d20+2 = 1d20 [16] + 2 = 18
+  [game] time: 5 minutes later: Day 1, 9:35 PM
+  [DM write_lore (hidden)] {"create": "Gannet Bend", "kind": "place", "description": "Narrow bend of the river below Hollin Ford, blockaded by a dark raider barge with a rope strung across the channel and a shallow reed slot along the bank. Vesper's Plump Heron slipped past it with a Minor Illusion distraction. Raiders called Harl among them; more barges lie farther down."}
+  [game] notebook: created an entry for Gannet Bend
+DM: Your voice-that-isn't leaves the far reeds in a scrape of wood and a muttered curse: "Lantern's out, Harl, back off the line, it's the wrong boat!" On the black barge the pipe-smoker jerks upright. The crossbowman swings his weapon toward the far bank. Someone hisses, "Who's that? Harl?" and two of them lean over the rail, peering the wrong way.
+
+Piet and the other hand dig their poles into the mud and heave. Corvin leans on the tiller with his tongue between his teeth, and the *Plump Heron* grinds into the slot with reeds slapping her flanks. The rope passes a bare arm's length off her starboard bow, humming against the current. For one long breath you hear the raiders arguing in low voices only twenty feet away.
+
+Then the wool barge scrapes free into open water, and the black shape falls behind. One raider calls out, uncertain. No one follows, and no bolt comes.
+
+Corvin lets out a breath that sounds like a bellows. "Girl," he whispers, "I will never again say a word about your bone." His hands are shaking on the tiller. Piet crosses himself.
+
+It's near ten at night. The raiders have spotted something, but they think it was a mistake. Marrowmere is still most of a day downriver, and Tamsin's three barges are not all behind you.
+
+What does Vesper do?
+
+== ROUND 9 ==
+PLAYER: Vesper lets out a shaky laugh and sits back down by Tamsin, tail twitching at last now that no one's watching. "Corvin, I'll hold you to that, and I'll want you at the tiller in the morning too. Piet, if you see any lantern ahead, shout before it sees us, and everyone keep your voices low until the Weeping Locks." She pulls Odalie's letter out again and rereads the line about the undercroft, murmuring, "Three barges, Tamsin said, and we've passed one. I'd like to know what's under that shrine before the other two get there."
+  [game] time: 8 hours 25 minutes later: Day 2, 6:00 AM
+  [game] sheet: XP +50: 50
+  [DM write_lore (hidden)] {"entry": "Tamsin Reeve", "add_to_description": "Woke at dawn on the Plump Heron. Reports the raiders wear boiled leather with no sigil, speak of 'the Sleeper', and their leader is a woman called Captain Ashgrove who wears a white glove."}
+  [game] notebook: updated Tamsin Reeve
+DM: The night passes in whispers and the slow creak of poles. Piet shouts twice at shapes that prove to be drifting snags. The moon sets, and a grey light creeps over the reeds. As the Weeping Locks rise ahead, their stone walls beaded with dripping moss, Tamsin opens his eyes.
+
+His voice is thin but clear. "We passed Gannet Bend?" You tell him, and he closes his eyes in relief. Then he says: "Listen. I saw them take the Harrow Bridge toll-house on the way up. They wear no colors, only boiled leather. But I heard the name they use for what's below your shrine. The Sleeper." He swallows. "Their captain is a woman, Ashgrove, with one white glove. She was the one who asked Sister Odalie, very politely, for the key."
+
+He fumbles at the blanket. "Odalie hid it where she'd never think to look: with a child who stole from her. That's what she said."
+
+Daylight finds the *Plump Heron* easing through the locks, with Corvin cheerfully paying the keeper to look the other way. Ahead lies a long, straight reach of river and, somewhere beyond it, Marrowmere. Another dusk of travel remains. You gain 50 XP for slipping the blockade.
+
+What does Vesper do?
+
+== ROUND 10 ==
+PLAYER: Vesper helps Tamsin sip some water and tucks the satchel tighter under her coat. "Ashgrove, one white glove, and politely asking for the key. Then she's the sort who smiles while she lies, and I know that sort." Turning to Corvin, she grins: "Friend, since you've a long day at the tiller, tell me everything you know about Marrowmere's docks, and which of them a wool barge could slip into without anyone asking questions."
+  [DM write_lore (hidden)] {"create": "Captain Ashgrove", "kind": "person", "description": "Polite, smiling raider captain who wears one white glove; leads three barges of unmarked men in boiled leather seeking the key to the undercroft beneath the Shrine of the Lantern Saint and 'the Sleeper'. Asked Sister Odalie for the key politely."}
+  [game] notebook: created an entry for Captain Ashgrove
+  [DM write_lore (hidden)] {"create": "Marrowmere docks", "kind": "place", "description": "Docks of Marrowmere: the Grand Quay (busy, tollkeepers, Harbour Reeve's watch), Tanner's Stair (smelly, little watched, steps lead up toward the old shrine quarter), and Eel Row (fishermen's mud-landing, where Vesper's fish crate once was sold). The Shrine of the Lantern Saint stands above Eel Row."}
+  [game] notebook: created an entry for Marrowmere docks
+  [game] time: 1 hour later: Day 2, 7:00 AM
+DM: Corvin puffs up. He loves nothing better than being asked about his own trade. He counts it off on thick fingers.
+
+"The Grand Quay is where I'd normally tie up. It's the busy one, with the Harbour Reeve's tollkeepers and a clerk for every crate. A barge like mine gets weighed and written down there, so no. Then there's Tanner's Stair. It stinks of hides, nobody watches it, and the stair climbs straight to the old quarter. I've slipped a bale or two past the toll there, mind." He winks, then remembers who he's talking to and coughs. "And Eel Row, the fishermen's mud-landing at the foot of the shrine hill. Shallow. A wool barge can't touch it, but a skiff could."
+
+Piet chips in, "If those three barges came by water, they'd want the Grand Quay or Eel Row. Anything bigger can't land under the shrine itself."
+
+Corvin scratches his jaw. "I'd put in at Tanner's Stair at dusk, drop you and the warden, and be gone before the tanners finish their supper. You'd be two streets from the shrine hill, and nobody would ask."
+
+The morning is bright and cold. The reeds thin and give way to sloping meadows dotted with sheep, and a few cottage chimneys smoke on the banks. You have most of a day with nothing but river, and a plan to make.
+
+What does Vesper do?
+
+== ROUND 11 ==
+PLAYER: Vesper nods slowly. "Tanner's Stair at dusk, Corvin, and I'll owe you more than a bone." She pulls out her notes on Odalie's letter and turns to Tamsin: "Warden, when I climb that stair, who in Marrowmere can I trust that Ashgrove hasn't already bought, and does the Harbour Reeve owe the shrine anything?"
+  [DM write_lore (hidden)] {"create": "Brannoc Vell", "kind": "person", "description": "Harbour Reeve of Marrowmere; honest but overstretched, has few watchmen, owes the Shrine of the Lantern Saint for burying his drowned wife. Tamsin's superior in the river-wardens. Deputy Sorrel Thack may be bought by Ashgrove."}
+  [game] notebook: created an entry for Brannoc Vell
+  [DM write_lore (hidden)] {"entry": "Tamsin Reeve", "add_to_description": "Advised Vesper: trust Harbour Reeve Brannoc Vell, distrust Deputy Sorrel Thack; also trust Old Mags the net-mender on Eel Row, who watched the shrine's steps."}
+  [game] notebook: updated Tamsin Reeve
+DM: Tamsin props himself on an elbow, wincing, and thinks it through with the care of a man ranking his own friends.
+
+"The Harbour Reeve, Brannoc Vell. Honest as a plumb line, and the shrine buried his drowned wife when nobody else would take the coin. He'll hear you. But he has six watchmen for a town of two thousand, and he answers to the Grand Quay clerks." His mouth twists. "His deputy, Sorrel Thack, I wouldn't trust with a sick cat. He's been spending silver he didn't have last month. If Ashgrove has bought anyone, it's him."
+
+He drinks, then adds, "Old Mags, the net-mender on Eel Row. She sits where she can see the shrine steps and she sees everything, and she can't be bought because she doesn't like anyone. Odalie brings her soup."
+
+By midday the barge is a lazy drift of sun and wool-smell, and the day wears on toward a dusk that may be the last quiet one you get. Corvin hums a dockside song off-key. The shrine's undercroft, Ashgrove, and an unpaid debt wait at the end of the river.
+
+What does Vesper do?
+
+== ROUND 12 ==
+PLAYER: Vesper tucks that away. "Brannoc Vell for the law, Old Mags for the eyes, and Sorrel Thack stays far from me." She pulls out her lute and starts working a quiet tune. "While we drift, I'll rest up and prep. Corvin, could I borrow a few of those wool sacks and some pitch-black cloak for a disguise? I'm thinking Disguise Self will serve me better if I have something real to hang it on."
+  [game] sheet: gained 1 × Dark oilcloth cloak, hooded; gained 2 × Wool sack
+  [game] time: 10 hours 30 minutes later: Day 2, 5:30 PM
+DM: Corvin waves a hand, too pleased with himself to haggle. "Take the lot. Wool's the one thing I've got in excess." From under a bale he drags a hooded oilcloth cloak, black with river-grime, that a tanner's boy left aboard last season. It smells of hide and rain, and it's exactly the kind of thing a person overlooks.
+
+You spend the long afternoon drifting and tuning. The lute comes alive under your fingers, Tamsin dozes with his blanket drawn up, and the river runs wide and slow between orchards gone russet with autumn. The oilcloth gets a rope belt and a sack folded under it for a stooped back, and you work out in your head how Disguise Self might wear it: a tanner's apprentice, a porter, a widow gathering wool-ends.
+
+By half past five the chimneys of Marrowmere stand against the western glow, and the shrine hill rises over the roofs. A smear of grey smoke leans from its crown, thicker than any hearth should make.
+
+Corvin goes quiet at the tiller. "That's not supper smoke."
+
+Tanner's Stair is perhaps half an hour off. Once you tie up, you're a girl with a key in a town that may already belong to Ashgrove.
+
+What does Vesper do?
+
+== ROUND 13 ==
+PLAYER: Vesper stares at that smoke a long moment, jaw tight, then pulls the oilcloth cloak on and slings the satchel flat against her back beneath it. "Corvin, that's the shrine, and I'm not waiting for dusk to find out how bad. Put us in at Tanner's Stair and keep the *Heron* ready to cast off, and Tamsin goes ashore with me only if he can stand." She turns to the warden, softer. "Can you walk, Tamsin, or do I find you a bed with Old Mags before I climb that hill?"
+  [game] time: 30 minutes later: Day 2, 6:00 PM
+DM: Tamsin gets one foot over the side of the pallet, goes grey, and sits back down hard. "Walk, yes. Fast, no." He grips the bale and tries a crooked smile. "Mags's place. I'll hold the door and tell the Reeve what I saw. Carrying a message is the one thing I'm still good for."
+
+The *Plump Heron* noses into Tanner's Stair at six. The air reeks of lime and wet hide, and the stone steps climb out of the water between tannery walls slick with green. Nobody is on the landing but a gaunt dog. Piet and Corvin lower Tamsin between them, and he leans his weight on your shoulder. Together you take the steps toward the streets. Corvin stays at the tiller with the pole ready, pale and sweating. "Go on. I'll wait till the second bell. No longer."
+
+Marrowmere is quieter than it should be at this hour. Shutters are drawn on the lanes above the stair. A woman hurries past a corner with a child under her cloak and does not look up. Up on the hill, the smoke is thicker, and a single bell is tolling, slow and uneven, as if someone is ringing it by hand and getting tired.
+
+Eel Row and Old Mags are down a side lane to the left. The shrine hill road runs straight ahead, steep and cobbled. Somewhere at its crown is the only home you ever had.
+
+What does Vesper do?
+
+== ROUND 14 ==
+PLAYER: Vesper steers Tamsin down the side lane toward Eel Row first, keeping the hood low, and knocks softly on Old Mags's door. "Mags, it's Odalie's girl, the one with the horns. I've brought you a wounded warden and I need to know who's on that hill before I climb it."
+  [DM write_lore (hidden)] {"create": "Old Mags", "kind": "person", "description": "Sour, sharp-eyed net-mender on Eel Row who watches the shrine steps. Odalie brings her soup. Reports: Ashgrove's men (about a dozen) hold the shrine yard; Deputy Sorrel Thack and two watchmen keep the hill road closed 'for order'; Odalie is alive and rings the shrine bell by hand; a raider fire in the woodshed smoulders. Knows the old Pilgri
+  [game] notebook: created an entry for Old Mags; added 2 relationships to Old Mags
+  [game] time: 20 minutes later: Day 2, 6:20 PM
+DM: The door opens a crack on a chain, and one rheumy eye studies you through it. "Hm. The one who took the bowl." The chain rattles free. "In, in, and mind the nets. You've grown. Still too thin."
+
+Old Mags is a stooped woman with forearms like mooring rope. She takes Tamsin's weight without a word and lays him on a cot of fishing-floats and sacking, and she doesn't ask how he got hurt. She talks as she works, flat and fast.
+
+"Came last night, a dozen or more, off the river with no lights. Took the shrine yard before the bell rang. Odalie barred the sanctuary and the cellar stair and has been ringing the bell by hand since dawn, so the town knows she's alive. Sorrel Thack and two of the watch are at the foot of the hill road, saying it's *for order*." She spits. "They set the woodshed alight to smoke her out, and it's gone to a smoulder. The woman in charge, the polite one with the glove, sits on the shrine's front step in a camp chair. Pours herself tea. Waits."
+
+She jerks her chin toward the back window and the dark slope behind it. "The front way's shut. But there's a Pilgrims' Water-Stair, from the old days when they came up by boat for the Lantern feast. It starts under the net-sheds, climbs behind the hill, and ends at the shrine cellar's river-door. It's boarded. Nobody's used it since before you were found in that fish crate." The eye narrows. "Odalie never told you that, did she? Of course not."
+
+The bell on the hill tolls once more, slower than before. Mags goes still, listening.
+
+"She's tiring," she says. "I'd go soon."
+
+What does Vesper do?
+
+== ROUND 15 ==
+PLAYER: Vesper checks that the key and vial are still in the satchel, then turns to Mags with a grim half-smile. "Then I'm taking the Water-Stair, Mags, and I'll need a crowbar or hatchet for those boards, plus a net or two I can drop from the stair if I need to slow anyone behind me. Keep Tamsin hidden, and if Sorrel Thack comes asking after a girl with horns, tell him you haven't seen one since that bowl went missing."
+  [game] sheet: gained 1 × Crowbar; gained 1 × Net; gained 1 × Hatchet
+  [game] time: 40 minutes later: Day 2, 7:00 PM
+  [DM write_lore (hidden)] {"entry": "Old Mags", "add_to_description": "Gave Vesper a crowbar, hatchet and net, and is hiding Tamsin Reeve in her house."}
+  [game] notebook: updated Old Mags
+DM: Mags's lips twitch toward something that isn't a smile. "I never saw a horned thing in my life. Eels, yes." She digs behind a stack of crab pots and hauls out a rusted crowbar, a short-hafted hatchet and a coil of weighted net, and she thrusts them at you. "Sorrel Thack couldn't find a fish in a bucket. Go on. And girl..." Her eye holds yours. "When you see her, don't start with the bowl."
+
+You slip out through the net-sheds as the light fails. Their tarred boards groan in the wind off the river, and the reek of old brine clings to your cloak. Behind the last shed, under a curtain of ivy and a rotting fishing skiff, you find it: a low stone arch and a stair that climbs into the hill, its entry barred with grey boards nailed crosswise. The wood is soft with damp. Beyond it, cold air breathes down on you, smelling of wet stone and, faintly, of lamp-oil and smoke.
+
+The shrine bell tolls above, thin and far, a single stroke. It's dusk, and there is no one in the lane.
+
+You could pry the boards now, or prepare first: Disguise Self, a bardic inspiration for later, or a look at how that stair rises. What does Vesper do?
+
+== ROUND 16 ==
+PLAYER: Vesper wedges the crowbar behind the lowest board and eases it back slowly, wincing at every creak and timing each pull to the next toll of the bell. "Slow and quiet, Vesper," she mutters, hood low and tail tucked. Once there's a gap wide enough to slip through, she'll pause on the threshold and let her darkvision take a good long look up the stair before she sets a foot on it.
+  [DM lookup (hidden)] {"name": "Crowbar", "kind": "equipment"}
+  [game] dice Vesper's Strength check prying the rotten boards quietly with crowbar, DC 10: 1d20-1 (advantage) = 1d20 [11, 4]→11 - 1 = 10
+  [game] time: 15 minutes later: Day 2, 7:15 PM
+DM: The boards give with a long, wet sigh, and each time the nails groan you stop and let the bell cover it. Three planks later there's a gap wide enough for a thin girl with a satchel. Cold air spills out of it, breathing of stone, rust and lamp-oil.
+
+Your darkvision turns the black into a grey-silver tunnel. The stair climbs steeply in a tight spiral, worn hollow in the middle by generations of pilgrims' feet. Little niches line the wall at shoulder height, each holding a clay lantern long dead. You count perhaps ninety steps before the curve hides the rest. There are no tripwires on the first stretch, only a sprinkle of fresh mud at the third step from the top you can see, where somebody's boots have been recently.
+
+You step inside and climb. Halfway up, at a landing with a carved lantern over its arch, the air changes. The smoke smell thickens. Above you there are voices, low and bored, two men: "...tell you she's not coming out. The old bat'll bleed that bell dry." "Captain says the key's coming by itself. Ha. Some girl."
+
+A grate of iron bars covers the stair's head, giving onto the cellar. Past it you can see yellow torchlight and the edge of a barrel. Two raiders sit on crates with a lantern between them and a dice cup. Past them, a stout oak door stands with a bar across it, and scratches around its lock. That's the undercroft door, or the stair to it. Through the grate you can smell burnt wood, and from far above comes the bell.
+
+What does Vesper do?
+
+== ROUND 17 ==
+PLAYER: Vesper crouches below the grate, pulls the glowing vial's stopper out of her mind and keeps it sealed, and whispers to herself, "Two bored men, one dice cup." She readies Sleep, a 1st-level slot with the grate between us, and softly casts Minor Illusion to throw a scraping sound and a muffled cough from the dark upper stair so they get up and wander toward it.
+
+"DM: before I cast, how many hit points have I got right now, and is the Sleep spell's 5-foot-wide area in range of both men through those bars?"
+  [DM lookup (hidden)] {"name": "Sleep", "kind": "spell"}
+DM: You have 9 of 9 hit points, and both of your 1st-level spell slots are free.
+
+Sleep doesn't have a 5-foot area. Its range is 90 feet, and it affects creatures within 20 feet of a point you choose, so a sphere that size would cover the whole corner of the cellar. The bars don't get in the way. You can see both men through them, so you can pick a point and catch them both. You can see the two raiders on the crates and the barrel, but not the whole cellar. Anyone else within 20 feet of that point would be caught too, friend or foe. The spell works from the lowest current hit points up, and you roll 5d8 for the total.
+
+The Minor Illusion is a separate action. You'd spend one action on the sound and one on Sleep, so they'd have a round or so to react between the two. The sound might draw them toward the stair (and the grate), or alert them to an intruder.
+
+Nothing has been cast yet. Do you want to cast anything, and in what order?
+
+== ROUND 18 ==
+PLAYER: Skip the sound, then: no point spending an action to wake them up and make them look at the grate. Vesper picks a point right between the two crates and casts Sleep with her 1st-level slot, whispering the lullaby under her breath.
+
+"DM: with 5d8 against two ordinary raiders, do they get a save, and if they drop, can I pry the grate open quietly before anyone upstairs hears the bell stop echoing?"
+  [DM lookup (hidden)] {"name": "Bandit", "kind": "monster"}
+  [game] sheet: Vesper casts Sleep at level 1; timer Vesper's Sleep: 1 minute; level-1 spell slots: 1/2
+  [game] dice Sleep: hit points of creatures affected: 5d8 = 5d8 [6, 7, 3, 3, 7] = 26
+  [game] sheet: XP +50: 100
+DM: The lullaby is barely more than breath. A silver-grey wave of drowsiness rolls out through the bars and settles over the cellar. Sleep gives no saving throw, and you rolled 26 for its total. That's more than enough for both men. The nearer one slumps over his dice cup, and the other slides off his crate with a soft thump and a snore. Neither stirs.
+
+You have 50 XP for the two bandits, which brings you to 100.
+
+The spell holds them only for a minute. After that they wake on their own, or sooner if they take damage or someone shakes them. That's about ten rounds to work with. The grate is old iron bars set in a rusted frame, with a padlock the size of your fist. The crowbar will probably pry it, though iron shrieks if you rush it. Above, the bell still tolls.
+
+What does Vesper do?
+
+== ROUND 19 ==
+PLAYER: Vesper wedges the crowbar against the padlock's hasp and leans on it slowly, timing each bit of pressure to the next toll of the bell so the iron's groan gets swallowed. Once the grate swings free she'll slip through, bind both sleepers' wrists with a length of Mags's net cord, and stuff a wool-rag gag in each mouth before they wake.
+  [game] dice Vesper's Strength check levering the rusted padlock quietly with crowbar, DC 12: 1d20-1 (advantage) = 1d20 [8, 9]→9 - 1 = 8
+  [game] time: 18 seconds later: Day 2, 7:15:18 PM
+DM: You set the bar against the hasp and lean, and the iron groans. It doesn't give. The padlock is rusted stubborn, and the frame around it is sounder than it looked. A thin scream of metal runs up the stair, and you hold your breath. The two sleepers don't stir, but somewhere above, the bell stops mid-toll. It rings again a heartbeat later, as if whoever is ringing it also stopped to listen.
+
+That cost you about three rounds, and the Sleep has maybe seven left in it. The hasp is cracked at one corner now. One more good heave with the crowbar should finish it, though it'll be louder. Or you could use the hatchet on the rotten wooden post that holds the grate's frame, which would be quicker and noisier still. Another option is to give it up and wait for them to wake, to talk or bluff your way past.
+
+What does Vesper do?
+
+== ROUND 20 ==
+PLAYER: Vesper wraps the wool sack around the crowbar's tip to muffle it, sets it against the cracked corner of the hasp, and heaves with her whole weight right as the bell tolls. "Come on, you rusted old thing," she breathes, ready to catch the grate before it clangs.
+  [game] dice Vesper's Strength check heaving the cracked hasp, muffled, DC 10: 1d20-1 (advantage) = 1d20 [20, 12]→20 - 1 = 19 (natural 20)
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Written orders found on a sleeping bandit in the shrine cellar: take the key by the third night; the Sleeper must be woken at the new moon (nine nights hence); do not harm the old woman until the key is in hand; a pay-chit marked with Sorrel Thack's mark shows the deputy took silver."}
+  [game] notebook: updated Captain Ashgrove
+  [game] time: 6 seconds later: Day 2, 7:15:24 PM
+DM: A natural 20. The hasp doesn't break so much as surrender. The wool-wrapped crowbar bites, the iron parts with a sound like a knuckle cracking, and you catch the grate in both hands before it can swing. It settles into your arms without a whisper, and overhead the bell tolls and covers even that. You've never opened a lock so gently in your life.
+
+As you lift the grate aside, you see what lay hidden behind the nearer crate: a canvas satchel with a waxed packet half out of its flap, tucked beneath the sleeper's elbow. You can read the top of it by torchlight. It's orders in a neat, looping hand: *Take the key by the third night. The old woman is not to be harmed until the key is in hand. The Sleeper wakes at the new moon, nine nights hence, and not before.* Under it is a pay-chit with a mark you saw once on a Harbour Reeve's warrant: the deputy's. Sorrel Thack has been paid in silver.
+
+You have about thirty-six seconds, six rounds, before the Sleep ends. The two men are still out. The undercroft door is barred ten feet away, and a stair at the far end of the cellar climbs toward the shrine's sanctuary.
+
+What does Vesper do?
+
+== ROUND 21 ==
+PLAYER: Vesper pockets the orders and Thack's pay-chit, then swiftly binds both sleepers' wrists with Mags's net cord and stuffs wool in their mouths. "That's evidence for the Reeve, and a leash on a deputy." She slips to the far stair and climbs toward the sanctuary, hood low, listening for Odalie's bell.
+  [game] sheet: gained 1 × Ashgrove's written orders; gained 1 × Sorrel Thack's pay-chit
+  [game] time: 2 minutes later: Day 2, 7:17:24 PM
+  [DM write_lore (hidden)] {"entry": "Shrine of the Lantern Saint", "add_to_description": "Cellar has a river-door and Pilgrims' Water-Stair from Eel Row, an iron grate and a stair at its far end up to the sanctuary (barred from above by Odalie), plus the oak-and-iron undercroft door with the key lock. Ashgrove sits on the front step outside in a camp chair. Bell rope in the sanctuary; Odalie rings it by hand."}
+  [game] notebook: updated Shrine of the Lantern Saint
+DM: The cord is Mags's good tarred twine, and your knots are sailor's knots that Odalie once scolded you for learning. Both men are trussed and gagged before the minute runs out. One snorts awake just as you finish. He blinks at you with wool in his mouth and a drowsy question in his eyes, and you give him a sweet smile and a small shake of the head. He thinks about it and lies very still.
+
+The far stair is short, twenty worn steps, and it ends at a low door of grey oak. A bar is dropped across it on the far side. You know that from the thin line of light under it, and from the faint, familiar smell: tallow, beeswax and old cloth, a smell you haven't breathed in years.
+
+Beyond it, the bell stops. You hear slow, labored breathing, a chair dragged, a cough. Then, very quietly, almost to herself, a woman's voice, rough as a rasp and unmistakable:
+
+"...Lantern keep you, child, wherever you are. Don't come."
+
+Through a crack in the boards of the far wall you can just hear a second voice, higher, clear, and amused from the front step: Ashgrove, speaking to someone, calm as a tea-party. "Another hour, I think. Then we will have the door opened properly, and Sister Odalie will have to decide how she wishes to feel about her stubbornness."
+
+The door is a hand's breadth from you. Odalie is on the other side.
+
+What does Vesper do?
+
+== ROUND 22 ==
+PLAYER: Vesper presses her forehead to the grey oak and taps softly, three slow knocks and one quick, the old signal she used to sneak back in after market nights. "Sister, it's the girl you never caught stealing," she whispers. "Lift the bar slowly and don't say my name where the front step can hear."
+  [DM write_lore (hidden)] {"create": "Sister Odalie", "kind": "person", "description": "Overworked sister of the Shrine of the Lantern Saint, Vesper's foster mother. Barricaded herself in the sanctuary, rings the bell by hand. Knew of the stolen bowl and said keep it. Hid the key and Saint's Flame by sending them to Vesper via Tamsin Reeve.", "relationships": ["raised [[Vesper Thorne]]", "keeps the [[Shrine of the Lantern 
+  [game] notebook: created an entry for Sister Odalie; added 3 relationships to Sister Odalie
+  [game] time: 3 minutes later: Day 2, 7:20:24 PM
+DM: Silence. Three slow knocks and one quick, and on the far side of the door the breathing stops entirely.
+
+Then the bar scrapes, slowly, with an old woman's care, and the door opens a hand's width onto candlelight. Sister Odalie is smaller than you remember. Her grey habit is soot-streaked, there's a cut over one eye and a bruise on her jaw, and her hands, which once scrubbed a hundred pews, tremble on the rope-rough bar. Her eyes are still the same pale, tired grey.
+
+She doesn't say your name. She looks at the violet of your skin and the curl of your horns beneath the hood, the way she looked at you once on a step in a fish crate, and her mouth works.
+
+"You stole the good beeswax too," she says at last, very low. "Last winter. I thought it was the rats." She tries to smile and it cracks. Her hand comes through the gap and finds your sleeve, and holds it as if you might evaporate. "Child. The key. Tamsin got through?"
+
+Behind her the sanctuary is dim: overturned benches, a barricaded front door, the bell rope hanging from the loft, and the undercroft's iron-bound door in the floor of the side chapel. Outside, Ashgrove's calm voice is giving orders again.
+
+What does Vesper do?
+
+== ROUND 23 ==
+PLAYER: Vesper slips through the gap, catches Odalie's trembling hand in both of hers, and nods, tail curling around her leg for once. "He got through, Sister. He's alive at Old Mags's, and I have the key and the Saint's Flame, but you're hurt, so sit before you fall." She glances at the iron-bound door in the chapel floor. "And I'll still say it: I stole the beeswax, I took your silver bowl, and I'm sorry. Now tell me fast what's actually sleeping under there, and what Ashgrove wants it for."
+  [DM write_lore (hidden)] {"create": "The Sleeper", "kind": "creature", "description": "A great drowned river-wyrm (a green dragon), bound into slumber beneath the Shrine of the Lantern Saint by the old Lantern Keepers. Held by the undercroft door's key and a lamp fed with the Saint's Flame. Ashgrove means to wake it at the new moon, nine nights hence, and bind it to her will. The lamp in the undercroft is failing and must
+  [game] notebook: created an entry for The Sleeper; added 2 relationships to The Sleeper
+  [game] time: 5 minutes later: Day 2, 7:25:24 PM
+DM: Odalie lets herself be lowered onto a pew, one hand still gripping yours. When she speaks, the tiredness drops away and the sister you remember comes back, the one who explained scripture the way you'd explain a coin trick.
+
+"Before there was a town, there was a drowned thing. A wyrm, green as river-weed and old as the first flood, that came up the Marrow and took villages in its sleep. The first Lantern Keepers couldn't kill it. So they put it back to sleep in the mud and built a shrine on top, and bound it with two things: the lantern key and a lamp that never goes out." Her eyes flick to your coat. "The Saint's Flame. As long as it burns in the undercroft, the Sleeper sleeps. But the lamp is old, child. The oil's nearly gone. I was going to refill it, and then *she* came."
+
+She breathes. "Ashgrove doesn't want the treasure there, because there isn't any. She wants the wyrm. A beast like that obeys whoever holds its key and says the old words at the new moon. Nine nights." A bitter laugh. "She asked politely for the key, you know. Over tea. I told her I'd already given it to a fish."
+
+Outside, Ashgrove's voice has paused. A boot scrapes on the front step. Then a knock on the sanctuary door, three polite raps. "Sister Odalie," the voice calls, pleasantly. "I do hope you've had time to reconsider. I'd so hate to have to burn the rest of your house."
+
+The key is in your satchel. The undercroft door is ten steps away. Beyond the front door stands a woman in a white glove with a dozen men, and in the town below, a deputy with silver in his pocket and a Reeve who might help.
+
+What does Vesper do?
+
+== ROUND 24 ==
+PLAYER: Vesper squeezes Odalie's hand, pulls the hood low, and mouths "Keep her talking" before she whispers the words of Disguise Self, letting her face melt into Odalie's own tired features, soot and bruise and all. "Sister, stay down and stay silent," she murmurs, then calls toward the door in a cracked old woman's voice, "Give me a moment, Captain, an old woman's knees are slow, and I'd like to hear what you'd offer for the key."
+
+"DM: what's the Saint's Flame vial's glow doing right now, and how much oil would it take to refill the lamp in the undercroft?"
+  [DM lookup (hidden)] {"name": "Disguise Self", "kind": "spell"}
+  [game] sheet: Vesper casts Disguise Self at level 1; timer Vesper's Disguise Self: 1 hour; level-1 spell slots: 0/2
+  [game] dice Vesper's Deception (Odalie's cracked voice through the door): 1d20+5 = 1d20 [4] + 5 = 9
+  [game] dice Ashgrove's Insight against the voice through the door: 1d20+3 = 1d20 [11] + 3 = 14
+  [game] time: 1 minute later: Day 2, 7:26:24 PM
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Became suspicious of the 'Odalie' voice at the sanctuary door (Vesper under Disguise Self, failed Deception) and moved men to the front door."}
+  [game] notebook: updated Captain Ashgrove
+DM: Your face shifts under the spell. Odalie's soot and bruise settle over your features, and Odalie stares at herself in your skin with a small, appalled breath. "Don't make my chin do that again," she whispers.
+
+Answering your questions as the DM: the Saint's Flame vial has gone warm in the satchel, and its pale glow is leaning toward the undercroft door, brightening whenever you turn that way, like a compass needle. A lamp that old would take only a thimbleful. Odalie says a few drops would keep it burning for a year, and the vial holds far more than that. The danger is the key and the door, not the oil.
+
+You speak through the door in the cracked old voice. It's a decent imitation, but you're a bard in a hurry, and a soft scrape of silence follows. Ashgrove's answer comes pleasantly, a beat too slow. "Sister. How odd. You sound so much *younger*."
+
+A rap of the knuckle on wood, then a different tone, still polite. "Harl, Dessa, the front door, if you would. And bring the ram."
+
+Boots gather on the step. The barricade is oak benches and a bolted door. It won't hold a ram for long, perhaps a minute or two. You have no spell slots left, and the bell rope, the undercroft and the stair back down are all within your reach.
+
+What does Vesper do?
+
+== ROUND 25 ==
+PLAYER: Vesper drops the disguise's stoop and hauls Odalie up by the arm. "Change of plan, Sister, we're not hiding, we're moving." She yanks the bell rope hard and rings it wildly, again and again, so the whole town hears it, then points Odalie at the cellar stair. "Down the Water-Stair, quick. Mags will hide you with Tamsin, and when the Reeve hears that bell, he'll have to come up the hill whether Thack likes it or not."
+
+"I'll take the flame and the key to the undercroft door and refill that lamp before the ram breaks through."
+  [game] dice Vesper's Sleight of Hand: steady hands refilling the lamp beside the Sleeper, DC 10: 1d20+4 = 1d20 [14] + 4 = 18
+  [game] time: 2 minutes later: Day 2, 7:28:24 PM
+  [DM write_lore (hidden)] {"entry": "The Sleeper", "add_to_description": "Vesper refilled the undercroft lamp with the Saint's Flame on Day 2 at about 7:30 PM, steadying the binding. The lamp now burns bright; the wyrm sleeps. The key still opens the door and Ashgrove still wants it. Vesper left the undercroft door unlocked as the ram broke through the sanctuary."}
+  [game] notebook: updated The Sleeper
+  [DM write_lore (hidden)] {"entry": "Sister Odalie", "add_to_description": "Sent down the Water-Stair by Vesper to hide with Old Mags and Tamsin. Taught Vesper the Keepers' binding words on the way."}
+  [game] notebook: updated Sister Odalie
+DM: You haul the bell rope as if you meant to pull the roof down. It clangs out over the roofs of Marrowmere, wild and ragged, and the whole town hears it. Odalie says nothing. She grips your face in both hands for one heartbeat and tells you the Keepers' words so fast you barely catch them, then limps for the cellar stair. The disguise is still on your face.
+
+You take the brass key to the iron-bound door in the chapel floor. It turns with the sound of a long-held breath, and cold air rises out of the dark like a held note. Below, a stair of black stone drops into a vaulted chamber that smells of river-bottom and old, still water.
+
+The Sleeper is there. You see only a part of it: a green-scaled flank the length of a barge, ribs rising and falling slowly under a blanket of silt, a foot-long claw curled in the mud. Its single closed eye is the size of a cartwheel. It breathes once while you stand there, and the water in the channel round it shivers.
+
+At the stair's foot stands a bronze lamp bowl on a pillar, almost dry, its flame down to a blue bead. You tip the vial over it with fingers that do not shake, and the Saint's Flame spills in like liquid starlight. It catches and steadies, and the whole chamber turns gold.
+
+Far above, the ram finds the front door. Wood splinters, and you hear Ashgrove's voice very close, perfectly pleasant. "Ah. There you are."
+
+You're in the undercroft with a sleeping dragon and a lit lamp, and the door above is open.
+
+What does Vesper do?
+
+== ROUND 26 ==
+PLAYER: Vesper pulls the brass key from the lock, hops back up two steps, and slams the iron-bound door shut above her, turning the key from inside so it's locked with her and the Sleeper on the right side and Ashgrove's ram on the wrong one. "Captain Ashgrove, you'll want to knock politely," she calls up in her own voice, "I'm busy being a very small candle in a very large room."
+
+Then she looks around the vaulted chamber for another way out, maybe a river-door leading back to the Water-Stair, and keeps well clear of the sleeping eye.
+  [game] dice Vesper's Perception check searching the undercroft for another way out, DC 12: 1d20+0 = 1d20 [19] + 0 = 19
+  [game] time: 3 minutes later: Day 2, 7:31:24 PM
+  [DM write_lore (hidden)] {"entry": "The Sleeper", "add_to_description": "Undercroft: vaulted stone chamber, water channel around the wyrm, bronze lamp pillar at the stair foot. A narrow Keepers' gallery runs off the east wall, a service tunnel that climbs behind the hill and joins the Water-Stair at the landing beneath the carved lantern arch. Vesper locked the undercroft door from inside with the brass key."}
+  [game] notebook: updated The Sleeper
+DM: The key turns with a deep, satisfying clunk, and the iron-bound door is locked from your side. Above, the ram's last blow rings off the chapel floor. A silence follows, then the polite voice again, nearer: "A very small candle, Miss Thorne? You'll find I'm patient. I have a whole night, and a nine-night after that."
+
+She knows your name. The door is old iron and oak, banded, and it will hold for a time. The ram will not get through it quickly, but she has a dozen men and a night.
+
+You turn your back on it and make a slow circuit of the vault, giving the great closed eye a wide berth. The lamp's gold light shows the walls clearly now. Carved lanterns march around the chamber in a frieze, each with a name beneath. Your own would fit among them, you think, with a small shock. On the east wall, half-hidden behind a pillar of black stone, is a low arch you'd miss if you weren't looking: a narrow Keepers' gallery, ankle-deep in cold water, sloping upward into the hill. A breath of river air comes from it, and far away you can hear the faint drip of the Water-Stair.
+
+Behind you the Sleeper breathes in, and out. The lamp holds steady. Above, men are shouting. You have the key in your hand, the satchel across your back, and the town's bell still echoing in your ears.
+
+What does Vesper do?
+
+== ROUND 27 ==
+PLAYER: Vesper tucks the key safely into her satchel and drops her voice to a whisper. "Thank you for the quiet, big fellow, I'll try not to wake you." She wades into the Keepers' gallery, keeping the lamp's gold at her back, and follows the river air up toward the Water-Stair to catch Odalie and find the Reeve before Ashgrove thinks to circle the hill.
+
+"DM: when I get out, can I still hear the bell in town, and is Brannoc Vell's watch answering it yet?"
+  [game] time: 10 minutes later: Day 2, 7:41:24 PM
+  [DM write_lore (hidden)] {"entry": "Brannoc Vell", "add_to_description": "Answered the shrine bell with the harbour watch, marching up the hill road with torches and a few dozen townsfolk, over Deputy Sorrel Thack's objections."}
+  [game] notebook: updated Brannoc Vell
+DM: The gallery climbs in a long, cold dark, ankle-deep and slick underfoot. Twice you duck under low stone. The air grows fresher, with river and tar in it, and then the Water-Stair opens beside you at the landing under the carved lantern arch, exactly where you passed it an hour ago. The sleeping bandits' torchlight glints through the cellar grate above. Both men are still trussed, and one of them now looks at you with a very worried face.
+
+You can hear the bell. It isn't Odalie's now. It's the old iron bell of the Grand Quay and the chapel bells of three other streets, picking up the alarm one by one, and under that is a rising roar of voices. Down through the arch of the stair mouth you can see torchlight on the hill road, a long wavering line of it. It's the harbour watch, perhaps twenty of them, with fishermen, tanners and net-menders behind, armed with boathooks, cleavers and cudgels. At the head of them strides a broad, grey-bearded man in a Reeve's chain, bellowing for Deputy Thack. Thack, two paces behind with a very pale face, is not answering.
+
+Ashgrove's men are on the shrine's front step. You count at least ten, and no one has sounded a horn yet. Ashgrove herself is nowhere you can see, and the camp chair is empty.
+
+At the bottom of the stair, in the lee of the net-sheds, a stooped figure in a grey habit waves from Mags's back door. Odalie. Tamsin's pale face looks out beside her.
+
+What does Vesper do?
+
+== ROUND 28 ==
+PLAYER: Vesper slips down the stair into the lee of the net-sheds, pulls Odalie into a quick fierce hug, then peels the oilcloth hood back so the Reeve will see her real face. "Sister, stay with Tamsin and bar Mags's door. I'm taking Ashgrove's orders and Thack's pay-chit straight to Brannoc Vell before that deputy can open his mouth."
+  [game] dice Vesper's Persuasion check convincing Brannoc Vell with the orders and pay-chit, DC 10: 1d20+5 = 1d20 [14] + 5 = 19
+  [game] time: 8 minutes later: Day 2, 7:49:24 PM
+  [game] time: timer Vesper's Disguise Self removed
+  [refused] sheet: nothing to change: pass at least one field
+  [DM write_lore (hidden)] {"entry": "Brannoc Vell", "add_to_description": "Convinced by Vesper with Ashgrove's orders and Thack's pay-chit; arrested Deputy Sorrel Thack and stopped at the shrine's front gate with the watch and townsfolk, facing Ashgrove's men. The standoff now holds at the shrine yard."}
+  [game] notebook: updated Brannoc Vell
+DM: Odalie's arms are thin but fierce around you, and she smells of tallow and smoke. "Go," she says into your shoulder. "And Vesper... you were never a thief to me." Then she pushes you away and shuts Mags's door.
+
+You think of the hood and realize your face is still hers. You take one breath to dismiss the illusion, and the old woman's features slide from you like water. You are violet and horned again.
+
+The hill road is a river of torches. Brannoc Vell stands at the foot of the shrine gate with the harbour watch ranked behind him, grey-bearded and furious. Ashgrove's men hold the yard behind a line of overturned handcarts, crossbows leveled. Thack hovers behind the Reeve with his hat in his hands.
+
+You walk straight up the middle of the road, hands open, with the pay-chit held high where the torchlight can read it. The Reeve's eyes go from the deputy's mark to your face, and for a moment you see the dock-warrant look in his eyes. Then you hold out Ashgrove's orders. *Take the key by the third night. The old woman is not to be harmed.* He reads, and his jaw works. He reads the pay-chit, and turns his head very slowly toward his own deputy.
+
+"Sorrel," he says, without raising his voice. "Your belt, if you please."
+
+Thack's mouth opens. No sound comes out. Two watchmen, who until a minute ago called him sir, take his arms. The crowd behind them growls.
+
+Across the yard, behind the carts, a white-gloved hand lifts in a polite, almost friendly wave. Ashgrove has reappeared, in the open doorway of the sanctuary she failed to break, with a thin smile.
+
+"Miss Thorne," she calls, clear and pleasant over the crowd. "You've made quite a night of it. Shall we talk?"
+
+The Reeve's watch, the town and a dozen raiders hold their breath, waiting on you.
+
+What does Vesper do?
+
+== ROUND 29 ==
+PLAYER: Vesper steps forward to the front of the line, tail tucked, grin crooked, and calls back sweetly, "Happy to talk, Captain, but I'll do it out loud with the whole town listening, and with your orders in the Reeve's hand." She tilts her head toward Brannoc Vell and says low, "Reeve, keep your watch steady, I'm going to make her say the Sleeper's name where every neighbor can hear it."
+
+Then, louder: "So tell us, Captain, what exactly did you want a nine-night and a key for?"
+  [game] dice Vesper's Persuasion/Deception goading Ashgrove to speak openly before the crowd, DC 14: 1d20+5 = 1d20 [9] + 5 = 14
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Goaded by Vesper before the Marrowmere crowd, she openly named the Sleeper and her aim: to wake the drowned wyrm at the new moon and bind it, to make Marrowmere pay tribute 'or drown'. Her men number about ten in the shrine yard; she holds a bell-shaped iron horn."}
+  [game] notebook: updated Captain Ashgrove
+  [game] time: 2 minutes later: Day 2, 7:51:24 PM
+DM: It lands. Ashgrove has spent two days being the calmest person in every room, and it's a vanity as much as a habit. She can't resist an audience. The smile widens, and she steps down from the sanctuary door into the torchlight with her white glove raised like a lecturer's.
+
+"What did I want?" Her voice carries to the back of the crowd. "The same thing every one of you has wanted, standing on mud your grandfathers dug, waiting for the river to take it back. Safety. Under this hill lies the Sleeper, a wyrm that drowned three valleys before your saints were even a rumor. At the new moon I will wake it, and it will answer to me, and Marrowmere will answer to it. Pay the tribute, and your children keep their feet dry. Refuse, and..." She spreads her hands. "The river is so very patient."
+
+A murmur goes through the crowd, then a growl. Someone's cleaver rings on a cobble. The Reeve's knuckles are white on his boathook. "Seize her," he says quietly.
+
+Ashgrove sighs, almost fondly. She lifts a small iron horn on a cord around her neck. "A pity you made it a public matter, Miss Thorne. I'd hoped to keep everyone *alive*." She blows one low note. From behind the shrine, from the cliff-path and the river-side, shapes rise up. More raiders, a dozen more, leather-clad with crossbows. Twenty-odd now in all, to the watch's twenty.
+
+Crossbows come up on both sides. The yard hangs on a breath, and every eye in Marrowmere is on the girl with the horns.
+
+What does Vesper do?
+
+== ROUND 30 ==
+PLAYER: Vesper plants herself in front of the Reeve, raises both hands, and shouts at the top of her lungs so the whole hill hears: "Nobody shoot! She's got twenty men and one bluff, and she's already told you the plan, so ask yourselves who's going to be standing when the Sleeper wakes, because I just locked its door and the key is in my satchel!" She pulls the brass key out and dangles it high in the torchlight, then flashes Ashgrove her honest-looking gold eyes. "Come take it, Captain, or call off your men and keep your tea."
+
+"DM: my spell slots are both spent, but do I still have Bardic Inspiration, and can I give a d6 to the Reeve's best crossbowman before the first bolt flies?"
+DM: Yes. Your spell slots are spent, but Bardic Inspiration is separate and you still have all 3 uses, a d6 each. Giving it takes a bonus action, and the target must be within 60 feet and able to hear you. They then have 10 minutes to spend the die on one ability check, attack roll or saving throw, adding it to the d20. Anyone in this yard who can hear you qualifies, and with your voice that's everyone.
+
+Your shout has frozen both lines for the moment. On the watch side, Ashgrove's gaze has dropped to the key in your raised hand and stays there. The look on her face is hunger. Her horn-note called her men into the yard, but she hasn't ordered a single bolt loosed. She wants that key more than she wants anyone dead, and her crossbowmen glance at her for the word.
+
+The Reeve's best crossbow is a lean, silent harbour-warden named Ysolt Pike, a woman with a sailor's squint, kneeling behind an upturned fish-cart with her bolt trained on the white glove. She's close enough to hear every word you say.
+
+Do you give Ysolt the die, or someone else? And what are you doing with the key and the standoff? Ashgrove is waiting for your next word.
+
+== ROUND 31 ==
+PLAYER: Vesper keeps the key dangling and her eyes on Ashgrove, but calls out in her best performer's voice, "Ysolt Pike, that's a Bardic Inspiration, a d6 for your first shot, and may the Lantern Saint steady your hand." Then to Ashgrove, sweet as honey: "Here's my offer, Captain: your men lay down their bolts and walk off this hill, and I'll hand the key to the Reeve right now, no tricks. Or you try for it, and Ysolt puts a bolt through that white glove before you reach me."
+  [game] sheet: Bardic Inspiration: 2/3
+  [game] dice Vesper's Persuasion/Intimidation backing a standoff against Ashgrove, DC 16: 1d20+5 = 1d20 [10] + 5 = 15
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Bandit Captain", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Vicious Mockery", "kind": "spell"}
+  [game] dice Vesper's initiative: 1d20+2 = 1d20 [19] + 2 = 21
+  [game] dice Captain Ashgrove's initiative: 1d20+3 = 1d20 [5] + 3 = 8
+  [game] dice Raiders' initiative (group of three): 1d20+1 = 1d20 [14] + 1 = 15
+  [game] dice Ysolt Pike's initiative: 1d20+2 = 1d20 [14] + 2 = 16
+  [game] fight: Fight started. Order: Vesper Thorne (21), Ysolt Pike (16), Raider 1 (15), Raider 2 (15), Raider 3 (15), Captain Ashgrove (8). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Ashgrove's smile thins by a hair. "Charming," she says. "Take her alive. The key is in her hand, and I'm told the left one is the one she needs." Her white glove drops, and the yard erupts.
+
+Steel rings, crossbow strings snap, and the whole crowd on the hill road surges forward with a roar. In the chaos around you, three raiders in boiled leather peel off from behind the carts and come straight for you, scimitars out, thirty feet away across wet cobbles. Ashgrove stays in the sanctuary doorway behind them, forty feet off, with her glove raised and her eyes on the key.
+
+Ysolt Pike's bolt is already nocked beside you, though the Reeve is shouting somewhere behind. The watch and the townsfolk are going to hold the line against the raiders' main body, but nobody's coming to cover you for a round or two. You have the initiative: you act first.
+
+You have 9 hit points, no spell slots, two uses of Bardic Inspiration, a rapier, a dagger, Vicious Mockery, Minor Illusion, and a hand full of key. What does Vesper do?
+
+== ROUND 32 ==
+PLAYER: Vesper stuffs the key deep into her satchel, snaps it shut, and throws Vicious Mockery at the lead raider: "Nice boots, did your mother pick them, or did she just pity you?" Then she backs one step toward Ysolt's fish-cart so the Reeve's line is at her shoulder, rapier drawn.
+  [game] dice Raider 1's Wisdom save vs Vicious Mockery, DC 13: 1d20+0 = 1d20 [5] + 0 = 5
+  [game] dice Vicious Mockery damage (psychic): 1d4 = 1d4 [2] = 2
+  [refused] fight: no combatant named 'pc'; in the fight: Vesper Thorne, Ysolt Pike, Raider 1, Raider 2, Raider 3, Captain Ashgrove
+  [game] fight: Round 1, now: Ysolt Pike. Ysolt Pike (initiative 16): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Raider 1 took 2: HP 11 → 9; Raider 1: Vicious Mockery: disadvantage on next attack (Vesper Thorne has used its action: no more actions this turn.)
+  [game] dice Ysolt Pike's crossbow attack on Raider 1 (AC 12): 1d20+4 = 1d20 [5] + 4 = 9
+  [game] dice Ysolt's Bardic Inspiration die added to her attack: 1d6 = 1d6 [1] = 1
+  [game] fight: Round 1, now: Raider 1. Raider 1 (initiative 15): HP 9/11, AC 12, Vicious Mockery: disadvantage on next attack Raider 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Raider 1 scimitar vs Vesper (AC 13), disadvantage from Vicious Mockery: 1d20+3 (disadvantage) = 1d20 [7, 18]→7 + 3 = 10
+  [game] dice Raider 2 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [9] + 3 = 12
+  [game] dice Raider 3 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [2] + 3 = 5
+  [game] fight: Round 1, now: Raider 2. Raider 2 (initiative 15): HP 11/11, AC 12 Raider 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Raider 3. Raider 3 (initiative 15): HP 11/11, AC 12 Raider 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Captain Ashgrove. Captain Ashgrove (initiative 8): HP 65/65, AC 15 Captain Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The yard is a roar of steel. Ysolt's bolt skitters off a cobble and she curses, working her crank. The three raiders crash into you from three sides. The first, rattled by your mockery, swings wild and wide. The second's scimitar hisses past your ribs close enough to part the oilcloth, and the third overbalances on the wet stone and misses by a yard. You're untouched.
+
+Ashgrove has stepped down off the doorway and is walking forward through the fighting with a steady, unhurried stride. Men part around her. A white-gloved hand rests on the pommel of her scimitar, and she hasn't drawn it yet. She's thirty feet off, eyes on the satchel on your back. Two more raiders have peeled away from the watch's line and are coming around the carts to your left.
+
+It's round 2, and it's your turn. You have 9 hit points, a rapier in your hand, and three raiders on you, one of whom is bleeding a little and sulking. Ysolt Pike is crouched beside you, still reloading. Brannoc Vell and the watch are twenty feet behind, pushing through a knot of raiders to reach you.
+
+What does Vesper do?
+
+== ROUND 33 ==
+PLAYER: Vesper lunges at the wounded Raider 1 with her rapier, trying to finish him before the others close the gap. "Sorry about the boots, friend, truly." If he drops, she'll slide back a step so Ysolt's fish-cart covers her flank.
+  [game] dice Vesper's rapier attack on Raider 1 (AC 12): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Vesper's rapier damage on Raider 1: 1d8+2 = 1d8 [6] + 2 = 8
+  [game] fight: Raider 1 took 8: HP 9 → 1 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Ysolt Pike. Ysolt Pike (initiative 16): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ysolt Pike's crossbow attack on Raider 1 (AC 12): 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [game] fight: Round 2, now: Raider 1. Raider 1 (initiative 15): HP 1/11, AC 12, Vicious Mockery: disadvantage on next attack Raider 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Raider 1 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [9] + 3 = 12
+  [game] dice Raider 2 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [4] + 3 = 7
+  [game] dice Raider 3 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [17] + 3 = 20
+  [game] dice Raider 3 scimitar damage to Vesper: 1d6+1 = 1d6 [4] + 1 = 5
+  [game] sheet: took 5 damage: HP 9 → 4
+  [game] fight: Raider 1: no longer Vicious Mockery: disadvantage on next attack
+  [game] fight: Round 2, now: Raider 2. Raider 2 (initiative 15): HP 11/11, AC 12 Raider 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Raider 3. Raider 3 (initiative 15): HP 11/11, AC 12 Raider 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Captain Ashgrove. Captain Ashgrove (initiative 8): HP 65/65, AC 15 Captain Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ashgrove's scimitar attack vs Vesper (AC 13), intent to knock out: 1d20+5 = 1d20 [12] + 5 = 17
+  [DM lookup (hidden)] {"name": "Knocking a Creature Out"}
+  [game] dice Ashgrove's scimitar damage to Vesper: 1d6+3 = 1d6 [3] + 3 = 6
+  [game] sheet: took 4 damage: HP 4 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Knocked Vesper unconscious (stable, not killed) in the shrine-yard melee on Day 2 about 7:52 PM. The brass key is in Vesper's satchel. Ashgrove has 65 HP and AC 15 (bandit-captain build)."}
+  [game] notebook: updated Captain Ashgrove
+  [game] fight: Round 3, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Raider 3's blade opens your arm just above the elbow, hot and shallow, and you grunt. For a heartbeat your rapier still bites. Then Ashgrove is simply there, strolling through the press of bodies with the same polite smile, and her scimitar flicks out almost lazily. The pommel catches you at the temple. The cobbles tilt up to meet you.
+
+Ashgrove chose to knock you out rather than kill you. By the rules, that leaves you unconscious and stable at 0 hit points, not dying, and no death saves are needed. You will wake in an hour or so if nobody wakes you sooner.
+
+The last things you hear are far away. Ashgrove, close above you, says mildly, "The key, girl. Left hand. Thank you." A white-gloved hand unbuckles the satchel from your back. Ysolt Pike screams your name. Then Brannoc Vell's roar, the watch's boathooks cracking against shields, the bell of the Quay still ringing, and, very faintly beneath it all, a deep slow note from under the hill, like a great sleeper turning over in its dream.
+
+You can't act, so your turn passes. Say what you'd like Vesper to dream, think or whisper as she goes under. Whatever you give me, the world will turn without you for a while.
+
+== ROUND 34 ==
+PLAYER: As the dark closes in, Vesper's last thought is of Odalie's line, "a crooked road, as long as it's lit," and she smiles against the cobbles. Her tail, finally free, twitches once: she isn't lying. Somewhere in the back of her mind she whispers, "Take the satchel, Captain, I never said which key was the real one."
+
+"DM: when I wake, where am I, and what's become of my silver bowl and Odalie's old scarf?"
+  [game] dice Hours until Vesper regains 1 hit point (stable at 0 HP): 1d4 = 1d4 [1] = 1
+  [game] fight: Fight over after 3 round(s). 18 seconds of fighting; now Day 2, 7:51:42 PM.
+  [game] time: 1 hour later: Day 2, 8:51:42 PM
+  [refused] sheet: condition 'unconscious' is not on the sheet; conditions now: Unconscious
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Took Vesper's satchel with the brass key and slipped away from the shrine yard fight to her barges below the hill; her force was driven from the yard by the watch but most escaped by river. She does not have the Keepers' binding words, which only Odalie and Vesper know. Still intends to wake the Sleeper at the new moon, nine nights from Day 2."}
+  [game] notebook: updated Captain Ashgrove
+  [DM write_lore (hidden)] {"entry": "The Sleeper", "add_to_description": "The brass key was taken by Ashgrove on Day 2 night. The lamp burns bright with the Saint's Flame; waking needs the key, the Keepers' words and the new moon."}
+  [game] notebook: updated The Sleeper
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; condition removed: Unconscious
+  [game] sheet: lost 1 × Ashgrove's written orders
+DM: Your last thought stays a thought. The key in the satchel was the real one, so the whisper doesn't change what happened in the yard, and Ashgrove walked off with it. But you were right about one thing: a smile on the cobbles isn't always a lie.
+
+You wake to the smell of tallow, brine and mint poultice, and a ceiling of drying nets. It's Old Mags's back room, an hour later. Your head throbs where the pommel struck, and your arm is bound above the elbow in clean linen. You have 1 hit point and a mouth like sawdust. Tamsin lies on the next cot, awake and watching you with relief. Sister Odalie sits on a stool at your side with her hand on your wrist.
+
+On the table beside you sits the silver offering bowl, polished until it gleams. Odalie took it out of your pack, and she didn't say a word about it when you stirred. Your first silk scarf is folded under your fingers, the one she gave you as a child. It's been washed, and it smells faintly of soap and beeswax.
+
+Odalie tells you the rest quietly. The Reeve's line held, and the town drove Ashgrove's men off the hill. Many of them fled to the barges, and three raiders were taken alive. Thack sits in the Reeve's lockup, singing like a bird. But Ashgrove got away downriver in the dark, with your satchel and the key. She does not have the Keepers' words, which only you and Odalie know, nor the new moon, which is nine nights off. The lamp under the hill burns bright.
+
+"Rest, child," Odalie says. "Then we'll decide what a lantern does when someone steals the flame."
+
+What does Vesper do?
+
+== ROUND 35 ==
+PLAYER: Vesper turns her head on the pillow and manages a cracked smile, her tail finally allowed to twitch where everyone can see. "Sister, you can have the bowl back first, it was always yours, and then I want to hear every word Thack is singing about where Ashgrove's barges are bound." She tries to sit up and thinks better of it. "DM: how many hit points will I have after a long rest, and did Ysolt Pike come through the fight all right?"
+  [DM write_lore (hidden)] {"create": "Ysolt Pike", "kind": "person", "description": "Lean, silent harbour-warden and crossbow of the Marrowmere watch. Fought beside Vesper in the shrine yard and came through unhurt with a jammed crossbow and a bruised pride."}
+  [game] notebook: created an entry for Ysolt Pike
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Sorrel Thack, in the lockup, says Ashgrove's barges were bound downriver, and that she has to bring the key back to the undercroft to use it; she has no words but intends to take them from Odalie by force, or from Vesper. Expect her return before the new moon."}
+  [game] notebook: updated Captain Ashgrove
+DM: Odalie closes your fingers around the bowl and pushes it back toward your chest. "The altar can wait. Hold it a little longer, and bring it back when the door's safe. That's an order from an old woman who never caught you." Her mouth wobbles, then firms.
+
+To your questions as the DM: a long rest takes eight hours. At the end of it you'd be back at your full 9 hit points, with both first-level spell slots, all 3 uses of Bardic Inspiration, and your hit die. Tonight you have 1 hit point and nothing else, so a night's sleep here would set you right.
+
+Ysolt Pike came through with a jammed crossbow, a split lip and a bruised pride. She stood over you in the yard with a boathook until the Reeve's watch reached you. She'll be glad to hear you're up.
+
+As for Thack, he sang for the Reeve as soon as the door shut. Ashgrove's barges went downriver past Gannet Bend, to what he calls "her hulk," an old toll-barge she keeps in the reeds. He says she needs the key to be brought back to the undercroft door at the new moon, with the Keepers' words, and she has only half of that. The other half is in two heads in this room. "She'll come for you or the Sister," he told the Reeve, "and she'll be polite about it."
+
+The bell is quiet now. Nine nights remain until the new moon. In Mags's back room a kettle ticks over a banked fire. A watchman's boots shuffle past the window.
+
+What does Vesper do?
+
+== ROUND 36 ==
+PLAYER: Vesper tucks the bowl against her chest and grins weakly at Odalie. "Then I'll sleep first and scheme second, Sister, but when I wake I want Ysolt Pike, Brannoc Vell, and a map of the reeds past Gannet Bend, because I'm going to take that key back from her hulk before the new moon." She yawns, then adds, "And Mags, if there's any soup left, I'll owe you another debt."
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 3, 4:51:42 AM
+  [game] sheet: XP +100: 200
+  [DM write_lore (hidden)] {"create": "Retake the Key", "kind": "quest", "description": "Ashgrove holds the brass key to the undercroft beneath the Shrine of the Lantern Saint and means to wake the Sleeper at the new moon, nine nights after Day 2. Vesper plans to take the key back from Ashgrove's hulk in the reeds past Gannet Bend with the help of Ysolt Pike and Reeve Brannoc Vell, before the new moon. Odalie and Vesper alo
+  [game] notebook: created an entry for Retake the Key
+DM: Mags snorts, ladles the last of the fish soup into a bowl and sets it on your chest. "Debts. Eat it before it's cold, and don't thank me." You are asleep before the bowl is empty, with Odalie's hand on your hair and the silver bowl under your arm.
+
+You wake at the grey end of the night to a full nine hit points, a clear head and a pull in your shoulder where the linen is. Your spell slots have come back, and you feel like yourself again. You earned 100 XP for breaking the siege and exposing Thack, which brings you to 200 of the 300 you need for 2nd level.
+
+By sunrise the back room is crowded. Brannoc Vell stands by the door with his chain half off and the look of a man who hasn't slept. Ysolt Pike leans on the wall with a fresh bolt-case at her belt and her lip stitched. Odalie is pouring tea into mismatched cups. On Mags's scarred table lies a wide sheet of river-chart, all reed-beds and sandbars, with the drawn line of Gannet Bend in the middle.
+
+"The hulk's here," Vell says, and taps a green smudge three miles below the Bend. "An old toll-barge, run aground in the Heron Reeds. Maybe thirty men when she left. Fewer now, after last night. You have eight days and a long reach of river between you and her. What's your plan, bard?"
+
+What does Vesper do?
+
+== ROUND 37 ==
+PLAYER: Vesper sets down the soup bowl, pulls the chart toward her, and studies the green smudge of the Heron Reeds. "Thirty men is too many to fight, so I'll go in as a liar instead of a soldier: Disguise Self as one of Thack's own contacts, with the pay-chit and the deputy's name to open the gangplank." She looks up at Ysolt and the Reeve. "I need a skiff, Ysolt on the far bank with that crossbow, and Corvin's *Plump Heron* if he'll lend it, to make a noise at the Bend while I slip aboard."
+
+"DM: did the Reeve keep Sorrel Thack's pay-chit, and does Thack know any password or signal the raiders use at the hulk?"
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Her hulk is an old toll-barge grounded in the Heron Reeds, three miles below Gannet Bend. Thack knows the gangplank challenge: a shuttered lantern flashed twice and the words 'low water', answered 'and rising'; but he says the answer changes every night at midnight, and he last heard it two nights ago."}
+  [game] notebook: updated Captain Ashgrove
+  [DM write_lore (hidden)] {"entry": "Corvin Aldersey", "add_to_description": "Stayed at Tanner's Stair with the Plump Heron all night; was found asleep at the tiller at dawn, hat over his face, and is willing to lend the barge for a promised cut of whatever the town pays him in future wool contracts."}
+  [game] notebook: updated Corvin Aldersey
+DM: Brannoc Vell studies you for a long moment and then shrugs his heavy shoulders. "Your pay-chit. I took the orders for the magistrate, and I keep the confession, but the chit is yours. A deputy's mark is a better passport than any papers I could write you." He flicks a thumbnail at it. "And Thack sang one more verse. The gangplank challenge: a shuttered lantern flashed twice, and the words 'low water'. The answer is 'and rising'. The answer changes each night at midnight, though, and Thack last heard it two nights ago." He gives a grim half-smile. "So you'll want to bluff the rest."
+
+Ysolt pushes off the wall. Her voice is a rasp. "Far bank. Reeds give cover. I can put a bolt through a lantern at three hundred feet." It's the longest speech you've heard from her.
+
+A knock at the door, and Piet's thin face appears around it, grinning. "Beg pardon. The master says to say the *Plump Heron* never left the Stair. He slept at the tiller all night with his hat over his face. He asks what's the plan, and if there's any breakfast." Behind him, you can hear Corvin's voice from the street, protesting that he did no such thing.
+
+Your plan is possible. It needs a disguise, a signal, a diversion at the Bend and a way off the hulk with the key in your hand. There are eight days left, and every hour you spend is an hour Ashgrove gets to dig in, or send men back to the shrine.
+
+Odalie sets down her cup. "Whatever you do, child, come home with the key and your own face."
+
+What does Vesper do?
+
+== ROUND 38 ==
+PLAYER: Vesper pockets the pay-chit and grins at Odalie. "My own face, Sister, I promise, and the key in my hand." She turns to Piet. "Tell Corvin there's breakfast and a very small favor: the *Plump Heron* drifts down to Gannet Bend after dusk, lanterns lit and crew singing loudly, so every raider on that hulk is looking at the wool barge instead of the skiff."
+
+To Ysolt: "You're on the far bank at midnight with a bolt for the shuttered lantern. The moment the lamp goes dark, that's my cue to walk up the gangplank with Thack's mark and say 'low water' like I own the river."
+  [game] time: 18 hours 40 minutes later: Day 3, 11:31:42 PM
+  [DM write_lore (hidden)] {"create": "The Heron Reeds Plan", "kind": "event", "description": "Vesper's plan on Day 3: at midnight Corvin's Plump Heron drifts past Gannet Bend with lanterns lit and the crew singing as decoy; Ysolt Pike on the far bank shoots out the hulk's shuttered lantern; Vesper, in Disguise Self carrying Thack's pay-chit, goes up the gangplank saying 'low water' to retrieve the key.", "relationships": [
+  [game] notebook: created an entry for The Heron Reeds Plan; added 2 relationships to The Heron Reeds Plan
+DM: The day goes in preparation. You draft your story three times and burn two of them. Odalie teaches you the shape of the Keepers' words again, so that you need never say them aloud. Mags stitches a false lining into the oilcloth cloak. At dusk Corvin turns up at the chandler's with an armful of lanterns and a face that says he regrets his generosity, and by nightfall the *Plump Heron* is hung with them like a wedding barge.
+
+At half past eleven you crouch in a borrowed skiff in the black shadow of the reeds, with Ysolt a dark smear on the far bank and oars wrapped in sacking. The moon is a thin pale sliver, and the river smells of mud and woodsmoke. Three miles of reed-channel lie behind you. Ahead, the hulk squats in the water like a drowned church: a long, low toll-barge with a rotting cabin, a crooked mast and a gangplank run out to a floating jetty of lashed barrels. Two shuttered lanterns hang at its bow. You count three men on the deck from here, and one on the jetty with a crossbow. Muffled laughter and the clink of cups drift from the cabin. Ashgrove has no sentries on the reeds, only on the water.
+
+From upriver, faint on the night wind, comes the sound of a barge full of tuneless men singing a drinking song: Corvin's decoy, right on time. On the hulk, heads begin to turn.
+
+Disguise Self is ready, the pay-chit is in your sleeve, and the skiff is a stone's throw from the jetty. You have one slot of 1st-level magic to spare after it, and the moment is now.
+
+What does Vesper do?
+
+== ROUND 39 ==
+PLAYER: Vesper casts Disguise Self, her face settling into the weathered, stubbled look of a river-runner in a deputy's oilcloth, and whispers a quick prayer to the Lantern Saint. She poles the skiff to the jetty, flashes her shuttered lantern twice at the man with the crossbow, and calls out low and bored, "Low water. Thack's man, with word from the hill. Somebody's lit up the river upstream and the Captain will want to hear it before the wool barge gets any closer."
+  [game] sheet: Vesper casts Disguise Self at level 1; timer Vesper's Disguise Self: 1 hour; level-1 spell slots: 1/2
+  [game] dice Vesper's Deception at the gangplank (stale password, Thack's mark, urgent news), DC 14: 1d20+5 = 1d20 [1] + 5 = 6 (natural 1)
+  [game] time: 2 minutes later: Day 3, 11:33:42 PM
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Expected a disguised intruder: her hulk's sentries were told that Thack's mark would be worthless by Day 3 and that any 'deputy's man' arriving after the siege was a spy. Day 3 midnight: Vesper's bluff at the gangplank failed (natural 1)."}
+  [game] notebook: updated Captain Ashgrove
+DM: The words come out smooth, and they're wrong. You see it in the sentry's face before he speaks. He's a squat man with a scar through one eyebrow and a crossbow held easy across his arm, and he doesn't answer "and rising". He lets your skiff bump the barrels and says, almost sorrowfully, "Thack's been in the Reeve's lockup since last night, friend. We heard. Captain said somebody might come wearing his name." He lifts two fingers to his mouth.
+
+The whistle is thin and sharp, a kingfisher's cry, and it carries across the reeds. On the deck two more men turn from the rail. The cabin door swings open, spilling yellow light, and a figure stands framed in it with a white glove resting on the frame.
+
+"Come aboard, Miss Thorne," Ashgrove calls pleasantly. Your disguise holds and she plainly doesn't care. "It's rude to make the staff shout. I have your satchel here, and a kettle on."
+
+A crossbow is leveled at your chest from ten feet. Across the water, in the reeds on the far bank, Ysolt Pike's shape is a darker dark. Far upriver, Corvin's drunken chorus carries faintly on.
+
+You have a skiff, a rapier, a full slot of 1st-level magic, three Bardic Inspiration, and a moment before the sentry loses patience.
+
+What does Vesper do?
+
+== ROUND 40 ==
+PLAYER: Vesper lets the disguise drop with a rueful laugh, raises both hands, and steps lightly onto the barrels as if she'd planned it. "Well, Captain, you've caught me being predictable. A kettle is the first honest thing anyone's offered me tonight, and I'd hate to waste it."
+
+She keeps her tail tucked and her eyes on the cabin door while she signals Ysolt with two slow fingers down by her hip: *wait.* "Mind if I bring my own cup? I'd like to hear what a woman with half the words offers for the other half."
+  [game] time: timer Vesper's Disguise Self removed
+  [game] dice Vesper's Insight reading Ashgrove's offer in the cabin, DC 13: 1d20+2 = 1d20 [1] + 2 = 3 (natural 1)
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Day 3 midnight, cabin of the hulk: offered Vesper tea and a deal for the Keepers' words (her satchel on the table with the key); in truth she is stalling while two skiffs of men slip toward Ysolt Pike's bank. Vesper's Insight failed (natural 1); she read Ashgrove as sincere and unhurried."}
+  [game] notebook: updated Captain Ashgrove
+  [game] time: 5 minutes later: Day 3, 11:38:42 PM
+DM: Ashgrove laughs, a real laugh and not unkind, and steps back from the cabin door with a flourish. "Predictable, yes, and honest enough to say so. Do come in. Bring your cup. Leave the rapier on the barrel, if you'd be so kind." The sentry takes it from the barrel's lid without being asked, careful as a man handling an adder.
+
+The cabin is clean and warm and surprisingly civil: a brass lamp, a map-table, two stools and a copper kettle on a spirit stove. Your satchel lies open on the table with the brass key glinting beside it. Ashgrove pours two cups and slides one across. Behind you the door stays open, and the sentry's boots stay in it.
+
+"Here is my offer," she says, and sits like a woman at a bank counter. "You say the Keepers' words with me at the new moon and the door opens. The wyrm wakes and obeys. No one dies. Marrowmere pays a tithe, no more than it pays the Reeve now, and I leave it be. Your Sister goes free and unharmed, with a pension if she'll take one." She turns her cup a quarter-turn. "You, Miss Thorne, I would pay in whatever coin you name, and then you may go anywhere you like. No script. That's what you want, isn't it? A road with nobody writing the next line?"
+
+You watch her face, the little muscles at the corners of her mouth, the steadiness of the glove around the cup. You find nothing: no tell, no flicker, no sign of a lie. She seems entirely sincere and unhurried, a woman with all the time in the world.
+
+Neither she nor you mention the sound of oars very far off in the reeds, on the far bank, where a woman with a crossbow is waiting.
+
+What does Vesper say?
+
+== ROUND 41 ==
+PLAYER: Vesper takes a slow sip of tea, lets the silence stretch, then sets the cup down with a smile. "That's a generous offer, Captain, and I'd say yes, if you'd told me what the wyrm eats once the tithe is paid." She leans back on the stool, eyes on the key. "Humor me: what's to stop it from deciding it likes Marrowmere better than your leash, and what do you do when the first thing it does is ask for a second tithe?"
+
+"DM: can I see where Ashgrove's hands and weapons are, and how many of her people are in the cabin besides the sentry at the door?"
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "In the cabin: scimitar on her stool at her right hip, a dagger at her belt, white glove on her left hand. Besides her, a sentry at the door, a crossbowman in the rear corner by the stern window, and a third man (the mate, Harl) at the map-table. Believes the key held plus the Keepers' words binds the Sleeper like a leash."}
+  [game] notebook: updated Captain Ashgrove
+DM: Seeing needs no check. The cabin is small and the lamp is bright. Ashgrove sits across the map-table from you with her left hand, in the white glove, wrapped around the tea cup. Her right hand rests loosely on her knee, a hand's breadth from her scimitar's hilt, which is propped against the stool. A dagger rides at her belt. She hasn't touched either.
+
+Besides her and the sentry at the door, there are two others: a crossbowman in the stern corner by the window, bolt nocked, who's been looking at you as if you owed him money, and a heavy-set man with a grey braid, bent over the map-table, who's a mate or a pilot or both. He hasn't looked up. The key lies on the table between your cups, within your reach, and not yet within anyone else's.
+
+Ashgrove considers your question with real attention, and a flicker of something approving crosses her face. "The leash holds as long as the key does," she says, "and the words are spoken right. A key in my hand is the only thing in this world that wyrm has to fear. You're quite right that it could have ideas. That's why I'd rather it was *two* of us who knew how to stop it. You, say, with me at the new moon." She smiles. "Two guards watch each other, Miss Thorne. It's the oldest safeguard there is."
+
+Far off in the reeds, a bird calls once, a kingfisher's note, and it doesn't sound like a bird.
+
+What does Vesper do?
+
+== ROUND 42 ==
+PLAYER: Vesper sets her cup down, lets her tail uncurl for once, and gives Ashgrove her most honest-looking gold stare. "Two guards watching each other, I like that, Captain. Let me prove I mean it." She slides one hand toward the key as if to push it across the table to her, and with the other she casts Minor Illusion from her sleeve: the sound of Corvin's drunken chorus suddenly bellowing from right outside the stern window, "Ahoy the hulk, Thack sent us!"
+
+If every eye swings to the window, she snatches the key and goes for the open water through the stern window.
+  [game] dice Vesper's Sleight of Hand snatching the key while all eyes are on the window, DC 13: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Ashgrove's Perception: did she see the sleeve-cast illusion's source or the hand on the key (contested, DC = Vesper's roll): 1d20+0 = 1d20 [6] + 0 = 6
+  [game] sheet: gained 1 × Brass lantern key
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Her map-table in the hulk cabin shows a backup plan: the Weeping Locks flood-gates marked to be opened at the new moon to send the river over Marrowmere's lower town, and three barge landings pinned on the quays. Vesper saw this when she took the key back (natural 20 on Sleight of Hand)."}
+  [game] notebook: updated Captain Ashgrove
+  [game] time: 6 seconds later: Day 3, 11:38:48 PM
+DM: A natural 20. The sound lands like a thrown brick: Corvin's unmistakable bellow, rough with ale, "Ahoy the hulk, Thack sent us!", right under the stern window. The crossbowman spins and thrusts his weapon at the glass. The sentry at the door cranes toward it. The grey-braided mate jerks upright and knocks the lamp. Even Ashgrove's head turns, for the length of a heartbeat.
+
+Your fingers close on the key as if the table had passed it to you. It slides into your sleeve without a sound. And because you've never taken your eyes off anything in a room in your life, you see what lay under it: the corner of a chart, a pin through a small river-lock, with a note in the neat looping hand: *Weeping Locks, open at the new moon. The lower town floods. Wyrm's channel to the sea. If no words, then water.* Three more pins mark the quays of Marrowmere. She never needed you. The words are a convenience, and the flood is the guarantee.
+
+The illusion will hold for a minute. The stern window is a small leaded frame five paces away, and the crossbowman stands at it with his back half to you. The door behind you is blocked by the sentry. Ashgrove is turning from the window, her eyes already coming back to the table, and to you.
+
+Your rapier is on the barrel outside. The key is in your sleeve. You have one slot of magic, a lute at your back, and about a second.
+
+What does Vesper do?
+
+== ROUND 43 ==
+PLAYER: Vesper kicks the map-table hard into Ashgrove's lap so the lamp, tea, and chart go flying, and in the same breath she casts Sleep at the stern corner, centered on the crossbowman and the grey-braided mate. "Sorry, Captain, the kettle was lovely!" Then she vaults the table toward the stern window, shoulder first, tucking the key tight and diving for the black water.
+  [game] sheet: Vesper casts Sleep at level 1; timer Vesper's Sleep: 1 minute; level-1 spell slots: 0/2
+  [game] dice Sleep: hit points of creatures affected (crossbowman, mate, sentry within 20 ft): 5d8 = 5d8 [3, 7, 1, 6, 1] = 18
+  [game] dice Vesper's Acrobatics diving through the leaded stern window, DC 11: 1d20+2 = 1d20 [18] + 2 = 20
+  [game] time: 6 seconds later: Day 3, 11:38:54 PM
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Day 3 near midnight: Vesper kicked the map-table into her lap, put the stern-window crossbowman to sleep with Sleep (the mate and sentry stayed awake), and dived out the stern window with the brass key into the reeds. Ashgrove is alive, unhurt and now openly hunting her."}
+  [game] notebook: updated Captain Ashgrove
+DM: The table goes over with a crash that sounds like a dropped anvil. Tea, chart and lamp fly into Ashgrove's lap, and the lamp gutters. You vault, shoulder first, and your words come out in a breath: "...lullaby!" The sleep catches the crossbowman mid-turn. He slumps against the sill and slides down it like a sack of meal. You rolled only 18 on the dice, and that was just enough for one of them. The mate with the grey braid staggers and shakes his head, wide awake, and the sentry at the door is still on his feet.
+
+Then there is only the window. The leaded frame bursts around your shoulder in a spray of glass and lead, and you are through it and falling, tucked tight, the key a cold weight in your sleeve. The river hits you like a slap. It is cold and black and tastes of mud, and for a long, ugly second the oilcloth drags at you. Then you break the surface under the hulk's stern, gasping, in the cover of the reeds.
+
+You're unhurt. Above you the hulk erupts: the sentry's shout, the mate's bellow, Ashgrove's voice rising above both, no longer pleasant at all: "Boats! Lamps! She has the key!" Torches flare along the rail. A crossbow bolt smacks into the water a yard from your head.
+
+Across the water, a darker shape on the far bank rises, and a cold, thin voice carries a long way over still water. Ysolt Pike, who has been waiting for a lantern to go dark: "Left lantern, hold your breath." There is a crack. The left lantern at the hulk's bow goes out. A second crack, and the right one follows.
+
+The reeds are all around you, cold and thick. Shouts come from the deck above, and a skiff is being dropped. You have a key, a lute on your back, and no spells left. Corvin's decoy is still singing upriver, and your own skiff is tied at the jetty, thirty yards off.
+
+What does Vesper do?
+
+== ROUND 44 ==
+PLAYER: Vesper sucks in a breath, ducks under the surface, and swims through the reeds toward the far bank, keeping low and letting the black water hide her. "Ysolt, keep them blind, I'm coming to you!" she hisses once she's clear, then pushes through the cattails toward that dark shape, the key clamped tight in her fist.
+  [game] dice Vesper's Athletics swimming across in leather armor with the lute, DC 10: 1d20-1 = 1d20 [15] - 1 = 14
+  [game] dice Vesper's Stealth slipping through the reeds in the dark (vs raiders' passive Perception 10): 1d20+2 = 1d20 [17] + 2 = 19
+  [game] sheet: XP +100: 300 - Vesper Thorne can now go up to level 2 (XP 300): use level_up_options, then level_up
+  [game] time: 20 minutes later: Day 3, 11:58:54 PM
+  [DM lookup (hidden)] {"name": "Beyond 1st Level"}
+  [DM write_lore (hidden)] {"entry": "Retake the Key", "add_to_description": "DONE on Day 3 near midnight: Vesper retook the brass key from Ashgrove's hulk, learned of the backup flood plan at the Weeping Locks (open at the new moon) and dived out. New threat: Ashgrove, the Weeping Locks, three barge landings.", "status": "done"}
+  [game] notebook: updated Retake the Key
+  [DM level_up_options (hidden)] {}
+DM: Ysolt's hand finds your collar as you crawl up the mud of the far bank, and she hauls you into the cattails like a sack of wet nets. You lie there coughing river. She presses a finger to your lips and listens. A skiff is working along the reeds on the hulk's side with a lantern swinging. It passes a hundred yards off, then turns back. Ysolt's whisper is flat. "Two boats came to my bank an hour ago. One sank. One went home. I don't know how many are left." She almost smiles. "You're a terrible swimmer."
+
+For the next twenty minutes you crawl through reeds, a mile of mud and cold. Then Corvin's lanterns bob out of the dark. The *Plump Heron* has stopped singing, and Piet hauls you aboard by the belt. You sit in a heap on a wool bale with the key still clenched in your fist, dripping and alive, and Corvin presses a flask into your hand. "I told them Thack sent us," he says, hoarse with pride. "Did I do it right?"
+
+It's nearly midnight on Day 3. The key is yours, and you've also learned what Ashgrove truly wanted: the flood at the Weeping Locks, three landings on the quays, and an answer that does not need you at all.
+
+You've earned 100 XP, which brings you to 300, and you can go up to level 2.
+
+At level 2 you get: Jack of All Trades (half your proficiency bonus, rounded down, on checks that don't already use it), Song of Rest (an extra d6 healing on a short rest), a third 1st-level spell slot, and one new spell known. You may also swap one spell for another of the same level.
+
+Spells you could learn: Animal Friendship, Bane, Comprehend Languages, Cure Wounds, Detect Magic, Feather Fall, Healing Word, Heroism, Hideous Laughter, Identify, Illusory Script, Longstrider, Silent Image, Speak with Animals, Thunderwave, Unseen Servant.
+
+For hit points you can take the fixed 6, or roll a d8 and add 1 (at least 1). Which new spell do you want, do you want to swap one out, and do you take the fixed hit points or roll?
+
+== ROUND 45 ==
+PLAYER: Level up! New spell: Healing Word, since I've nearly died once already and a heal at range beats a prayer. No swaps, and I'll take the fixed 6 hit points, because I don't trust my luck with a d8 after that natural 1 at the hulk.
+
+Then she holds up the key to the lantern light. "Corvin, drop us at Tanner's Stair by dawn. Ashgrove means to open the Weeping Locks at the new moon and drown the lower town, so I need Odalie, the Reeve, and a way to break that lock before then."
+  [game] level up: Level up done: Vesper Thorne is now Tiefling bard 2, acolyte background.
+HP 9/9 -> 15/15; hit dice left 2/2 d8
+Features: new Jack of All Trades, Song of Rest (d6)
+Features whose text changed (numbers or choices): Bardic Inspiration (d6)
+Spell slots now: level 1: 1/3
+Spells known: new Healing Word
+  [game] time: 5 hours 30 minutes later: Day 4, 5:28:54 AM
+  [DM write_lore (hidden)] {"create": "Weeping Locks", "kind": "place", "description": "Old stone river-locks with dripping moss walls, a few hours above Marrowmere. The flood-gates, if opened at the new moon, would send the river over Marrowmere's lower town and down the wyrm's channel to the sea. Ashgrove's backup plan; the keeper takes small bribes. Now a threat to avert."}
+  [game] notebook: created an entry for Weeping Locks
+  [DM write_lore (hidden)] {"create": "Stop the Flood at the Weeping Locks", "kind": "quest", "description": "Ashgrove's map shows the Weeping Locks to be opened at the new moon (nine nights after Day 2, so Day 11) to flood Marrowmere's lower town, with three barge landings pinned on the quays. Vesper must warn the Reeve and Odalie, secure the locks, and stop Ashgrove, who still seeks the Keepers' words and the key now in V
+  [game] notebook: created an entry for Stop the Flood at the Weeping Locks
+DM: Level 2 settles on you like a warm cloak. You're a tougher, steadier version of the girl who dived out of a window. You have 15 hit points and a new spell. Healing Word, a spell you whisper across a battlefield, would have been very welcome in the yard.
+
+You gain Jack of All Trades, which adds a point to every check you aren't trained in, Song of Rest, a third 1st-level slot, and your spells known are now Charm Person, Disguise Self, Sleep, Faerie Fire and Healing Word. Your slots refill with a long rest. Right now you have one left.
+
+The *Plump Heron* slides downstream under a lightening sky, with Corvin yawning at the tiller and Piet coiling rope. You show Corvin the key in the lantern light and tell him what you saw on Ashgrove's map. By the time you've finished, his face has gone the colour of tallow. "The lower town," he says. "That's the wool quays, my warehouses, three thousand people." For once he has nothing clever to say.
+
+At dawn you pass the Weeping Locks, stone arches beaded with moss, their great iron gates shut and dripping. A tiny lockhouse sits on the upper wall with a thread of chimney smoke. A single man in a grey coat sits on the lockhouse step, eating an apple, and he waves lazily at the barge. He might be a lock-keeper. He might be something else. You can't tell from here.
+
+Tanner's Stair lies two hours on. The new moon is seven nights away.
+
+What does Vesper do?
+
+== ROUND 46 ==
+PLAYER: Vesper keeps her face easy and lifts a hand to wave back at the man with the apple, then murmurs to Corvin without moving her lips, "Don't slow, don't stare, and tell me if he's wearing a white glove." She sits on a bale, coils her tail, and watches the lockhouse chimney until it's behind them.
+
+"DM: back at the Stair, how many nights until the new moon again, and does Brannoc Vell have anyone who knows how those lock gates are worked?"
+DM: Corvin squints at the lockhouse step as it slides past, then shakes his head. "No glove. Bare hands, and he's eating an apple like a man with nowhere to be." He frowns. "But that isn't Old Garrow Quill. Garrow's kept those locks thirty years. He has a bad hip and a spotted dog that barks at every hull on the river. There's no dog on that step."
+
+The man's wave stays easy, and the barge carries you on. When the lockhouse is a grey smudge behind you, Piet lets out a breath he's been holding.
+
+To your questions as the DM. Counting nights, you have seven left: tonight, then six more, with the new moon rising dark on Day 11. That's a week to do something about the locks.
+
+When you reach the Stair, Brannoc Vell does have someone. Tamsin Reeve's mother, Dame Ines Reeve, is a retired lock-master who ran the Weeping Locks before Garrow Quill took over. She lives in the Tanners' Row almshouse, near enough to the stair to reach in an hour. Corvin mentions her as he's coiling a line. "She knows every gate, sluice and chain on that river. Cantankerous. Won't talk to wool merchants."
+
+The sun is climbing, and the lower town's chimneys come into view, along with the shrine on its hill. You have one spell slot, a key, and seven nights.
+
+What does Vesper do?
+
+== ROUND 47 ==
+PLAYER: Vesper grins at Corvin. "Cantankerous and won't talk to wool merchants? Then I'll talk to her, and you'll wait at the Stair, friend." She stows the key deep in her pack beside the silver bowl and checks the oilcloth cloak.
+
+"At the Stair I'm going straight to the almshouse to find Dame Ines, and I'll bring her a gift: Tamsin's good news that he's alive and mending. Piet, could you run ahead to Mags's and fetch Odalie and Tamsin to meet me there?"
+  [DM write_lore (hidden)] {"create": "Dame Ines Reeve", "kind": "person", "description": "Tamsin Reeve's mother, retired lock-master of the Weeping Locks, cantankerous, lives in the Tanners' Row almshouse in Marrowmere. Knows every gate, sluice and chain. Predecessor of Garrow Quill. Won't talk to wool merchants.", "relationships": ["mother of [[Tamsin Reeve]]", "former keeper of the [[Weeping Locks]]"]}
+  [game] notebook: created an entry for Dame Ines Reeve; added 2 relationships to Dame Ines Reeve
+  [DM write_lore (hidden)] {"create": "Garrow Quill", "kind": "person", "description": "Lock-keeper of the Weeping Locks for thirty years, bad hip, spotted dog. On Day 4 dawn a stranger in a grey coat eating an apple sat on the lockhouse step in his place: Garrow's whereabouts unknown.", "relationships": ["keeper of the [[Weeping Locks]]"]}
+  [game] notebook: created an entry for Garrow Quill; added 1 relationship to Garrow Quill
+  [game] time: 3 hours later: Day 4, 8:28:54 AM
+DM: Piet is off the barge before the plank is down, pelting up Tanner's Stair with his shirttails flying. Corvin tips an imaginary hat as you leave. "I'll be here, with a flask and a long list of things I'm not afraid of."
+
+Tanners' Row is a crooked lane of lime-pits and drying frames, and the almshouse sits at its end: a long low building of yellow brick with a green door and a row of geraniums that someone cares about more than the roof. You knock, and a small, fierce woman answers, with white hair in a bun, a lock-master's iron whistle on a cord and a face like a closed gate. Her eyes go from your horns to your wet coat and back. "If you're selling, no. If you're from the Reeve, the answer is still no."
+
+You say Tamsin's name. Her face changes in a heartbeat, and her hand finds the doorframe.
+
+"Alive?" she says. "That boy. That fool of a boy." She sits down on the step quite suddenly. Then the gate shuts again, and she looks up at you with eyes like flint. "All right. He's alive. Now say what you want, because nobody comes to my door for gratitude."
+
+Behind you, down the lane, hurrying footsteps: Odalie, in a borrowed shawl, helped along by a limping Tamsin, with Piet trotting ahead.
+
+You have the key, the lock-master of the Weeping Locks on her own step, and seven nights.
+
+What does Vesper do?
+
+== ROUND 48 ==
+PLAYER: Vesper crouches to Dame Ines's eye level and drops the performer's voice entirely. "Dame Ines, a woman named Ashgrove means to open the Weeping Locks at the new moon and drown the lower town, and a man who isn't Garrow Quill is sitting on your old lockhouse step eating an apple. I need to know how those gates are worked, and how to stop them being opened by anyone who isn't you."
+
+"DM: does Dame Ines's iron whistle do anything besides call the lock crews, and is Garrow Quill's spotted dog's name something I should know?"
+  [DM write_lore (hidden)] {"entry": "Dame Ines Reeve", "add_to_description": "Told Vesper how the Weeping Locks work: the great gates are opened by two windlass-wheels in the lockhouse that need the lock-master's iron 'sluice-pin' (a bar of black iron in two halves, one kept by the keeper, the other by the Reeve's office) and the pin-chain. Her iron whistle's note carries across the whole lock and is the old signal the loc
+  [game] notebook: updated Dame Ines Reeve
+  [DM write_lore (hidden)] {"entry": "Garrow Quill", "add_to_description": "His spotted dog is called Biscuit. Dame Ines fears he is dead or locked up in the lockhouse cellar."}
+  [game] notebook: updated Garrow Quill
+  [game] time: 30 minutes later: Day 4, 8:58:54 AM
+DM: Dame Ines listens with her hands folded and her mouth a hard line. When Odalie and Tamsin reach the step, she doesn't look at them. She puts her whole attention on you, and when you stop, she nods once.
+
+"An apple on my step," she says. "Garrow would no more let a stranger sit there than he'd let one drink from his cup. Someone's got him." She spits neatly into the geraniums. "Listen, girl. The Locks have two great gates, upper and lower, and each is worked by a windlass-wheel in the lockhouse. The wheels don't turn without the sluice-pin: a bar of black iron in two halves, one half kept by the keeper, the other by the Reeve's office. Put the halves together, drop the pin in the wheel-housing, and the gates answer a strong back. Without the pin, they answer nothing. A man can't break them without a week and a hundred men, and the river would tell the whole town what he was at." Her eyes narrow. "So your Ashgrove wants Garrow's half, or the Reeve's, or both."
+
+You ask about the whistle. She touches the iron on its cord. "It calls the lock crews, forty years of habit. Every bargee on that river knows the note, and the dog too. Biscuit comes to the name and to the whistle, so he'll bark whoever's about before they know it. If he's alive."
+
+Tamsin, leaning on a doorpost, speaks for the first time. "Mother. Vell has the other half in his strongbox at the Quay house. If Thack knew..." He stops, and the colour leaves his face. "Thack was the Reeve's deputy. He had the strongbox keys."
+
+Nobody speaks. Then Dame Ines says, very quietly, "Then we go to the Quay house first. And then we go to my locks."
+
+Seven nights are left, and the Reeve's half of the pin may already be gone.
+
+What does Vesper do?
+
+== ROUND 49 ==
+PLAYER: Vesper stands and holds out an arm to help Dame Ines up. "Then we move now, Dame, and I'll take the Reeve's quay house at a walk, not a run, so nobody watching sees us worry." She turns to Odalie and Tamsin. "Sister, stay here with Tamsin, and keep that door barred."
+
+"Dame Ines, bring your whistle. If Biscuit is alive, I want him barking when we reach the locks. And if the strongbox is empty, I'd like to know who in the Reeve's office saw Thack take the keys."
+  [game] dice Vesper's Investigation at the Quay house: is the strongbox half still there? (Jack of All Trades included, DC 12): 1d20+1 = 1d20 [17] + 1 = 18
+  [game] time: 45 minutes later: Day 4, 9:43:54 AM
+  [DM write_lore (hidden)] {"create": "Quay House", "kind": "place", "description": "The Harbour Reeve's office on the Grand Quay in Marrowmere. Holds a strongbox with the Reeve's half of the Weeping Locks' sluice-pin. Brannoc Vell's clerk Perrin Sallow minds it. On Day 4 the strongbox lock was found scratched but the pin-half still inside; someone tried and was interrupted by Thack's arrest."}
+  [game] notebook: created an entry for Quay House
+  [DM write_lore (hidden)] {"entry": "Dame Ines Reeve", "add_to_description": "Went with Vesper to the Quay house on Day 4 morning; Reeve's half of the sluice-pin is intact in the strongbox."}
+  [game] notebook: updated Dame Ines Reeve
+DM: You walk the long way, past the fish-stalls and the cooperage, with Dame Ines on your arm like an aunt with a bad knee. Nobody looks twice. The Quay house is a squat grey building with a green lamp over the door and two bored watchmen on its step. The Reeve himself isn't there. He's asleep upstairs, his clerk says, with orders to wake him for nothing less than fire or flood.
+
+"Flood," says Dame Ines. The clerk, a nervous young man named Perrin Sallow, wakes the Reeve.
+
+Your eye catches the strongbox before anyone has said a word. It's an iron-banded chest under the clerk's desk. The brass lock is scratched, bright little furrows in the tarnish, like a mouse had been at it with a pick. But it is still locked, and the scratches stop short of the keyhole's edge, as if whoever did it had been interrupted. You tell Perrin to open it. Inside, wrapped in oiled cloth, lies a short bar of black iron, notched and split lengthwise, the Reeve's half of the pin.
+
+Dame Ines lifts it and closes her eyes briefly. "Still here. Thank the Lantern." She wraps it, tucks it into her bodice and glares at the room. "Garrow's half is the one they want, and it's in the lockhouse, with a man who isn't Garrow."
+
+Brannoc Vell comes down the stairs in his shirtsleeves, grey-faced and unshaven. He takes the situation in one look and says only, "How many do you need?"
+
+The new moon is seven nights off. There is a stranger on the lockhouse step, a lock-master who wants her locks back, and half a pin.
+
+What does Vesper do?
+
+== ROUND 50 ==
+PLAYER: Vesper keeps her voice low. "Not many, Reeve, just quiet ones: Ysolt Pike and four of your steadiest watchmen, no tabards, in a fish-cart and a net-barge so we look like a catch coming up the river."
+
+"I'll take the bank path with Dame Ines and her whistle, and I want that man with the apple to hear Biscuit bark before he thinks to look at us." She turns to the Reeve. "DM: do I have a long rest before dusk to get my spell slots back, or should I cast Charm Person on the stranger with only one slot left?"
+  [DM lookup (hidden)] {"name": "Long Rest", "kind": "rule"}
+DM: Yes, a long rest is available. It needs at least 8 hours of sleep or light activity, and you can only benefit from one in any 24-hour period. Your last one finished early on Day 3, more than a day ago, so you're clear. It's a quarter to ten in the morning, so resting now would carry you to about quarter to six in the evening, just before dusk. It would restore all three 1st-level slots, your hit points, and all three uses of Bardic Inspiration.
+
+The cost is the afternoon. Whoever sits on the lockhouse step has had a night and a morning already, and Garrow Quill has been in his hands for who knows how long. You have seven nights, so a day's rest doesn't break the plan, but it isn't free.
+
+Brannoc Vell doesn't blink at your list. He's already moving. "Ysolt and four who can keep their mouths shut. A fish-cart, a net-barge, plain coats. Perrin, find me Hobb Marrin's cousin who runs the eel-boat, quietly." He looks at Dame Ines, then back at you. "You lead. It's your plan, and your bard's trick. I'll keep a second crew at the Quay in case it fails."
+
+Dame Ines is already counting the iron half of the pin through her bodice.
+
+What does Vesper do?
+
+== ROUND 51 ==
+PLAYER: Vesper nods. "Then I rest first: eight hours in a quiet back room here at the Quay, and we go at dusk with full slots and a clear head. A tired bard makes a bad liar, and Garrow Quill has already lasted a night."
+
+She turns to Dame Ines. "Dame, sleep too if you can, and keep that half of the pin on you. Perrin, wake me the moment anyone reports movement at the lockhouse, and not before."
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 4, 5:43:54 PM
+  [DM write_lore (hidden)] {"entry": "Stop the Flood at the Weeping Locks", "add_to_description": "Day 4: Vesper, Dame Ines Reeve (holding the Reeve's half of the sluice-pin) and Ysolt Pike with four plain-clothed watchmen in a fish-cart and net-barge plan to retake the lockhouse at dusk. Vesper rested to full slots first. Garrow Quill (and his dog Biscuit) may be held in the lockhouse cellar by the stranger in the grey coa
+  [game] notebook: updated Stop the Flood at the Weeping Locks
+DM: You sleep like the dead in a cot behind the Reeve's ledger-room, with the smell of ink and tar in the blankets and the noise of the Quay a long way off. Nobody wakes you, because nothing moves at the lockhouse. Perrin Sallow brings a boy up twice with messages and sends him away both times.
+
+You wake at a quarter to six with the light going amber in the high window, clear-headed and whole. You have all 15 hit points, all three 1st-level spell slots, and all three uses of Bardic Inspiration.
+
+In the yard behind the Quay house, the plan has assembled itself. A fish-cart loaded with barrels and nets stands ready, and a flat net-barge is moored below the steps. Ysolt Pike leans on the cart in a fisherwoman's smock with her crossbow wrapped in sailcloth. Four watchmen in plain wool lounge about it, each with a cudgel or a boathook somewhere handy. Dame Ines sits on a barrel with her iron whistle in her fist and a knotted bundle in her lap, and she's chewing something that might be pride or tobacco. Brannoc Vell stands by, chain off, a plain grey cloak over his shirt.
+
+"Three hours upriver by barge, with the current against us," he says. "You'll make the Locks near dark, and the lockhouse will see you coming from a mile off. Think about how you want to arrive."
+
+What does Vesper do?
+
+== ROUND 52 ==
+PLAYER: Vesper ties the oilcloth cloak on and grins at the barge. "We arrive as a catch coming home: Ysolt and two watchmen on the barge singing and gutting fish in plain view, and Dame Ines at the stern with her whistle, ready to blow it the moment we're in earshot so Biscuit starts barking."
+
+"I'll ride in the fish-cart under the nets with the other two watchmen and slip off at the bank path a quarter mile out, to come at the lockhouse from the reeds. DM: how many first-level slots do I have now, and can I see the lockhouse's windows from the bank path?"
+DM: You have all 3 first-level slots, so Charm Person, Disguise Self, Sleep, Faerie Fire and Healing Word are all open to you, and you also have your three uses of Bardic Inspiration.
+
+The barge pushes off with Dame Ines at the stern and Ysolt at the gutting-board, laughing loudly at a joke she didn't make. The cart rattles out along the bank road with you under the nets, breathing fish and tar, and the two watchmen beside you, Dunnet and Wick, making jokes about your horns until you remind them whose scarf they're sitting on.
+
+At about quarter to nine, with the light nearly gone and the sky a bruised plum, the cart halts. A quarter mile out, you slide off the tail and drop into the reeds of the bank path, dry, thin and rattling. From there the Weeping Locks stand black against the last of the sky: two stone arches, the great gates dripping, and the lockhouse on the upper wall, a squat stone cabin with a slate roof and a chimney that is smoking.
+
+The lockhouse has three windows facing the bank path. Two are lit. In the left one a man in a grey coat moves back and forth past a lamp, carrying something. The middle window is shuttered. The right is dark, and a ladder lies in the grass beneath it, as if someone has been mending the sill. There's a lantern at the lock's end, and two more men sit on the upper wall. They have crossbows across their knees and are watching the river. Their eyes are on the water, not the reeds.
+
+From behind you, thin across the dusk, comes the first faint note of Dame Ines's whistle, far downstream and drawing near.
+
+What does Vesper do?
+
+== ROUND 53 ==
+PLAYER: Vesper crouches low in the reeds and waits for the whistle's second note, watching the two crossbowmen's heads turn toward the river. As soon as they do, she creeps along the bank to the ladder under the dark right window, stays flat to the stone, and eases up to listen and peek inside before deciding anything.
+
+"If Biscuit starts barking, that's my cue to climb through."
+  [game] dice Vesper's Stealth creeping along the bank and up the ladder (vs crossbowmen's passive Perception 10, distracted): 1d20+3 = 1d20 [13] + 3 = 16
+  [game] time: 10 minutes later: Day 4, 5:53:54 PM
+  [DM write_lore (hidden)] {"entry": "Garrow Quill", "add_to_description": "Day 4 night: seen bound to a chair in the lockhouse's dark side room, gagged and alive, by Vesper through the right window; Biscuit the dog is muzzled and tied beside him. The man in the grey coat is working the windlass-wheels, trying to force them without Garrow's half of the pin (which Garrow swallowed? no: hidden in the dog's collar)."}
+  [game] notebook: updated Garrow Quill
+  [game] time: time set: Day 4, 9:00 PM
+DM: The second note of the whistle floats over the water, and both crossbowmen on the wall turn their heads and their lanterns toward it. You're a flat shadow moving between the cattails. The ladder is old and dry and gives a single complaint under your hand. The wind covers it, and the wall guards don't turn. You press against the cold stone beneath the dark window and listen, and then ease an eye over the sill.
+
+It's a small back room with a cold stove, rope coils and a cot. In the middle of it, bound to a chair with net-cord and gagged with a rag, sits an old man with a white beard, a lame hip and a thick wool coat. His eyes are open, bloodshot, furious. That has to be Garrow Quill. At his feet lies a spotted dog with a muzzle of twine and a cord on its collar, its ears pricked toward the sound of the whistle, trembling all over. A small iron collar-ring on the dog glints, and on it, tied with a bit of fishing line, is a short bar of black iron, notched and split. Garrow's half of the pin.
+
+The door to the main room stands ajar. Through it you can see the windlass-hall: two great wheels as tall as a man, a man in a grey coat at the nearer one hauling at the spokes with a sweat-dark back, and a second man at a table with a lamp, turning something over and over in his hand: a lump of iron, roughly the shape of a pin, and not the right one. Their voices carry. "...nothing. Won't turn. Garrow's half, the old fool said it's in the keep. It's not in the keep." "Then it's on him or the dog. Check the dog." "I checked. Captain says tomorrow night, one way or another."
+
+Nobody is looking toward you. The guards outside are watching the river. The whistle sounds a third time, nearer, and the dog begins to whine.
+
+What does Vesper do?
+
+== ROUND 54 ==
+PLAYER: Vesper eases over the sill without a sound, drops to a crouch beside the chair, and puts a finger to her lips for Garrow. She slips her dagger under the twine on the dog's collar, cuts the half-pin free into her palm, then saws through the muzzle cord and murmurs, "Biscuit, quiet, good dog, and then loud when I say so."
+
+Next she cuts Garrow's wrists loose and whispers, "Stay in the chair and keep your hands behind you. When the whistle's next note comes, I'm going to put those two in the windlass-hall to sleep."
+  [game] dice Vesper's Stealth slipping in and cutting the bonds (vs men in the windlass-hall, passive Perception 10): 1d20+3 = 1d20 [7] + 3 = 10
+  [game] sheet: Vesper casts Sleep at level 1; timer Vesper's Sleep: 1 minute; level-1 spell slots: 2/3
+  [game] dice Sleep: hit points affected (two raiders in the windlass-hall, 11 HP each): 5d8 = 5d8 [8, 4, 1, 3, 4] = 20
+  [game] sheet: gained 1 × Garrow Quill's half of the sluice-pin
+DM: The rest happens in a few breaths. You cut the twine from the dog's collar and the iron half-pin drops cold into your palm. You saw the muzzle cord loose, and Biscuit lets out a long, shuddering breath and doesn't bark. You free Garrow's wrists, and the old man's eyes fill, and he stays exactly where he is with his hands behind him, as told.
+
+The whistle sounds again, nearer, sharp. You rise in the doorway, spread your fingers and whisper the lullaby into the windlass-hall. Your roll is 20, but it has to go in order of lowest hit points and each of those men is a solid, hearty raider. The man at the table takes it first. His head goes down onto the table with a soft knock and the lump of fake iron rolls out of his hand. That leaves 9 in the spell, not enough for the second. The grey-coated man at the windlass staggers, shakes his head, and stands there blinking, wide awake, with one hand still on the spoke.
+
+He's six feet from you and he hasn't seen you. Your roll to creep in beat his eye, just. For this moment he's surprised: he can't act on the first turn of the fight. Outside, the two guards on the wall still watch the river, and Dame Ines's whistle is closing, the barge's lantern now a gold smear on the black water. In the back room the dog quivers beside Garrow's chair, and Garrow whispers hoarsely, "Mind the pin, girl. Gate'll open for a child with both halves."
+
+You have both halves of the sluice-pin now, if you count the Reeve's in Dame Ines's bodice, and one awake raider, surprised, at arm's reach.
+
+What does Vesper do?
+
+== ROUND 55 ==
+PLAYER: Vesper steps in behind the dazed raider and drives her pommel... no, her rapier's gone, so she draws her dagger and presses it flat against his ribs, whispering sweetly, "Hands off the wheel, friend, and breathe slowly, the Lantern Saint is watching and I'm in a poor mood." If he so much as shouts, she'll plant the dagger and slam him into the table.
+
+"DM: do I still have my rapier, or did the hulk's sentry keep it?"
+  [game] sheet: lost 1 × Rapier
+  [game] dice Vesper's Intimidation with a dagger at a surprised raider's ribs, DC 12: 1d20+4 = 1d20 [2] + 4 = 6
+  [game] dice Vesper's initiative (Dex +2, Jack of All Trades +1): 1d20+3 = 1d20 [2] + 3 = 5
+  [game] dice Grey-coated raider's initiative: 1d20+1 = 1d20 [16] + 1 = 17
+  [game] fight: Fight started. Order: Grey Coat (17), Vesper Thorne (5). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Grey Coat. Grey Coat (initiative 17): HP 11/11, AC 12 Grey Coat's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your whisper is perfect, honey over a knife, and he doesn't believe a word of it. His hand tightens on the spoke. Something proud in him won't take orders from a girl with horns and a short blade, and he starts to draw breath for a shout.
+
+He's still surprised, so he can't act yet, though. Your own initiative came up poor, but his stunned moment is yours. The fight is on, round 1, and it's your turn. You have a dagger pressed to his ribs, two spell slots left, and the sleeping raider snoring at the table. Past the door, the guards on the wall are still facing the river, and the barge's lantern is very close.
+
+What does Vesper do?
+
+== ROUND 56 ==
+PLAYER: Vesper doesn't wait for the shout. She drives her dagger hilt-first at his temple, then if he's still standing she casts Vicious Mockery in his face: "Your mother would be so proud, shouting for help from a girl half your size!"
+
+Failing that, she'll whisper a quick Sleep with her second slot to drop him before he can alert the wall guards.
+  [game] dice Vesper's dagger attack (hilt-first) on Grey Coat, AC 12: 1d20+4 = 1d20 [10] + 4 = 14
+  [game] dice Vesper's dagger damage on Grey Coat: 1d4+2 = 1d4 [2] + 2 = 4
+  [game] fight: Grey Coat took 4: HP 11 → 7 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Grey Coat. Grey Coat (initiative 17): HP 7/11, AC 12 Grey Coat's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Grey Coat's scimitar attack vs Vesper (AC 13): 1d20+3 = 1d20 [7] + 3 = 10
+  [game] fight: Round 2, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The dagger-hilt cracks off his temple with a wet sound, and he reels but doesn't fall. A cut opens over his eyebrow and blood runs into his eye. Then the surprise lets go of him all at once, and he wrenches a scimitar out of the sheath at his hip and bellows over his shoulder, a raw, wordless shout that rattles the windlass chains: "Wall! In the hall, she's in the hall!"
+
+His first slash goes wide, whistling past your shoulder and biting the oak of the doorframe.
+
+The shout carries, and on the wall outside, two lanterns swing round hard. Boots pound on the stone steps. The barge's lamp is at the lower gate now, maybe thirty yards off, and Dame Ines's whistle shrills once more, followed by the deep, glad bark of a dog who has been waiting all night for exactly that.
+
+The raider is bleeding and furious, with his scimitar out. You have a dagger, two slots, and Garrow and the dog behind you. It's round 2, and it's your turn.
+
+What does Vesper do?
+
+== ROUND 57 ==
+PLAYER: Vesper snaps, "Sleep, friend," and whispers the lullaby with her second slot, centered right on the bleeding raider's head. He's at 7 hit points, well under the roll, so he should drop before he can swing again.
+
+Then she shouts back over her shoulder, "Garrow, bar that door behind you and keep Biscuit barking, the wall guards are coming!"
+  [game] sheet: Vesper casts Sleep at level 1; timer Vesper's Sleep: 1 minute; level-1 spell slots: 1/3 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] dice Sleep: hit points affected (Grey Coat at 7 HP): 5d8 = 5d8 [1, 8, 2, 4, 5] = 20
+  [game] fight: Grey Coat: Unconscious (Sleep)
+  [game] dice Wall guards' initiative (group of two): 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+  [game] fight: Added to the fight. Order: Grey Coat (17), Vesper Thorne (5), Wall Guard 1 (2), Wall Guard 2 (2)
+  [game] fight: Round 2, now: Wall Guard 1. Wall Guard 1 (initiative 2): HP 11/11, AC 12 Wall Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Wall Guard 1 light crossbow vs Vesper (AC 13): 1d20+3 = 1d20 [5] + 3 = 8
+  [game] dice Wall Guard 2 light crossbow vs Vesper (AC 13): 1d20+3 = 1d20 [7] + 3 = 10
+  [game] fight: Round 2, now: Wall Guard 2. Wall Guard 2 (initiative 2): HP 11/11, AC 12 Wall Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Grey Coat. Grey Coat (initiative 17): HP 7/11, AC 12, Unconscious (Sleep) Grey Coat's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 3, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The lullaby takes him standing. His scimitar clatters out of his hand, his knees go, and the bleeding raider folds down beside the windlass with a long, bubbling snore. Behind you Garrow, to his credit, hauls himself out of the chair, puts his shoulder to the back-room door and drops the bar across it. Biscuit shoves out of the muzzle's last threads and barks.
+
+The wall guards come in through the outer door at a run, with their crossbows cranked. Both of them shoot at the first dark shape that moves, which is you. One bolt thuds into the doorpost by your hip. The other snaps past your ear and shatters a lamp-glass, spilling oil across the stone. Neither touched you.
+
+Then Dame Ines's whistle splits the night from the lock-wall itself. Ysolt Pike and the watchmen have come up over the gate-beam from the barge, wet to the knees, and the first one is already through the lockhouse door behind the guards.
+
+It's round 3, your turn. Two guards in the doorway are fumbling to reload, with their backs half-turned to the door. You have a dagger, one slot, Vicious Mockery, and the pin-half in your pocket. The lamp-oil is smoking on the flags, close to a coil of rope.
+
+What does Vesper do?
+
+== ROUND 58 ==
+PLAYER: Vesper snatches up the spilled lamp's fallen glass chimney and sidesteps behind the windlass wheel for cover, then shouts at the nearer guard, "Sweet dreams, boys, you're surrounded!" She hurls Vicious Mockery at him: "You reloaded that crossbow like a man buttering toast with a mallet!"
+
+"Ysolt, take the left one, I've got the right!"
+  [game] dice Wall Guard 1's Wisdom save vs Vicious Mockery, DC 13: 1d20+0 = 1d20 [11] + 0 = 11
+  [game] dice Vicious Mockery psychic damage on Wall Guard 1: 1d4 = 1d4 [1] = 1
+  [game] dice Ysolt Pike's initiative (joins the fight): 1d20+2 = 1d20 [17] + 2 = 19
+  [game] fight: Wall Guard 1 took 1: HP 11 → 10; Wall Guard 1: Vicious Mockery: disadvantage on next attack
+  [game] fight: Added to the fight. Order: Ysolt Pike (19), Grey Coat (17), Watchman Dunnet (10), Vesper Thorne (5), Wall Guard 1 (2), Wall Guard 2 (2)
+  [game] fight: Round 3, now: Wall Guard 1. Wall Guard 1 (initiative 2): HP 10/11, AC 12, Vicious Mockery: disadvantage on next attack Wall Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Wall Guard 1 crossbow vs Vesper (AC 13 +2 half cover = 15), disadvantage: 1d20+3 (disadvantage) = 1d20 [7, 10]→7 + 3 = 10
+  [game] dice Wall Guard 2 crossbow vs Vesper (AC 15 with half cover): 1d20+3 = 1d20 [8] + 3 = 11
+  [game] fight: Round 3, now: Wall Guard 2. Wall Guard 2 (initiative 2): HP 11/11, AC 12 Wall Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Ysolt Pike. Ysolt Pike (initiative 19): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ysolt Pike's crossbow attack on Wall Guard 2 (AC 12): 1d20+4 = 1d20 [12] + 4 = 16
+  [game] dice Ysolt's crossbow damage on Wall Guard 2: 1d8+2 = 1d8 [2] + 2 = 4
+  [game] fight: Wall Guard 2 took 4: HP 11 → 7 (Ysolt Pike has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Grey Coat. Grey Coat (initiative 17): HP 7/11, AC 12, Unconscious (Sleep) Grey Coat's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 4, now: Watchman Dunnet. Watchman Dunnet (initiative 10): HP 11/11, AC 12 Watchman Dunnet's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Watchman Dunnet's cudgel attack on Wall Guard 1 (AC 12): 1d20+3 = 1d20 [14] + 3 = 17
+  [game] dice Dunnet's cudgel damage on Wall Guard 1: 1d6+1 = 1d6 [2] + 1 = 3
+  [game] fight: Wall Guard 1 took 3: HP 10 → 7 (Watchman Dunnet has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your mockery lands like a slap. The nearer guard goes red to the ears, and his bolt skitters off the windlass frame. His mate's shot rattles off the iron housing a hand from your cheek. Behind them Ysolt's crossbow cracks from the doorway, the bolt taking the second guard in the thigh, and Dunnet's cudgel thumps the first guard across the ribs hard enough to shake the dust off the rafters.
+
+Both guards are bleeding and half-turned now, caught between the watchmen at the door and you behind the wheel. One has dropped his crossbow and is dragging out a short blade, the other is fumbling for a bolt with a bad hand. They're hurt, outnumbered, and looking at the way out. The oil from the broken lamp is still creeping across the flags toward the rope coil.
+
+It's your turn, round 4. You have a dagger, one 1st-level slot, Vicious Mockery and 3 Bardic Inspirations. Ysolt, Dunnet and two more watchmen are at the door. What does Vesper do?
+
+== ROUND 59 ==
+PLAYER: Vesper steps out from behind the wheel and calls to the guards, bright and clear: "Gentlemen, drop the blades and you walk out of here with your teeth, because the rope by your feet is about to catch fire and I'd hate for you to be standing on it." She tosses Dunnet a Bardic Inspiration, "Dunnet, a d6 on your next swing, make it count!" and kicks the coil of rope away from the spreading oil with her boot.
+  [game] sheet: Bardic Inspiration: 2/3 (Vesper Thorne has used its bonus action: no more bonus actions this turn.)
+  [game] dice Vesper's Intimidation: wounded guards outnumbered, offer of surrender, DC 12: 1d20+4 = 1d20 [5] + 4 = 9 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] fight: Wall Guard 1: no longer Vicious Mockery: disadvantage on next attack
+  [game] fight: Round 4, now: Wall Guard 1. Wall Guard 1 (initiative 2): HP 7/11, AC 12 Wall Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Wall Guard 1 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [19] + 3 = 22
+  [game] dice Wall Guard 2 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [17] + 3 = 20
+  [game] dice Wall Guard 1 scimitar damage: 1d6+1 = 1d6 [1] + 1 = 2
+  [game] dice Wall Guard 2 scimitar damage: 1d6+1 = 1d6 [6] + 1 = 7
+  [game] sheet: took 9 damage: HP 15 → 6
+  [game] fight: Round 4, now: Wall Guard 2. Wall Guard 2 (initiative 2): HP 7/11, AC 12 Wall Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Ysolt Pike. Ysolt Pike (initiative 19): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ysolt Pike's crossbow on Wall Guard 2 (AC 12): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Ysolt's crossbow damage on Wall Guard 2: 1d8+2 = 1d8 [5] + 2 = 7
+  [game] fight: Wall Guard 2 took 7: HP 7 → 0 (0 HP) (Ysolt Pike has used its action: no more actions this turn.)
+  [game] fight: Round 5, now: Grey Coat. Grey Coat (initiative 17): HP 7/11, AC 12, Unconscious (Sleep) Grey Coat's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Watchman Dunnet. Watchman Dunnet (initiative 10): HP 11/11, AC 12 Watchman Dunnet's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Dunnet's cudgel on Wall Guard 1 (AC 12): 1d20+3 = 1d20 [2] + 3 = 5
+  [game] dice Dunnet's Bardic Inspiration die added to the attack (5 → needs 7+): 1d6 = 1d6 [5] = 5
+  [game] fight: Wall Guard 2 removed from the fight. Order: Ysolt Pike (19), Grey Coat (17), Watchman Dunnet (10), Vesper Thorne (5), Wall Guard 1 (2)
+  [game] fight: Round 5, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your offer lands on deaf ears. The nearer guard sneers at it, and then both their blades come at you in a flat rush. You kick the rope coil clear of the oil with a quick flick of your boot, but two cuts open you at the shoulder and ribs, a hot, shallow sting. You're down to 6 hit points.
+
+Then the room turns on them. Ysolt's bolt takes the second guard in the throat and he folds against the doorpost. Dunnet's cudgel, inspired and a hand's breadth wide, whistles past the first guard's ear and cracks the plank wall. Your die is gone.
+
+One guard remains, with a scimitar, bleeding from the ribs, and the dying lamplight in his eyes. He's alone now with the watchmen filling the door behind him, and you, his only wall, in front. The oil is a bright, thin line moving toward the rope. Behind you Garrow and Biscuit wait in the back room.
+
+It's round 5, and it's your turn. You have 6 hit points, a dagger, one 1st-level slot, and Vicious Mockery. What does Vesper do?
+
+== ROUND 60 ==
+PLAYER: Vesper backs a step behind the windlass wheel and whispers Healing Word on herself to get back on her feet. Then she snaps at the last guard, "Look around, friend: you're alone, bleeding, and standing in lamp oil beside a lit lamp. Drop it, and I'll tell the Reeve you surrendered."
+  [DM lookup (hidden)] {"name": "Healing Word", "kind": "spell"}
+  [game] sheet: Vesper casts Healing Word at level 1; level-1 spell slots: 0/3 (Vesper Thorne has used its bonus action: no more bonus actions this turn.)
+  [game] dice Healing Word on Vesper: 1d4+3 = 1d4 [4] + 3 = 7
+  [game] dice Vesper's Intimidation on the last guard: alone, wounded, outnumbered, DC 11: 1d20+4 = 1d20 [8] + 4 = 12 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] sheet: healed 7: HP 6 → 13
+  [game] fight: Fight over after 5 round(s). 30 seconds of fighting; now Day 4, 9:00:30 PM.
+  [game] sheet: XP +125: 425
+  [game] time: 40 minutes later: Day 4, 9:40:30 PM
+  [DM write_lore (hidden)] {"entry": "Weeping Locks", "add_to_description": "Day 4 night: retaken by Vesper, Ysolt Pike, Dame Ines Reeve and four watchmen. Four raiders held (the last guard surrendered; the Grey Coat and the table man asleep; one dead). Garrow Quill freed with his dog Biscuit; both halves of the sluice-pin now with Vesper and Dame Ines. Prisoners say Ashgrove intends to arrive 'on the night of the dark moon
+  [game] notebook: updated Weeping Locks
+DM: The last guard looks at the oil, then at the open door, then at the crossbows leveled at his chest. His scimitar rings on the flags. "Don't burn me," he says, in a voice thinner than he'd like. "I only did the wall. I never did nothing." Dunnet and a second watchman have him on his knees with his hands bound in the time it takes you to breathe. Healing Word has closed the worst of your cuts, and you're at 13 hit points.
+
+Dame Ines steps through the door last, the iron whistle swinging. She looks at the windlass wheels and lays her palm flat on one, the way a woman touches a horse. Then she turns to Garrow, who has come out on Biscuit's shoulder, and the two old people regard one another across the room. "You let a man sit on my step eating an apple," she says. "You're slipping, Quill." Garrow starts to laugh, then to cry, and Biscuit leaps on them both.
+
+Within the hour the lockhouse is yours. You set the two halves of the sluice-pin together on the table and Dame Ines turns the lock-wheel through a quarter circle to prove it works, and then she takes it off the wheels again and tucks the whole thing in her bodice. "Nobody opens my gates but me." The prisoners are tied in the cellar, three alive and one dead. They tell the Reeve's men that Ashgrove will come on the night of the dark moon with everything she has left. The signal on the lockhouse roof is a lamp that must be lit to tell her barge the locks are hers.
+
+You earned 125 XP, which brings you to 425 of the 900 needed for level 3. It's twenty to ten on Day 4, with six nights left. The locks are in your hands. Ashgrove's will is still out there, and so is the Sleeper.
+
+What does Vesper do?

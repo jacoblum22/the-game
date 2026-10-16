@@ -28,7 +28,7 @@ def rounds(t: list[dict], play_starts: int) -> list[list[dict]]:
 
 def block(name: str, first: int, last: int) -> dict:
     meta = json.loads((GAMES / f"{name}.meta.json").read_text(encoding="utf-8"))
-    save = json.loads(Path(meta["save"]).read_text(encoding="utf-8"))
+    save = json.loads((GAMES / Path(meta["save"]).name).read_text(encoding="utf-8"))
     rs = rounds(save["transcript"], meta["play_starts"])[first - 1:last]
     c: Counter = Counter()
     lens, tools = [], Counter()

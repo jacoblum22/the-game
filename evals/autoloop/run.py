@@ -82,7 +82,7 @@ async def main(name: str, rounds: int) -> None:
     await p.connect()
     try:
         if meta.get("save"):
-            path = Path(meta["save"])
+            path = (GAMES / Path(meta["save"]).name)
             await s.play(play.Game(json.loads(path.read_text(encoding="utf-8")), path))
             g = s.game
             seen = max(i for i, e in enumerate(g.transcript) if e["kind"] == "player") + 1  # the reply not yet read
@@ -98,7 +98,7 @@ async def main(name: str, rounds: int) -> None:
                 text = shown((s.game or c).transcript[k:]) if not s.game else ""
             assert s.game, "character creation didn't finish in 40 lines"
             g = s.game
-            meta["save"] = str(g.path)
+            meta["save"] = g.path.name
             seen = max(i for i, e in enumerate(g.transcript) if e["kind"] == "player") + 1
             meta["play_starts"] = seen
         for _ in range(rounds):

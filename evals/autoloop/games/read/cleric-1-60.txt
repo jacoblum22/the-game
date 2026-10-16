@@ -1,0 +1,1329 @@
+CHARACTER: Brunhilde Stonehearth, Hill Dwarf cleric 2 (Life), acolyte background
+== OPENING ==
+Your character is complete.
+
+The mountain roads of the hill country are old dwarf-cut routes, and they carry more grief than trade these days. Rain loosens the slopes, and the small shrines along them are the only mercy for many miles.
+
+Brunhilde Stonehearth, called Brun, grew up in one of those shrines. Father Dorrin Ashbeard found her as a half-starved child in a collapsed mine shaft and raised her in the Morninglord's light. His prayer book now rides in her pack, and she has come down from the hills to carry his blessing to those who need it.
+
+Late afternoon, cold rain hammering the slate roof of the crossroads waystation. You have barely shaken the water from your braid when a roar of sliding stone tears across the pass. Beyond the inn's yard, a fresh rockslide has swallowed part of the road. Under it, muffled tapping and a thin voice calling for help: a wagon's worth of travelers, a wounded merchant, a child, a mule-driver.
+
+At the edge of the rubble three strangers are already shouting. A nervous caravan guard wants to dig now. A sullen hunter, arms folded, says the slope above is still groaning and will bury them all. The innkeeper, wringing a rag, keeps looking from one to the other. Then all three turn to you, the cleric in the dented mail.
+
+Above the rubble, small stones still trickle down. The tapping goes on beneath.
+
+What does Brun do?
+
+== ROUND 1 ==
+PLAYER: Brun steps up between the guard and the hunter, hands raised, and says calmly, "Nobody digs yet, and nobody stands around either. Hunter, you know this slope: where is it loose, and where will it hold? Guard, keep your people back until we have a plan." Then she kneels at the rubble, cups her hands to the stones, and calls down in a steady voice, "Hold on, we're coming. Tap once if you can hear me, and tell me who's hurt!"
+  [game] dice Brun's Persuasion check to rally the guard and hunter, DC 12: 1d20+2 = 1d20 [16] + 2 = 18
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Brun rallied the guard and hunter (Persuasion 18). Hunter will share what he knows of the slope. Trapped party answers by tapping."}
+  [game] notebook: updated Rockslide Rescue
+  [game] time: 5 minutes later: Day 1, 5:05 PM
+DM: Your steady voice cuts through the shouting. The guard's mouth snaps shut, and he lowers the pick he was already swinging. The hunter studies you for a long moment, then grunts and unfolds his arms.
+
+"Dwarf's got sense," he mutters. He points up the slope with his chin. "The grey shelf there, that's what came down, and it's still sitting on a wet clay seam. The left side, where the old cairn stands, is solid ledge. If you dig, dig from the left and go slow. Take the top stones first, never pull from the bottom." The guard nods hard, and the innkeeper lets out a breath and begins fetching shovels and planks.
+
+You kneel and press your hands to the cold stones. A pause, then one tap. A child's voice, wavering but clear, comes up through the gaps: "Merchant Ilsa's hurt, her leg is crushed and she keeps falling asleep. Tam the driver is here. I'm Pip. There's water coming in and the wagon is creaking!"
+
+Stone ticks down the slope again, and the mule somewhere below brays in fear.
+
+The party waits on you. Left-side digging from the hunter's advice could work, and you could also read how the rubble is stacked, or brace it with timbers from the inn. What does Brun do?
+
+== ROUND 2 ==
+PLAYER: Brun calls down, "Pip, you're doing wonderfully. Keep Ilsa talking and keep her awake, and tell Tam to move the wagon's weight off that creaking side if he can. We're digging from the left, slow and careful." She turns to the hunter and guard. "Hunter, would you read the slope for us and shout the moment it shifts? Guard, you and I take the top stones from the left side, and let's get those planks from the innkeeper braced as we go."
+
+She sets her shield against her pack, tucks her braid back, and picks up the first stone, using Stonecunning to read how the rubble sits as she works. "Easy now, nobody pulls from the bottom."
+  [game] dice Brun's Wisdom (Survival) check to read the rubble and dig safely, DC 13 (ruling: Stonecunning covers stone origins only, so this is a plain read of the slope): 1d20+3 = 1d20 [14] + 3 = 17
+  [game] time: 30 minutes later: Day 1, 5:35 PM
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Trapped: merchant Ilsa (crushed leg, drifting unconscious), mule-driver Tam, child Pip. Brun is digging from the left (solid ledge by old cairn), top stones first, with planks bracing; hunter watching slope. Survival 17 read the rubble well; about 30 minutes in, an opening is near."}
+  [game] notebook: updated Rockslide Rescue
+DM: Your hands find the rhythm of it, the same one Father Dorrin taught you in a hundred small chores: lift, test, set aside. Reading the rubble is not Stonecunning's trade, since that knows how stone was made, not how it will fall, but you have lived under fallen rock and your eyes learn fast. You spot the keystone slab holding the pile together and have the guard leave it alone, working around it instead. The innkeeper wedges planks beneath the overhanging edge as you go, and each time the hunter cries "Hold!" everyone freezes, and a heartbeat later a trickle of grit slides harmlessly past.
+
+Half an hour of grim labor, and a gap opens at last: a dark hole just wide enough for a child, and beyond it the tilted bed of a wagon, water running along its floor. A small, muddy face peers out at you. "You came," Pip whispers.
+
+Behind her, Tam the driver is bracing a beam with his shoulder, grey-faced. Further in, Ilsa lies pinned from the knee down under a fallen cask-rack and a heap of stone, her lips pale and her breathing shallow.
+
+The gap is too narrow for the pinned woman, and the wagon still creaks. Pip could be passed out first, but Ilsa needs healing and lifting. What does Brun do?
+
+== ROUND 3 ==
+PLAYER: Brun smiles at Pip and says, "Hello, brave one. Come out to me nice and slow, and the guard will take you somewhere dry." She hands Pip through to the guard, then calls to the hunter, "Keep watch on that slope, and shout if it so much as sighs."
+
+Then she wriggles into the gap as far as her shoulders allow, reaches Ilsa, and speaks Healing Word to steady her, "Stay with me, Ilsa, you're not done yet." She tells Tam, "Once she's awake and breathing steady, you and I lever that rack up together while the guard drags her clear, and the innkeeper keeps the planks tight."
+  [DM lookup (hidden)] {"name": "Healing Word", "kind": "spell"}
+  [game] sheet: Brunhilde casts Healing Word at level 1; level-1 spell slots: 1/2
+  [game] dice Healing Word on Ilsa: 1d4 + WIS 3 + Disciple of Life 3: 1d4+3+3 = 1d4 [1] + 3 + 3 = 7
+  [game] dice Brun and Tam's Strength (Athletics) check to lever the rack, DC 12 (Tam helps): 1d20+1 (advantage) = 1d20 [15, 6]→15 + 1 = 16
+  [game] time: 10 minutes later: Day 1, 5:45 PM
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Pip freed and safe with the guard. Brun healed Ilsa with Healing Word (7 HP) and levered the rack with Tam (Athletics 16 with help); Ilsa dragged clear, leg still badly hurt and needs further care. Slope held."}
+  [game] notebook: updated Rockslide Rescue
+  [game] sheet: XP +50: 50
+DM: Pip scrambles out into the guard's arms, who wraps her in his cloak and carries her off toward the inn's lit doorway without another word of argument.
+
+Wedged in the gap, you reach Ilsa and murmur the word of mending. Warmth runs from your hands into her. Her eyes flutter open, her breath deepens, and color creeps back into her lips. "Who... a dwarf?" she croaks. "Stay with me, you said. All right."
+
+You brace beside Tam, who sets his shoulder under the rack beside yours. "On three," you grunt, and the two of you heave. The rack lifts a hand's breadth, then more, stone grinding off her leg. Outside, the guard hauls Ilsa's shoulders and the innkeeper keeps the planks tight, and she slides free into the rain. The slope sighs once and settles. Tam stumbles out behind you a moment before the wagon's roof gives a final groan and sags.
+
+Ilsa's leg is purple and badly swollen, probably broken, but she lives. Everyone is clear.
+
+Cheers, ragged and shaky, rise from the yard. The innkeeper is already asking where to carry her. The hunter, rain streaming off his hood, gives you a single nod, the most praise he looks capable of.
+
+You have only one spell slot left and the merchant needs a bed, a splint, and proper care, and the mule still brays under the wreck. What does Brun do?
+
+== ROUND 4 ==
+PLAYER: Brun crawls out, wipes the mud from her face, and says to the innkeeper, "Carry her to your warmest room on a plank door, keeping the leg straight, and fetch me clean cloth and two flat boards for a splint." She kneels by Ilsa and starts checking the leg with her Medicine training, speaking softly. "You're safe now, Ilsa. I'm Brun, and I'll set this properly before you sleep."
+
+Then to the hunter: "If you can spare a hand once she's settled, would you and Tam see to that mule? It did its share of braying for us."
+  [game] dice Brun's Wisdom (Medicine) check to examine and splint Ilsa's leg, DC 12: 1d20+5 = 1d20 [2] + 5 = 7
+  [game] time: 45 minutes later: Day 1, 6:30 PM
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Medicine check failed (7): Brun's first splint was off; Ilsa's shin bone is displaced and the set won't hold without a second attempt or magic. Ilsa lies in the inn's warmest room. Hunter and Tam tending the mule. Ilsa has something to say about her cargo (hook)."}
+  [game] notebook: updated Rockslide Rescue
+DM: The innkeeper and guard carry Ilsa in on a plank door, keeping the leg straight as you ordered, and lay her on a bed by the hearth. Clean linen and two flat boards arrive. You work by firelight, hands steady, murmuring the old prayer Father Dorrin used for setting bones.
+
+But the break is stubborn. You bind it, tie off the splint, and sit back, and only then, watching her face tighten and the swelling push against the cloth, do you see you read it wrong. The bone sits crooked beneath the boards. The splint will not hold it as it should, and if she is moved or left like this, it could heal badly or worse.
+
+Ilsa, sweat on her lip, watches your face. "Not as good as you hoped," she says, a merchant's eye for bad news. She forces a thin smile. "Tell me straight, healer."
+
+Behind you the inn is loud with warm relief. Pip sits wrapped in a blanket by the fire with soup, Tam and the hunter have the mule in the stable, and the rain drums on.
+
+You have one spell slot left, and the leg wants setting again, with real force. What does Brun do?
+
+== ROUND 5 ==
+PLAYER: Brun meets Ilsa's eyes and says plainly, "Straight, then: I set it wrong, and the bone is sitting crooked. I need to take the splint off and set it again, and it will hurt badly, but I'll have you breathe with me and I'll use my last spell to ease you through it."
+
+She turns to the innkeeper. "Bring a strip of leather or a spoon handle for her to bite, and have the guard hold her shoulders steady. Ilsa, Pip is right there by the fire and safe, so think of her." Then she unties the splint and rolls up her sleeves. "Ready on three."
+  [DM lookup (hidden)] {"name": "Cure Wounds", "kind": "spell"}
+  [game] dice Brun's second Wisdom (Medicine) attempt to reset the bone, DC 12, with help holding Ilsa steady: 1d20+5 (advantage) = 1d20 [13, 12]→13 + 5 = 18
+  [game] sheet: Brunhilde casts Cure Wounds at level 1; level-1 spell slots: 0/2
+  [game] dice Cure Wounds on Ilsa: 1d8 + WIS 3 + Disciple of Life 3: 1d8+3+3 = 1d8 [4] + 3 + 3 = 10
+  [game] time: 30 minutes later: Day 1, 7:00 PM
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Second attempt succeeded (Medicine 18): bone reset cleanly and Cure Wounds (10 HP) eased Ilsa; she sleeps. Brun has no spell slots left until a long rest. Ilsa wanted a word about her cargo."}
+  [game] notebook: updated Rockslide Rescue
+  [game] sheet: XP +50: 100
+DM: The guard kneels at Ilsa's shoulders and the innkeeper presses a leather strap between her teeth. Ilsa's fingers find yours and grip hard. "Breathe with me," you say. "In... and out. Think of Pip." On three you pull.
+
+The bone grinds, Ilsa cries out around the leather, and then you feel it slide home. You hold it steady and speak the Morninglord's blessing, and the warmth of Cure Wounds floods into the limb. The swelling eases as you watch, the purple fading toward yellow. You bind the splint again, tight and true this time, and every board lies where it should.
+
+Ilsa goes limp, then laughs weakly through tears. "Gods, that hurt. But it's right, isn't it? I can feel it's right." Within minutes she is asleep, breathing slow and even. You are out of spells and your arms shake with weariness, but she will walk again.
+
+The inn is warm and quiet. Pip pads over in her blanket and presses something into your hand, a small tin bell. "It's for luck," she whispers. The innkeeper sets a bowl of stew and a mug of ale before you and says no coin will be taken from you tonight.
+
+The hunter lingers at the edge of the firelight. "That slope won't stay quiet," he says. "And I'd say that wasn't only the rain that brought it down. Something was digging up there. Tomorrow, I'll show you if you like."
+
+You are tired and out of magic, but the night is yours: eat, rest, speak with the others, or look into what the hunter hints at. What does Brun do?
+
+== ROUND 6 ==
+PLAYER: Brun closes her fingers around the little tin bell, smiles at Pip, and hangs it from her belt. "Thank you, Pip, I'll keep it close. Now back to bed with you."
+
+Then she sits by the hunter with her stew and says, "I'd be glad to see it at first light, once I've prayed and my spells are back. What's your name, friend, and what makes you think someone was digging?"
+  [game] sheet: gained 1 × Tin bell (Pip's luck charm)
+  [DM write_lore (hidden)] {"create": "Digging on the Slope", "kind": "lead", "description": "Garrick Thorne says that for two weeks he has seen lantern light high on the slope at night and found fresh spoil and cut timber near the old cairn: someone has been tunneling, and the rockslide may not have been natural. He will show Brun at first light."}
+  [game] notebook: created an entry for Digging on the Slope
+  [game] time: 30 minutes later: Day 1, 7:30 PM
+  [DM write_lore (hidden)] {"create": "Garrick Thorne", "kind": "person", "description": "Sullen hunter who knows the slope above the waystation. Taciturn and gruff, but softened by Brun's competence. Suspects someone has been digging on the slope and offers to show Brun at first light.", "other_names": ["the hunter"], "relationships": ["helped Brun dig out the rockslide at the [[Crossroads Waystation]]", "source of the lea
+  [game] notebook: created an entry for Garrick Thorne; added 2 relationships to Garrick Thorne
+DM: The hunter takes a long pull of his ale before answering. "Garrick Thorne," he says. "Twelve winters I've run these slopes." He turns his mug slowly in his scarred hands. "Two weeks now I've seen lantern light high up near the old cairn after dark, where no honest soul has business. Then yesterday I found fresh spoil, loose rock heaped where no slide dropped it, and cut timber, sawn clean, not broken. Somebody's been tunneling into that mountain. That seam of wet clay wouldn't have given way on its own, not this soon."
+
+He lowers his voice. "I told the guard and the innkeeper none of it. Folk panic. But you didn't panic, dwarf. You listened."
+
+The fire pops. Across the room Tam snores in a chair, Pip is curled beside Ilsa's bed, and the guard stares into the flames. You are tired to the bone, the stew is warm, and your prayers and spells will return after a night's rest.
+
+Garrick finishes his ale. "First light, then. Sleep well, Brun Stonehearth."
+
+Will Brun ask him anything more, or take the rest the night offers?
+
+== ROUND 7 ==
+PLAYER: Brun nods slowly. "Before you go, Garrick: was that cut timber the kind of sawn work a dwarf-hold would do, or rough human work? And who else uses the old cairn path besides you?" 
+
+Once he answers, she'll thank him, check on Ilsa's splint one last time, and bed down by the hearth where she can hear if the woman stirs, with Father Dorrin's prayer book open for her evening prayers.
+  [game] time: 30 minutes later: Day 1, 8:00 PM
+  [DM write_lore (hidden)] {"entry": "Digging on the Slope", "add_to_description": "Garrick says the cut timber is fine, square-sawn work, not rough human hacking; the beams were cut to a measured length, which is dwarf-style or someone who learned it. Only Garrick and the occasional goatherd use the old cairn path; nobody honest has reason to be there at night."}
+  [game] notebook: updated Digging on the Slope
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 2, 4:00 AM
+  [game] time: 2 hours later: Day 2, 6:00 AM
+DM: Garrick considers the question seriously. "Not rough work," he says. "Square-sawn, cut to a measured length, pegged and wedged the way a hold-wright would shore a gallery. That's no hacking. Whoever it is knows mines." He rubs his jaw. "As for the cairn path, only me and the odd goatherd, and none of us go up at night. Honest folk don't have reason to."
+
+You thank him. Ilsa's splint is still tight and her skin is cool; she murmurs in her sleep and settles. You bed down by the hearth with Father Dorrin's prayer book open on your knees, read the evening prayers in his cramped hand, and sleep with one ear on the room.
+
+The night passes without trouble. You wake in the grey before dawn, rested and whole, your prayers answered, and your spells return to you. Rain has thinned to a drizzle. Ilsa wakes clear-eyed and her color is good, and Pip is already asking about the bell. Garrick waits at the door with his bow strung, pointing wordlessly toward the cairn path.
+
+Your spells are renewed, and you may change your prepared list if you wish: Healing Word, Guiding Bolt, Sanctuary and Shield of Faith are ready, with Bless and Cure Wounds always prepared. Will Brun change anything, or set out with Garrick?
+
+== ROUND 8 ==
+PLAYER: Brun keeps her list as it is: Healing Word, Guiding Bolt, Sanctuary and Shield of Faith have served her well. She tells Ilsa to rest and to let the innkeeper's broth do its work, ties Pip's tin bell snug at her belt, and shoulders her shield. "Lead on, Garrick. I'll follow your steps exactly, and if you raise a hand, I stop."
+  [game] dice Brun's Wisdom (Perception) check on the climb, DC 12: 1d20+3 = 1d20 [2] + 3 = 5
+  [game] time: 45 minutes later: Day 2, 6:45 AM
+  [DM write_lore (hidden)] {"entry": "Digging on the Slope", "add_to_description": "Day 2 morning: Garrick led Brun to the old cairn. Tunnel mouth found behind a stack of loose rock, timbered with square-sawn props. Brun failed Perception (5) on the climb and did not notice a watcher on the ledge above, who has seen them and slipped inside."}
+  [game] notebook: updated Digging on the Slope
+DM: The path climbs steep and slick behind the waystation, switchbacking through wet bracken and shale. Garrick moves like a shadow; you move like a dwarf in chain mail, which is to say loudly, though you place each foot where his has been. You are watching your footing and the mist rolling off the ridge, and your thoughts are half on Ilsa's leg and half on Father Dorrin's old words about not letting haste make a second grave.
+
+Near the top the old cairn stands stark against the grey, a heap of mossy stones taller than you. Garrick raises a hand, and you stop.
+
+"There," he breathes.
+
+Behind a screen of fallen rock, one that looks too neatly stacked to be natural, a dark opening yawns in the hillside, four feet wide and braced with fresh timbers, the pale square-cut wood bright against the old stone. Cold air breathes out of it, smelling of wet clay and lamp oil. Scattered at the mouth are boot prints, many, and a loose heap of spoil that has plainly come from inside. A pick with a broken handle lies beside it.
+
+Garrick crouches and traces one print. "Last night. Maybe two or three of them. Still fresh." He glances toward the hole, then back at you, his hand on his bowstring. "I'll go no further without you saying so."
+
+The tunnel is silent, and the drizzle ticks on the stone. What does Brun do?
+
+== ROUND 9 ==
+PLAYER: Brun crouches beside the prints and keeps her voice low. "Garrick, stay at my shoulder with your bow ready. I'm going to cast Shield of Faith on myself before we step inside, and I'd like a closer look at those timbers and the broken pick first. If anyone's still down there, I'd rather talk than fight, but we go slowly and quietly, and if I raise my hand we stop."
+  [DM lookup (hidden)] {"name": "Shield of Faith", "kind": "spell"}
+  [game] dice Brun's Intelligence (Investigation) check on the timbers and broken pick, DC 10: 1d20-1 = 1d20 [20] - 1 = 19 (natural 20)
+  [game] sheet: Brunhilde casts Shield of Faith at level 1; timer Brunhilde's Shield of Faith: 10 minutes; level-1 spell slots: 1/2; concentrating on Shield of Faith
+  [game] sheet: AC now 20 (Shield of Faith: +2 AC (18 + 2), concentration, 10 minutes)
+  [DM write_lore (hidden)] {"create": "Hearthdeep Wardens' Brand", "kind": "item", "description": "A burned-in maker's brand (a hammer over three wavy lines) on the tunnel timbers and the broken pick's haft, the mark of the old mine-wardens of Hearthdeep, the hill-hold near the shaft where Brun was found as a child. The mark is old, though the wood is fresh-cut, meaning the diggers hold stock or tools stolen from, or taken 
+  [game] notebook: created an entry for Hearthdeep Wardens' Brand; added 2 relationships to Hearthdeep Wardens' Brand
+  [game] time: 5 minutes later: Day 2, 6:50 AM
+DM: A shimmering field settles over you like a breath of warm light, and the damp chill slides off your armor. Garrick glances at it, says nothing, and nocks an arrow.
+
+You run a thumb along the nearest prop and then turn the broken pick in your hands, and your eyes catch what a hurried glance would miss. Burned into the pale wood, small and neat on the underside of the timber and again on the haft of the pick, is a brand: a hammer over three wavy lines.
+
+You know it. Every dwarf child in the hills does. It is the mark of the old mine-wardens of Hearthdeep, the hold whose galleries run under the very hills where you were found as a child. The wardens' stores were sealed when the lower mines fell in, and no new timber should bear that brand. Yet this wood is days old, cut and shored to a warden's exacting standard. Whoever is digging here has the wardens' tools, their stock, or their knowledge, and the proper dwarven way of shoring means the diggers expect to dig long and deep. And since those timbers are set carefully, whoever placed them did not mean for the hill to fall. The slide was something else going wrong.
+
+Cold air still breathes from the opening, smelling of wet clay and lamp oil. Your Shield of Faith will hold for about ten minutes if your concentration does. Garrick waits at your shoulder, bow ready.
+
+What does Brun do?
+
+== ROUND 10 ==
+PLAYER: Brun runs her thumb over the brand once more and murmurs, "Hearthdeep wardens... that's the hold under the hills where Father Dorrin found me. Garrick, remember this mark; somebody's using a dead hold's name, or its stores." She lifts her shield and steps to the opening, whispering, "Slow and quiet, I'll lead with the shield since it's holding. Keep your arrow ready, and stay a few paces behind me."
+
+She calls softly into the dark first, in Dwarvish, "Friends from the road, hold your tools. I'm a healer of the Morninglord and I mean no harm. Is anyone hurt down there?"
+  [DM write_lore (hidden)] {"create": "Hild Ironvein", "kind": "person", "description": "Gruff dwarf woman, leader of a small band digging into the old Hearthdeep galleries from the slope. Speaks Dwarvish, wary, has a crossbow trained on the tunnel mouth. Her motives are not yet known; she did not want the slope to fall.", "relationships": ["leads the diggers behind [[Digging on the Slope]]", "answered Brun's Dwarvish hail 
+  [game] notebook: created an entry for Hild Ironvein; added 2 relationships to Hild Ironvein
+  [game] time: 2 minutes later: Day 2, 6:52 AM
+DM: Your Dwarvish rolls into the dark, and for a long moment nothing answers but dripping water. Then, from perhaps thirty feet down the tunnel, a lamp shutter clicks open and a crossbow bolt whispers past your ear and thunks into a timber at the opening, a hand's breadth from your head. A warning, and a good shot, since the shot was meant to miss.
+
+"That's far enough, surface-walker," a woman's voice growls in the old tongue, roughened by dust and cold. "Healer of the Morninglord, are you? Plenty come with kind words. Who's the man with the bow behind you?"
+
+In the lamp's thin glow you make out a squat figure braced behind a timber, a dwarf with a grey-shot beard braided in the wardens' fashion, a second crossbow cocked and ready. Others shift in the dark behind her, at least two more by the sound. Their lamps are shuttered, but you hear a cough, wet and ragged, from further in.
+
+"Say your piece quick," the woman says. "I have no mind to kill a priest, but I'll not let this hole be taken from us."
+
+Garrick's breathing is steady behind you, his arrow still drawn. Your shield glimmers in the lamplight, its blessing about five minutes from fading.
+
+What does Brun say or do?
+
+== ROUND 11 ==
+PLAYER: Brun keeps her shield low and her hands open, speaking in Dwarvish. "My name is Brun Stonehearth, raised by Father Dorrin Ashbeard at a shrine near Hearthdeep. The man behind me is Garrick Thorne, a hunter, and he'll lower his bow if you'll lower yours. Garrick, easy now, and let the arrow down."
+
+She says to the dark, "I heard a cough that sounds wet and bad, and healing is the only thing I came to offer. Who is hurt, and what is it you're guarding down here? Your slide buried a wagon yesterday, and I pulled a child out of it, so I think we both have things to say."
+  [game] dice Brun's Charisma (Persuasion) check on Hild Ironvein, DC 13 (wary but the name Ashbeard and an honest offer help): 1d20+2 = 1d20 [10] + 2 = 12
+  [game] time: 3 minutes later: Day 2, 6:55 AM
+  [DM write_lore (hidden)] {"entry": "Hild Ironvein", "add_to_description": "Persuasion 12 (just short): Hild half-trusts Brun. Knew Father Dorrin's name (\"the old Ashbeard\") but not enough to trust. She'll let Brun alone in to see her sick comrade, but only if Brun leaves her warhammer at the mouth and Garrick stays out. She insists her crew did not bring the slope down."}
+  [game] notebook: updated Hild Ironvein
+DM: Silence stretches. Behind you Garrick lowers his bow an inch at a time, jaw tight. In the dark the crossbow does not waver, but the voice, when it comes, has lost a little of its edge.
+
+"Ashbeard." She says it as if tasting it. "The old priest of the hill shrine. He buried my brother's wife, once. So you're his foundling." A pause. "Doesn't mean I trust you, girl. Fine words come cheap. But hear this: we did not bring that slope down. The seam gave from above, not below, and it took one of ours with it. We've been three days trying to shore what's left."
+
+The cough comes again, deeper, wet, and someone mutters a curse.
+
+"Here's my terms. You come in alone, no hammer in your hand. Leave it at the mouth. Your hunter stays out in the rain with his bow lowered, and if I hear one string drawn, you'll be the first I put a bolt in. You can look at Aldric. Then we talk."
+
+Garrick's eyes meet yours, uneasy. "I don't like it," he says low. "But it's your call, dwarf."
+
+Your Shield of Faith will fade in a few minutes. The tunnel beyond is narrow, timbered, and dark, with several armed dwarves in it, and a sick one who may need you. What does Brun do?
+
+== ROUND 12 ==
+PLAYER: Brun sets her warhammer carefully against the cairn side of the opening and says to Garrick, "Stay here and keep your bow down, my friend. If I'm not out within the hour, go back and tell the innkeeper what we found, and don't come after me alone."
+
+She raises her empty hands and calls into the dark in Dwarvish, "Thank you, Hild, my hammer's at the mouth and I'm coming in slowly, with only my holy symbol and my healing. Show me Aldric."
+  [game] sheet: AC back to 18; concentration on Shield of Faith ends (its timer, if it has one, is removed with change_time)
+  [game] time: timer Brunhilde's Shield of Faith removed
+  [DM write_lore (hidden)] {"create": "Aldric", "kind": "person", "description": "Injured dwarf in Hild Ironvein's crew, hurt when the seam gave way; has a wet, ragged cough and is lying on a pallet in a side gallery of the tunnel.", "relationships": ["member of [[Hild Ironvein]]'s digging crew", "Brun came in alone to see him"]}
+  [game] notebook: created an entry for Aldric; added 2 relationships to Aldric
+  [game] time: 5 minutes later: Day 2, 7:00 AM
+DM: Your hammer leans against the cairn, and Garrick's face goes flat with worry. Then the dark takes you. The blessing around you fades like a candle guttering, and the tunnel closes in, low, cold, and shored with the wardens' brand every few paces. The tools and lamps along the walls are old stock, kept well.
+
+Just before the first bend someone hisses from the shadows, "Hild, she's coming in with nothing in her hands." You take the name with you.
+
+At the bend a lamp opens, and Hild Ironvein steps into the light, a squat, grey-braided dwarf with a crossbow trained on your chest and dust ground into every line of her face. Two more dwarves hover behind her, a younger man with a pick in a white-knuckled grip and a one-eyed woman holding a lantern. None of them lower their weapons.
+
+"Aldric's through here," Hild says. "Mind your head, and mind your hands."
+
+A side gallery opens to the left, hung with canvas against the draught. On a pallet of sacks lies a stocky dwarf with a bandaged chest and a grey, sweat-slicked face, each breath a wet rasp. Dried blood stains his lips. His eyes find you and widen. "A priest," he whispers. "Hild... you brought a priest."
+
+Beyond him, deeper in the gallery, the lamplight touches something that is not rock: a smooth, curved surface of old stone set into the wall, and a great iron-banded door half-cleared of clay.
+
+You have one spell slot, and the dwarf is badly hurt. Hild's crossbow has not moved. What does Brun do?
+
+== ROUND 13 ==
+PLAYER: Brun kneels beside Aldric without a glance at the crossbow and says gently in Dwarvish, "I'm here, Aldric. Don't talk, just breathe slowly for me." She lays her hand on his wrist and listens to his chest, checking the bandage and the color of his lips with her Medicine training.
+
+"Hild, I'll need one lamp brought close and some clean water, and I'd like to know how he was hurt and how long ago. If it's what I fear, the lung is filling, and I'll cast Cure Wounds on him now."
+  [game] dice Brun's Wisdom (Medicine) check to diagnose Aldric's chest injury, DC 12: 1d20+5 = 1d20 [6] + 5 = 11
+  [game] sheet: Brunhilde casts Cure Wounds at level 1; level-1 spell slots: 0/2
+  [game] dice Cure Wounds on Aldric: 1d8 + WIS 3 + Disciple of Life 3: 1d8+3+3 = 1d8 [1] + 3 + 3 = 7
+  [DM write_lore (hidden)] {"entry": "Aldric", "add_to_description": "Brun's Medicine check 11 (just short) and Cure Wounds (7 HP): his crushed ribs knit somewhat and his color improved, but the wet cough persists. Brun suspects it is not only the ribs. Hild says he was hurt when the seam gave way a day ago; his cough began before that, after the crew got near the iron-banded door."}
+  [game] notebook: updated Aldric
+  [DM write_lore (hidden)] {"create": "Iron-Banded Door", "kind": "place", "description": "A great iron-banded door of old dwarf stone half-cleared of clay at the end of the tunnel gallery. Cold, foul-smelling air seeps from the seams. The crew's coughs started after they got close to it. Likely a sealed gate into the lower mines of Hearthdeep.", "relationships": ["at the end of the gallery where [[Aldric]] lies", "being du
+  [game] notebook: created an entry for Iron-Banded Door; added 3 relationships to Iron-Banded Door
+  [game] time: 15 minutes later: Day 2, 7:15 AM
+DM: The one-eyed woman sets a lamp and a basin of water beside you without a word. Hild lowers her crossbow, not far, only to her hip.
+
+"Yesterday, when the seam gave," she says, grudging but answering. "A beam took him across the ribs. And before you ask, the cough's older than that. Started three days ago, the same as Dunna's and the boy's." The young man with the pick looks away.
+
+You lay your palm on Aldric's chest and pray, and the Morninglord's warmth runs through your hand. The broken ribs ease and the bruising pales; his breath deepens and his eyes clear. You listen again, though, and it is not enough. Beneath the crush there is another sound, a crackling wet rasp deep in the lungs that does not come from the beam. You read the injury only halfway, and the other half of it you cannot name.
+
+"Better," Aldric breathes. "Gods, better." Then the cough takes him again and he spits something grey into the cloth. Hild's mouth thins.
+
+"It's the air," says the one-eyed woman quietly, her gaze sliding toward the end of the gallery. "It comes off the door. Sweet-smelling when the wind turns, and then you cough." She says nothing more.
+
+Hild watches you, and for the first time something other than suspicion is in her face: fear, tightly held. Your spells are spent, and the iron door breathes cold at the gallery's end.
+
+What does Brun do?
+
+== ROUND 14 ==
+PLAYER: Brun sits back on her heels and says quietly in Dwarvish, "Hild, the beam was only half of it. The rest is in the air, and I'd bet my life it's coming from that door. Everyone who's coughing needs to be moved back toward the mouth of the tunnel and into the open, right now, with Aldric carried on his pallet."
+
+She looks to the one-eyed woman. "You noticed the sweet smell. Has anyone gone near the door, and has anyone worked closest to it? Ask them to keep a wet cloth over their nose and mouth until we're out, and I'll look at the door from a distance once everyone's breathing fresh air."
+  [DM write_lore (hidden)] {"entry": "Hild Ironvein", "add_to_description": "Crew: Aldric (hurt), Dunna (one-eyed woman, coughing), and a young man with a pick (also coughing). Motive revealed after Brun moved everyone out: the lower Hearthdeep galleries were sealed after a collapse about forty winters ago that trapped many of the hold's dead; Hild's kin among them. The crew dug in to bring them out for proper burial. The w
+  [game] notebook: updated Hild Ironvein
+  [game] time: 20 minutes later: Day 2, 7:35 AM
+DM: Hild looks at you for a long breath, and then at the cloth Aldric spat into. "Dunna," she says to the one-eyed woman, "the door's yours to answer for. Boy, wet your scarf and take the pallet's head. Move."
+
+There are no more words. The crew lifts Aldric between them and carries him back through the shored gallery, cloth over every mouth. Dunna answers you as she goes, in a low rasp: it was her and the boy who worked nearest the door, mostly in the last three days, chipping clay from the seams. Sweet-smelling air, cold as a cellar, a taste like old pennies on the tongue. The more they dug, the worse the cough. Nobody had gone through; the door had never opened.
+
+You come out into grey daylight and thin rain, and the open air is a shock of sweetness after the tunnel. Garrick is on his feet at once, bow half raised, and you wave him down with a word. He stares at the dwarves, at Aldric on his pallet, then at you, and slowly lowers the arrow.
+
+Aldric drags in a deep, clean breath and then another, and the color eases in his face. Dunna sags against the cairn, coughing, then straightens.
+
+Hild stands apart, rain running down her braids, and says nothing for a while. When she speaks, her voice is lower. "Forty winters back, the lower galleries of Hearthdeep fell with half the hold's miners in them. The wardens sealed what they couldn't reach and set a door on it. Our kin are still down there, my brother among them. We came to bring them out for proper burial, so they might rest in the earth as they should." She looks at you hard. "We didn't pull that slope down. And we never meant to bring anything out but our dead."
+
+You have no spells left, and the tunnel breathes its foul air in the hill behind you. A wagon party's life has been saved, a crew's life is in your care, and a door waits. What does Brun do?
+
+== ROUND 15 ==
+PLAYER: Brun lays a hand on Hild's arm and says gently in Dwarvish, "Then you have my word, Hild: I'll help you bring your kin out, and I won't let anyone else use that door either. But not today, and not until the air is understood, because I owe you the truth: whatever breathes off it is making your people sick, and Father Dorrin taught me never to let haste dig a second grave."
+
+She turns to Garrick. "Would you take Aldric, Dunna and the boy down to the waystation on a cart with the innkeeper's help? I'll keep watch here with Hild, pray for my spells at dusk, and then we go back in with wet cloths and a plan."
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Day 2 ~9 AM: Brun promised Hild Ironvein to help bring her kin out of sealed Hearthdeep once the foul air from the Iron-Banded Door is understood. Garrick takes the sick (Aldric, Dunna, the boy) to the waystation on a cart. Brun's spells won't return until another long rest (earliest ends Day 3, 4 AM). The slide itself was caused from above/by s
+  [game] notebook: updated Rockslide Rescue
+  [game] sheet: XP +50: 150
+  [game] time: 1 hour 30 minutes later: Day 2, 9:05 AM
+DM: Hild stares at your hand on her arm, then at your face. Some of the iron goes out of her shoulders. "Haste dug the first grave," she says, half to herself. "Aye. Forty winters of it." She nods once, a short, hard thing. "Your word, then. I'll hold you to it, Stonehearth."
+
+Garrick says little, as ever, but he is already moving. He and the innkeeper's cart, fetched from the waystation at a trot by a boy sent running, carry Aldric, Dunna and the young man down the cairn path wrapped in blankets and breathing clean air. Garrick's parting look says plainly that he thinks you are mad, and a half-nod says he would not leave you out here alone anyway. He promises to bring a hot meal and Ilsa's news by midday.
+
+By nine the mouth of the tunnel stands quiet in the drizzle. Hild sits on a flat stone at the cairn, crossbow across her knees, watching the black opening. The rest of her crew are gone, all but a lean grey-bearded dwarf you haven't met, Corm, who has been keeping the fire and now sets a pot over it without a word.
+
+One thing needs saying, since you will not be able to pray your spells back by dusk: you finished a long rest only hours ago, and the rules of rest allow only one in a day, so your magic will not return until about four tomorrow morning. Until then you have only your hammer, your Sacred Flame, Guidance, and your wits.
+
+The door still breathes behind the hill. Hild waits for your plan.
+
+== ROUND 16 ==
+PLAYER: Brun nods at Hild and takes the seat beside her. "Then we use today to learn, not to dig, Hild. Tell me everything the wardens left: any marks, records, or sealing words on that door, and whether your family kept a map of the lower galleries." 
+
+She adds, "And Corm, if that stew has room in it, I'll gladly take a bowl. DM: just to be sure, I still have Pip's tin bell on my belt and my warhammer is still leaning at the tunnel mouth, correct?"
+  [DM lookup (hidden)] {"name": "Stonecunning", "kind": "trait"}
+  [game] dice Brun's Intelligence (History) check, Stonecunning (double proficiency: -1 + 4), on the origin and workmanship of the warden's door and Hild's rubbing, DC 13: 1d20+3 = 1d20 [8] + 3 = 11
+  [DM write_lore (hidden)] {"create": "Corm", "kind": "person", "description": "Lean, grey-bearded dwarf in Hild's crew who keeps the camp fire. Silent, watchful, and was a warden's apprentice at Hearthdeep as a boy; he knows the sealing marks better than he admits and is reluctant to speak of them.", "relationships": ["member of [[Hild Ironvein]]'s crew", "knows more about the [[Iron-Banded Door]] than he has said"]}
+  [game] notebook: created an entry for Corm; added 2 relationships to Corm
+  [DM write_lore (hidden)] {"entry": "Iron-Banded Door", "add_to_description": "Day 2: Brun studied Hild's charcoal rubbing of the door marks (History/Stonecunning 11, short of DC 13): confirmed warden work from about forty winters ago, a deliberate seal, with a repeated three-stroke sign she could not read; it could mean 'bury' or 'keep shut'. Hild's half-map of the lower galleries shows a gallery marked with a sign like a
+  [game] notebook: updated Iron-Banded Door
+  [game] time: 1 hour later: Day 2, 10:05 AM
+DM: Yes on both: Pip's tin bell still hangs at your belt, and your warhammer still leans where you left it against the cairn side of the opening. Hild grunts when you stand to fetch it, and does not stop you.
+
+Corm ladles a thick bowl of stew, barley and salt pork, and presses it into your hands without a word. It is the best meal you have had in days.
+
+Hild digs a folded square of waxed cloth from inside her coat. Within is a charcoal rubbing of the iron door's marks and a half-torn map of the lower galleries, copied from some warden's ledger her family kept. You study both for the better part of an hour, tracing the lines with a finger. The workmanship is unmistakably the wardens', hold-cut stone fitted without mortar, and by the weathering it is some forty winters old. But you cannot make the center of the door speak. A three-stroke sign repeats across its face, and it might mean bury, or might mean keep shut, and the difference matters very much. On the half-map, one gallery is marked with a hammer split in two, and you cannot tell what that means either.
+
+Across the fire, Corm has stopped stirring. He is staring at the rubbing in your hands, and for a moment his face goes the color of ash. When he sees you looking, he turns back to the pot.
+
+"Old marks," Hild mutters. "Corm was apprenticed to the wardens as a boy. Won't say much."
+
+The rain has thinned to a mist, and the day is still young. You have a rubbing, a half-map, an unsaid answer, and no magic. What does Brun do?
+
+== ROUND 17 ==
+PLAYER: Brun sets her bowl down, carries the rubbing over to Corm, and crouches beside him, keeping her voice soft. "Corm, I saw your face when you looked at this. You don't have to say it all, but that three-stroke sign and the split hammer on the map: do they mean 'bury' or 'keep shut'? Whatever it is, I'd rather hear it from you than learn it by opening that door."
+
+She adds, "Nobody here is going to think less of you for a hard memory. Father Dorrin used to say a truth shared at a fire weighs half as much."
+  [game] dice Brun's Charisma (Persuasion) check to coax Corm into speaking, DC 12 (a soft, honest approach): 1d20+2 = 1d20 [5] + 2 = 7
+  [DM write_lore (hidden)] {"entry": "Corm", "add_to_description": "Persuasion 7 failed: Corm refused to speak when Brun asked about the three-stroke sign and split hammer. His hands shook; he touched an old warden-brand scar on his forearm and left to check snares on the ridge. Hild is irritated but says he will talk when he is ready."}
+  [game] notebook: updated Corm
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Noon Day 2: Garrick returns with food and word that Ilsa is awake and insists on speaking to Brun alone; she says her cargo is not what her manifest says."}
+  [game] notebook: updated Rockslide Rescue
+  [game] time: 2 hours later: Day 2, 12:05 PM
+DM: Corm does not look up. His thumb travels to the inside of his left forearm, where beneath the rolled sleeve a pale, puckered scar runs in the shape of a hammer, and it rests there. For a moment you think he will answer. Then he shuts his eyes.
+
+"Leave it be, Stonehearth," he says, hoarse, in Dwarvish. "You've a good heart. Don't ask me that. Not at the fire, not today." He rises, takes his bow and a coil of snare-wire, and goes up the ridge without another word.
+
+Hild watches him go, mouth tight. "He's been like that since we found the door," she says. "He'll speak when he's ready or he won't. I've learned not to push a dwarf who's carrying a grave."
+
+The morning drags on. You make a careful copy of the rubbing in your prayer book's margin, mark the split hammer on the map, and take stock of the tunnel: foul air still breathes at its mouth, so you keep well clear.
+
+A little after noon, Garrick comes up the path with a basket of bread and cold mutton, a flask of broth, and news. Aldric, Dunna and the boy are resting at the waystation with the innkeeper's wife, coughing less in the clean air. Pip is under Ilsa's bed teaching the mule driver a rhyme. Then Garrick sets the basket down and rubs his neck.
+
+"The merchant's awake and wants you. Alone, she says. Says her cargo's not what her manifest says, and she'll not tell a soul but the dwarf who set her leg."
+
+Hild's eyes narrow. The tunnel breathes behind you, and Corm's silence hangs on the ridge. What does Brun do?
+
+== ROUND 18 ==
+PLAYER: Brun accepts the bread and mutton, then says to Hild, "I'll go hear what Ilsa has to say and be back before dusk. Please keep everyone away from that tunnel mouth, and if Corm returns, let him be; I'll not push him again." She turns to Garrick. "Lead the way, friend, and tell me on the path if the innkeeper's wife needs anything for Aldric's cough."
+  [DM write_lore (hidden)] {"create": "Ilsa's Lead-Lined Chest", "kind": "item", "description": "A small lead-lined chest bound in iron, stamped with the Hearthdeep Wardens' brand, carried hidden in Ilsa's wagon under barrels of lamp oil. Ilsa was paid triple by a stranger (a grey-bearded dwarf with a scarred forearm, hooded, who gave no name) to carry it to the old cairn above the waystation and leave it for collection. It
+  [game] notebook: created an entry for Ilsa's Lead-Lined Chest; added 3 relationships to Ilsa's Lead-Lined Chest
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Ilsa told Brun of the Lead-Lined Chest (see item): a grey-bearded, scar-forearmed dwarf paid her triple to leave it at the old cairn. It is still in the wagon wreck at the road. Ilsa fears it caused the slide."}
+  [game] notebook: updated Rockslide Rescue
+  [game] time: 1 hour later: Day 2, 1:05 PM
+DM: Hild lets you go with a grunt and a long look back at the tunnel. Garrick leads you down the cairn path, and on the way tells you that the innkeeper's wife has the three coughers on steam and honey and willow-bark, which she says is as much as anyone could do for lungs. They are easier in clean air. What they need is rest and time.
+
+At the waystation the yard is half-cleared, planks and shovels leaning against the wall, the wagon's wreck still lying at the road's edge under tarps. Inside, the common room smells of broth and peat smoke. Pip waves from the hearth with a spoon, and Tam the driver nods you toward the back room.
+
+Ilsa sits propped on pillows with her splinted leg raised, color good, eyes sharp. She waits until Garrick has closed the door.
+
+"You set my bone twice and never asked what I carried," she says. "So I'll tell you, because I think it killed that slope." She pulls a folded paper from under the blanket: her manifest, all lamp oil, salt, and bolts of wool. "Under the oil barrels, in a false bottom, there's a chest. Lead-lined, iron-bound, no bigger than a bread box. A stranger paid me triple to leave it at the old cairn above this station, and said someone would collect it. Hooded, a dwarf, grey-bearded, spoke Common with a hill accent. He wore gloves, but when he handed me the coin his sleeve rode up and I saw a scar on his forearm like a hammer."
+
+She swallows. "The chest has the wardens' brand burned into the lid. At night it's warm, Brun, like a living thing, and I swear it hums. The slide came the moment we got close to the cairn path. I don't know what's inside it, and I don't want to. But it's still in the wreck."
+
+Beyond the door, Pip's laugh rings, and the rain starts again against the shutters. What does Brun do?
+
+== ROUND 19 ==
+PLAYER: Brun holds Ilsa's hand and says quietly, "Thank you for trusting me with this, Ilsa. That scar matches the one Corm showed me at the fire, so I think he knows far more than he's said, and we'll be careful with him, not cruel." 
+
+She turns to Garrick. "Nobody touches that chest, and nobody lets Pip or the mule near the wreck. Can you and I look at the wagon from a distance, with Tam keeping the yard clear, and I'll tell you what I think before anyone lifts a finger?"
+  [game] dice Brun's Wisdom (Perception) check studying the wagon wreck from a distance, DC 12: 1d20+3 = 1d20 [19] + 3 = 22
+  [DM write_lore (hidden)] {"entry": "Ilsa's Lead-Lined Chest", "add_to_description": "Day 2 afternoon: Brun (Perception 22) watched the wreck from 40 feet. The chest is visible through a split in the false bottom. Rain does not wet the tarp over it: it steams. Faint low hum felt in the teeth. Frost forms on the iron bands though the air is not cold. The slope behind the wreck, where the cairn path meets the road, trickles 
+  [game] notebook: updated Ilsa's Lead-Lined Chest
+  [game] time: 30 minutes later: Day 2, 1:35 PM
+DM: You take your leave of Ilsa with a squeeze of her hand, then go out into the rain with Garrick. Tam, set to keep the yard clear, herds the innkeeper's boy and Pip indoors with a loud tale about a dragon in the kitchen.
+
+From forty feet you study the wreck under its tarps. The wagon bed has slumped, its false-bottomed barrels split, and through the gap, half-hidden in sodden straw, you can see a squat iron-bound box. You see more. The tarp above it does not run with rain the way the rest does. It steams, a thin pale vapor lifting from the canvas as if the lid beneath were warm. Frost has bloomed on the iron bands, although the air is merely cold and wet. When the wind drops, you feel a low hum behind your teeth, the same pitch Garrick winces at and touches his jaw for.
+
+And you see something Garrick does not. Where the cairn path meets the road, a thin line of grit and pebbles has been trickling across the mud toward the wreck all afternoon, uphill to down, in a slow, patient thread, as if the hill itself were leaning toward the chest.
+
+"I don't like it," Garrick mutters. "Not one bit. Rock doesn't do that."
+
+Your hammer is in your hand. Your spells are gone until near dawn, and the chest sits in the rain like a held breath. What does Brun say or do?
+
+== ROUND 20 ==
+PLAYER: Brun keeps her eyes on the thread of pebbles and says low, "Garrick, I don't think the hill is leaning toward the chest by chance. Let's not touch it or pull it away yet, but I want that yard and the road kept clear, and a rope line staked around the wreck at forty feet so nobody wanders close, especially Pip."
+
+She adds, "Then I'll send word up to Hild: the chest is down here, and whoever left it, the scarred dwarf, may be Corm's kin or Corm himself. Can you fetch the innkeeper and have him tell the other guests to sleep upstairs tonight, away from that side of the building?"
+  [DM write_lore (hidden)] {"entry": "Corm", "add_to_description": "Dusk Day 2: Corm arrives alone at the waystation yard, hood up, having followed Brun down from the ridge; he stops at the rope line around the wagon wreck and stares at the chest. He is the hooded patron who paid Ilsa."}
+  [game] notebook: updated Corm
+  [game] time: 5 hours 30 minutes later: Day 2, 7:05 PM
+DM: Garrick does not argue. He takes one more long look at the thread of pebbles and starts working. By midafternoon the wreck is ringed with stakes and a rope at forty feet, hung with the innkeeper's old cowbells so that anything crossing it will be heard. Tam and the guard take the yard in shifts. The innkeeper moves the guests upstairs without fuss, Pip and the three coughers at the far end of the hall, Ilsa carried up on her plank door. Garrick sends the innkeeper's boy up the cairn path with your message for Hild: the chest is below, the scarred stranger may be Corm or his kin, watch the tunnel and stay out of it.
+
+The day wears away into a cold, wet dusk, and the hum has not stopped. You feel it now in your breastbone when you stand near the window. The thread of grit has thickened into a slow stream.
+
+A little past seven, a bell clinks on the rope line, once, softly. You are at the door in a moment, hammer in hand, Garrick a step behind with an arrow nocked.
+
+A lean figure stands at the edge of the lamplight, hooded, cloaked in oiled wool, just short of the rope. He is breathing hard, as though he has run all the way down the ridge in the dark. He does not look at you. He is staring at the steaming tarp, and the frost on the iron bands, and his face under the hood is the grey of old ash.
+
+It is Corm. He holds his bare left forearm out into the light, scar and all, and says in Dwarvish, hoarse and broken: "I paid the merchant. I put it in that wagon. And I think I have killed us all."
+
+The hum in your teeth deepens. What does Brun do?
+
+== ROUND 21 ==
+PLAYER: Brun lowers her hammer at once and steps out to the rope, keeping her voice level and kind. "Corm, I'm here and I'm listening, and nobody is going to strike you. Stay on your side of the rope, breathe with me, and tell me plainly: what is in that chest, and what did you hope to do with it?"
+
+She adds quietly over her shoulder, "Garrick, ease the arrow down, but keep it close."
+  [DM write_lore (hidden)] {"entry": "Ilsa's Lead-Lined Chest", "add_to_description": "Corm's confession (Day 2 dusk): the chest holds the warden's keystone-seal, the 'heartstone' that bound the Iron-Banded Door forty winters ago. Corm, a warden's apprentice, was sworn to keep it; he took it from the door three nights before the slide because he feared Hild's crew would break through and release what the wardens sealed in t
+  [game] notebook: updated Ilsa's Lead-Lined Chest
+  [DM write_lore (hidden)] {"entry": "Iron-Banded Door", "add_to_description": "Seal explained by Corm: the three-stroke sign means 'bound, not buried'. The lower galleries did not simply collapse; the wardens sealed something living and sleeping behind it, and a heartstone set in the door held it. Without the stone the seal weakens."}
+  [game] notebook: updated Iron-Banded Door
+  [game] time: 25 minutes later: Day 2, 7:30 PM
+DM: Corm sags against a fence post, and the words come out of him as if he has carried them forty winters.
+
+"It is not a burial, girl. Not bound by grief. The three strokes mean bound, not buried. The lower galleries didn't fall by themselves. Something woke in the deep, a sleeper the miners broke into, and it fouled the air and the stone and the men who breathed it. The wardens sealed it in. Sixty souls, and the hold's own dead among them, so the rest could live." His hand trembles on the scar. "I was fourteen. My master gave me the heartstone to keep when he walked in through the door and let them shut it behind him. That chest is the heartstone. It's what holds the door."
+
+He swallows. "When Hild's crew came digging, I knew they would break through. I took the stone away three nights past, meaning to carry it far, to the old ward-cairn on the other side of the hill where the wardens' dead lie and the rock is clean. But it burns my arm, and I'm old. So I paid the merchant, and swore to meet her at the cairn. And the hill... the hill wants it back. It's been dragging toward the door ever since I moved it. The slide was that. Without the stone the seal fails a little more each hour. That's why they cough."
+
+He looks at you with eyes that are all grief. "I don't know whether to put it back or carry it away. If I put it back, Hild digs through and wakes it. If I don't, it wakes anyway."
+
+The hum in your breastbone deepens, and from the dark the bell on the rope line clinks again, though no one has touched it. Overhead, the wind has the sound of a long, slow breath. It is not yet night, and your spells are hours away.
+
+What does Brun say or do?
+
+== ROUND 22 ==
+PLAYER: Brun steps up to Corm and puts a steadying hand on his shoulder. "Thank you for telling me, Corm. That was a heavy thing to carry alone for forty winters, and you don't carry it alone now."
+
+"Here's what I think, and tell me if I'm wrong: the stone must go back before the seal fails any further, because carrying it away just lets whatever is below wake with nothing holding it. Then Hild needs to hear all of this from your own mouth, and she must promise me she'll never dig that door open. I gave her my word to help bring her kin home, and I'll keep it, but not at the price of that thing waking."
+
+She turns to Garrick. "Can you wake Tam and the guard, and help me wrap the chest in wet canvas and lift it with the long planks, never touching it with bare hands? Corm, you know the stone best, so you tell us how to carry it and how to set it back."
+  [game] dice Brun's Strength (Athletics) check lifting the chest on planks with Garrick, Tam and the guard, DC 12: 1d20+1 (advantage) = 1d20 [11, 2]→11 + 1 = 12
+  [game] dice Brun's Wisdom (Survival) check keeping the party on the night path under the hum, DC 12: 1d20+3 = 1d20 [6] + 3 = 9
+  [game] dice Bludgeoning damage as the plank slips on the wet path and slams into Brun's shield arm: 1d4 = 1d4 [2] = 2
+  [game] sheet: took 2 damage: HP 12 → 10
+  [game] time: 1 hour 30 minutes later: Day 2, 9:00 PM
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "add_to_description": "Night Day 2: Brun, Corm, Garrick, Tam and the guard lifted the chest on planks wrapped in wet canvas and carried it uphill to the tunnel (Athletics 12 success, Survival 9: lost the path briefly, plank slipped, Brun took 2 damage). They reach the tunnel mouth around 9 PM with Hild waiting."}
+  [game] notebook: updated Rockslide Rescue
+DM: Corm lifts his head, and something like relief crosses the ruin of his face. "Wet canvas, double thick," he says. "Iron tools, not bare hands. Never let it touch the earth between here and the door. It knows the way back; it will pull toward the hill, so keep it level."
+
+Garrick wakes Tam and the guard, and the innkeeper brings canvas and two long planks from the woodpile. Soaked in the trough, the canvas hisses and steams where it meets the lid. You and Garrick lift on the planks, Tam and the guard take the far ends, and Corm walks ahead with a lantern, murmuring warden-words under his breath that you almost recognize from Father Dorrin's old prayers. The chest comes up out of the straw, impossibly heavy, as if the stone inside were sinking through the earth.
+
+The climb is a black, wet hour. Under the hum the path seems to move, and in the dark and rain you lose the line Garrick walked this morning and stray onto the clay-wet side. Your boot skids, the plank slews, and the iron band cracks painfully across your shield arm. You hold. Corm swears and has the chest back level before it can touch the ground. You bleed a little and bruise, but the stone stays off the earth, and the canvas holds.
+
+You reach the tunnel mouth at nine, soaked and shaking. Hild stands in the lamplight with a lantern in one hand and the crossbow in the other, Aldric's empty pallet behind her. She sees Corm, then the chest, and her face closes like a fist.
+
+"Corm," she says, very softly. "What did you do?"
+
+Behind her the tunnel breathes. The hum fills the air, and the iron door waits at its end. You are at 10 hit points, with no spells until near four. What does Brun do?
+
+== ROUND 23 ==
+PLAYER: Brun steps between Hild and Corm, keeping her hands open and her voice steady. "Hild, lower the crossbow and hear him out, because he's been carrying this for forty winters and it's why your people are coughing. Corm, tell her what you told me, all of it, the three strokes, the sixty souls, and your master at the door."
+
+She glances at the chest, held level on its planks. "Garrick, Tam, keep it off the ground a little longer. Hild, I gave you my word to bring your kin home, and I'll keep it, but first I need yours: nobody opens that door until we have set the stone back and understand what's behind it."
+  [game] dice Brun's Charisma (Persuasion) check to win Hild's word, DC 13 (a hard truth, but Corm's confession and Brun's earned trust help): 1d20+2 = 1d20 [15] + 2 = 17
+  [DM write_lore (hidden)] {"entry": "Hild Ironvein", "add_to_description": "Night Day 2: Persuasion 17: Hild heard Corm's confession and gave Brun her word that nobody opens the door until the stone is set back and the thing behind it understood. She grieves: her brother is one of the sixty. She wants him honored, not freed."}
+  [game] notebook: updated Hild Ironvein
+  [game] time: 20 minutes later: Day 2, 9:20 PM
+DM: For a long moment no one moves. Rain taps on the planks and hisses on the steaming canvas. Hild's crossbow stays level at Corm's heart, and Corm does not flinch from it.
+
+Then he tells it. Slowly, in the old tongue, the three strokes, the sixty souls, the boy of fourteen with the heartstone in his hands and his master's back disappearing into the dark as the door swung shut. Hild's jaw works. When he reaches the part about her brother, the miners' names read out one by one by the wardens before the sealing, hers among them, the crossbow dips.
+
+"My brother Brenn," she says, hoarse. "He's down there. You're telling me he's not dead the way the dead are dead."
+
+"He's bound," Corm whispers. "Like all of them. Whatever walks in the deep wears the dead as well as the living, Hild. If you open that door, you won't bring Brenn home. You'll bring home what has his face."
+
+Her breath shudders out of her. She looks at you then, and the grief in her face is something you have seen only in mirrors. "You said no digging till you understood," she says. "You said you'd never let haste dig a second grave." Her voice cracks. "Then say it plain, priest. You give me your word you'll find a way to honor him. And I give you mine: nobody opens that door."
+
+She lowers the crossbow entirely. Behind her the lantern flickers, and the hum swells until the planks tremble in your hands.
+
+The chest wants to go in. The iron door waits at the gallery's end, and you are tired, bruised, and out of spells. What does Brun do?
+
+== ROUND 24 ==
+PLAYER: Brun meets Hild's eyes and says softly, "You have my word, Hild: I'll find a way to honor Brenn and every name on that list, with prayers said over them properly, and not one grave dug by haste. Thank you."
+
+Then to the others, "Corm, lead us in, wet cloths over every face, iron tools only, and tell us at each step what to do. Garrick, Tam, keep the chest level and off the earth, and if anyone feels the hum in their chest turn bad or the air go sweet, say so and we stop and back out."
+
+She shifts her shield arm, wincing, and takes up the rear plank. "Slow and together, and I'll keep my hammer ready but not drawn."
+  [game] dice Brun's Wisdom saving throw against the sweet, sleeping pull of the door as the stone is lifted, DC 12: 1d20+5 = 1d20 [7] + 5 = 12
+  [game] dice Brun's Intelligence (Religion) check: Father Dorrin's old prayer of binding, spoken with Corm to reseat the stone, DC 13: 1d20+1 = 1d20 [9] + 1 = 10
+  [game] time: 40 minutes later: Day 2, 10:00 PM
+  [game] sheet: XP +150: 300 - Brunhilde Stonehearth can now go up to level 2 (XP 300): use level_up_options, then level_up
+  [DM write_lore (hidden)] {"entry": "Iron-Banded Door", "add_to_description": "Night Day 2 ~10 PM: the heartstone was carried in and set back into the door. Brun's WIS save held; her binding prayer (Religion 10) was not enough to fully reseat it. The stone sits, the hum quiets to a low sleeper's breath, but the seal is only half-mended and needs a warden to keep it and a true rite of binding. Corm chose to stay as its keep
+  [game] notebook: updated Iron-Banded Door
+  [DM write_lore (hidden)] {"entry": "Rockslide Rescue", "status": "done", "add_to_description": "Resolved: all three trapped travelers saved; chest returned to the door; Hild's crew sworn not to open it. Remaining thread: the half-mended seal and Hearthdeep's dead."}
+  [game] notebook: updated Rockslide Rescue
+  [DM write_lore (hidden)] {"entry": "Digging on the Slope", "status": "done"}
+  [game] notebook: updated Digging on the Slope
+  [DM write_lore (hidden)] {"create": "Mend the Hearthdeep Seal", "kind": "quest", "description": "The heartstone is back in the Iron-Banded Door but the seal is only half-mended. Brun promised Hild to honor Brenn and the sixty bound dead without opening the door. Needs a true rite of binding, perhaps help from a temple of the Morninglord or Father Dorrin's old knowledge in his prayer book. Corm keeps watch at the door."}
+  [game] notebook: created an entry for Mend the Hearthdeep Seal
+  [DM lookup (hidden)] {"name": "Beyond 1st Level"}
+  [DM level_up_options (hidden)] {}
+DM: Brun, the stone has settled and you have earned your second level. Here is the story first, and then the choice.
+
+The tunnel closes around you as you walk, Corm leading, wet cloths over every mouth. At the iron door the hum rises until your teeth ache. Corm sets the planks on the iron tool-rest and speaks the warden's words, a flat, rough chant, and your Wisdom holds against the sweet, sleepy pull that rises when the canvas is peeled back. You hold it, just barely, steadied by Father Dorrin's old prayers. You speak your binding prayer beside Corm and reach for the words and cannot quite grasp them whole.
+
+The stone seats in the door's heart with a deep, grinding note. The hum drops to a low, even breath, like a sleeper turning over and settling. But the seal is only half-mended: the lines on the door still gleam too faintly, and the air still smells a little sweet. It will hold, for now, with a warden's hand upon it.
+
+Corm lays his scarred arm against the iron and says quietly, "My master stayed. I was a boy and I ran. I'll not run again." Hild sits down on the cold floor beside him, crossbow across her knees, and says nothing. Brenn's name lies unspoken between you.
+
+You have completed the rescue and more. You are at 300 XP and may take level 2 now.
+
+Level 2 gives you:
+- Hit points: take the fixed 9 more HP, or roll 1d8 and add your Constitution +3 (plus 1 for Dwarven Toughness, at least 1 total before it).
+- Channel Divinity, once per rest, with two options: Turn Undead, and Preserve Life (heal up to 10 HP, divided among creatures within 30 feet, no more than half their maximum).
+- A third first-level spell slot, and you can prepare 5 spells instead of 4 after a long rest.
+
+Do you take the fixed 9 hit points or roll the d8?
+
+== ROUND 25 ==
+PLAYER: I'll take the fixed 9 hit points, steady and sure. And for my fifth prepared spell I'd like Protection from Evil and Good, given what sleeps behind that door.
+  [game] level up: Level up done: Brunhilde Stonehearth is now Hill Dwarf cleric 2 (Life), acolyte background.
+HP 10/12 -> 19/21; hit dice left 2/2 d8
+Features: new Channel Divinity (1/rest), Channel Divinity
+Spell slots now: level 1: 1/3
+Feature uses now: Channel Divinity 1/1 (short rest)
+Can prepare up to 5 spells (was 4); the list changes after a long rest, so the prepared spells are unchanged for now
+DM: You are now a 2nd-level cleric, with 19 of 21 hit points and a new spell slot already waiting (one of three is unspent). Channel Divinity is ready, with Preserve Life to heal up to 10 hit points among creatures within 30 feet and Turn Undead if something stirs that should not.
+
+The rules let you change your prepared spells only after a long rest, so Protection from Evil and Good goes onto your list at your next rest, near dawn. You will have five prepared, with Bless and Cure Wounds always ready besides. Your current list is unchanged for now.
+
+In the quiet, Hild lifts her head. "Stonehearth," she says. "Go sleep. We'll keep the door till morning." Corm says nothing, his palm flat against the cold iron. The stone's breath is slow, even, almost peaceful.
+
+Your quest to rescue the wagon is done. A bigger one has begun: the seal at Hearthdeep is half-mended, a hold's worth of dead are bound behind it, and you gave your word to a grieving dwarf.
+
+What does Brun do now? You might sleep at the cairn, return to the waystation, or stay with Corm and Hild through the night.
+
+== ROUND 26 ==
+PLAYER: Brun sits down on the cold floor between Hild and Corm and says, "I'll stay with you both tonight, if you'll have me. Someone should keep the door company, and Father Dorrin always said no vigil should be kept alone."
+
+She takes out his prayer book, opens it to the evening prayers, and begins reading them softly aloud in Dwarvish, adding Brenn's name to the end.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Guiding Bolt, Sanctuary, Shield of Faith, Protection from Evil and Good; 8 hours later: Day 3, 6:00 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Night Day 2: Brun kept vigil with Hild and Corm at the door, reading Father Dorrin's evening prayers in Dwarvish and adding Brenn's name. The stone's breath stayed slow all night. Brun rested there; Day 3 ~6 AM she is rested, with Protection from Evil and Good now prepared."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: Your voice is low and even in the cold gallery. The old evening prayers come easily, in Father Dorrin's cramped phrasing, and when you reach the end you say Brenn's name once, plainly, and then the names of the sixty that Corm can give you, one at a time. Hild's lips move silently with the first. Corm keeps his scarred arm against the iron and does not lift his head, but his shoulders ease.
+
+Somewhere in the reading, the hum in your teeth fades to nothing. The door breathes slow and even, like a sleeper, and the sweet smell thins. One by one your companions doze against the wall, and you, with your shield for a pillow and your hammer within reach, follow them down.
+
+The night passes without trouble. You wake near six, stiff and warm, with grey light creeping down the tunnel from the mouth. Your wounds are mended and your spells restored: you are at 21 hit points, with all three first-level slots, Channel Divinity ready, and Protection from Evil and Good prepared beside Healing Word, Guiding Bolt, Sanctuary and Shield of Faith.
+
+Corm has not moved from the door. His face is lined but calmer than you have seen it. "The seal holds," he says without turning. "It will not do so forever. A true binding needs the old rite, and that needs a warden's ledger, or a priest of your Morninglord who knows the words of sealing. Father Dorrin may have left some of it in that book of yours. Look at the back pages."
+
+Hild stirs, rubs her eyes, and lays a hand on her crossbow. Above, the day is breaking over the hills.
+
+What does Brun do?
+
+== ROUND 27 ==
+PLAYER: Brun rubs the sleep from her eyes, thanks Corm, and turns Father Dorrin's prayer book over to read its back pages by the grey light. "If he left the rite here, Corm, I want you reading it over my shoulder, since you'll know the warden's words better than I will."
+
+She adds quietly, "DM: remind me, what did the three-stroke sign and the split hammer on Hild's half-map end up meaning? I only have Corm's word that it means 'bound,' and I'd like to be sure about the split hammer."
+  [game] dice Brun's Intelligence (Religion) check to read Father Dorrin's back-page rite of binding with Corm's help, DC 13: 1d20+1 (advantage) = 1d20 [7, 11]→11 + 1 = 12
+  [game] time: 45 minutes later: Day 3, 6:45 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Day 3 morning: Religion 12 (with Corm, DC 13) just short. Father Dorrin's back pages hold half a rite of binding in his hand, copied from a warden: the opening words and the closing, but the middle ('the Naming') is torn out or missing. Corm says the full rite lives in the wardens' ledger kept in the upper stores of Hearthdeep (the seale
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: Corm answers you first, without looking up from the door. "Bound, as I said. The three strokes are the warden's seal: *shut, held, kept*. Not *buried*. You've read it right." He is quiet a moment. "The split hammer is the lowest gallery, the sleeper's own. Where my master walked in. The hammer is broken because the work of that gallery was never finished. Nothing was ever mined there that wasn't also feeding it."
+
+You turn the prayer book to its back pages and Corm kneels beside you, close enough that his scarred arm brushes your sleeve. Father Dorrin's cramped hand fills three leaves you had never read past, copied from some warden long ago, with water-stains and a pressed sprig of mountain thyme between the pages. You and Corm work through it line by line in the grey light.
+
+Most of it comes clear: an opening invocation of the Morninglord's light on the seal, and a closing, the setting of the keeper's hand upon the stone. But between them, where the rite should name what is being bound, there is a gap. A page has been cut out cleanly, with a knife, long ago. You read the stubs and cannot make out more than a few words. Whatever the middle holds, you cannot reconstruct it from what is left, and Corm shakes his head when you look to him. "The Naming was never taught to apprentices. Only the warden-captain knew it, and it was kept in the wardens' ledger."
+
+"The ledger was in the upper stores," he says. "Behind the first bend, there is a side stair the crew has not cleared. The stores were sealed when the lower mines fell, with the oldest timbers, tools, and records inside. That is where Hild's timber came from. Her crew found one door of it. If the ledger survived the damp, the Naming will be in it."
+
+In the margin beside the missing page, Father Dorrin has scrawled in his small hand: *Brun, if you read this, the Naming is not mine to give. Go where the wardens kept it.*
+
+Hild straightens, crossbow in her hands, hope and dread both on her face. The upper stores lie behind the first bend of the tunnel, away from the door and the breathing seal. Your spells are all ready, three slots, with Channel Divinity besides.
+
+What does Brun do?
+
+== ROUND 28 ==
+PLAYER: Brun closes the prayer book gently and presses her thumb to Father Dorrin's scrawled note. "He knew I'd come back to this. Then we go where the wardens kept it, Hild, and we go carefully: wet cloths over our faces, iron tools only, Corm at my shoulder."
+
+She casts Bless on herself, Hild and Corm before they leave the door, and says, "Corm, you've the keeper's hand upon that stone, so stay only as long as you can bear it, and if the seal so much as stirs, we come straight back. Hild, lead on to that side stair, and let's see what the damp has left us."
+  [DM lookup (hidden)] {"name": "Bless", "kind": "spell"}
+  [game] sheet: Brunhilde casts Bless at level 1; timer Brunhilde's Bless: 1 minute; level-1 spell slots: 2/3; concentrating on Bless
+  [DM write_lore (hidden)] {"create": "Upper Stores of Hearthdeep", "kind": "place", "description": "Sealed warden stores reached by a side stair behind the first bend of Hild's tunnel. Old timbers, tools and records; the wardens' ledger with the Naming is believed to be inside. The stair door is an iron-banded wardens' gate, damp and swollen.", "relationships": ["holds the ledger needed for [[Mend the Hearthdeep Seal]]", "
+  [game] notebook: created an entry for Upper Stores of Hearthdeep; added 2 relationships to Upper Stores of Hearthdeep
+  [game] time: 10 minutes later: Day 3, 6:55 AM
+DM: Light spills over the three of you as you speak the blessing, a thin warm gold that settles on Hild's braids and Corm's scarred arm and your own shoulders. It lasts only a minute, as such blessings do, and it is spent before you reach the first bend. You note it plainly: the spell slot is gone and the glow is fading, a waste if nothing is waiting. But Corm gives you a small nod of thanks all the same, and Hild's grip on her crossbow has steadied.
+
+Corm stays at the door, his palm on the iron, and does not look back.
+
+Past the first bend, the tunnel's wall changes. Behind a curtain of hanging roots and a half-fallen timber, a stair of worn dwarf-cut steps drops into the dark, ending after a dozen turns at a squat iron-banded gate set into the wardens' stonework, the hammer-and-three-lines brand burned deep into its panels. The gate is swollen with damp, its hinges thick with rust, and the lock plate is green. Cold air breathes faintly from its seams, not sweet this time, only old: dust, rotted wool, and cold iron.
+
+On the lintel above it, chiseled small, is a line of Dwarvish: *What the hold keeps, the hold remembers.*
+
+Hild whispers, "That's the way in. My crew found this and couldn't shift it." You hear water dripping somewhere below, and nothing else.
+
+What does Brun do?
+
+== ROUND 29 ==
+PLAYER: Brun studies the gate's hinges and lock plate, then looks to Hild. "Rust and damp, not magic, I think, but let me look before we force it. Hild, do you have a pry bar and some oil in your kit? We'll ease it, not break it, because I'd rather this door open quietly."
+
+She holds up the tin bell at her belt, then tucks it under her cloak so it won't chime. "And Hild, keep your crossbow ready but pointed at the floor. Whatever the hold remembers, I'd like it to remember us as guests."
+  [game] sheet: concentration on Bless ends (its timer, if it has one, is removed with change_time)
+  [game] time: timer Brunhilde's Bless removed
+  [game] dice Brun's Strength (Athletics) check, easing the oiled gate with a pry bar, DC 12 (smith's-tools know-how for hinges): 1d20+1 = 1d20 [3] + 1 = 4
+  [game] dice Brun's Intelligence (Investigation) check on the lock plate and lintel for traps, DC 11: 1d20-1 = 1d20 [2] - 1 = 1
+  [game] time: 10 minutes later: Day 3, 7:05 AM
+  [DM write_lore (hidden)] {"entry": "Upper Stores of Hearthdeep", "add_to_description": "Day 3 ~7 AM: Brun's Athletics (4) and Investigation (1) both failed at the gate. The pry bar slipped and the hinge shrieked; the gate gaped a hand's breadth and a rusted wardens' warning-chime on the lintel (missed by Brun) clanged down the tunnel. Echo carried to the Iron-Banded Door: Corm's voice calls faintly; the seal's hum stirs. 
+  [game] notebook: updated Upper Stores of Hearthdeep
+DM: Hild has oil and a short iron bar, and you set to work with the care Father Dorrin drilled into you: oil on the hinge pins, a patient press with the bar's tip, a listening ear to the iron. You tuck Pip's bell beneath your cloak where it cannot sing.
+
+It is not enough. The oil has not soaked through the rust, and the bar skids on the lock plate. The hinge gives with a shriek like a dying mule, and the gate yawns a hand's breadth. You had not spotted what hangs on the lintel above: a little rust-crusted warden's chime on a chain, tripped by the gate's swing. It clangs, loud and flat, down the tunnel and back, again and again, as the echo carries it.
+
+Far behind, at the door, Corm's voice calls your name, faint and sharp. A tremor runs through the stone under your boots, and the low hum you thought was gone swells for a breath, then eases. The seal has stirred. It has not woken.
+
+And in the dark beyond the gate, something has heard. A dry, many-footed scuttling rises from the stores, nearer, and nearer, and in the slit of the gap you see a glitter of tiny eyes in your lamplight.
+
+Hild raises her crossbow. "That's not the seal," she says. "Something lives down there."
+
+What does Brun do?
+
+== ROUND 30 ==
+PLAYER: Brun plants her feet in the doorway and says, "Hild, back me up from behind my shoulder, and aim low for anything that comes through the gap." She raises her shield and murmurs Shield of Faith on herself, then calls over her shoulder, "Corm, the seal's only stirred, hold your hand on it, we'll be quick!"
+
+She holds the gap with her warhammer ready. "If they're only vermin, we drive them off, and if they're more than that, we fall back to the stair and I'll turn them with Channel Divinity."
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Swarm of Rats", "kind": "monster"}
+  [game] sheet: Brunhilde casts Shield of Faith at level 1; timer Brunhilde's Shield of Faith: 10 minutes; level-1 spell slots: 1/3; concentrating on Shield of Faith
+  [game] sheet: AC now 20 (Shield of Faith: +2 AC (18 + 2), concentration, 10 minutes)
+  [game] dice Brun's initiative: 1d20+1 = 1d20 [17] + 1 = 18
+  [game] dice Swarm of Rats initiative: 1d20+0 = 1d20 [11] + 0 = 11
+  [game] fight: Fight started. Order: Brunhilde Stonehearth (18), Rat Swarm (11). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Brunhilde Stonehearth. Brunhilde Stonehearth's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Shield of Faith settles over you in a shimmer of gold, and your shield and hammer come up in the narrow gap. Hild sets her stock to her shoulder, crossbow aimed low and steady, just behind yours.
+
+A grey tide pours through the slit: a rolling carpet of rats, hundreds of them moving as one body, with a hundred tiny red-lit eyes and the sharp stink of old nesting and wet fur. They have not yet reached you. The nearest are a pace beyond the gate.
+
+You have the first move, one action and a bonus action. One note first, since you mentioned Channel Divinity: Turn Undead works only on undead, and these are plain rats, so it will not move them. Your Sacred Flame, your hammer, and Guiding Bolt are the tools you have. Hammer blows are weak against a swarm (it resists bludgeoning, piercing and slashing alike), but Sacred Flame's radiant fire is not turned aside.
+
+The swarm acts after you. What does Brun do?
+
+== ROUND 31 ==
+PLAYER: Brun holds the gap and snaps off a Sacred Flame at the front of the swarm, calling, "Radiant fire, Hild, light them up and aim for the ones that scatter!" If any slip past her shield, she'll fall back a step so the narrow gate keeps them funneled.
+  [DM lookup (hidden)] {"name": "Sacred Flame", "kind": "spell"}
+  [game] dice Rat Swarm's Dexterity saving throw vs Sacred Flame DC 13: 1d20+0 = 1d20 [17] + 0 = 17
+  [game] dice Hild's crossbow attack on the Rat Swarm (AC 10): 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [refused] sheet: nothing to change: pass at least one field
+  [game] fight: Round 1, now: Rat Swarm. Rat Swarm (initiative 11): HP 24/24, AC 10 Rat Swarm's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Rat Swarm bites Brun (AC 20): 1d20+2 = 1d20 [13] + 2 = 15
+  [game] fight: Round 2, now: Brunhilde Stonehearth. Brunhilde Stonehearth's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your Sacred Flame falls across the front of the swarm in a clean white sheet, and the rats flinch and boil sideways out of it, quick enough that the radiance only singes the air. Behind your shoulder Hild's crossbow snaps and the bolt skitters off the stone, the shot jerked wide by the sheer press of eyes and chittering.
+
+The swarm answers by flowing over the gate's threshold in a gray wave, scrabbling at your boots and the hem of your mail. Rats leap, bite, and slide off your shield's glimmering field. Every bite skips off your gold-lit armor and the swarm hisses in frustration. Not a tooth gets through.
+
+It is your turn again in round 2. The swarm sits in your space and Hild's, with the gate narrow behind it. You have one first-level slot left, Sacred Flame, and your hammer, which the swarm resists. What does Brun do?
+
+== ROUND 32 ==
+PLAYER: Brun grits her teeth and casts Sacred Flame again, aiming it right at the thickest knot of rats on her boots. "Hild, keep shooting, and if you can, step back toward the stair so they can't surround you!"
+  [game] dice Rat Swarm's Dexterity save vs Sacred Flame DC 13: 1d20+0 = 1d20 [2] + 0 = 2
+  [game] dice Sacred Flame radiant damage: 1d8 = 1d8 [1] = 1
+  [game] dice Hild's crossbow attack on the Rat Swarm (AC 10): 1d20+4 = 1d20 [15] + 4 = 19
+  [game] dice Hild's crossbow damage (halved by swarm's piercing resistance): 1d8+2 = 1d8 [4] + 2 = 6
+  [game] fight: Rat Swarm took 4: HP 24 → 20
+  [game] fight: Round 2, now: Rat Swarm. Rat Swarm (initiative 11): HP 20/24, AC 10 Rat Swarm's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Rat Swarm bites Brun (AC 20): 1d20+2 = 1d20 [19] + 2 = 21
+  [game] dice Rat Swarm bite damage (piercing): 2d6 = 2d6 [3, 1] = 4
+  [game] sheet: took 4 damage: HP 21 → 17; Brunhilde is concentrating on Shield of Faith: Constitution saving throw, DC 10 (10 or half the damage, whichever is higher); on a failure, end it with concentration_end (and remove the spell's timer)
+  [game] fight: Round 3, now: Brunhilde Stonehearth. Brunhilde Stonehearth's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brun's Constitution saving throw to keep concentrating on Shield of Faith, DC 10: 1d20+3 = 1d20 [5] + 3 = 8
+  [game] sheet: AC back to 18; concentration on Shield of Faith ends (its timer, if it has one, is removed with change_time)
+  [game] time: timer Brunhilde's Shield of Faith removed
+DM: Your second Sacred Flame lands true this time, searing a ragged hole in the swarm, and Hild's bolt punches into the grey mass behind it. The rats shriek and churn, but the swarm closes around its wounds and surges over you. A cluster slips under your shield's edge, and teeth find the gap in your mail. Four sharp bites, and a hot line of pain runs up your leg.
+
+The jolt of it breaks your focus. You falter for half a breath, and the golden shimmer around you gutters and goes out. Your armor is plain chain and shield again.
+
+You are at 17 of 21 hit points, in round 3. The swarm is hurt but far from done, and it sits in your space. You have one first-level slot (Guiding Bolt, or Healing Word, or Sanctuary), Sacred Flame, and your hammer. What does Brun do?
+
+== ROUND 33 ==
+PLAYER: Brun grunts, plants her feet, and casts Guiding Bolt straight into the heart of the swarm. "Hild, keep firing and stay behind me, we're wearing it down!"
+  [DM lookup (hidden)] {"name": "Guiding Bolt", "kind": "spell"}
+  [game] sheet: Brunhilde casts Guiding Bolt at level 1; timer Brunhilde's Guiding Bolt: 6 seconds; level-1 spell slots: 0/3 (Brunhilde Stonehearth has used its action: no more actions this turn.)
+  [game] dice Guiding Bolt spell attack vs Rat Swarm AC 10: 1d20+5 = 1d20 [7] + 5 = 12
+  [game] dice Guiding Bolt radiant damage: 4d6 = 4d6 [2, 5, 6, 1] = 14
+  [game] dice Hild's crossbow vs Rat Swarm, advantage from Guiding Bolt: 1d20+4 (advantage) = 1d20 [2, 18]→18 + 4 = 22
+  [game] dice Hild's crossbow damage (halved by piercing resistance): 1d8+2 = 1d8 [2] + 2 = 4
+  [game] fight: Rat Swarm took 16: HP 20 → 4
+  [game] fight: Round 3, now: Rat Swarm. Rat Swarm (initiative 11): HP 4/24, AC 10 Rat Swarm's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Rat Swarm bites Brun (AC 18): 1d20+2 = 1d20 [20] + 2 = 22 (natural 20)
+  [game] dice Rat Swarm critical bite damage (1d6 doubled, swarm at half HP or fewer): 2d6 = 2d6 [4, 3] = 7
+  [game] sheet: took 7 damage: HP 17 → 10
+  [game] fight: Round 4, now: Brunhilde Stonehearth. Brunhilde Stonehearth's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The Guiding Bolt streaks into the swarm like a falling star and bursts across it in a white flare. Rats shriek and burn and scatter in clumps, and the mass of them shrinks to a ragged, thrashing remnant. Hild's bolt, riding the glow, punches into what is left.
+
+The swarm's last mass of rats lunges anyway, desperate and many-mouthed. Through luck or hunger it finds the gap under your arm, and you feel the teeth bite deep into the meat of your side before you can get the shield around.
+
+You are at 10 of 21 hit points, round 4. The swarm is nearly spent, a few dozen rats at most, still in your space. You have no spell slots, Sacred Flame, your hammer (which the swarm resists, though a rough remnant may still fall to it), and Channel Divinity (Preserve Life could heal you, up to half your maximum, though you would trade your action). What does Brun do?
+
+== ROUND 34 ==
+PLAYER: Brun grits her teeth against the pain and casts Sacred Flame at the last knot of rats. "Almost done, Hild, one more volley and they break!"
+  [game] dice Rat Swarm's Dexterity save vs Sacred Flame DC 13: 1d20+0 = 1d20 [17] + 0 = 17
+  [game] dice Hild's crossbow vs Rat Swarm AC 10: 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [game] fight: Round 4, now: Rat Swarm. Rat Swarm (initiative 11): HP 4/24, AC 10 Rat Swarm's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Rat Swarm bites Brun (AC 18): 1d20+2 = 1d20 [13] + 2 = 15
+  [game] fight: Round 5, now: Brunhilde Stonehearth. Brunhilde Stonehearth's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Miss. Next.
+DM: Your Sacred Flame lances down, and the swarm's last knot ripples aside from it, slipping past the light as if it knew where the flame would fall. Hild's bolt goes wide and rings off the stone.
+
+The remnant bites at you and misses, teeth skittering across your mail. It is a thin, ragged thing now, a few dozen rats at most, and their eyes are rolling. They are fighting out of hunger and fear, with nowhere to go but through you.
+
+Round 5, and it's your turn. You are at 10 of 21 hit points, with no spell slots, Sacred Flame, your hammer (the swarm still resists it, but it is almost spent), and Channel Divinity. What does Brun do?
+
+== ROUND 35 ==
+PLAYER: Brun swings her warhammer two-handed, since her shield is useless against them in this crush, and brings it down on the ragged knot of rats. "Hild, together now, finish them!"
+  [game] sheet: AC now 16 (Shield dropped to wield the warhammer two-handed: Chain Mail 16)
+  [game] dice Brun's two-handed warhammer attack vs Rat Swarm AC 10: 1d20+3 = 1d20 [10] + 3 = 13 (Brunhilde Stonehearth has used its action: no more actions this turn.)
+  [game] dice Warhammer two-handed damage (halved by bludgeoning resistance): 1d10+1 = 1d10 [8] + 1 = 9
+  [game] dice Hild's crossbow vs Rat Swarm AC 10: 1d20+4 = 1d20 [14] + 4 = 18
+  [game] fight: Rat Swarm took 4: HP 4 → 0 (0 HP)
+  [game] fight: Rat Swarm removed from the fight. Order: Brunhilde Stonehearth (18)
+  [game] fight: Fight over after 5 round(s). 30 seconds of fighting; now Day 3, 7:05:30 AM.
+  [game] sheet: XP +50: 350
+  [DM write_lore (hidden)] {"entry": "Upper Stores of Hearthdeep", "add_to_description": "Day 3 ~7:06 AM: Brun and Hild killed the rat swarm that nested in the stores' threshold. Gate now open; Brun's shield lies on the stair, to be retrieved. The stores beyond are dark and dry-smelling."}
+  [game] notebook: updated Upper Stores of Hearthdeep
+DM: Your hammer comes down two-handed in a brutal arc, and the swarm's remnant breaks under it, rats bursting sideways into the dark. Hild's bolt takes the last that tries to flee across the threshold. Then the stair is silent but for dripping water and the two of you breathing hard.
+
+It is over. Torn grey fur lies in drifts on the steps and your side aches where the teeth went in. You are at 10 of 21 hit points, with no spell slots left today and Channel Divinity still ready. Your shield lies on the stair where you dropped it, and you earned 50 XP for the fight.
+
+Hild lowers her crossbow and wipes her brow. "That's the third thing today I didn't want to learn," she mutters. "Rats and the hold's memory. Mind the nests." She nods at the gate, now swung wide by the fight. Beyond it your lamplight runs along a low vault of dry stone, shelves heaped with rotted sacking, rusted tool-racks, and, at the far end, a heavy table with a lectern and a rack of ledgers gone grey with dust.
+
+The air in there is still, cold and dry, no sweet smell. The ledger rack is perhaps forty paces in.
+
+You can retrieve your shield, take a moment to bind your wounds, or go in. What does Brun do?
+
+== ROUND 36 ==
+PLAYER: Brun retrieves her shield from the stair, straps it back on, and uses Channel Divinity for Preserve Life, laying a hand on her own side to close the worst of the bites. "Hild, let me patch that and look you over for bites too, then we go in together, slow, and check each shelf for nests before we step near them."
+
+She adds, "Keep your eyes on the floor and your crossbow loaded. The ledgers are all we came for."
+  [game] sheet: AC back to 18
+  [game] time: 2 minutes later: Day 3, 7:07:30 AM
+DM: You strap the shield back on, and your AC is 18 again. Then you hold your holy symbol up and stop. I'm holding back the spend before it happens, because the rules would waste it: Preserve Life can't restore a creature past half its hit point maximum. Half of your 21 is 10, and you are already at 10. Hild took no bites, so she has nothing to heal either. If you channel now it does nothing and costs you your one use until a rest.
+
+So you do not use it. You go over Hild with a quick, practiced eye instead. She is unbitten. A few rat-scratches on her boots, nothing more. She grunts and says, "I've had worse from my aunt's cat."
+
+You are at 10 of 21, bruised and stiff, with no spell slots left. A short rest (an hour, and you could spend hit dice, up to two d8 plus Constitution) would help, and it would also restore Channel Divinity. The seal at the door is quiet. The stores ahead are cold and dry, with shelves, sacking, and a lectern and ledger rack at the far end, forty paces off.
+
+What does Brun do: rest for an hour first, or go in now?
+
+== ROUND 37 ==
+PLAYER: Brun nods and says, "Thank you for catching that. An hour's rest it is, Hild, because I'd rather face whatever the hold remembers with my wits and a few hit dice spent. Let's sit by the gate where we can hear the seal, and I'll spend both hit dice to patch myself up."
+
+She adds, "Before I sit, I'll look up the stair and call a word to Corm so he knows we're safe and the rats are dealt with."
+  [game] sheet: short rest; 1 hour later: Day 3, 8:07:30 AM
+  [game] sheet: spent 1 hit die (1/2 left): roll 1d8 and add the CON modifier (CON 16 (+3)), then pass the total as heal; the player decides whether to spend another after the roll
+  [game] dice Hit die 1 healing (short rest): 1d8 + CON 3: 1d8+3 = 1d8 [8] + 3 = 11
+  [game] sheet: healed 11: HP 10 → 21
+  [DM write_lore (hidden)] {"entry": "Upper Stores of Hearthdeep", "add_to_description": "Day 3 8:07 AM: Brun and Hild took a short rest at the gate; Corm called that the seal stayed quiet. Brun is at full HP, Channel Divinity restored, one hit die left. Spell slots remain spent (short rest does not restore them) until a long rest (earliest ~6 AM Day 4)."}
+  [game] notebook: updated Upper Stores of Hearthdeep
+DM: You climb a few steps and call up the stair. Corm's voice answers, thin and steady: the seal has stirred twice in the hour but settled both times, and he is well. You report the rats and the open gate, and he says only, "Mind the shelves. The wardens set things where they were not meant to be found."
+
+Then you sit with Hild on the cold step. She shares a heel of bread and a strip of dried mutton, and says little. You pray the morning prayers softly, and the stiffness drains from your side and shoulder as the hour passes.
+
+When it ends, you have rolled one hit die: 8 plus 3 for 11 hit points, which takes you back to 21 of 21 with nothing to spare, so you keep the second die. Channel Divinity is ready again. Your spell slots are still spent. A short rest does not return them, and they come back only with a long rest, the next one possible around six tomorrow morning.
+
+It is now a little past eight. The gate yawns open, and the stores wait: dry shelves heaped with rotted sacking, rusted racks, and the lectern and ledger rack forty paces off, in lamplight that barely reaches.
+
+Hild shoulders her crossbow and waits for you to lead. What does Brun do?
+
+== ROUND 38 ==
+PLAYER: Brun nods, tightens her shield strap, and steps through the gate with her lamp held low. "Slow and together, Hild. I'll check each shelf and sack for nests before we pass it, and you watch the ceiling and the corners."
+
+She keeps Pip's bell tucked under her cloak and heads for the lectern, murmuring, "DM: just to confirm, I'm at 21 of 21 hit points with one hit die left and Channel Divinity ready, and no spell slots until a long rest, right?"
+  [game] dice Brun's Wisdom (Perception) check sweeping shelves and corners as she crosses the stores, DC 12: 1d20+3 = 1d20 [10] + 3 = 13
+  [game] dice Brun's Intelligence (Investigation) check hunting the ledger of the Naming among the warden records, DC 12 (Hild helps with the dust-sheets, Corm's directions): 1d20-1 (advantage) = 1d20 [17, 20]→20 - 1 = 19 (natural 20)
+  [game] time: 40 minutes later: Day 3, 8:47:30 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Day 3 ~8:50 AM: Brun found the warden-captain's ledger (Investigation nat 20). The Naming recovered: it must be spoken at dawn by a priest of the Morninglord at the Iron-Banded Door while the keeper's hand rests on the heartstone. The ledger also reveals the sleeper was not a monster but something the miners hurt: a mountain's grief, a h
+  [game] notebook: updated Mend the Hearthdeep Seal
+  [DM write_lore (hidden)] {"create": "Brenn Ironvein", "kind": "person", "description": "Hild's brother. One of the sixty in the lower galleries of Hearthdeep. The warden ledger records he walked in voluntarily to keep company with the bound sleeper.", "relationships": ["brother of [[Hild Ironvein]]", "listed in the ledger found in the [[Upper Stores of Hearthdeep]]"]}
+  [game] notebook: created an entry for Brenn Ironvein; added 2 relationships to Brenn Ironvein
+DM: Yes, exactly: 21 of 21, one hit die left, Channel Divinity ready, and no spell slots until a long rest.
+
+You go in slowly, lamp low, shield up, and Hild a pace behind, eyes on the ceiling. Your sweep turns up two old rat nests in rotted sacking, long abandoned, and a rusted snare-wire strung across the aisle at ankle height, the wardens' crude alarm, tripped long ago and left slack. You step over it and point it out to Hild, who spits and steps over it too. Nothing else stirs.
+
+At the lectern the ledgers lie in a rack of dry slate, their covers tough as old boot leather. Hild and you turn them one by one under the lamp, and then your hand falls on one without knowing why: the warden-captain's own, its last leaf marked by a strip of faded blue ribbon. Inside, in a tight, upright Dwarvish script, is the Naming.
+
+You read it twice. It is shorter than you feared, a litany of the sixty names, a plea, and a closing word of leave-taking. Beside it the captain has written more than the rite needs. The sleeper below is no monster. It is a hurt and grieving thing, the mountain's own stone-spirit, woken when the lower seam was cut, and the wardens bound it out of fear. The Naming can bind it again, as Corm believes, but it can also release it, if the keeper consents and the sixty are named aloud.
+
+One name is marked in a different hand. *Brenn Ironvein, volunteer. Walked in of his own will to keep it company, and to hold its hand.* You read it to Hild, who goes very still, and then very quiet, and then covers her face with her sleeve.
+
+The rite must be spoken at dawn, by a priest of the Morninglord, at the door, with the keeper's hand upon the stone. That is dawn tomorrow, about six. It is a little before nine now.
+
+What does Brun do?
+
+== ROUND 39 ==
+PLAYER: Brun lays a hand on Hild's shoulder and waits until the dwarf lowers her sleeve. "Hild, Brenn wasn't taken, he chose to stay, and chose to keep something frightened company. Whatever else is true, that's a kind thing, and we'll honor it."
+
+She tucks the captain's ledger into her pack wrapped in a dry cloth. "Let's carry this up to Corm now, and read the rite through together with Hild and him before dawn. Corm has to hear what the captain wrote about releasing it, because it's his hand on the stone and it's his choice to make, not mine."
+  [game] sheet: gained 1 × Warden-captain's ledger (the Naming)
+  [game] time: 30 minutes later: Day 3, 9:17:30 AM
+  [DM write_lore (hidden)] {"entry": "Corm", "add_to_description": "Day 3 ~9:20 AM: Brun brought him the ledger and read him the Naming and the captain's note on releasing the sleeper. Corm must choose bind or release, and the keeper's burden. He asks for the day to decide; at dusk he will tell Brun."}
+  [game] notebook: updated Corm
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Day 3 ~9:20 AM: Ledger shown to Corm; the choice (bind again or release with mercy) is his as keeper. Brun leaves the decision to him and Hild; dawn Day 4 is the rite. Brun's long rest is due ~6 AM Day 4 and must happen before the rite if she is to have spells."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: Hild drops her sleeve and looks at you for a long moment, her eyes red-rimmed and fierce. "Chose to stay," she says. "That's Brenn. He always did pick the lonely end of a rope." She laughs once, a cracked sound, and wipes her eyes with the back of her hand. "Aye. We'll honor it."
+
+You wrap the ledger in dry cloth and tuck it into your pack beside Father Dorrin's book. The two of you climb back past the first bend with your lamp low and the rats' droppings crunching under your boots.
+
+Corm is where you left him, his palm flat on the iron, his scarred arm pale in the lamplight. He listens in silence while you read the Naming aloud, and then the captain's closing note: that the sleeper may be bound, or may be released, if the keeper consents and the sixty are named. When you read Brenn's line he closes his eyes.
+
+"My master wrote none of this," he says at last. "He told me only to keep it shut." He is quiet for a long time. "I have spent forty winters afraid of a thing that was afraid." He lowers his head. "Give me the day, Stonehearth. It is my hand, as you say, and it is a heavy choice. At dusk I will tell you which."
+
+Hild sits down beside him. Neither speaks again.
+
+It is a little after nine, with nearly a day to dawn. Your spell slots return only with a long rest, which you can begin tonight and finish near dawn. You have a ledger, a rite, and a dwarf's decision to wait for.
+
+What does Brun do with the day?
+
+== ROUND 40 ==
+PLAYER: Brun nods and says, "Take all the time you need, Corm. Whichever you choose, I'll stand beside you, and I'll not press you again." She sets her pack down and adds, "Hild, I'd like to go down to the waystation for a few hours, check on Aldric, Dunna and Ilsa, and tell Garrick and the innkeeper that the door holds and nobody is to come up the cairn path. I'll bring back hot food for you both and be here again before dusk."
+
+On the way, she'll copy the names of the sixty into the back of Father Dorrin's book so she can speak them clearly at dawn.
+  [game] dice Brun's Wisdom (Medicine) check examining Aldric, Dunna and the boy's lungs after a night in clean air, DC 12: 1d20+5 = 1d20 [18] + 5 = 23
+  [game] time: 7 hours later: Day 3, 4:17:30 PM
+  [DM write_lore (hidden)] {"entry": "Aldric", "add_to_description": "Day 3 afternoon: Brun (Medicine 23) found Aldric, Dunna and the young miner (Tobin) all recovering in clean air at the waystation; cough fading, no lasting damage. Ilsa's leg is mending and she means to be on the road in a week. Garrick and the innkeeper promised to keep the cairn path closed."}
+  [game] notebook: updated Aldric
+  [game] sheet: money +5 gp: now 20 gp
+DM: The walk down is quiet and wet, and you copy the sixty names into the back of Father Dorrin's book as you go, a few at a time at each bend, in the captain's tight hand. By the time the waystation's roof shows through the rain you have all of them, and Brenn's is the last.
+
+Aldric is sitting up in a chair by the hearth with a bowl of broth, his color good and his breath deep and quiet. Dunna and the young miner, Tobin, are playing knucklebones on the floor, and they cough only a little. You listen to each of their chests in turn, and the sweet rattle is gone, with nothing left but ordinary roughness. Another week in clean air, you tell them, and the innkeeper's wife says she already knows.
+
+Ilsa is awake and sharp as ever. She presses a small purse into your hand, five gold pieces, over your protests: "For the leg and the truth, and you'll not argue with a merchant." Pip tugs at your sleeve and wants to hear about the dragon, and you tell her, truthfully, that there was a swarm of rats and that you did not scream.
+
+Garrick listens to your report with his arms folded. He grunts, nods, and says he and the innkeeper will keep the cairn path shut and sit by it themselves at night if need be. The innkeeper's wife packs you a basket: two loaves, a crock of stew, a flask of broth, and a wedge of hard cheese for Hild and Corm.
+
+It is a little after four in the afternoon. You are at 21 of 21, with 20 gold now. Dusk comes in a few hours, and then Corm's decision, and after it the dawn rite. Your spells will come back with a long rest tonight if you begin by ten or so.
+
+What does Brun do?
+
+== ROUND 41 ==
+PLAYER: Brun thanks Ilsa, tucks the purse away, and says to Garrick, "Would you walk me back up with the basket, friend? I'd welcome your bow on the path, and Corm and Hild will want to meet the man who kept watch over the waystation."
+
+She ruffles Pip's hair and hands her the tin bell's twin promise: "I'll bring you the whole story when this is done, and the bell will ring at the end of it." Then she shoulders the basket and heads up the cairn path with Garrick.
+  [game] time: 2 hours 15 minutes later: Day 3, 6:32:30 PM
+  [DM write_lore (hidden)] {"entry": "Corm", "add_to_description": "Dusk Day 3: Corm decided to release the sleeper with mercy at dawn, not rebind it. He will name the sixty with Brun, rest his hand on the heartstone, and stay at the door as its last keeper until it is done. He asks that Hild be present and that Brun speak Brenn's name last. Garrick met Hild and Corm and stayed to keep the watch at the tunnel mouth."}
+  [game] notebook: updated Corm
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dusk Day 3: Corm chose RELEASE with mercy (not rebinding). The rite is at dawn Day 4: names of the sixty, Brenn last, with Brun as the Morninglord's priest and Corm's hand on the stone. Brun should long-rest through the night to have her spells."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: Garrick carries the basket and neither of you says much on the way up. The rain has thinned to a fine mist and the hillside is quiet, only a wren somewhere in the bracken. At the tunnel mouth Hild is waiting on her flat stone, and she gets up to meet the hunter. They look each other over like two cats in a yard, then Hild nods and takes the basket without a word. Garrick sets his bow across his knees on the rock beside the opening, plainly settled for the night.
+
+In the gallery below, the three of you eat in the lamplight, bread and stew and cheese, and for a little while it is almost cheerful. Corm barely touches his. When the last bowl is scraped, he lays his spoon down and wipes his hands on his knees.
+
+"I have decided," he says. His voice is steady for the first time since you met him. "I'll not bind it again. I was a boy, and I was told to keep it shut, and I have kept it shut for forty winters, and it has been afraid every one of them." He looks at the iron door. "I will put my hand on the stone, as the keeper must. You will say the names, Stonehearth. You will say Brenn's last. And when it is done and the door is open, if it opens, I will go down with Hild and bring up what we can bury."
+
+Hild nods once, hard. "I'll stand beside him."
+
+"It may go badly," Corm adds. "It may wake angry. A keeper's hand does not always protect the keeper."
+
+Outside the mist darkens into night. You have the ledger, the names copied in your book, and one night before dawn. Your spells return only with a long rest, which should begin soon if you are to be ready.
+
+What does Brun do?
+
+== ROUND 42 ==
+PLAYER: Brun puts a hand over Corm's scarred one and says quietly, "Then I'll stand with you, and I'll say every name as if it were my own family's. If it wakes angry, I'll have Sanctuary and Protection from Evil and Good ready for the three of us, and I'll not leave your side."
+
+She turns to Hild. "Let's all sleep in turns tonight, with Garrick keeping the outer watch, so I can take my long rest and have my spells by dawn. And before I lie down, I'll read the names through once more aloud, so they're steady in my mouth."
+  [game] time: 3 hours 27 minutes later: Day 3, 9:59:30 PM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Guiding Bolt, Sanctuary, Shield of Faith, Protection from Evil and Good; 8 hours later: Day 4, 5:59:30 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "add_to_description": "Dawn Day 4 (~6 AM): Brun long-rested through the night with Garrick keeping the outer watch and Hild and Corm at the door; all spells restored (3 slots), Channel Divinity ready. Names of the sixty rehearsed aloud before sleep. The rite is about to begin."}
+  [game] notebook: updated Mend the Hearthdeep Seal
+DM: You take your hands from Corm's, and say the names aloud once through: the sixty, one at a time, in the captain's tight order, with Brenn's last. You say them again, softer, until they sit steady in your mouth like beads on a cord. Then you lie down on your blanket by the wall with your shield for a pillow, and Hild takes the first watch, her crossbow across her knees.
+
+The night passes. Twice you half wake to the soft sound of Garrick's boots on the stair and the murmur of his report to Hild: all quiet, nothing on the path. Once you hear the stone's slow breath at the end of the gallery, like a sleeper who has begun to dream. Corm never sleeps.
+
+You wake a little before six, and the grey light is already in the tunnel mouth. The long rest has done its work: you are at 21 of 21 hit points, with all three first-level slots and Channel Divinity ready. You still have Healing Word, Guiding Bolt, Sanctuary, Shield of Faith and Protection from Evil and Good prepared, with Bless and Cure Wounds always ready besides.
+
+Corm is standing at the door with his scarred arm already bared and his palm laid flat against the iron beside the heartstone. He does not turn. Hild stands at his shoulder, her crossbow lowered and slung. Garrick has come down from the mouth and waits at the bend with his bow unstrung, because Corm asked him to. The air is cold and still, with nothing sweet in it, and the hum has gone so quiet you can barely feel it in your teeth.
+
+"Dawn," Corm says. "Whenever you're ready, Stonehearth."
+
+What does Brun do?
+
+== ROUND 43 ==
+PLAYER: Brun steps up to the door beside Corm, opens Father Dorrin's prayer book to the captain's rite, and sets her holy symbol against the cold iron. Before she begins, she casts Protection from Evil and Good on Corm, since his hand is the one on the stone, and says softly, "Steady, old friend. I'm here."
+
+Then she begins the Naming in a low, clear voice, saying the Morninglord's invocation first, and then each of the sixty names slowly, one at a time, with Brenn Ironvein's last.
+  [DM lookup (hidden)] {"name": "Protection from Evil and Good", "kind": "spell"}
+  [game] sheet: Brunhilde casts Protection from Evil and Good at level 1; timer Brunhilde's Protection from Evil and Good: 10 minutes; level-1 spell slots: 2/3; concentrating on Protection from Evil and Good
+  [game] dice Brun's Wisdom (Insight) check, hearing what the sleeper truly asks as she speaks the Naming, DC 13: 1d20+5 = 1d20 [12] + 5 = 17
+  [game] dice Brun's Wisdom saving throw to hold her concentration and voice as the sleeper wakes, DC 12: 1d20+5 = 1d20 [7] + 5 = 12
+  [game] sheet: concentration on Protection from Evil and Good ends (its timer, if it has one, is removed with change_time); XP +250: 600
+  [game] time: timer Brunhilde's Protection from Evil and Good removed
+  [game] time: 20 minutes later: Day 4, 6:19:30 AM
+  [DM write_lore (hidden)] {"entry": "Mend the Hearthdeep Seal", "status": "done", "add_to_description": "Dawn Day 4: the rite succeeded (Insight 17, WIS save 12). The sleeper, a stone-spirit grieving for the lost miners, was named, mourned and released with mercy; the Iron-Banded Door stands open and the lower galleries breathe clean. Hild and Corm will bring up Brenn and the sixty for burial. Brun was marked: a Morninglor
+  [game] notebook: updated Mend the Hearthdeep Seal
+  [DM write_lore (hidden)] {"create": "Lantern of Hearthdeep", "kind": "legend", "description": "Title given to Brun by Hild's crew and the dwarves of the cairn after the dawn rite: when she named the sixty and offered mercy, the Morninglord's light stood in her holy symbol and filled the lower gallery. Story only, no mechanical effect.", "relationships": ["earned by [[Brenn Ironvein]]'s sister's witness at the rite", "tied
+  [game] notebook: created an entry for Lantern of Hearthdeep; added 2 relationships to Lantern of Hearthdeep
+DM: The ward settles over Corm like a held breath, and his shoulders ease a hair. You open Father Dorrin's book, set your holy symbol against the cold iron beside his scarred hand, and begin.
+
+The Morninglord's invocation first, a low, plain line of light. Then the names. One by one, in the captain's tight order, each given room to be heard. By the tenth the hum under your feet has changed pitch; by the thirtieth the iron beneath your palm is warm. Somewhere deep in the hill, something turns over and listens.
+
+It does not wake gently. At the forty-first name the door shudders, dust sheets down from the lintel, and a vast, slow, sorrowing voice rolls up through the stone, not words but the memory of words, the sound of a weight on a heart. It is afraid. Your whole body knows it. And it is angry in the way the frightened are.
+
+You hear what it asks. It is not release it wants, not at first. It wants *them to stay*. It has been so long alone. You catch your voice before it breaks, and your Wisdom holds. You say the next name, and the next, and you do not stop, because Father Dorrin once found a starving child in the dark and did not stop either.
+
+At the last name you lay your forehead against the iron. "Brenn Ironvein," you say. "He held your hand. You may let go now. We have come to hold it for him."
+
+The light stands up out of your holy symbol, soft gold, like a sunrise through a doorway, and fills the gallery to the vault. Hild falls to her knees. Corm's hand does not move. The great door groans and swings inward on a breath of cold, clean air, with no sweetness in it at all.
+
+Below, as far as the lamplight carries, a long dark gallery opens, and in it, in rows, still and peaceful, the sixty lie in their places, as if sleeping. The voice in the stone is quiet. A sigh, then silence, then nothing but the slow drip of ordinary water.
+
+When it is done, Hild's crew are on their feet and weeping. Garrick has taken off his hood. They are calling you something in Dwarvish, softly, a name that will follow you: the *Lantern of Hearthdeep*.
+
+You earned 250 XP, now 600 of 900. The seal is mended, the dead can come home, and the rest of the day belongs to burying them. What does Brun do?
+
+== ROUND 44 ==
+PLAYER: Brun wipes her eyes, closes Father Dorrin's book, and says softly, "Then let's bring them home properly, Hild. Corm, would you lead us down, and Garrick, could you fetch the innkeeper and the folk at the waystation to help carry and dig?"
+
+She kneels at the first of the sixty and begins the Morninglord's burial prayer, and when she reaches the place where a name is wanted, she looks to Hild. "Show me where Brenn lies, and we'll bring him up first."
+  [game] time: 6 hours later: Day 4, 12:19:30 PM
+  [DM write_lore (hidden)] {"entry": "Brenn Ironvein", "add_to_description": "Day 4: Found at the head of the sixty, seated against the wall of the lowest gallery, one hand open on his knee as if holding another's. Hild carried him up; he was buried first, with the sixty, in clean earth on the hillside by the old ward-cairn at the waystation's edge."}
+  [game] notebook: updated Brenn Ironvein
+  [DM write_lore (hidden)] {"create": "Hearthdeep Burial Ground", "kind": "place", "description": "Hillside field by the old ward-cairn above the Crossroads Waystation where the sixty of Hearthdeep were buried on Day 4 with Brun, Hild, Corm, Garrick and the folk of the waystation. Sixty cairn-stones, one per name.", "relationships": ["site of the burial of [[Brenn Ironvein]] and the sixty", "near the [[Crossroads Waystation
+  [game] notebook: created an entry for Hearthdeep Burial Ground; added 2 relationships to Hearthdeep Burial Ground
+DM: Corm takes the lamp and leads, and you walk down into Hearthdeep together with Hild at your shoulder. The galleries are dry and cold, with nothing bad in the air. The sixty lie where they were bound, their tools beside them, their faces calm. There is no rot, only a long, quiet stillness, as if the mountain kept them as a promise.
+
+Hild finds Brenn at the lowest gallery's head, sitting against the wall with one hand open on his knee, exactly as the ledger said. She kneels and does not speak, and then she lays her forehead on his hand. You say the burial prayer over him first, as you said you would, and then you move down the rows, one after another, with the name each time.
+
+By midmorning the whole waystation is on the hill. Garrick has brought the innkeeper and his wife, Tam and the guard, Aldric on a stick, Dunna and Tobin with their cloths over their mouths for old habit, and Pip, in the arms of Ilsa's carriage-boy, solemn with a cairn-stone clutched in her fist. They carry the sixty out on planks and doors, and dig sixty graves in clean earth by the old ward-cairn, each marked with a cairn-stone and a name. Corm digs his master's grave himself and will not be helped.
+
+You say the prayers at each one. By noon your voice is rough as gravel and your arms ache, and the last stone is set. Hild's face is wet and she is smiling for the first time since you met her. She sets a hand on your shoulder. "You'll have a place at any hearth of Hearthdeep," she says. "Whatever remains of us."
+
+Pip tugs at your sleeve. The bell at your belt chimes once, softly, as if on its own. You ring it for her, the way you promised, and she laughs.
+
+The rockslide is cleared, the road is open, and the hold is quiet. It is a little past noon, and you have 600 of 900 XP, with 2 of 3 spell slots and a ledger that is now Corm's to keep. In the margin of Father Dorrin's book, his last note still waits: *Ask Brunhilde's mother's people at the Deepwatch.*
+
+What does Brun do next?
+
+== ROUND 45 ==
+PLAYER: Brun reads Father Dorrin's last note twice, then closes the book and holds it to her chest. "DM: I never knew he had written anything about my mother's people. Is the Deepwatch a place I've heard of, and did Father Dorrin ever mention where it lies?"
+
+She turns to Hild and Corm. "Before I go anywhere, I'd like to say goodbye properly. Would you tell me what you know of the Deepwatch, and would you walk with me to Father Dorrin's shrine once more, to pray there before I set out?"
+  [DM write_lore (hidden)] {"create": "The Deepwatch", "kind": "place", "description": "Old warden stronghold in the high hills north of Hearthdeep, about three days' walk beyond the waystation; the mother-hall of the mine-wardens, where copies of hold ledgers and the names of the lost are kept. Father Dorrin's margin note says Brun's mother's people may be found there. Not yet visited.", "relationships": ["named in Father 
+  [game] notebook: created an entry for The Deepwatch; added 3 relationships to The Deepwatch
+  [DM write_lore (hidden)] {"create": "The Deepwatch Lead", "kind": "lead", "description": "Father Dorrin's margin note: 'Ask Brunhilde's mother's people at the Deepwatch.' Brun does not remember him ever speaking of it. Hild and Corm say the Deepwatch lies about three days north through the high hills. What Brun knows of her mother is hers to say."}
+  [game] notebook: created an entry for The Deepwatch Lead
+  [game] time: 30 minutes later: Day 4, 12:49:30 PM
+DM: You turn the prayer book over in your hands, and its worn spine feels strange now, as if it held a door you had never opened.
+
+I will be plain about what the story knows. Nothing in your past says Father Dorrin ever spoke of the Deepwatch to you, and the note itself is the only mention. What your mother's people were is yours to say. The note is his hand and his word, and I will not write your family for you.
+
+Hild answers first, wiping her face with her sleeve. "The Deepwatch? Aye. Every warden's child knows the name. It is the old mother-hall of the mine-wardens, up in the high hills north of here, three days' walk if the passes are clear. Where they keep copies of every hold's ledgers, and the names of the lost." She considers you. "Folk say a warden's kin are still sworn there, whatever became of the holds. If your mother's people were of the wardens, that is where they'd be recorded."
+
+Corm has been standing a little apart, his scarred arm bare in the afternoon light. He nods slowly. "Hold-kin go there to ask. I never did. I was afraid of what they would say about what I did." He looks at you. "Take the captain's ledger, if you want it. It is a copy of one at the Deepwatch. They will want to see you with it. I will not need it now."
+
+At the cairn the wind lifts, and the two of them walk with you a little way up the slope to where the road runs into the hills toward the old shrine, as you asked, though it is a long road home and you will pray there at dusk. The bell at your belt chimes once as you walk, and the hills lie wide and grey and open before you.
+
+You are at 21 of 21 with 2 spell slots left, 20 gold, and 600 XP of the 900 for third level. The road north to the Deepwatch is three days, the road back to the shrine is shorter, and the waystation is below.
+
+What does Brun do?
+
+== ROUND 46 ==
+PLAYER: Brun accepts the ledger with both hands. "Thank you, Corm. I'll carry it to them with care, and with your name on it."
+
+"I'll pray at Father Dorrin's shrine first and tidy it for whoever comes next. Then I'll go north to the Deepwatch. Hild, if you hear anything of the wardens' kin, send word to the waystation, and Garrick will know where to find me." She turns toward the shrine road, the bell chiming at her belt. "DM: just to check, how much gold do I have now, and is Pip's bell still on my belt?"
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 4 ~1 PM: Brun means to pray and tidy Father Dorrin's shrine first, then travel north to the Deepwatch carrying the ledger with Corm's name on it. Hild will send word to the waystation through Garrick if she hears of the wardens' kin."}
+  [game] notebook: updated The Deepwatch Lead
+DM: You have 20 gold pieces, the five from Ilsa's purse added to your fifteen, and yes, Pip's tin bell still hangs at your belt, chiming softly as you walk.
+
+Corm presses the ledger into your hands as if it weighed a great deal, and he bows his head to you the way one dwarf bows to another who has earned it. Hild grips your forearm in the old way, hand to wrist. "Whatever you carry, Lantern, you don't carry it alone," she says. "Go well."
+
+Garrick walks with you as far as the road's first bend. He doesn't speak for a long while, and then he says, gruffly, to the air, "You'll want a guide north through the passes. I know those hills." It is not quite an offer, and you suspect it is the most generous thing he has ever said aloud.
+
+Behind you the cairn field sits quiet under the grey sky, sixty stones in a clean row. Ahead the road bends toward the old shrine, then the high hills and the Deepwatch beyond.
+
+You have a long road before you and a few ways to take it. You could ask Garrick to come, as he half-offered, or go alone. You could stop first at the waystation for supplies, or head straight for Father Dorrin's shrine.
+
+What does Brun do?
+
+== ROUND 47 ==
+PLAYER: Brun stops and turns to him with a warm smile. "Garrick, I'd be glad of your company and your knowledge of the passes. Come with me to the waystation first so we can fill our packs, and say goodbye to Pip and Ilsa properly."
+
+"Then we go to Father Dorrin's shrine, and after that north to the Deepwatch together. I'll keep my promise to Pip about the bell on the way."
+  [DM srd_options (hidden)] {"race": "human", "class": "ranger"}
+  [refused] party: NOT BUILT, nothing changed. Problems:
+- base_scores: give all six of STR, DEX, CON, INT, WIS, CHA as whole numbers, before racial increases
+  [DM party (hidden)] {}
+  [DM level_up_options (hidden)] {"who": "Garrick Thorne"}
+  [DM level up (hidden)] {}
+  [game] party: Garrick Thorne joined the party, Human ranger 2, acolyte background
+  [DM write_lore (hidden)] {"entry": "Garrick Thorne", "add_to_description": "Day 4 ~1 PM: Garrick joins Brun as a companion for the road north to the Deepwatch. Human ranger 2 (Archery), mountain terrain, favored enemy monstrosities; knows the high passes."}
+  [game] notebook: updated Garrick Thorne
+  [game] time: 1 hour later: Day 4, 1:49:30 PM
+DM: Garrick stops in the road and looks at you for a long moment, as if checking the weight of the offer. Then he gives one short nod. "I'll fetch my pack," he says, and for the first time since you met him there is the ghost of a smile under the hood.
+
+He is your companion now. The hunter has his longbow, a shortsword at his hip, and a leather coat oiled against the rain. He is a second-level ranger, familiar with these high passes and wise to monsters of the mountains. He has two ranger spells too, Hunter's Mark and Cure Wounds, and two slots to cast them from.
+
+At the waystation the yard is quiet in the afternoon light. The wagon wreck has been cleared from the road, and a patched cart waits at the stable door, where Tam and the mule are already loading it. The innkeeper's wife gives you a sack of oatcakes and dried apple, which you take with thanks, and Ilsa, propped on her chair at the door, presses a wool scarf into your hands against the cold of the passes. Pip stands at the foot of the steps, chin high, trying very hard not to cry.
+
+You ring the little tin bell once, and she takes it in both hands, the way you promised, and holds it to her ear. "It rings at the end of the story," she says. "So you have to come back."
+
+"I will," you say.
+
+It is nearly two in the afternoon. Father Dorrin's shrine lies a half day's walk the other way, and the road north goes up into the high hills from here.
+
+What does Brun do?
+
+== ROUND 48 ==
+PLAYER: Brun kneels to Pip and tucks the bell gently into her small hands. "Keep it safe for me, Pip, and ring it whenever you miss me. I promise I'll come back and tell you the end of the story."
+
+She stands, shoulders her pack, and nods to Garrick. "Shrine first, then. We'll walk until dusk and camp wherever the road gives us shelter, and I'll cast Shield of Faith or Sanctuary if anything troubles us on the way."
+  [game] sheet: lost 1 × Tin bell (Pip's luck charm)
+  [game] dice Garrick's Wisdom (Perception) on the road at dusk, DC 12: 1d20+4 = 1d20 [2] + 4 = 6
+  [game] time: 4 hours 30 minutes later: Day 4, 6:19:30 PM
+DM: Pip's fingers close around the bell, and she holds it against her chest as if it might escape. "I'll ring it every night," she says fiercely. The bell is hers now, so it is gone from your belt and your pack, and you feel the lightness of it.
+
+You and Garrick take the road west under a clearing sky. He walks a little ahead, eyes on the ridgeline, saying nothing, and the quiet is a comfortable one. The road climbs, drops into a gully of birch and wet bracken, and climbs again. You eat oatcakes on the move.
+
+The light is going gold and low when the shrine comes into view on its shelf of rock: a small, squat stone hut with a slate roof, a lean-to for travelers, a stone Morninglord's sun carved over the door, exactly as you left it. Smoke does not rise from it. There is no one to light the fire.
+
+Garrick, scanning the slope as you approach, misses the thing at the door, and you almost do too. Someone has been here since you left. The shrine's door stands ajar, a fresh mud-print of a boot lies across the step, and a small pile of stones has been built on the threshold, three in a row: the wardens' sign for *kin passed here*.
+
+Within, a candle burns on the altar, lit not long ago, with its wax still soft.
+
+Your pack is heavy, the light is failing, and Garrick has unslung his bow without a word. You have two spell slots and Channel Divinity. What does Brun do?
+
+== ROUND 49 ==
+PLAYER: Brun lifts a hand to stop Garrick, then speaks low. "Easy, friend. Whoever left that sign meant kin, not harm, and I'd like to be the first through the door, with my hammer down and my holy symbol showing."
+
+She steps onto the threshold, nudges the door wider, and calls softly in Dwarvish, "This is Brun Stonehearth, Father Dorrin's foundling. If you lit that candle, I'm home, and I mean no harm."
+  [DM write_lore (hidden)] {"create": "Maren Stonehearth", "kind": "person", "description": "Elderly dwarf woman of the Deepwatch wardens, travel-worn, who lit the candle at Father Dorrin's shrine and left the wardens' kin-sign. She was sent south by the Deepwatch after news of the Hearthdeep seal stirring reached it, and carries a warden's token. Her bond to Brun (what she is to her) is revealed in her own words; she says 
+  [game] notebook: created an entry for Maren Stonehearth; added 3 relationships to Maren Stonehearth
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 4 dusk: at Father Dorrin's shrine Brun found a candle lit and the wardens' kin-sign laid on the threshold by Maren Stonehearth, an old warden of the Deepwatch who answers Brun's Dwarvish call from within."}
+  [game] notebook: updated The Deepwatch Lead
+  [game] time: 10 minutes later: Day 4, 6:29:30 PM
+DM: Your voice goes into the little stone room and comes back to you from the walls, the way it did through all your childhood evenings. For a moment there is only the candle's small sound.
+
+Then something stirs near the altar, and a figure rises slowly from the bench where the old priest used to sit. A dwarf woman, ancient even by dwarf reckoning, her braids white as bone and bound with iron rings, a worn warden's cloak pinned at the shoulder with a hammer-and-three-lines brooch. She leans on a staff of black oak. Her eyes are your eyes: soot-dark, steady.
+
+She says, in the old tongue, hoarse with the road, "I told myself I would sit one hour and go if you did not come. It has been three days." She looks at you the way you looked at the names in the ledger. "You have his chin. Your mother had that same stubborn chin, Brunhilde."
+
+You cannot move. Garrick's bow lowers by itself behind you.
+
+"My name is Maren Stonehearth," she says. "I am your mother's mother's sister, and the last of the wardens' line that sat at the Deepwatch before the holds fell. Dorrin wrote to us the winter you came to him. We could not come. We were told a child was found in a collapsed shaft, and that she would be safer where no warden's blood was known." Her voice thins. "That was a lie told to keep us frightened. I have regretted believing it every year since."
+
+On the altar beside the candle lies a small, battered iron ring, braided with a lock of auburn hair gone dull with age, the same auburn as your own.
+
+"It was hers," Maren says. "I carried it three days to put it in your hand. The Deepwatch has news of Hearthdeep, and of you. Whether you come north is your choice. But tonight I would like to sit in a warm place with my kin, if you will have me."
+
+The shrine is quiet. The candle gutters and steadies. The ring lies on the altar, waiting.
+
+What does Brun do?
+
+== ROUND 50 ==
+PLAYER: Brun crosses the little room in three strides, and when she reaches the altar her hand trembles over the iron ring before she closes her fingers around it. "Aunt Maren," she says, her voice breaking on the word, "yes. Please sit. I'll light the hearth and put the kettle on, and Garrick will help me, because tonight this is a warm place and you are kin."
+
+She slips the ring onto her smallest finger and turns back, wiping her eyes. "I have so many questions, but first tell me one thing: what was my mother's name, and how did she die?"
+  [DM write_lore (hidden)] {"create": "Sigrun Stonehearth", "kind": "person", "description": "Brun's mother, a warden-surveyor of the Deepwatch who mapped shafts for the hill-holds. Auburn-haired, stubborn-chinned. She died when the shaft she was surveying near the hill-hold collapsed; she shielded her small daughter with her own body, and Brun was found alive beside her days later by Father Dorrin. The iron ring braided wi
+  [game] notebook: created an entry for Sigrun Stonehearth; added 4 relationships to Sigrun Stonehearth
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 4 evening: Maren told Brun her mother was Sigrun Stonehearth, a warden-surveyor who died shielding her in the shaft collapse. Brun now wears the iron ring with Sigrun's hair. Maren has news from the Deepwatch to share by the fire and wants Brun to come north; the father's name is kept in the Deepwatch records."}
+  [game] notebook: updated The Deepwatch Lead
+  [game] sheet: gained 1 × Sigrun's iron ring (braided with auburn hair)
+  [game] time: 2 hours later: Day 4, 8:29:30 PM
+DM: Maren sits down on the old priest's bench and does not answer until the fire is lit. Garrick splits kindling with his shortsword, you set the kettle on the hook, and the little stone room fills slowly with warmth and the smell of woodsmoke. It is the first fire the shrine has had since you left.
+
+Then she tells you.
+
+"Sigrun," she says. "Sigrun Stonehearth. A warden-surveyor, the best the Deepwatch ever sent down a shaft. She could read a seam like you read a face. She drew the maps the hill-holds still use." She almost smiles. "Stubborn as an anvil. She would not be told a shaft was unsafe if her own line said otherwise."
+
+The fire pops. Maren's hands tighten on her staff.
+
+"The shaft she was surveying outside the hold gave way while you were with her. She was not meant to have you there; the nurse had fallen ill, and she would not leave you alone. When the roof came down she put herself over you. That is how you lived. They dug for four days. Dorrin found you on the fourth, alive under her, cold, and holding a handful of her braid in your fist."
+
+She nods at the ring on your finger. "That is what he cut from it. He kept it for you, and then, I think, he did not know how to give it. He wrote to us once, and we did not come, and the years went on."
+
+Her eyes are wet but her voice does not break. "As for your father, he was not a warden. The rest is in the Deepwatch records, and it is not mine to say by a fire at night, half told. Come north, and I will show you the page."
+
+Garrick keeps his eyes on the flames and says nothing, but when you glance at him he has set a second cup beside Maren's, and filled it, and nudged it toward you. Outside the stars are coming out over the hills.
+
+You are home, at the shrine where Father Dorrin raised you, with kin at the fire and a ring on your finger. It is a little past eight. You have two spell slots, Channel Divinity, and a long road north when you are ready. What does Brun do?
+
+== ROUND 51 ==
+PLAYER: Brun takes the cup Garrick set for her, holds it in both hands, and sits down beside Maren, leaning her shoulder against her aunt's. "Thank you, Aunt Maren. I'll come north, and we'll read that page together when I'm ready."
+
+"But tonight I'd like to stay here and keep Father Dorrin's hearth lit one last time, and say the evening prayers aloud with you, if you'll join me. Garrick, you'll share the watch with me?" She smiles, a little wet-eyed, and adds, "DM: just to be sure, I still have Corm's ledger and Father Dorrin's prayer book in my pack, correct?"
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Guiding Bolt, Sanctuary, Shield of Faith, Protection from Evil and Good; Garrick Thorne: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 5, 4:29:30 AM
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Night Day 4: Brun, Maren and Garrick kept the hearth and evening prayers at Father Dorrin's shrine and shared the watch; long rest taken. At dawn Day 5 they set out north for the Deepwatch (about three days) with Maren and Garrick."}
+  [game] notebook: updated The Deepwatch Lead
+DM: Yes: Corm's ledger and Father Dorrin's prayer book are both in your pack, wrapped in dry cloth, and the ring is on your smallest finger.
+
+You say the evening prayers aloud with Maren, the old priest's words in two voices, hers dry and cracked, yours low and steady. When you reach the place where Father Dorrin's name belongs, you say it, and she says it after you. The hearth burns down to a bed of red. Garrick takes the first watch at the door with his bow across his knees, and you take the second. Nothing comes up the road. Once in the small hours an owl asks its question and no one answers.
+
+You sleep in the old priest's own bed, on the old priest's own blanket, and for the first time in a long while you do not dream of stone.
+
+It is a little after four in the morning when you wake, rested, at 21 of 21 hit points with all three spell slots and Channel Divinity ready. The same five spells are prepared, with Bless and Cure Wounds always ready besides. Grey light is just starting in the shrine's one window. Maren is already up, sitting by the cold hearth with her staff across her knees, watching you with an expression you have not seen on anyone's face before, one you suspect is called pride.
+
+Garrick has the packs ready by the door, and the road north runs up into the high hills, three days to the Deepwatch.
+
+What does Brun do?
+
+== ROUND 52 ==
+PLAYER: Brun rises, folds Father Dorrin's blanket neatly on the bed, and lays a hand on the lintel of the little shrine for a moment before she shoulders her pack. "Aunt Maren, Garrick, I'm ready. Let's be on the road north while the light is still gray and the passes are quiet."
+
+She stirs the cold ashes once and says softly, "Rest well, Father. I'll come back and tell you how it ends."
+  [game] time: 10 hours later: Day 5, 2:29:30 PM
+  [game] dice Garrick's Wisdom (Survival) check reading the high pass for the safest line, Natural Explorer doubles proficiency (+2+2+... mountain), DC 12: 1d20+4 = 1d20 [18] + 4 = 22
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 5 afternoon: the party (Brun, Garrick, Maren) is on the north road, well into the high hills, making good time under Garrick's guidance. The Deepwatch lies roughly two days further. Next stop: a warden waymark-hut at the saddle for the night."}
+  [game] notebook: updated The Deepwatch Lead
+DM: The road north climbs out of the birch gullies and into bare, wind-scoured hills, where the grass lies flat and the cairns of old warden waymarks stand at every rise. You leave the shrine's smoke behind you at the first ridge and do not look back, though you want to. Maren walks slower than you, her black staff striking the stones in an even beat, but she does not falter and she does not complain.
+
+Garrick takes the lead and reads the land like a page. Where the old track washes out at a stream, he finds the ford; where it climbs into scree, he finds the sheep trail that skirts it. Twice he stops, lifts a hand, and listens, then goes on. Nothing follows you. Once a pair of ravens wheel overhead for an hour, and Maren says they are only ravens.
+
+By midafternoon you have crossed two ridges and a high saddle, and Garrick estimates you are a full day ahead of the pace he feared. "The Deepwatch is two days yet," he says, not turning his head. "Maybe a day and a half, if the weather holds. There's a warden's waymark-hut at the next saddle. We can shelter there tonight."
+
+It is half past two. The sky is high and pale, the wind steady, and the path ahead runs on through the hills, long and bare and quiet. You are at full strength, with three spell slots and Channel Divinity ready, and kin walking beside you.
+
+What does Brun do?
+
+== ROUND 53 ==
+PLAYER: Brun falls into step beside Maren and shortens her stride to match. "Aunt Maren, while we walk, would you tell me about the Deepwatch itself, and about my mother as a girl? I'd like to hear the small things, like what she liked to eat and what songs she sang."
+
+She glances ahead at Garrick and adds, "Garrick, thank you for the ford and the sheep trail. At the waymark-hut tonight I'll cook, since you've done the hard work all day."
+  [DM write_lore (hidden)] {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 (Maren's stories on the road): as a girl Sigrun hoarded flat river stones and chalked maps of the Deepwatch's corridors on them; loved barley-and-honey cakes and sour plum jam; sang a work-song about a lamp-maker's daughter, 'Seven Wicks', badly and loudly; refused to wear a helm in the shafts until she cracked her head at twelve. She ma
+  [game] notebook: updated Sigrun Stonehearth
+  [DM write_lore (hidden)] {"entry": "The Deepwatch", "add_to_description": "Described by Maren on the road: a hall cut into a single mountain, seven galleries high, with a lamp-lit Hall of Names where every warden's death is carved. A few dozen wardens and their kin still live there; it has grown quiet since the holds fell. The captain is Maren's old rival and Brun's great-grandfather's grandnephew, a stern dwarf named Tor
+  [game] notebook: updated The Deepwatch
+  [game] time: 4 hours later: Day 5, 6:29:30 PM
+DM: Maren gives you the answer slowly, a few steps at a time, as if each memory had to be taken down from a high shelf.
+
+Your mother, she says, was a hoarder of flat river stones. As a girl she chalked maps of the Deepwatch's corridors on them and left them in odd corners, so that for years the wardens found little grey stones in the lamp-niches with a corridor drawn on them and a tiny, furious arrow. She loved barley-and-honey cakes and sour plum jam, and could not be kept from the kitchens. She sang one song, badly and loudly, a lamp-maker's work-song called "Seven Wicks," and every warden on the seventh gallery knew it by heart whether they wanted to or not. She would not wear a helm in the shafts until she cracked her head on a low lintel at twelve, and after that she wore one for the rest of her life and complained about it daily.
+
+Maren hums a bar of the song under her breath, flat and dry, and you realize with a start that you know the tune. Father Dorrin used to whistle it while he mended the shrine roof.
+
+She tells you of the Deepwatch too: a hall cut into a single mountain, seven galleries high, with a lamp-lit Hall of Names where every warden's death is carved. A few dozen wardens and their kin still live there, and it has grown very quiet since the holds fell. Its captain is a stern dwarf named Torvald Greycairn, who was Maren's rival for forty years and is, she admits, probably her only friend. He disapproved of your mother's marriage, she adds, and she lets that sit.
+
+By evening the waymark-hut stands at the saddle, a low stone shelter with a turf roof and a hearth and a stack of dry peat left by some earlier traveler. Garrick has already checked the corners, and he nods once. You keep your promise and cook: oatcakes toasted on the hearthstone, dried apple stewed in a pot, a bit of cheese. Maren eats two helpings and says the stew is not bad for a priest.
+
+It is a little past six. The wind is rising off the hills, the hut is warm, and the Deepwatch lies a day and a half north. You have three spell slots and Channel Divinity. What does Brun do?
+
+== ROUND 54 ==
+PLAYER: Brun sits back by the peat fire with her bowl and hums a flat, loud bar of "Seven Wicks," then grins at Maren. "Father Dorrin whistled that every time he mended the roof, and I never knew it was hers. Will you teach me the words tonight?"
+
+She adds, "Garrick, would you take the first watch and wake me for the second? And Aunt Maren, you said Torvald Greycairn disapproved of my mother's marriage, so when you're ready, I'd like to hear a little about my father too."
+  [DM write_lore (hidden)] {"entry": "Sigrun Stonehearth", "add_to_description": "Night Day 5 at the waymark-hut: Maren taught Brun the words of 'Seven Wicks' and, pressed, gave a little of Brun's father: a hill-hold lamp-maker, a quiet dwarf with soot-black eyes who made lamps for the Deepwatch's seventh gallery and was the reason Sigrun wrote 'Seven Wicks' into every corner; Torvald Greycairn objected because he was not o
+  [game] notebook: updated Sigrun Stonehearth
+  [game] time: 11 hours 30 minutes later: Day 6, 5:59:30 AM
+DM: Maren puts down her bowl and clears her throat like a woman about to be paid for something she'd rather do for free. Then she sings it. Her voice is cracked and thin and entirely without shame, and the old song comes out in a plain, rolling rhythm about a lamp-maker's daughter and seven wicks, each one lit for a thing she had lost. By the third verse you have the tune, and by the fifth you are singing it loud and flat, exactly as Sigrun did. Garrick, on watch at the door, does not turn his head, but his shoulders shake once.
+
+When the song is done and the fire has burned low, you ask about your father, and she is quiet a long while.
+
+"I will give you a little," she says, "and the rest at the Deepwatch, where it is written in stone as he deserves. He was a lamp-maker from a hill-hold, a quiet dwarf with soot in the creases of his hands and eyes as dark as yours. He made the lamps for the seventh gallery, the ones that never smoke. That is why she wrote his trade into the song, and why every corner of the seventh gallery has a lamp in it that she insisted on." She almost smiles. "Torvald objected because he would not swear the wardens' oath. He said he was a lamp-maker and not a soldier, and that he would light the way for anyone but would not choose a side. It was the stubbornest thing I ever heard from a man who weighed nothing. They married anyway."
+
+She pats your hand. "His name is carved. You will read it there."
+
+Garrick takes the first watch and wakes you for the second. Nothing stirs in the hills but the wind. The night passes, and the grey dawn finds you at the doorway of the hut with the whole high country laid out before you, cold and pale and clean.
+
+It is just before six on day six. You are at 21 of 21 with all spell slots and Channel Divinity. The Deepwatch lies a day or less ahead, and Garrick says the weather is turning. A bank of cloud is building in the north.
+
+What does Brun do?
+
+== ROUND 55 ==
+PLAYER: Brun studies the building clouds and turns to Garrick. "You know these hills better than I do. Do we push on and try to reach the Deepwatch before the weather breaks, or find shelter along the way? I'll follow your read."
+
+She helps Maren to her feet and tucks Ilsa's wool scarf around her aunt's shoulders. "Aunt Maren, if the wind gets bad, take my arm and keep the scarf up, and tell me the moment you tire."
+  [game] dice Garrick's Wisdom (Survival) check reading the weather and choosing the route, Natural Explorer doubles proficiency (+2 WIS +4), DC 13: 1d20+6 = 1d20 [8] + 6 = 14
+  [game] time: 11 hours 30 minutes later: Day 6, 5:29:30 PM
+  [DM write_lore (hidden)] {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:30 PM: the party reached the Deepwatch's outer gate ahead of a storm. The gate is a pair of bronze-banded doors set into a sheer cliff under a lamp-lit overhang, with a warden sentry on the wall above who challenges them in Dwarvish and asks the name of Maren's companion."}
+  [game] notebook: updated The Deepwatch
+DM: Garrick studies the north for a long minute, wets a finger, and watches the cloud-bank crawl. "It will break by dusk," he says. "Hard. But the Deepwatch is a long day off, not two, and the track runs along the lee of the ridge the whole way. We push. Slow and steady, no stops but short ones, and the old woman rides my pack-strap at the steep places." Maren snorts at that, but she does not argue.
+
+It is a long, hard day. The wind rises through the morning and by noon it is a living thing, tugging at your cloak and plucking at the scarf you have tied about Maren's shoulders. You walk at her side with her arm through yours, and twice she leans on you more than she means to, and you say nothing. The first cold drops of rain come at three, and by four the sky has gone the color of slate. Garrick's route holds: every time the weather seems about to catch you, the track bends in under a shoulder of rock and the worst of it goes by overhead.
+
+A little before half past five, in the first real roar of the storm, you come over the last rise and the Deepwatch stands before you.
+
+It is a single mountain with a face cut into it. Seven rows of narrow, lamplit windows climb the cliff like a stair of gold, and below them, set deep under a great overhanging brow of stone, stand a pair of bronze-banded doors twice the height of a dwarf. A lamp burns on either side of them, steady against the wind. On the wall above, a sentry in a hooded warden's cloak has already spotted you and leans over the parapet with a lantern.
+
+"Who comes to the Deepwatch in the storm?" the sentry calls in Dwarvish. "Maren? Is that you? Gods, you are three days late. And who is that with you, the one with the dented mail?"
+
+Maren straightens beneath your hand and lifts her chin, and in the rain her face is suddenly very proud.
+
+"Tell the captain," she says, and her voice carries, "that Sigrun's daughter has come home."
+
+You are at 21 of 21, with three spell slots and Channel Divinity, in the shelter of the gate. What does Brun do?
+
+== ROUND 56 ==
+PLAYER: Brun squares her shoulders, wipes the rain from her face, and calls up to the sentry in clear Dwarvish, "I'm Brunhilde Stonehearth, Sigrun's daughter, raised by Father Dorrin Ashbeard. I carry a copy of the Hearthdeep warden-captain's ledger, and I've come home."
+
+She keeps one hand on Maren's arm and glances at Garrick. "Stay close, friend. You're with me, and you're welcome here."
+  [game] dice Brun's Charisma (Persuasion) check, gate sentry and the captain's hearing of her claim with the ledger and Maren's word, DC 10: 1d20+2 = 1d20 [18] + 2 = 20
+  [DM write_lore (hidden)] {"create": "Torvald Greycairn", "kind": "person", "description": "Stern, iron-bearded captain of the Deepwatch wardens, Maren's rival of forty years and only friend. Disapproved of Sigrun's marriage to a lamp-maker. Met Brun at the gate hall on Day 6 evening; received the Hearthdeep ledger with solemnity and promised her the Hall of Names at first light.", "relationships": ["captain of [[The Deepw
+  [game] notebook: created an entry for Torvald Greycairn; added 3 relationships to Torvald Greycairn
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~6 PM: Brun's Persuasion 20 at the gate: the doors opened. Captain Torvald Greycairn received her in the gate hall, took the ledger to be copied and kept in the Deepwatch archive, and promised her the Hall of Names at first light. Brun and Garrick are guests; Maren has gone to rest."}
+  [game] notebook: updated The Deepwatch Lead
+  [game] time: 1 hour later: Day 6, 6:29:30 PM
+DM: Your voice carries over the wind and the rain, clear and unhurried, in the old tongue. For a moment the sentry stares. Then he is gone from the parapet, and you hear the sound of bolts drawn back inside the stone.
+
+The great doors open on a gate hall of dressed granite, its roof lost in lamplight and its floor worn smooth by a thousand years of boots. A dozen wardens in grey and hammer-brooched cloaks stand along the walls, still as pillars, and at the far end under a stern carved arch a single dwarf waits: iron-bearded, heavy-browed, his cloak pinned with a captain's seven-lamp brooch. Torvald Greycairn. He says nothing at all while you cross the hall, until Maren steps forward and lays her palm flat on his chest.
+
+"You old fool," she says. "I told you I'd find her."
+
+His jaw works. He looks at her hand, and then at you, and then at the ring on your finger, and his face does something very difficult to put a name to. "Aye," he says, gruff and hoarse. "You did."
+
+You offer the ledger, and he takes it in both hands as if it were warm. He opens it to the faded blue ribbon and reads the captain's last leaf, and his lips move over the Naming. When he looks up his eyes are bright. "The Naming," he says. "It was lost with the holds. We have waited forty years for this." He closes it. "It will be copied tonight and set in the archive with Corm's name on it, and yours. You have done the Deepwatch a service we cannot repay, daughter of Sigrun."
+
+He does not embrace you, because he is not that sort of dwarf. But he lays one hard hand on your shoulder and says, "The Hall of Names is closed at night. At first light I will take you there myself. There is a page you should read."
+
+A warden brings you hot broth, a clean bed in the guest gallery, and a dry cloak. Garrick, silent as ever, is shown to a bunk beside yours and sleeps with his bow within reach. Maren is already sleeping in a chair by the fire, wrapped in your scarf.
+
+It is half past six. Your spells are full. The Hall of Names waits for morning.
+
+What does Brun do?
+
+== ROUND 57 ==
+PLAYER: Brun thanks the warden for the broth and the cloak, then turns to Torvald and bows her head. "Thank you, Captain Greycairn. I'll be at the Hall of Names at first light, and I'd be honored if Aunt Maren and Garrick could come with me."
+
+She tucks the blanket more snugly around Maren in her chair, then sits by the fire with Father Dorrin's prayer book and softly says the evening prayers, adding her mother's name and her father's, though she doesn't yet know it, before she lies down to sleep.
+  [DM write_lore (hidden)] {"create": "Dagrim Wickwright", "kind": "person", "description": "Brun's father, a quiet hill-hold lamp-maker with soot-dark eyes who made the smokeless lamps of the Deepwatch's seventh gallery and refused the wardens' oath. When the shaft fell on Sigrun and Brun, he dug for them three days with the wardens and died in a second collapse while pulling the last timbers; Dorrin found Brun on the four
+  [game] notebook: created an entry for Dagrim Wickwright; added 3 relationships to Dagrim Wickwright
+  [DM write_lore (hidden)] {"entry": "The Deepwatch Lead", "add_to_description": "Day 7 dawn: Torvald took Brun, Maren and Garrick to the Hall of Names. Father: Dagrim Wickwright, lamp-maker, died in the second collapse digging for them. Torvald carved the name himself. Torvald offers Brun a place at the Deepwatch as its priest of the Morninglord, and asks that someone carry the Naming back to other sealed holds; the seal a
+  [game] notebook: updated The Deepwatch Lead
+  [DM write_lore (hidden)] {"create": "The Sealed Holds", "kind": "lead", "description": "Torvald Greycairn says Hearthdeep was not the only hold the wardens sealed in the years the holds fell. Four more seals are named in the Deepwatch archive, their keepers long dead, and the Naming now lets a priest mend or mercifully release them. He asks Brun, the Lantern of Hearthdeep, to consider carrying it. Nearest: Ember Gate, two
+  [game] notebook: created an entry for The Sealed Holds
+  [game] sheet: XP +100: 700
+  [game] time: 11 hours 30 minutes later: Day 7, 5:59:30 AM
+DM: You say the evening prayers by the fire and add two names, your mother's and a second you do not yet have. In the gap where it belongs you say only, "my father," and the fire pops softly as if in answer. Then you sleep, deeply, in a bed that smells of clean wool and lamp-oil.
+
+Before first light a warden raps on the door. Torvald is waiting in the corridor with a lantern, Maren leaning on her staff beside him, and Garrick already dressed and silent behind you. The captain leads you down, gallery after gallery, past lamp-niches each holding a small flat river stone with a corridor chalked on it. You notice them now. At the lowest level a plain oak door opens on the Hall of Names.
+
+It is a long, quiet chamber with a vault like an upturned boat, lit by a single row of lamps whose flames do not flicker or smoke. Every wall is carved: names, hundreds of them, row on row, and beneath each the date and a hammer-and-three-lines mark. Torvald lifts his lantern and walks you to the far end, the seventh gallery's wall, and stops.
+
+There, among the wardens, is your mother's name: SIGRUN STONEHEARTH, SURVEYOR. And beneath it, cut a little deeper and a little more carefully than the rest, is another.
+
+DAGRIM WICKWRIGHT, LAMP-MAKER. HE WOULD NOT SWEAR. HE DUG.
+
+"He dug for three days beside my wardens," Torvald says, low and gravelly. "A man who weighed nothing and would not choose a side. When the second fall came he was pulling the last timber from over the place where the child lay. It took him. I had his name cut myself, the week after, among the wardens, though he never swore." His jaw works. "I was wrong about him. I have been wrong about him for forty years. Dorrin found you on the fourth day, under your mother, with his lamp lying beside you, still lit."
+
+You put your hand on the stone. It is cool, and the carving is clean-edged. Maren's hand finds your shoulder.
+
+After a long time Torvald clears his throat. "The Deepwatch has a place for a priest of the Morninglord, if you want one. But there is another matter. Hearthdeep was not the only hold the wardens sealed. Four more seals are named in our archive, their keepers long dead. With the Naming copied and your example, a priest could mend them, or release what sleeps there with mercy. I would not ask you to carry it. I ask you to think on it."
+
+The lamps burn steady on the wall. You are at 21 of 21, with 700 of the 900 XP for third level, and a ring on your finger. What does Brun do?
+
+== ROUND 58 ==
+PLAYER: Brun keeps her hand on her father's name a long moment, then traces the words *he would not swear, he dug* with her thumb. "Thank you, Captain. Thank you for cutting it, and for telling me true."
+
+She turns, wipes her eyes, and says, "I'll think on the four seals, and I'll not say no. But first I'd like to sit here a while with my mother and father, and say the morning prayers aloud with Aunt Maren. DM: remind me, which of Father Dorrin's last words did I never get to read, and is there anything more in the back of his book I haven't checked?"
+  [DM write_lore (hidden)] {"create": "Father Dorrin's Last Leaf", "kind": "item", "description": "A single folded leaf pressed flat inside the back cover of Dorrin's prayer book, written in his hand, found by Brun at the Hall of Names on Day 7. It is a letter to Brun: that he kept the book for her, that he wrote three letters to the Deepwatch in her first year, and that he asked them to come and fetch her, never to stay aw
+  [game] notebook: created an entry for Father Dorrin's Last Leaf; added 3 relationships to Father Dorrin's Last Leaf
+  [DM write_lore (hidden)] {"create": "Who Cut the Props", "kind": "lead", "description": "Father Dorrin's last leaf says he sent three letters to the Deepwatch in Brun's first year, asking them to come for her; Maren says only one arrived, and that she was told Brun was safer unknown. He also believed the shaft's props were cut before the second collapse that killed Dagrim, by someone unknown. Someone kept the Deepwatch an
+  [game] notebook: created an entry for Who Cut the Props
+  [game] time: 1 hour later: Day 7, 6:59:30 AM
+DM: Torvald steps back without a word and takes his lantern with him as far as the door, and Garrick goes with him, closing it softly. You and Maren are left in the long hush of the hall, with the single row of steady lamps and your parents' names above your head.
+
+You say the morning prayers aloud, Father Dorrin's cramped phrases in your low voice and Maren's dry one beneath it. At the end you say both names, slowly, once each. When the last word is spoken the room is quiet in a way that feels like being listened to.
+
+You answer your own question as you close the book. You have read three leaves in its back pages, but you have never read the leather of the back cover itself. Your thumb catches on a stiffness there, a ridge you took for old stitching. You work your nail under it and a single folded leaf slides out, pressed flat, soft as cloth with age, written in the cramped hand you know best of anything in the world.
+
+*Brun,*
+
+*If you read this, you have found your people, and I am glad past saying. I kept this book for you because it is all of me I could give you that would not rot.*
+
+*I wrote three letters to the Deepwatch in your first year, asking them to come for you. I never had an answer. I told myself it was grief that kept them away. I have not been sure since. The props in that shaft were cut, child. I saw the ends when we dug. I have never known by whom, and I was too afraid for you to say so aloud.*
+
+*Forgive an old man his silence. The Morninglord found you in the dark through me. I would not trade it. Walk in the light and do not be afraid of the dark places; you are made of them.*
+
+*Dorrin.*
+
+You read it twice. Then you read it aloud to Maren, because she will want to hear it from your mouth, and when you reach the part about the letters her whole body goes still.
+
+"Three," she says. "Dorrin wrote three? We had one. One only. It said she was safe, that she was with a priest, and that she should not be sought, that warden's blood on the road would bring harm to her." Her voice is flat and very quiet. "We were told this was Dorrin's wish. We believed it was." She looks at the carved names on the wall, and then at you, and there is something very old and very hard in her face. "Someone has kept us apart for forty years, Brunhilde."
+
+The lamps burn steady. Somewhere above you a bell rings the hour. You are at 21 of 21, with a leaf in your hand, a ring on your finger, and two things on your road now: four sealed holds that Torvald has asked you to consider, and a hand that cut a shaft's props, which has not yet been named.
+
+What does Brun do?
+  [game] conversation shortened: the DM's summary of turns 0 to 45, then turns 46 to 65
+
+== ROUND 59 ==
+PLAYER: Brun folds the leaf carefully back into the prayer book and takes Maren's hand. "Then we find out who, Aunt Maren. Whoever it was, they kept you from me and Father Dorrin from you, and I won't let that rest."
+
+She stands and says, "Let's take this to Torvald now. Who in the Deepwatch had the power to intercept letters, and who wrote the one that said I should not be sought? The archive may keep the one letter you received, and I'd like to see its hand."
+  [game] dice Brun's Intelligence (Investigation) check, comparing the hand and seal of the one letter Maren received with Father Dorrin's script, DC 13: 1d20-1 = 1d20 [12] - 1 = 11
+  [DM write_lore (hidden)] {"entry": "Who Cut the Props", "add_to_description": "Day 7: Torvald showed Brun the one letter Maren received, kept in the Deepwatch archive. It is a clean clerk's copy, not Dorrin's cramped hand, sealed with a plain warden's wax stamp. Brun could not tell whose hand wrote it (Investigation 11). Torvald says only the Keeper of the Rolls and the captain's own seal-bearer handled incoming and outgo
+  [game] notebook: updated Who Cut the Props
+  [DM write_lore (hidden)] {"create": "Osric Vane", "kind": "person", "description": "Very old dwarf, former Keeper of the Rolls at the Deepwatch, who handled its post forty years ago. Lives in a small cell on the seventh gallery. Possible link to the intercepted letters; unproven.", "relationships": ["former Keeper of the Rolls at [[The Deepwatch]]", "named by [[Torvald Greycairn]] as one who handled post forty years ago"]
+  [game] notebook: created an entry for Osric Vane; added 2 relationships to Osric Vane
+  [game] time: 30 minutes later: Day 7, 7:29:30 AM
+DM: Torvald is waiting outside the door with his lantern. He listens to you without interrupting, and when you reach the part about the third letter his jaw sets like a latch. "Three," he says. "I will not call it a lie until I see it. Come."
+
+He takes the three of you up to the archive on the fourth gallery, a low room of pigeonholes and oak chests that smells of dust and cold lamp-oil. From a locked drawer he lifts a single folded sheet, brittle at the creases, and lays it on the table under the steady lamps.
+
+The letter is short, a clean clerk's hand with every stroke the same weight, and it is sealed with a plain warden's wax stamp. It says the child is safe with a priest, that warden's blood on the road would bring harm to her, and that she should not be sought. It is signed "Dorrin," but the name is too neat. You set it beside the cramped, leaning script of the leaf in your prayer book. To your eye they are not the same. Beyond that you cannot say whose hand it is, because the letters are the sort that clerks are taught to make. The seal is no help either, since every post-seal in the hall is the same stamp.
+
+"Forty years ago," Torvald says slowly, "the post came and went through the Keeper of the Rolls and through my own seal-bearer, and no one else. My seal-bearer died in the second year after. The Keeper is Osric Vane, and he lives yet, on the seventh gallery, in a cell by the lamp-niches. He is very old and his mind comes and goes." He looks at you. "I will not have him dragged out. If you would speak with him, I will go with you, and gently."
+
+Maren's hands are folded on her staff. She says nothing, which for her is its own kind of answer. Garrick leans in the doorway with his arms crossed and watches the corridor behind you.
+
+It is a little after half past seven. You are at 21 of 21 with three spell slots and Channel Divinity. What does Brun do?
+
+== ROUND 60 ==
+PLAYER: Brun nods. "Yes, Captain, let's speak with him, and gently. Aunt Maren, will you come too? He may answer more easily to a face he's known for forty years."
+
+She says quietly to Garrick, "Stay in the corridor and keep an ear out, friend, since someone cut those props and may not want us asking." Then she follows Torvald toward the seventh gallery, keeping her hand off her hammer and her voice soft.
+  [game] dice Brun's Wisdom (Insight) check, listening to old Osric Vane and watching Torvald's face as he does, DC 13: 1d20+5 = 1d20 [20] + 5 = 25 (natural 20)
+  [game] time: 40 minutes later: Day 7, 8:09:30 AM
+  [game] sheet: gained 1 × Dorrin's two hidden letters to the Deepwatch
+  [DM write_lore (hidden)] {"create": "Haldor Greycairn", "kind": "person", "description": "Torvald Greycairn's father and captain of the Deepwatch forty years ago, now dead. Osric Vane says the seal-bearer Kell Marrow stopped Dorrin's letters 'by the captain's word', so Haldor is the likely source of the order. Unproven; motive unknown.", "relationships": ["father of [[Torvald Greycairn]]", "captain of [[The Deepwatch]] fo
+  [game] notebook: created an entry for Haldor Greycairn; added 3 relationships to Haldor Greycairn
+  [DM write_lore (hidden)] {"entry": "Who Cut the Props", "add_to_description": "Day 7, Osric Vane (lucid for a while; Brun Insight nat 20): Kell Marrow, Torvald's seal-bearer then, brought him Dorrin's letters already opened, said 'by the captain's word', and told him to burn them and write the one 'safe' reply. Osric could not burn a priest's letters. He hid two of them under a river stone with a chalked corridor (Sigrun'
+  [game] notebook: updated Who Cut the Props
+DM: Garrick takes his place at the top of the last stair with his bow unstrung, eyes on the corridor, and says nothing. You go on with Torvald and Maren, past lamp-niches each holding a small grey stone with a corridor chalked on it.
+
+Osric Vane's cell is a bare stone room with a cot, a stool and a shelf of dry inkwells. The old Keeper sits by a cold brazier in a blanket, small as a child, his eyes milky and bright. At first he calls Torvald "Haldor" and asks if the post has come. Maren kneels and tells him her name, and something clears in his face like a lamp being trimmed.
+
+"Maren Stonehearth," he says. "Aye. You came asking for the little one. Every week you came." He turns his head toward you, though he cannot see you well. "Her chin. Sigrun's chin."
+
+Then he tells it, slowly, as if setting down a load. Kell Marrow, the seal-bearer, brought him a priest's letters already opened and told him to burn them and write one soft reply in a clerk's hand, "by the captain's word." Osric was Keeper and it was not his place to ask. But he could not burn a priest's letters. "A man who asks for a child in the dark," he says. "I could not."
+
+As he speaks you watch Torvald and not the old man. The captain's face goes grey, not guarded. It is the look of a man hearing his own house described by a stranger. You are as sure as you can be that he did not know.
+
+"The captain then," Torvald says, barely audible. "Say it, Osric."
+
+"Haldor," the old man whispers. "Your father, boy. I am sorry. I am so sorry."
+
+Osric points a shaking finger at the lamp-niche nearest the door. Under a grey river stone, with a corridor chalked on it in a furious small hand and a tiny arrow, is a hollow in the wall. In it lie two letters in Father Dorrin's leaning script, their seals broken and folded again with care, and softened by forty years of dry air. You take them. Maren says the stone is Sigrun's.
+
+Torvald stands very still, his hand over the seven-lamp brooch at his breast. "My father," he says. "Whatever he did, I will have the whole of it, and so will you. I give you my word before the Deepwatch." He does not say what he will do if the answer is bad.
+
+It is a little after eight. Kell Marrow is dead. Osric is spent and should rest. The letters are in your hand, unread, and there is still the question of who cut the props and why Haldor wanted a child kept hidden. What does Brun do?

@@ -21,7 +21,7 @@ GAMES = Path(__file__).parent / "games"
 PROJECTS = Path.home() / ".claude" / "projects" / "C--Users-Nelly-AppData-Local-the-game-dm"
 NAME, POINTS, RUNS, OUT = sys.argv[1], [int(x) for x in sys.argv[2].split(",")], int(sys.argv[3]), Path(sys.argv[4])
 META = json.loads((GAMES / f"{NAME}.meta.json").read_text(encoding="utf-8"))
-SAVE = json.loads(Path(META["save"]).read_text(encoding="utf-8"))
+SAVE = json.loads((GAMES / Path(META["save"]).name).read_text(encoding="utf-8"))
 STATES = {}
 if (GAMES / f"{NAME}.states.jsonl").exists():
     for line in open(GAMES / f"{NAME}.states.jsonl", encoding="utf-8"):

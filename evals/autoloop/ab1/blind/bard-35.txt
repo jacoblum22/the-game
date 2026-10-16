@@ -1,0 +1,472 @@
+GAME bard, ROUND 35
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 32 ==
+PLAYER: Vesper stuffs the key deep into her satchel, snaps it shut, and throws Vicious Mockery at the lead raider: "Nice boots, did your mother pick them, or did she just pity you?" Then she backs one step toward Ysolt's fish-cart so the Reeve's line is at her shoulder, rapier drawn.
+  [game] dice Raider 1's Wisdom save vs Vicious Mockery, DC 13: 1d20+0 = 1d20 [5] + 0 = 5
+  [game] dice Vicious Mockery damage (psychic): 1d4 = 1d4 [2] = 2
+  [refused] fight: no combatant named 'pc'; in the fight: Vesper Thorne, Ysolt Pike, Raider 1, Raider 2, Raider 3, Captain Ashgrove
+  [game] fight: Round 1, now: Ysolt Pike. Ysolt Pike (initiative 16): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Raider 1 took 2: HP 11 → 9; Raider 1: Vicious Mockery: disadvantage on next attack (Vesper Thorne has used its action: no more actions this turn.)
+  [game] dice Ysolt Pike's crossbow attack on Raider 1 (AC 12): 1d20+4 = 1d20 [5] + 4 = 9
+  [game] dice Ysolt's Bardic Inspiration die added to her attack: 1d6 = 1d6 [1] = 1
+  [game] fight: Round 1, now: Raider 1. Raider 1 (initiative 15): HP 9/11, AC 12, Vicious Mockery: disadvantage on next attack Raider 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Raider 1 scimitar vs Vesper (AC 13), disadvantage from Vicious Mockery: 1d20+3 (disadvantage) = 1d20 [7, 18]→7 + 3 = 10
+  [game] dice Raider 2 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [9] + 3 = 12
+  [game] dice Raider 3 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [2] + 3 = 5
+  [game] fight: Round 1, now: Raider 2. Raider 2 (initiative 15): HP 11/11, AC 12 Raider 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Raider 3. Raider 3 (initiative 15): HP 11/11, AC 12 Raider 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 1, now: Captain Ashgrove. Captain Ashgrove (initiative 8): HP 65/65, AC 15 Captain Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The yard is a roar of steel. Ysolt's bolt skitters off a cobble and she curses, working her crank. The three raiders crash into you from three sides. The first, rattled by your mockery, swings wild and wide. The second's scimitar hisses past your ribs close enough to part the oilcloth, and the third overbalances on the wet stone and misses by a yard. You're untouched.
+
+Ashgrove has stepped down off the doorway and is walking forward through the fighting with a steady, unhurried stride. Men part around her. A white-gloved hand rests on the pommel of her scimitar, and she hasn't drawn it yet. She's thirty feet off, eyes on the satchel on your back. Two more raiders have peeled away from the watch's line and are coming around the carts to your left.
+
+It's round 2, and it's your turn. You have 9 hit points, a rapier in your hand, and three raiders on you, one of whom is bleeding a little and sulking. Ysolt Pike is crouched beside you, still reloading. Brannoc Vell and the watch are twenty feet behind, pushing through a knot of raiders to reach you.
+
+What does Vesper do?
+
+== ROUND 33 ==
+PLAYER: Vesper lunges at the wounded Raider 1 with her rapier, trying to finish him before the others close the gap. "Sorry about the boots, friend, truly." If he drops, she'll slide back a step so Ysolt's fish-cart covers her flank.
+  [game] dice Vesper's rapier attack on Raider 1 (AC 12): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Vesper's rapier damage on Raider 1: 1d8+2 = 1d8 [6] + 2 = 8
+  [game] fight: Raider 1 took 8: HP 9 → 1 (Vesper Thorne has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Ysolt Pike. Ysolt Pike (initiative 16): HP 11/11, AC 12 Ysolt Pike's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ysolt Pike's crossbow attack on Raider 1 (AC 12): 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [game] fight: Round 2, now: Raider 1. Raider 1 (initiative 15): HP 1/11, AC 12, Vicious Mockery: disadvantage on next attack Raider 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Raider 1 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [9] + 3 = 12
+  [game] dice Raider 2 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [4] + 3 = 7
+  [game] dice Raider 3 scimitar vs Vesper (AC 13): 1d20+3 = 1d20 [17] + 3 = 20
+  [game] dice Raider 3 scimitar damage to Vesper: 1d6+1 = 1d6 [4] + 1 = 5
+  [game] sheet: took 5 damage: HP 9 → 4
+  [game] fight: Raider 1: no longer Vicious Mockery: disadvantage on next attack
+  [game] fight: Round 2, now: Raider 2. Raider 2 (initiative 15): HP 11/11, AC 12 Raider 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Raider 3. Raider 3 (initiative 15): HP 11/11, AC 12 Raider 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Captain Ashgrove. Captain Ashgrove (initiative 8): HP 65/65, AC 15 Captain Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ashgrove's scimitar attack vs Vesper (AC 13), intent to knock out: 1d20+5 = 1d20 [12] + 5 = 17
+  [DM lookup (hidden)] {"name": "Knocking a Creature Out"}
+  [game] dice Ashgrove's scimitar damage to Vesper: 1d6+3 = 1d6 [3] + 3 = 6
+  [game] sheet: took 4 damage: HP 4 → 0; at 0 HP: unconscious; make death saving throws on each of their turns; condition added: Unconscious
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Knocked Vesper unconscious (stable, not killed) in the shrine-yard melee on Day 2 about 7:52 PM. The brass key is in Vesper's satchel. Ashgrove has 65 HP and AC 15 (bandit-captain build)."}
+  [game] notebook: updated Captain Ashgrove
+  [game] fight: Round 3, now: Vesper Thorne. Vesper Thorne's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Raider 3's blade opens your arm just above the elbow, hot and shallow, and you grunt. For a heartbeat your rapier still bites. Then Ashgrove is simply there, strolling through the press of bodies with the same polite smile, and her scimitar flicks out almost lazily. The pommel catches you at the temple. The cobbles tilt up to meet you.
+
+Ashgrove chose to knock you out rather than kill you. By the rules, that leaves you unconscious and stable at 0 hit points, not dying, and no death saves are needed. You will wake in an hour or so if nobody wakes you sooner.
+
+The last things you hear are far away. Ashgrove, close above you, says mildly, "The key, girl. Left hand. Thank you." A white-gloved hand unbuckles the satchel from your back. Ysolt Pike screams your name. Then Brannoc Vell's roar, the watch's boathooks cracking against shields, the bell of the Quay still ringing, and, very faintly beneath it all, a deep slow note from under the hill, like a great sleeper turning over in its dream.
+
+You can't act, so your turn passes. Say what you'd like Vesper to dream, think or whisper as she goes under. Whatever you give me, the world will turn without you for a while.
+
+== ROUND 34 ==
+PLAYER: As the dark closes in, Vesper's last thought is of Odalie's line, "a crooked road, as long as it's lit," and she smiles against the cobbles. Her tail, finally free, twitches once: she isn't lying. Somewhere in the back of her mind she whispers, "Take the satchel, Captain, I never said which key was the real one."
+
+"DM: when I wake, where am I, and what's become of my silver bowl and Odalie's old scarf?"
+  [game] dice Hours until Vesper regains 1 hit point (stable at 0 HP): 1d4 = 1d4 [1] = 1
+  [game] fight: Fight over after 3 round(s). 18 seconds of fighting; now Day 2, 7:51:42 PM.
+  [game] time: 1 hour later: Day 2, 8:51:42 PM
+  [refused] sheet: condition 'unconscious' is not on the sheet; conditions now: Unconscious
+  [DM write_lore (hidden)] {"entry": "Captain Ashgrove", "add_to_description": "Took Vesper's satchel with the brass key and slipped away from the shrine yard fight to her barges below the hill; her force was driven from the yard by the watch but most escaped by river. She does not have the Keepers' binding words, which only Odalie and Vesper know. Still intends to wake the Sleeper at the new moon, nine nights from Day 2."}
+  [game] notebook: updated Captain Ashgrove
+  [DM write_lore (hidden)] {"entry": "The Sleeper", "add_to_description": "The brass key was taken by Ashgrove on Day 2 night. The lamp burns bright with the Saint's Flame; waking needs the key, the Keepers' words and the new moon."}
+  [game] notebook: updated The Sleeper
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset; condition removed: Unconscious
+  [game] sheet: lost 1 × Ashgrove's written orders
+DM: Your last thought stays a thought. The key in the satchel was the real one, so the whisper doesn't change what happened in the yard, and Ashgrove walked off with it. But you were right about one thing: a smile on the cobbles isn't always a lie.
+
+You wake to the smell of tallow, brine and mint poultice, and a ceiling of drying nets. It's Old Mags's back room, an hour later. Your head throbs where the pommel struck, and your arm is bound above the elbow in clean linen. You have 1 hit point and a mouth like sawdust. Tamsin lies on the next cot, awake and watching you with relief. Sister Odalie sits on a stool at your side with her hand on your wrist.
+
+On the table beside you sits the silver offering bowl, polished until it gleams. Odalie took it out of your pack, and she didn't say a word about it when you stirred. Your first silk scarf is folded under your fingers, the one she gave you as a child. It's been washed, and it smells faintly of soap and beeswax.
+
+Odalie tells you the rest quietly. The Reeve's line held, and the town drove Ashgrove's men off the hill. Many of them fled to the barges, and three raiders were taken alive. Thack sits in the Reeve's lockup, singing like a bird. But Ashgrove got away downriver in the dark, with your satchel and the key. She does not have the Keepers' words, which only you and Odalie know, nor the new moon, which is nine nights off. The lamp under the hill burns bright.
+
+"Rest, child," Odalie says. "Then we'll decide what a lantern does when someone steals the flame."
+
+What does Vesper do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 35, "category": "contradiction", "severity": 2, "quote": "Ashgrove's barges went downriver past Gannet Bend", "why": "Gannet Bend is upriver of Marrowmere (R6-R8, most of a day away from the town); fleeing downriver from Marrowmere cannot pass it. The hulk 'three miles below the Bend' is also reached and left in hours (R38, R44) vs about 20 hours Bend-to-Marrowmere earlier."}
+
+THE PLAYER'S LINE THIS ROUND: Vesper turns her head on the pillow and manages a cracked smile, her tail finally allowed to twitch where everyone can see. "Sister, you can have the bowl back first, it was always yours, and then I want to hear every word Thack is singing about where Ashgrove's barges are bound." She tries to sit up and thinks better of it. "DM: how many hit points will I have after a long rest, and did Ysolt Pike come through the fight all right?"
+
+=== REPLY ba35-01 ===
+  [hidden call] write_lore: {"entry": "The Sleeper", "add_to_description": "Correction: Ashgrove took only Vesper's satchel; the brass lantern key was found on Vesper (still in her possession). Ashgrove has neither the key nor t
+A full night's rest would put you back at your maximum of 15. You're at 13 now, since the old woman's poultice and Mags's soup have done what a Healing Word would have. Your spell slots return at the same long rest.
+
+Ysolt Pike came through it well. She took a crossbow graze across the shoulder and lost her temper, which Odalie says did more for the watch's line than any speech. Mags grunts from the doorway that the woman has been outside her shop all night, refusing to go home until you woke.
+
+Odalie answers your other question while she tucks the bowl back into your hands, which you refuse to take back. "It's yours. Keep it, or put it back on the altar when you've earned the right to." Then she says Thack's confession has been scratched onto four sheets of the Reeve's best paper: Ashgrove's barges are bound for the Weeping Locks, then on to a drowned toll-keep called Saltmere Weir, where she keeps what she calls her "tidewater court." The deputy was paid there once, and he remembers a cellar full of chains.
+
+I need to correct one thing I told you. When Ashgrove took your satchel, the brass key did not go with it. You'd shoved it into the folds of your oilcloth, and Mags found it there when she cut the cloak off you. It's on the table by your elbow now, still cold. That means Ashgrove has an empty satchel and a bad temper. She still has nine nights, though, and she can have a new key made.
+
+Your rapier is another matter. It isn't on the table. Odalie says it was lost somewhere in the yard in the scuffle, and the watch is still sweeping the cobbles for it.
+
+What does Vesper do?
+
+=== REPLY ba35-02 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, squinting harbour-warden and the Reeve's best crossbow. Received a Bardic Inspiration die from Vesper in the shrine-yard fight. Survive
+Odalie pushes the bowl back across the blanket with two fingers. "Keep it. I said so in the letter, and I don't repeat myself for thieves." Then she squeezes your wrist. "Yours is the only hand it should ever sit in."
+
+Ysolt Pike came through. A raider's blade opened her shoulder to the bone, and Brother Pell's cousin stitched it with a fishing needle while she swore at him. She has already sent word that she's sorry about the cart, and that she missed twice and plans to do better. Brannoc Vell lost four watchmen to wounds but none to death, and he asks for you as soon as you can stand.
+
+As for your hit points, a night's long rest on a cot would bring you back to your full fifteen. Your sheet shows thirteen now, and you can feel the headache easing.
+
+Two things, DM to player, because I want the table straight. Your sheet shows the brass lantern key still on you, and I narrated Ashgrove taking your satchel. It also lists a half of a sluice-pin that once belonged to someone called Garrow Quill, which I have no record of putting in your hands. I would rather ask than invent: how did those come to you? Tell me what Vesper remembers, or whether she palmed a decoy and kept the real key, and I'll build the story from there.
+
+For now you are warm, awake and among friends, with a dozen questions waiting for you.
+
+=== REPLY ba35-03 ===
+After a long rest you'd be at your full 15 hit points. The sheet shows 13 of 15 right now, so you're better off than I narrated. A long rest also restores your spell slots (3 first-level slots) and your Bardic Inspiration. You can't take one yet, because the nine-night clock and Ashgrove are still moving.
+
+Ysolt Pike came through it fine. Her only scratch is a split lip from a crossbow stock, and she's already boasting about how many of Ashgrove's men she nearly hit. Brannoc Vell took a cut on the forearm and won't let anyone tend it until the lockup is full.
+
+Two things on your sheet don't match what I've told you, and I'd rather say so than paper over them. The sheet lists the brass lantern key as still in your possession, though I narrated Ashgrove walking off with your satchel. It also lists something called "Garrow Quill's half of the sluice-pin," which I have no note of, and your rapier isn't on it. I won't invent where those came from. Tell me how you want to read it. Maybe the satchel Ashgrove took held a decoy, as your last whisper hinted, and the real key was elsewhere on you. Or maybe Garrow Quill is someone you want to introduce.
+
+Odalie takes the bowl and sets it back in your hands. "No. You carried it. Keep it until you've earned it back, and you have." Mags has gone to find the Reeve. Tamsin is awake and ready to tell what he knows.
+
+What does Vesper do?
+
+=== REPLY ba35-04 ===
+Answering as the DM: a long rest takes you to your full 15 hit points. It also restores your spell slots and your Bardic Inspiration uses. Right now you're at 13 of 15, and you don't need the whole rest to feel the difference. You can't take one yet, because an hour has barely passed.
+
+Ysolt Pike came through the fight unhurt, and so did Brannoc Vell. She's outside Mags's door at this moment, apparently refusing to go home until she's seen you open your eyes. She's the one who dragged you out of the yard by the collar, and she left your rapier on the table with the bowl. I'm recording that, since it was missing from your sheet.
+
+Odalie presses the bowl back into your hands without a word, closes your fingers over it, and says only, "Later. When you've earned the right to be embarrassed about it."
+
+Two things need straightening out, because your sheet disagrees with what I told you earlier. It shows the brass lantern key still on you, which means I misjudged the satchel. The truth is that Ashgrove took the satchel and found it empty of the key. Mags found the key clenched in your fist when they carried you in, so you did hold on to it. Ashgrove has the vial's empty stopper and a letter, and a very bad mood.
+
+The sheet also lists a half of a sluice-pin belonging to someone called Garrow Quill, which I don't recall putting in your hands. Tell me where it came from and I'll fold it into the story. Thack's confession mentions only a sluice and a meeting point downriver.
+
+What does Vesper do?
+
+=== REPLY ba35-05 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Answering your two questions first.
+
+A long rest would restore you to your full 15 hit points. The sheet shows 13 of 15 right now, and your three 1st-level slots and Bardic Inspiration come back with it. Ysolt Pike came through unscratched. She spent the fight cursing her crank and jammed bolts, and she's outside Mags's door right now, refusing to leave until you wake. She wants to tell you her one bolt that mattered went through the sleeve of Ashgrove's white glove.
+
+Your sheet has gone out of step with what I've told you, and I'd rather say so than paper over it:
+
+- It lists the brass lantern key in your pack. In the story, Ashgrove took your satchel with the key in it.
+- It shows no rapier. I never said you lost it.
+- It lists "Garrow Quill's half of the sluice-pin." I haven't introduced that item or that name. I don't know where it came from, so I won't invent a history for it.
+- It shows you at 425 XP at level 2, and I've only awarded 100.
+
+I can't verify any of that from what has happened at the table. How would you like to handle it? You could tell me where these came from, or we could say the sheet is wrong and I'll correct it to match the story. Whichever you choose, we can then carry on with Odalie, Thack's confession and the nine nights.
+
+=== REPLY ba35-06 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, squinting harbour-warden crossbow of Brannoc Vell's watch. Fought beside Vesper in the shrine-yard melee, received a Bardic Inspiration
+Odalie takes the bowl in both hands and doesn't answer, but her thumb moves once over the rim, and that is answer enough. "It was never the bowl, child," she says at last, and sets it back on your blanket. "Keep it until you have someplace to put it."
+
+Ysolt Pike came through, and she's the first thing Odalie tells you. A raider's bolt grazed her shoulder, and she was back behind her fish-cart before the line broke. She has sworn, to anyone who'll listen, that the horned girl owes her a drink and a better shot. Brannoc Vell took a cut on his forearm and lost a boathook. Two of the watch are badly hurt, and none of them died. Thack is still singing. So far he's named a barge-master called Garrow Quill, a sluice-keeper somewhere south at the Greywater Weirs, and "the third night and the moon, always the moon."
+
+As for your hit points, a long rest restores you to your full 15 and gives you back all three of your 1st-level slots. Half your spent hit dice come back too, and so do your Bardic Inspiration uses. It's about nine at night. If you sleep here until morning, you'll start the next day whole.
+
+One thing needs fixing, and I'd rather say so than hide it. Your sheet shows a brass lantern key and half of a "sluice-pin" marked Garrow Quill's, but no rapier. I narrated Ashgrove taking the satchel and the key, and I never gave you either of those other things. It's possible the sheet has gone ahead of the story. Which do you want to have happened? Did Ashgrove take a copy or a false key, with the real one slipped to you in the scuffle, or did Garrow's pin-half come off a raider? And is the rapier gone, or lying somewhere in the yard? I'll set the story to match what you choose.
+
+=== REPLY ba35-07 ===
+  [hidden call] lookup: {"name": "Long Rest"}
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, silent harbour-warden crossbow of Brannoc Vell's watch, with a sailor's squint. Vesper gave her a Bardic Inspiration die in the shrine-
+Your sheet shows 13 of 15 hit points, so you're stronger than the last few minutes suggest. A long rest of at least 8 hours would take you to your full 15 and give you back every spent spell slot and your Bardic Inspiration uses. You can only take one long rest in a 24-hour period, and it must start with you at 1 hit point or more, which you are.
+
+Ysolt Pike came through it. Odalie says a raider's blade opened her shoulder, and Brother Pell's apprentice stitched it. She's already back on the hill road with the watch, and she told Odalie she owes you a bolt and a favor. She says the die you gave her would have helped more if she hadn't rolled a 1.
+
+Three things on your sheet don't match what I narrated, and I want to be straight about them:
+
+- The brass lantern key is in your items, though I said Ashgrove took it with the satchel.
+- A "Garrow Quill's half of the sluice-pin" is on your sheet, and I have never established it, so I don't know what it is.
+- Your rapier is missing.
+
+I won't invent a story for items I haven't introduced. Do you want to tell me where the pin came from, or should I weave it in as a clue from Thack's singing? And do you want the rapier recovered from the yard, or lost to Ashgrove?
+
+Odalie waits, hand on your wrist, for the answer to what comes first. What does Vesper do?
+
+=== REPLY ba35-08 ===
+After a long rest you'll have your full 15 hit points. The sheet now shows you at 13 of 15, and the long rest restores the rest, along with your spell slots and Bardic Inspiration.
+
+Ysolt Pike came through it fine. She never took a hit. When the watch's line closed, she dragged you behind her fish-cart herself and kept her crossbow on the raiders until Mags's boys could carry you down the hill. She'd like her d6 back, she says, because she fumbled it on a natural 1.
+
+Two things on the sheet don't match what I told you, and I want to fix them before we go on. The sheet lists the brass lantern key as still in your possession, along with a half of a sluice-pin marked with the name Garrow Quill, which I haven't introduced. It also shows no rapier. I'd rather not guess. Tell me how you'd like to handle them. Is the key still with you after all, and should I treat the rapier as lost in the yard until Ysolt or Mags returns it?
+
+Then say whether you want to take the long rest at Mags's house or press Thack for where the barges are bound first.
+
+=== REPLY ba35-09 ===
+  [hidden call] write_lore: {"entry": "The Sleeper", "add_to_description": "Correction: the brass lantern key is still with Vesper (found on her person after the yard fight). Ashgrove took only the satchel. The Sleeper stays bou
+  [hidden call] write_lore: {"entry": "Captain Ashgrove", "add_to_description": "Correction: Ashgrove got only the empty satchel; the brass key remained with Vesper. She will realise this soon and come back for it."}
+Odalie presses the bowl back into your hands, closes your fingers around it and says nothing for a moment. "It was never the bowl, child. Keep it until you know what it's for." The bowl is the first thing in a long time that doesn't feel stolen.
+
+On your questions as the DM: a long rest restores all your hit points, so after a night's sleep you'd be back at your full 15. You're at 13 now and your spell slots are spent, so a good rest also brings back your three first-level slots and your Bardic Inspiration.
+
+Ysolt Pike came through. She took a scimitar cut across the thigh in the scramble and is cursing the Reeve's surgeon, but she's on her feet, and she's the one who dragged you out of the yard by your collar and behind the fish-cart before the watch swept it. She asks after you every hour, apparently.
+
+Something doesn't match what I told you, and I'd rather be straight about it. Your sheet shows the brass lantern key still on you. Odalie found it tucked inside your coat when she undressed your wounds. Ashgrove took your satchel, but the satchel was empty, and she doesn't know that yet. When she opens it, she'll come back for the key.
+
+I also don't know where your rapier is. It isn't among your things, so perhaps it was lost in the yard. Mags says the watch gathered up the dropped steel, so it may be waiting at the Reeve's. Your sheet also lists "Garrow Quill's half of the sluice-pin," and I have no notes of where that came from. Can you tell me what you intended it to be, or is it something you picked up that I should work in?
+
+Thack is singing, in the Reeve's lockup, but Odalie wants you to rest first. What does Vesper do?
+
+=== REPLY ba35-10 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Odalie takes the bowl in both hands and turns it once in the lamplight. Her mouth does something complicated. "Always mine," she says, and sets it on the shelf above your cot, where a shrine's bowl belongs.
+
+To your questions, as the DM:
+
+Hit points: your maximum is 15, and the sheet shows you at 13 right now. A long rest restores you to full, 15, and returns your spell slots, which now number three at 1st level, and your Bardic Inspiration. You also have 2 hit dice. Once you've slept, you're in shape to chase someone.
+
+Ysolt Pike: she came through. She took a scimitar cut across the shoulder when the raiders broke her cart, and she's stitched and swearing in the watch-house. By Mags's account she put a bolt through the leg of the man who was reaching for you, which is the main reason you weren't carried off.
+
+Thack, in the Reeve's lockup, is talking. He's told them Ashgrove's barges would run for the Weeping Locks and the old sluice-works downriver, a drowned toll-post nobody uses. He swears she meant to winter there until the new moon.
+
+Two things on your sheet I have no notes for, and I'd rather ask than invent. Your sheet lists a brass lantern key and "Garrow Quill's half of the sluice-pin", and it no longer lists your rapier. I told you Ashgrove walked off with the satchel and key. Do you want to tell me what you did in the yard that matches this, or should I treat the sheet as the truth and work out how the key stayed with you?
+
+Whichever you say, what does Vesper do now?
+
+=== REPLY ba35-11 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Rest first. A long rest restores all your hit points, so you'd come out of it at 15 of 15. It also gives back your spell slots and Bardic Inspiration uses. You have 13 of 15 now, and nobody is stopping you from sleeping the night in Mags's back room.
+
+Ysolt Pike came through it fine. She took a raider's scimitar across the forearm after her second shot, and it's bound up now. She's already asked after "the girl who mocked a man's boots," and she means to buy you a drink once you can stand.
+
+As for Thack, he's mostly singing about money. He says the barges are bound downriver for a place called the Sluice Mill, a drowned weir-works below the Weeping Locks. He doesn't know why, and he hasn't heard a word about the key.
+
+I have a problem I should be straight about. Your sheet doesn't match what I narrated. It lists a brass lantern key in your pack, which Ashgrove took with the satchel, and it shows no rapier. It also lists "Garrow Quill's half of the sluice-pin," and I never introduced anyone by that name in this game. I won't invent an explanation for that on my own. Do you know where that item came from? And do you want me to treat the key as still in your hands, or as taken?
+
+=== REPLY ba35-12 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Ysolt Pike came through it fine. She took no wound, and she's outside Mags's door now with her crossbow across her knees, refusing to leave your doorstep. She'll tell you she missed the first two shots on purpose.
+
+After a long rest you'd be at full hit points, which is 15. Hit points come back with a long rest, and you also have one spare hit die to spend on a short rest. A long rest would also restore your three spell slots and your Bardic Inspiration.
+
+Before you go on, I have to flag a mismatch. Your sheet now lists a brass lantern key and "Garrow Quill's half of the sluice-pin", and it shows your rapier missing and 13 of 15 hit points. None of that matches what I told you. In play, Ashgrove took the satchel with the key, and I have no record of anyone named Garrow Quill or of a sluice-pin. I'm not going to invent a history for them without asking you.
+
+Two questions:
+- Do you want the key on your sheet to be real, with Ashgrove carrying a decoy or a copy?
+- Is Garrow Quill someone you intend to introduce, such as a contact Thack named or a mark from your past?
+
+Once you answer, I'll write it into the story. Then you can rest, or press Thack for where Ashgrove's barges went.
+
+=== REPLY ba35-13 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, squinting harbour-warden crossbow of Brannoc Vell's watch. Received Vesper's Bardic Inspiration die in the shrine-yard fight; survived 
+Ysolt Pike came through it. She took a bolt-graze across the shoulder and is under Brother Pell's needle with a face like thunder, since she wasted two shots. Before the raiders broke, she put a bolt through the leg of the man who knocked Odalie's door in. Odalie says she asked after "the girl with the horns" twice.
+
+Your hit points: your maximum is 15. A long rest brings you back to full, and you have 13 now. That also refills your spell slots and your Bardic Inspiration. You're in no state to leave tonight anyway.
+
+I also have to flag some things on your sheet that the game hasn't established. It lists a brass lantern key and "Garrow Quill's half of the sluice-pin", and it no longer lists your rapier. I never narrated any of that. Ashgrove took your satchel and the key, and nobody has mentioned a Garrow Quill or a sluice-pin. Tell me where you picked these up, or whether I should treat them as errors and fix the sheet, and I'll fold it into the story either way.
+
+As for Thack, he's in the Reeve's lockup and eager to talk, but he's frightened of Ashgrove more than of the Reeve, and he knows less than he thinks. He might still tell you where the barges meet.
+
+Do you rest, or go and hear him out first?
+
+=== REPLY ba35-14 ===
+I'll answer your questions first, and then I need to flag something about your sheet.
+
+A long rest takes you to your full maximum of 15 hit points, and it restores your spell slots and Bardic Inspiration uses. You're at 13 of 15 right now, so you're better off than you feel. You also have a Hit Die to spend on a short rest if you want a quicker patch-up. Sleep is the kind of night's work a long rest is for, and nobody is storming the door at the moment.
+
+Ysolt Pike came through it. She took a crossbow bolt through the meat of her shoulder and swears she'll be back on the harbour wall by the week's end. In the middle of the melee she hauled you behind her fish-cart by the collar, which is likely why Ashgrove's men couldn't finish a second blow, and why you woke at all. Odalie says she's refused to go to the surgeon until someone told her you were breathing.
+
+Now the flag. Your sheet shows a brass lantern key in your pack and a "Garrow Quill's half of the sluice-pin," and no rapier. That doesn't match what I told you a moment ago, when Ashgrove took your satchel with the key. I have no record of Garrow Quill or a sluice-pin, and I won't invent a history for them on the spot. Tell me where the pin came from, or whether you want to treat these as things you found on the way, and I'll build it in. As for the key, it's a matter of which one is real. You said, "I never said which key was the real one," so tell me whether you mean the one Ashgrove carries is a copy.
+
+Odalie takes the bowl in both hands, and for a moment she can't speak. Then she sets it on Mags's table in the lamplight and says, "Keep it a little longer. Thack's song is long and it's all barges. Eat first."
+
+What does Vesper do?
+
+=== REPLY ba35-15 ===
+A long rest takes you back to your maximum of 15 hit points. You're at 13/15 now, and a long rest also refills your three 1st-level slots and your Bardic Inspiration. Odalie says you'll sleep a full night here whether you like it or not.
+
+Ysolt Pike came through fine. She took a scimitar-slash across the shoulder when a raider slipped past the carts, and Brannoc's men pulled her back. Her arm is in a sling, she's cursing her crossbow for the missed shots, and she's already asking when the bard who cursed that raider's boots will be well enough to do it again.
+
+I should flag three things in your sheet that don't match what I've told you, since the sheet is the record:
+
+- **The brass lantern key is listed as still yours.** I narrated Ashgrove taking your satchel. Her taking the satchel stands, but the key on your sheet is the real one, and it's with you. Make of that what you will: she may be holding a satchel with a wax-sealed decoy, or something else. Tell Odalie, and ask what she knows.
+- **Your rapier isn't on your sheet.** It was lost in the yard. Brannoc's watch may have kept it, or it may be in a raider's hands or a gutter.
+- **"Garrow Quill's half of the sluice-pin" is on your sheet, but it's nothing I've introduced, and it isn't in my notes.** If you know who that is and where it came from, tell me and I'll fold it into the story. Otherwise I'd like you to say what you think it is before I invent anything.
+
+Right now the room is quiet, and Odalie is holding your wrist, waiting for your answer about Thack and the barges.
+
+=== REPLY ba35-16 ===
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, squinting harbour-warden crossbow of Marrowmere. Took a bolt graze on the shoulder in the shrine-yard fight but is fine. Was given Bard
+  [hidden call] write_lore: {"create": "Sorrel Thack", "kind": "person", "description": "Disgraced deputy of the Marrowmere harbour watch, in the Reeve's lockup. Admits Ashgrove paid him silver. Says her barges put in at the Sun
+Odalie lays the bowl back in your lap, and your fingers close on it before you decide to let them. "Keep it," she says. "A lantern needs something to catch the light." She doesn't tease you about the apology. She only squeezes your wrist.
+
+Your questions, as the DM. After a long rest you'll be at your full 15 hit points. You'll also have all three first-level slots and your three uses of Bardic Inspiration back. Right now you have 13 of 15, because the wounds closed while you slept, and the rest needs a proper night.
+
+Ysolt Pike came through. She has a bolt-graze across the shoulder and a bad temper, and she's already at the lockup door with a stool, daring Thack to stop talking. Here's what he's said so far. Ashgrove's barges put in at the Sunken Mill, a ruined mill on the lower river about three hours below Marrowmere. She was also hunting for a pilot who knows the old drowned channel. He claims he doesn't know why, though from the way he said it, he does.
+
+One correction from me: the sheet shows the brass key still with you. Odalie says she found it in the pocket of your coat. You'd shoved it there instead of the satchel, and Ashgrove took only the satchel. She has the pack, but she doesn't have the key. She will know that by morning.
+
+Odalie's grey eyes are steady. "The key is yours to keep. The lamp is lit, and she cannot wake what she cannot open. But she will come back for it, and she knows your face now."
+
+It's nearly nine at night on Day 2. The new moon is nine nights off. The Sunken Mill is three hours downriver. The Reeve wants to see you in the morning.
+
+What does Vesper do?
+
+=== REPLY ba35-17 ===
+After a full night's rest you'll be back to your maximum of 15 hit points. A long rest takes 8 hours, so you'd wake around dawn. You're at 13 now, so you are not as wrecked as you felt when you first woke.
+
+Ysolt Pike came through it fine. She has a bolt-graze across one cheek and a very sour mood about that natural 1, but she was back on her feet, hauling a raider off the Reeve's flank before the yard went quiet. She's been asking after "the girl with the horns who gave me luck, such as it was."
+
+Odalie takes the bowl in both hands. She doesn't say anything, only turns it once so the lamplight slides across the rim, then sets it back on your blanket. "Keep it until you've earned the right to give it back," she says. "That's a better debt than a thief's."
+
+As for Thack, he's been talking since midnight. He swears Ashgrove's barges make for the Weeping Locks, the only chokepoint below here where a heavy vessel must slow. He also says she answers to someone upriver whose name he never heard, only a title: *the Lampwright.*
+
+A note from the DM: your sheet now lists a brass lantern key in your pack, which doesn't match what happened in the yard, since Ashgrove took the satchel. It also shows an item I haven't introduced, "Garrow Quill's half of the sluice-pin", and no rapier. I'd rather sort that out with you than guess, so tell me what you make of it. You might say the key is a second one Odalie had, or something else entirely.
+
+What does Vesper do?
+
+=== REPLY ba35-18 ===
+Out of character first: the sheet says a few things that don't match my narration, and the sheet is the record.
+
+- It shows the brass lantern key still in your items, so Ashgrove did not walk off with the real one. I narrated her taking the satchel, and I'll count that as a swap: what she grabbed was the satchel and not the key.
+- It lists "Garrow Quill's half of the sluice-pin", which I have never introduced and have no notes on. I won't make up a story for it. If you know where it came from, tell me and I'll fold it in.
+- Your rapier is missing from the sheet. Tell me whether you dropped it in the yard or it was never lost, and I'll rule on it.
+
+To your questions: you're at 13 of 15 hit points right now, and a full night's rest brings you to 15 and restores your spell slots and Bardic Inspiration. Ysolt Pike came through fine. She took a graze on the shoulder and is currently being scolded by a watch-surgeon she outranks, and she asked after the "singer with the horns" twice.
+
+Odalie presses the bowl back into your hands. "Keep it," she says, "and bring it to the altar when you've earned the right, not before." Thack, she says, has already named a ferryman called Dunmore as the man who rowed Ashgrove's messages, and a quiet cove below the Weeping Locks, where one barge is hauled out for repair.
+
+The new moon is nine nights off. What does Vesper do?
+
+=== REPLY ba35-19 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Ysolt Pike came through it. She was untouched when the melee broke, and she's the one who dragged you behind the fish-cart. She sits in the doorway now, nursing a split lip and boasting that the bolt she missed Ashgrove with was "a warning."
+
+After a long rest you'll have your full 15 hit points. That also restores your spell slots and your Bardic Inspiration uses, which is worth having with nine nights to the new moon. You have 13 now, so Mags's cot and a night's sleep will do it. Hit dice are separate: you have two, and Song of Rest can add an extra d6 on a short rest.
+
+Thack is still in the Reeve's lockup and, by Odalie's account, has had little to say that's useful yet. He knows the barges only by sight.
+
+I need to check three things on your sheet against what I have in my notes:
+
+- Your sheet lists the brass lantern key as still in your pack, but I narrated Ashgrove taking it with the satchel. Did you swap it for a copy, or is something else going on?
+- It lists "Garrow Quill's half of the sluice-pin", and I have no record of who that is or how you came by it. Where did it come from?
+- Your rapier is missing from the sheet.
+
+Tell me how you want to settle those, and whether Vesper sleeps first or presses Thack tonight.
+
+=== REPLY ba35-20 ===
+Your sheet now reads 13 of 15 hit points, so a long rest brings you to your full 15. The blow to the head was a knock-out and not a killing wound, and the rest will restore your spell slots and your third use of Bardic Inspiration as well.
+
+Ysolt Pike came through it well. Her only wound is a split lip from a cart rail, and she's been outside Mags's door since the fight, refusing to be sent home. The bolt she missed with when you rallied her is the one she says she'll "be hearing about in the taverns for years."
+
+Two things on your sheet don't match what I told you, and I want to flag them before going on. It lists a brass lantern key still among your things, along with half of a sluice-pin marked as Garrow Quill's. I narrated Ashgrove walking off with the satchel and the key. Your rapier is also missing from the list. Before you rest, tell me how you want to square that: does Odalie put a key in your hand and say it's the true one, and which of those things do you actually have on you now?
+
+As it stands, the shrine bell has stopped, the town is quiet, and the only sounds in Mags's back room are Tamsin's breathing and the river.
+
+=== REPLY ba35-21 ===
+  [hidden call] lookup: {"name": "Resting"}
+Odalie takes the bowl in both hands, looks at it a long moment, and sets it back in yours. "Later," she says. "Thack can wait a minute. You can't sit up, so don't."
+
+To your questions, as the DM:
+
+**Hit points.** The sheet shows you at 13 of 15. A long rest restores you to your full maximum of 15 and gives you back your spell slots and Bardic Inspiration uses. It takes 8 hours, and you can only benefit from one in 24 hours.
+
+**Ysolt Pike.** She came through it. She took no damage in the fight, and she's at the Reeve's side with a bandaged knuckle and a very sour opinion of her own shooting. She sends word that you owe her one more chance at that glove.
+
+**Thack's song.** His story is that Ashgrove's barges are bound downriver, toward the drowned weirs below the Weeping Locks. That's where the old Keepers' sluice-works stand, and where she means to wait out the new moon.
+
+There's also a problem with my own record. Your sheet now lists things I never narrated: a brass lantern key, a "Garrow Quill's half of the sluice-pin", and no rapier. I described Ashgrove taking your satchel and the key. I have no notebook entry for Garrow Quill or the sluice-pin, and I won't invent a story for them without you. Tell me where those came from, or whether you want to treat the sheet as true. Either way I'll fit it into the story.
+
+What does Vesper do?
+
+=== REPLY ba35-22 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Answering as the DM: a long rest takes you to your full 15 hit points. It also restores all three 1st-level slots, your Bardic Inspiration uses and your spent hit die. It takes 8 hours, and you're at 13 of 15 right now. Pushing on without it means going after Ashgrove on that much, with no spells.
+
+Ysolt Pike came through. She took a crossbow graze across the ribs and a split lip, and Mags says she's already back on the hill road sulking that she missed twice. Her Bardic Inspiration die went unspent.
+
+There are three things on your sheet that don't match the story so far, so you know where I stand:
+
+- The brass lantern key shows in your items. I narrated Ashgrove taking it with your satchel, so I can't say how it's still with you. If you want it to be the key's twin, or a copy Odalie or Mags slipped back to you, we can decide that together.
+- "Garrow Quill's half of the sluice-pin" is on your sheet too. It has no entry in my notes and has never come up in play, so I can't tell you what it is. Do you know where it came from? If you do, I'll record it.
+- Your rapier isn't listed any more. I didn't narrate you losing it, so tell me if you want it lying in the yard, or Odalie having kept it safe.
+
+The bowl and scarf are beside you, Thack is singing, and Ashgrove has nine nights of lead. What does Vesper do?
+
+=== REPLY ba35-23 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+Odalie takes the bowl from the table and sets it back in your hands. "Keep it until you can put it on the altar yourself," she says. "I'll not have it leave you now."
+
+Answering as the DM:
+
+**Hit points.** Your maximum is 15. A long rest restores you to full, so you'd wake at 15/15. You're at 13 now, and your spell slots (0 of 3) and Bardic Inspiration (2 of 3) come back after the same rest. It's just past eight in the evening, so you could sleep here at Mags's and be whole by morning. That would leave eight nights before the new moon.
+
+**Ysolt Pike.** She came through it. A raider's blade opened her shoulder, and she is bandaged in the next room, swearing at anyone who calls it a wound. She put her bolt through the knee of the man who stood over you, and the watch credits her with keeping Ashgrove from dragging you off the hill. When you were carried down, she walked beside you.
+
+**One thing I need to flag.** Your sheet shows a brass lantern key and an item called "Garrow Quill's half of the sluice-pin," and no rapier. I narrated Ashgrove taking the satchel and the key, and I have no record of Garrow Quill or a sluice-pin at all. Something has changed on your sheet that I didn't put there. I won't invent a story for it until you tell me what you know. Do you want to say where the pin came from, or would you rather I treat the sheet as the truth and the key as a copy or a decoy? And would you like a fresh rapier from Mags's chandler friend, or do you remember where yours fell?
+
+Tamsin is already muttering about Thack. What does Vesper do?
+
+=== REPLY ba35-24 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] write_lore: {"entry": "Captain Ashgrove", "add_to_description": "CORRECTION: Ashgrove took only Vesper's satchel (letter, empty vial); the brass lantern key stayed with Vesper (found on her by Odalie). Ashgrove d
+  [hidden call] write_lore: {"entry": "The Sleeper", "add_to_description": "CORRECTION: the brass key is still with Vesper, not Ashgrove."}
+Odalie's hand tightens on your wrist. "Keep the bowl a little longer. Then give it back when you're ready, and not before I've scolded you properly." Her mouth wobbles, and she doesn't scold you yet.
+
+Rules answers first. A long rest returns you to your full hit point maximum, which is 15, and restores your spell slots (all 3) and your Bardic Inspiration. You're at 13 of 15 now, so you're mostly there already. A night's sleep in Mags's back room does the rest.
+
+Ysolt Pike came through it. She took a cut across the scalp and a cracked rib, and she's loud about both. Mags says she's drinking the Reeve's brandy by the shrine gate and telling anyone who'll listen that "the horned girl's bardic blessing gave me the shakes, and I still hit three of them."
+
+One correction from me, because your sheet is the record and I narrated it wrong. The brass lantern key is still with you. Odalie found it clenched in your fist when they carried you in. Ashgrove took only your satchel, which held your letter and the empty vial. She has no key and no Keepers' words, so she can't wake the Sleeper yet. The new moon is nine nights off.
+
+Your sheet also lists "Garrow Quill's half of the sluice-pin", and I have no record of it in play. Tell me where you got it and what it is, and I'll fit it into the story. Your rapier is also missing from the sheet. I'd say Odalie has it, propped by the door.
+
+Thack in the lockup is singing about the barges. Which of those threads do you pull first?
+
+=== REPLY ba35-25 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+To answer your questions: you have 13 of 15 hit points, and a long rest will bring you to your full 15. Ysolt Pike came through the fight with a split lip and a bolt-graze across her ribs. She's sitting on Mags's step, cleaning her crossbow and swearing at her own luck.
+
+My notes don't match your sheet in a few places, and I'll say how I'm settling them. Odalie found the brass key still clenched in your left fist when she pried your fingers open. Ashgrove took the satchel, and it was empty of the key when she opened it. So she has your satchel and nothing else, and the key is still yours. Your rapier is gone, lost in the yard, and the watch is looking for it. Tucked in your pouch is also half of a split iron sluice-pin stamped "Garrow Quill," which my notes have no record of. Tell me if you know where it came from, and I'll work it into the story.
+
+Odalie takes the bowl in both hands, turns it so the lamp catches it, and says nothing for a long moment. Then she sets it on the table between you and pushes it back an inch. "It sits better where you can polish it," she says.
+
+As for Thack, he's talking. Ashgrove's barges are bound downriver for the Weeping Locks and the old drowned quarter at Saltmere, a sunken chapel town where, he says, she means to take the wyrm's bones for a ritual spot. She has eight nights to reach it. The Reeve wants to see you at first light.
+
+What does Vesper do?
+
+=== REPLY ba35-26 ===
+  [hidden call] recall: {"search": ["sluice-pin"]}
+Answering your two questions as the DM.
+
+After a long rest you'll be at your full 15 hit points. The sheet shows 13 of 15 right now, so you're better off than I narrated a moment ago. Hit dice come back too, up to half your total, and your spell slots and Bardic Inspiration refill.
+
+Ysolt Pike came through fine. Her bolts went wide in the crush, but nobody touched her. She has a split lip and a cracked crossbow stock, and she's been asking after "the horned one who gave me luck."
+
+I also need to flag some mismatches between what I narrated and what your sheet says. The sheet is the record, so I'm not going to paper over them:
+
+- **The brass lantern key is on your sheet.** I told you Ashgrove took it with your satchel. The sheet says you still have it, so I'm going with the sheet. Ashgrove has the satchel, but not the key.
+- **Your rapier is missing.** It isn't on the sheet. It could have been lost or taken in the yard, and I don't have a record of what happened to it.
+- **"Garrow Quill's half of the sluice-pin"** is on your sheet, but nothing in my notes or in play explains it. I don't know who Garrow Quill is or how you got it. I won't invent an answer without asking you.
+
+Where did the sluice-pin come from, if you know? And do you want to say the rapier was lost in the yard, or do you want it back in your hands?
+
+=== REPLY ba35-27 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] write_lore: {"create": "Ysolt Pike", "kind": "person", "description": "Lean, silent harbour-warden crossbow of Brannoc Vell's watch with a sailor's squint. Fought beside Vesper in the shrine yard; came through wi
+Odalie takes the bowl in both hands and sets it on her knee without looking at it. "It was never mine," she says. "It was only ever what we put the coins in. You can give it back when you've earned a place to put it down." Her thumb rubs the rim once, and then she hands it back to you.
+
+Ysolt Pike came through. She has a cracked rib and a grazed scalp and a temper. She spent the end of the fight dragging you behind the fish-cart, and she's sitting on Mags's front step now, glaring at anyone who suggests she lie down. Brannoc Vell's watch lost two good people. Thack is in the lockup and still talking, though Odalie says all he truly knows is that the barges are bound for the Weeping Locks and then upriver, past Hollin Ford, toward somewhere the raiders call the Drowned Chapel.
+
+On your hit points: you're at 13 of 15 now, and a full long rest will bring you to 15. You'll also get your spell slots and Bardic Inspiration back.
+
+One out-of-character note. Your sheet now shows a brass lantern key and half of a "sluice-pin" that belonged to someone called Garrow Quill, and your rapier isn't listed. I narrated Ashgrove taking the satchel and key, so I don't want to guess what happened to those items. Tell me how you'd like to handle them: is the key a copy, did you take the pin from someone, and where is the rapier?
+
+For now, the night is quiet, and Mags is already heating soup. What does Vesper do?
+
+=== REPLY ba35-28 ===
+  [hidden call] recall: {"search": ["Garrow Quill"]}
+  [hidden call] write_lore: {"entry": "Old Mags", "add_to_description": "Her back room is where Vesper woke; Ysolt Pike brought Vesper's dropped rapier there after the yard fight."}
+Odalie pushes the bowl back across the blanket with two fingers. "It's yours to carry. It was never the bowl I wanted back." Then she lets you hold it a moment, which is more than you expected.
+
+On Ysolt Pike: she came through. A raider's blade scored her ribs and she's cursing at the cost of a fish-cart, but she's upright. She was the one who dragged you out of the yard and brought your rapier here. It leans against the cot now.
+
+On Thack: he's been singing since the Reeve took his belt. Ashgrove's barges are bound downriver for the Weeping Locks and the marsh beyond, where she has a camp of her own. The deputy knows no more than that, and he's frightened of her.
+
+On rest: a long rest takes eight hours. At the end of it you'd be back to 15 of 15 hit points, with your spell slots, and Bardic Inspiration back to 3.
+
+One thing to flag, speaking as your DM. Your sheet now lists a brass lantern key and half of a sluice-pin from someone called Garrow Quill. I have no record of either from play, and I narrated Ashgrove taking the key. I don't want to invent a story for them, so I'll leave them off the story until you tell me where they came from. Do you want to say how you got them, or should I treat it as a sheet error?
+
+Otherwise, the room is quiet, the lamp under the hill is lit, and nine nights are ticking. What does Vesper do?

@@ -1,0 +1,600 @@
+GAME cleric, ROUND 56
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 53 ==
+PLAYER: Brun falls into step beside Maren and shortens her stride to match. "Aunt Maren, while we walk, would you tell me about the Deepwatch itself, and about my mother as a girl? I'd like to hear the small things, like what she liked to eat and what songs she sang."
+
+She glances ahead at Garrick and adds, "Garrick, thank you for the ford and the sheep trail. At the waymark-hut tonight I'll cook, since you've done the hard work all day."
+  [DM write_lore (hidden)] {"entry": "Sigrun Stonehearth", "add_to_description": "Day 5 (Maren's stories on the road): as a girl Sigrun hoarded flat river stones and chalked maps of the Deepwatch's corridors on them; loved barley-and-honey cakes and sour plum jam; sang a work-song about a lamp-maker's daughter, 'Seven Wicks', badly and loudly; refused to wear a helm in the shafts until she cracked her head at twelve. She ma
+  [game] notebook: updated Sigrun Stonehearth
+  [DM write_lore (hidden)] {"entry": "The Deepwatch", "add_to_description": "Described by Maren on the road: a hall cut into a single mountain, seven galleries high, with a lamp-lit Hall of Names where every warden's death is carved. A few dozen wardens and their kin still live there; it has grown quiet since the holds fell. The captain is Maren's old rival and Brun's great-grandfather's grandnephew, a stern dwarf named Tor
+  [game] notebook: updated The Deepwatch
+  [game] time: 4 hours later: Day 5, 6:29:30 PM
+DM: Maren gives you the answer slowly, a few steps at a time, as if each memory had to be taken down from a high shelf.
+
+Your mother, she says, was a hoarder of flat river stones. As a girl she chalked maps of the Deepwatch's corridors on them and left them in odd corners, so that for years the wardens found little grey stones in the lamp-niches with a corridor drawn on them and a tiny, furious arrow. She loved barley-and-honey cakes and sour plum jam, and could not be kept from the kitchens. She sang one song, badly and loudly, a lamp-maker's work-song called "Seven Wicks," and every warden on the seventh gallery knew it by heart whether they wanted to or not. She would not wear a helm in the shafts until she cracked her head on a low lintel at twelve, and after that she wore one for the rest of her life and complained about it daily.
+
+Maren hums a bar of the song under her breath, flat and dry, and you realize with a start that you know the tune. Father Dorrin used to whistle it while he mended the shrine roof.
+
+She tells you of the Deepwatch too: a hall cut into a single mountain, seven galleries high, with a lamp-lit Hall of Names where every warden's death is carved. A few dozen wardens and their kin still live there, and it has grown very quiet since the holds fell. Its captain is a stern dwarf named Torvald Greycairn, who was Maren's rival for forty years and is, she admits, probably her only friend. He disapproved of your mother's marriage, she adds, and she lets that sit.
+
+By evening the waymark-hut stands at the saddle, a low stone shelter with a turf roof and a hearth and a stack of dry peat left by some earlier traveler. Garrick has already checked the corners, and he nods once. You keep your promise and cook: oatcakes toasted on the hearthstone, dried apple stewed in a pot, a bit of cheese. Maren eats two helpings and says the stew is not bad for a priest.
+
+It is a little past six. The wind is rising off the hills, the hut is warm, and the Deepwatch lies a day and a half north. You have three spell slots and Channel Divinity. What does Brun do?
+
+== ROUND 54 ==
+PLAYER: Brun sits back by the peat fire with her bowl and hums a flat, loud bar of "Seven Wicks," then grins at Maren. "Father Dorrin whistled that every time he mended the roof, and I never knew it was hers. Will you teach me the words tonight?"
+
+She adds, "Garrick, would you take the first watch and wake me for the second? And Aunt Maren, you said Torvald Greycairn disapproved of my mother's marriage, so when you're ready, I'd like to hear a little about my father too."
+  [DM write_lore (hidden)] {"entry": "Sigrun Stonehearth", "add_to_description": "Night Day 5 at the waymark-hut: Maren taught Brun the words of 'Seven Wicks' and, pressed, gave a little of Brun's father: a hill-hold lamp-maker, a quiet dwarf with soot-black eyes who made lamps for the Deepwatch's seventh gallery and was the reason Sigrun wrote 'Seven Wicks' into every corner; Torvald Greycairn objected because he was not o
+  [game] notebook: updated Sigrun Stonehearth
+  [game] time: 11 hours 30 minutes later: Day 6, 5:59:30 AM
+DM: Maren puts down her bowl and clears her throat like a woman about to be paid for something she'd rather do for free. Then she sings it. Her voice is cracked and thin and entirely without shame, and the old song comes out in a plain, rolling rhythm about a lamp-maker's daughter and seven wicks, each one lit for a thing she had lost. By the third verse you have the tune, and by the fifth you are singing it loud and flat, exactly as Sigrun did. Garrick, on watch at the door, does not turn his head, but his shoulders shake once.
+
+When the song is done and the fire has burned low, you ask about your father, and she is quiet a long while.
+
+"I will give you a little," she says, "and the rest at the Deepwatch, where it is written in stone as he deserves. He was a lamp-maker from a hill-hold, a quiet dwarf with soot in the creases of his hands and eyes as dark as yours. He made the lamps for the seventh gallery, the ones that never smoke. That is why she wrote his trade into the song, and why every corner of the seventh gallery has a lamp in it that she insisted on." She almost smiles. "Torvald objected because he would not swear the wardens' oath. He said he was a lamp-maker and not a soldier, and that he would light the way for anyone but would not choose a side. It was the stubbornest thing I ever heard from a man who weighed nothing. They married anyway."
+
+She pats your hand. "His name is carved. You will read it there."
+
+Garrick takes the first watch and wakes you for the second. Nothing stirs in the hills but the wind. The night passes, and the grey dawn finds you at the doorway of the hut with the whole high country laid out before you, cold and pale and clean.
+
+It is just before six on day six. You are at 21 of 21 with all spell slots and Channel Divinity. The Deepwatch lies a day or less ahead, and Garrick says the weather is turning. A bank of cloud is building in the north.
+
+What does Brun do?
+
+== ROUND 55 ==
+PLAYER: Brun studies the building clouds and turns to Garrick. "You know these hills better than I do. Do we push on and try to reach the Deepwatch before the weather breaks, or find shelter along the way? I'll follow your read."
+
+She helps Maren to her feet and tucks Ilsa's wool scarf around her aunt's shoulders. "Aunt Maren, if the wind gets bad, take my arm and keep the scarf up, and tell me the moment you tire."
+  [game] dice Garrick's Wisdom (Survival) check reading the weather and choosing the route, Natural Explorer doubles proficiency (+2 WIS +4), DC 13: 1d20+6 = 1d20 [8] + 6 = 14
+  [game] time: 11 hours 30 minutes later: Day 6, 5:29:30 PM
+  [DM write_lore (hidden)] {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:30 PM: the party reached the Deepwatch's outer gate ahead of a storm. The gate is a pair of bronze-banded doors set into a sheer cliff under a lamp-lit overhang, with a warden sentry on the wall above who challenges them in Dwarvish and asks the name of Maren's companion."}
+  [game] notebook: updated The Deepwatch
+DM: Garrick studies the north for a long minute, wets a finger, and watches the cloud-bank crawl. "It will break by dusk," he says. "Hard. But the Deepwatch is a long day off, not two, and the track runs along the lee of the ridge the whole way. We push. Slow and steady, no stops but short ones, and the old woman rides my pack-strap at the steep places." Maren snorts at that, but she does not argue.
+
+It is a long, hard day. The wind rises through the morning and by noon it is a living thing, tugging at your cloak and plucking at the scarf you have tied about Maren's shoulders. You walk at her side with her arm through yours, and twice she leans on you more than she means to, and you say nothing. The first cold drops of rain come at three, and by four the sky has gone the color of slate. Garrick's route holds: every time the weather seems about to catch you, the track bends in under a shoulder of rock and the worst of it goes by overhead.
+
+A little before half past five, in the first real roar of the storm, you come over the last rise and the Deepwatch stands before you.
+
+It is a single mountain with a face cut into it. Seven rows of narrow, lamplit windows climb the cliff like a stair of gold, and below them, set deep under a great overhanging brow of stone, stand a pair of bronze-banded doors twice the height of a dwarf. A lamp burns on either side of them, steady against the wind. On the wall above, a sentry in a hooded warden's cloak has already spotted you and leans over the parapet with a lantern.
+
+"Who comes to the Deepwatch in the storm?" the sentry calls in Dwarvish. "Maren? Is that you? Gods, you are three days late. And who is that with you, the one with the dented mail?"
+
+Maren straightens beneath your hand and lifts her chin, and in the rain her face is suddenly very proud.
+
+"Tell the captain," she says, and her voice carries, "that Sigrun's daughter has come home."
+
+You are at 21 of 21, with three spell slots and Channel Divinity, in the shelter of the gate. What does Brun do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 56, "category": "npc", "severity": 2, "quote": "It was lost with the holds. We have waited forty years for this.", "why": "In R45 Hild says the Deepwatch keeps 'copies of every hold's ledgers' and Corm says the captain's ledger 'is a copy of one at the Deepwatch', so Torvald should not be missing the Naming."}
+
+THE PLAYER'S LINE THIS ROUND: Brun squares her shoulders, wipes the rain from her face, and calls up to the sentry in clear Dwarvish, "I'm Brunhilde Stonehearth, Sigrun's daughter, raised by Father Dorrin Ashbeard. I carry a copy of the Hearthdeep warden-captain's ledger, and I've come home."
+
+She keeps one hand on Maren's arm and glances at Garrick. "Stay close, friend. You're with me, and you're welcome here."
+
+=== REPLY cl56-01 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. A stern, broad dwarf with a grey beard cropped to the jaw and an iron-shod staff. Maren's rival of forty yea
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 evening: Brun hailed the sentry by name and lineage and showed the Hearthdeep ledger copy. The bronze doors opened; the party was taken into the
+Your voice carries over the wind, plain and unhurried, and the sentry goes still on the parapet. A silence follows, with only the rain hissing on the bronze. Then the lantern lifts and swings once, and somewhere inside a bar the width of a man's body grinds back in its cradle.
+
+The great doors part, and warm light spills out over the wet stone. Beyond them is a long gate hall, its roof held up by pillars carved with the names of the dead, lamps burning in every niche. Wardens in hooded cloaks line the walls, a few dozen, grey-bearded and young, saying nothing. A child peers around a pillar and is hauled back by the collar.
+
+Down the middle of the hall comes a broad dwarf with a grey beard cropped to the jaw and an iron-shod staff that rings on the flagstones. His cloak is pinned with the hammer-and-three-lines brooch, and his face is a closed door. He stops an arm's length from you and looks at your chin, your braid, the ring on your finger, and for a long moment he says nothing at all.
+
+"Maren," he says at last, without turning his head, "you were told to send word."
+
+"I was told to bring her," Maren says. "I have."
+
+Torvald Greycairn's jaw works. His eyes come back to yours, and something moves behind them, old and slow and heavy. "Sigrun's daughter," he says quietly. "She had that look when she was told no. Forty winters, and I would know it anywhere." He lowers the staff. "You carry a ledger of Hearthdeep's wardens, they say. Show me, and then you will have a fire, and a bed, and the Hall of Names, in whatever order you wish."
+
+Garrick has stopped a pace behind you, bow unstrung and eyes everywhere. The hall waits. What does Brun do?
+
+=== REPLY cl56-02 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch, stern old dwarf, Maren's rival of forty years and only friend. Disapproved of Sigrun's marriage. Meets Brun 
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~5:40 PM: Brun announced herself at the Deepwatch gate as Sigrun's daughter, with the Hearthdeep ledger. The doors opened; Captain Torvald 
+Your voice carries up the wet stone, steady against the wind, and for a heartbeat the sentry says nothing at all. Then the lantern swings away and you hear her shouting down into the dark of the wall, a name and then a second name, and the sound of boots on stairs.
+
+The bronze doors do not open all at once. A smaller door within the left leaf cracks, spilling gold light across the rain, and then the great leaves themselves groan inward, slow and heavy, as though they had not moved for anyone in a long time. Warmth breathes out, with the smell of lamp-oil, barley and old stone. Wardens in grey hooded cloaks line the passage inside, a dozen or more, silent, their eyes on your face and then on the ring at your finger.
+
+A tall dwarf comes down the passage between them, white-bearded, iron-hard, a captain's chain of hammered links at his throat. He stops three paces from you and looks at you for a long time, the way a man looks at a map he has not seen in decades and knows by heart.
+
+"You have her chin," Torvald Greycairn says at last. His voice is rough as a rasp. "And her bad habit of arriving in a storm." He glances at Maren, and something passes between them that is forty years deep. "Three days late, old woman."
+
+"Four," Maren says. "I stopped to sit with a priest's ghost."
+
+He grunts, and then, to your surprise, he bows, not deeply, but as one bows to kin. "Brunhilde Stonehearth, daughter of Sigrun. The Deepwatch is yours to enter, and your friend's with you. Come in out of the rain. There is food, and a fire, and when you are warm there is a page I would have you read, if you wish."
+
+Garrick has said nothing, but the wardens' eyes have gone to him, and he stands a little straighter under his dripping hood.
+
+One note for you as DM: your sheet now shows two sealed letters in Father Dorrin's hand, addressed to the Deepwatch, tucked among your things. They were with his book all along, and you may choose when to hand them over.
+
+You are warm, at 21 of 21 with three slots and Channel Divinity, at the gate of your mother's hall. What does Brun do?
+
+=== REPLY cl56-03 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 evening: Brun named herself at the gate as Sigrun's daughter and ward of Father Dorrin Ashbeard, carrying the Hearthdeep ledger copy. The sentry
+Your voice carries over the wind. For a breath the sentry is silent, and the rain drums on his hood. Then he cries out, a short, cracked sound, and is gone from the parapet. A bell begins to ring somewhere inside the mountain, slow and deep, and then another answers it from higher up.
+
+The bronze doors swing inward on oiled hinges, with a sound like a long breath. Warm lamplight and the smell of peat smoke and baked barley roll out over you. Beyond is a wide stone hall hung with lanterns, and in it, standing in two ragged rows, are dwarves. Dozens of them, in grey warden's cloaks, some half-armed from the forge, some still holding ladles. They are very quiet. A few have their hands pressed over their mouths.
+
+Down the middle comes a broad, iron-bearded dwarf in a captain's black cloak, walking stiffly, with a face like a closed gate. He stops an arm's length from you and looks at your chin. Then at the ring on your finger. Then at Maren.
+
+"Seventy winters," he says, very low, "I have kept a place on the wall for that chin, and I thought it would stay bare." His jaw works. "Torvald Greycairn. Welcome home, Sigrun's daughter."
+
+Maren leans on her staff and gives him a look of enormous, tired satisfaction. "You owe me a silver for the bet," she says.
+
+Garrick, at your shoulder, has taken off his hood and is trying very hard to be a piece of the wall. A girl no older than Pip tugs at his sleeve and asks, in Common, if he is a real hunter.
+
+Your sheet also shows two sealed letters in Father Dorrin's hand, tucked in the binding of his prayer book. I did not narrate how you found them, so I will leave that to you: they are in your pack, addressed to the Deepwatch.
+
+You have three spell slots, Channel Divinity, and a hall of kin before you. What does Brun do?
+
+=== REPLY cl56-04 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch, iron-grey beard cut square, one hand missing two fingers. Maren's rival of forty years and only friend
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~5:45 PM: Brun announced herself at the gate; the sentry ran for the captain. Torvald Greycairn comes to the gate and the doors open for th
+The sentry vanishes from the parapet, and for a long minute there is only the storm: rain hammering the bronze, wind howling along the cliff, and the lamps burning steady on either side of the doors. Maren's arm is thin and cold through your sleeve.
+
+Then a bar the size of a roof-beam rises somewhere inside, and the great doors swing open on a warm gold hall.
+
+Torvald Greycairn stands in the gap, flanked by two wardens with lanterns. He is a broad old dwarf with an iron-grey beard cut square, a captain's chain across his chest, and two fingers missing from his left hand. He looks at Maren first, and something in his jaw works. "Three days late, you stubborn old goat," he says, rough as gravel. "I had the bed aired twice."
+
+"Torvald," she says, and that is all, and he takes her other arm so that she is held between the two of you.
+
+Then he turns his eyes on you, and they are the same cold grey as a mountain tarn. He takes his time. He looks at your braid, your dented mail, your chin, and last at the ring on your finger.
+
+"You have her chin," he says finally, grudging as a man pulling a tooth. "Gods rot it. You have the stubborn chin." He holds out his maimed hand. "The ledger, girl, if you would. And the ring, for a moment. I wrote the oath she broke, and I would see what is left of it."
+
+Behind him the hall stretches away, hung with lamps, and somewhere far in there is a stair and a gallery and a wall of names.
+
+Rain streams from your cloak. Garrick waits at your shoulder, bow unstrung, saying nothing. What does Brun do?
+
+=== REPLY cl56-05 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, grey-bearded warden, Maren's rival of forty years and only friend. Disapproved of Sigrun's marriage t
+Your voice carries over the wind, clear and level, and for a heartbeat the sentry says nothing at all. Then the lantern swings away from the parapet and you hear a shout going inward, passed from voice to voice down the wall, and a deep bell begins to toll somewhere in the mountain, slow and low.
+
+The bronze doors do not open all at once. First a small door cut into the left leaf swings inward on its hinges, and a line of wardens file out into the rain with hooded lamps: a dozen dwarves in grey cloaks pinned with the hammer-and-three-lines brooch, silent, their faces turned toward you. They part, and a dwarf comes through them.
+
+He is broad and short and very old, with a beard the color of wet slate braided in four plaits to his belt, and a face that looks as though it was cut from the same stone as the gate. He wears a captain's cloak and carries no weapon. He stops a pace from you and looks you over, from the dented chain mail to the braid threaded with brass beads, to the iron ring on your smallest finger. His eyes rest on that last a long time.
+
+"Maren," he says, without looking away from you. "You are late. And you have brought her."
+
+"I said I would," Maren answers, and her voice shakes.
+
+The captain, Torvald Greycairn, puts out a hand, palm up. You understand that he is asking for proof, not out of suspicion, but because the dead are owed it. You have the warden-captain's ledger with Corm's name on it, and the sheet shows a pair of letters in Father Dorrin's hand that you will want to look at, along with the book and the ring.
+
+Behind him the great doors have begun to swing wide, and the lamp-gold of seven galleries pours out onto the wet stone. The rain hisses on the threshold, Garrick has taken his hand from his bow, and the whole mountain seems to be holding its breath.
+
+What does Brun do?
+
+=== REPLY cl56-06 ===
+The sentry stares down for a long breath, the lantern swinging in the wind. Then the lantern lifts and drops twice, a signal, and from somewhere inside the mountain a bell begins to ring, slow and deep.
+
+"Sigrun's daughter," the sentry says, and the formal edge has gone from her voice. "We were told the child was lost. Come in out of the rain, all of you."
+
+The bronze doors swing inward without a sound. Warm lamplight and the smell of peat smoke and baked barley pour out over the threshold. Inside is a broad vaulted hall hung with lamps, each in its own niche, every one burning clean without a thread of smoke. Dwarves in grey warden cloaks are already gathering at the far end, quietly, as if they had been waiting a long time and had only now been told what for.
+
+At the head of them stands a stern, barrel-chested dwarf with a beard like iron wool and a captain's chain across his chest. He does not smile. He looks at your face, then at the ring on your finger, then at Maren. "You found her," he says, hoarse. "Gods help me, Maren, you found her."
+
+That would be Torvald Greycairn. He turns his eyes to you, and something in his hard face gives way.
+
+Before anyone can speak, you find that the back cover of Father Dorrin's prayer book is thicker than it should be. Tucked inside the binding, sealed with his plain sun-stamp and addressed in his cramped hand to *the Captain of the Deepwatch*, are two letters you have never seen. They were there all along, written years ago and never sent.
+
+Garrick stays a half-step behind you with his bow slung and his hood down, dripping on the flagstones. The hall waits for you to speak.
+
+What does Brun do?
+
+=== REPLY cl56-07 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:40 PM: the sentry accepted Brun's name and the ledger; the bronze doors opened for the party out of the storm. Captain Torvald Greycairn came
+Your voice carries over the wind. The sentry stares down at you a moment, then at the ring on your finger, and without a word the lantern is gone from the parapet. Chains rattle somewhere inside the stone.
+
+The great bronze doors swing inward on slow, well-oiled hinges, and warm lamplight spills out over the wet flagstones. You step through with Maren on your arm and Garrick a pace behind, and the storm closes off behind you with a boom.
+
+The gate hall is vaulted and long, hung with banners of faded wardens' brown, a hammer over three wavy lines on every one. Perhaps twenty dwarves have gathered in the lamplight, some in warden cloaks, some in kitchen aprons, a few children peering from behind skirts. They have stopped talking. Several are staring at your hair.
+
+Down the middle of the hall strides a broad, grey-bearded dwarf in a captain's cloak, plain and scarred and heavy as an anvil. His eyes go to Maren first, with a flicker of something like relief that he covers at once with a scowl. Then they come to you, and to the ring, and stay.
+
+"Maren," he says gruffly, still looking at you, "you took three days longer than you said."
+
+"Torvald," she answers, "I brought what I went for."
+
+The captain stops an arm's length from you. He is silent so long that someone in the crowd coughs. Then he says, in a voice that has gone strangely rough, "She had that same chin." He looks at the ledger in your hands, and at the hammer at your belt. "Sigrun's girl. By the stone, you are welcome in this hall, and I will not be the last to say so."
+
+Garrick shifts at your shoulder, hand away from his bow, watching the hall with his usual suspicion. Your pack, soaked through, holds Corm's ledger, Father Dorrin's book, and two sealed letters in the old priest's hand that you have not yet opened.
+
+You are at 21 of 21 with three spell slots and Channel Divinity. The Hall of Names is above, and so is your father's page. What does Brun do?
+
+=== REPLY cl56-08 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern, white-bearded captain of the Deepwatch, Maren's old rival and only friend. Disapproved of Sigrun's marriage to a lamp-maker. Co
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~5:30 PM: Brun declared herself at the gate in Dwarvish. Dorrin's two sealed letters to the Deepwatch (found tucked behind the back board o
+Your voice carries over the wind, plain and clear, and for a moment the sentry says nothing at all. The lantern on the parapet swings once, and then she is gone from the wall. Somewhere behind the bronze, a bell begins to ring, slowly, seven strokes and a pause, seven more.
+
+Rain hammers the stone overhang. Maren's hand tightens on your arm. "That is the bell for a warden come home," she says, very low. "I have not heard it rung in nine years."
+
+The doors swing inward on oiled hinges. Lamplight and warm air roll out over the threshold, with the smell of hot iron, lamp-oil and baking barley. Dwarves are gathering in the gallery beyond: miners in leather, women with ledger-satchels, old ones leaning on sticks, a boy with soot on his nose staring wide-eyed at your braid. No one speaks.
+
+Through them comes a broad, white-bearded dwarf in a warden-captain's grey cloak, a hammer-and-three-lines brooch at his throat and a face carved from the same stone as the mountain. He stops an arm's length from you. He looks at your chin. Then at the ring on your finger.
+
+"Your mother wore that to the shaft the last morning," says Torvald Greycairn. His voice is rough. "You'll forgive an old man for needing proof. Show me what you carry."
+
+You take out the warden-captain's ledger and Father Dorrin's prayer book. As you open the book's cover, two folded letters slip from behind the back board where they have lain unseen for years, each sealed with a small red sun and addressed in cramped, familiar handwriting: *To the Captain of the Deepwatch.* They were written long ago and never sent.
+
+Torvald stares at them. His hand, when he reaches out, is not quite steady.
+
+Garrick has stepped half a pace back, bow slung, keeping out of the way. The whole gallery waits. What does Brun do?
+
+=== REPLY cl56-09 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch, Maren's rival of forty years and, she admits, her only friend. Disapproved of Sigrun's marriage to a l
+Your voice carries over the wind, plain and unhurried, and the name Sigrun does what no password could. The lantern on the wall goes still. Then the sentry is gone from the parapet, and you hear a shout pass inward from voice to voice, gallery to gallery, up the mountain's seven lit rows, until a bell begins to ring somewhere deep inside.
+
+The great bronze doors swing inward with a groan of old counterweights. Warm lamplight and the smell of peat smoke roll out into the storm.
+
+Dwarves crowd the threshold, wardens in hooded cloaks, a few children peering around their legs, an old woman with a ladle still in her hand. They fall silent as you step in out of the rain. Then a space opens, and a broad, grey-bearded dwarf with a captain's iron-banded staff and a face like a closed fist walks through it. His eyes go to your chin, then to the iron ring on your finger, and stay there.
+
+"Torvald," Maren says dryly, "close your mouth."
+
+He does not. He looks at you for a long, long moment, and what crosses his face is not welcome yet, but it is not far from it. "You have her chin," he says gruffly. "And her habit of arriving in weather." He glances at Garrick, who stands rain-streaked and wary in the doorway, and grunts. "The man with the bow is your own, I take it. Then he's under my roof too, and I'll not hear otherwise."
+
+The doors boom shut behind you, and the storm becomes a muffled thing. Warmth settles around you. Your pack holds the captain's ledger, Father Dorrin's book, and the two letters you carry for this hall.
+
+"Come," Torvald says. "There is hot food, and the Hall of Names is lit. But I will hear what you carry first, here, before the old woman tells me she did it all herself."
+
+What does Brun do?
+
+=== REPLY cl56-10 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch, Maren's rival of forty years and, she admits, her only friend. Disapproved of Sigrun's marriage to a n
+For a moment there is only the storm. The sentry's lantern swings, and then the man is gone from the parapet and you hear his boots ringing down a stair inside the wall, and a bar being drawn.
+
+The bronze doors do not swing wide. A smaller door cut into the left leaf opens, and warm yellow light spills out across the wet stone. Three wardens come out in hooded grey cloaks, spears grounded, and behind them a dwarf in a captain's black wool, broad as a door, with a beard the color of cold ash and a face like a cliff. He looks at Maren first, and something in his jaw loosens. Then he looks at you, and for a long time he does not speak.
+
+"The ledger," he says in Dwarvish, gruff and low. "Show me."
+
+You unwrap it from its dry cloth and hold it out in both hands, rain beading on the cover. From between its leaves, where you had not looked since the burial, a pair of folded letters slips into your palm, sealed with the Morninglord's sun in old red wax and addressed in Father Dorrin's cramped hand: *To the captain of the Deepwatch. To be given into Brunhilde's keeping, when she comes.* You had not known they were there. Neither, by the look on her face, had Maren.
+
+The captain reads the direction on the seals. He lifts his eyes to your face, to the chin, to the ring on your finger with its braid of auburn hair, and his stone expression cracks along one line.
+
+"Torvald Greycairn," he says. "I told her the lamp-maker was no good for her. I was wrong about a great many things." He steps aside and pulls the little door wide. "Come in out of the rain, Sigrun's daughter. Bring your hunter. There is a fire, and food, and a great deal to say, and a page you should read before you sleep."
+
+Warm air breathes out of the hall, smelling of lamp-oil and bread. Garrick glances at you, one eyebrow raised, and waits for your word.
+
+You are at 21 of 21 with all your spells, standing at the threshold of your mother's home, with Father Dorrin's letters in your hand. What does Brun do?
+
+=== REPLY cl56-11 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, broad, iron-grey dwarf with a cairn-stone pendant, Maren's old rival and only friend. Objected to Sig
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~5:40 PM: Brun announced herself at the gate with the ledger copy; the sentry sent for the captain, Torvald Greycairn, and the bronze doors
+Your voice carries up the wet cliff, clear and level, and the sentry goes very still. For a long breath there is only the storm. Then the lantern swings away and you hear her shout down the wall in a voice that cracks: "Open the doors! Open the doors, and fetch the captain!"
+
+Chains rattle, and the great bronze-banded doors groan inward on a hall of lamplight and warm air that smells of oil, stone, and bread. Wardens come hurrying out into the rain, a dozen or more, in hooded cloaks pinned with the hammer-and-three-lines brooch. They stop at the threshold and stare at you. Someone murmurs, "She has Sigrun's chin." Someone else takes Maren's other arm and gently lifts her weight from you.
+
+Garrick keeps a pace behind you and a hand away from his bow, watching the doorways the way he watches ridgelines. A young warden eyes his longbow, then you, and says only, "He is with the Stonehearth. Let him pass."
+
+Down the central gallery, between rows of lamps that burn without smoke (the lamp-maker's work, you realize, and your throat tightens), a broad, iron-grey dwarf is striding toward you with a cairn-stone pendant on his chest and a face that has not smiled in a long time. Torvald Greycairn stops three paces away. His eyes go to your face, to the iron ring on your finger, to the ledger under your arm, and for a moment the stern lines of his face come undone.
+
+"Sigrun's daughter," he says, hoarse. "Forty winters, near enough, I have looked at that chin. Come in out of the rain, child." Then, more gruffly, to Maren: "You are three days late, you stubborn old crow. I had the kettle on twice."
+
+Behind him, at the far end of the gallery, a stair of dark stone climbs toward a high arch carved with names. The Hall of Names is up there, and your father's.
+
+You are at 21 of 21 with three spell slots and Channel Divinity, dripping on the floor of your mother's home. What does Brun do?
+
+=== REPLY cl56-12 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch: tall, stooped, grey-bearded, iron circlet. Stern, Maren's rival of forty years and her only friend. Disappro
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 ~5:35 PM: Brun and Garrick admitted to the Deepwatch by Captain Torvald Greycairn as guests. Brun carries two sealed letters in Father Dorr
+The sentry lifts the lantern higher, and for a long breath there is only the wind. Then the bronze doors begin to open, inward, slowly, on a hall full of gold light.
+
+Your pack holds the ledger in its dry cloth, Father Dorrin's book, and two sealed letters in his cramped hand that you had not noticed tucked behind the prayer book's binding. The wax bears the wardens' hammer, and both are addressed to the Deepwatch. You haven't read them, and they weren't yours to read before now.
+
+A tall, stooped dwarf strides out under the arch, grey-bearded, in a captain's heavy cloak and a plain iron circlet. Torvald Greycairn, you guess, and his face is carved from the same stone as the doors. Behind him a few wardens gather with lanterns, and a small child peers round a leg.
+
+He looks at Maren first, and something tightens in his jaw, a scolding he doesn't give. Then he looks at you for a very long time, at the braid, the chin, the ring on your smallest finger.
+
+"Three days late," he says to Maren, rough. "And you bring the storm with you."
+
+Then he turns to you and bows, very slightly, the bow one dwarf gives a kinswoman.
+
+"Sigrun's daughter," he says. "The hall has kept a lamp lit for you for twenty years. Come in out of the rain, child, and bring the hunter. You are both guests of the Deepwatch."
+
+Warmth rolls out of the gate: peat smoke, hot bread, lamp oil. Garrick glances at you, uncertain, and you can see he has never been welcomed anywhere so wholly.
+
+It is a little past half past five. You are at 21 of 21 with three spell slots and Channel Divinity. What does Brun do?
+
+=== REPLY cl56-13 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch, a stern, broad dwarf with an iron-grey beard cut square, Maren's rival of forty years and, she admits, her o
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 evening: Brun named herself at the gate and showed she carries the Hearthdeep ledger copy. The bronze doors opened; Captain Torvald Greycai
+Your voice carries up the cliff through the rain, plain and unhurried. For a moment the sentry says nothing at all. Then the lantern swings, a horn sounds twice from somewhere inside the mountain, and the great bronze doors begin to open, inward, with a long grinding groan.
+
+Light and warm air spill out over the threshold. A knot of wardens in grey cloaks hurry out with lamps, and behind them, unhurried, comes a broad dwarf with an iron-grey beard cut square and a captain's brooch at his throat. He walks straight out into the storm without a hood and stops an arm's length from you.
+
+He looks at your chin. He looks at the ring on your finger. He looks, for a long time, at the dented mail, and then at Maren.
+
+"You were three days late, you stubborn old crow," Torvald Greycairn says gruffly. "I had your bed aired twice." Then, to you, with the rain running down his beard and his voice not quite steady: "Sigrun's chin. Aye. I'd know it in the dark." He holds out a hand, palm up, the way a warden greets kin. "I am Torvald. I was wrong about your father, and I have been wrong for thirty years. Come in out of the wet, child. Your people have been waiting a long time."
+
+Wardens crowd the gate, curious and quiet. One of them takes Maren's pack, another reaches for Garrick's, and he stiffens, then lets it go. Beyond the doors a long lamplit hall runs back into the mountain, its walls carved with names.
+
+The Hall of Names is just ahead, and so is your father's. You are at 21 of 21, with three spell slots and Channel Divinity. You also carry Father Dorrin's two sealed letters, which you have not yet opened.
+
+What does Brun do?
+
+=== REPLY cl56-14 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch, Maren's rival of forty years and, she admits, her only friend. Disapproved of Sigrun's marriage to a l
+For a moment there is only the storm and the hiss of rain on the bronze. The sentry's lantern wavers on the parapet, and a second voice calls something down the wall, and then a third. A bell begins to ring inside the mountain, slow and deep, and you feel it in your boots.
+
+The great doors swing inward on silent hinges. Light pours out over the wet stone, gold and warm, and with it the smell of lamp-oil, barley, and hot iron. Wardens stand in the passage beyond in two ragged rows, men and women in grey cloaks, some old, a few young, a child peering round a knee. None of them speak. Every hand goes to a chest, palm flat over the heart, in the old salute.
+
+Down the middle of them strides a broad, stooped dwarf with a beard the color of wet slate and a captain's iron torc at his throat. He stops a pace in front of you. His eyes go to your auburn braid, to your chin, and then, very slowly, to the iron ring on your smallest finger.
+
+"Torvald Greycairn," he says, gruff as a gravel-slide. "Captain of this hall. I was told the child was safer far from us. I was wrong, and I have known it for thirty years." His jaw works. "You have her stubborn chin. Gods help us all."
+
+He looks past you to Maren, soaked and smiling, and mutters, "You old crow, you are late." Then, to Garrick, with a brusque nod, "Your friend is welcome too, hunter. Anyone who walks my cousin's daughter through the high pass is welcome at my table."
+
+He steps aside and lifts one hand toward the warm hall beyond.
+
+"The Hall of Names is lit," he says, more quietly. "It has been lit every night since the day she died. Whenever you are ready, Sigrun's daughter, there is a page I would like you to read. But there is soup first, and dry clothes, and no one in this mountain will think the less of you for either."
+
+You are at 21 of 21 with three spell slots and Channel Divinity, at the threshold of the Deepwatch, with kin all around you. What does Brun do?
+
+=== REPLY cl56-15 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 evening: after Brun named herself at the gate, the bronze doors opened. Captain Torvald Greycairn met the party in the entry hall, stern and whi
+Your voice rings off the rock above the gate, and for a breath the wind itself seems to hold still. The sentry's lantern lifts higher. Then a horn sounds somewhere inside the mountain, one low note, and the great bronze doors begin to move, grinding inward on counterweights older than the holds.
+
+Warmth and lamplight pour out onto the wet stone. Beyond the doors is a long entry hall, vaulted and bare, with a lamp set in a niche every ten paces, and every niche holds a small flat grey stone with a corridor chalked on it, and a tiny, furious arrow.
+
+A dwarf waits at the hall's far end. He is tall for his kind, white-bearded to the belt, in a plain warden's cloak with the hammer-and-three-lines brooch, and he stands so straight he looks carved. This must be Torvald Greycairn. He does not smile. He looks at Maren first, and something in his jaw eases a hair. Then he looks at you, at the auburn braid, the dented mail, the chin.
+
+"Maren," he says. "You are late, and you have been in the rain, and you are an old fool." His eyes do not leave you. "Is this her?"
+
+"It is," Maren says, and her hand tightens on your arm.
+
+"I will see the ledger," Torvald says to you, in a voice like a closing door, "and the ring. I mean no insult. The Deepwatch has been lied to before, by people with the right face." Then, quieter, almost to himself: "She had that same way of standing in a doorway as if it owed her something."
+
+Behind you, Garrick shifts, one hand resting easy on his bow, saying nothing. A lamp-bearer has come up beside him and offers to take him and Maren to the guest hall and a fire.
+
+One more thing on the sheet: you carry two letters in Father Dorrin's hand, addressed to the Deepwatch, which show on your list though we have not yet looked at them in play. They are yours to bring out if you wish.
+
+What does Brun do?
+
+=== REPLY cl56-16 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch wardens, Maren's rival of forty years and, she admits, her only friend. Disapproved of Sigrun's marriag
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 evening: Brun announced herself at the gate with the ledger copy. The doors opened and Captain Torvald Greycairn came out. Two sealed lette
+Your voice goes up the wet cliff clear and level, and for a moment the only answer is the storm. Then the sentry's lantern swings away, and a horn sounds somewhere inside the mountain, one long note and two short.
+
+The bronze doors open inward a handspan at a time, with a grinding that you feel in your boots. Lamplight pours out across the wet stone. Wardens in grey cloaks line the passage, a dozen of them, hammer-and-three-lines brooches at every shoulder, and not one speaks.
+
+Then a broad, grey-bearded dwarf walks out through the doors with no cloak against the rain, a heavy iron-headed staff in one hand, and stops three paces from you. His face is carved from the same stone as the gate. He looks at your chin, your braid, the dented mail. His eyes stop on the iron ring.
+
+"Torvald Greycairn," Maren says at your side, dry as ever. "Captain of the Deepwatch. Try not to be disagreeable, Torvald."
+
+He does not answer her. He says to you, in a voice like a door on a rusted hinge, "You have her chin." A long breath. "The ledger. Show it."
+
+You reach into your pack to unwrap Corm's gift, and your fingers close on something you did not put there: two letters, sealed in grey wax, tucked behind the back cover of Father Dorrin's prayer book. They are in his cramped hand, addressed to the Deepwatch, and the seals are unbroken. He must have hidden them years ago, for you to find only now.
+
+Torvald sees them. His jaw tightens, and the rain runs down his beard.
+
+Behind him the lamps of the seven galleries burn in the dark. Garrick has gone very still at your shoulder. Maren's hand tightens on your arm.
+
+What does Brun do?
+
+=== REPLY cl56-17 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:40 PM: Brun named herself at the gate; the sentry knew the name Sigrun and opened the bronze doors. Inside, the entry hall has a lamp-lit sta
+For a long moment there is only the storm and the sentry's lantern swinging in the wind. Then the lantern stops.
+
+"Sigrun's daughter," the sentry says, much more quietly. "Say it again, with the name of the book." You do, with the captain's ledger held up in both hands against the rain, and a silence falls on the wall that has nothing to do with the weather.
+
+A bar scrapes somewhere inside. Slowly, with a deep groan of bronze, the great doors swing inward, and warm lamplight and the smell of peat smoke and hot iron spill out onto the wet stone. A line of wardens in hooded cloaks stands within, a dozen of them, old and young, with none of them holding a weapon. They do not cheer. They simply look at you, and one by one they lower their hoods.
+
+Maren squeezes your arm. "Come," she says. "Mind the step. They have been waiting a long time to see that chin."
+
+The sentry hurries down the stair and bows to Garrick without being asked. "Any guest of Sigrun's daughter," he says. Garrick, who has not been bowed to in his life, looks as if he would like to vanish into his hood, and follows you in.
+
+The entry hall rises three stories, its walls lined with lamps in niches, every one of them lit and every one with a flat grey river-stone set beside it. A lamp-lit stair climbs into the mountain. Down it, slowly, in a long grey cloak with a staff of office and a face like a closed door, comes an old dwarf with a white beard to his belt, and the hall falls silent as he comes.
+
+"So," says Captain Torvald Greycairn, stopping three steps above you. His eyes go to the ring on your finger and rest there. "Dorrin kept his word after all. Come in out of the rain, child. We have a good deal to say to each other."
+
+It is a little before six, and you are at 21 of 21, with three spell slots and Channel Divinity. What does Brun do?
+
+=== REPLY cl56-18 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, broad, iron-grey beard, Maren's rival of forty years and her only friend. Disapproved of Sigrun's mar
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 evening: Brun and Garrick admitted to the Deepwatch. Brun carries two sealed letters from Father Dorrin to the Deepwatch that were hidden i
+Your words ring off the cliff-face in the wind, and for a moment the sentry says nothing. Then the lantern swings. "Sigrun's girl," he says, as if testing the shape of it. "Hold there." He vanishes from the parapet.
+
+A great bolt draws back inside the bronze doors with a sound like a mountain clearing its throat. They swing inward, and warm lamplight and the smell of oil and stone and baking bread roll out into the storm.
+
+A broad old dwarf stands in the gatehall with a dozen wardens at his back, his iron-grey beard braided and bound with bronze rings, a captain's chain across his chest. His face is hard as a quarry wall. Torvald Greycairn. He looks at Maren first, and something passes between them that is thirty years of quarrel and one long, tired kindness. Then he looks at you, at your chin, at the ring on your finger, at the hammer-and-three-lines brooch you do not wear but carry in your face.
+
+"Show me," he says.
+
+You hold out the ring, and he turns it in his thick fingers, finds the braid of hair, and goes very still. You hand him the captain's ledger, and he opens it and reads the first line, and his mouth tightens. Then you remember what the sentry noticed, tucked inside the stiff back cover of Father Dorrin's prayer book where your thumb found it on the road: two folded letters, sealed with a small sun pressed in wax, addressed in the old priest's cramped hand to *the Captain of the Deepwatch*. You had not known they were there. You give them to him, and he breaks the first seal and reads in silence.
+
+When he looks up, his eyes are wet and furious and he does not hide either.
+
+"He wrote us," Torvald says roughly. "Twice. And they were taken at the south road before they reached my hand, by a quartermaster I have since turned out." He folds the letter with great care. "You were never lost, girl. You were kept from us. That is my shame and the hold's, and I will answer for it." He steps aside and sweeps an arm toward the lamplit hall. "Come in out of the weather. All of you. The hunter too."
+
+Warm bread, dry cloaks and a hundred curious faces wait beyond the door. The Hall of Names lies somewhere in the seven galleries above, where your father's name is carved.
+
+You have 700 of 900 XP, with all three spell slots and Channel Divinity ready. What does Brun do?
+
+=== REPLY cl56-19 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern, one-handed captain of the Deepwatch, Maren's rival of forty years and, she admits, her only friend. Disapproved of Sigrun's mar
+Your voice rings up the cliff face over the wind, and for a moment the sentry says nothing at all. Then the lantern lifts and drops, and a bar slides somewhere behind the bronze. Shouting runs away inside the mountain from gallery to gallery, and the great doors groan outward on well-oiled hinges.
+
+Warm light and the smell of lamp oil and baked barley spill out into the rain. Beyond the doors lies a gate hall of fitted stone, lamps set in niches every few paces, and a dozen wardens in grey cloaks standing without weapons drawn, their faces turned toward you. Some are old. A few are children, peering around their elders' legs. Not one speaks.
+
+Down the hall's center walks a lean, grey-bearded dwarf with a leather glove where his left hand should be, and an iron torc at his throat. His eyes go to Maren first, and something in his face loosens and tightens at once. Then they come to you, and rest on your chin.
+
+"Maren," he says, gruff. "You old goat. You were told to sit one hour."
+
+"I sat three days, Torvald."
+
+"So I hear." He turns to you. This is Captain Torvald Greycairn, you know without being told, and he does not smile. "A child of Sigrun's would have her stubborn chin. Many have claimed it these forty years, girl, hoping for a bed. I must ask for proof, and I ask kindly."
+
+You have the ledger of the sealed captain's hand, the ring braided with your mother's hair, and Father Dorrin's two sealed letters to the Deepwatch, which turn up in your pack, tied together with thread. Garrick stands at your shoulder, dripping, saying nothing, and the lamps hiss softly in the draught.
+
+What does Brun do?
+
+=== REPLY cl56-20 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:40 PM: Brun named herself at the gate as Sigrun's daughter and showed the Hearthdeep ledger copy. The sentry sent a runner for Captain Torval
+The sentry stares down at you through the rain, and the name seems to land on him like a stone dropped in a still pool. "Sigrun's..." He stops, shouts something over his shoulder, and then a bell begins to ring somewhere deep inside the mountain, slow and low, a sound you feel in your boots.
+
+You lift the ledger in its dry cloth so the lantern catches it. He sees the hammer and three lines burned into the cover and says nothing more. The bar drops on the far side of the doors with a sound like a falling tree, and the bronze leaves swing inward on well-oiled hinges.
+
+Warm lamplight and dry air roll out around you. The doors open on a great hall of dressed grey stone, its pillars carved with wardens' marks, and a stair of broad, shallow steps climbing out of sight. Perhaps thirty dwarves have gathered, wardens in hooded cloaks, a few older kin in work aprons, children peering round their legs. They fall silent as you step in out of the storm with Maren on your arm.
+
+Down the central stair, unhurried, comes a broad old dwarf with a beard like iron wire, a captain's torc at his throat and a face carved from the same stone as the hall. His eyes go to Maren first and soften by a hair, then to you, and they stay. They travel over your braid, your chin, your hands, and stop at the iron ring on your finger.
+
+"Three days late, Maren," he says, in a voice like a door closing. "And you bring her home." He looks at you again. "You have her chin."
+
+Behind you Garrick has taken off his hood and stands very still, a human in a hall of dwarves. In your pack are the ledger, Father Dorrin's book, and the two letters you carry from him, still sealed.
+
+Torvald Greycairn waits for you to speak. What does Brun say or do?
+
+=== REPLY cl56-21 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern, one-armed captain of the Deepwatch, Maren's old rival and only friend. Grey-bearded, iron-voiced. He disapproved of Sigrun's ma
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:45 PM: sentry opened the gate to Brun, Maren and Garrick at the storm's start. Captain Torvald Greycairn met them in the entry hall. Brun's p
+Your voice carries over the wind and the hiss of the rain, and the sentry goes very still above you. Then the lantern swings, a horn sounds twice inside the stone, and the great bronze doors begin to open with a groan of counterweights.
+
+Warm light and the smell of lamp oil and hot bread spill out over you. Beyond the doors lies a long entry hall hung with lamps, and down its length comes a line of wardens with lanterns in their hands, silent, dwarves in grey cloaks pinned with the hammer-and-three-lines brooch, young and old, staring. At their head walks a stern, grey-bearded dwarf with one sleeve pinned empty at his shoulder and a voice you can hear before he uses it.
+
+"Maren," he says, in a tone like a closing gate. "Three days late, and you bring the storm in with you." Then his eyes find you, and the iron goes out of his face all at once. He looks at your braid, at the chin, at the ring on your finger.
+
+"By the hammer," says Torvald Greycairn softly. "Sigrun's child."
+
+He lowers his lantern. He makes no speech. He simply puts his one hand on your shoulder, as you saw Hild do to Corm, heavy and warm and shaking a little. "You have your mother's walk," he says. "Come in out of the rain. All of you, the hunter too. There's stew, and a fire, and a great deal I owe you."
+
+As you step over the threshold, the wardens close ranks behind you and the doors boom shut against the storm. In your pack, tucked into the binding of Father Dorrin's prayer book, you feel the stiff edge of two folded letters you had not noticed before, sewn there and sealed with his plain brown wax. They are addressed, in his small hand, to the Deepwatch.
+
+It is nearly six. You are at 21 of 21, with three spell slots and Channel Divinity, warm and dry for the first time in a day. What does Brun do?
+
+=== REPLY cl56-22 ===
+  [hidden call] write_lore: {"create": "Dorrin's Hidden Letters", "kind": "item", "description": "Two sealed letters in Father Dorrin's hand, addressed to the captain of the Deepwatch, found in the lining of his prayer book's bi
+For a long breath there is only the wind and the rain drumming on the bronze. Then the sentry's lantern swings away from your face, and you hear her shout down into the mountain, one word, over and over: "Sigrun's! Sigrun's! Sigrun's!"
+
+The great doors groan inward on a warm gold light and the smell of lamp oil and baked barley. A line of wardens in hooded grey cloaks stands in the passage beyond, some old, some young, every one of them with soot-dark eyes. No one speaks. Then an old dwarf at the front, bald as an egg and broad as a barrel, steps forward and looks at your chin, and at the iron ring on your finger, and says in a voice like a rockfall, "That is her jaw. Gods help us all, that is her jaw."
+
+Maren sags against you, laughing and weeping at once. "Torvald," she says, "you old goat, I brought her."
+
+Captain Torvald Greycairn looks at you for a long time, and then at Garrick, who has stopped dead in the doorway with his bow lowered and his hood back. "Your friend," Torvald says. "He is welcome too. Bring the ledger in out of the weather, girl, and bring that book. Whatever Dorrin put in the binding of it, I will read it by my own fire."
+
+You startle, because you had never opened the binding. But when you take the book from your pack, the spine gives under your thumb, and between the leather and the boards two small, flat, sealed letters slide into your palm, both addressed in the old priest's cramped hand to *the captain of the Deepwatch*. He must have sewn them in a long time ago, against the day you finally came.
+
+Behind you the storm breaks in earnest. Ahead is the warm gold hall, with its seven galleries and its Hall of Names, and a captain waiting at the fire. You are at 21 of 21, with three slots and Channel Divinity ready.
+
+What does Brun do?
+
+=== REPLY cl56-23 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, broad, iron-grey beard braided with lead beads, Maren's rival and only friend of forty years. Disappr
+  [hidden call] write_lore: {"create": "Dorrin's Hidden Letters", "kind": "item", "description": "Two sealed letters in Father Dorrin's hand, addressed to the Deepwatch, found tucked in the lining of Brun's pack (the sheet recor
+Your voice carries over the wind, plain and unhurried, and the sentry goes still on the parapet. "Sigrun's daughter," he repeats, as though the words were in a language he had half forgotten. Then he is gone from the wall, and you hear shouting inside, and the clatter of a great bar being drawn.
+
+The bronze doors swing inward on a breath of warm air and lamplight. Beyond them is a gate hall carved from the living rock, its vault lost in shadow, its floor worn into shallow dips by a thousand years of boots. Wardens in dark hooded cloaks line the walls, perhaps two dozen of them, not armed, only watching. Their faces are the faces of dwarves who have not been surprised in a very long time.
+
+Through them comes a broad dwarf with an iron-grey beard braided with lead beads and a captain's chain across his chest. He stops three paces from you, and his eyes go to your braid, your chin, your hands, the iron ring on your smallest finger. His mouth works once.
+
+"Torvald Greycairn," Maren murmurs at your ear. "Do not let him bluster."
+
+"Maren," he says without looking away from you. "You were gone three days longer than you swore."
+
+"I found her," Maren says.
+
+Torvald's jaw tightens. He says, gruffly, in a voice kept very level: "You have her chin. I would have known you in the dark." Then, with a visible effort, he steps aside and sweeps an arm toward the lamplit hall. "Come in out of the wet, Sigrun's daughter, and bring your hunter. The fires are lit."
+
+As you cross the threshold, you feel something in the lining of your pack shift, and remember what the sheet is telling you: two sealed letters in Father Dorrin's hand, addressed to this hall, which you had not known you carried. You have not opened them.
+
+It is a little before six. You are at 21 of 21 with three slots and Channel Divinity, dry for the first time in hours, in your mother's home. What does Brun do?
+
+=== REPLY cl56-24 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, iron-bearded, Maren's rival of forty years and closest friend. Disapproved of Sigrun's marriage to a 
+  [hidden call] write_lore: {"entry": "The Deepwatch Lead", "add_to_description": "Day 6 evening: Brun named herself at the gate and showed the ledger copy. The sentry opened the doors; Torvald Greycairn waits in the gate hall. 
+Your voice rings up the cliff face and the sentry goes quiet. The rain drums on your shoulders and the lamps on either side of the gate gutter and steady.
+
+"The ledger," the sentry calls. "Show it."
+
+You dig into your pack and lift out Corm's ledger in its dry cloth. Your fingers close on something else too, tucked deep in the binding of Father Dorrin's prayer book, where you never felt it before: two small folded letters sealed with the Morninglord's sun, one marked *Torvald* and one *Brun, when she is ready*. You do not read them. You hold the ledger up to the lamplight instead, and the sentry looks long at the hammer-and-three-lines on its cover.
+
+Then the sentry is gone from the wall, and somewhere inside a great bar slides back. The bronze doors swing inward without a sound, and warm light spills over the wet stone.
+
+The gate hall is vast and low-vaulted, hung with a hundred lamps that burn without smoke. Wardens in hooded cloaks line the walls, some with spears grounded, some simply watching. At the far end, before a stair that climbs into the mountain, stands a dwarf with an iron-grey beard braided to his belt and a captain's chain across his chest. He is very still. He looks at Maren first and says only, "You are late, old woman." Then his eyes find you, and go to your chin, and stay there.
+
+"You have her face," Torvald Greycairn says at last, his voice rough as a quarry. "I told myself it was a lie, that Dorrin had hidden you for good reason. I did not believe I would live to see it." He steps forward, and the wardens along the walls bow their heads one by one, though he has not asked it.
+
+"Welcome home, Brunhilde Stonehearth. The Hall of Names is lit. Will you eat first, or read first?"
+
+Garrick shifts at your shoulder, a stranger under that vaulted roof, and the letters are warm against your ribs.
+
+What does Brun do?
+
+=== REPLY cl56-25 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:40 PM: Brun named herself at the gate. The bronze doors opened; Captain Torvald Greycairn came down to the gatehall himself. Dorrin's two hid
+The sentry's lantern stops moving. For a long breath there is only the storm, the rain drumming on the bronze and the wind tearing at the lamps. Then the sentry says, in a changed voice, "Sigrun's daughter. Say it again." You say it again, and the lantern vanishes from the parapet at a run.
+
+The great doors groan inward. Warm light and the smell of lamp-oil and baked bread pour out into the rain. Wardens crowd the gatehall in hooded cloaks, a few dozen of them, mostly grey-bearded, some barely past their apprenticeship, and they fall quiet as you step in. Someone takes Maren's other arm. Someone else, without a word, lifts your pack from your shoulders and sets a dry cloak about them. Garrick hangs back at the threshold with his bow lowered, and a young warden gestures him in with an awkward half-bow.
+
+An old dwarf comes down the long stair at a measured pace. He is broad as a door, his beard iron-grey and braided in the wardens' fashion, a heavy chain of office across his chest, and a face carved of hard weather. This is Torvald Greycairn. He stops three paces from you and looks at your chin, then at the ring on your finger.
+
+"She had that same jaw," he says. His voice is rough and low. "I told her it would get her killed." A pause. "I was wrong about the jaw. I was wrong about a good many things."
+
+You remember what you are carrying. Beneath the cloth in your pack, in the binding of Father Dorrin's prayer book, lie the two letters he hid there, sealed in wax and addressed in his cramped hand to the Deepwatch. They are what he meant when he wrote to Maren. He never sent them. Your fingers find the spine of the book.
+
+Torvald holds out a callused hand. "Come in out of the weather, Lantern of Hearthdeep. Yes, word has reached us. And Sigrun's daughter. There is a page in the Hall of Names that has waited a long time for you."
+
+You are warm and dry for the first time in a day, your aunt is at your side, and Garrick is somewhere behind you being fed. You have 700 XP, 21 of 21 hit points, three spell slots, and Channel Divinity.
+
+What does Brun do?
+
+=== REPLY cl56-26 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:35 PM: Brun named herself to the sentry; the bronze doors opened. Captain Torvald Greycairn, white-bearded and iron-faced, met the party in t
+Your voice carries over the storm. For a long breath the sentry says nothing, and the lantern on the wall goes still. Then comes a shout down into the dark behind the parapet, and a clatter of boots, and the great bronze doors groan and swing inward on a rush of warm, lamp-sweet air.
+
+Beyond them stretches a high entry hall, its pillars carved with a thousand tiny chiselled names, seven tiers of galleries rising into the gloom. A dozen wardens in grey cloaks stand in a half-ring on the flagstones, and every one of them is looking at your face.
+
+At the center stands a white-bearded dwarf as hard and square as a boundary stone, with a captain's iron torc at his throat and a scar through one brow. Torvald Greycairn does not speak. His eyes go to your chin, to the auburn braid, and to the iron ring on your smallest finger, and something in that granite face moves like a stone shifting on a slope.
+
+"Maren," he says at last, low and rough. "You old fool. You went south for a rumour."
+
+"I went south for a child," Maren says, "and I brought her."
+
+The captain looks at Garrick, at his bow, at the rain streaming off his hood. "And the human?"
+
+"My companion," you say, "and a friend of the wardens, whatever the wardens think of him."
+
+Torvald's mouth twitches. "We will see." Then he steps forward, and the half-ring of wardens steps with him. "Show me the ledger, girl. Show me what you carry."
+
+One note from me as DM: your sheet now lists two sealed letters in Father Dorrin's hand, addressed to the Deepwatch, which I did not narrate you finding. They are yours to produce if you wish. Say where you found them, and I will keep that true.
+
+The hall is silent but for the storm. What does Brun do?
+
+=== REPLY cl56-27 ===
+  [hidden call] write_lore: {"entry": "The Deepwatch", "add_to_description": "Day 6 ~5:40 PM: Brun named herself at the gate and offered the Hearthdeep ledger copy and Father Dorrin's two sealed letters (found tucked in his pray
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Stern captain of the Deepwatch, Maren's rival of forty years and her only friend. Disapproved of Sigrun's marriage to a lamp-maker who
+Your voice carries up the wet cliff, plain and clear in the old tongue. For a moment there is only the storm. Then the sentry's lantern swings, a horn sounds twice inside the mountain, and a runner's boots clatter away along the wall.
+
+"Proof, daughter of Sigrun?" the sentry calls, not unkindly. "The captain will ask."
+
+You lift the ledger in its dry cloth, and from Father Dorrin's prayer book you draw the two sealed letters you found tucked in its binding, their wax stamped with his small sun. You had not told anyone of them yet, and Maren draws a sharp breath when she sees the seals. "He wrote," she whispers. "He did write."
+
+The bronze doors begin to move, slowly, with a deep sound like a held note. Warm lamplight spills out over the wet stone. Warden-folk gather inside, a few dozen, in plain grey cloaks, standing in a quiet double row. They do not cheer. They simply look at your face, and you watch it go through them from one to the next: the chin, the auburn braid, the eyes.
+
+Garrick hesitates at the threshold, hood dripping. A white-bearded warden steps forward and says gruffly, "Guest of the blood is guest of the hall. Come in out of the rain, hunter."
+
+At the end of the row, a broad, grey-bearded dwarf in a captain's cloak waits with his arms folded and his jaw set like a stone. He looks at you for a long, hard moment. Then he looks at the ring on your finger, and something in his face gives way.
+
+"Sigrun's daughter," says Torvald Greycairn. "I was wrong about a great many things. Come in. The Hall of Names is lit, and there is a page I have kept for you for thirty years."
+
+You are at 21 of 21, with three spell slots and Channel Divinity, and two sealed letters in your hand. What does Brun do?
+
+=== REPLY cl56-28 ===
+  [hidden call] write_lore: {"create": "Torvald Greycairn", "kind": "person", "description": "Captain of the Deepwatch. Stern, grey-bearded, Maren's rival of forty years and her only friend. Disapproved of Sigrun's marriage to a
+The sentry says nothing for a long breath, and the wind fills the silence. Then the lantern swings away and you hear her shouting down the wall in Dwarvish, thin and fast. A bar slams back inside the gate. One bronze door grinds open a hand's breadth, then a body's width, spilling lamplight and warm air across the wet stones.
+
+A line of wardens stands in the gate hall, six of them in hooded cloaks, hammers at their belts, and none speaks. Before them is a broad old dwarf with a grey beard cropped square and a face like a cliff. A hammer-and-three-lines brooch the size of your palm is pinned to his chest. He looks at Maren first, then at the ring on your finger, then at your chin.
+
+"Show me," he says gruffly.
+
+You hold out the captain's ledger in its dry cloth, and with it, from the prayer book's back board, the two sealed letters in Father Dorrin's cramped hand that you found tucked behind the cover, addressed in plain Dwarvish to the captain of the Deepwatch. He takes the letters and breaks the first wax with a thumb that shakes slightly. His eyes move down the page, then stop, then go back to the top.
+
+"Twenty-two years," Torvald Greycairn says quietly, to no one. "He wrote and the courier was killed on the pass, and the second letter never left his desk." His jaw works. He looks up at you. "I am Torvald Greycairn, captain here. I told your mother she was a fool to marry out of the oath. I was the fool." He puts a heavy hand on your shoulder, as a dwarf does with kin. "Come in out of the rain, Stonehearth. Your mother's lamp is still lit on the seventh gallery."
+
+Behind him, up the long stair, you can see a single steady light burning above all the rest.
+
+Garrick shifts at your shoulder, uncertain whether he is welcome. Torvald's eyes flick to him, to the bow, then to Maren. "Friend of the Stonehearth line?" Maren nods. "Then he eats at our table."
+
+The storm bursts over the mountain as the great door closes behind you. You are inside the Deepwatch, in warmth and lamplight, with kin on every side. What does Brun do?
