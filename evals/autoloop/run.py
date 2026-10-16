@@ -34,6 +34,17 @@ BRIEFS = {
     "bard": ("a tiefling bard (College of Lore)",
              "You play as a curious trickster: you explore, poke at strange things, lie and bluff, try clever or odd "
              "uses of your spells and skills, and sometimes test the edges of the rules."),
+    # Second set (2026-10-16): the first set's DM conversations stayed on the old PC, so its games can't go on or be
+    # replayed. Same classes and player styles, new characters and races.
+    "cleric2": ("a human cleric (Life domain)",
+                "You play carefully and kindly: you talk to people, help the hurt, ask questions, keep promises, and "
+                "think before you fight, though you will fight to protect others."),
+    "barbarian2": ("a dragonborn barbarian",
+                   "You play boldly: you like a fight, take physical risks, intimidate people, and charge in, but you "
+                   "have a soft spot for the underdog and a code of honour."),
+    "bard2": ("a half-elf bard (College of Lore)",
+              "You play as a curious trickster: you explore, poke at strange things, lie and bluff, try clever or odd "
+              "uses of your spells and skills, and sometimes test the edges of the rules."),
 }
 
 PLAYER = """You are a human player in a solo D&D 5e game (2014 rules) run by a DM. {style}
@@ -63,8 +74,12 @@ async def player_line(p: ClaudeSDKClient, text: str) -> str:
 
 
 def shown(entries: list[dict]) -> str:
-    """What the player saw: the DM's text and the game's lines (dice, sheet, clock)."""
-    return "\n\n".join(f"[{e['text']}]" if e["kind"] == "tool" else e["text"] for e in entries if e["kind"] in ("dm", "tool"))
+    """What the player saw: the DM's text and the game's lines (dice, sheet, clock). A failed turn shows in the
+    terminal as a line saying the DM call failed."""
+    out = "\n\n".join(f"[{e['text']}]" if e["kind"] == "tool" else e["text"] for e in entries if e["kind"] in ("dm", "tool"))
+    if any(e["kind"] == "failed" for e in entries) and not any(e["kind"] == "dm" for e in entries):
+        out += "\n\n[the DM's reply didn't come through]"
+    return out.strip()
 
 
 async def main(name: str, rounds: int) -> None:
