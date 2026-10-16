@@ -16,10 +16,10 @@ for f in d.glob("judge*.jsonl"):
         if not line.strip().startswith("{"):
             continue
         v = json.loads(line)
-        arm, rnd = key[v["code"]], v["code"].split("-")[0]
+        arm, rnd = key[v["code"]], v["code"].rsplit("-", 1)[0]
         t = tot[arm]
         t["n"] += 1
-        for k in ("contradiction", "repeats_original", "agency", "menu", "sheet_readout", "unclear_end"):
+        for k in ("contradiction", "repeats_original", "agency", "menu", "sheet_readout", "unclear_end", "clock"):
             if k in v:
                 t[k] += int(v.get(k) or 0)
         p = per[(rnd, arm)]

@@ -139,3 +139,7 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   (fmt.py): menu at end base 5, 1B 4, 2A 1 of 64; sheet numbers at end 4/5/2. 3D's replies are less than half as long
   (641 vs 1532 chars): a likely side effect to check. Next: blind.py + three Sonnet judges with JUDGE.md, score.py,
   then keep/drop in dm/prompt.md (nothing changed there yet), report, blocks 2 and 3.
+- 2026-10-16 (resumed): judged blind (4 runs per round of each arm; ab2/*/blind, B2 = 3D rerun). No prompt idea kept;
+  full results and causes in REPORT-set2-block1.md. Fixed: blind.py codes used the game's first two letters, so
+  bard2 and barbarian2 rounds with the same number collided; codes now carry the game's name (score.py follows).
+  Budget from now on (Jake): 4 runs per round on 6 rounds to screen, 8 only for a winner.

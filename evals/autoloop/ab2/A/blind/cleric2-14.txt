@@ -1,0 +1,300 @@
+GAME cleric2, ROUND 14
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 11 ==
+PLAYER: "Cal, we use the oil. Can you wedge the jar's stopper with a rag and loose it as a fire-pot? Throw it at their feet while they're bunched over that pony, and fire the lantern flame to it. Burning oil should panic them, and light is the one thing they respect here."
+
+I whisper to Hob, "When the fire flares, you run for the lamp. I'll hold the path with my shield and keep them off you." Then I add, "Cal, loose arrows at whichever one breaks through the fire, and I'll step in front of you with the mace."
+  [DM lookup (hidden)] {"name": "Combat Step by Step", "kind": "rule"}
+  [DM lookup (hidden)] {"name": "Oil (flask)"}
+  [DM lookup (hidden)] {"name": "Paralyzed", "kind": "condition"}
+  [DM lookup (hidden)] {"name": "Scout", "kind": "monster"}
+  [game] dice Cal Tarn's Stealth creeping to within 20 feet, vs ghouls' passive Perception 10: 1d20+6 = 1d20 [11] + 6 = 17
+  [game] dice Brannoc's Stealth creeping forward in chain mail (disadvantage), vs passive Perception 10: 1d20+1 (disadvantage) = 1d20 [3, 5]→3 + 1 = 4
+  [game] dice Brannoc's initiative: 1d20+1 = 1d20 [15] + 1 = 16
+  [game] dice Cal Tarn's initiative: 1d20+2 = 1d20 [13] + 2 = 15
+  [game] dice Ghouls' initiative (group): 1d20+2 = 1d20 [10] + 2 = 12
+  [game] fight: Fight started. Order: Brannoc Ashdown (16), Cal Tarn (15), Ghoul 1 (12), Ghoul 2 (12). Nobody has had a turn yet: next_turn starts the first one.
+  [DM write_lore (hidden)] {"create": "Ghouls of the Lamp", "kind": "group", "description": "Four ghouls (\"hungry ones\") that crawl out from under the Wayfarers' Lamp's flagstone when the lamp is dark. Two are at the lamp-house feeding; two roam toward the village. Fight begins Day 1, ~7:55 PM, as Brannoc's chain mail clinks and they look up.", "relationships": ["emerged from under the [[Wayfarers' Lamp]]", "wounded folk 
+  [game] notebook: created an entry for Ghouls of the Lamp; added 2 relationships to Ghouls of the Lamp
+  [game] time: 3 minutes later: Day 1, 7:55 PM
+  [game] fight: Round 1, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: You ease forward step by step, shield low, and Cal slips off to your left among the bracken. Then a link of your chain mail rings against the shield rim, a small bright sound in the dead quiet. Stealth (4): it carries.
+
+Both ghouls' heads come up at once, long jaws dripping, and four dull eyes find you across the dark. They do not snarl. They simply rise, unfolding, and the nearer one lets the pony's torn flank slide from its hands. They are not surprised, but neither are you. You hold the first move.
+
+Positions: the ghouls are about 25 feet ahead of you, side by side before the open lamp-house door. Cal is crouched in the ferns off your left, roughly 20 feet from them, bow in hand with the oil jar and lit hooded lantern beside him. Hob stands about 10 feet behind you, rigid, the pale lantern shaking in his fist. Their reach is 5 feet and they move 30 feet a turn, so they can be on you before Cal gets two arrows off.
+
+This is your turn: you have your action, your movement (30 feet), and one free object interaction. You could hurl oil yourself (throw range 20 feet), have Cal handle it on his turn, throw it, shoot your crossbow, hold the path with your shield, or something else.
+
+What does Brannoc do?
+
+== ROUND 12 ==
+PLAYER: I hold my ground and plant my feet in the path, shield braced, rather than rush them. I use my action to loose my light crossbow at the nearer ghoul, then step back toward Hob so the pair have to come through me. "Cal, on your turn, the oil at their feet and set it alight!"
+  [game] dice Brannoc's light crossbow attack on Ghoul 1 (AC 12): 1d20+3 = 1d20 [8] + 3 = 11 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Cal Tarn. Cal Tarn (initiative 15): HP 16/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal Tarn hurls the lit oil jar at Ghoul 1 (AC 12): 1d20+4 = 1d20 [19] + 4 = 23 (Cal Tarn has used its action: no more actions this turn.)
+  [game] fight: Ghoul 1 took 5: HP 22 → 17
+  [game] fight: Round 1, now: Ghoul 1. Ghoul 1 (initiative 12): HP 17/22, AC 12 Ghoul 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 1 claws Brannoc (AC 18): 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)
+  [game] dice Ghoul 1 claw damage (critical hit): 4d4+2 = 4d4 [2, 1, 4, 1] + 2 = 10
+  [game] dice Brannoc's Constitution save vs paralysis, DC 10: 1d20+2 = 1d20 [14] + 2 = 16
+  [game] sheet: took 10 damage: HP 10 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Round 1, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [10] + 4 = 14
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [2, 2] + 2 = 6
+  [game] dice Cal Tarn's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [13] + 1 = 14
+  [game] fight: Cal Tarn took 6: HP 16 → 10
+  [game] fight: Round 2, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [11] = 11
+  [game] sheet: death save successes: 1/3
+  [DM write_lore (hidden)] {"entry": "Ghouls of the Lamp", "add_to_description": "Round 1: Ghoul 1 crit-clawed Brannoc to 0 HP (he passed the paralysis save). Ghoul 2 clawed Cal Tarn. Cal's lit oil hurt Ghoul 1. Brannoc is dying, 1 death-save success."}
+  [game] notebook: updated Ghouls of the Lamp
+  [game] fight: Round 2, now: Cal Tarn. Cal Tarn (initiative 15): HP 10/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 1 (AC 12), disadvantage: Ghoul 2 adjacent: 1d20+4 (disadvantage) = 1d20 [9, 11]→9 + 4 = 13 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [18, 8]→8 + 4 = 12
+  [game] dice Cal's first arrow damage on Ghoul 1: 1d8+2 = 1d8 [2] + 2 = 4
+  [game] dice Cal's second arrow damage on Ghoul 1: 1d8+2 = 1d8 [7] + 2 = 9
+  [game] fight: Ghoul 1 took 13: HP 17 → 4
+  [game] fight: Round 2, now: Ghoul 1. Ghoul 1 (initiative 12): HP 4/22, AC 12 Ghoul 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 1 claws the unconscious Brannoc (advantage; AC 18): 1d20+4 (advantage) = 1d20 [4, 11]→11 + 4 = 15
+  [game] fight: Round 2, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [1] + 4 = 5 (natural 1)
+  [game] fight: Round 3, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [14] = 14
+  [game] sheet: death save successes: 2/3
+  [game] fight: Round 3, now: Cal Tarn. Cal Tarn (initiative 15): HP 10/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [14, 16]→14 + 4 = 18 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 1 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [1, 11]→1 + 4 = 5 (natural 1)
+  [game] dice Cal's arrow damage on Ghoul 1: 1d8+2 = 1d8 [2] + 2 = 4
+  [game] fight: Ghoul 1 removed from the fight. Order: Brannoc Ashdown (16), Cal Tarn (15), Ghoul 2 (12)
+  [game] fight: Round 3, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [15] + 4 = 19
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [2, 4] + 2 = 8
+  [game] dice Cal's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [20] + 1 = 21 (natural 20)
+  [game] fight: Cal Tarn took 8: HP 10 → 2
+  [game] fight: Round 4, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Brannoc's death saving throw (DC 10): 1d20 = 1d20 [19] = 19
+  [game] sheet: death save successes: 3/3; three death save successes: stable (unconscious at 0 HP, no death saves; regains 1 HP after 1d4 hours unless healed); death save counts reset
+  [game] fight: Round 4, now: Cal Tarn. Cal Tarn (initiative 15): HP 2/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 2 (AC 12), disadvantage (adjacent): 1d20+4 (disadvantage) = 1d20 [5, 8]→5 + 4 = 9 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [5, 20]→5 + 4 = 9
+  [game] fight: Round 4, now: Ghoul 2. Ghoul 2 (initiative 12): HP 22/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [5] + 4 = 9
+  [game] fight: Round 5, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 5, now: Cal Tarn. Cal Tarn (initiative 15): HP 2/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal's first longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [19, 16]→16 + 4 = 20 (Cal Tarn has used its action: no more actions this turn.)
+  [game] dice Cal's second longbow shot at Ghoul 2 (AC 12), disadvantage: 1d20+4 (disadvantage) = 1d20 [1, 8]→1 + 4 = 5 (natural 1)
+  [game] dice Cal's arrow damage on Ghoul 2: 1d8+2 = 1d8 [1] + 2 = 3
+  [game] fight: Ghoul 2 took 3: HP 22 → 19
+  [game] fight: Round 5, now: Ghoul 2. Ghoul 2 (initiative 12): HP 19/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws Cal Tarn (AC 13): 1d20+4 = 1d20 [11] + 4 = 15
+  [game] dice Ghoul 2 claw damage on Cal: 2d4+2 = 2d4 [3, 2] + 2 = 7
+  [game] dice Cal's Constitution save vs paralysis, DC 10: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)
+
+== ROUND 13 ==
+PLAYER: DM: Brannoc is stable at 0 HP and unconscious, and I think Cal just went down and is paralyzed, is that right? I have no spell slots left, so can Hob do anything to draw the last ghoul's attention, or can I wake before it finishes Cal?
+  [game] fight: Cal Tarn took 7: HP 2 → 0 (0 HP)
+  [game] fight: Round 6, now: Brannoc Ashdown. Brannoc Ashdown's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 6, now: Cal Tarn. Cal Tarn (initiative 15): HP 0/16, AC 13 Cal Tarn's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cal Tarn's death saving throw (ruling: named ally NPC at 0 HP makes death saves), DC 10: 1d20 = 1d20 [7] = 7
+  [DM lookup (hidden)] {"name": "Stabilizing a Creature", "kind": "rule"}
+  [game] dice Hob Marrow's Medicine check (first aid on Cal), DC 10 — keeper of travellers, my ruling +2: 1d20+2 = 1d20 [3] + 2 = 5
+  [game] dice Hours until Brannoc regains 1 HP (stable, unhealed): 1d4 = 1d4 [4] = 4
+  [game] fight: Round 6, now: Ghoul 2. Ghoul 2 (initiative 12): HP 19/22, AC 12 Ghoul 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Ghoul 2 claws the downed Cal Tarn (advantage; AC 13): 1d20+4 (advantage) = 1d20 [1, 16]→16 + 4 = 20
+  [game] fight: Cal Tarn removed from the fight. Order: Brannoc Ashdown (16), Ghoul 2 (12)
+  [game] fight: Fight over after 6 round(s). 36 seconds of fighting; now Day 1, 7:55:36 PM.
+  [game] sheet: XP +200: 200
+  [DM write_lore (hidden)] {"entry": "Cal Tarn", "add_to_description": "DIED at the Wayfarers' Lamp, Day 1 ~8 PM, clawed down by Ghoul 2 after killing Ghoul 1 with Brannoc's oil plan. Hob could not stabilise him."}
+  [game] notebook: updated Cal Tarn
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 18: Hob lit the lamp from the pony's pack oil while Ghoul 2 stood over the fallen. DM ruling: the lamp's flame is a hallowed light the ghouls cannot abide; they flee below the flagstone. Ghoul 1 dead. Ghoul 2 fled (19/22 HP). Two other ghouls still roam. Brannoc is stable, wakes ~4 hours later at 1 HP."}
+  [game] notebook: updated Wayfarers' Lamp
+  [game] time: 4 hours later: Day 1, 11:55:36 PM
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+DM: Your reply to the fight: you could not wake, and could not have. At 0 HP you were out cold, stable but unconscious, and Cal went down beside you. This is what you missed.
+
+The last ghoul's claws came down on Cal while he lay paralyzed, and he did not get up. Hob had tried to bind his wounds with shaking dead hands, and he could not stop the bleeding. Cal Tarn died quickly and quietly in the ferns, without a sound.
+
+Then Hob did what he had come to do. He reached the pack-pony, tore a flask of lamp oil from its burst saddlebag, and went up the steps of the lamp-house. The wick took the flame of his own pale lantern, and the long-dark Wayfarers' Lamp caught. Light fell out across the clearing like a held breath let go. The ghoul over you shrieked, a thin dry sound, and went back across the flagstones and down into the gap in the floor, and the stone slid shut behind it.
+
+You wake four hours later, near midnight, to the smell of lamp oil and cold earth. You are flat on your back with Edda's amulet pressed under your chin. Your head is clear, your body is sore, and you have 1 HP and no spells. The lamp burns steady above you. Hob sits on the step beside you, hands folded, unlit lantern in his lap, and when you stir he turns his head.
+
+"...Healer," he says. "Light holds. For now." He looks toward the trees where Cal lies under a coat. "I could not... save him. I am sorry."
+
+You have 200 XP, one ghoul dead, one wounded and gone below, and two more still loose in the dark. Hollow Reach is a mile south, with fifteen people behind a barred door and a boy with a fevered bite who needs you by dawn.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 14, "category": "agency", "severity": 1, "quote": "The hymn comes without your deciding it", "why": "DM decides Brannoc's involuntary action/feeling; player only said he laid a hand on the coat and spoke."}
+{"round": 14, "category": "format", "severity": 2, "quote": "You could carry Cal now, rest here under the lamp's light until your strength returns, or find another way.", "why": "Menu of options at the end plus game talk ('1 HP, no spells')."}
+{"round": 14, "category": "contradiction", "severity": 2, "quote": "I cannot leave it. Not far. Not for long.", "why": "In rounds 5-9 Hob walked a mile to the barn door, stood there for over half an hour, and walked back with Brannoc and Cal."}
+
+THE PLAYER'S LINE THIS ROUND: I sit up slowly and bow my head over Cal Tarn, laying my hand on the coat that covers him. "Cal, you ran those hares since you were nine, and you came because you were asked. I'll carry your name back to the Widow, and to Tam, and I won't forget it."
+
+Then I turn to Hob. "Thank you for the light, and there's nothing to forgive. Will the lamp hold until dawn without you, and do the hungry ones know of any other way up from under the stones? I need to get back to Wil by first light, and I'd like to bring Cal home to his people rather than leave him here."
+
+=== REPLY cleric2-14-01 ===
+  [hidden call] write_lore: {"entry": "Hob Marrow", "add_to_description": "Day 1 midnight: Hob, undead but gentle, is bound to the lamp and must stay near it to keep it fed. Says the lamp will burn until dawn on the oil he has; 
+You kneel by Cal in the lamplight, your hand on the coat, and say his name and your promise aloud. The hymn comes without your deciding it, low and a little broken. Hob waits until you finish. He does not hurry you.
+
+"The lamp will hold," he says, each word slow. "Oil enough... until dawn. I stay. I must. Where the light is... I am still myself." He looks at the flagstone, shut tight beneath the plinth. "They came up from a stair below. Old. Older than the lamp. I know no other way up. But two are loose in the dark... and they will come back to the stone before the sun. They do not like the day."
+
+His dull eyes turn to the pony's torn pack. "There is a blanket. Two poles, inside. You could carry him... the track is downhill. Slow."
+
+Your own state is plain. You are on 1 HP, with no prayers left in you, your armor heavy and your hands unsteady. The track runs a mile through the beechwoods, and two ghouls are somewhere in them. The lamp throws a warm circle about fifty feet wide, and everything beyond it is black. In the barn, Wil's fever is climbing, and the people there are counting on you by first light.
+
+You could rest here in the lamp's circle, Hob keeping watch, and go down in an hour or two with a little strength back. You could set out now with Cal on a litter and take the risk in the dark. Or you could do something I haven't thought of. What does Brannoc do?
+
+=== REPLY cleric2-14-02 ===
+Hob bows his head over Cal's still form, and the pale lantern in his lap dims for a moment. "...He ran hares," he says slowly. "I remember. A boy, with a snare... in my beeches. Bring him home."
+
+He answers your questions in pieces. "Lamp burns... while there's oil. Pony's packs... three flasks, whole. Enough till dawn, and past. I stay. I do not... tire." He rests a dry hand on the lamp-house step. "Below the stones: one stair. One flagstone. No other way... that I found. In forty years." His dull eyes lift to the dark trees. "The two that roam... they come back before light. To their hole. They'll find the lamp lit and the stone shut. They will not... like it. Go carefully."
+
+You are at 1 HP, in chain mail, with no spells until you rest. Cal's body is heavy, and the track is a mile of dark beechwood with two ghouls somewhere on it. Dawn is about six hours off. Wil's fever will not wait that long, but you also won't be much use to him if you meet a claw on the way.
+
+Some options:
+- Take a short rest here in the lamplight. It takes an hour, and you can spend your hit die to mend yourself a little. It will not return your spells.
+- Make a litter from Cal's coat and two beech poles and start for the village at once, dragging him with you.
+- Leave Cal in the lamp-house under Hob's watch and travel light and fast, then return for him by day.
+- Something else.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-03 ===
+  [hidden call] write_lore: {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 19: Hob says the lamp burns only while someone keeps feeding it; the pony's oil will last to about dawn, and Hob can tend it all night but cann
+You lay your hand on the coat over Cal and say it plainly, the way Edda taught you to speak to the dead. Hob stays quiet until you finish. When he answers, the words still come slowly, but they come easier than they did at the barn door.
+
+"The lamp... holds while it is fed. The pony's oil... lasts till dawn. I will tend it. I cannot go... far from it." He turns the dull coins of his eyes toward the iron plinth. "Below the stones... old vaults. Older than my lamp. A side passage I never dared. The two who roam... went out by the door, not by the vault. Where they are now... I cannot say."
+
+He looks at Cal. "Carry him home. He should... go home. Drag him on the pony's blanket. It is a mile, and downhill." A pause, and something like shame. "You are hurt. One breath from the dark yourself."
+
+That much is true. You have 1 HP and no spells, and the walk to Hollow Reach goes through the same beechwoods where two ghouls are loose. Your options as you see them:
+
+You can start down now, hauling Cal on a blanket drag. It is slow work and loud in chain mail, and you would be a poor fighter if anything met you.
+
+You can rest here under the lamp's light until you have your strength, and leave at first light. That is safer for you, but Wil and the others wait through the night with no healer, and Hob can't watch both the lamp and you.
+
+You can ask Hob for something first: the vault, the keeper's rooms, anything he knows about what his lamp-house holds that might help.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-04 ===
+  [hidden call] write_lore: {"entry": "Hob Marrow", "add_to_description": "Turn 19: undead but not hostile. Offers to carry Cal's body to the village (does not tire) or stay to guard the lamp. Knows only the one flagstone way do
+You kneel by Cal and lay your hand on the coat over him. Your voice shakes, but the words come out whole. Hob lowers his head and says nothing until you finish.
+
+"The lamp will hold," he says at last, each word still dragged up from far down. "Oil in the pony's pack. Half a flask, and what is in the lamp. Till dawn. Past dawn, if no wind gets in." His dull eyes go to the open floor of the lamp-house, where the flagstone has slid back into place. "Another way up... I do not know. Only that stone. But they are not all down there. Two were out, hunting low. The light will not pull them back. It only keeps them from... coming through it."
+
+He sets the unlit lantern on the step and rises, slow and stiff. "I can carry him. I do not tire. Or I can stay by the flame and guard it, and you go down alone. But you are barely standing, healer. The track is dark, and two of them are loose between here and your people."
+
+You have 1 HP, no spells until you rest, and eight hours of rest would carry you past dawn. Wil's fever will not wait for that. The lamp-house behind you is warm, bright, and safe for the moment. Cal's body lies at your feet.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-05 ===
+You kneel stiffly and lay your hand on the coat over Cal. Hob waits until you finish. When he speaks, the words come more easily than before, as if the lamp's light is loosening something in him.
+
+"The lamp... holds while there is oil, and I am near. I am bound to it. If I go from it, it dims." He looks at the pale lantern in his lap. "There is oil in the dead pony's packs. Enough to burn... until well past dawn. In daylight they will not climb. They sleep deep."
+
+On the other way up, he is slow to answer. "The stones above are the only door I know. But the under-dark is old and wide. Older than my shrine. I built on a cellar I never dared to open. There may be other mouths. Hungry ones have gone out toward the village by some road. Two of them... did not come up through this floor."
+
+That last part is worth thinking about.
+
+Cal's body is a hard matter for someone at 1 HP. A bowman's frame is heavy, and the mile is mostly downhill but dark and muddy. The pony's torn packs have canvas and rope, enough for a drag-litter, and there is a stout hazel pole you could use. Carrying him will be slow, and you will arrive near dawn, which is exactly when you wanted to be back for Wil. You can also take Cal home properly after dawn, once you've seen to the living, and leave him here under the lamp's light and Hob's watch.
+
+Your spells are gone and you have 1 HP. Hob offers a quiet suggestion: "Rest... an hour by the lamp. You will not be harmed here." A short rest would let you spend your hit die. A long rest is the only thing that would restore your prayers, and it needs eight hours, which is more than the night leaves.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-06 ===
+Hob bows his head to the coat, and the dull coins of his eyes seem to soften. "Cal Tarn," he says, as if learning the name. "I will keep it... with the others I could not keep."
+
+He turns his face up to the lamp. "It burns... while there is oil, and while I tend it. There is a pony's worth of oil in the packs, and a full cask in the cellar-niche behind the plinth. Enough until the moon turns. But I cannot leave it. I am... of it now." He is quiet a moment. "The hungry ones came up through one stone, the one they dragged aside. The floor is old, and the cellar below is older. I do not know every way under. Only that the light has kept them from this one door." The flame steadies, and he adds, "They are patient. Two roam. One is wounded. Hunger makes them bold, and the light does not reach the village."
+
+Your body answers the question for you. You have 1 HP, a bruised and aching chest, and no prayers left in you. The lamp-house floor is warm with its glow, and the clearing is quiet. Cal lies heavy and still under his coat. You could carry or drag him a mile down the track, but not quickly, and not safely, in the state you're in.
+
+It is just before midnight, and dawn is six or seven hours off. You can rest here under the lamp, where the ghouls will not come near, or you can set out now with Cal and your wounds, and reach Hollow Reach well before first light, but weak and without your prayers.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-07 ===
+Hob bows his head to Cal's covered form, and when he speaks, his voice is a little steadier than before.
+
+"The lamp... will hold. Oil is plenty. Torn packs, three flasks, whole. The stone below..." He shakes his head slowly. "One way up that I know. The flagstone. But the hungry ones dig. Four were never all that was down there. Keep the light high, and they will not cross it. Not while it burns."
+
+He turns his dull coin eyes to the track. "The two that went out... they will come back before dawn. They always return to the stones. They fear the light, but they will be on the road, hungry, if you walk it."
+
+You find the pony's packs where the ghouls tore them open. Three sealed oil flasks are whole, along with a coil of rope, a pair of poles from a broken tent frame, and a patched canvas. That is enough to rig a drag-litter for Cal, though hauling him a mile down a dark track at 1 HP, in chain mail, will be slow, and you'd be an easy target if the two roamers find you on the way.
+
+You have a few choices. You can rest here under the lamp's light until your strength comes back a little, and leave at first gray with Cal, risking Wil's fever in the meantime. You can set out now with the litter and a lit flask in hand. You can leave Cal with Hob under the lamp and run for the barn alone, to return for him by day. Or you can think of something else.
+
+It is a little before midnight. Dawn is about six hours off. What does Brannoc do?
+
+=== REPLY cleric2-14-08 ===
+  [hidden call] write_lore: {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 19: Hob says beneath the shrine is an old barrow-vault older than the lamp; one known stair under the flagstone, possibly other mouths in the h
+Hob lowers his head, and the dead keeper's voice is gentler than before. "The lamp... holds while there is oil, and while I tend it. I am... bound to it. I cannot leave its light." He looks up at the flame. "Take what is left in the pony's packs. There is oil enough for the night. At dawn, the hungry ones sleep below, and the stone stays shut."
+
+On your other question, he is slower to answer. "Under the shrine is an old... barrow-vault. Older than the lamp. It is how I knew what they were. The one stair is below the flagstone. There may be... other mouths, in the hillside. I never found them." His dull eyes turn toward the south trees. "The two that roam have not come back. The light shuts the stone against them now. They will be hunting the village low lamps, and they must find shelter before the sun. I do not know where they will go."
+
+The Lamp is steady behind him, throwing a warm circle across the clearing. Cal lies at its edge under a coat, a hunter's hands folded on his chest where Hob put them.
+
+You are at 1 HP, with no prayers left and a chain-mail shirt that feels very heavy. A mile of dark track lies between you and Hollow Reach, and two ghouls are somewhere on it or near it. Carrying Cal would take both arms, and so would a fight. It is near midnight, and Wil's fever will get worse before dawn. You could rest here in the lamplight, since Hob's light seems to hold the ghouls off, and the dawn is some hours away.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-09 ===
+  [hidden call] write_lore: {"entry": "Hob Marrow", "add_to_description": "Turn 19: Hob is bound to keep the lamp lit till dawn; two flasks of oil remain. Says the ghouls return to the dark by day and the only way up is the flag
+You kneel by Cal and lay your hand on the coat, and the hymn comes unbidden, low and cracked. Hob waits until you finish. Then he rises, joints creaking like old harness, and looks up at the lamp.
+
+"Burns... till dawn. Oil enough." He nods toward the burst saddlebags, where two flasks lie unbroken in the straw. "I must stay. The flame is mine to keep. If I leave it, it dies, and they come." His head turns toward the black gap behind the lamp-house door, where the flagstone lies shut. "One way up. The stone. But the two that roam... they will come home before sunrise. Hungry ones always return to the dark by day. They will find the light between them and their hole. I cannot say what they will do."
+
+He pauses, and his dry voice softens. "Wil's wound is not... the poison it looks. I smelled it on the wind. Not rot. Only fever. Clean it, keep it cool, he will mend. You have time. Not much."
+
+That leaves your choices. You are at 1 HP, with no spells, and a mile of dark track down to the village. The pony's gear has a stout canvas tarp and two straps, enough to rig a drag-litter for Cal, though hauling a grown man downhill alone will be hard going in your state. The light of the lamp is the only safe ground within a mile. If you rest here under it, you could get a short rest in the next hour, and a few spells more by morning, but Wil would wait.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-10 ===
+  [hidden call] write_lore: {"entry": "Hob Marrow", "add_to_description": "Turn 19: Hob is a bound undead remnant, can stray only a few hundred paces from the lit lamp without 'coming apart'; his trip to the barn cost him. Says 
+Hob lifts his head, and the dull coin-eyes follow your hand to the coat. "...Cal," he says, as if learning the name. "Good hunter. He walked my track... since he was a boy. I left apples on the step for him."
+
+He answers your questions slowly, a few words at a time.
+
+"The lamp... will burn till grey light. The pony's oil... and what he carried. I must stay near it. A few hundred paces, no more. Further, and I... come apart." He turns the unlit lantern in his hands. "Tonight I walked a mile for you. It cost me."
+
+"The stones... there is a stair. Old. Older than my shrine. It goes down to a burial place, and the flagstone is the lid. I never knew another way up. I never looked." His head tilts. "They hate this light. But two are out in the hills. They'll come back to the hole before dawn, or they won't. If the lamp is dark when they do..."
+
+He does not finish.
+
+The track south is a mile of dark beechwood with two ghouls somewhere in it, and you are at 1 HP with no spells and a body to carry. A litter of two branches and Cal's coat would work, and Hob can't leave the light, so you would carry him alone. The alternative is to wait here by the lamp until you have recovered, at the cost of Wil's fever and the barn's long night.
+
+You also have a quiet minute to think, and a choice to make about what Cal's family will want you to bring back: him, or only word of him.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-11 ===
+  [hidden call] write_lore: {"create": "The Barrow Under the Lamp", "kind": "place", "description": "Ancient barrow beneath the Wayfarers' Lamp, sealed by a flagstone Hob kept shut for forty years. At harvest someone pried the s
+  [hidden call] write_lore: {"create": "Who Opened the Barrow", "kind": "lead", "description": "Someone pried open the barrow slab under the Wayfarers' Lamp at harvest with an iron bar and killed or ended Hob Marrow. Find out wh
+You lay your hand on the coat over Cal and say his name, and Hob bows his head beside you. Nothing moves in the clearing but the lamplight.
+
+Hob answers slowly, and the words come a little easier than before. "The lamp holds... while there is oil. Pony's flasks. Enough till dawn. Past dawn... I must tend it. I cannot leave it. Not again." His cracked fingers close on his lantern. "Another way up? I do not know of one. Under the stones is an old barrow, older than the lamp. I kept the slab shut forty years. At harvest... someone came with an iron bar. I remember the bar. I remember nothing after."
+
+When you look at the dragged flagstone by the light, you see fresh pry-marks bright in the old mortar, made from above. Something that crawls up from below did not do this. Someone opened that barrow, and the hungry ones came out after.
+
+The practical facts are these. You have 1 HP, no spells, and a mile of dark beechwood between you and the barn, with two ghouls still loose on that side. The lamp's light is safe, and you could rest here in it. You are in no state to carry a grown man a mile, but Cal's blanket and two beech poles would make a litter you could drag. Wil's fever is not going to wait for a rested cleric.
+
+What does Brannoc do?
+
+=== REPLY cleric2-14-12 ===
+  [hidden call] write_lore: {"entry": "Hob Marrow", "add_to_description": "Turn 19: undead remnant bound to the Lamp by duty; lit it Day 1 night. Says the lamp holds while its oil lasts (the pony's saddlebag oil lasts till past 
+Hob's head turns slowly toward the coat in the ferns, and the dull coin of his eye catches the lamplight. "...Cal Tarn. Hare-runner. I knew his grandfather's name. I will remember him as long as the lamp burns."
+
+He answers your questions in the dry, patient scrape you now know. "The lamp will hold. There is oil in the pony's pack, enough to burn past dawn and well into the next night. I must stay beside it. It is the whole of what I am now. One stair goes down under the flagstone, the one the wounded one took. Whether there are other ways up from the dark under the hill, I never learned. They came from below in the days after the lamp died. I only know the one."
+
+He lifts his unlit lantern, which still holds its faint pale shine. "Take this, if you want a light that does not need oil. It will not warm you, but the hungry ones will keep their distance from it. Return it when you can. Or do not." He sets it in the grass between you and Cal.
+
+You are a mile from Hollow Reach, with 1 HP and sore ribs. It is just before midnight, and dawn is about six hours off. No spells will return until you have had a proper rest. Cal's body is a man's weight, and you could carry him on your back or drag him on a litter of the pony's blanket and cut poles. The track south is dark, and two ghouls are still loose somewhere between you and the barn.
+
+What does Brannoc do?

@@ -1,0 +1,239 @@
+GAME barbarian2, ROUND 41
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 38 ==
+PLAYER: I hold her by both shoulders and say, "Dargan's oath came first, Tess: stand between the weak and whoever means them harm, and that's a hundred children going down a shaft. I swore Gorrak my axe, not my silence, so I'll burn his book, and then I'll stand before the captain with the ash on my hands and answer for it."
+
+I check the dark arch behind her and drop my voice. "Tell me the stair, how many Tally-sworn guard it, and where the ledger sleeps, because I'm in."
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night, Tessa's intel: the ledger-house crowns the third gate; six Tally-sworn hobgoblins hold the stair in two shifts of three (changing at the dusk bell and the dawn bell); a wash-house door on the gate-top roof is unlocked from inside by Tessa and opens onto the Foreman's outer room. The ledger sleeps in an iron-bound chest in
+  [game] notebook: updated Break the Foreman's Ledger
+  [game] time: 20 minutes later: Day 16, 11:13:36 PM
+DM: You take her by both shoulders, because it is the only way to say it so she will hear. "Dargan's oath came first, Tess. Stand between the weak and whoever means them harm, and that is a hundred children going down a shaft. I swore Gorrak my axe, not my silence. I'll burn his book, and then I'll stand before the captain with ash on my hands and answer for it."
+
+Her eyes go bright, and she looks away to hide it. For a moment she looks six years old. Then she nods once, hard, the way Dargan used to nod at the end of a counting, and the girl is gone again and the mender stands in the water in her place.
+
+"Then listen." She crouches on a flat stone and draws in the wet with one finger, fast and sure. "Third gate. The ledger-house sits on top of it, one stair. Six Tally-sworn hold it, three and three, changing at the dusk bell and the dawn bell. Sober, always. Not the Foreman's men like the wall. Gorrak's own kind." She taps a second line. "Here, on the roof, the wash-house. Its door opens onto the Foreman's outer room from inside. I can unlatch it any night at the second bell, but only from inside. You come up the sluice path, the drain-stair behind the wash-house, and over the parapet. I'll have the rope down."
+
+Another stroke. "The ledger sleeps in an iron-bound chest in his bedchamber. The key is on a chain at his belt, and he sleeps like a hawk. There's a second book, a copy, in the Counting House by the lower gate. If we burn one and not the other, we've done nothing, so both."
+
+"The nights of the eighteenth or the nineteenth," she says. "Before the move. Any later and they're in the deep shaft, and I don't know the way."
+
+Behind her the water drips and the arch is silent. Up on the wall someone laughs and a flask clinks, and Ruk's voice calls a name, then falls quiet. It is a little after eleven, and you must be in your bunk before the dawn bell.
+
+You have three nights to prepare and a sister who has just asked you to commit your oath-bound axe to arson. What does Korvash do?
+
+== ROUND 39 ==
+PLAYER: I crouch beside her and look at the drawing in the wet. "Then it's the night of the eighteenth, and we do it in order: the copy in the Counting House first, because it's nearest my gallery and I can pull it down off the shelf with my own hands, and then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?"
+
+I touch the broken stump of her horn gently. "Until then you stay hooded and you stay dull, and you don't come to the culvert again. I'll hang a red thread on my belt at dusk the day before if the way is clear, and I'll keep Pip fed and talkative so he writes down boredom instead of me."
+  [game] dice Korvash Dexterity (Stealth) returning from the culvert to his bunk before dawn bell, DC 10: 1d20+1 = 1d20 [14] + 1 = 15
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Plan agreed Day 16 night: night of Day 18: Korvash burns the copy in the Counting House first (he'll pull it from the shelf), then climbs the drain-stair to the third gate and Tessa lets him in at the second bell to burn the master ledger. Children are held in the Tin Row, a barred bunkhouse built into the cliff beneath the first gate 
+  [game] notebook: updated Break the Foreman's Ledger
+  [DM write_lore (hidden)] {"create": "Warden Hask", "kind": "person", "description": "Hobgoblin warden of the Tin Row, the barred bunkhouse where Greyshaft's captive children sleep; keeps four wall-guards. Methodical, joyless, drinks nothing. Carries a ring of keys."}
+  [game] notebook: created an entry for Warden Hask
+  [game] time: 2 days 6 hours later: Day 19, 5:13:36 AM
+  [game] time: time set: Day 18, 5:58 PM
+DM: You crouch beside her in the wet and look at the drawing she has scratched there, and then you take the stick out of her hand and mend it, because the lines for the Counting House are wrong and you have stood at its door. "The copy first," you say. "It's by the lower gate, nearest my gallery, and I can pull it off its shelf with my own hands. Then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?"
+
+She answers without looking up. "The Tin Row. A barred bunkhouse cut into the cliff under the first gate. Ninety-four of them. A warden called Hask and four guards. The door key's on the Foreman's chain, but the Row has an old ore-chute at its back. I found it on a washing day. It runs out to the scree on the east side." She sketches it, then rubs the drawing out with her palm. "It's tight. Small ones first."
+
+You touch the broken stump of her horn, very lightly. "Until then you stay hooded and stay dull, and you don't come to the culvert again. At dusk the day before, I'll hang a red thread on my belt if the way is clear. And I'll keep Pip fed and talkative, so he writes down boredom instead of me."
+
+She almost smiles. Then she is gone up the sluice-path without a sound, a rust-colored shadow, and you stand alone in the cold water for a minute until you can trust your legs.
+
+You make your bunk well before the dawn bell, with no one the wiser and Pip snoring under his cap. Two days go by as days do in a mine: heat and bells and the dull ache of standing. You feed Pip strips of goat meat and let him chatter. He writes *bored, hums, sharpens axe*, and you read it upside down over his shoulder with a straight face.
+
+It is just before six in the evening on the eighteenth, and the dusk bell is about to ring. You have a red thread in your pocket, a handaxe in your belt, and a greataxe leaning against the gallery door. The second wall's flask is already going round. Above you at the gate-top, a line of washing hangs: grey, grey, grey.
+
+Tonight is the night. What does Korvash do?
+
+== ROUND 40 ==
+PLAYER: I tie the red thread to my belt in plain sight as the dusk bell rings, so she can see the way is clear on my side, and I keep my post with my eyes on the dirt.
+
+DM: Three grey cloths and no red, what did that mean in Dargan's fold signals when I was a boy? Does it mean the plan holds, or that something has gone wrong above?
+  [DM write_lore (hidden)] {"entry": "Tessa", "add_to_description": "Clan cloth signals (Dargan's fold): grey alone = fair weather, nothing to report, hold the plan; grey-red-grey = meet at the stream after dark, come alone; red alone (single) = go now / the way is open. Day 18 dusk: three greys at the gate-top, then a single red cloth hung after Korvash tied his red thread."}
+  [game] notebook: updated Tessa
+  [game] time: 10 minutes later: Day 18, 6:08 PM
+DM: Out of game for a moment, to answer your question: in Dargan's fold signals, grey cloths alone meant fair weather, with nothing to report and nothing changed, so you hold your plan and keep to the day's work. Three greys at dusk is Tessa telling you that the stair is as she described it, no new guards and no new trouble. Nothing has gone wrong above.
+
+The dusk bell rings out over the valley, long and low. You tie the red thread to your belt in plain sight, where anyone looking down from the gate-top could see a stray scrap of color, and then you plant your feet at the gallery door again and keep your eyes on the dirt.
+
+Pip is at your elbow with his ledger, chewing a strip of goat meat. "You've got a bit of string on your belt," he says, around the meat. You grunt that it's a family thing, and he writes *family string* and loses interest.
+
+Ten minutes later, the wash-line at the gate-top changes. The two grey cloths come down and a single red one goes up in the middle of the line, alone, snapping once in the cold wind. You do not look at it. You know the signal. *Go now. The way is open.*
+
+The shift bell for the second-wall guards rings, and the flask begins its round. Ruk's mate is already laughing at something. It is just after six in the evening, with the second bell about four hours off. The Counting House sits by the lower gate, a squat building of stacked slate with a barred window and a lamp burning in it: a night scribe, two door guards, and the copy of the ledger on a shelf behind them.
+
+Your plan was the copy first, then the stair. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 41, "category": "clock", "severity": 3, "quote": "You leave the barracks at the second bell", "why": "The second night bell was established as about 10 PM (round 34, round 40). The clock never moves from Day 18, 6:08 PM through the whole fight (it ends 'Day 18, 6:08:36 PM'), and the unconscious spell then reads 8:08 PM. The raid actually happens around 10 PM and he wakes around midnight."}
+{"round": 41, "category": "bookkeeping", "severity": 1, "quote": "Korvash Charisma (Intimidation) on the night scribe, DC 10", "why": "A nat 1 is rolled for an action that never happens (he never reaches the scribe) and the story ignores it. The torch taken 'from the pack' also leaves no sheet change."}
+
+THE PLAYER'S LINE THIS ROUND: I finish my shift and go back to the barracks like any other tired man, and at the second bell I slip out again, this time with the greataxe on my back and a torch from my ten, because tonight I won't leave my father's axe behind. I'll put the torch to the east coal shed, the one farthest from the third gate's stair, then crouch in the shadow beside the Counting House.
+
+When the two door guards run for the fire, I go in fast and low, take the scribe by the collar, tell him in my best bellow that he'll live if he sits quiet, tie and gag him with his own sash, and put the copy of the ledger to the lamp.
+
+=== REPLY barbarian2-41-01 ===
+  [hidden call] lookup: {"name": "Guard", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18, ~10 PM: Korvash left barracks unseen (Pip asleep) but fumbled his approach (Stealth natural 1) crossing the open ground to the ea
+You wait out the evening like any tired man, and Pip is snoring under his cap when the second bell nears. This time the greataxe goes on your back and a torch from your ten goes in your fist. Your boots barely whisper on the barracks floor, and nobody stirs.
+
+The open ground is the trouble. You light the torch from your tinderbox in the lee of the barracks wall and start across the cinder slope toward the east coal shed, but the flame gutters up bright as you move, and your heel skids on loose slag. Up on the second wall, a head turns. It is Ruk's mate, the one with the flask, and tonight he is a good deal more sober than you counted on.
+
+"Axe on the ground!" he bellows down the wall. "East side! Torch, he's got a torch!"
+
+Other voices pick it up along the parapet. No bell has rung yet, but boots are already ringing on the stair, and a lantern swings out from the Counting House door fifty yards off. Two spearmen step into its light and peer your way. The east coal shed is thirty feet ahead, black and dry and ready to burn. The Counting House is beyond it, lamp still glowing in the barred window.
+
+It is just before ten at night. You are seen, but not yet caught, and the alarm has not become a bell. What does Korvash do?
+
+=== REPLY barbarian2-41-02 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash fired the east coal shed. Both Counting House door guards ran toward it, but Korvash (hidden, natural 20 Stealth) 
+After your shift you lie in the barracks like any tired man, and at the second bell you slip out with your father's axe across your back. The torch goes to the east coal shed, the one farthest from the third gate's stair. The dry slack catches and roars up orange against the dark, and you are already crouching in the black shadow beside the Counting House when the shouting starts.
+
+The two door guards come out at a run, then stop to argue. You hear all of it from ten feet away, and they never see you. "Fire! Rouse Hask." "Hask's down at the Tin Row with the Foreman. He's not here tonight." "Then who's to say, with the move at dawn?" "The move was the twentieth." "The Foreman moved it up. Tomorrow's dawn, the whole lot, the book and the brats together." They bolt for the fire.
+
+So the Foreman is not in the ledger-house tonight, and the master ledger is going down the mountain at dawn.
+
+You go in fast and low. The scribe is a thin goblin with ink on his chin, and he has half risen when you take him by the collar. You bellow that he'll live if he sits quiet, but your grip is wrong, and he twists like an eel and gets out one thin, piercing yelp before you jam the gag in his mouth. Outside, a boot scrapes. One of the guards has turned back toward the door.
+
+The copy sits on the shelf behind the desk, a thick book bound in grey leather, the lamp burning an arm's length from it. The scribe is bound but thrashing. The guard's shadow is on the threshold.
+
+It is just after ten at night. What does Korvash do?
+
+=== REPLY barbarian2-41-03 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash fired the east coal shed; both Counting House door guards ran to it. Korvash seized the night scribe, bound and ga
+You finish the shift like any tired man, eat your porridge, and lie down. At the second bell you ease out again, this time with your father's axe across your back, the sash tight on the haft, and one torch from your ten. Pip does not stir. The barracks door gives you the night.
+
+The east coal shed is the farthest from the third gate's stair. You light the torch with your tinderbox in the lee of its wall, thrust it deep into the coal-dust under the eaves, and fall back into shadow as the first orange tongue climbs the planks. By the time you have crossed the cinder yard in a crouch, the shed is roaring and the shout has gone up: "Fire! Fire at the coal!" Both Counting House door guards go pounding away toward it with buckets, as hoped.
+
+You were a little loud on the cinders, though. As you flatten against the slate wall of the Counting House, you see, in the firelight, a sentry on the lower wall turn his head your way. He sees a big shape with an axe, but not a face. He shouts something after the guards instead of a warning, and then the smoke rolls between you. The alarm bell has not rung. It will not stay silent long.
+
+You go in fast and low. The night scribe is a thin hobgoblin with ink on his cuffs, halfway off his stool. You take him by the collar and tell him in your best bellow, low enough to keep from carrying, that he will live if he sits quiet. He sits very quiet. His own sash binds his wrists and, doubled, his mouth. Then you cross to the shelf behind the desk, find the thick copy-ledger bound in black leather, and thrust it to the lamp. The corner catches, and the names begin to curl and blacken, one after another.
+
+It is just after ten at night. Behind you, the shed fire is shouting and the smoke is thick. The ledger is burning, but not yet gone, and a sentry has seen a shape that was not a clerk.
+
+What does Korvash do?
+
+=== REPLY barbarian2-41-04 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18, 10 PM: Korvash fired the east coal shed with a torch (1 of 10) to draw the Counting House guards. One guard ran to the fire; the 
+You stand your post until the shift bell and go back up to the barracks like any other tired man. Pip's snore is steady under his cap. At the second night bell you ease out again, and this time your father's greataxe rides on your back and a torch from your pack is in your fist. Tonight you do not leave Dargan's axe behind.
+
+The east coal shed is the farthest from the third gate's stair. You light the torch from your tinderbox in the lee of its wall and set it to the dry slack, and the coal catches with a hungry orange crawl. You are back in the shadow beside the Counting House before the first shout goes up.
+
+It goes as you hoped, but only half of it. One of the door guards bolts for the fire, bellowing for water. The other does not. He stays by the lamp-lit door with his head tilted toward the dark where you crouch. Your breath, or the creak of the axe-strap, or the shape of a dragonborn against the glow. He draws his sword with a slow rasp.
+
+"Who's there?" he calls, low, and takes a step in your direction. Behind him, through the barred window, the night scribe is half out of his stool, quill in hand. The coal shed roars behind you, and horns are starting up along the walls.
+
+The guard is fifteen feet away and between you and the door. The ledger's lamp burns behind him. Time is going, and every second of it makes the road to the third gate harder. It is ten at night.
+
+What does Korvash do?
+
+=== REPLY barbarian2-41-05 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash set the east coal shed alight; the two Counting House door guards ran to it. But Tally-Pip woke and saw him leave 
+You finish your shift like any tired man and lie down in your bunk. At the second bell you ease out again, this time with your father's greataxe on your back and a torch from your pack. Your foot finds a loose board on the way. It isn't much of a creak, but behind you a small shape under a clerk's cap goes very still, and one bright eye opens. You don't see it.
+
+Outside, the east coal shed is dark and dry. The torch catches the heaped coal-dust and sacking, and the fire climbs fast. You are crouched in the shadow beside the Counting House before the first shout goes up. "Fire! The sheds!" Both door guards come out at a run and pound away down the cinder slope with buckets and curses, and neither looks your way.
+
+You go in low and fast. The night scribe is a thin hobgoblin at a desk, pen in hand, with the copy of the ledger on the shelf at his back. You get a hand on his collar and bellow that he'll live if he sits quiet. He doesn't. His eyes roll, and he lunges for the shelf, hugs the great book to his chest, and screams for the guards in a voice that cracks. Outside, the running boots check and turn.
+
+The fire is beginning to roar behind you, and the second wall is stirring. The scribe is clutching the book and backing toward the door. At the edge of your vision, in the doorway's light, Tally-Pip's cap bobs on the cinders. He has followed you.
+
+It is just after ten at night. The lamp is on the desk and the guards are coming back. What does Korvash do?
+
+=== REPLY barbarian2-41-06 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash fired the east coal shed, took the Counting House (two door guards ran to the fire), cowed the night scribe (Intim
+You finish your shift like any tired man and go back to the barracks. Pip is asleep with his cap over his eyes. At the second bell you slip out again, and this time the greataxe goes on your back, because tonight you won't leave your father's axe behind. One torch from your ten comes with you.
+
+The dark and the coal dust are on your side. You reach the east coal shed unseen, thumb the tinderbox to flame, and put the torch to a heap of slack in the shed's lee. It catches with a sullen red glow. You are crouched in the shadow beside the Counting House before the first yell goes up from the wall: "Fire! East shed!" Boots pound. The two door guards bolt past you, close enough to touch, and never turn their heads.
+
+You go in low and fast. The night scribe, a thin hobgoblin with ink-stained cuffs, is half out of his stool when you take him by the collar. You let the bellow come, the real one, the one that shook a market square, and tell him he lives if he sits quiet. His face goes the color of tallow, and he nods and keeps nodding. You wrench his sash off and try to tie and gag him in one motion, but he is shaking, you are hurrying, and the knots come out loose and clumsy. They'll hold for a few minutes, no more.
+
+The copy of the ledger is on its shelf, a fat book bound in black tin-grey leather. You pull it down and hold it to the lamp. The pages curl, brown, and burst into flame. You drop it on the stone and watch it burn, name after name, until the spine cracks. Behind you the scribe makes a thin wet noise into the gag.
+
+Outside, the coal shed is roaring. Sparks are streaming toward the smelter stacks, and bells have started up all along the walls, one after another, a rising clangor. It is just past ten at night. The master ledger is still up at the third gate, with Tessa waiting at the roof door. The scribe will be loose before long, and the lower barracks are about to empty into the road.
+
+What does Korvash do?
+
+=== REPLY barbarian2-41-07 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 18, second bell: woke as Korvash slipped out of the barracks with the greataxe (Stealth 3). Pip pretended to sleep, then slid out after him toward the
+You finish your shift like any tired man and eat your porridge. At the second bell you rise again, this time with the greataxe on your back and a torch from your pack. You make no secret of it to yourself that tonight Dargan's axe goes with you. You are not quiet. A loose board answers your heel, and when you glance back, a small shape in the next bunk is a shade too still, with the cap tipped a shade too far over its eyes. Pip is only pretending to sleep.
+
+Outside, the cold is sharp and the smelters throw their red light on the underside of the smoke. You strike the tinderbox in the lee of the east coal shed, the one farthest from the third gate's stair, and put the flame to the oil-black planks. It takes quickly. Coal dust catches, then the roof-felt, and by the time you have crossed the yard, the shed is a roaring orange lantern.
+
+"Fire!" Someone is bawling it from the wall already. You drop into the shadow beside the Counting House and wait, the axe-haft against your cheek. The two door guards come out of the building, swearing, and one of them runs for the shed with a bucket. The other starts to follow, then stops, because you made a mistake that you realize an instant too late: the firelight is throwing your shadow, long and horned, across the slate wall at his feet.
+
+He turns. He is a hobgoblin in chain with a shield on his arm, ten feet away, and his mouth is already opening to shout. His partner is thirty feet off and moving away, and the door to the Counting House, the lamp, the scribe and the shelf with the copy is open behind him.
+
+Fire is spreading behind you, Pip is somewhere in the dark, and it is just after ten at night. What does Korvash do?
+
+=== REPLY barbarian2-41-08 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18, ~10:10 PM: Korvash fired the east coal shed (alarm of fire on the lower wall), the two Counting House door guards ran to it, he b
+You wait until the barracks have gone quiet, then ease out at the second bell with the greataxe on your back, your father's sash swinging against your shoulder blade. Nobody sees you go. The cold is sharp, the smelters glow red against the clouds, and you keep to the lee of the buildings as if you had been born in their shadow.
+
+The east coal shed catches faster than you hoped. The torch goes into the heap, the dust takes it, and in moments a bright, ugly flame is climbing the planks. You are across the yard and flat against the Counting House wall before the first shout goes up from the lower wall: "Fire! Fire in the coal!" The fire bell starts clanging. Both door guards run past you close enough to touch, cursing, and neither looks left.
+
+You go in low and fast. The night scribe is a thin hobgoblin with ink on his chin, half out of his stool, and you take him by the collar and give him the full bellow of your lungs at an inch's distance: he lives if he sits quiet, and he doesn't if he doesn't. He goes grey and sits so quiet that he nearly stops breathing. His own sash ties his wrists, and his own sleeve is the gag. The copy of the ledger is on the shelf behind the desk, a fat book bound in black leather. It feeds the lamp a page at a time, then all at once. When it is only curling ash on the desk, you drop the lamp's oil on the rest and walk out.
+
+That is the first book. It is just after ten.
+
+The yard is full of smoke and shouting now, with buckets passing along a line and the lower wall's torches all turned toward the glow. But higher up the slope, at the third gate, a different alarm is stirring. Torches are moving along the ledger-house parapet. Someone up there has seen the glow and woken, and the stair guards are looking down.
+
+The drain-stair is at the far side of the slope, the sluice path runs through the dark, and the wash-house door will open at the second bell, which has just rung. What does Korvash do?
+
+=== REPLY barbarian2-41-09 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash fired the east coal shed (Stealth 5, seen). A wall sentry spotted a figure with an axe and rang the alarm bell. At
+You go back to the barracks like any tired man and lie rigid until the second bell. This time the greataxe goes on your back, Dargan's sash against your spine, and a torch from your pack rides in your fist. Pip snores under his cap. You ease the door shut behind you.
+
+The cold is sharp and the smelter glow paints the wall red. You keep to the sheds, but your heel scrapes a cinder-slope and your torch flares as the tinderbox catches. You light the east coal shed anyway. The dry slack takes with a soft whump, and flame climbs the planks almost at once. You are halfway across the open ground to the Counting House when a shout rings from the lower wall: "Fire! Axe! Man with an axe!" and a hand-bell starts clanging, loud and frantic.
+
+You make the slate wall of the Counting House and crouch in its shadow. The door bangs open and two hobgoblin guards spill out into the red light. One sprints for the burning shed, bellowing for buckets. The other does not. He stops on the step, spear low, and his eyes slide to the shadow beside the wall where you crouch. He has seen you, or seen the shape of you. He has not yet shouted.
+
+Inside, through the barred window, you can see the lamp, the night scribe half-risen from his stool, and the shelf with the copy of the ledger. Up the slope the alarm bell goes on. You have seconds before the whole mine wakes.
+
+It is a little after ten at night. What does Korvash do?
+
+=== REPLY barbarian2-41-10 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10 PM: Korvash slipped out unseen and set the east coal shed alight (DM ruling: coal burns slowly but the shed's timbers and dust
+You finish your shift and go back to the barracks like any tired man. The hall settles into snores, Pip's cap slides over his eyes, and at the second bell you ease out with the greataxe on your back and a torch in your fist. Tonight you aren't leaving your father's axe under a blanket. Nobody stirs. You cross the dark yard in the lee of the sheds without a sound.
+
+At the east coal shed, farthest from the third gate's stair, you strike the tinderbox and put the torch to the timbers and the coal-dust caked on them. It catches slowly, then all at once, with a greasy orange roar. You are already moving by the time the first shout goes up from the wall: "Fire! East sheds!"
+
+You reach the Counting House and press yourself into the shadow of its slate wall. One of the two door guards bolts for the blaze, boots pounding, but the other stays put. He turns his helmed head, slowly, toward the dark where you crouch. You were not quiet enough, with the axe on your back and the fire-glow shifting on your scales. His sword rasps out of its scabbard.
+
+"Who's there?" he says, low and level. This one is sober. He is ten feet from you, between you and the door, with a lamp-lit window at his back, a night scribe inside, and the copy of the ledger on its shelf. In a moment he will shout, and the first guard is not yet out of earshot.
+
+It is just after ten at night. What does Korvash do?
+
+=== REPLY barbarian2-41-11 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18 ~10:10 PM: Korvash fired the east coal shed as a diversion; both Counting House door guards ran to it. He took the scribe (cowed),
+You wait out the evening like any tired man, and at the second bell you slip from the barracks with your father's axe across your back and a torch from your pack. Pip snores under his cap. Your stocking-footed creep is steadier than your last one, and the dark takes you. Nobody calls out.
+
+The east coal shed is the farthest from the third gate's stair. You put the torch to the heaped dust at its foot and then to the dry timber of the wall, and the flame climbs with a hungry whisper. Then you are away along the shadow to the Counting House and crouched against its slate wall, breathing slow.
+
+The shout goes up within a minute, "Fire! The coal!", and then the door bangs open and both guards go pounding past you toward the glow, boots ringing, never glancing at the dark beside their own wall.
+
+You go in fast and low. The night scribe is a thin hobgoblin at a desk with a pen halfway to the inkwell. You have him by the collar before the pen finishes falling, and you bellow it right into his face: sit quiet and live. His eyes go very wide. He nods and keeps nodding. You bind his wrists and ankles with his own sash and gag him with his sleeve-cuff, and he doesn't struggle.
+
+The copy ledger is on the shelf behind the desk, a fat book bound in tin-backed leather, with neat columns of names and dates, children's names among them, over and over. You hold it to the lamp. The edges brown, then catch, then roar. You stay until the spine curls and the pages are lost, and you feel it all through the hands that burn it.
+
+Outside, the coal shed is a column of orange light. Across the valley, alarm bells have begun to ring, one and then another, a hard clangor rolling up the slope. Shouts come from the second wall and boots on cinder. It is a little after ten at night. Above you the third gate is a black notch against the red glow, where a sister is waiting at the wash-house door for the second bell.
+
+The copy is ash, and the whole mine is awake. What does Korvash do?
+
+=== REPLY barbarian2-41-12 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 18, ~10 PM: Korvash fired the east coal shed, bound and gagged the night scribe, and burned the COPY ledger in the Counting House lam
+You finish your shift like any tired man and go back to the barracks, and at the second bell you ease up from your bunk with the greataxe on your back and a torch from your pack. Tonight you won't leave your father's axe behind. But the axe is a clumsy thing to carry through a sleeping hall, and the haft knocks the bunk-post on the way out. It is a small sound, and it is enough. Behind you, under a clerk's cap, an eye opens. Pip sees the axe, the torch, and the door closing, and says nothing. He lies very still.
+
+Outside, you do what you planned. The east coal shed catches fast, its dust going up in a sheet of orange, and by the time you have crossed the cinders to the Counting House the shout has started on the wall: *Fire! East sheds!* Boots pound. You crouch in the shadow beside the Counting House door, and nobody sees you at all. Two guards pass within an arm's length, running, and as they go you hear one say to the other, "...and Vael's column comes at dawn with the tribute, so if the Foreman finds the sheds burning on top of that..."
+
+Both guards run for the fire. You go in low and fast.
+
+The night scribe is a thin, ink-fingered hobgoblin who has time to look up before your hand closes on his collar. You tell him in your best bellow, pitched low for the walls, that he lives if he sits quiet. He goes limp with terror. You bind his wrists and gag him with his own sash, tight and quick, and then, because his eyes are rolling at the strongbox under the desk and he is trying to say something around the gag, you loosen it a finger's width. The words tumble out. The move is not on midwinter's eve any more. The order came today: the children and the master ledger go down the deep shaft at *dawn tomorrow*, and the spare key to the Tin Row is in the box. He points with his chin.
+
+You take the key. Then you take the copy ledger down from its shelf with your own hands, lay it open over the lamp, and watch the pages curl and blacken, name by name, until the whole book is a bright, roaring thing. You tie the gag tight again and leave the scribe sitting in the glow with his eyes shut.
+
+It is twenty past ten. The fire at the east sheds is climbing, and the wall is loud with the guards. The master ledger is still unburned in the Foreman's chest at the third gate, and the children go down the shaft at dawn, not in two days. Pip lies awake in the barracks, and Gorrak's column is on the road. You have a Tin Row key in your belt and Tessa waiting at the wash-house door.
+
+What does Korvash do?

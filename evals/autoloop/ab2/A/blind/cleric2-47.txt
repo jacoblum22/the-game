@@ -1,0 +1,306 @@
+GAME cleric2, ROUND 47
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 44 ==
+PLAYER: "Of course, Hesper. Take me to him, and bring a lamp and a cup of warm water with a little honey if you have it."
+
+I'll kneel by the boy, listen to his breathing and feel his forehead and throat, and ask how long the cough has run, whether he's bringing up anything, and whether anyone else in the inn is sick. If it's more than I can ease with Medicine and rest, I'll use Cure Wounds or Healing Word as it fits.
+  [game] dice Brannoc's Medicine check examining the carter's boy, DC 12: 1d20+5 = 1d20 [3] + 5 = 8
+  [DM write_lore (hidden)] {"create": "Piper", "kind": "person", "description": "Carter's boy of about nine, ill at the Millstone Inn with a chest fever and a wet cough for three days. His father Garn the carter left for Greywater and is due back in two days. Brannoc tended him with Medicine, steam and honey water.", "relationships": ["lies sick in the back room of [[The Millstone Inn]]"]}
+  [game] notebook: created an entry for Piper; added 1 relationship to Piper
+  [game] time: 30 minutes later: Day 3, 7:20:42 PM
+DM: Hesper leads you through the kitchen to a narrow back room with a pallet under the eaves. Her lamp falls across a boy of about nine, flushed and sweat-damp, his hair stuck flat to his forehead. His name is Piper, and he does not stir when you kneel. His cough is wet and deep, and between spells his breath whistles.
+
+Medicine (8): you don't get a clear read. His forehead is hot, his throat is rough, and the cough is plainly wet, but you cannot tell whether this is a bad chill that has settled low or something worse. His chest sounds muddy under your ear, but the pulse and the heat don't settle it either way, and you are honestly unsure.
+
+What you do learn from asking is this. Hesper says the cough started three days ago, that he brings up a thick yellow-gray phlegm in the morning, and that no one else in the inn is sick. His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days. The boy has taken little but water and broth.
+
+You warm honey-water at the kitchen fire, and lift Piper to sip it. He takes half the cup and dozes off against your arm. Steam from a kettle in the room loosens his breath a little. Nothing you can do tonight will cure it outright, and Cure Wounds mends wounds, not fevers, so you hold it back.
+
+It's about twenty past seven. Supper is on the table, Hesper has a free bed for you, and the boy is not worse, though he is not better. You could sit up with him, check him through the night, ask more of Hesper, or try a different approach tomorrow.
+
+What does Brannoc do?
+
+== ROUND 45 ==
+PLAYER: I eat a quick supper, then bring a stool to Piper's bedside and keep the kettle steaming. "Hesper, would you prop his shoulders up with a rolled blanket and wake me if his breathing changes? I'll sit with him tonight, since I promised never to let anyone suffer alone."
+
+I'll check his breathing and brow every hour or so, humming low. DM: does Piper have a fever I could cool with a damp cloth, and can I try Medicine again with more time, or does anything in the room, like the phlegm or his lips, give me a clearer read?
+  [game] dice Brannoc's second Medicine check after hours at the bedside, with phlegm, lips and fever to read, DC 12: 1d20+5 = 1d20 [8] + 5 = 13
+  [game] time: 5 hours later: Day 4, 12:20:42 AM
+  [DM write_lore (hidden)] {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc's second Medicine read (13) found a lung fever (settled in the chest, no wound, no magic), not a simple chill. Cooling cloths, propped upright, steam and honey water; by ~1 AM fever eased from its peak. Cure Wounds cannot treat it; Lesser Restoration (level 3 for Brannoc) would end a disease. Garn the carter due back in two days."}
+  [game] notebook: updated Piper
+DM: You eat Hesper's onion-and-barley stew, standing, and are back at the boy's side before the bowl is cold. Hesper props his shoulders on a rolled blanket without a word. She has done this before, for her own, and she says as much with a look. Then she leaves you the lamp and the kettle and tells you to knock on the wall if you need her.
+
+Yes, he has a fever. His brow is hot and dry, and a cloth wrung in cool water takes the edge off it for a quarter of an hour at a time. You change it as it warms.
+
+Medicine (13), a second look with hours of watching behind it: this time it comes clear. His lips are faintly blue-gray at the edges whenever the cough hits, and his breath takes a catch at the top of each inhalation, a small hitch. The phlegm in the cup is thick and rust-colored, not the pale spit of a cold. You are fairly sure now. This is a fever settled in the lungs, a true chest sickness, not a chill and not a wound. It is a fight his body has to win, with help. It is also why Cure Wounds was never going to touch it, and why Lesser Restoration, which ends a disease, would. It is a 2nd-level spell, and you cannot cast it until level 3.
+
+What you can do is keep him upright, keep him cool, give him steam and honey water in small sips, and watch the breath. You do all of it through the night, humming low. Around the middle of the night his breathing eases from a rasp to a rattle, and a little before one o'clock his brow cools under your hand and a thin sweat breaks across it. He sleeps properly for the first time. He is not out of danger, but the worst of the climb is behind him.
+
+It is twenty past midnight on Day 4. You are tired but steady. In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+
+What does Brannoc do?
+
+== ROUND 46 ==
+PLAYER: I lay a hand on Piper's damp brow and let out a long breath. "Sleep well, little one." I'll get a few hours of rest on the stool beside him, then wake at first light to check his breathing once more before the road.
+
+In the morning I'll tell Hesper plainly what the sickness is: keep him upright, cool, and sipping honey water, and send for a healer if the blue returns to his lips. I'll also leave a note for Garn the carter that his boy is mending and that Brannoc of Hollow Reach sat with him. Then I'll set out for Greywater with the shawl and Hob's words.
+
+DM: could I use Healing Word on Piper in the morning to ease his breath a little, or is it only good for wounds like Cure Wounds?
+  [DM lookup (hidden)] {"name": "Healing Word", "kind": "spell"}
+  [game] time: 6 hours 40 minutes later: Day 4, 7:00:42 AM
+  [DM write_lore (hidden)] {"create": "Greywater", "kind": "place", "description": "Weaving village in the valley, a day's walk from Hollow Reach and about two hours past the Millstone Inn. Grey slate roofs along a river, racks of dyed wool drying, a small chapel with no resident priest. Maud Marrow's loom-house is at the lower end by the weir, a blue door.", "relationships": ["home of [[Maud Marrow]]", "lies past the [[The
+  [game] notebook: created an entry for Greywater; added 2 relationships to Greywater
+  [DM write_lore (hidden)] {"entry": "Piper", "add_to_description": "Day 4 dawn: fever low, breath easier, sleeping. Brannoc left instructions with Hesper (upright, cool, honey water, send for a healer if his lips go blue) and a note for Garn the carter. Healing Word only restores hit points, so Brannoc did not spend it."}
+  [game] notebook: updated Piper
+DM: Your answer first: Healing Word restores hit points and nothing else, so it can't ease a fever or a bad chest. The sickness is not a wound. You can cast it and give him a little more strength for the road, but it wouldn't touch what is wrong, and I won't pretend it would. Your slots are better kept. The sleep, steam, and honey water are doing the real work.
+
+You settle on the stool with your back against the wall, your hand where you can feel his breath. You sleep, in snatches, for six hours or so. Hesper wakes you at first gray with a mug of hot tea. Piper is awake and watching you with big, clear eyes. His fever has dropped to a mild warmth, his breath comes slow and mostly quiet, and he asks, hoarse, whether you are the man who hummed. You say you are. He says it helped, and goes back to sleep.
+
+You tell Hesper plainly what it is: a sickness settled in the chest. Keep him upright, keep him cool, keep honey water in him in small sips, and send for a healer if the blue ever comes back to his lips. You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him. Hesper refuses your coin and presses a heel of bread and a hard cheese into your hands. "Bed and board's for them as earn it," she says. "You did."
+
+By seven you are on the road with the shawl in your pack. The mist lies thick on the river, and the sun is pale behind it. The road goes through low hills and pastures grazed gray-green, past a ford and a ruined chapel with its roof fallen in. It is quiet, and your steps and your humming are the only sound.
+
+At about nine, the road bends and Greywater comes into view below, a cluster of slate roofs along the river, with racks of dyed wool drying red and blue and ochre in rows along the bank, and a weir turning white across the water. A small chapel stands at the near end with its door shut. A girl hauling a basket of yarn looks up, sees you, and stops. At the lower end of the village, by the weir, there is a house with a blue door.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 47, "category": "contradiction", "severity": 2, "quote": "I knew in the spring, when he went up that track and wouldn't be told.", "why": "Round 5: Hob kept the Lamp 'forty years'; Maud saying he went up this spring conflicts with that."}
+
+THE PLAYER'S LINE THIS ROUND: I nod to the girl and ask gently, "Good morning. Could you tell me where Maud Marrow the weaver lives? I've come with word of her brother."
+
+Then I walk down to the house with the blue door, shield slung on my back so I look less like a soldier, and knock. When she opens, I'll say, "Maud Marrow? My name is Brannoc, and I come from Hob. May I come in? I have something of yours in my pack, and I'd like to tell you about him in my own words."
+
+=== REPLY cleric2-47-01 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:30 AM: Brannoc found her at her loom-house by the weir (blue door). Brisk, talkative, sixtyish; had not heard from Hob since midsummer. Receive
+The girl points without a word, then walks you to the end of the lane, the basket bumping her hip. She nods at the blue door and goes quickly back the way she came.
+
+You swing the shield onto your back and knock. A loom is clacking inside, a steady rhythm, and it stops mid-pass. The door opens on a spare, bright-eyed woman of sixty or so, with gray hair under a kerchief and a shuttle still in her hand. Her eyes find the amulet, then your face, and she goes still, the way people do when they have been expecting a knock for a long time.
+
+"Maud Marrow? My name is Brannoc, and I come from Hob. May I come in? I have something of yours in my pack, and I'd like to tell you about him in my own words."
+
+"Hob," she says. "You'd better come in." She doesn't ask whether he's alive. She steps aside.
+
+The room is warm and bright, full of skeins in a dozen colors, with the loom under the window and the river loud outside. She sits you at the table and does not offer tea until you've said it. You tell it all, gently, in order: the lamp gone dark, the creatures from below, how he walked to the barn begging for light and could not make himself understood, how he spoke to you through a door, and how he led you to the Lamp and lit it with his own hands. You say he died before you ever met him, but that he stayed, because the light was his to keep. You do not lie, and you do not make it harder than it was.
+
+She listens without a word, the shuttle turning slowly in her fingers. When you reach the end, you take the blue shawl from your pack and lay it across the table. She puts out a hand and touches it, faded now and smelling of lamp smoke. Her mouth works.
+
+Then you give her his words, exactly: that he kept the light, that he was not afraid at the end, that the shawl was warm every night, and that she would say he should have come home. "And he said, 'Tell her I had somewhere to be.'"
+
+Maud makes a sound that is half a laugh and half something else, and she covers her eyes. "That stubborn old goat," she says, wet and furious and fond. "Forty years I told him. Forty years." She sits with the shawl pressed to her face for a long while, and you sit with her, humming low, and say nothing at all. It is, you think, exactly what Edda would have done.
+
+When she can speak again, she looks up, red-eyed and fierce. "He never wanted anyone to come after him. But somebody ought to. A keeper's got to have kin." She wipes her face on her sleeve. "I'll go up. I'll sit his watch myself, a month at a time, and I'll bring the wool. Will you tell them in the Reach?"
+
+The shawl is hers again, the message is delivered, and the Lamp will have a keeper of blood as well as of habit. It is mid-morning. Greywater has a chapel with no priest, a weaver's village that might want a healer, and the road ahead goes on. What does Brannoc do?
+
+=== REPLY cleric2-47-02 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9-12: Brannoc told Maud of Hob's death and gave her the blue shawl and Hob's words. Maud is a broad-shouldered, grey-haired weaver in her sixties
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~noon: word of Hob delivered to Maud Marrow in Greywater, shawl returned. Maud will walk to the Lamp herself in a few days and join the rota. Quest
+The girl points with her chin and hurries off with her basket. You swing the shield onto your back and walk down between the drying racks, wool in red and blue and ochre moving gently in the wind, to the house by the weir. The blue door is old and faded to the color of a winter sky. You knock twice, softly.
+
+Maud Marrow opens it with a shuttle still in her hand. She is a broad, gray-haired woman in her sixties, with her sleeves pushed up and dye stained blue into every crease of her fingers. She takes in the amulet, then your face, and the shuttle slowly lowers. "You're from the Reach," she says. "Or from Hob." You say you are from Hob. Her mouth tightens, and she steps aside.
+
+You sit at her table beside the loom, with the weir loud outside. You tell it all in your own words, as you promised: that he kept the light, that he did not leave it, that when the dark came he stood between it and the village in the only way left to him. You do not hide what he had become. She listens with her hands flat on the table, and does not interrupt, which is the only way you know she is a woman who talks. When you reach his words, you give them exactly, and then you take the blue shawl from your pack and lay it in her lap.
+
+She presses it to her face. For a long time the only sound is the weir. Then she laughs, a wet, startled sound. "'Had somewhere to be.' He would. Forty years of that man having somewhere to be." She wipes her eyes with the corner of the wool. "It was warm, he said? Every night?" You say that was what he asked you to tell her, and she nods and keeps nodding.
+
+By noon she has fed you bread, cheese, and a bowl of sharp pickled beets, and has decided, in a flurry of wool and orders, that she is going to the Lamp herself. She'll bring dyed fleeces for the rota, and oil, and sit a night or two on the step beside him, "since the stubborn old fool never would come home." She presses a coil of dyed yarn into your hand as thanks, a deep, steady blue.
+
+With that, the word is carried. The Lamp has its keepers, the rota is set, and the Reach has its lanterns lit. It is noon on Day 4. You have 300 XP and will need 900 for level 3, and Lesser Restoration is waiting for you there. You have a village behind you that will remember your name, and a road ahead that you don't yet know.
+
+What does Brannoc do now?
+
+=== REPLY cleric2-47-03 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:30 AM: Brannoc found her at her loom-house by the weir (blue door). Sturdy, silver-streaked, talkative; she suspected Hob was dead since harves
+The girl with the yarn points without a word, and then, as if she has understood something from your face, she says quietly, "She's up. She's always up." You sling the shield onto your back, as you said, so that you look more like a traveller than a soldier, and walk down along the river past the racks of drying wool.
+
+The blue door is the last on the lane, beside the weir, with the sound of a loom going inside, the steady clack and thump of a shuttle. You knock. It stops.
+
+Maud Marrow opens the door herself: sturdy, silver-streaked, hands stained blue to the wrist, with her brother's long jaw and none of his stillness. She looks at your amulet and then at your face, and her own face changes before you have said a word.
+
+You say it as you planned. "Maud Marrow? My name is Brannoc, and I come from Hob. May I come in? I have something of yours in my pack, and I'd like to tell you about him in my own words."
+
+She stands very still. Then she says, quite evenly, "He's dead, then," and steps back to let you in. She does not ask it as a question.
+
+Inside, the loom-house is warm and smells of wool and dye. She sits you at a bench and does not sit herself. You tell her everything, and you leave nothing out: the Lamp gone dark, the ghouls below the stones, the night at the barn door, and what Hob did. You say that he kept the light, that he was not afraid at the end, and that the shawl was warm every night. You take it from your pack and lay it across her hands. She holds it against her chest and says nothing for some time.
+
+Then, with a crack in her voice that is nearly a laugh: "'I had somewhere to be.' That stubborn old goat. He'd never once come home, and he's right, I'd have said it." She wipes her eyes with the heel of her hand. "I knew. I knew at the turn of the harvest, when no letter came. He never missed a letter."
+
+When she can speak steadily again, she asks three things. She would like to see the Lamp herself, in a day or two, when she can close the loom-house. She will weave wicks and good cloth for the rota, for as long as it needs them. And Greywater has no priest of its own; she asks whether you would say words for Hob in the chapel, so that people who knew him can come.
+
+It is about half past seven in the morning, and the whole village is waking up around you. You are rested and have all your prayers. What does Brannoc do?
+
+=== REPLY cleric2-47-04 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:20 AM: Brannoc told Maud of Hob's death and gave her the blue shawl and his message. Maud is a lean, grey-haired weaver in her sixties with ink
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~9:20 AM: Message delivered to Maud Marrow and the shawl returned. Maud says the Marrow family has kept the Lamp for three generations and will tra
+The girl with the yarn basket blinks at you, then points with her chin. "Blue door, by the weir. Mistress Maud. She's at the loom, she always is." She watches you go, and you hear her whisper to someone behind a rack of red wool as you pass.
+
+You sling the shield across your back and walk down through the drying racks, past the wet-wool smell and the sound of the weir. The blue door is paint-flaked and open an inch. You knock, and the clack of a loom inside stops.
+
+Maud Marrow opens it herself: a lean, grey-haired woman in her sixties, with dye-stained fingers and Hob's long jaw, though her eyes are bright and quick where his were dull. She looks at your amulet, your face, and the pack on your shoulder, and says before you speak, "You've come from Hob."
+
+"I have," you say, and give your name. She steps back and lets you in without another word.
+
+The loom-house is warm and bright, full of bobbins, hanks of dyed thread, a half-woven cloth of blue and grey. She sits you down at her table and listens with her hands folded to the end of it. You tell her all of it: the lamp gone dark, the hungry ones, the keeper who walked in the night begging for oil, what he did for the village, and that he sits by the light still. You say his words exactly. She is silent a long moment. When you take out the shawl, faded, soft, smelling of lamp smoke, her face changes. She takes it in both hands and puts it to her cheek.
+
+"I knew," she says, quietly. "He wrote every harvest. Never missed. This year, nothing." She laughs, wet and short, at "somewhere to be." "He would. Our father kept that lamp, and his father. Hob promised he would see it burned as long as there was a Marrow to light it. Stubborn old fool." She wipes her eyes with the heel of her hand. "Tell me about this rota of yours. I'll come back with you. I'd like to see the place, and sit with him."
+
+She asks you to stay for a meal. Over bread and hot broth she tells you more. Greywater has no priest, only an empty chapel with a cracked bell. Her neighbour's husband has been ill with a swelling in his leg since the hay was cut, and nobody knows what to do for him.
+
+It is nearly half past nine in the morning, with all your prayers and a full day ahead. What does Brannoc do?
+
+=== REPLY cleric2-47-05 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9-11 AM: Brannoc told Maud the truth about Hob in her blue-doored loom-house and gave her the blue shawl and Hob's message. Maud is sharp-tongued
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~11 AM: word of Hob delivered to Maud in Greywater; shawl returned. Maud wants to visit the Lamp. Quest effectively complete.", "status": "done"}
+The girl with the basket points without a word, and then she hurries ahead of you, because in a village this size news runs faster than a man walks. By the time you reach the house with the blue door, it is already open.
+
+Maud Marrow stands in the doorway with her hands floured to the wrists, a lean, gray-haired woman with Hob's long jaw and a tongue you can tell is quick. She takes in the mace, the amulet, and your face, and the quickness goes out of her.
+
+"You said Hob," she says.
+
+You ask to come in, and she steps aside. Her loom stands in the front room, half a green length on it, and she sits down on the bench before it as if her knees have decided for her. You give her your name and where you've come from. You tell her in your own words, slowly: the dark lamp, the thing at the barn door that begged for light, the keeper who rose to ask for help for the sake of strangers and stayed to see the fire lit. You say that he is dead, and has been since harvest, and that he is bound to the Lamp's light now, and that he is not in pain.
+
+She doesn't interrupt. Her hands twist in her apron, and the flour makes pale marks in the cloth.
+
+Then you take out the blue shawl and set it in her lap. She stares at it. Her thumb finds a dropped stitch near the hem. "I never did mend that," she whispers, and for the first time her face breaks.
+
+You give her his words in his order: that he kept the light, that he was not afraid at the end, that the shawl was warm every night. At the last, you say that she will tell him he should have come home, and that he said to tell her he had somewhere to be. She laughs, a wet, cracked sound, and says, "Of course I would. The stubborn old fool." Then she weeps in earnest, and you sit by her and hum low until it eases.
+
+An hour passes, then two. Maud makes tea no one drinks. She asks a hundred questions, and you answer every one. By the time the sun is full over the weir, she has made up her mind. She will see him. She will walk to the Lamp herself, or ride with the first carter going north, and she will sit with him at the step. And she insists, with a flash of the old sharpness, on sending a bolt of her best cloth back with you for the families in the Reach who have lost their men.
+
+You have 100 XP for finishing what you promised, for 400 total, 500 short of level 3. Your pack feels lighter. It is a little past nine, and the weaver is steadier than she was. You have a road, a free morning, a village with a shut chapel and no priest, and prayers still full.
+
+What does Brannoc do?
+
+=== REPLY cleric2-47-06 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:15 AM: Brannoc reaches her blue-doored loom-house. Maud is a lean, sharp-tongued woman of about sixty with dye-stained hands, who had not heard
+The girl with the yarn basket points with her chin. "Maud? Blue door, down by the weir. She's at her loom, she's always at her loom." Then she looks again at your amulet and adds, more quietly, "Is it bad news?" You tell her it is the kind that should be told in person, and she nods and lets you go.
+
+You sling your shield on your back so you look less like a soldier, and walk down the lane between the racks of drying wool, red and blue and ochre, until the weir is loud in your ears. The blue door is weathered and stands slightly open. From inside comes the steady knock and slide of a loom.
+
+It stops when you knock. The woman who opens the door is lean and straight-backed, about sixty, with dye-stained hands, gray hair pinned hard, and a glare that has clearly seen off many peddlers. She looks at the mace, the amulet, and your face. You say it as you planned: your name, that you come from Hob, that you have something of hers and want to tell her about him in your own words.
+
+The glare doesn't leave, but something behind it goes very still. "Hob," she says. "Hob sent you?" Her voice is dry. "That fool hasn't sent a word since midsummer. I had half a mind to walk up that hill and shout at him." She holds the door a moment longer, hand tight on the frame. Then she steps back. "In. Sit. Say it."
+
+The room is warm and smells of wool and woad. A loom stands by the window with a half-woven bolt of deep blue on it. Two stools, a hearth, a kettle. She doesn't offer tea. She stays on her feet, arms folded, watching you.
+
+You have the shawl in your pack, Hob's four messages by heart, and a woman who will not sit down until you speak. How does Brannoc begin?
+
+=== REPLY cleric2-47-07 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:20 AM: Brannoc reached her blue-doored loom-house at Greywater. She is sixty-ish, brisk, sharp-tongued, grey braid, ink-blue fingers. Brannoc t
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~9:30 AM: message delivered to Maud Marrow, who will travel to the Lamp to see Hob. Quest effectively complete; rota continues in Hollow Reach.", "
+The girl points with her chin, a little wary, and then softer when she sees your amulet. "Maud? Blue door, by the weir. She's up already. She's always up." She watches you go.
+
+You sling the shield on your back as you said, and the walk down along the river is quiet, past drying racks, a dog asleep on a doorstep, a woman beating a rug who stops mid-swing to look. The blue door has a loom's clack behind it, steady as a heartbeat. You knock, and the clacking stops.
+
+Maud Marrow is sixty or near it, narrow and brisk, with a gray braid down her back and fingertips stained deep blue to the first knuckle. She looks you up and down before you speak. When you say your name and that you come from Hob, her face does not change, but her hand tightens on the door. "Come in, then," she says. "Mind the warp."
+
+Her house is all thread: skeins on pegs, a great loom under the window, a kettle ticking on a small stove. You do not take the chair she offers until she sits. You tell it plainly, in your own words: that her brother is dead, that he kept the lamp to the end and saved a village, that he was not afraid. You give her his message exactly as he gave it, including the last part. "He said you would tell him he should have come home. He said to tell you he had somewhere to be."
+
+For a long moment she says nothing. Then she makes a short dry sound that is half a laugh. "Somewhere to be. The stubborn old goat." She presses the back of her wrist to her mouth. When you take the blue shawl from your pack and lay it in her hands, she holds it to her face and her shoulders go. You sit and hum, very low, and do not speak, and the loom stands silent. It is a long time before she looks up.
+
+"Take me to him," she says. Her voice is rough but steady. "I'll not have him sitting alone on a step. A day's walk, you say? I've walked further for worse." She wipes her eyes with the heel of her hand. "And I'll be bringing lamp oil. I know what that old fool would forget."
+
+You earn 100 XP for carrying the promise home, which brings you to 400 of the 900 needed for level 3. Maud is already pulling down a coat and stuffing a loaf in a bag. It is about half past nine on Day 4, and the road back to the Lamp is a day's walk.
+
+What does Brannoc do?
+
+=== REPLY cleric2-47-08 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9 AM: Brannoc told Maud of Hob's death and gave her the blue shawl and his words. Maud is a brisk grey-haired weaver, near sixty, with Hob's heav
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~noon: Maud Marrow told, shawl returned. Remaining: nothing pressing; Maud will visit the Lamp. Quest effectively done.", "status": "done"}
+The girl points without a word, then trots ahead of you to the lower end of the village. The house with the blue door is narrow and tall, with a loom's clack coming through the shutters. It stops when you knock.
+
+Maud Marrow is a brisk, grey-haired woman near sixty, with her brother's heavy brows and wool-stained hands. She looks at you, the amulet, the shield on your back, and the careful way you stand. She knows before you speak. "He's dead, then," she says, flatly, and steps back to let you in.
+
+You sit by her loom and tell it in your own words: the Lamp gone dark, the hungry ones, how he came to a barn door to beg for light, how he kept it burning afterward, and that the lamp-house is lit tonight because of him. You give her his words one by one, carefully. When you reach the shawl, you take it from your pack and lay it across her knees. She holds it a long time, and she cries without noise, the way people do who have wept alone before. Then you say, "He said you would tell him he should have come home. He said to tell you he had somewhere to be." Maud laughs, a short, wet bark. "Stubborn old goat," she says. "I knew it. I knew he'd never come down off that hill."
+
+She feeds you bread and hot tea, and does not let you leave before noon. She says she will come to the Lamp with the next cart and sit a night with him, and she presses a bolt of undyed wool cloth on you for the road, which you can carry or sell. She also tells you, quietly, that Greywater has no healer and no priest, and its chapel has stood shut since the last one died. There are always coughs, she says, and a child with a bad foot.
+
+You have kept your promise to Hob, and you have earned 100 XP for it. That brings you to 400 of the 900 you need for level 3. Lamp Watch is done. Maud's bolt of cloth is yours if you want it, and the road goes on.
+
+What does Brannoc do now?
+
+=== REPLY cleric2-47-09 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9 AM: Brannoc found her at her loom in the blue-doored house by the weir. A broad, brisk woman in her fifties with ink-blue fingertips, who talks
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~noon: Maud Marrow told. Quest complete except for her visit to the Lamp. Marking done.", "status": "done"}
+The girl with the yarn basket points without hesitation. "Maud? Blue door, by the weir. She'll talk your ear off, mind." She watches you go, and by the time you reach the lower lane, two other doors have opened a crack.
+
+You slip the shield onto your back, so you look less like a soldier, and knock. The clack of a loom stops inside. The door opens on a broad, brisk woman in her fifties, sleeves rolled, her fingertips dyed deep blue to the second knuckle, and her eyes sharp and quick. She sees the amulet first, then your face, and the briskness goes out of her all at once, as if she already knows.
+
+"Maud Marrow? My name is Brannoc. I come from Hob. May I come in? I have something of yours in my pack."
+
+She says nothing for a heartbeat. Then she steps back and opens the door wide.
+
+Her workroom is full of morning light, with the loom in the window and skeins of blue and madder drying on a rack. You sit at her table, and you tell it in your own words, the way you promised. Hob kept the light until the last, and was not afraid. He gave his life's service to strangers and, when it was dark, begged for light for them. A good man died, and then he stayed, and because he stayed, a village lived. You tell her about the barn, the Lamp, the dark, and the night he said her name.
+
+Then you draw the shawl from your pack and lay it in her hands. Blue, faded, a little worn at the fringe, smelling faintly of lamp smoke. And you give her his words one by one: that he kept the light, that he was not afraid at the end, that it was warm every night, and last, with a small smile you cannot help, that she would say he should have come home, and that he had somewhere to be.
+
+Maud holds the shawl against her chest and laughs, an astonished wet laugh that breaks halfway into something else. "Somewhere to be," she says. "The stubborn old goat." She wipes her eyes with the back of a blue hand and talks, and talks, and you let her, because it is what she needs. She tells you about their mother's tongue, and the winter he went north, and the letters he never wrote. When she runs down at last, she sits with the shawl in her lap and says quietly, "Thank you. Nobody else would have come."
+
+She says she will go up to the Lamp herself within the week, and take wool for the keeper's winter. She asks you to stay for the evening meal, and refuses to hear no.
+
+The errand you swore is done. You earned 100 XP, and have 400 of the 900 needed for level 3. Greywater has a chapel with no priest, Piper is mending, and the valley road runs on beyond. It is ten in the morning.
+
+What does Brannoc do?
+
+=== REPLY cleric2-47-10 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9–12: Brannoc told her of Hob's death and gave her the blue shawl and his message. Maud is a lean, sharp-tongued woman of about sixty with ink-bl
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~noon: Maud Marrow told. She will travel to the Lamp within the week and arrange Greywater oil. Quest essentially complete.", "status": "done"}
+The girl points without a word, then runs ahead of you down the lane, basket bumping on her hip. By the time you reach the blue door, the news that a stranger is asking after the weaver's brother has gone ahead of you. You unsling your shield and hang it on your back. You knock, softly.
+
+The door opens on a lean, sharp-faced woman of about sixty, with ink-blue fingertips and her gray hair bound in a scarf. She looks at your amulet, and at your face, and her mouth goes tight before you have said a word. "He's dead, isn't he," she says. "Come in, then."
+
+You say it the way you planned. You tell her your name, that you come from Hob, and that you have something of hers. You sit at her table, with the loom ticking cold in the next room, and you tell her all of it. You tell her about the dark lamp, the ghouls under the stones, and the night Hob came to the barn door begging for light, and that he kept the Lamp lit to the end. You hand her the shawl. She holds it against her face a long moment. Then you give her his words, exactly as he said them: that he kept the light, that he was not afraid, that it was warm every night, that she would say he should have come home, and that he had somewhere to be.
+
+She laughs, a short cracked sound, and then she is crying, and she is still scolding him through it. "Somewhere to be. Forty years of somewhere to be." She wipes her face with the shawl and then, to your surprise, folds it carefully over her knee. "He was always the stubborn one. I told him that lamp would be the death of him." She is quiet. "I'm glad it wasn't for nothing."
+
+By noon she has made tea, fed you bread and soft cheese, and decided what she will do. She will walk up to the Lamp herself within the week, whatever the road, and see him. She will weave good wicks for the lamp-house and a banner for the door, and send a cart of Greywater oil, so the Reach need not carry it all. She presses two silver pieces and a hand-dyed scarf the blue of her shawl into your hand. You hold out the coin to refuse, but she is already shaking her head. "Take it. He'd have wanted you fed."
+
+You've seen the message through. That is 100 XP for it, and you are at 400 of the 900 you need for level 3. It is just after noon, and you stand at Maud's door with a full belly, full prayers, and no one left in the road ahead of you to carry anything to. The valley is bright and open. The chapel in Greywater has no priest, and the sick, if any, are for you to find.
+
+What does Brannoc do?
+
+=== REPLY cleric2-47-11 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:30 AM: Brannoc reached her blue-doored loom-house in Greywater and delivered Hob's message and the blue shawl. Sharp-tongued, grey-braided, mid
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 4 ~9:30 AM: word of Hob delivered to Maud in Greywater, with the shawl. Quest complete except Maud's own decision to visit the Lamp.", "status": "don
+The girl with the yarn points with her chin and says, "Maud? The blue door, down by the weir. She's up already, she's always up." She watches you go, and by the time you reach the lower lane she has told two others, and a few shutters have eased open.
+
+You walk with your shield slung on your back and your hands open at your sides. The loom-house is narrow and old, its blue paint worn pale. Through the window you hear the steady clack and thump of a loom. It stops when you knock.
+
+Maud Marrow opens the door herself. She is a spare, upright woman in her middle fifties with a gray braid down her back, wool-lint on her apron and dye-stained fingers, and she has Hob's long jaw. Her sharp eyes go from your mace to your amulet and then to your face, and you see her understand before you say a word.
+
+"My name is Brannoc," you say. "I come from Hob. May I come in? I've something of yours, and I'd like to tell you about him in my own words."
+
+She stands quite still. Then she says, very evenly, "He's dead." It is not a question. "I've known since midsummer, when he didn't write. Come in, then."
+
+You sit at her table, and you tell her all of it: the Lamp gone dark, the ghouls under the stones, how he walked the road at night for lanterns and could not speak until he heard a hymn, how he lit the Lamp at last and held the dark back, and that he still keeps it. Then you say his words, one at a time, exactly as he said them. That he kept the light. That he was not afraid, at the end. That the shawl was warm, every night. You take it from your pack, faded blue, smelling of lamp smoke, and lay it in her hands.
+
+She holds it against her face for a long moment without a sound. When she lowers it, her eyes are dry and fierce and wet at once. "Somewhere to be," she says hoarsely, at the last line. "Of course he did. Stubborn old goat. Forty years, and he never once came home for the harvest." A short, cracked laugh breaks out of her. "I'd have told him to come home."
+
+She asks what you ask of her, nothing; you ask nothing. She says she will walk to the Lamp, three days' road, to see it with her own eyes, and she will bring wool for the keepers' blankets and her loom's share of oil every winter for as long as she lives. Then she insists you eat, and she will not be argued with.
+
+It is mid-morning. You earned 50 XP for carrying the word faithfully, and you stand at 350 of the 900 you need for level 3. The Lamp Watch is done. Greywater has no priest, and a girl at the window is already whispering about the healer who has come. Several doors along the lane are cracked open.
+
+What does Brannoc do?
+
+=== REPLY cleric2-47-12 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 4 ~9:15 AM: Brannoc found her at the loom-house with the blue door in Greywater. She is a broad, grey-braided woman of about sixty, quick-tongued. H
+The girl with the yarn basket points down the lane without a word, then looks at your amulet and says, "Is it Hob? Is he all right?" She is gone before you can answer, running ahead toward the weir. You slip the shield onto your back so you look less like a soldier. That leaves your AC at 16 until you ready it again.
+
+The house with the blue door is narrow and tall, with a loom clacking inside. The clacking stops at your knock. The woman who opens is broad and grey-braided, about sixty, with ink-stained fingers and her brother's long jaw. Her eyes go to your amulet, and then to your face, and something in her sets itself like a person bracing against a wind.
+
+"You're not here about wool," she says.
+
+"Maud Marrow? My name is Brannoc, and I come from Hob. May I come in? I have something of yours in my pack, and I'd like to tell you about him in my own words."
+
+She stands back and lets you in. The room is bright with hanks of dyed wool hung from the beams, and a half-woven bolt of blue stands on the loom. You sit when she tells you to. You tell her plainly that he is dead, and has been since harvest, and that he kept the Lamp lit until the end, and afterward as well. You tell her about the ghouls and the village. Then you give her Hob's words exactly, one at a time: that he kept the light, that he was not afraid at the end, that the shawl was warm every night. You take it from your pack and put it into her hands.
+
+She holds the soft faded wool against her face. For a long while she doesn't make a sound. Then, wet-eyed and furious, she says, "He should have come home." You wait. And then you give her the last of it, gently: that he had somewhere to be. She laughs, a cracked sound that turns into weeping, and she nods and nods.
+
+"The old fool," she says. "The old, stubborn fool. Of course he did."
+
+When she can speak again she asks questions: how the Lamp stands, who tends it, whether he suffered. You answer every one honestly. She wipes her face with the shawl and says that she will go up and see him, and that she will bring thread and a loom-stool and stay as long as the Lamp needs a keeper's sister. She asks you to wait while she shuts up the loom and tells her neighbor. She also says, sharply, that you look like you haven't eaten.
+
+It is a little past nine in the morning. Your errands are done, your prayers are full, and the road is open in every direction. What does Brannoc do?

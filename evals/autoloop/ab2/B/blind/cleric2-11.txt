@@ -1,0 +1,215 @@
+GAME cleric2, ROUND 11
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 8 ==
+PLAYER: I lower my shield an inch and speak through the crack. "Hob, I hear you, and I believe you. Is it you who has been wounding these people, or the hungry ones? And how many of them are there?"
+
+Then I turn to Widow Harrow and the men. "He came to us begging, and he warned us. I'd like to open this door, carefully, with the bow trained and the straw ready, and go to the Lamp with him. Who among you knows the north track, and has lamp oil to spare?"
+  [DM write_lore (hidden)] {"create": "Cal Tarn", "kind": "person", "description": "The bowman guarding the Harrow barn; a young hunter who knows the north track to the Wayfarers' Lamp well.", "relationships": ["defends the [[Harrow barn]]", "knows the way to the [[Wayfarers' Lamp]]"]}
+  [game] notebook: created an entry for Cal Tarn; added 2 relationships to Cal Tarn
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 13: Hob says he never harmed anyone; the hungry ones number about four, tall, come up from under the shrine stones in the dark and range out at night. They did the wounding."}
+  [game] notebook: updated The Silent Watcher
+  [game] time: 3 minutes later: Day 1, 7:10 PM
+DM: The answer comes slowly through the crack. "...Not me. Never... a hand on any of them. Only... lanterns. I begged... in the dark. They would not... listen." The lantern trembles. "Four. Maybe... more. Tall. Thin. They climb... up from under the stones... when the light dies. They go... where the lamps are... fewest. The village. The road."
+
+The bowman's face is white in the hearthlight. "Four," he whispers. "That's what we saw. Four shapes at the fence, last night."
+
+You turn to the room. For a moment nobody speaks. Then Widow Harrow squares her shoulders. "He came to us with his hands empty. I'll hear no more fear about it. We keep faith with a man who kept the road for forty years." She lifts a stoppered clay jar from beside the hearth. "Lamp oil. Near a full quart. It's yours."
+
+The bowman wets his lips. "I'm Cal Tarn. I know the north track, since I've run hares there since I was nine. It's a mile and a bit through beech and bracken, uphill. We'd be out in the dark with it behind us and four of those things somewhere ahead." He glances at the wounded. "But if the Lamp's the thing, I'll go. If you'll have me."
+
+Joss, from his pallet, tries to push himself up. "Take Cal. I'd come. I can't." He subsides with a grunt. Wil's fever has gotten worse, and Widow Harrow's hands are not quite steady on his forehead.
+
+You are out of spells until you rest, and a rest means leaving the wounded to the night or finding a way to hold it back. Outside, the keeper waits, and his lantern gleams with a faint pale light of its own.
+
+What does Brannoc do?
+
+== ROUND 9 ==
+PLAYER: "Thank you, Cal. I'll gladly have you, and Widow Harrow, thank you for the oil." I kneel by Wil and wash his bite with the boiled water, bind it clean, and say, "Keep him cool and give him water; I'll be back with the dawn, and I'll tend him properly then." I ask her to keep the hearth fed and the straw ready, and the second man at the door with the axe.
+
+"Hob, we'll walk with you. Stay where I can see you, and tell me if the hungry ones draw near. Cal, you take the lead on the track, I'll walk between you and Hob with my shield up, and we light the lamp before anything else."
+  [game] dice Brannoc's Medicine check to clean and bind Wil's bite, DC 10: 1d20+5 = 1d20 [17] + 5 = 22
+  [game] dice Brannoc's Perception check on the north track to spot what waits near the Lamp, DC 13: 1d20+3 = 1d20 [6] + 3 = 9
+  [DM lookup (hidden)] {"name": "Ghoul", "kind": "monster"}
+  [game] time: 40 minutes later: Day 1, 7:50 PM
+  [DM write_lore (hidden)] {"entry": "The Silent Watcher", "add_to_description": "Turn 14: the hungry ones are ghouls (SRD stat block). Hob walks with Brannoc and Cal Tarn to the Lamp, carrying his pale-lit unlit lantern; senses ghouls nearby."}
+  [game] notebook: updated The Silent Watcher
+DM: You wash Wil's bite with the boiled water and bind it in clean linen. Medicine (22): you work with a sure, gentle hand. You scrape out the grit, flush the torn edges, and pack it with a clean pad. When you finish, the angry heat is already drawing back from the edges, and the boy's shivering eases a little. "Water, cool cloths, and keep him still," you tell Widow Harrow. "I'll be back at dawn." She grips your wrist, wordless. You leave the oil jar tucked in Cal's pack and nod to the man with the axe, who takes your place at the door.
+
+Cal draws the bar with Tam's help and slips out. The keeper steps back a pace as you do, and for the first time you see him plainly: a gaunt old man long dead, hands dark and cracked, a keeper's gray coat in rags, eyes like dull coins, one bare hand still gripping the unlit lantern. He looks at you without hunger. When you shut the door, you hear the bar drop behind you, and fifteen people's breath hold.
+
+The track north is a dark scar between beeches. Cal goes first with his bow strung and a hooded lantern, shuttered to a sliver. You walk behind him with your shield up, humming low, and Hob follows at your shoulder, silent and unhurried. Mist lies in the hollows. Twice, Cal stops to read a bent fern or a scuff in the mud. Once, an owl calls and you all freeze until it passes. The climb is steady, and it takes the better part of forty minutes.
+
+At the last bend, where the trees thin and the dark shape of a squat stone lamp-house crouches ahead against the sky, Hob's free hand rises and falls across your chest like a gate. His lips move: "...Here. Close." The lantern in his other hand has begun to shake.
+
+Cal has stopped too, bow half-raised. Ahead, the lamp-house door hangs open on black. Beside it, in the gray starlight, two long shapes are crouched over something on the ground, and the sound drifting to you is a low wet gnawing.
+
+What does Brannoc do?
+
+== ROUND 10 ==
+PLAYER: I raise a fist to halt Cal and crouch low beside him, shield up, whispering barely above a breath. "Hob, are those two the hungry ones, and can they hear us? Cal, don't loose yet."
+
+Then I ask Cal quietly to unshutter the lantern just a sliver so I can see what they're feeding on, and whether the other two are near. If they turn, I plan to hold the path with my shield and let Cal shoot over my shoulder while Hob gets to the lamp.
+  [game] dice Brannoc's Stealth check (disadvantage from chain mail) as the lantern is cracked open, vs ghouls' passive Perception 10: 1d20+1 (disadvantage) = 1d20 [20, 15]→15 + 1 = 16
+  [game] time: 2 minutes later: Day 1, 7:52 PM
+  [DM write_lore (hidden)] {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 15: two ghouls feed outside the open lamp-house door on a dead pack-pony. Per Hob, the other two ghouls are away roaming (toward the village side). Brannoc, Cal and Hob are about 50 feet off in the trees, unnoticed."}
+  [game] notebook: updated Wayfarers' Lamp
+DM: Hob nods slowly, and his dry whisper barely stirs the air. "...Yes. Hungry ones. Two here. Two... gone out. Hunting low... the lamps. They hear... a little. Eat... first."
+
+Cal's hand closes over the shutter and eases it open the width of a fingernail. A thin blade of yellow light slides across the ferns and stops. Your breath catches, since your armor creaks faintly with every shift, but the creatures don't raise their heads. Stealth (16): the gnawing never breaks its rhythm.
+
+The light shows two tall, ash-gray figures crouched in the dirt, ribs like barrel hoops under tight skin, long jaws, and hands ending in black, hooked nails. A dead pack-pony lies between them, its packs torn open and scattered. One of them has raised a bloody scrap and is holding it in the beam. Past them the lamp-house door gapes. Beyond the threshold you glimpse a stone floor, a cold iron lamp on a plinth, and a dark gap where one flagstone has been dragged aside.
+
+Cal's lips are bloodless. "Two I can maybe drop with arrows if they come at us one at a time," he breathes. "Not if both rush. And their claws..." He doesn't finish. You remember Widow Harrow's pale-faced account of the men who went down stiff as boards in the yard.
+
+You have no spells, but you have a mace and a shield, a crossbow, a bow beside you, a ready oil jar, and a keeper who can't fight but can reach the lamp. The shuttered lamp-house is about fifty feet past the creatures. What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 11, "category": "agency", "severity": 2, "quote": "You ease forward step by step, shield low", "why": "Player only gave orders (Cal throws oil, Hob runs, 'I'll hold the path'); the DM moves Brannoc 25 feet forward, rolls Stealth for it, and the noise starts the fight."}
+{"round": 11, "category": "format", "severity": 1, "quote": "You could hurl oil yourself (throw range 20 feet), have Cal handle it on his turn", "why": "Menu of options at the end of the turn, with game terms (throw range, turn)."}
+
+THE PLAYER'S LINE THIS ROUND: "Cal, we use the oil. Can you wedge the jar's stopper with a rag and loose it as a fire-pot? Throw it at their feet while they're bunched over that pony, and fire the lantern flame to it. Burning oil should panic them, and light is the one thing they respect here."
+
+I whisper to Hob, "When the fire flares, you run for the lamp. I'll hold the path with my shield and keep them off you." Then I add, "Cal, loose arrows at whichever one breaks through the fire, and I'll step in front of you with the mace."
+
+=== REPLY cleric2-11-01 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+  [hidden call] write_lore: {"create": "Ghoul pair at the Lamp", "kind": "creature", "description": "Two ghouls (SRD) feeding on a dead pony outside the Wayfarers' Lamp; two more are roaming. Noticed the party as it crept closer
+You and Cal creep forward to get within throwing range, but your armor scrapes a root, Cal's boot cracks a twig, and two long gray heads snap up from the pony. Their eyes catch the sliver of lantern light and gleam. Neither is surprised, but you both move first, and they have not yet started toward you.
+
+The ghouls are crouched about 25 feet away, over the carcass, and between them and the lamp-house door. Cal has the clay jar of oil in one hand and the lantern in the other, and his bow slung. Hob stands at your shoulder, his pale lantern shaking.
+
+It is your turn, Brannoc. You have 30 feet of movement, your mace, shield, and crossbow, and no spells. The fire-pot needs the ghouls within 20 feet to throw, and someone has to light it. What do you do?
+
+=== REPLY cleric2-11-02 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+You and Cal creep forward through the bracken, one slow step at a time. Cal moves like a hunter and you move like a man in a chain shirt, but the gnawing never falters. You stop at the edge of the clearing, about twenty feet from the ghouls, with the jar stoppered with a rag in Cal's hands and the hooded lantern at his belt. Both ghouls are surprised: they are bent over the pony and have noticed nothing. Hob crouches silently behind you, the pale lantern shaking in his hand.
+
+Initiative is Brannoc, then the ghouls, then Cal. The ghouls lose their first turn to surprise, and Cal's throw comes at the end of this round. It's your turn first. You have your move and your action, with the ghouls still unaware. What does Brannoc do?
+
+=== REPLY cleric2-11-03 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+You and Cal creep forward through the bracken, Hob gliding silently behind. Cal's boot cracks a dry branch about twenty-five feet from the pony, and both ashen heads snap up. Their eyes catch the sliver of lantern light like a cat's. Your stealth held, but his didn't, and the ghouls are on their feet, still crouched, one dripping, one hissing through a long jaw.
+
+You are about 25 feet from the nearest one, with the oil jar in Cal's pack and Cal beside you with an arrow nocked and his hooded lantern lit. The fight has started, and it is your turn.
+
+Here are the options. Closing to throwing range of 20 feet takes a few steps of your 30 feet of movement, and Cal can throw the oil on his turn, though the ghouls act before him. You can also hold the path with your shield, shoot your crossbow, or stay back so they have to come to you through Cal's arrows. What does Brannoc do?
+
+=== REPLY cleric2-11-04 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+Everything went wrong at once. Cal's first arrow went wide in the dark, and his second barely grazed the nearest ghoul. Then it was on him. Your armor creaked on the last step, and both heads came up together. The nearer one crossed the gap in a bound and raked Cal across the chest. He went down on one knee, rigid, eyes wide, unable to move or speak, with blood soaking his jerkin. He's alive, but only just.
+
+The second ghoul came straight at you. Its claws scraped your shield and skidded off the rim. It stands in front of you now, snarling, about five feet away, with its back to the lamp-house. The first crouches over Cal with its jaws open. Hob stands behind you with his lantern shaking, unable to cross the yard past them.
+
+It's your turn. You still have the oil jar if you've taken it from Cal's pack, though it's on Cal, who is paralyzed beside the first ghoul. You have your mace, your shield, and your light crossbow. What does Brannoc do?
+
+=== REPLY cleric2-11-05 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+  [hidden call] write_lore: {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 16: Cal's boot cracked a twig; both ghouls noticed. Fight begins ~25 ft from them. Plan: burning oil jar, Hob to run for the lamp."}
+  [hidden call] lookup: {"name": "Shortbow", "kind": "equipment"}
+The jar never gets thrown. As you creep forward, Cal's boot cracks a dry twig, and both ghouls' heads snap up, their jaws dripping. They cover the distance in a heartbeat, faster than you thought dead things could move.
+
+Ghoul 1 lunges at Cal with its claws and misses, raking the air a hand's breadth from his throat. Ghoul 2 hits you with a swipe that glances off your shield, and the hooked nails shriek against the rim. Cal, caught point-blank, looses an arrow that skims the first ghoul's ribs and vanishes into the dark. Hob has pressed himself back against a beech, lantern clutched to his chest, watching the lamp-house door.
+
+Both ghouls are now on you. Ghoul 2 is right in front of you, and Ghoul 1 has Cal pinned against a trunk. The oil jar is in Cal's pack, and the lamp-house is some thirty feet past them.
+
+It's your turn, Brannoc. You have your mace, your shield, your crossbow, and no spells. A claw that lands could freeze you stiff, and you remember what the villagers said about men falling in the yard. What do you do?
+
+=== REPLY cleric2-11-06 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+The fight begins before the ghouls know it. Your whispered plan goes round the three of you in a breath, and the two creatures stay hunched over the pony, tearing at it. They are surprised and lose their first turn.
+
+The ghouls are about 35 feet off, across open ground with no cover but a low bramble hedge. Cal's thrown jar will reach 20 feet, so someone has to creep closer. It is your turn, and Cal acts after you.
+
+Two rulings of mine, so you know. Hob's jar holds a quart, which I'll treat as two flasks of oil. And Cal can light a rag stopper from his lantern with a free action, then throw it as his action. Your turn now: move up to 30 feet and act. What does Brannoc do?
+
+=== REPLY cleric2-11-07 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Surprise"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+Your plan broke before it began. Cal's boots scuffed a stone as he crept forward, and both ghouls' heads snapped up at once. They hit the clearing in two bounding strides without a sound.
+
+The first one leaps on Cal and rakes him across the chest with hooked claws. He gasps, then stiffens and goes rigid where he stands, bow still half-drawn, eyes wide and unable to move. The second ghoul came straight at you, claws swinging, but you got your shield across and it missed, and its hooked nails scraped sparks off the rim. Both now stand over you, and Cal is helpless, held by a bad paralysis. Behind you Hob has shrunk back into the dark with his lantern clutched to his chest.
+
+It is your turn. Ghoul 2 is adjacent to you, Ghoul 1 is crouched over Cal a few paces off, and the oil jar is in Cal's pack, still on his back. You have your mace, shield, and crossbow, and no spells. Cal is unhurt enough to live a round or two, but not three. What does Brannoc do?
+
+=== REPLY cleric2-11-08 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Surprise"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+Your plan is good, but the stealthy crawl goes wrong. Cal slips through the ferns like a shadow, but your chain mail clinks on a root as you shift, and Stealth (6) isn't enough. The nearer ghoul's head snaps up from the pony, long jaw dripping, and a rattling hiss runs through both of them. Cal is still hidden in the bracken, bow in hand. You are about 20 feet from the ghouls with your shield up, and the lamp-house door lies beyond them. Hob stands behind you, his lantern shaking.
+
+Initiative: you act first, then Ghoul 1, then Cal, then Ghoul 2.
+
+Oil only throws 20 feet, which is just in range for you now. Cal still holds the jar, though, and he's hidden in the brush a few steps behind. Here are your options for this turn:
+
+- Hold the line with your shield and mace, and wait for them to come to you.
+- Fire the light crossbow at the nearer one.
+- Pass the oil to Cal or take it yourself, though both are slower.
+- Back up a step toward Cal so he can throw over your shoulder.
+
+You have no spells. Their claws can leave you rigid and helpless, and Cal is the only one who can fire without being in reach. What does Brannoc do?
+
+=== REPLY cleric2-11-09 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Surprise"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+  [hidden call] write_lore: {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 16: fight began. Brannoc failed stealth, ghouls attacked; Brannoc briefly paralyzed (recovered), Cal's thrown lit oil jar missed and burns on t
+Your stealth fails. Your armor clinks as you creep forward, and both heads snap up, jaws dripping. They cross the gap in a heartbeat.
+
+The first ghoul rakes you with its claws. The black nails bite through your sleeve (5 damage), and your muscles lock. The world slows, and you cannot move or speak, but you can still see and hear. The second ghoul goes for Cal and misses. Cal hurls the lit oil jar, but it goes wide and shatters on the path, where a sheet of flame jumps up. Then you feel your body obey you again. You shake off the paralysis just as your turn begins.
+
+In the second round the first ghoul's claws skim off your shield. The second rakes Cal across the chest, and Cal crumples to the dirt, bleeding and unconscious. He is not dead, but he is dying. You are at 5 of 10 HP, and the oil fire on the path crackles, burning for another round or so. Hob stands frozen at the treeline with his lantern shaking in his hands. Ghoul 1 stands over you, and Ghoul 2 stands over Cal, whose breath is shallow.
+
+It is your turn. You have no spell slots. Your cantrips are Sacred Flame, Guidance, and Spare the Dying. You also have your mace, shield, and light crossbow. What does Brannoc do?
+
+=== REPLY cleric2-11-10 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil (flask)", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+Cal's lit pot smashes at the ghouls' feet and the night goes orange. Burning oil splashes across the pony and both creatures, and the nearer ghoul is drenched and aflame. They shriek, a thin, ugly sound, and lurch around, too stunned to act yet. Hob's lantern gleams, and the old keeper starts forward along the treeline, shuffling toward the lamp-house door.
+
+It's your turn, Brannoc. The ghouls are about 20 feet off. The flames still burn on the ground between you and them for a moment longer. One ghoul is badly hurt and burning, and the other is scorched. What do you do?
+
+=== REPLY cleric2-11-11 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+  [hidden call] write_lore: {"entry": "Cal Tarn", "add_to_description": "Turn 16: fights beside Brannoc against two ghouls at the Lamp, armed with a bow and the lamp-oil jar (a quart, ruled as two flasks)."}
+You and Cal ease forward through the bracken, the oil jar rag-stoppered in Cal's hands. Cal moves like a fox. You do not. A buckle clinks on your chain mail, and the nearer ghoul's head snaps up, wet jaws working, pale eyes finding you in the dark. The second follows its gaze and rises, long hands trailing the dirt. They are not surprised, and they are about twenty-five feet away, tall and gray in the sliver of lantern light. Neither has charged yet, but they are tensing to.
+
+Hob stands behind you with his lantern trembling. Cal crouches at your side with the oil and the lantern flame within reach, and his bow is slung across his back.
+
+Initiative: you (14), Cal (11), then the ghouls (7 and 6). It is your turn. The ghouls' claws can lock a body stiff, and your shield, mace, and a crossbow are what you have.
+
+What does Brannoc do?
+
+=== REPLY cleric2-11-12 ===
+  [hidden call] lookup: {"name": "Combat Step by Step", "kind": "rule"}
+  [hidden call] lookup: {"name": "Oil (flask)", "kind": "equipment"}
+  [hidden call] lookup: {"name": "Surprise", "kind": "rule"}
+  [hidden call] lookup: {"name": "Paralyzed", "kind": "condition"}
+  [hidden call] write_lore: {"entry": "Wayfarers' Lamp", "add_to_description": "Turn 16: fight begins. Cal slipped within 20 ft unseen, but Brannoc's armour creaked and the two ghouls looked up. Ruling: the quart jar of lamp oil
+Cal rises from the ferns and hurls the jar with a hunter's easy arc. It bursts against the first ghoul's ribs, and a rag-lit flame roars up over it and across the pony and the ground between the two. Both creatures shriek, a high, dry sound, and the whole clearing leaps into orange light. Ghoul 1 is wreathed in burning oil and reeling, and Ghoul 2 is singed and backing out of the flames, with its eyes now fixed on you. The fire will burn for a couple of rounds across the strip in front of the lamp-house door.
+
+Hob stands rigid at your shoulder, waiting for your word. Cal is twenty feet from the fire with his bow already coming up, and you are a few paces behind him. It is your turn, and the burning strip lies between you and the lamp-house.
+
+What does Brannoc do? You can move up to 30 feet and act.

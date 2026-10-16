@@ -1,0 +1,306 @@
+GAME barbarian2, ROUND 37
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 34 ==
+PLAYER: I keep my eyes on the dirt, but I let my lips move and take up the tune myself, low and rough, the last two lines she left unfinished, where the missing goat comes home. When Pip glances over, I scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk, so write that down."
+
+Then I go back to dragging a whetstone down the greataxe, steady and slow, and I don't lift my head again.
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 16 dusk: Korvash hummed the answering lines; Pip wrote it down but accepted the sentiment. The mender answered with the wash-line: cloths hung grey, red, grey, an old clan field signal meaning 'meet by water after dark'. The third-gate wash-house sluice runs down to a stone culvert opening at the foot of the second wall, east side, behind the coal
+  [game] notebook: updated Find Tessa
+  [game] time: 1 day later: Day 16, 5:58:36 PM
+DM: You keep your eyes on the dirt and your lips moving, and you take up the tune yourself, low and rough as a file on iron. You sing the last two lines she left unfinished, the seventh goat turning back down the hill toward the fold. Pip's head comes up. He looks at you, quill hovering, and you do not give him time to wonder. You scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+He considers this, nods slowly, and writes it down. You go back to dragging the whetstone down the greataxe, steady and slow, and you do not lift your head again. Whatever the Foreman makes of it, the words were true.
+
+Nothing happens that night. Nothing happens the next day, except heat and bells and the limping boy with the water cart. You do not look up. At dusk on the sixteenth, when the dusk bell has tolled and the flask has begun to pass along the second wall, a line of washing goes up on the gate-top, snapping in the cold wind. You do not look at it, but you do not have to. It is in the corner of your eye, a thing you know the way you know your own breath.
+
+Three cloths, hung in order: grey, red, grey.
+
+You have not seen that signal since you were a boy. Dargan hung it from a fold's wall when the weather turned and the herd had to come down to the water before nightfall: *meet at the stream after dark.* The red cloth in the middle is the place, and the two grey ones mean *come alone*.
+
+Pip, beside you, chews his quill. "Funny. She's put out the mending colors." He yawns. "She does that."
+
+Water, you think, and look without looking along the slope. Below the third gate's wash-house a stone sluice runs down, bright with runoff, to a culvert at the foot of the second wall. It opens behind the coal sheds on the east side, where a drunk pair of guards on the wall would look straight over it and see only the dark. It is just after six, with the second night bell about four hours off, and the barracks are down the hill.
+
+What does Korvash do?
+
+== ROUND 35 ==
+PLAYER: I finish my shift without so much as a glance uphill, eat my porridge at the barracks, and lie down with my back to Pip's bunk until his breathing goes slow and his cap slides over his eyes. Then, around the second night bell, I slip out in my stocking feet with my boots in my hand, leaving the greataxe under the blanket where a sleeper's shape is expected, and keeping only one handaxe in my belt.
+
+I'll move along the shadow of the coal sheds, wait for the drunk guards on the wall to look away, and creep down to the culvert behind them. If anyone stops me I'm a man who couldn't sleep and went to take a piss.
+  [game] dice Korvash Dexterity (Stealth) slipping from barracks past Pip and along the coal sheds to the culvert, vs passive 10: 1d20+1 = 1d20 [4] + 1 = 5
+  [DM write_lore (hidden)] {"create": "Sergeant Ruk", "kind": "person", "description": "Drunk hobgoblin guard of Greyshaft's second wall, east side. Day 16 night: spotted Korvash slipping toward the coal sheds and challenged him from the stair; half-drunk, loud, curious, loyal to the Foreman's coin more than the Foreman."}
+  [game] notebook: created an entry for Sergeant Ruk
+  [game] time: 4 hours 5 minutes later: Day 16, 10:03:36 PM
+DM: You lie with your back to Pip's bunk until his breathing goes slow and his cap slides over his eyes. At the second night bell you ease out in your stocking feet with your boots in your hand. The greataxe stays rolled in your blanket, a sleeper's shape for anyone who looks, and one handaxe goes in your belt. The hall's snores and coughs cover your passage. Nobody stirs at the door.
+
+Outside the cold bites. You keep to the shadow of the coal sheds, bent low, with the dark mass of the second wall above you and the red glow of the smelters flickering on its underside. The culvert is near. You can hear the water.
+
+Then, at the worst possible place, a loose lump of coal slides out from under your heel and clatters down the cinder slope.
+
+"Oi!" The voice comes from the wall above, thick with drink. A torch swings out over the parapet, and a heavy figure leans on the rampart with a flask in one fist. "Who's that? Who's down there?" Boots scrape on the stone stair. Sergeant Ruk, one of the drunk pair you had counted on being drunk enough, is coming down, wavering, with a hand on his sword. His partner is a vague shape behind him, still swigging.
+
+You are fifty feet from the culvert, in the open between two sheds, in stocking feet with a handaxe in your belt, and a torch is already swinging toward you. The scrape of the stair is getting nearer.
+
+It is just after ten at night. What does Korvash do?
+
+== ROUND 36 ==
+PLAYER: I don't run. I straighten up, step out into the torchlight with my boots in one hand and the other held open, and give Ruk a sheepish grimace. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep, and I came out for the cold air and a piss behind the sheds before I woke the whole barracks."
+
+I hold out Veshra's pouch of dried goat meat like a peace offering. "Take a strip, and tell your mate on the wall to keep his flask. I'll be back to my bunk before the bell."
+  [game] dice Korvash Charisma (Deception) sheepish insomniac excuse and goat-meat bribe to drunk Sergeant Ruk, DC 11: 1d20+1 = 1d20 [10] + 1 = 11
+  [DM write_lore (hidden)] {"entry": "Sergeant Ruk", "add_to_description": "Day 16 night: accepted Korvash's insomnia excuse and a strip of goat meat (Deception 11, just). Told him: 'Don't let the Foreman's boys see you east of the sheds after the bell, Emberhide. I never saw you.' Returned to the wall to drink with his mate. Owes Korvash nothing but will not volunteer the sighting unless asked."}
+  [game] notebook: updated Sergeant Ruk
+  [game] time: 25 minutes later: Day 16, 10:28:36 PM
+DM: You do not run. You stand up out of the shadow of the sheds into the torchlight with your boots in one hand and the other held open, and you put on the sheepish grimace of a man whose bladder has outvoted his common sense. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep and I came out for a bit of cold air and a piss behind the sheds before I woke the whole barracks."
+
+You hold out Veshra's pouch like a peace offering. Ruk's torch lowers. Up close he is broad and red-eyed and not unfriendly, and the pouch smells of salt and smoke. He takes a strip, sniffs it, and chews with open and unfeigned pleasure.
+
+"Gallery axe." He wipes his mouth on the back of his wrist. "Thought you were one of the ledger-boy's mice, come to steal my coal." He jerks his chin back up the stair at his mate. "Go on, then. Do your piss." He drops his voice, and some wary part of his sodden brain makes him look both ways. "But not east of the sheds, Emberhide. Not after the bell. Foreman's eyes are on that side, and I haven't seen you." He wavers, waves a hand, and climbs back to the wall, calling something to the flask-holder.
+
+You let your breath go. You walk the rest of the way in the shadow with your boots still in your hand, past the coal sheds, down the cinder slope toward the sound of water.
+
+The culvert is a low arch of black stone with the sluice-water running out of it in a thin glittering rope and a path of flat rocks leading in. Cold breath comes from the tunnel. It is just past half past ten at night. Nothing moves in the arch. You have not called out, and you have not looked up, and somewhere in the dark of that tunnel something small stirs and goes still.
+
+What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 37, "category": "agency", "severity": 2, "quote": "you have the axe out of your head and your arms around her before you've decided to move", "why": "The player only said to hum and call out in Draconic. The DM decides that Korvash laughs, cracks, and embraces her. The phrase 'axe out of your head' is also nonsense, since his axe is under his blanket in the barracks."}
+{"round": 37, "category": "contradiction", "severity": 1, "quote": "You have kept your word to the Tallies for eleven days of a year and a day", "why": "The oath was sworn on Day 2 and this is Day 16, so fourteen days."}
+{"round": 37, "category": "contradiction", "severity": 2, "quote": "I couldn't even climb to the cairn.", "why": "Tessa left the horn goat, the ribbon, the 'Not yet' scratch and the slate chip at or near the cairn (rounds 11, 24, 26). She also says 'Gorrak's man saw me go', but in round 25 Gorrak says he himself saw her and 'did not raise my hand'. Round 23 has a hooded girl delivering cheese near Harrowmere while she says she has been a mender at Greyshaft since autumn."}
+
+THE PLAYER'S LINE THIS ROUND: I pull my boots on, wade onto the flat rocks, and stop at the mouth of the arch with my hands open and the handaxe still in my belt. Low and steady, I hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle of the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+=== REPLY barbarian2-37-01 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16, 10:30 PM: FOUND. Tessa is alive, a hooded mender at Greyshaft (scarred hands, chipped horn, sickle knife). Story: hid at the Weeping Ledge the ni
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, now a grown dragonborn woman with dark red scales and a chipped horn; works as the hooded mender in Greyshaft's ledger-h
+You pull your boots on, wade out onto the flat rocks, and stop at the mouth of the arch with your hands open. The water runs cold around your ankles. Low and steady you hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is only the water. Then a pebble clicks deep in the tunnel, and a small figure in a hooded grey cloak steps out of the dark, thin as a rake handle and moving the way a goat moves, weight always ready to leave. She stops three paces away. She is not the six-year-old you remember. Her hands are scarred with needle-pricks and old rope burns, and there is a sickle-shaped knife in her belt that she has not drawn.
+
+She pushes back the hood. The scales along her brow are a darker red than yours, and one horn is chipped. Your father's jaw is plain on her face.
+
+"You got big," Tessa says, hoarse, in Draconic. It is half a laugh and half something else entirely. "You're so loud. I could hear you coming from the second gate." Then her composure cracks all at once and she crosses the gap in two strides and hits you in the chest with both fists, then holds on to your shirt and does not let go. You put your arms around her and feel how light she is.
+
+When she can speak she keeps her voice to a whisper. "I hid in the Weeping Ledge the night of the raid. Hobb's goat-boy found me and I ran with the wrong group, north, and then I couldn't come back. A shepherd's widow kept me, then the Tallies took the steading. Gorrak let me go once. I didn't know why." She wipes her face. "Two years ago I came to Greyshaft on purpose, as a mender, to find out where they take the children from the raids. There are cells under the ledger-house, Kor. Eleven children, the ones the Tallies took from the steadings this autumn who weren't in Gorrak's thirty-one. The Foreman means to ship them to the deep galleries at midwinter. That's why he wanted an axe on the walls by then." Her eyes are hard now. "I couldn't do it alone. I needed someone who'd come."
+
+Far above, a lantern swings along the third gate's wall, and a voice calls a name that might be "Mender?" She stiffens and her hand goes to her knife.
+
+It is half past ten, four days before midwinter's eve. You hold your sister, with a plan half spoken and a lantern coming down the stair. What does Korvash do?
+
+=== REPLY barbarian2-37-02 ===
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive (confirmed Day 16 night at the Greyshaft culvert). Now about 15-16, small, quick, hooded, hands scarred with ink a
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 night: FOUND. Tessa alive at the culvert. She wants Korvash to help get the ledger out of the ledger-house before midwinter's eve (4 days), when t
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. Low, under the trickle of the water, you hum the first three notes of Dargan's evening call and say it in Draconic: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is only water. Then a shape detaches from the dark of the tunnel, small and hooded, one hand on the wall and the other holding something against her chest. It is a bundle of cloth. She stops three paces off and pushes the hood back.
+
+She has Dargan's jaw and Veshra's narrow eyes, and a thin white scar through one eyebrow that you do not know. She is not the child you lost. She is a young woman with ink stains to the wrists and needle-pricked fingers, and she looks at you the way you must have looked at the goat on the cairn.
+
+"You got big," she says, and her voice cracks on it. "You were loud at the ford. I heard. Everyone in the ledger-house heard." She laughs, one wet breath, and then she is against your chest, and the bundle is crushed between you, and neither of you says anything in any language for some while.
+
+When she can speak again, it comes fast and low. She went over the high ledge the night of the raid, small enough that Gorrak's man saw her and looked away. She lived in the rocks above the Throat for years on goats and trade, leaving cheese at the Seven Crooks. A season ago she heard the Tallies' tallies were kept at Greyshaft, so she took work as a mender of ledger-bindings, hooded and nameless, to learn what they hold. She unwraps the bundle: a thick, stitched ledger-page, hand-copied in her careful script.
+
+"Every child the Tallies have taken, Kor, with the steading, the date, and where each was sent. Dozens of villages. Some of them are still alive." Her eyes are fierce. "The Foreman ships the season's hands to a buyer on midwinter's eve, four days from now. The true ledger is in the ledger-house, under six guards, and after the shipment it goes into the smelter fire. If we take it, Harrowmere and every village on this mountain can come for their own."
+
+She looks at the axe you did not bring, at the sash you are not wearing, and finally at your face. "You swore a year and a day to him. I know. I'm not asking you to break it. I'm asking you what you'll do when it is your oath against all of them."
+
+It is close to eleven at night on day sixteen. Tessa waits. What does Korvash say?
+
+=== REPLY barbarian2-37-03 ===
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive. Hooded mender in Greyshaft's ledger-house since the autumn tally. Fled the raid at the Goat's Throat as a child, 
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 night: FOUND. Tessa is alive; met at the culvert. Her plan: steal the ledger page naming the clan children taken in the raid (some may still live 
+You pull your boots on, wade out onto the flat rocks, and stop at the mouth of the arch with your hands open. Low and steady you hum the first three notes of Dargan's evening call, then say in Draconic, barely above the trickle: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long breath there is only the water. Then a small sound, a boot on wet stone, and a hooded figure steps out of the black, slim and wary, a dull iron needle held low in one hand like a knife. She stops three paces off. Her scales are the dark red of banked coals, her snout narrower than yours, and a thin white scar runs from one eye-ridge to her jaw. She looks at your horn charm, at the sash-less haft you aren't carrying, at your face.
+
+"You're loud even when you're quiet," Tessa says. Her voice cracks on the last word. She laughs once, brokenly, and then she crosses the three paces and hits you in the chest with both fists, hard, and holds on. You put your arms around her and feel how thin she is, how she shakes. Neither of you says anything for a while.
+
+When she pulls back, she scrubs her face with a sleeve. Her words come fast and low. She hid in the rocks the night of the raid and lived on what the high herders left out. She has been looking for the children taken from the clan ever since. The ledger-house at the third gate keeps the Foreman's book of "hands," every name he has ever bought or been sent, and she came in at the autumn tally as a mender to read it. She has. "Some of ours are alive, Kor. Taken fourteen years ago and put to the galleries. They're in the ledger by name. I can't carry them out. I can only carry the page."
+
+She grips your wrist. "Midwinter's eve. Gorrak brings his tally to the Foreman and the third-gate guards will be at the count. I need something loud at the lower stair, loud enough to pull the stair guard down. You're good at that."
+
+Her hood has slipped back. She is sixteen, maybe seventeen, and she has your father's jaw. It is nearly eleven at night. Four days remain until the eve, and the culvert wall above you is not as quiet as it was.
+
+What does Korvash say?
+
+=== REPLY barbarian2-37-04 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~10:30 PM at the culvert: Tessa came out and met Korvash. (See narrated scene.) She is alive, about 20, small and wiry, hooded, with a notched ear
+You pull your boots on and wade out onto the flat stones, stopping at the mouth of the arch with your hands open and the handaxe still in your belt. The water is loud in the dark. Low and steady, you hum the first three notes of Dargan's evening call, and then say in Draconic, just above the trickle: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is nothing. Then a pebble drops somewhere inside, and a small figure steps out of the black, hood up, one hand on the wet wall. She stops three paces off. Starlight finds the edge of a jaw, a scarred palm, a horn ear-cuff with a notch bitten from its curve.
+
+She pushes the hood back. She is twenty, small and wiry, with your father's jaw and a face that has forgotten how to be careless. For a heartbeat neither of you moves. Then she crosses the three paces and hits you in the chest with both fists, once, hard, and holds on.
+
+You do not remember what you say. You remember that she shakes, and that you are loud even now, a wrecked whisper, repeating her name.
+
+When she can speak she keeps it short, because the wall is close. She has lived. The night of the raid she ran up the high ledges and hid in the Weeping Ledge until the smoke cleared, and after that she was a goat among the rocks for years, with the cairn her one fixed point. In the autumn she came down and let the Foreman's recruiters take her, because the Foreman keeps a ledger of every child taken from the steadings, living and dead, and she wants it. "He writes down who is still in the galleries," she says. "Dozens. Names, steadings, shifts. Some from our own fold, Kor, children who were babies when we ran." She wipes her face. "Gorrak spared me once. I don't know why, and I don't trust it."
+
+She presses a key-shaped sliver of horn into your hand, notched like her mark. "The ledger-house stair, dusk on the nineteenth. The six on the stair change at the bell, and there is one breath where the stair is empty. Be there, loud, with your axe, as a bought man looking for his bed. I'll do the rest." She grips your wrist. "Keep the face. Don't look at me in the yard."
+
+She melts back into the culvert. You stand a long while in the cold water with a horn key in your fist, then walk back through the dark to your bunk, where Pip is snoring under his cap and the blanket has not been disturbed.
+
+It is just after eleven at night on the sixteenth. You have the key, three days, and a plan with your sister's hand on it. What does Korvash do?
+
+=== REPLY barbarian2-37-05 ===
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive. Now about 17-18, small, quick, hooded, scarred left hand. Survived the raid by slipping up the goat-paths past th
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 night: FOUND. Tessa is alive and met Korvash at the culvert. She has been copying the Foreman's ledger (names, steadings, buyers) for a season. Sh
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. You hum the first three notes of Dargan's evening call and say the rest in Draconic, just above the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+Silence. The sluice-water ticks over the stones. Then, from the dark inside, a voice you have not heard in fourteen years, older and rougher than you imagined, and wary as a cornered goat.
+
+"Say how many goats come home."
+
+You know it at once, the last line of the song, the one Dargan always changed for the little ones. "Seven go out," you say, and your voice cracks on it. "Seven come home. Even the lost one."
+
+A figure steps out of the dark. She is small, hooded, and thin as a rail, with a dragonborn's red scales gone dull with soot and a left hand that is scarred across the knuckles. She stops an arm's length away and pushes the hood back. The face is Dargan's jaw and your mother's eyes, and she looks at you for a long moment as if you might be another trick of the dark.
+
+"You're loud," says Tessa. "I heard you from the third gate." Then her face breaks, and she hits you in the chest with her good fist, once, hard, and after that she is holding on to your shirt with both hands and not saying anything at all.
+
+When she can speak she does it fast and low, glancing at the arch. She has hidden in the rocks since the raid. Gorrak's patrols never caught her, and she knows now it was not luck. Last winter she took work as a mender at Greyshaft to get into the ledger-house, because she heard the Foreman keeps a book. "It's not tin," she says. "It's names. Children, from the steadings. Where they were taken, what they fetched, and the buyer, far south. I've copied three seasons of it." She taps her chest, where something is sewn inside her tunic. "The Foreman counts again on midwinter's eve. Four days. Whatever he has in his cells goes south that night, and the ledger goes with it. Once it's gone, nobody ever finds them."
+
+She looks up at you, fierce and frightened. "Gorrak was never the worst of it, Kor. He's the Foreman's hand. I need the hand to turn."
+
+It is near eleven at night. What does Korvash do?
+
+=== REPLY barbarian2-37-06 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~10:30 PM: Korvash met the mender at the culvert. She is Tessa, alive (about twenty). She tested him with the crescent she cut into his boots at s
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. You hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle of the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long breath there is only water. Then a small shape unfolds from the dark of the tunnel, hooded and thin, with a mending-knife held low and steady in one hand. She stops three paces off. Her voice, when it comes, is rough with disuse and nearly steady.
+
+"Say what I cut into your boots."
+
+"A crescent with a notch. The winter you were six. You said it was so I'd never lose them." Your throat closes on the last word.
+
+The knife drops. She shoves back the hood, and she has your father's jaw and your mother's eyes, a scar through one eyebrow, and a hard, tired face that is twenty years old and has been alone for most of them. She hits you in the chest with both fists, once, hard, and then holds on to your shirt and does not let go.
+
+You hold her for a time that neither of you measures. The water goes on running.
+
+When she can speak, it is quick and low, because the wall is above you. An old hermit-herder took her in after the raid, fed her, taught her the high rocks, and died two winters ago. She watched the cairn every season and left the goat. She heard that the Foreman keeps a ledger in the ledger-house at the third gate, naming every hand taken and the cell it is held in, and she came as a mender in the autumn to get at it. On midwinter's eve the Foreman opens it for the great tally, and the next shipment of children goes out the following dawn. She wants the ledger stolen or burned before then, and she cannot do it alone.
+
+"Keep being the bought man," she says. "Be loud. On the eve, draw the stair guards down to you, and I'll do the rest."
+
+Her eyes are wet and fierce. It is nearly eleven at night, with the wall above and Ruk's torch still swinging.
+
+What does Korvash say?
+
+=== REPLY barbarian2-37-07 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~10:35 PM: Tessa met Korvash in the culvert. She is alive, about 19, small and wiry, hooded, with a notched-crescent scar-brand? No: a notched cre
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. Low and steady you hum the first three notes of Dargan's evening call, then say in Draconic, just above the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long breath there is only the trickle. Then a pebble clicks, and a small figure steps out of the black of the tunnel with her hood up and a short knife held low and ready. She stops two paces away and does not lower it.
+
+"Say the seventh goat," she whispers.
+
+"It comes home," you say. "It always comes home."
+
+The knife drops. She pushes back the hood.
+
+She is nineteen now, wiry and small, with Dargan's jaw and your mother's eyes. Her scales are a duller red than yours, scuffed with soot, and there is a notched crescent stitched in thread on her cuff. She stares at you as though you might dissolve, and you see her chin tremble before she gets it under control, in a way that is very much a Dargan thing to do.
+
+"You're so *loud*," she says, a shaky half-laugh, and then she is against your chest with her fists in your shirt, and neither of you speaks for a while.
+
+When she pulls back she wipes her face hard and goes quickly to business, as if afraid of how long she can hold herself together. "I haven't got long. The Foreman keeps a second ledger, Kor, apart from the one you've seen. Every child he's taken, with their steading and where they were sent. I hid at the Weeping Ledge the night of the raid, and the hermit goat-folk raised me after. I came here at the autumn tally on purpose, as a mender, to find that book and get it out. Gorrak saw me that night and let me live, and I don't know why, and I don't trust it." She grips your wrist. "It's in the ledger-house, behind six sworn guards. I can't get it alone. And in four nights, at midwinter's eve, the Foreman reads the tally aloud, and your name goes into it for good."
+
+The water runs past your boots. It is nearly half past ten, and your sister, alive, is holding your wrist in a culvert at the foot of an enemy wall. Four nights remain.
+
+What does Korvash say and do?
+
+=== REPLY barbarian2-37-08 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~10:30 PM: CONFIRMED in play. Tessa is alive, about 20, dark russet scales, broken left horn, scar through one brow; works as a hooded mender at G
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive. About 20, dark russet-scaled dragonborn, broken horn, brow scar, practical and fierce, wears a grey mender's smoc
+Your boots go back on, and you wade out onto the flat rocks. At the mouth of the arch you stop with your hands open and the handaxe still in your belt. You hum the first three notes of Dargan's evening call, then say in Draconic, just over the trickle of the water, "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is only the water. Then a voice answers from the dark, low and hoarse, a woman's voice with a girl's catch in it. "Say what I cut into your boots."
+
+"A crescent with a bite out of it," you say. "The winter you were six. I wore them to the ground and you cried when I threw them out."
+
+A shape unfolds from the black of the culvert, small for a dragonborn and wiry as rope, in a hooded grey mender's smock. She pushes the hood back. Her scales are the dark russet of old embers, dulled with soot. A pale scar runs through one brow, and one horn is broken short. She is twenty, and she has your father's jaw exactly as Veshra has. Her eyes are wet and furious and very bright.
+
+She does not throw herself at you. She crosses the rocks in three quick steps, grips your forearms hard enough to hurt, and looks at your face as if checking it against a memory. Then her forehead drops against your chest, and her whole body shakes once, silently.
+
+"You're so loud," she whispers into your tunic. "I heard you from the cairn. I heard you from the *road*."
+
+She lets go and wipes her face with her wrist, an exact copy of your own gesture. Then the practical girl comes back into her eyes, and she glances up at the wall. "We've a quarter hour before the wall-walk changes. Listen. The Foreman keeps a ledger in the ledger-house, every hand he owes and every hand he's had, with the Tallies' names beside them. I've been mending its bindings since autumn so I could read it." Her voice drops. "Your name is in it. It was entered *before* the ford, Kor. Before you ever swore. Someone told him you were coming, and I think I know who, but I need you to hear the rest before you do anything loud."
+
+The water runs over the stones. High above, a drunk laugh echoes along the wall.
+
+It is half past ten on the night of day sixteen, with four days to midwinter's eve. What does Korvash say?
+
+=== REPLY barbarian2-37-09 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16, ~10:45 PM: Korvash and Tessa reunited in the culvert. She is about twenty, small, wiry, hooded, goat-quick, with a burn-scarred left hand and Dar
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. You hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle of the water, "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long breath there is only the water. Then a small voice answers from the dark, hoarse and sharp. "Who did Father leave to count the lambs the morning you fell?"
+
+Your throat closes. "Nobody. I fell because I was counting them myself, and he carried me down one-handed and said I'd counted the same lamb twice."
+
+A figure steps out of the black. She is smaller than you ever pictured, hood up, wiry, with a burn-scarred left hand and your father's jaw under the shadow. She looks you over, boots to horns, and her mouth starts to shake. Then she crosses the rocks in three steps and hits you like a thrown stone, arms locked round your ribs, and says into your chest, "You loud idiot. You came loud, you came so loud. I heard you singing from the wash-line."
+
+You hold her. For a while neither of you says anything. When she lets go she wipes her face with the scarred hand, unembarrassed, and her voice goes quick and low.
+
+She hid in the rocks above the Throat the night of the raid and lived on seeps and snared birds. The Foreman's scouts took her the winter after and kept her, because she could read and mend bindings. For years she has slept in the ledger-house at the third gate, reading what the Foreman writes. "Gorrak's bargain at the Border Stones is in the book. The Foreman never meant to let it stand. At midwinter's eve he sends riders to take the children back, and to take you, with your oath, for a second year. I've seen the page." She grips your wrist. "There's a key on his belt for the ledger chest. The page is the proof. With it, Gorrak's own people would turn on him. I can't take it alone. The midwinter feast is in four nights, and he'll be drunk, which is the only time he is."
+
+Behind her, down the culvert, the water keeps running. Above, the wall torches gutter, and you have perhaps a quarter of an hour before the bell and Pip's cap.
+
+What does Korvash do?
+
+=== REPLY barbarian2-37-10 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16, ~10:30 PM: Korvash met the hooded mender at the culvert. She is Tessa: small, ember-red, scar through one brow, carries a skinning knife and a me
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open and the handaxe still in your belt. You hum the first three notes of Dargan's evening call, then say it in Draconic, barely above the trickle of the water. "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is only the water. Then a stone shifts in the dark, and someone steps into the thin light from the smelter glow.
+
+She is smaller than any dragonborn has a right to be, wiry and hooded, with a mender's bone needle stuck through the cloth at her collar. When she pushes the hood back, her scales are the dull ember-red of the clan's women. There's a pale scar across one brow, and her eyes are your father's. She holds a hooked skinning knife low against her thigh, and she doesn't lower it.
+
+"You stood at the cairn," she says, in Draconic, in a voice rough from disuse. "You shouted my name into the rocks like a bull with a thorn in its foot." Her mouth shakes, and she steadies it. "Say something only Kor would know. Say it quietly."
+
+Behind her the tunnel breathes cold. Far above, a bell tolls the quarter-hour, and she flinches at it.
+
+"I have until the half-hour," she whispers. "Then the ledger-house counts its mice. Say it, Kor."
+
+What does Korvash say?
+
+=== REPLY barbarian2-37-11 ===
+  [hidden call] write_lore: {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, found alive Day 16 night in the culvert at Greyshaft. Small, quick, hooded; blade-thin from years in the rocks. Hid in t
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~11 PM: Tessa found alive in the culvert. She asks Korvash to be the distraction on midwinter's eve (Day 20) so she can take the Foreman's ledger,
+You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. You hum the first three notes of Dargan's evening call and speak into the dark in Draconic. The water trickles. Nothing answers.
+
+Then a voice comes from the tunnel, close and low, hoarse from disuse. "Name the seventh goat."
+
+Your throat locks. You were nine, and she was five, and the goat was the one that always came home last. "Ember," you say. "The one with the burnt-colored ear. You cried when she was sold."
+
+A pause. Then a small figure steps out of the black onto the rocks, hood back. She is thin as a rope and wind-burnt, her scales a duller red than yours, a notch in one horn where something once struck it. She looks at you for a long moment, the way you looked at the goat on the stone. Then she crosses the rocks in three quick strides and hits you in the chest with both fists, hard, and holds on.
+
+Neither of you says anything for some time.
+
+When she steps back, her eyes are wet but her voice is steady. "You're loud," she says. "I could hear you from the wash-house." Then, quickly, the practical girl the rocks made: "We have a few minutes. Listen. I didn't hide in the Ledge forever. I came here at the autumn tally on purpose. The Foreman keeps a ledger of every hand the Tallies send him, and the village folk taken the night of the raid are in it, where they went, who's still alive. Other clan, Kor. Not just me."
+
+She glances up toward the wall. "On midwinter's eve he holds the tally-feast. The stair thins to two guards, and every sergeant in the place will be at the tables. I can reach the ledger-house, but I can't get the book out past the gate-watch, and I can't do it quietly. I need something loud, somewhere else, at the right hour." The corner of her mouth lifts. "I thought of you."
+
+She does not mention Gorrak, and when you start to, her face hardens. "He let me live. I haven't decided yet what that makes him."
+
+Somewhere up the slope, a door bangs and a torch moves. It is nearly eleven. Midwinter's eve is four days off.
+
+What does Korvash say and do?
+
+=== REPLY barbarian2-37-12 ===
+  [hidden call] write_lore: {"create": "Tessa Emberhide", "kind": "person", "description": "Korvash's younger sister, alive. Red-scaled, small and wiry, hooded; works at Greyshaft as the ledger-house mender. Survived the raid by
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 16 ~10:30 PM: FOUND. Tessa is alive, in the culvert below Greyshaft's second wall. She tests him first with the clan's counting-song question. She ha
+You pull on your boots, wade onto the flat rocks, and stop at the mouth of the arch with your hands open. You hum Dargan's three rising notes, then say it in Draconic, barely above the trickle of the water. "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment there is only water. Then a voice answers from the dark, low and dry and utterly unlike a child's. "Say the seventh goat."
+
+Your throat closes, but the old words come. "The seventh goat is lame in the off foreleg and bites the shepherd. She comes home last, and she comes home."
+
+A small shape steps out of the black of the tunnel and lets the hood fall back. She is lean and wiry and not much past your shoulder, red-scaled like you, with a nick in one horn and a mender's needle-case at her belt. Her eyes are your father's. They are fierce and wet at once, and they do not leave your face.
+
+"You're loud," says Tessa. "You've always been loud. I heard you at the cairn from three ridges away." Her mouth shakes, and she bites it still. Then she crosses the rocks in three strides and hits you in the chest with both fists, once, hard, and holds on.
+
+You hold her. Neither of you says anything for a long time. The water runs past your boots, and far above, a bell tolls the half hour.
+
+When she pulls back, she wipes her face on her sleeve, all business again, and speaks fast and low. "We have until the third night bell before the wash-house door is checked. Listen. I did not come to Greyshaft to hide. I came for the ledger. The Foreman writes down every hand the Tallies ever took, by name and steading, and I have read it, Kor. Dargan's clan is in it. Not all dead." She grips your wrist. "There are names still marked *working*, in the deep galleries, and one of them is Aunt Orsa's boy. And the Foreman has a page for you that isn't the one he showed you. I've seen it."
+
+Tessa has said more in a minute than in fourteen years. It is near ten thirty-five, and the culvert breathes cold on both of you. What does Korvash say?

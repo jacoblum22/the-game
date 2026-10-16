@@ -1,0 +1,210 @@
+GAME barbarian2, ROUND 39
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 36 ==
+PLAYER: I don't run. I straighten up, step out into the torchlight with my boots in one hand and the other held open, and give Ruk a sheepish grimace. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep, and I came out for the cold air and a piss behind the sheds before I woke the whole barracks."
+
+I hold out Veshra's pouch of dried goat meat like a peace offering. "Take a strip, and tell your mate on the wall to keep his flask. I'll be back to my bunk before the bell."
+  [game] dice Korvash Charisma (Deception) sheepish insomniac excuse and goat-meat bribe to drunk Sergeant Ruk, DC 11: 1d20+1 = 1d20 [10] + 1 = 11
+  [DM write_lore (hidden)] {"entry": "Sergeant Ruk", "add_to_description": "Day 16 night: accepted Korvash's insomnia excuse and a strip of goat meat (Deception 11, just). Told him: 'Don't let the Foreman's boys see you east of the sheds after the bell, Emberhide. I never saw you.' Returned to the wall to drink with his mate. Owes Korvash nothing but will not volunteer the sighting unless asked."}
+  [game] notebook: updated Sergeant Ruk
+  [game] time: 25 minutes later: Day 16, 10:28:36 PM
+DM: You do not run. You stand up out of the shadow of the sheds into the torchlight with your boots in one hand and the other held open, and you put on the sheepish grimace of a man whose bladder has outvoted his common sense. "Easy, Sergeant. It's Emberhide, the new axe from the second gallery. The heat's cooked my sleep and I came out for a bit of cold air and a piss behind the sheds before I woke the whole barracks."
+
+You hold out Veshra's pouch like a peace offering. Ruk's torch lowers. Up close he is broad and red-eyed and not unfriendly, and the pouch smells of salt and smoke. He takes a strip, sniffs it, and chews with open and unfeigned pleasure.
+
+"Gallery axe." He wipes his mouth on the back of his wrist. "Thought you were one of the ledger-boy's mice, come to steal my coal." He jerks his chin back up the stair at his mate. "Go on, then. Do your piss." He drops his voice, and some wary part of his sodden brain makes him look both ways. "But not east of the sheds, Emberhide. Not after the bell. Foreman's eyes are on that side, and I haven't seen you." He wavers, waves a hand, and climbs back to the wall, calling something to the flask-holder.
+
+You let your breath go. You walk the rest of the way in the shadow with your boots still in your hand, past the coal sheds, down the cinder slope toward the sound of water.
+
+The culvert is a low arch of black stone with the sluice-water running out of it in a thin glittering rope and a path of flat rocks leading in. Cold breath comes from the tunnel. It is just past half past ten at night. Nothing moves in the arch. You have not called out, and you have not looked up, and somewhere in the dark of that tunnel something small stirs and goes still.
+
+What does Korvash do?
+
+== ROUND 37 ==
+PLAYER: I pull my boots on, wade onto the flat rocks, and stop at the mouth of the arch with my hands open and the handaxe still in my belt. Low and steady, I hum the first three notes of Dargan's evening call, then say in Draconic, just above the trickle of the water: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+  [DM write_lore (hidden)] {"create": "Tessa", "kind": "person", "description": "Korvash's younger sister, alive. Day 16 night, ~10:30 PM, met him at the Greyshaft culvert. Small and wiry for a dragonborn, red scales dulled to rust, left horn broken, burn scar on one forearm; hooded; speaks Draconic in short clipped sentences; she cut her crescent mark. Survived the raid by hiding on the Weeping Ledge as a child; Dargan's c
+  [game] notebook: created an entry for Tessa
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "status": "done", "add_to_description": "DONE Day 16: Tessa found alive at Greyshaft's culvert. New purpose: help her break the Foreman's ledger and free the children in the lower galleries before midwinter's eve (Day 20), when the ledger and a hundred 'hands' move to the deep shaft."}
+  [game] notebook: updated Find Tessa
+  [DM write_lore (hidden)] {"create": "Break the Foreman's Ledger", "kind": "quest", "description": "With Tessa, destroy the Greyshaft Foreman's ledger of 'hands' and free the children held in the lower galleries before Day 20 (midwinter's eve), when the ledger and about a hundred laborers are moved to the deep shaft. Complications: Korvash's year-and-a-day oath to the Iron Tallies; Gorrak Vael's debt and fear; Tally-Pip wa
+  [game] notebook: created an entry for Break the Foreman's Ledger
+  [game] time: 25 minutes later: Day 16, 10:53:36 PM
+DM: You pull your boots on, wade onto the flat rocks, and stop at the mouth of the arch with your hands open and the handaxe still in your belt. The water is loud and cold around your ankles. Low and steady, above the trickle, you hum the first three notes of Dargan's evening call, and then you say it in Draconic: "Tess. It's Kor. Nobody followed me. Come out where I can see you."
+
+For a long moment nothing answers. Then, from the dark of the arch, very quietly, a voice finishes the next three notes of the call, a little flat, as though it has been a long time since anyone sang them to anyone.
+
+She steps out into the starlight with the hood pushed back. She is smaller than you remember anything being: lean and wiry, hardly more than a breath taller than your shoulder. Her scales have gone the rust-red of old iron, dulled by years of soot and cold. One horn is broken off short, and a burn scar runs up her left forearm in a ladder of pale seams. Her eyes are your father's eyes, yellow-amber and level, and they look at you as though she is memorizing something she is afraid will vanish.
+
+"Kor," she says. Then: "You got *fat*."
+
+You laugh. It comes out cracked and wrong, and you have the axe out of your head and your arms around her before you've decided to move. She does not hug back at first, stiff as a post. Then her fingers dig into the back of your tunic and hold on hard enough to hurt, and her shoulders start to shake without any sound at all.
+
+It is a minute, or ten. When she steps back she scrubs her face on her sleeve and the look in her eyes has hardened into purpose. "No time. Listen." She speaks in short clipped sentences, the way you learn to when every word costs. "I hid on the ledge the night they came. Dargan's stones covered me. Gorrak's man saw me go, and let me." Her mouth twists. "I lived on goat-farms. Cheese. Whatever. A year ago I heard the tin-masks sold a hundred children a season to a mine. So I came to see. I got on as a mender. I've been up in the ledger-house since autumn." She pulls a fold of grey cloth from her cloak, and in it a tiny scrap of black paper with writing on it, columns of names. "The Foreman writes every hand he owns. Every child. Every date. He moves the ledger and a hundred of them to the deep shaft on midwinter's eve, four days from now. After that, they're gone. Nobody can find them. Nobody can count them."
+
+She looks up at you, and her chin is Dargan's chin. "I can't do it alone, Kor. I couldn't even climb to the cairn. But I can get you up the stair. Will you help me burn his book?"
+
+It is nearly eleven at night. The wall is quiet above you, with Ruk's flask somewhere up there, and the sluice runs cold over your boots. You have kept your word to the Tallies for eleven days of a year and a day, and the girl you went looking for is here, alive, asking you for something that would break it.
+
+What does Korvash say?
+
+== ROUND 38 ==
+PLAYER: I hold her by both shoulders and say, "Dargan's oath came first, Tess: stand between the weak and whoever means them harm, and that's a hundred children going down a shaft. I swore Gorrak my axe, not my silence, so I'll burn his book, and then I'll stand before the captain with the ash on my hands and answer for it."
+
+I check the dark arch behind her and drop my voice. "Tell me the stair, how many Tally-sworn guard it, and where the ledger sleeps, because I'm in."
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night, Tessa's intel: the ledger-house crowns the third gate; six Tally-sworn hobgoblins hold the stair in two shifts of three (changing at the dusk bell and the dawn bell); a wash-house door on the gate-top roof is unlocked from inside by Tessa and opens onto the Foreman's outer room. The ledger sleeps in an iron-bound chest in
+  [game] notebook: updated Break the Foreman's Ledger
+  [game] time: 20 minutes later: Day 16, 11:13:36 PM
+DM: You take her by both shoulders, because it is the only way to say it so she will hear. "Dargan's oath came first, Tess. Stand between the weak and whoever means them harm, and that is a hundred children going down a shaft. I swore Gorrak my axe, not my silence. I'll burn his book, and then I'll stand before the captain with ash on my hands and answer for it."
+
+Her eyes go bright, and she looks away to hide it. For a moment she looks six years old. Then she nods once, hard, the way Dargan used to nod at the end of a counting, and the girl is gone again and the mender stands in the water in her place.
+
+"Then listen." She crouches on a flat stone and draws in the wet with one finger, fast and sure. "Third gate. The ledger-house sits on top of it, one stair. Six Tally-sworn hold it, three and three, changing at the dusk bell and the dawn bell. Sober, always. Not the Foreman's men like the wall. Gorrak's own kind." She taps a second line. "Here, on the roof, the wash-house. Its door opens onto the Foreman's outer room from inside. I can unlatch it any night at the second bell, but only from inside. You come up the sluice path, the drain-stair behind the wash-house, and over the parapet. I'll have the rope down."
+
+Another stroke. "The ledger sleeps in an iron-bound chest in his bedchamber. The key is on a chain at his belt, and he sleeps like a hawk. There's a second book, a copy, in the Counting House by the lower gate. If we burn one and not the other, we've done nothing, so both."
+
+"The nights of the eighteenth or the nineteenth," she says. "Before the move. Any later and they're in the deep shaft, and I don't know the way."
+
+Behind her the water drips and the arch is silent. Up on the wall someone laughs and a flask clinks, and Ruk's voice calls a name, then falls quiet. It is a little after eleven, and you must be in your bunk before the dawn bell.
+
+You have three nights to prepare and a sister who has just asked you to commit your oath-bound axe to arson. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 39, "category": "agency", "severity": 2, "quote": "you take the stick out of her hand and mend it, because the lines for the Counting House are wrong", "why": "The player only asked a question. The DM has Korvash take the stick, redraw the map and correct Tessa, none of which the player said."}
+{"round": 39, "category": "agency", "severity": 1, "quote": "It is just before six in the evening on the eighteenth", "why": "The player said he would hang a red thread at dusk 'the day before' (the 17th) if the way was clear. The DM skips straight to the 18th without that beat."}
+{"round": 39, "category": "bookkeeping", "severity": 1, "quote": "time: 2 days 6 hours later: Day 19, 5:13:36 AM", "why": "The clock is pushed to Day 19 and then reset to 'Day 18, 5:58 PM'. The first advance is never accounted for in the story, which already treats it as the evening of Day 18."}
+
+THE PLAYER'S LINE THIS ROUND: I crouch beside her and look at the drawing in the wet. "Then it's the night of the eighteenth, and we do it in order: the copy in the Counting House first, because it's nearest my gallery and I can pull it down off the shelf with my own hands, and then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?"
+
+I touch the broken stump of her horn gently. "Until then you stay hooded and you stay dull, and you don't come to the culvert again. I'll hang a red thread on my belt at dusk the day before if the way is clear, and I'll keep Pip fed and talkative so he writes down boredom instead of me."
+
+=== REPLY barbarian2-39-01 ===
+
+
+=== REPLY barbarian2-39-02 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: Korvash takes the Counting House copy first, then climbs the drain-stair for the main ledger on the night of Day 18. T
+Tessa studies the drawing in the wet and nods slowly. "The copy first. Good. It's on the shelf behind the Foreman's standing desk, a grey cloth binding with a brass clasp. The key to the children's warren is in the desk's top drawer. Take that too, or burning books will free no one."
+
+She tells you the rest in her clipped way. The children are kept in the Lower Galleries behind the third smelter, a barred warren entered through a gate off the ore yard. About a hundred, and none older than twelve. Once the books are ash and the gate is open, the way out is the one she came: the sluice, the culvert, the scree, and the goat-path east. "You know it," she says. "Dargan taught it to us both."
+
+You touch the broken stump of her horn, gently. She flinches, then lets you. You tell her to stay hooded and dull, to keep away from the culvert, and that you will hang a red thread on your belt at dusk on the seventeenth if the way is clear. She repeats it back to you word for word, like a lesson in a fold. Then she is a shadow in the arch, and gone, and only the sluice is left talking.
+
+You are back in the barracks before the dawn bell. Pip's cap is still over his eyes. You lie down on the bunk with your pouch under your head, where the goat and the slate are, and you do not sleep.
+
+It is a little before midnight on the sixteenth. Two days remain until the eighteenth. You must keep Pip fed and talkative, learn the Counting House's rhythm, and decide how you mean to get inside it. What does Korvash do?
+
+=== REPLY barbarian2-39-03 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: strike the night of Day 18. Copy in Counting House first, then the ledger via drain-stair. Tessa: the children are hel
+Tessa nods at your plan, and the nod grows into something near a grin. "Copy first. Good. It's closest, and nobody guards paper they think nobody wants."
+
+She rubs out her drawing and draws another. "The children are in the Tally-pens, behind the third smelter. The cold gallery, they call it, because the fire never reaches it. A barred hall, ninety hands in all, and about forty of them children. A chain on the door. The key hangs in the Counting House, on a hook beside the copy." She taps the far end of the line. "There's an old air-adit at the back of the cold gallery. It comes out on the east scree past the wall. The Foreman thinks it's blocked. It isn't. Not all the way."
+
+That settles the rest. The copy and the key together in one room is a gift. You take the book, take the key, burn the one, and the cold gallery opens before the ledger-house is even touched. Then up the drain-stair for the second book, and out the adit with the children, all by the east scree, before the dawn bell.
+
+She lets you touch the broken stump of her horn, which she would not have allowed anyone else to do, and agrees to everything. She will stay hooded and dull, and she will not come to the culvert again. You will wear a red thread on your belt at dusk on the seventeenth if the way is clear. And Pip will be kept fed and talkative, writing down boredom instead of you.
+
+"Kor." She stops at the arch, a small shape in a hood against the dark. "Whatever happens. I'm glad it was you who came."
+
+Then she is gone into the tunnel, up the sluice, and you wade back out into the cold. It is nearly half past eleven. You have time to reach your bunk before the dawn bell, if no one is watching, and two days to prepare.
+
+What does Korvash do?
+
+=== REPLY barbarian2-39-04 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 late: plan fixed for night of Day 18: Counting House copy first (Korvash), then the ledger-house via drain-stair (Tessa unlatches 
+Tessa studies the map in the wet and nods slowly at your order of work. "The copy first. Yes. Nearest you, and the key to the ore-chute grate hangs in the same room, on a nail behind the Foreman's desk. If you take the book you take the key."
+
+She scrubs out the first lines and draws new ones. "The children are in the Lower Pens, three barred galleries under the second smelter. Your own gallery door guards the shaft-head above them. You've been standing over them for two days." Her jaw sets. "About a hundred. They're counted at the dusk bell by the goblin clerks. The old ore-chute runs from the pens out onto the scree behind the coal sheds. It has an iron grate, and that key is the one on the nail. Once it's open, they walk out in the dark, and nobody on the wall looks at the coal sheds after the bell. Ruk saw to that, and so did you."
+
+You touch the stump of her horn. She flinches, then leans into your hand for the space of a breath. She agrees to everything: hooded and dull, no more culvert, nothing that Pip could write down. The red thread at your belt at dusk on the seventeenth will mean the way is clear. She gives you the scrap of black paper with the names, and you fold it into the pouch with the goat and the slate.
+
+She goes back up the sluice path like a shadow going home. You wait until you cannot hear her, then climb the cinder slope and slip back into the barracks before the dawn bell. Pip is snoring under his cap. Your blanket still holds the shape of the greataxe.
+
+It is nearly midnight on the sixteenth. You have a day to scout and two nights to the work, and Pip will be asking questions soon. What does Korvash do?
+
+=== REPLY barbarian2-39-05 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: Night of Day 18. First the copy in the Counting House (Korvash), then the main ledger via the drain-stair (Tessa unlat
+Tessa studies the wet drawing, then wipes half of it out with her palm and redraws it. "Copy first, then. Good. It's nearer, and if the main book burns first they'll lock the Counting House before you reach it." She taps a new square. "The children are under the fifth gallery, in the tally pens, a barred cellar with one door. The pen-warden is Garrow, one-eyed, sleeps across the threshold with the key on his neck. The children are on a single chain-line, ankle to ankle. They march to the deep shaft at dawn on the twentieth." She looks up. "Garrow wakes at a mouse. You'll need either a way to keep him asleep, or a way to make him sorry he woke."
+
+You touch the broken stump of her horn, gently, the way you would touch a healing bone. She lets you, and says nothing. "You stay hooded and you stay dull," you tell her. "No more culvert. At dusk on the seventeenth I hang a red thread on my belt if the way is clear. If there's no thread, you do nothing and you wait for the next dusk. And I'll keep Pip fed and talkative so he writes down boredom instead of me."
+
+"Red thread." Her mouth twitches, nearly a smile. "Like the herd-count." She presses the scrap of black paper into your palm: a clerk's sketch of the Counting House, a shelf marked with a small ink X. "That's where the copy sleeps. Don't be seen reading it, Kor. You never could keep your face still."
+
+"I'll keep it still."
+
+"You never could." She pulls the hood up, steps backward into the arch, and the dark takes her. Her footsteps do not make a sound.
+
+You get back to the barracks a little before midnight, boots in hand, past the quiet coal sheds and under Ruk's drowsing torch. Pip is snoring on the next bunk with his cap over his face. The greataxe is exactly where you left it, in its blanket. You lie down, the paper in your fist, and for the first time in fourteen years you sleep like a man who has somewhere to go.
+
+It is now the night of the sixteenth. Two days remain before the eighteenth, and you hold a sketch of the Counting House, a plan, and a red thread yet to be tied. What does Korvash do?
+
+=== REPLY barbarian2-39-06 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night, plan: Day 18 night. Counting House copy first (Korvash), then Tessa's drain-stair to the original. Tessa's intel on the chi
+  [hidden call] write_lore: {"create": "Gragh", "kind": "person", "description": "Hobgoblin pen-warden of the Low Pens beneath Greyshaft's second gallery; sleeps at the iron door with the key on his neck. Named by Tessa."}
+
+
+=== REPLY barbarian2-39-07 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: Day 18 night: copy in the Counting House first, then the main ledger via Tessa's drain-stair. Children (about a hundre
+  [hidden call] write_lore: {"create": "Mog", "kind": "person", "description": "Hobgoblin pen-warden of Greyshaft's Lower Pens, keyholder, sleeps by the pen door under the second smelter gallery that Korvash guards."}
+Tessa studies your plan in the wet stone and grunts, which is as close to praise as she gives. "The copy first. Good. It's nearer, and if it goes wrong the main book is still safe, and he'll think it's a clerk's fire."
+
+She rubs out the drawing and draws a new one. "The children are in the Lower Pens, a barred gallery beneath the second smelter. Beneath the door you guard, Kor. Every shift you've stood there, they've been behind you." She lets that sit. "Maybe a hundred. Five to fifteen years. The pen-warden is a hobgoblin called Mog. He sleeps across the door with the key on his neck. Take him quietly and the children walk. Out through the sluice and the culvert, east across the scree, and onto the old drover track. It's dark and it's cold, but nobody watches it."
+
+You touch the broken stump of her horn, gently. She flinches, then lets you. "Until the eighteenth you stay hooded and dull," you tell her, "and you don't come to the culvert again. The day before, I'll hang a red thread on my belt at dusk if the way is clear. And I'll keep Pip fed and talkative, so that what he writes down is boredom."
+
+"Boredom," she says, almost smiling. "You'd have to be someone else."
+
+She presses the black paper scrap into your hand, a column of names in a tiny, careful script, and then she is gone up the wet stones into the dark of the arch. The water carries away the sound of her feet.
+
+You slip back along the coal sheds in your stocking feet. Ruk and his flask are quiet. At the barracks Pip is still asleep with his cap over his eyes and the greataxe still lies rolled in your blanket. You ease in beside it a little before midnight, and the paper goes into the pouch with the goat and the slate. Hours later, the dawn bell tolls.
+
+You have two nights until the eighteenth, a post above a hundred sleeping children, a clerk to keep bored, a warden to deal with, and two books to burn. What does Korvash do?
+
+=== REPLY barbarian2-39-08 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: strike the night of Day 18 (two nights hence): the Counting House copy first, then the ledger via the drain-stair. Chi
+Tessa watches your finger trace her lines in the wet. She nods at the order of it and frowns at the last part.
+
+"The children are in the Low Pens," she says. "A barred gallery under your own smelter, Kor, right under the door you guard. You've been standing over them for two days." That lands hard, and she sees it land. "Bar and padlock. The pen-warden, Gresh, holds the key and sleeps in the gatehouse. As for getting them out..." She spreads her scarred hands. "The culvert, and the sluice. A child can crawl it. A hundred of them, in the dark, past a wall? I don't know. I have not found the answer."
+
+When you touch the stump of her horn she goes still, then leans into your hand for exactly one breath. "Dull and hooded," she says. "A red thread at dusk. Don't be late, and don't let Pip count your yawns." She turns, and the dark takes her into the arch like a goat into the rocks. You hear water, then nothing.
+
+You climb back through the shadow of the coal sheds, past Ruk's wall, which is quiet now, and ease into the barracks near midnight. Pip is a lump under his cap. The blanket you left over the greataxe has not been disturbed. You lie down, and for the first time in fourteen years the weight on your chest is a different weight.
+
+You have two days. The copy, the ledger, a padlock, a key held by Gresh, a hundred children under your own post, and a sluice just wide enough to crawl. You can't solve it all tonight.
+
+It is nearly midnight on the sixteenth. What does Korvash do next?
+
+=== REPLY barbarian2-39-09 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: Korvash hits the Counting House copy first, then climbs the drain-stair for the main ledger, on the night of Day 18. T
+Tessa nods at your order, and you see her filing it away the way Dargan used to. "The copy first. Good. It's closer, and it's the one he'll trust to be safe." She smooths the drawing in the mud and adds two more lines.
+
+"The children are in the Low Galleries, behind the fourth smelter. A hundred, give or take, sleeping in rows. One barred gate. The key hangs on a hook in the Counting House, near the copy." She taps a thin line. "From the Low Galleries a service tunnel runs out to this culvert. The grate at the end is rusted through. Two strong backs can force it. That's how they leave: through the water, in the dark, while the wall watches the fires."
+
+She reaches up, almost shyly, and lets you touch the stump of her broken horn. "Dargan's trick," she says. "Hit a rock at six. Never mind." Then she pulls her hood up and the mender is back. "Red thread on your belt at dusk if the way is clear. I'll watch for it. I won't come back here till then."
+
+She slips into the arch and is gone, so quiet that the water doesn't change its sound. You stay a moment alone in the cold, then climb the cinder slope to the barracks, boots in hand, past the coal sheds, careful of loose coal. Ruk's torch is a small star on the wall, and he doesn't look down.
+
+You slip into your bunk before the dawn bell. Pip is asleep with his cap over his eyes. The greataxe is where you left it, rolled in the blanket. It is past eleven thirty and you have two days to ready the plan: the copy in the Counting House, the key for the Low Galleries, the drain-stair to the ledger-house, and Pip, who writes everything down.
+
+What does Korvash do?
+
+=== REPLY barbarian2-39-10 ===
+
+
+=== REPLY barbarian2-39-11 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night plan: strike the night of Day 18. Order: Counting House copy first (Korvash), then the ledger-house via drain-stair (Tessa u
+Tessa studies the wet-stone map with you, and her finger moves to a new spot. "The children are in the Lower Pens. A barred gallery under your own smelter, Kor. One door, and the pen-warden carries the key. There's an old vent-adit at the back that runs out under the east scree. I crawled it in autumn. It's tight for you, but children will fit." She looks up. "Copy first, then the ledger, then the pens. The warden I can't do anything about."
+
+You touch the broken stump of her horn, gently. She flinches, then leans into it for half a breath. You tell her to stay hooded and dull, and not to come to the culvert again. You'll hang a red thread on your belt at dusk tomorrow if the way is clear, and keep Pip fed and talkative so he writes boredom instead of you.
+
+"Red thread," she says, almost smiling. "Dargan's trick." She rubs out the drawing with her palm, squeezes your wrist once, and is gone into the arch like water into stone.
+
+You wade out and creep back along the sheds. Ruk's mate has fallen asleep on the parapet and Ruk does not look down. You slip into the barracks a little before midnight, ease the greataxe out of the blanket, and lie down. Pip stirs, mutters "nothing, nothing, boring," in his sleep, and is quiet.
+
+You have the night of the eighteenth to plan. The Counting House is by the lower gate, guarded, with a scribe who sleeps in it. You are due at the gallery door at dawn, and nobody knows what you've done.
+
+What does Korvash do?
+
+=== REPLY barbarian2-39-12 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 16 night, plan: Day 18 night. Korvash takes the Counting House copy first, then climbs the drain-stair to the ledger. Tessa: the chil
+

@@ -1,0 +1,221 @@
+GAME bard2, ROUND 28
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 25 ==
+PLAYER: I shake my head with a crooked smile. "Nothing, my lord, but a bed for the night, a hot supper, and two promises: that you'll keep Osric safe until the assessor comes, and that if a storyteller named Corvin shows up here, you'll send word to me before you open the door." I glance at the psalter in my hands. "The other two houses in this book are next, and I'd like to know their names and where they hold, so I'll sleep, then start on them at first light."
+  [DM write_lore (hidden)] {"create": "House Thistlewood", "kind": "group", "description": "Minor house of Lady Maren Thistlewood at Ashby Weir, two days upriver of Marrowford. Corvin forged her a tale of a heroic ancestor holding a river ford, to claim ferry-toll rights. Already paid; page struck through in Corvin's draft. Toll rights are being contested by neighbouring village.", "relationships": ["client of [[Corvin Tall
+  [game] notebook: created an entry for House Thistlewood; added 2 relationships to House Thistlewood
+  [DM write_lore (hidden)] {"create": "House Dray", "kind": "group", "description": "House of Sir Corwen Dray at Saltmarsh Keep, near the estuary, three days downriver of Thornhallow. Corvin forged a betrothal contract and a vow tale tying Dray's heir to a wealthy merchant family; the merchants have since begun to doubt. Page struck through in Corvin's draft.", "relationships": ["client of [[Corvin Tallowmere]]", "named in 
+  [game] notebook: created an entry for House Dray; added 2 relationships to House Dray
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 2 night: Wren read the two other pages. House Thistlewood (Lady Maren, Ashby Weir, two days upriver of Marrowford; forged ford/toll tale) and House Dray (Sir Corwen, Saltmarsh Keep, estuary three days downriver; forged betrothal contract). Both paid and \"struck through\" in Corvin's draft; Corvin planned to mend only Verrel."}
+  [game] notebook: updated The Sealed Letter
+  [game] time: 11 hours 45 minutes later: Day 3, 6:59 AM
+DM: Lord Edric stares, then laughs shakily. "A bed, a supper, and two promises. Child, I'd have given you the south field." But he gives his word on both, hand on the table. Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+
+Supper is mutton and barley bread and a cup of cider, eaten at the kitchen table among cooks who now treat you like a visiting saint, or perhaps like a small, dangerous animal. Tobin sits at your elbow and doesn't say much, but he keeps pushing the best bits of the mutton toward you. He's asleep on a bench before the cider is gone. You're given a clean bed in a small room under the eaves.
+
+Before sleeping you spread the two remaining leaves under a candle. The names are there in Corvin's neat hand. Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights. Sir Corwen Dray of Saltmarsh Keep, out on the estuary some three days downriver of here, bought a betrothal contract and a vow-tale tying his heir to a wealthy merchant family, and those merchants have begun to doubt. Both pages are struck through as paid. Corvin meant to mend only Verrel.
+
+You sleep, and the night is quiet. It's just before seven now on Day 3, with the sun rising over a clean, cold morning. The assessor arrives tomorrow at noon. Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+
+What does Wren do?
+
+== ROUND 26 ==
+PLAYER: I pack my psalter, thank the kitchen for the mutton, and find Lord Edric before breakfast. "My lord, lend me a mule and a short letter in your hand saying I act with your blessing. I'm going upriver through Marrowford to Lady Thistlewood at Ashby Weir, because that's where Corvin will be heading once Garrow finds him, and I'd rather meet him on my road than on his." On my way out I give Tobin a wink and slip him the last of my bread. "Keep your head down, Tobin, and if Osric needs anything, you're his legs."
+  [game] sheet: lost 1 × Bread loaf; gained 1 × Letter under Lord Edric Verrel's seal, vouching for Wren; gained 1 × Mule (lent by Lord Edric Verrel)
+  [DM write_lore (hidden)] {"entry": "Corvin's Wagon", "add_to_description": "Day 3 ~1:30 PM: gone from Marrowford's square. A fishwife reports Garrow (brown coat) arrived at dawn on a lathered horse, spoke to the driver, and the wagon left at once north-upriver on the Ashby road with the driver whipping the team. Strongbox and everything went with it."}
+  [game] notebook: updated Corvin's Wagon
+  [game] time: 6 hours 30 minutes later: Day 3, 1:29 PM
+DM: Lord Edric is at the kitchen table in his shirt-sleeves with a bowl of porridge, looking ten years younger. He hears you through, nods, and writes the letter himself with an ink-stained thumb and a flourish, sealing it with his signet in green wax. "To all whom it concerns: the bearer, Wren Ashgrove, acts with my full blessing and my gratitude." He also has the stable-boy saddle a placid grey mule called Biscuit.
+
+Tobin takes the last of your bread with both hands, as if it were a medal, and nods fiercely. "I'll be Brother Osric's legs. I promise." Then, lower: "Thank you. For not being smiling."
+
+You ride out of the gate into the cold bright morning with the Marrow glinting at your left hand. The road upriver is the same one you walked down, but it looks different under a mule's nodding head, wide and ordinary and slow. By half past one you're clattering over the stone bridge into Marrowford.
+
+The square is busy with market-day trade, but your eye goes at once to the far corner. The place where Corvin's painted wagon stood is empty, with only a scatter of straw and a dark patch of oil on the cobbles. A fishwife by the tailor's stall sees you looking and wipes her hands. "Looking for the shrine-wagon, love? Gone at dawn. A man in a brown coat came in on a lathered horse, shouted at the driver, and off they went up the Ashby road like the river was on fire." She sniffs. "Strongbox and all."
+
+So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule. It's half past one on Day 3.
+
+What does Wren do?
+
+== ROUND 27 ==
+PLAYER: I toss the fishwife a copper and lean down from Biscuit's back. "Thank you, love. Was Corvin himself aboard, or only the driver and the man in the brown coat, and did either of them ask after a young woman with a lute?" Then I turn the mule toward the Ashby road, keeping to a steady walk so I don't spend him, and think it over as I go: the wagon is hours ahead, so I'd rather arrive after them and watch Lady Thistlewood's gate than ride in on their heels.
+
+DM: how much coin do I have now, and is the tinker's set of thieves' tools still 25 gp if I pass back through here?
+  [game] sheet: money -1 cp: now 14 gp 6 sp 1 cp
+  [DM write_lore (hidden)] {"create": "Lantern's Rest", "kind": "place", "description": "Small wayside shrine-house of the Lantern-Bearer on the Ashby road, half a day's ride north of Marrowford. A stone hut with a bunkroom, a hearth, and a brass lamp kept lit. Run by a lay-keeper named Marta Pell, a cheerful widow. Offers free bed and bread to Lantern-Bearer faithful (Wren's Shelter of the Faithful).", "relationships": ["o
+  [game] notebook: created an entry for Lantern's Rest; added 1 relationship to Lantern's Rest
+  [game] time: 5 hours 10 minutes later: Day 3, 6:39 PM
+DM: You flip her a copper and she snatches it neatly out of the air. "Only the driver and the brown-coated one," she says. "Not the master, not that I saw. The brown coat asked the stall-folk whether a young half-elf with a lute had come through, and he wasn't sweet about it. Sharp-faced fellow. Take care, love."
+
+You have 14 gp 6 sp 1 cp now, down a copper. And the tinker, if you ask, still wants his 25 gp for the thieves' tools. He hasn't moved his tray, and it's the same price, so it's out of reach for now.
+
+You turn Biscuit up the Ashby road at an easy walk and let the afternoon pass. The road climbs away from the river, runs through hop fields, then oak woods, then open heath. You keep the pace steady and the mule unhurried, watching for dust or wheel-ruts. About half past six, with the sky going the colour of a bruise, a thin thread of smoke and a small glowing lamp appear ahead where the road forks.
+
+It's a squat stone shrine-house with a tiled roof and a lantern hung on a pole by its door, a brass lamp with rays carved into the shutters, the Lantern-Bearer's sign. A hand-painted board by the gate says **LANTERN'S REST: BED, BREAD, AND A LIGHT FOR ANY WHO WALK.** A plump, grey-haired woman in a green apron is raking the yard and looks up as you approach.
+
+There are fresh wheel-ruts in the soft ground by the gate, two wheels, heavy, turned in and out. Wagon ruts, and recent.
+
+What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 28, "category": "format", "severity": 1, "quote": "You can open the note now, take a moment with Marta first, or sleep on it.", "why": "Menu of options at the end."}
+
+THE PLAYER'S LINE THIS ROUND: I dismount, pat Biscuit's neck, and walk up with the reliquary held openly in my palm so the lamp catches its brass. "Evening, Mother. A traveler of the Lantern-Bearer asks shelter for herself and a mule, and if you've bread to spare, I'd be glad of it." Then, glancing at the ruts, lightly: "Looks like a wagon came through ahead of me. Did a shrine-wagon stop here, and did its driver say where they'd sleep?"
+
+=== REPLY bard2-28-01 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Marta Pell welcomed Wren. She says Corvin's shrine-wagon stopped here around noon, only the driver and a brown-coated man aboard, who 
+Your Persuasion check was a 14, though with the reliquary in your palm you hardly needed it. Marta Pell sets down her rake and her face crinkles. "Bless you, child, a lamp-bearer! In, in. The mule can have the lean-to, and there's barley bread and a pot of leek broth that wants eating."
+
+Over the broth she answers your question. Yes, a shrine-wagon came through near noon with only the driver and a lean fellow in a brown coat. They watered the horses, bought no bread, and pushed on toward Ashby Weir, saying they'd lie at the ford inn. "Master Tallowmere himself hasn't been by in months," she says, frowning. "I didn't care for that driver. The wagon rode heavy and rattled like a chest of coin. A shrine-wagon should sound like prayer, not money."
+
+The bunkroom is clean, with a brass lamp in the shutter and a shelf of worn prayer books. Marta won't take a copper from a servant of the Lantern-Bearer. The mule is fed and the hearth is warm. The wagon is a few hours ahead, at the ford inn near Ashby Weir, another half-day's ride on. It's just after seven in the evening on Day 3, and Dame Crowe reaches Thornhallow at noon tomorrow.
+
+You could rest here and ride at dawn, or push on in the dark and try to reach the ford inn tonight. What does Wren do?
+
+=== REPLY bard2-28-02 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Marta Pell says the shrine-wagon stopped at noon, the driver watered horses, a brown-coated man asked about \"a girl with a lute\", an
+Marta Pell sees the brass lantern and her whole face opens. "Bless you, child, of course. Bed, bread and a stable, no coin asked. That's the Rest's way." She takes Biscuit's rein herself.
+
+Over a bowl of onion stew by the hearth, you ask about the wagon, and your Persuasion check of 20 gets everything. It stopped at noon. The driver watered the horses, and a sharp-faced man in a brown coat asked after "a girl with a lute" and didn't like her answer. Then a tall man in a dark cloak stepped down from the wagon's shadow to light a candle at her porch lamp. He bowed to her like a lord, paid for bread, and left within the hour for Ashby Weir.
+
+Marta hesitates. "He left a word for you, if you came. He said you'd know him by it: *tell her the lamp is still lit for her.*" She frowns. "Is he your father, love? He spoke so gently."
+
+The words settle in your chest like a hook. Corvin knew you'd follow, and he's waiting.
+
+The common room is warm and the bunks are clean. A single other traveller, a snoring drover, sleeps in the corner. The wagon is half a day ahead, and Ashby Weir is another day's ride. It's a quarter past seven.
+
+What does Wren do?
+
+=== REPLY bard2-28-03 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: keeper Marta Pell says Corvin slept here two nights ago, left at first light on Day 2... (actually yesterday) alone toward Ashby Weir;
+Marta Pell leans her rake against the wall and wipes her hands on her apron. She sees the reliquary, and her whole face warms. "Lantern-Bearer's own! Come in, come in. There's always a bed and bread for a light-bearer, and the mule can have the lean-to." She won't hear of payment, since a traveler of the faith is owed shelter. Biscuit gets a bucket of water and a lean-to stall.
+
+She talks as she ladles barley stew into a bowl. She says a shrine-wagon did come through this afternoon, rattling and fast, with a driver who didn't so much as ask for water. He only wanted to know if "the master" had passed by. "Master Tallowmere," she adds, "who stops here every year and leaves a silver for the lamp. He slept under this roof the night before last, and he was gone by first light yesterday, riding alone toward Ashby Weir. A lovely-spoken man." She frowns slightly. "A man in a brown coat came behind the wagon, on a tired horse, and asked after a young half-elf with a lute. I told him I'd seen no such girl. I didn't care for his manner."
+
+So Corvin is a day ahead of you, the wagon is a few hours ahead, and Garrow is hunting for you. Marta doesn't yet know you are that girl, though the lute on your back is plain to see.
+
+Over the fire she mentions that the Ashby road is about a day and a half more, and that the ferry at the Weir runs only by daylight. It's now past seven on the evening of Day 3. You have a bed, a hot meal, and a night to decide how to approach Lady Thistlewood and Corvin.
+
+What does Wren do?
+
+=== REPLY bard2-28-04 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Marta Pell welcomed Wren (Shelter of the Faithful). Corvin's wagon stopped here around noon: the driver and Garrow watered the horses 
+Your Persuasion check was a 19. Marta Pell's face opens like a window when the brass catches the lamplight. "Bless you, child, come in, come in. Marta Pell, and the mule can have the lean-to." She takes Biscuit's rein herself and sets a bowl of barley broth and a heel of bread in your hands before you've sat down.
+
+Your Insight check was a 20, so you notice what she's careful about. When you ask after the wagon she answers readily, but her eyes drop to the offering box by the door.
+
+"It stopped about noon. The driver and a brown-coated fellow watered the horses and bought bread. They didn't stay." She hesitates. "There was a third man, who never got down. He stayed behind the canvas and spoke to me through it, a smooth, tired voice. He asked if a young woman with a lute had passed. I said no, which was true then." She looks at you, and at the lute on your back, and neither of you says anything for a moment. "He left a coin in the box with a scrap of paper. *For the lamp. T.*"
+
+T. Tallowmere. He was within arm's reach of this door, and he left a gift for the god he never believed in. "They're bound for Ashby Weir," Marta adds. "The driver said they'd make it by tomorrow evening."
+
+The bunkroom is warm, the broth is good, and the lamp is steady. Corvin is perhaps half a day ahead, and you're sheltered, fed, and unseen for the night. It's seven now on Day 3.
+
+What does Wren do?
+
+=== REPLY bard2-28-05 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Marta Pell welcomed Wren (Shelter of the Faithful). She says the shrine-wagon stopped at midday only to water the horses; the brown-co
+Marta Pell's face lights at the sight of the brass lantern in your palm. "Oh, a true one! Come in, come in, love. I'll see to the mule myself." She is as good as her word, with a nosebag of oats for Biscuit and a bowl of barley broth with a thick heel of bread for you. As a faithful traveller you pay nothing.
+
+She talks while you eat. The shrine-wagon stopped about midday, she says, only to water the horses. The brown-coated man was short with her and wanted the Ashby road. The driver dropped a coin in the offering bowl but never lit the lamp or bowed at the porch, which she took as a poor sign. She didn't see the master. "But the driver said, to the other, that they'd meet him at the Thistlewood ferry-house by tomorrow noon."
+
+Your Insight check was a 9. She seems honest and sharp-eyed, and you can't find a flaw in her account. You can't be sure she hasn't forgotten or smoothed some small thing, but nothing in her manner suggests it.
+
+By the hearth there's a bunk with a clean blanket and a shelf with a small brass lamp. It is a little past seven. Ashby Weir is another day's ride, and the wagon should reach the ferry-house by noon tomorrow. Mule and you are tired.
+
+What does Wren do?
+
+=== REPLY bard2-28-06 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Marta Pell welcomed Wren (Shelter of the Faithful). She says a shrine-wagon stopped at noon to water the horses; the driver and a brow
+The woman's face lights up at the brass lantern. "Bless you, dear, come in, come in. I'm Marta Pell. There's always a bed for the Lantern's own." She takes Biscuit's rein herself and leads him to a lean-to with hay and a trough, clucking at him all the way. Shelter of the Faithful holds good here: bed, bread and a bowl of barley broth, all free.
+
+Over the broth you ask about the wagon. "Aye, noon, it was," Marta says, ladling. "Painted with the very sign above my door, so I went out glad. But the driver wouldn't look me in the eye, and the man in the brown coat bought bread and said nothing. They watered the horses and went on toward Ashby Weir. Didn't sleep here." She pauses. "Though I'll say, dear, they seemed more frightened than any pair of travelers ought."
+
+Your Insight check was a 7. She seems honest and warm, but you can't say whether she's leaving something out.
+
+The bunkroom is clean and the hearth is warm. Outside, the night is cold and clear, and Ashby Weir lies a day and a bit further on. It's just past seven on Day 3, and tomorrow at noon Dame Crowe reaches Thornhallow without you.
+
+What does Wren do?
+
+=== REPLY bard2-28-07 ===
+  [hidden call] write_lore: {"create": "Marta Pell", "kind": "person", "description": "Plump, grey-haired widow, lay-keeper of Lantern's Rest. Warm and talkative. Corvin's wagon stopped here at noon; the driver watered the horse
+The woman's face lights at the reliquary. "Marta Pell, keeper of this lamp, and any friend of the Bearer eats at my table. Come in, come in. Mule's welcome in the lean-to, there's hay."
+
+Your Insight check was a 6, so you read nothing but warmth. She chatters as she leads you in. Yes, a shrine-wagon stopped at noon, with a sour driver who watered the horses, bought bread, and went on toward Ashby Weir. No, she didn't hear where they'd sleep. She says it all easily, and whether she's holding anything back, you can't tell.
+
+The common room is a bare hearth, a bunkroom with six pallets, and a brass lamp kept lit on a shelf. You get bread, onion soup and a cup of small beer, free as the Lantern-Bearer's faithful are due. You're the only guest. Marta fusses over your mule, hums a road-song you half know, and asks nothing about why you're alone.
+
+It's past seven and dark outside. Ashby Weir is a day's ride on, and the wagon is somewhere ahead on the same road. You can sleep here, talk more with Marta, or push on by night.
+
+What does Wren do?
+
+=== REPLY bard2-28-08 ===
+  [hidden call] write_lore: {"create": "Marta Pell", "kind": "person", "description": "Plump, grey-haired lay-keeper of Lantern's Rest, devout and warm. Day 3: the shrine-wagon stopped at midday only to water the horses; the dri
+The woman's eyes go straight to the reliquary, and her whole face softens. "Marta Pell, keeper here. Come in, child, come in. A mule, a bed and bread are what the Lantern's for." She takes Biscuit's rein herself and leads him toward a lean-to.
+
+Your Insight check was a 21, and you read her easily: she is honest, a little wary, and decided about something before you spoke. While she rubs the mule down she answers your question plainly.
+
+"A shrine-wagon, aye, at midday. Watered the horses and went on. The driver was in a lather, and a sharp-faced fellow in a brown coat asked after a young half-elf with a lute. I told him I'd seen no such person." She gives you a sidelong look. "That was true then. Master Tallowmere wasn't aboard, but the driver said the master meets them at Ashby Weir."
+
+She wipes her hands on her apron. "Before they left the driver set a sealed note on the offering-box and said it was for 'the apprentice, if she comes.' I thought it odd, and I didn't like the brown coat, so I kept it back." She goes into the shrine-house and returns with a folded, wax-sealed paper, marked on the outside in Corvin's neat hand: *Wren.*
+
+The room inside is warm, with a hearth, a bunk, and a brass lamp burning in the corner. The note sits in your hand, unopened, and the seal is Corvin's own lantern sigil.
+
+What does Wren do?
+
+=== REPLY bard2-28-09 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: keeper Marta Pell welcomed Wren (Persuasion nat 20). Wagon stopped here about 3 PM to water the team; driver and Garrow spoke low, Mar
+  [hidden call] write_lore: {"create": "Marta Pell", "kind": "person", "description": "Plump, grey-haired lay-keeper of Lantern's Rest, cheerful widow in a green apron. Honest and observant.", "relationships": ["keeper of [[Lant
+The woman sees the brass lantern glinting in your palm and her whole face opens. Your Persuasion check was a natural 20, and your Insight, a 22, tells you she's hiding nothing. She's simply glad to see you.
+
+"Marta Pell, keeper of the Rest, and you're welcome, daughter. Bed, bread and a stall for your mule, and no coin asked." She takes Biscuit's bridle herself. "Aye, the shrine-wagon came by about three. Watered the team, didn't stay. The driver and a sharp-faced man in a brown coat talked low by the trough, but I've good ears for a woman my age. The master will meet them at the Ashby Weir ferry-landing at dawn. And the brown-coat said..." She frowns. "'The girl has the book. The master wants her alive and the book whole.' I thought it an ugly thing to say beside a lantern."
+
+So Corvin wants you alive, and the book intact. The dawn meeting gives you a place and a time.
+
+Then she looks at the reliquary again and goes quiet. "Child, may I see that closer? I know that make. Sister Ansel, the old road-priest who kept this house before me, cast lamps like it. She gave them to apprentices and to the dying, and she wrote down every one in the shrine's book. If yours is one of hers, there's a name beside it." She hesitates. "I'll look tonight, if you'd like. I won't tell you what it says unless you wish to hear."
+
+It's seven in the evening. The hearth inside is lit and there's the smell of bread. The ferry-landing is perhaps half a night's ride on, and Corvin arrives at dawn.
+
+What does Wren do?
+
+=== REPLY bard2-28-10 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Corvin's wagon stopped here about noon to water the horses. Marta says the driver and a brown-coated man bought bread, did not go in, 
+Your Persuasion check was a 21. Marta Pell's face softens at the sight of the little brass lantern. "Oh, child, come in, come in. The Lantern-Bearer's own are never turned away." She takes Biscuit's reins herself and calls for a boy to rub him down. Bed and bread are free to you, as is the right of any faithful traveller.
+
+Your Insight check was a 14, and it tells you she's holding something back. She answers your questions about the wagon a little too readily and keeps glancing at the bunkroom door. "Yes, a shrine-wagon stopped about noon, watered its horses, bought bread, and wouldn't come in. A brown-coated fellow with it, sharp and in a hurry. He said if a young woman with a lute came asking, I was to tell her nothing." She lowers her voice. "I don't hold with that, not at a Lantern house. They drove on toward Ashby Weir."
+
+She hesitates, then adds, quieter still: "There's another. A tall, grey-bearded gentleman rode up an hour after, on a hired horse, a storyteller by his voice. He said he was weary and asked for a bunk. He's asleep in the bunkroom now. Said he was expecting a friend, and I wondered..." Her eyes go to your lute.
+
+Behind her, through the half-open bunkroom door, a lamp burns low. In the dim, a long shape lies on a cot with a cloak drawn up, and a hand with an old silver ring rests outside the blanket. You know that ring.
+
+It's near seven in the evening. Corvin is twenty feet away, asleep, or pretending to be. What does Wren do?
+
+=== REPLY bard2-28-11 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: keeper Marta Pell welcomed Wren free under Shelter of the Faithful. Corvin's wagon stopped here about three in the afternoon: driver a
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3 evening: Garrow left word at Lantern's Rest that \"the master waits at the Ashby ferry-house\", likely a trap or a summons. Corvin himself i
+The woman's face opens like a shutter when she sees the brass in your palm. "Marta Pell, keeper here, and no one's ever 'Mother' to me but my own lads." She takes Biscuit's rein herself. "Bed, bread and a light, the board says, and the board doesn't lie. Come in, child. Your faith pays for your supper." Under the Shelter of the Faithful, that is free.
+
+She talks as she leads the mule to a lean-to. Yes, a wagon stopped, about three in the afternoon, with the shrine-lantern painted on its side. "Which I'd have blessed, except there was no blessing in the men." There were only two, a surly driver and a sharp-faced man in a brown coat. They watered the horses and bought a flask of lamp oil. They asked the road to Ashby Weir and said nothing of where they'd sleep. No master was aboard.
+
+Then she lowers her voice. "The brown coat left a silver with me. Said if a girl with a lute came by, I was to tell her 'the master waits at the Ashby ferry-house.'" She sniffs. "A man who pays to be believed is lying about something. I didn't like it, and I'm telling you straight."
+
+So Corvin is apparently ahead, or wants you to think so, and the message is waiting at the ferry-house, a trap or a summons. The wagon is a long evening ahead of you, and Ashby Weir is another day's ride.
+
+Supper is turnip soup, brown bread and a hunk of sheep's cheese by the shrine hearth, with the brass lamp throwing rays across the rafters. The bunkroom is empty but for you. It's seven now, and the fire is warm.
+
+What does Wren do?
+
+=== REPLY bard2-28-12 ===
+  [hidden call] write_lore: {"create": "Marta Pell", "kind": "person", "description": "Plump, grey-haired lay-keeper of Lantern's Rest. Honest and warm. Says the shrine-wagon stopped at midday only to water the horses; the drive
+The woman's face opens at the sight of the brass lantern. "Lantern-Bearer's own, and welcome. I'm Marta Pell. Bed and bread cost a traveler of the faith nothing here, and your mule gets a stall and oats." She takes Biscuit's rein herself.
+
+Your Insight check was a 15, and Marta isn't hiding anything. She answers freely. The shrine-wagon stopped about midday, only to water the horses and borrow a cart-spoke. The driver was in a tearing hurry, and with him was a sharp-faced man in a brown coat who kept looking back down the road. A third person rode inside with the canvas shut and never came out, and Marta heard only a dry cough. "The master, I'd guess. They didn't say where they'd lie tonight. But that road leads one place past here, Ashby Weir, and it's a day and a half for a loaded wagon."
+
+So Corvin is almost certainly aboard, ill or hiding, and they're ahead of you by about seven hours, and they know you may follow.
+
+Inside it's warm: a hearth, a bunkroom with six cots, a brass lamp burning on a shelf. You're the only guest. Over bean soup and bread, Marta tells you the Weir folk are quarrelling with their lady over a ferry toll, and that Lady Thistlewood is proud, thin-skinned and sharp.
+
+It's past seven on Day 3. You could sleep here and rise early, or press on by lamplight.
+
+What does Wren do?

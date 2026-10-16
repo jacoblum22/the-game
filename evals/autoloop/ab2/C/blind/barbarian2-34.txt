@@ -1,0 +1,246 @@
+GAME barbarian2, ROUND 34
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 31 ==
+PLAYER: I plant my feet and let the old loudness out, because it's the one thing about me that's true. "My father's grave, Foreman. Fourteen years I couldn't climb to it, and your Captain Vael gave me half an hour to say my piece before I sold my axe, so I took the time and said it."
+
+I tilt my chin at the ledger. "Count that however you like. I swore an oath on my father's blood and I keep it, so put me to work, and tell your scouts to find something better to chew on than a son's grief."
+  [game] dice Korvash Charisma (Deception) telling the grief-true story while hiding Tessa, DC 13 (Foreman's Insight): 1d20+1 = 1d20 [6] + 1 = 7
+  [DM write_lore (hidden)] {"entry": "The Greyshaft Foreman", "add_to_description": "Day 14: believed the grief but sensed an omission (Deception 7). Assigned Korvash to the second smelter gallery door-guard, bunk in lower barracks, with a watcher bunkmate named Tally-Pip (young goblin, ledger-boy, reports to the Foreman). Declared the third gate off-limits to hired axes: 'the third gate is where the ledger sleeps.' Korvash
+  [game] notebook: updated The Greyshaft Foreman
+  [DM write_lore (hidden)] {"create": "Tally-Pip", "kind": "person", "description": "Young goblin ledger-boy at Greyshaft, the Foreman's watcher assigned as Korvash's bunkmate; quick, bright-eyed, chatters; reports nightly to the Counting House. Can be bribed with rations or befriended."}
+  [game] notebook: created an entry for Tally-Pip
+  [game] time: 6 hours later: Day 14, 12:58:36 PM
+DM: You say it the way you say everything: loudly, with your chin up and every word meant. The scribe's pen scratches behind its screen. The guards by the door shift their feet. When you finish, the Foreman looks at you for a long moment, and his thumb moves once across the edge of the page.
+
+"Grief," he says at last, soft as before. "A son's. I have seen it, and it is not a lie, and it is not the whole of it." He lets that sit between you like a coin on a table. "I do not ask for the whole of a man. I ask for his hands." He turns the ledger toward you. There is already a line on the page with your name in a clerk's neat hand, and beside it a blank column. "You will guard the door of the second smelter gallery. The heat is considerable. You will be fed, and you will sleep in the lower barracks. A bunkmate will show you the ways of the place."
+
+A small goblin boy appears at the screen as if summoned: thin, bright-eyed, ink to the elbows, a clerk's cap sliding over one ear. "Tally-Pip, sir!" he chirps, and gives you a grin that is both friendly and perfectly attentive. You do not doubt that he writes down everything you say.
+
+"One more thing," the Foreman adds as you turn. "The third gate is closed to hired axes. It is where the ledger sleeps. Do not climb to it. Do not look up at it." The softness has gone out of his voice and left only the level weight. "I would be most displeased."
+
+The rest of the morning goes to marching and a bowl of grey porridge, to the smell of coal and iron, to the second gallery's door, a slab of riveted plate with a gap through which heat rolls out like breath. It is nearly one in the afternoon. Tally-Pip chatters at your elbow the whole way, naming the guards, the cooks, and the shifts, and from the corner of your eye you watch him count how many questions you do not ask.
+
+The third gate is above and behind you, forbidden, and somewhere up there is a girl who left you a slate chip. You have six days.
+
+What does Korvash do?
+
+== ROUND 32 ==
+PLAYER: I take the post at the gallery door like a man who's resigned to it, arms folded, greataxe grounded beside me, and share a strip of Veshra's dried goat meat with Tally-Pip, since he looks like he doesn't eat enough. "Eat, little clerk. Write down that I'm generous, if you must write something."
+
+Then I ask only the harmless things: when the shifts change, who brings the water, and which guards drink on watch. I'll learn the rhythm of the place before I ever look up at that third gate.
+  [game] dice Korvash Charisma (Persuasion) befriending Tally-Pip with goat meat and harmless questions, DC 11: 1d20+1 = 1d20 [12] + 1 = 13
+  [DM write_lore (hidden)] {"entry": "Tally-Pip", "add_to_description": "Day 14 afternoon: befriended by Korvash with goat meat (Persuasion 13). Told him: shifts change at dawn, noon and dusk bells; water carts come at the noon bell; the guards of the second wall drink on watch after the dusk bell; the third gate is the Foreman's ledger-house and its stairs, guarded by six Tally-sworn hobgoblins, never drunk. A quiet girl, 
+  [game] notebook: updated Tally-Pip
+  [game] time: 5 hours later: Day 14, 5:58:36 PM
+DM: You plant yourself at the gallery door like a man resigned to it, arms folded, greataxe grounded beside your boot. The heat that rolls out through the plate is a steady, dry fist. When Pip stops chattering to wipe his forehead you tear a strip from Veshra's pouch and hold it out. "Eat, little clerk. Write down that I'm generous, if you must write something."
+
+He blinks, takes it, and eats the whole strip while looking very hard at you. After that he talks a good deal more and writes a good deal less. You ask only the harmless things. The shift bells ring at dawn, noon and dusk. The water carts come on the noon bell, always the same boy with the same limp. The guards of the second wall drink on watch once the dusk bell has gone and the Foreman is back in his counting-house; the lower wall keep sober, being closer. The third gate is another matter. "That's the ledger-house," Pip says, lowering his voice with relish. "Six Tally-sworn on the stair and none of them drunk, ever. The Foreman sleeps up there with his books." He licks his fingers. "There's a mender, too. Came with the autumn tally. Quiet. Hood always up. She mends the ledger-bindings and she sings to goats that aren't there. I've only seen her at dusk, at the wash-line on the gate-top, hanging cloths. She never comes down."
+
+He looks at you sidelong with the open, avid curiosity of a boy who has just given something away and isn't sure what. Then he shrugs, because he is fourteen and it isn't his problem. "Don't tell the Foreman I said."
+
+The dusk bell tolls across the valley. It is nearly six in the evening, and the light in the bowl of scree is going the color of a bruise. From the gallery door you have a clear line up the slope past the second wall to the third gate, a black notch with a ribbon of washing flapping on a line along its top. Someone is up there hanging cloths.
+
+You are due off your post with the bell, and the barracks are down the hill. The guards of the second wall are beginning to drink.
+
+What does Korvash do?
+
+== ROUND 33 ==
+PLAYER: I don't look up. I thank Pip with a gruff nod, tell him his secret is safe with a dragonborn who's never kept a clean ledger, and fall in with the shift going downhill to the lower barracks.
+
+I take a bunk by the wall, keep my pouch under my head with the goat and the slate in it, and eat my porridge slow, listening to who talks and who drinks. Tomorrow at dusk I'll be back at my post with my eyes on the dirt and my ears on that wash-line, because a girl who sings to goats that aren't there will sing a tune I know.
+  [DM write_lore (hidden)] {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: at the second gallery door, Korvash hears the hooded mender at the third-gate wash-line singing the clan's goat-counting song, the one Dargan sang; she hit the verse about the 'seventh goat that returns' twice, pointedly. The Foreman's guards did not notice. She has not looked down."}
+  [game] notebook: updated Find Tessa
+  [game] time: 1 day later: Day 15, 5:58:36 PM
+DM: You thank Pip with a gruff nod and tell him his secret is as safe with you as a dragonborn's ever is, which is to say very. Then you fall in with the shift going down the hill and do not look up once, not at the notch of the third gate and not at the cloth flapping above it, though your neck prickles the whole way.
+
+The lower barracks are a long low hall that smells of wet wool, coal and boiled barley. You take the bunk against the wall, tuck your pouch beneath your head with the goat and the slate inside it, and eat your porridge slowly while the room talks around you. You learn who gambles and who sulks, who owes whom, which sergeant has a cough. Tally-Pip drops onto the next bunk with his ledger and falls asleep mid-sentence, cap over his eyes.
+
+The next day passes at the gallery door in heat and noise: a shift bell, a water cart, a hobgoblin with a hammer. You keep your eyes on the dirt. At the noon bell the limping boy brings water and a heel of bread. You think about not thinking.
+
+At dusk, when the bell has tolled and the second-wall guards have begun, quietly, to pass a flask, you hear it. At first it is only a thread under the forge noise and the wind: a woman's voice, or a girl's, thin and unhurried, floating down from the gate-top where the washing hangs. You know the tune before you know the words. It is the clan's goat-counting song, the one Dargan sang at the evening fold when you were small and could not sleep, a nonsense chant of numbers and animals that ends in one goat missing and coming home.
+
+She sings it quietly, in Draconic, all the way through. Then, where the seventh goat is lost and found again, she goes back and sings the verse a second time, slower and plainer, so that anyone who knew it would hear.
+
+None of the guards pay it any mind. Pip, beside you, doesn't look up from his page, except to say, "Mender's singing again. She does that. It's creepy." He scratches something out.
+
+It is just after six in the evening of day fifteen, and the song has stopped. The wash-line is still. You have not looked up. Five days remain, and you have a hundred ways to get a message to a girl you are not allowed to know.
+
+What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 34, "category": "clock", "severity": 2, "quote": "Nothing happens that night. Nothing happens the next day", "why": "The player only hummed a verse and went back to sharpening the axe. The clock jumps a full day (Day 15 to Day 16, 5:58 PM), costing a day of the five before midwinter's eve with no choice by the player."}
+
+THE PLAYER'S LINE THIS ROUND: I keep my eyes on the dirt, but I let my lips move and take up the tune myself, low and rough, the last two lines she left unfinished, where the missing goat comes home. When Pip glances over, I scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk, so write that down."
+
+Then I go back to dragging a whetstone down the greataxe, steady and slow, and I don't lift my head again.
+
+=== REPLY barbarian2-34-01 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: Korvash hummed the song's last two lines in reply (Deception 11, just passes). Pip accepted it as grief and wrote it down as 'sentimental ab
+You keep your head down and let the whetstone run along the greataxe, and under your breath, rough as gravel, you take up the tune. You don't sing the verse she sang. You give her the two lines she left hanging, where the lost goat turns on the hillside and comes home to the fold.
+
+Pip's pen stops. He looks at you, then at the page, then at you again. You scowl without lifting your eyes. "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+It is a close thing. His gaze lingers a heartbeat too long. Then he shrugs, scribbles a line, and tucks the ledger under his arm. "Sentimental," he mutters, and sounds almost fond of it.
+
+Not once do you look up. But at the corner of your eye, where the third gate's notch cuts the darkening sky, the washing line gives a small jerk, as if a hand had snatched at it. A moment later, one more cloth is pegged out at the far end, a pale rag against the dusk, hung deliberately where it was not hung before.
+
+Nobody else marks it. The guards of the second wall pass their flask. The bell has gone, your shift is done, and the barracks wait below. It is a little after six-fifteen on day fifteen, with five days until midwinter's eve. She knows you are here and has answered. What does Korvash do?
+
+=== REPLY barbarian2-34-02 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: Korvash answered the mender's song by humming the last two lines (the missing goat coming home). Pip accepted it as sentimental grief (Decep
+You keep your head down and your lips barely moving, and you hum the last two lines of the song, rough and low, where the lost goat finds the fold and comes home. Pip's pen stops. He looks at you sidelong.
+
+"My father's evening song," you mutter, and scowl as hard as you can. "A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+He studies you a moment longer, then shrugs and bends to his page. You can see the line he writes: *sings father's song.* That is all.
+
+You go back to the whetstone, drawing it down the greataxe in long, slow strokes, and you do not lift your head. You don't need to. At the edge of your sight, high on the slope, the washing on the third-gate line has stopped moving, as though a hand had paused among the cloths. After a moment, something small and pale is pegged at the end of the line, a rag knotted in a way you remember. It is a herder's tally knot, the kind a shepherd ties to say *counted, all present.* It faces the second gallery, and it hangs there in the wind.
+
+Then the hand is gone, the line sways, and the dusk bell finishes tolling. It is a quarter past six on day fifteen. Five days remain, and she knows you heard her.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-03 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: heard Korvash finish the mender's song (Deception 7). Pip wrote it down and noticed that he knew the unfinished verse. He is torn between fri
+You keep your eyes on the dirt and let your lips move. The last two lines come out low and rough, the ones where the missing goat comes home, and they come out true, because they are the oldest thing you own. Pip's pen stops.
+
+You scowl before he can speak. "My father's evening song. A man's allowed to be sentimental about his dead, clerk, so write that down."
+
+"I will," Pip says slowly. He does write, but not the way he writes the shift counts. He writes carefully, with his tongue between his teeth, and he doesn't look at you while he does it. "Funny," he says. "Mender knew the same one. Knew it all the way to the end, too." Then he shrugs, much too casually for a boy his age, and turns the page so you can't see it.
+
+The excuse was thin and he knew it. He has not decided yet what to make of it. You have a feeling the decision is coming, and that it will land before the next bell, when the Foreman asks for his pages.
+
+You drag the whetstone down the axe, steady and slow, and don't lift your head. The wash-line above the third gate hangs motionless. The second-wall guards are passing their flask. It is a quarter past six, and the gallery door breathes its heat on your back.
+
+Do you act on Pip, or wait and see what he does?
+
+=== REPLY barbarian2-34-04 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the song's ending (Deception natural 1 on covering it). Pip noticed the mender and Korvash sing the SAME song, wrote it down, 
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 15 night: will learn from Tally-Pip that Korvash and the hooded mender sing the same clan song. He will act on it (summons, or moves the m
+Your lips move before you decide to let them. Low and rough, you take up the tune where she left it, the last two lines, where the missing goat finds the fold and comes home. It is out before you can stop it.
+
+Pip's head comes up. His pen stops. You scowl and mutter your excuse: your father's evening song, a man's allowed to be sentimental about his dead, write that down, clerk. It's even true, and it is a bad liar's best cover, but you say it too fast and too gruffly, and the boy's eyes go from you, to the gate-top, to you again.
+
+"That's funny," he says slowly. "That's the same song. Same words, even." He looks down at the page, and you watch him write it, with the care of a boy who knows an interesting thing when he sees one. "Lots of people know songs," he adds, not quite convincingly, and turns the page.
+
+You go back to dragging the whetstone down the axe, slow and steady, and you do not lift your head. Above you, at the top of the slope, the washing line has gone still. A cloth that was flapping has been taken in, and no one is hanging more.
+
+The nightly tally is at the seventh bell, and Pip never misses it. It is half past six now, the gallery door is hot against your back, and five days remain.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-05 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: heard Korvash hum the unfinished lines of the mender's song (Deception 7, not convinced). Wrote 'knows the mender's song' in his ledger, then
+You keep your eyes on the dirt and let your lips move. The tune comes out of you low and rough, the way it did when Dargan hummed it over the evening fold. You take up the last two lines she left hanging, where the missing goat comes home, and you sing them to the whetstone.
+
+Pip's pen stops. He looks at you, then up the slope, then at you again. You scowl before he can open his mouth. "My father's evening song. A man's allowed to be sentimental about his dead, clerk, so write that down."
+
+It is a poor lie. You feel it fall flat the moment it leaves you. Pip says "Mm," in the voice of someone being polite about a bad stew, and bends over his ledger. You watch his pen write a line, strike it out, and write it again, slower. He doesn't say what it is. When he glances up, his bright eyes are troubled rather than sly, which is worse in its way. He likes the goat meat. He may not like what he is about to decide.
+
+Up on the gate-top the last of the washing comes down. A small hooded shape gathers the cloths in her arms and pauses at the parapet for the length of one breath, facing the valley, not you. Then she is gone down the ledger-house stair.
+
+It is just past six on day fifteen. The dusk bell has rung, and the second-wall guards are well into their flask. Five days remain before midwinter's eve. Pip is watching you, ledger shut on his thumb, waiting to see what kind of man you are.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-06 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the goat-song's closing lines; Pip bought the 'grief' excuse only half-way (Deception 7). He wrote it down and noticed the men
+You keep your eyes on the dirt, but your lips move. Low and rough, you take up the two lines she left hanging, the ones where the missing goat comes home, and you sing them under the roar of the forge so only the plate and the whetstone could hear.
+
+Pip's pen stops. He glances up at the gate-top, then at you, then at his page. "That's the same one," he says slowly. "The mender's."
+
+"My father's evening song," you growl, not looking up. "A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+You say it well enough, in the right voice, but not well enough. Pip's bright eyes stay on you a beat too long. He writes something, a short line, then holds the pen above the page and looks at it. You do not see what he has written. He tucks the book against his chest, as if he might change his mind about it.
+
+"Lots of people know old songs," he says at last, carefully, and for once he doesn't chatter. "I didn't hear anything, anyway. Funny how the wind carries things."
+
+The whetstone rasps down the axe. Up on the gate-top the wash-line is empty now, one cloth stirring. The dusk bell has long since rung, and the second-wall guards are drinking in earnest. You have a clerk who has chosen, for the moment, not to tell, and five days left.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-07 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the song's last lines back, claiming grief (Deception 9, not fully convincing). Pip wrote it down but also noted, unprompted, 
+You keep your eyes on the dirt, but your lips move, and the tune comes out of you low and rough: the last two lines she left unfinished, where the missing goat comes home. You sing them the way Dargan did, flat on the last note.
+
+Pip's pen stops. He looks at you, then at the whetstone, then up the slope at the empty wash-line. You scowl before he can open his mouth. "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+He writes. The scowl wasn't as good as you hoped. He writes for rather longer than "sentimental" needs, and when he finishes he looks at the page and then at you with a small, worried crease between his brows. "The mender sang that one," he says quietly. "Same words. You knew the end." He chews his cap-string. "I wrote down you were sentimental. I didn't write the other part. Yet."
+
+Then he goes back to scratching, pointedly not looking at you, and the dusk bell's echo dies off the scree.
+
+Pip is a boy with a conscience, and a deadline: the Foreman reads his pages every night. The gallery door ticks with heat at your back. The wash-line above is still, and five days remain.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-08 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the song's last lines (Deception 10, just short). Pip wrote down 'sings the mender's song, says it's his father's' and did not
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: Korvash sang the last lines back; the wash-line above went still, and a cloth was left hanging a moment longer than the rest, then withdrawn
+You take up the tune low and rough, under the noise of the forge, and give her the last two lines she left hanging: the seventh goat, the long way round, the fold-gate opening. Your voice cracks on the word for *home*. You don't stop.
+
+Above, at the top of the slope, the wash-line goes still. A pale cloth hangs a heartbeat longer than the others, then is drawn in quickly, and the gate-top is empty.
+
+Pip has stopped writing. He's looking at you with his head tilted and the pen resting on his lip. You scowl and mutter that a man is allowed to be sentimental about his dead, and he should write that down. It's a poor performance. Your voice is too thick, and the scowl comes a beat late.
+
+"Your father's song," Pip says slowly. "Funny. She sings it too." He looks at his page, then at you, and for once he does not chatter. After a moment he writes a short line and doesn't read it out. He doesn't strike it out either.
+
+You go back to dragging the whetstone down the axe, steady and slow, and don't lift your head again. The dusk bell's echo fades. Down the slope, the second-wall guards pass their flask. It is a little past six, and the relief is due at the next bell.
+
+Pip knows something now, and it is in his ledger. He likes you, and he has not told the Foreman yet. Five days remain. What does Korvash do?
+
+=== REPLY barbarian2-34-09 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the song's ending and covered with 'sentimental for my dead' (Deception 8, failed to fully convince). Pip wrote it down, then 
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: Korvash answered Tessa's song by humming the unfinished last lines (the missing goat comes home). At the gate-top, the wash-line shook once,
+You keep your eyes on the dirt and let your lips move. The tune comes out low and rough, the two lines she left hanging, where the missing goat comes home through the fold gate and the count is whole again. It is the first time you have sung it since you were a boy.
+
+Up on the gate-top, the wash-line shakes once, as if a hand had caught it. Nothing else moves.
+
+Pip has stopped writing. He looks at you, then at his page, and his smile is a little uncertain. "Sentimental," you growl, "for my dead. Write that down, clerk." He does write, and then crosses it out, and then writes something much shorter. He doesn't say what. When he tucks the ledger under his arm his chatter has gone thin, and he watches you with the face of a boy who has found a loose stone in a wall and cannot decide whether to push it.
+
+The whetstone goes down the greataxe, slow and steady. The dusk bell has long since faded, and the second-wall guards have the flask going round. It is a little after six-fifteen in the evening of day fifteen. You do not look up. Five days remain, and Pip may be carrying your song to the Counting House tonight.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-10 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the song's ending (Deception natural 1 passing it off as grief). Pip wrote it down, and also noted the mender's song and Korva
+You keep your eyes on the dirt and let the old tune come out of you low and rough, the last two lines she left hanging, where the missing goat finds the fold. It is out before you think. Then Pip's pen stops.
+
+You scowl and mutter, "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down." It comes out too loud, too fast, and too long. It is the voice of a man explaining himself.
+
+Pip does not answer. He looks at you, then up the slope toward the wash-line, then at his page, where he has written two lines side by side and drawn a small, careful bracket between them. He closes the ledger. "Sure," he says, in a different voice, smaller. "Sentimental."
+
+The dusk bell has long since gone, and he gathers his things without meeting your eye. "I'm supposed to report at the half hour," he says to the ground. "To the Counting House. Every night." He swallows. "I haven't decided what to say."
+
+He doesn't wait for an answer. He walks off down the slope toward the lower gate with his cap pulled low, a small thin figure in the dusk, and the forge-light throws his shadow long behind him.
+
+It is half past six. Up the hill the wash-line hangs still. You are due at the barracks in an hour, and the Foreman's Counting House is at the bottom of the slope, where Pip is going.
+
+What does Korvash do?
+
+=== REPLY barbarian2-34-11 ===
+  [hidden call] write_lore: {"entry": "Tally-Pip", "add_to_description": "Day 15 dusk: Korvash hummed the goat-song's ending; Pip noted it (Deception 8, not fully convincing). Pip wrote it down but did not understand; he'll repo
+You keep your eyes on the dirt, but your lips move. The tune comes up out of you low and rough, the last two lines she left hanging, where the missing goat finds the fold and the counting comes out right at last. You have not sung it since you were a boy. Your voice cracks on the final note.
+
+Pip's pen stops. He looks up at you, then toward the gate-top, then back. "That's the same song," he says slowly.
+
+You scowl and mutter that it's your father's evening song and a man is allowed to be sentimental about his dead, and he can write that down. It is not your best lie. Pip wets his lip and writes something, though his pen moves more slowly than before, and he doesn't quite meet your eye. He knows he has seen something. He has not yet decided what it is worth, or to whom.
+
+You drag the whetstone down the greataxe, steady and slow, and don't lift your head. Up on the gate-top, the cloth on the wash-line is still. A little later a single hand reaches out of the dusk and takes in one white shirt, as if there were nothing in the world more ordinary.
+
+The night bell is near, and Pip is chewing his pen. Tonight he reports to the Counting House, and you do not know what he will say. Five days remain. What does Korvash do?
+
+=== REPLY barbarian2-34-12 ===
+  [hidden call] write_lore: {"entry": "Find Tessa", "add_to_description": "Day 15 dusk: Korvash hummed the song's closing lines low (answer to the mender). Pip accepted it as grief and wrote 'sentimental about dead father' in hi
+You keep your head down and let your lips move. The words come up rough from somewhere under your ribs, the last two lines she left hanging, where the missing goat finds the fold in the dark and the counting comes out right at last. You hum them more than sing them, pitched low beneath the forge-roar.
+
+Pip's head comes up. His pen stops. You scowl before he can open his mouth. "My father's evening song. A man's allowed to be sentimental about his dead, clerk. Write that down."
+
+He studies you for a moment, then shrugs and bends over the page. You see him write it, word for word, and underline *sentimental*. His face holds no suspicion at all, only the pleased look of a boy who has caught a small, harmless truth and filed it where it belongs.
+
+You go back to the whetstone, long steady strokes down the greataxe's edge, and you do not lift your head. But at the edge of your vision, high on the slope, the cloth on the wash-line shifts once, as if a hand paused there. Then it hangs still, and a lamp is lit behind the ledger-house shutters.
+
+It is a quarter past six. The second-wall guards are drinking in earnest now, and the night shift is filing in. Five days remain before midwinter's eve, and she has heard you. Neither of you can say so aloud.
+
+What does Korvash do?

@@ -1,0 +1,184 @@
+GAME bard2, ROUND 39
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 36 ==
+PLAYER: I sit, keep my hands visible, and tell her plainly. "My lady, I'm a storyteller's apprentice, and I've come to give you the truth about the hero at the ford in that painting: Corvin Tallowmere sold your family a tale, and I have his own page recording the sale." I place the Thistlewood leaf on the arm of her chair, then add more gently, "And a second matter, if you'll allow it: your mother once took in a road-priest called Elowen Ashgrove, with a babe wrapped in green velvet. I think that babe grew up to sit before you."
+  [DM write_lore (hidden)] {"entry": "Lady Maren Thistlewood", "add_to_description": "Day 4 night: Read the Thistlewood ledger leaf, accepts the ford tale is forged (she half suspected). Remembers Elowen Ashgrove staying at the manor ~20 years ago with a baby (Maren then in her twenties). Her mother Lady Agnes kept the child three months. Then Corvin arrived with a \"letter in Elowen's hand\" (forged) asking for the child, 
+  [game] notebook: updated Lady Maren Thistlewood
+  [DM write_lore (hidden)] {"create": "Elowen's Coffer", "kind": "item", "description": "Small iron-bound coffer in the Thistlewood strongroom, scratched with a lantern and \"E.A.\". Left by Elowen Ashgrove \"for the girl when she is grown.\" Locked; the key was given to Corvin twenty years ago. Contents unknown.", "relationships": ["kept at [[House Thistlewood]]", "left by Elowen Ashgrove ([[The Road-Priest's Hand]])", "it
+  [game] notebook: created an entry for Elowen's Coffer; added 3 relationships to Elowen's Coffer
+  [game] time: 30 minutes later: Day 4, 7:30 PM
+DM: She reads the leaf by the firelight, once, then again, her ink-stained thumb moving along Corvin's neat hand. When she looks up there isn't surprise in her face, only a deep weariness, as of a debt long expected. "I wondered," she says. "I'd sit under that painting and think, no man ever looked so tidy in a river." She folds the leaf and holds it as if it weighed a great deal. "The ford tale held for twenty years because no one dared look. Now the village will."
+
+Then your second matter lands, and the weariness changes into something stranger. She is quiet for a long time. She looks at your face, your eyes, the way you hold your hands.
+
+"I was twenty-four when she came," she says. "A road-priest, thin as a heron, with a baby in a blanket the colour of a forest. My mother was sick that year, and she took them in without a question. The child slept in my own old cradle by that fire for three months, until the road-priest went out one evening and didn't come back." Her voice catches. "Then a man arrived, a storyteller, charming, silver-tongued, with a letter in the priest's hand asking for the child to be given to him. My mother was ill and she believed it. She gave him the baby, and the key to a coffer the priest had left behind 'for the girl when she's grown.' I watched him ride away with her." She presses her lips together. "I've wondered for twenty years if I should have said something."
+
+She rises. "The coffer is still here. Mother wouldn't send it away, and the key went with the storyteller. Come."
+
+She leads you down a stair to a small stone strongroom, and by the light of her candle you see it on a shelf: a little iron-bound coffer scratched with a lantern and the letters *E.A.* It is no bigger than a bread-box. Locked.
+
+You've heard Corvin's name linked to this twice in a day. He has the key, and he'll be at the ford at dusk tomorrow.
+
+What does Wren do?
+
+== ROUND 37 ==
+PLAYER: "Thank you, my lady. Twenty years is a long time to carry that, and I won't hold any of it against you." I set the candle on the shelf and kneel at the coffer, running a fingertip over the lantern scratches and the keyhole, then turn the brass reliquary over in my hand. "May I try something odd first? Elowen made this case and this coffer, and I wonder if the lantern's foot or the ring on its base is more than ornament. If it isn't, I'll ask you for a smith's fine awl and a steady hour, and I'll not force the lid."
+  [game] dice Wren's Investigation check examining the reliquary's foot against the coffer's keyhole, DC 14: 1d20+2 = 1d20 [16] + 2 = 18
+  [DM write_lore (hidden)] {"entry": "Elowen's Coffer", "add_to_description": "Opened Day 4 night by Wren: the brass reliquary's lantern-foot is the true key (Corvin's iron key was a decoy Elowen sent with him). Inside: a letter from Elowen to \"my wren\", a small silver lantern pendant, and a folded, sealed commission-paper naming Wren as Elowen's heir to her road-priest's lamp-staff. Letter: Corvin Tallowmere was Elowen's
+  [game] notebook: updated Elowen's Coffer
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Per Elowen's letter: was her apprentice, became a forger who sold her true blessings as noble pedigrees; she was going to confront him when she vanished. Whether he killed her or merely took the child is unknown. He fears the coffer and the true key; his note's \"who wrote it\" hinted at this."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] sheet: gained 1 × Elowen's letter to her daughter; gained 1 × Silver lantern pendant; gained 1 × Sealed commission-paper naming Wren Elowen's heir
+  [game] time: 40 minutes later: Day 4, 8:10 PM
+DM: You kneel on the cold stones with the candle on the shelf above you and turn the little brass lantern in your hands. Your Investigation check was an 18. Under the base, hidden among the cast rays, a boss of metal stands a hair proud, and it isn't a decoration. It has teeth. It's a key.
+
+You hold your breath and fit it to the coffer's keyhole. It slides in with a small, soft click, as if it had been waiting twenty years, and turns. Lady Maren catches her breath behind you. The iron key Corvin carried off was never going to fit.
+
+The lid rises. Inside, on a bed of faded green velvet, lie three things: a small silver pendant shaped like a lantern, a folded paper sealed with plain wax and marked with a lamp-staff, and a single letter in a looped hand you know from the parchment in your reliquary. It's addressed on the outside: *To my wren.*
+
+You read it kneeling, with a hand over your mouth. It isn't long. Elowen writes that Corvin Tallowmere was her own apprentice, that he turned her blessings into pedigrees and sold the road's mercy to men who wanted it for their vanity, and that she meant to confront him. If she did not return, she wrote, he would come for the child with false letters and a pleasant face. *Light the road, don't sell it. You'll know what that means when you're old enough to be ashamed.* Beneath the signature, a lantern with a crooked flame. The folded paper is a commission, naming you heir to her lamp-staff and her calling, if you want it.
+
+You've gained the letter, the pendant, and the commission, and learned more than you came for. It's ten past eight on Day 4. Corvin is a day's wait away at the ford, and he knows it is true.
+
+Lady Maren waits quietly, hand on the door. What does Wren do?
+
+== ROUND 38 ==
+PLAYER: I fold the letter against my chest for a long moment, then wipe my face with my sleeve and put the pendant on. "My lady, may I ask for a bed, a pen, and a few hours alone with this? Tomorrow I'm going to meet the man who raised me, and I'd like to know what I'll say before I open my mouth."
+
+DM: what's my total XP now and how many Bardic Inspiration uses do I have left?
+  [game] sheet: XP +75: 175
+  [DM write_lore (hidden)] {"entry": "Lady Maren Thistlewood", "add_to_description": "Gave Wren a guest room, pen, and privacy on Day 4 night. Offered to stand witness against the forged ford tale before the village and will not burn the Thistlewood ledger leaf until Wren says so. Hob Crannock also willing to swear to Elowen's mark."}
+  [game] notebook: updated Lady Maren Thistlewood
+  [game] time: 10 hours 50 minutes later: Day 5, 7:00 AM
+DM: You fold the letter against your chest for a long moment, wipe your face with your sleeve, and clasp the little silver lantern around your neck. Lady Maren says nothing at all. She only nods once, the way you might nod to a stranger on a long road, and leads you up a narrow stair to a small, clean guest room with a bed, a table, a pen, and a candle. She sets a jug of water and a heel of bread by your hand and withdraws, closing the door softly behind her.
+
+You write for a while. You write what you'd say to him, then scratch it out, then write it again plainer. By the time the candle gutters you have a few lines you can say aloud, and you sleep better than you expected.
+
+To answer your questions: you're at 175 XP, out of 300 for the next level. I gave you 75 for finding Elowen's trail and opening the coffer. Bardic Inspiration is at 3 of 3, none spent.
+
+It's seven in the morning on Day 5 now, and the village has been up for an hour. Down in the yard Biscuit is munching oats, and the ford is a bright, fast thread beyond the willows. Dusk is eleven hours off. Lady Maren has left word with the household that you're to be given anything you ask for.
+
+Corvin will be there at dusk, perhaps with Garrow and the driver. You have today to prepare, and the ledger, the commission, the pendant, and the village's trust, if you want it.
+
+What does Wren do with the day?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 39, "category": "agency", "severity": 2, "quote": "The best place, you decide, is the broad, flat stone midway across", "why": "The DM chooses the meeting spot for the player; in R40 the player then repeats it as their own idea. Also 'You eat a little, you check your rapier, and you smooth the pendant at your throat.'"}
+
+THE PLAYER'S LINE THIS ROUND: I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.
+
+In the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.
+
+=== REPLY bard2-39-01 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 noon: Wren (Performance 24) confessed the forged ford-hero tale in the Heron and Net. The village listened, then laughed with relief and cheered; t
+Lady Maren hears your request over porridge, sets down her spoon, and says, "My mother would have liked that. Do it." She sends a boy running ahead to the Heron and Net.
+
+At noon the common room is packed to the rafters: fishermen, the miller and his wife, a blacksmith with arms like hams, children on the stairs. You stand on a bench with your lute and tell it straight. Your Performance check was a 24. You tell them the ford hero never held any ford, that a clever man sold the tale to a frightened family, and that the toll you've quarrelled over for twenty years rested on a lie that nobody here made. The room is silent. Then the miller's wife laughs, a big, relieved bark, and the whole room breaks. Lady Maren, standing at the back, agrees aloud to a shared ferry-committee of village and manor. People shake your hand. You've earned 50 XP, bringing you to 225 of 300.
+
+In the afternoon you walk the ford. The stepping stones are broad and flat, the water shin-deep and fast, the willows thick on the near bank. You choose a flat shelf of rock mid-ford where Hob's cottage and the village green are both within earshot. Lady Maren lends you two men-at-arms, Dunstan and young Joss, who settle quietly into the willows with bows unstrung. Your Perception check was a 4, so you're sure of the ground and nothing else. The reed-bed upstream looks like reeds, and that's all you can say about it.
+
+It's half past four on Day 5. Dusk is a couple of hours off. Hob has taken a stool outside his green door with his pipe. The light is turning gold, and the wagon has not yet appeared.
+
+What does Wren do until dusk?
+
+=== REPLY bard2-39-02 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren told the Heron and Net's common room the ford hero was a forgery (Performance 7, clumsy: the room turned angry at first, at Wren and t
+Lady Maren agrees over breakfast, though she goes pale as she does. "Say it plainly, and I'll stand beside you."
+
+At midday the Heron and Net is packed, with fishers, ferrymen and the toll-keeper's cousins. You climb on a bench and tell them. Your Performance check was a 7, and it goes badly at first. Your words come out too clever, and someone shouts that the Thistlewoods have been robbing them for twenty years and now a girl tells them it was all a song. A tankard hits the wall. Then Lady Maren steps forward and says, in her tired, level voice, "It's true. I knew it might be." Old Hob Crannock raps his stick and swears to Elowen's mark. The room doesn't forgive, but it goes quiet and wary, and the toll is now a question rather than a grievance.
+
+In the afternoon you walk the ford. Your Perception check was a 14. You find the stepping stones, a flat gravel bar mid-stream with a leaning alder, and Hob's cottage in earshot of the bank. You also spot a flattened patch in the reeds on the far bank, upstream. A brown sleeve moves in it: Garrow, lying still. And through a screen of alders downstream, the painted tail of Corvin's wagon, hidden. Lady Maren lends you two men-at-arms, Dunstan and Pell, who slip into the willows on your side without a sound.
+
+It's half past four. Dusk comes in a little over two hours. The river is loud and cold, and the sun is lowering behind the weir.
+
+You can use that time to rest, prepare, or arrange your ground. What does Wren do?
+
+=== REPLY bard2-39-03 ===
+
+
+=== REPLY bard2-39-04 ===
+
+
+=== REPLY bard2-39-05 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren's confession in the Heron and Net went badly (nat 1): she tangled her words, the crowd heard \"the Thistlewoods lied\" more than \"a s
+Breakfast with Lady Maren is quiet. She hears your request, goes pale, and agrees. "Better from you than from a stranger with a seal," she says, and lends you two of her men-at-arms, Pell and Harrow.
+
+Midday at the Heron and Net goes badly. You stand on a bench with the common room packed, and your Performance check is a natural 1. Your tongue trips, a pun lands wrong, and what the crowd hears is "the Thistlewoods lied for twenty years" and not "a swindler fooled them." A blacksmith named Dunstan Rook bellows that the toll must go and the Lady with it. Hob Crannock tries to speak and is shouted down. Pell and Harrow hustle you out, and the village is angrier at the spur than it was this morning. That is a mess you will need to mend.
+
+The afternoon is kinder. Your Perception check at the ford is a 14. The stepping stones cross a shallow bar about forty paces wide, with a gravel spit mid-stream where you could talk in the open. But on the far bank the willows are trampled, and a fresh wagon-rut leads into a hollow behind them. Corvin's people are already in place, hours before dusk.
+
+It's half past four. Dusk is about two hours away. Pell and Harrow wait by the cottage with Hob. Dunstan Rook's angry crowd mutters at the inn.
+
+What does Wren do?
+
+=== REPLY bard2-39-06 ===
+
+
+=== REPLY bard2-39-07 ===
+
+
+=== REPLY bard2-39-08 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren confessed the forged ford tale in the Heron and Net (Performance 19). The villagers, led by the miller Dunstan Hale-Wick's widow Bess,
+Lady Maren listens over porridge, then slowly smiles. "My mother would have called that either very brave or very vain. I'll take brave." She agrees on the spot.
+
+At noon the Heron and Net is packed, with fishers, weavers, and boys perched on the rafters. You stand on a bench with your lute and tell them the story of the hero at the ford, all of it, the handsome lie and the page that records its sale. Your Performance check was a 19. You make them laugh at the tidy man in the painting, and then you make the laughter stop. When you finish, nobody shouts. A broad miller's widow named Bess rises and says that if the lady will settle the toll at a village moot, fairly, she'll sit at it. Lady Maren, standing at the back, bows her head and says yes. That's worth 50 XP, bringing you to 225 of 300.
+
+In the afternoon you walk the ford with Hob leaning on your arm. You choose the western gravel bar, open and in plain sight of his cottage door and the inn's yard, with the stepping stones leading to it. Two of Lady Maren's men-at-arms, Pell and Harrick, drift into the willows with ale-jugs to look idle. Your Perception check was only a 5, so you check the reeds and the weir and see nothing but heron-prints. That doesn't mean there's nothing there.
+
+It's half past four. Dusk is about two hours off. The village has quietly gathered on the inn's green, pretending not to watch the water.
+
+What does Wren do?
+
+=== REPLY bard2-39-09 ===
+  [hidden call] write_lore: {"create": "Bess Wade", "kind": "legend", "description": "The true hero of Ashby Weir's ford: a ferrywoman who hauled villagers across in a flood generations ago. The village's toll was always a commo
+  [hidden call] write_lore: {"entry": "The Road-Priest's Hand", "add_to_description": "Day 5: Nan Wade (very old, Bess Wade's descendant) tells Wren she saw the road-priest with a lamp-staff cross the ford at night twenty years 
+  [hidden call] write_lore: {"entry": "Lady Maren Thistlewood", "add_to_description": "Day 5: agreed to Wren's public confession at the Heron and Net at midday; after Wren's speech, publicly agreed the toll returns to the villag
+Lady Maren hears your request over porridge, sets down her spoon, and agrees. "I'd sooner be shamed by you than by the Crown."
+
+At midday the Heron and Net is packed, with fishers, weavers and ferrymen shoulder to shoulder and Lady Maren standing stiffly by the door. You climb onto a bench and tell it the way Corvin taught you, with the story first and the truth tucked inside. Your Performance check was a natural 20, and the room goes silent, then loud, then silent again. You tell them the painting's hero never held the ford, that a storyteller sold the tale, and that you are his apprentice and ashamed of it. Lady Maren steps forward, says the toll is the village's common right as it always was, and apologises. Somebody starts to clap, and somebody else is crying.
+
+Afterwards a very old woman, Nan Wade, takes your sleeve. The true hero, she says, was a ferrywoman, Bess Wade, her own forebear, who hauled the village across in a flood. And she has something for you, since you've given the truth back: twenty years ago she saw a road-priest with a lamp-staff cross the ford at night and go down toward the old weir-mill, and a man with a shuttered lantern following her. The priest never crossed back. The mill has been derelict ever since.
+
+The afternoon you spend scouting the ford, the stepping stones, and the willows. Your Perception check was a 9, and you find a good spot, a flat bank in the open with Hob's doorstep forty paces off, but nothing that tells you who is watching you. Two of Lady Maren's men-at-arms settle quietly into the willows, as you asked.
+
+It's a quarter past five on Day 5, and the light is going copper. Dusk is near. Corvin hasn't appeared, and the old mill squats dark downstream of the weir.
+
+What does Wren do?
+
+=== REPLY bard2-39-10 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren confessed the ford hero tale's falseness in the Heron and Net. Crowd mixed: Lady Maren stood beside her, the miller's guild-man Dunsta
+Over breakfast Lady Maren hears you out, sets down her cup, and says, "Say it in my name as well as yours." She agrees to everything, including the loan of two men-at-arms, Alder and Wick, who look glad of a task that isn't collecting tolls.
+
+At noon the Heron and Net is packed. Your speech lands with a 11, which is only half enough. You tell them straight: the hero at the ford was a tale sold to the Thistlewoods, and you hold the page that proves it. Lady Maren stands at your shoulder and doesn't flinch. Some listen. A broad miller's man, Dunstan Pike, bangs his mug and demands the toll be struck and twenty years of dues paid back. Others jeer that you're a stranger stirring trouble. It ends in shouting but no blows, and Maren promises a moot in a week to settle it. The room is split, not hostile. Hob Crannock, on a bench by the door, says loudly that he'll swear to Elowen's mark and sit within earshot at dusk.
+
+In the afternoon you walk the ford. Your Perception check was an 11, not quite sharp enough to be sure of anything. The east-bank willows give good cover for Alder and Wick. The stepping stones run about forty paces across, with Hob's green door at the near end. Upstream, the reeds are flattened in a patch the size of a cart-bed. Someone lay there recently, but you can't tell who or whether they're still there.
+
+It's half past four. Dusk is a couple of hours off. You have the ledger, the commission, the pendant, and a village that's still arguing. Your plan is set, and Corvin hasn't shown himself.
+
+What does Wren do until dusk?
+
+=== REPLY bard2-39-11 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren told the village in the Heron and Net that the ford hero was Corvin's invention; with Lady Maren beside her, the villagers accepted a 
+Lady Maren hears your request over porridge and doesn't argue. "Say it in my name as well," she says. "I'd rather be ashamed with company."
+
+At noon the Heron and Net is packed to the rafters, with fishermen, weavers, the ferryman, and a dozen children on the stairs. Your Performance check was a 22. You tell it as a story, because that's what you are: the hero at the ford, the grand painting, the tale a clever man sold to a frightened family. You make them laugh at the tidy hero, then you let the laughter go quiet, and you say the true part plainly. The toll was never his to give, and the lady never knew. Lady Maren stands beside you and says, "I did not ask, and I should have." Nobody shouts. The ferryman scratches his chin and says the toll can be talked about like honest folk, and a murmur of agreement goes round. It isn't forgiveness yet, but it is a start.
+
+In the afternoon you walk the ford. Your Perception check was a 19. Across the water in the willows, a brown coat lies still in the reeds, Garrow, watching. Behind the old weir-keeper's hut, in a dry hollow, the painted wagon stands with its driver dozing on the box. No Corvin yet. You pick the middle stepping stones as your ground, open to the water, in earshot of Hob's green door and the near bank. Hob promises to sit on his step with his pipe, and Lady Maren lends you two men-at-arms, who settle quietly into the willows on the near side.
+
+It is half past four on Day 5. Dusk is a couple of hours off. Garrow doesn't know you've seen him.
+
+What does Wren do?
+
+=== REPLY bard2-39-12 ===
+  [hidden call] write_lore: {"entry": "Ashby Weir", "add_to_description": "Day 5 midday: Wren's confession in the Heron and Net went badly (natural 1 Performance); the villagers are split and angry at Lady Maren; Hob Crannock st
+Lady Maren hears you out over porridge, hesitates for the length of one held breath, and agrees. "Better from you than from a stranger with a seal." She also lends you two men-at-arms, Pike and Dunn, who are to wait in the willows and stay out of sight.
+
+Midday in the Heron and Net goes badly. Your Performance check was a natural 1. Your voice cracks on the first line, you lose the thread of the story you rehearsed, and someone at the back laughs. "Another liar from the spur!" a man shouts. Half the room hears "my lady's family cheated us" and the other half hears "my lady's family is shamed". The mood sours fast, and for a moment you think they might throw you out. Then old Hob Crannock gets to his feet, shaky and loud, and swears on Elowen's lamp to what he saw twenty years ago. That steadies some of them. Others leave muttering. The village is split and wary, and Lady Maren will have to live with the aftermath.
+
+In the afternoon you scout the ford. Your Perception check was a 13, and it pays off. A lean shape in a brown coat is crouched in the reeds below the weir, still as a heron. Upstream, in an alder copse, a painted wagon sits under a tarp, with the driver dozing on the box. You find a flat bank by the stepping stones, in the open, where Hob's cottage and a few cottagers' doorways overlook the water.
+
+It's half past four. Dusk is a couple of hours off. The light is going gold on the water.
+
+What does Wren do?

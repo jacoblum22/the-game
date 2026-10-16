@@ -1,0 +1,238 @@
+GAME barbarian2, ROUND 57
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 54 ==
+PLAYER: I hustle Ninna and the last of them into the chute. "Go, Ninna, and don't look back." Then I grab the rim of the grate in both hands, plant my boots on the wall, and haul with all the rage I've got left to tear the frame out wider so a dragonborn can squeeze through behind them.
+
+If it won't give, I'll hold the door as long as I'm standing, and tell Tessa through the gap to take the children to Harrowmere without me.
+  [game] dice Korvash Athletics tearing the grate frame wider (my ruling DC 20; advantage from Rage): 1d20+6 (advantage) = 1d20 [14, 20]→20 + 6 = 26 (natural 20) (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] sheet: condition removed: Raging
+  [game] fight: Round 4, now: Sentry A. Sentry A (initiative 10): HP 11/11, AC 18 Sentry A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Sentry A shoulders the wedged door again (DC 15): 1d20+1 = 1d20 [6] + 1 = 7 (Sentry A has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Sentry B. Sentry B (initiative 10): HP 11/11, AC 18 Sentry B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Sentry B has used its action: no more actions this turn.
+  [game] fight: Round 4, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:25 AM: Korvash tore out the Tin Row ore-chute grate frame (nat 20) and found behind it an old side-drift with rusted rails and a ladder rising toward the third gate, smelling of lamp oil and paper; Tessa's crescent is scratched on a rivet where she sawed it over nights. Tin Row door locked and wedged with a stool leg; Sentry 
+  [game] notebook: updated Break the Foreman's Ledger
+DM: You push Ninna in head-first with the last of the children behind her, then set your boots on the wall and haul. The old iron groans. A rivet sheared half through, then another, and the whole frame peels out of the rock in a shower of grit and rust. Someone had been at it before you: down in the corner of the frame, a crescent has been scratched into a rivet head, and the bolts underneath are sawn nearly through. Tessa has been working at this for nights.
+
+The opening is wide enough for your shoulders now. Behind the frame, where the chute bends, an older working opens off to one side: a drift with rotted rails and a rusted ladder climbing into the dark, toward the third gate. The draft in it smells of lamp oil and paper.
+
+From outside, Tessa's voice, ragged and fast: "Kor? Kor, is that you? The little ones are out, the east scree is clear. *Come on.*"
+
+Back at the door the sentry's boot slams the planks again, the wedge shifting a finger's width. The rage has gone out of you and left your legs shaking. You are at 2 hit points, with the door still holding, a clear way out, and a side-drift that might lead to the ledger.
+
+It is your turn. What does Korvash do?
+
+== ROUND 55 ==
+PLAYER: I squeeze through the torn frame, grab the lamp oil flask off my belt and splash the wedge's side of the door, then hand it to Tessa. "The book can wait, Tess, I'm two hit points from dead, and the children need us on that scree more than the ledger needs burning tonight."
+
+I crawl out into the grey dawn and take her arm. "Get them moving east, and I'll walk the rear with the sword and shield. We'll bring the flame back to that ledger once they're safe, I swear it."
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 19, 6:21:12 AM.
+  [game] time: 4 minutes later: Day 19, 6:25:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:30 AM: Korvash got out through the chute with the last children to the east scree to Tessa; sentries A and B raised the alarm; all 94 children free of the Row but pursuit expected. Master ledger still in the ledger-house; Korvash has 2 HP, no lamp oil, longsword and shield only."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: You squeeze through the torn frame on your belly with the shield scraping rock above you, and the cold dawn hits your face. There's no oil flask on your belt, only your torches and tinderbox. Whatever Greyshaft took off you in the night, it took that too, so the door stays as it is and the wedge will have to hold on its own.
+
+Tessa is there, flat against the scree with her hood thrown back, and she has your arm before you've fully cleared the opening, hauling you upright with a strength that doesn't match her size. She looks at your side, at the black blood on the bandage, at your face, and her mouth goes thin. "You are an idiot," she says in Draconic, and doesn't let go.
+
+The east slope is a wasteland of grey scree and broken slate. Strung out across it, crouched behind boulders in bunches of ten the way you told them, are the children. Ninna is counting heads with her lips moving, one hand on the shoulder of each as she passes. She reaches the end, looks at Tessa, and nods once. Ninety-four. Nobody has been left behind.
+
+Behind and above, the alarm bell has begun to ring out over Greyshaft, long and angry, and from the Row's door you can hear the sentries bellowing for axes to break it. You have a quarter hour at most, perhaps less. East is the stone gully Tessa scouted, a goat track dropping toward a stream and the high road beyond. Harrowmere is three days' march for children on foot.
+
+Tessa keeps her voice low. "I can lead them down the track. I can't walk them all the way and hold off hobgoblins too. And the book is still up there. He'll move it tomorrow, with whatever hands he has left."
+
+You are at 2 hit points with a longsword, a shield, a ring of keys and your sister's hand on your arm. What does Korvash do?
+
+== ROUND 56 ==
+PLAYER: I take Tessa's hand and squeeze it once. "You lead them down the goat track, Tess, and Ninna keeps the count. I walk the rear with the shield and sword, and at the narrowest part of the gully I'll pull the slate down behind us so the Tallies have to dig to follow."
+
+I look at the children and put some of the old loudness back in my voice, pitched low. "Quiet feet, hands on shoulders, and no one drops back. Anyone who gets tired, tell me, and I'll carry you."
+  [game] dice Korvash Athletics pulling the slate down across the narrow gully (my ruling DC 14), 2 HP, not raging: 1d20+6 = 1d20 [6] + 6 = 12
+  [game] dice Pursuit on the goat track (1-2 Foreman's scouts overtake the column; 3-6 not yet): 1d6 = 1d6 [2] = 2
+  [game] time: 25 minutes later: Day 19, 6:50:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:50 AM: Tessa leads 94 children down the east goat-track gully with Ninna counting; Korvash's slate-pull failed (12) and only half the slope came down; two of the Foreman's grey-cloaked scouts have caught up on the ridge above the gully."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: Tessa takes the head of the column without argument, and Ninna falls in beside her, one hand on a shoulder at a time, counting under her breath. The children go down the goat track in a long whispering chain, small ones riding on bigger backs, and nobody drops back. At the first tired boy, you hoist him onto your shoulder without a word, shield on one arm, sword hand free.
+
+At the narrowest place in the gully the walls close to a spear's length, loose slate stacked in dark leaning sheets overhead. You set your back to it, find the keystone slab and heave. Your arms are not what they were an hour ago. The slab shudders and a trickle of shale slides across the path, and then it stops. The slope shrugs, and half of what you wanted comes down: a ragged heap you could climb in a minute, no wall.
+
+You are still staring at it when Ninna's whisper cuts back down the line. "Two of them. On the ridge."
+
+Two grey-cloaked figures stand against the lightening sky on the lip of the gully, thirty feet above the track and forty behind the last of the column. They are the Foreman's scouts, the ones who watched you on the road. One has a short bow already nocked. The other has a longsword and is looking at the children, not at you. Neither has shouted. They are waiting to see how many of you there are.
+
+It is a little before seven in the morning. You are at 2 hit points with a boy on your shoulder, a sword and a shield, the narrow gully at your back, and the whole column strung out ahead of you in the open. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 57, "category": "contradiction", "severity": 3, "quote": "Vael will be on this road by dusk, and he can fetch you himself.", "why": "Cinder Ford and the Throat are three days' road from Greyshaft, the alarm rang under an hour earlier, and the scout says a rider has 'already' gone. Gorrak could not be on this road the same day."}
+
+THE PLAYER'S LINE THIS ROUND: I set the boy down, tell him "Run to Tessa, lad, and don't stop," and climb onto the rubble heap with the shield up and the sword out, so the scouts have to look at me and not the column. Then I bellow up the gully in Goblin and Common alike, as loud as my cracked voice will go: "Two grey cloaks on a ridge, and a whole camp's worth of me already past you! Come down and learn what a Tally's axe is worth, or go and tell your Foreman Dargan's son walked ninety-four children out of his mine!"
+
+"Ninna, Tessa, keep them moving!"
+
+=== REPLY barbarian2-57-01 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~7:00 AM: Korvash's bellowed challenge (Intimidation 20) made the two grey-cloaked scouts withdraw from the ridge to report; they 
+You set the boy on his feet. "Run to Tessa, lad, and don't stop." He goes like a hare. Then you climb the rubble heap with the shield up and the sword out, and you let the old loudness out of you at last, in Goblin and in Common, so that it bounces off both walls of the gully and comes back twice as big.
+
+It works better than it has any right to. Your voice is cracked and your knees are water, but the gully makes a giant of you. On the ridge the archer's bow dips. The swordsman looks down the track for the army of Emberhides you swear is already past them, and sees only the rubble, the shield, and a great red-scaled shape that has not blinked. A dragonborn who is that loud is either mad or not alone, and neither is worth dying for before breakfast.
+
+They say nothing, which is its own answer. The swordsman jerks his chin. They back off the lip together, grey cloaks dropping out of sight, and a moment later you hear boots on loose stone going back toward Greyshaft, fast. They are carrying your name to the Foreman. By the sound of it, they are in no hurry to carry it back with you attached.
+
+You stand on the rubble until the sound is gone, and then your legs remind you that you are at 2 hit points. Ahead, Tessa has halted the head of the column at a bend and is looking back at you. Ninna is counting again. It is about seven in the morning, the stream is below, and the high road beyond it leads to Harrowmere three days off. The scouts will return, and so will worse. You have no food but your pouch of goat meat and ten rations, and the children have eaten nothing.
+
+What does Korvash do?
+
+=== REPLY barbarian2-57-02 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~7:30 AM: Korvash's natural-20 Intimidation turned the two scouts; they let the column pass. The older scout said the Foreman sent
+  [hidden call] write_lore: {"entry": "Foreman's Scouts", "add_to_description": "Day 19 ~6:50 AM: two caught the column at the gully (Scout stat block, hired coin-men, not Tally-sworn). Korvash's natural-20 Intimidation made the
+You send the boy running and climb the rubble heap with the shield up and the sword out. Then you let the old loudness out, cracked and ragged, in Goblin and Common both, and it rolls up the gully like a rockfall. Two grey cloaks on a ridge. A whole camp's worth of you already past them. Dargan's son has walked ninety-four children out of the Foreman's mine, and anyone who wants his axe can come down and learn what it's worth.
+
+It lands. The archer's bow sags a hand's breadth. The one with the sword looks at the length of the column, at the shale at your boots, and at the way you stand, and some tally goes through his head that comes out wrong for the Foreman. "We're paid in coin," he calls down, flat and a little hoarse. "Not in blood. Not for a ledger." He does not sheathe the sword, but he does not come down either.
+
+Then, grudgingly, like a man paying off a debt to his own good sense, he adds: "You're late for one thing, Emberhide. Foreman sent a rider to the Tin Mask two days gone, right after he had your cairn story out of the cook. Wants his count and wants it in person. Your captain'll be at the third gate by dusk tomorrow, and the move is that same night." He spits. "Whatever you're going to do about it, do it before then."
+
+The other scout is already gone, a grey shape slipping back over the ridge toward Greyshaft with the news that Dargan's son led them out. The sword-man watches you a moment longer, then follows. The ridge is empty.
+
+The column goes on. It is a little after half past seven, the sun is clear of the peaks, and by the time the gully opens onto a stream and the high road, you are walking with legs that don't feel like yours. Ninna is counting. Tessa has dropped back to walk beside you, and she is looking at you the way Dargan used to look at a ewe that had come in lame.
+
+You are at 2 hit points. The children are free and moving toward Harrowmere, three days off. The master ledger is still on the third gate, and Gorrak is coming to Greyshaft by tomorrow's dusk. What does Korvash do?
+
+=== REPLY barbarian2-57-03 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+You lower the boy to his feet and send him scrambling down the track toward Tessa's red head. Then you climb the rubble heap with the shield up and the sword out, and let loose the loudest voice your cracked throat can find, in Goblin and in Common both. Your bellow rolls up the gully like a rockfall.
+
+It lands. The swordsman flinches as if struck. The archer's bow swings from the column to you and stays there. For a moment they only stare at the lone, bloody dragonborn on the scree, who has just said Dargan's name and ninety-four in the same breath. Behind you the line of children flows on down the track, and no one up on the ridge is looking at them.
+
+They are thirty feet above you, and the archer is drawing. The swordsman is looking for a way down the gully wall. You have the first move, with 2 hit points, a sword, a shield, and the heap of slate under your boots.
+
+What does Korvash do?
+
+=== REPLY barbarian2-57-04 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:51 AM: Korvash's bellowed bluff at the Foreman's two scouts failed (natural 1). He shouted that \"Dargan's son\" walked 94 chil
+You set the boy down and he bolts for Tessa. Then you climb the rubble with the shield up and the sword out, and you bellow it all up the gully in Goblin and Common. It should have been magnificent. It isn't. Your voice cracks on "Dargan's son", the heap of slate shifts under your boot, and you have to catch yourself on the shield. Your chest is heaving, and the bandage at your side is dark and wet.
+
+The scouts look at you for a long moment. The one with the sword laughs, a short dry bark, and says something low to his partner in Goblin. You catch "one" and "bleeding". They have counted you now, and they know what they're counting.
+
+The swordsman turns and goes back along the ridge at a lope, toward Greyshaft, and he is not hurrying because he doesn't need to. He is carrying your name to the Foreman: Dargan's son, alone, wounded, walking the children out. The archer stays. He lays the arrow on the string, and the point drifts past you, along the gully, to the last of the column where Ninna's head is bobbing, counting.
+
+He hasn't loosed yet. He is waiting for you to move, or for the column to bunch. Below you the children are filing out of the gully's mouth into the open slope, with Tessa at the head, and they will be exposed for several minutes more.
+
+You are at 2 hit points on a heap of slate, thirty feet below an archer who is taking his time. What does Korvash do?
+
+=== REPLY barbarian2-57-05 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:50 AM: Korvash's Intimidation was a nat 1; Foreman's two scouts (A with bow, B with shortsword) dropped him to 0 and he took 2 
+You climb onto the rubble with the shield up and bellow your challenge up the gully in Goblin and Common both. It cracks in the middle. The two grey cloaks do not move, because they can see one dragonborn with a bloody bandage and a boy's weight still in his arms, not a camp's worth of anyone. The archer's first two arrows go wide of the shield. The swordsman is down the slope before the echo dies, and his blade finds the gap under your arm. Your legs fold, and the second cut comes down on you already falling.
+
+You hear one voice from a long way off. "Alive! The Foreman wants him alive!" Hands turn you over and press a wad of cloth against your side. Then there is only dark.
+
+You wake with your cheek on cold slate, wrists bound behind you and the sun well up. It is nearly nine in the morning, and you have 1 hit point. Your sword, shield and keys are gone. The two scouts sit a few paces off on the lip of the gully, sharing a waterskin. Beside them a little knot of children sits roped together at the ankle, nine or ten, the smallest of them sniffling. Ninna is not among them. Nor is Tessa.
+
+The archer sees your eyes open and grunts. "Your lot went to ground in the rocks like rabbits. Drilled them well, didn't you? We've got the slow ones. The rest will keep for the hobgoblins." He jerks his chin toward the black bowl of Greyshaft. A dozen torches are strung out along the track below, coming up in a long line, and a heavy tin-banded figure walks at the head of it with a measuring stride.
+
+It is the Foreman, soft-voiced and in no hurry. The scout stands. "Morning, Emberhide. He'd like a word."
+
+What does Korvash do?
+
+=== REPLY barbarian2-57-06 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:52 AM: Korvash's Intimidation (21) from the rubble made the Foreman's two scouts (stat block: Scout) hold; the archer lowered h
+You set the boy down, tell him to run, and he goes like a hare. You climb the rubble with the shield high and the sword out, and let your cracked voice fill the gully in Goblin and Common both. It rolls off the slate walls like three men's.
+
+It lands. The archer's string eases and the bow dips. For a long breath neither scout moves, weighing a lone, bloody dragonborn on a pile of rock against the unknown number of axes that name might be hiding. Then the swordsman says something short to the other and slips back over the ridge toward Greyshaft, at a run. The archer stays. He keeps his bow in hand, arrow off the string, and he does not come down. He only watches, and begins to walk the ridge parallel to the column.
+
+You've bought a little time, and spent your secret. By now the Foreman will hear that Dargan's son walked ninety-four children out of his mine. Behind you the column is moving, with Tessa's thin voice and Ninna's counting fading down the track.
+
+It is a few minutes before seven in the morning. The archer is shadowing you, and nothing more yet. You are at 2 hit points. What does Korvash do?
+
+=== REPLY barbarian2-57-07 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:55 AM: Korvash's Intimidation (15) from the rubble held the Foreman's two scouts (stat: Scout, AC 13, HP 16, two attacks) on th
+You set the boy down and he bolts. You climb the rubble with the shield up and the sword out, and you roar. It cracks and rasps, but it carries up the walls of the gully in two tongues, and it rolls back down off the slate like a landslide: *a whole camp's worth of me already past you, come down and learn what a Tally's axe is worth, or tell your Foreman that Dargan's son walked ninety-four children out of his mine.*
+
+The scouts do not come down. They were told to watch and count, and the thing on the rubble is not what they were told to count. The one with the sword looks at the bow-woman. Some silent agreement passes between them. He turns and goes back along the ridge at a run, toward Greyshaft and the bell, carrying your name with him. The bow-woman stays on the rim, and she does not loose. She keeps pace along the edge of the gully, always a long bowshot back, with the arrow still nocked and her eyes on the column.
+
+Behind you the children are filing down the track with Ninna's whisper running along them. Tessa glances back once, hard, and you see her take in the name that has just gone up the hill.
+
+It is nearly seven in the morning. The Foreman now knows exactly who you are, and he will know within the hour how many walked out. The track drops toward a stream and the high road beyond. The shadow on the ridge is waiting for the column to come out into the open. You are at 2 hit points.
+
+What does Korvash do?
+
+=== REPLY barbarian2-57-08 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Intimidation"}
+You set the boy down, tell him to run to Tessa and not stop, and he goes. Then you climb the rubble with the shield up and the sword out, and you let the old loudness out of you. "Two grey cloaks on a ridge, and a whole camp's worth of me already past you! Come down and learn what a Tally's axe is worth, or go tell your Foreman that Dargan's son walked ninety-four children out of his mine!"
+
+It almost works. The swordsman shifts his weight, and the archer's bow dips. But then the archer looks at the dark stain on your bandaged side and at how you are standing, the way a man stands when he has nothing left but his lungs. He smiles thinly and says something short in Goblin. The bow comes back up.
+
+They know. You are one wounded man on a rubble heap, and the column is strung out below the ridge with its back to them. You act first, and the scouts have not moved. The archer is thirty feet up the slope with a clear line down the gully. The swordsman is beside him, ready to come down the scree.
+
+Your breath weapon is still in you, but the ridge is too far for a cone, and you have 2 hit points. The children are filing past behind you, and Tessa's small figure has stopped at the bend to look back.
+
+It is your turn. What does Korvash do?
+
+=== REPLY barbarian2-57-09 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Instant Death"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:51 AM: Korvash's bellow failed (7); a Scout Archer's natural-20 arrow (17 damage vs his 2 HP) killed him outright by the massiv
+You set the boy down. "Run to Tessa, lad, and don't stop." Then you climb the rubble heap with the shield up and the sword out. You bellow up the gully in Goblin and Common alike, as loud as your cracked voice will go. It comes out ragged. You are one wounded dragonborn on a heap of slate, and the scouts on the ridge can see it.
+
+Neither of them answers. The archer simply draws.
+
+His first arrow is fast and low, and it comes in over the shield's rim. It hits you at the base of the throat. You feel the blow before you feel the pain. His second arrow goes wide and skitters away down the slate. The first was enough.
+
+Your knees go. The sword slips from your hand and the shield drags your arm down. The gully tilts and the grey sky turns over. You hear Ninna still counting below you, steady and unbroken, and the small boy's running feet. Far ahead, a rust-red figure turns on the track and starts back toward you. She is too far away to reach you.
+
+You don't hear the end of the count. You hear Tessa's voice, once, calling your name in Draconic. Then the sound of the gully thins away and goes quiet.
+
+Korvash Emberhide dies on the slate at the Greyshaft gully, shortly before seven in the morning on the nineteenth day. His last act was to stand between ninety-four children and the men hunting them. By the rules, the arrow that finished him was a critical hit, and the damage was more than your maximum hit points even after what was already gone. At 2 hit points, there was no chance to make a death saving throw.
+
+That is the end of Korvash's story. I'm sorry. He went out the way he lived, loud and in front. If you'd like, I can build a new character who picks up the aftermath: Tessa, Ninna and the children on the goat track, the Foreman's ledger still unburned, and Gorrak Vael's oath with no axe left to hold it. Or we can start a different adventure entirely. Which would you like?
+
+=== REPLY barbarian2-57-10 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:50 AM: at the gully the Foreman's scout archer dropped Korvash (2 HP) with a longbow shot; scouts stabilized him on the Foreman
+You went down on the rubble heap with the shield still up and the bellow still in your throat. The arrow caught you above the rim and the world went out like a snuffed lamp.
+
+You come back to it slowly. The first thing you know is the cold, and the second is rope biting your wrists behind you. You are propped against a boulder on the lip of the gully with your boots lashed together. The sun is well up and it must be nearly ten. Your side and shoulder burn, but you are breathing, and that is more than you counted on.
+
+The sword, the shield and Hask's key ring are gone. The scout archer sits a few paces off with his bow across his knees, chewing a strip of something and watching you without malice. The other scout is nowhere in sight. When your eyes find the empty place beside him, the archer says in flat Common, "Gone to tell the Foreman you're alive. He'll want you in one piece. He says so every time."
+
+You look down the gully. The track is empty to the first bend. No column, no small figures on the scree, no rust-red hood. The slate you pulled half-down lies where it fell, and past it there is only wind. Three hours is a long head start for children who have been told not to stop.
+
+Whether Tessa carried them to safety or whether the Foreman's riders are already among them, you cannot tell from here. You have one hit point and no weapon. One man with a bow watches you, and soon the other will be back with more.
+
+What does Korvash do?
+
+=== REPLY barbarian2-57-11 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:50 AM: Korvash taunted the scouts, failed Intimidation (10); Scout Archer shot him to 0 HP; Scout Blade stabilized him (Foreman
+Your bellow carries up the gully and comes back thin. The two grey cloaks do not answer it. The archer simply draws and looses, two shafts in the time it takes you to blink. The first whistles past your ear. The second takes you high in the chest, and the rubble goes out from under you. The last thing you hear is Ninna's whisper, sharp as a pin: "Go. *Go.*"
+
+You come up slowly, with a heavy ache where the arrow went in and cold iron on both wrists. You are on a floor of black oak boards in a warm room that smells of tallow, ink and hot metal. It is a little before nine in the morning, and you have one hit point. Your sword, shield, keys and the guard's helm are gone. A bandage is wound tight round your chest, and someone has done it well.
+
+Through a high window you can see grey slate and the corner of a stair. This is the Foreman's outer room at the third gate. A tall desk stands against one wall. Through a half-open door beyond it, you glimpse a bed and an iron-bound chest at its foot. On the desk lies your father's greataxe, with Dargan's ember-red sash still tied to the haft.
+
+Two grey-cloaked scouts stand by the door, one rubbing a bowstring with wax. Between you and the desk, a heavy man in a leather apron sits on a stool, turning brass tallying beads one at a time through his fingers. He does not look up.
+
+"Ninety-four hands left my Row this morning," the Foreman says softly. "My scouts lost the column among the rocks. I have sent riders after it, and I have put out the road to Harrowmere. Still, you are here, and a ledger is a patient thing." He moves one bead. "Tell me, Emberhide. Who is the mender to you?"
+
+You have not seen your sister since the scree. You do not know whether she and the children got clear. What does Korvash do?
+
+=== REPLY barbarian2-57-12 ===
+  [hidden call] lookup: {"name": "Scout", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~6:51 AM: Korvash's Intimidation on the two scouts failed (5); fight begun in the gully. Scouts use SRD Scout stats (Scout Archer,
+The boy scrambles off down the track, and you climb the rubble with shield up and sword out. Your bellow rolls up the gully in Goblin and Common both, and it cracks halfway through, hoarse from a night in the dark. The scout with the bow doesn't flinch. He tilts his head the way a man does when a dog barks, and draws to his cheek.
+
+Neither one is afraid of you. They are not hired axes like the guards below. They are watchers, and they know a cut-down man when they see one. The swordsman is already picking his way along the lip toward the gully floor. The archer holds his aim on you.
+
+Thirty feet above, on bare slate, with the column strung out behind you and Tessa's voice hushing the front of it, you are standing on 2 hit points. Your rage is spent, but your breath still burns in your chest.
+
+It is your turn. What does Korvash do?

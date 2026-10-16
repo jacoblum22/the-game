@@ -1,0 +1,250 @@
+GAME bard2, ROUND 40
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 37 ==
+PLAYER: "Thank you, my lady. Twenty years is a long time to carry that, and I won't hold any of it against you." I set the candle on the shelf and kneel at the coffer, running a fingertip over the lantern scratches and the keyhole, then turn the brass reliquary over in my hand. "May I try something odd first? Elowen made this case and this coffer, and I wonder if the lantern's foot or the ring on its base is more than ornament. If it isn't, I'll ask you for a smith's fine awl and a steady hour, and I'll not force the lid."
+  [game] dice Wren's Investigation check examining the reliquary's foot against the coffer's keyhole, DC 14: 1d20+2 = 1d20 [16] + 2 = 18
+  [DM write_lore (hidden)] {"entry": "Elowen's Coffer", "add_to_description": "Opened Day 4 night by Wren: the brass reliquary's lantern-foot is the true key (Corvin's iron key was a decoy Elowen sent with him). Inside: a letter from Elowen to \"my wren\", a small silver lantern pendant, and a folded, sealed commission-paper naming Wren as Elowen's heir to her road-priest's lamp-staff. Letter: Corvin Tallowmere was Elowen's
+  [game] notebook: updated Elowen's Coffer
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Per Elowen's letter: was her apprentice, became a forger who sold her true blessings as noble pedigrees; she was going to confront him when she vanished. Whether he killed her or merely took the child is unknown. He fears the coffer and the true key; his note's \"who wrote it\" hinted at this."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] sheet: gained 1 × Elowen's letter to her daughter; gained 1 × Silver lantern pendant; gained 1 × Sealed commission-paper naming Wren Elowen's heir
+  [game] time: 40 minutes later: Day 4, 8:10 PM
+DM: You kneel on the cold stones with the candle on the shelf above you and turn the little brass lantern in your hands. Your Investigation check was an 18. Under the base, hidden among the cast rays, a boss of metal stands a hair proud, and it isn't a decoration. It has teeth. It's a key.
+
+You hold your breath and fit it to the coffer's keyhole. It slides in with a small, soft click, as if it had been waiting twenty years, and turns. Lady Maren catches her breath behind you. The iron key Corvin carried off was never going to fit.
+
+The lid rises. Inside, on a bed of faded green velvet, lie three things: a small silver pendant shaped like a lantern, a folded paper sealed with plain wax and marked with a lamp-staff, and a single letter in a looped hand you know from the parchment in your reliquary. It's addressed on the outside: *To my wren.*
+
+You read it kneeling, with a hand over your mouth. It isn't long. Elowen writes that Corvin Tallowmere was her own apprentice, that he turned her blessings into pedigrees and sold the road's mercy to men who wanted it for their vanity, and that she meant to confront him. If she did not return, she wrote, he would come for the child with false letters and a pleasant face. *Light the road, don't sell it. You'll know what that means when you're old enough to be ashamed.* Beneath the signature, a lantern with a crooked flame. The folded paper is a commission, naming you heir to her lamp-staff and her calling, if you want it.
+
+You've gained the letter, the pendant, and the commission, and learned more than you came for. It's ten past eight on Day 4. Corvin is a day's wait away at the ford, and he knows it is true.
+
+Lady Maren waits quietly, hand on the door. What does Wren do?
+
+== ROUND 38 ==
+PLAYER: I fold the letter against my chest for a long moment, then wipe my face with my sleeve and put the pendant on. "My lady, may I ask for a bed, a pen, and a few hours alone with this? Tomorrow I'm going to meet the man who raised me, and I'd like to know what I'll say before I open my mouth."
+
+DM: what's my total XP now and how many Bardic Inspiration uses do I have left?
+  [game] sheet: XP +75: 175
+  [DM write_lore (hidden)] {"entry": "Lady Maren Thistlewood", "add_to_description": "Gave Wren a guest room, pen, and privacy on Day 4 night. Offered to stand witness against the forged ford tale before the village and will not burn the Thistlewood ledger leaf until Wren says so. Hob Crannock also willing to swear to Elowen's mark."}
+  [game] notebook: updated Lady Maren Thistlewood
+  [game] time: 10 hours 50 minutes later: Day 5, 7:00 AM
+DM: You fold the letter against your chest for a long moment, wipe your face with your sleeve, and clasp the little silver lantern around your neck. Lady Maren says nothing at all. She only nods once, the way you might nod to a stranger on a long road, and leads you up a narrow stair to a small, clean guest room with a bed, a table, a pen, and a candle. She sets a jug of water and a heel of bread by your hand and withdraws, closing the door softly behind her.
+
+You write for a while. You write what you'd say to him, then scratch it out, then write it again plainer. By the time the candle gutters you have a few lines you can say aloud, and you sleep better than you expected.
+
+To answer your questions: you're at 175 XP, out of 300 for the next level. I gave you 75 for finding Elowen's trail and opening the coffer. Bardic Inspiration is at 3 of 3, none spent.
+
+It's seven in the morning on Day 5 now, and the village has been up for an hour. Down in the yard Biscuit is munching oats, and the ford is a bright, fast thread beyond the willows. Dusk is eleven hours off. Lady Maren has left word with the household that you're to be given anything you ask for.
+
+Corvin will be there at dusk, perhaps with Garrow and the driver. You have today to prepare, and the ledger, the commission, the pendant, and the village's trust, if you want it.
+
+What does Wren do with the day?
+
+== ROUND 39 ==
+PLAYER: I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.
+
+In the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.
+  [game] dice Wren's Persuasion check telling the village the truth about the ford hero in the Heron and Net, DC 13 (angry, suspicious villagers): 1d20+5 = 1d20 [2] + 5 = 7
+  [game] dice Wren's Perception check scouting the ford and its banks for watchers, DC 13: 1d20+1 = 1d20 [5] + 1 = 6
+  [DM write_lore (hidden)] {"create": "Ashby Weir Common-Room Confession", "kind": "event", "description": "Day 5 midday: Wren told the Heron and Net's crowd the truth about the ford hero. Persuasion 7: the villagers erupted, some shouting at Lady Maren to drop the toll at once, others cursing Wren as a liar paid by a rival; a man threw a tankard; the men-at-arms hustled Wren out. Word spread through the village, and Garrow
+  [game] notebook: created an entry for Ashby Weir Common-Room Confession; added 3 relationships to Ashby Weir Common-Room Confession
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 5: Corvin's people (Garrow, the driver) have already come to the ford before Wren's scouting; she failed Perception (6) and saw nothing. Wagon is hidden in a tithe-barn a quarter mile up the Ashby road."}
+  [game] notebook: updated Corvin Tallowmere
+  [game] time: 10 hours later: Day 5, 5:00 PM
+DM: Lady Maren listens over her porridge with her cup halfway to her mouth. "You want me to hand my own village to you at noon," she says slowly. Then something in her face settles. "Do it. Better from a girl who found the page than from a man with a seal." She gives the order, and by eleven the Heron and Net's common room is jammed with fishermen, ferry-hands, weavers and children.
+
+It goes badly. Your Persuasion check was a 7. You stand on a bench and tell them all of it, the forged hero, the toll, the tale of a man at a ford, and you can see it land. But a crowd that has paid its toll for twenty years doesn't thank the bearer of that news. Someone shouts that you're a liar paid by the Dunmere ferry. Someone else shouts that the Thistlewoods should refund every penny. A tankard flies. Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar. By afternoon it's across the village that the ford tale is a lie, the toll is cursed, and that Lady Maren must answer for it. It's not what you meant, but it isn't gone back into the bottle, either.
+
+In the afternoon you scout the ford. Your Perception check was a 6, and it tells you only that the stones are wet and the willows thick and quiet. There's nothing to see. The best place, you decide, is the broad, flat stone midway across, within hail of Hob's cottage and the bank where a few villagers have gathered, uneasily, to watch. Alder and Kit go quietly into the willows with Lady Maren's blessing. Hob Crannock sits by his green door with a pipe, as if he's merely taking the air.
+
+You eat a little, you check your rapier, and you smooth the pendant at your throat. The sun drops behind the spur and the river turns copper. It's five in the evening, dusk is an hour off. In the green and gold light, down the Ashby road, comes the creak of a wagon, a painted lantern swinging on its side, and a lean man walking before it in a brown coat.
+
+What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 40, "category": "clock", "severity": 2, "quote": "The silver in his hair catches the last light.", "why": "It is 5:20 PM. R39 at 5:00 PM says 'dusk is an hour off' (R32, same hour, said 'two hours away'). On Days 1-4 dusk fell about 7 PM (R24 7:14 'dusk', R35 7:00). The ford scene is called dusk and Corvin disappears 'into the dusk' by 5:48."}
+
+THE PLAYER'S LINE THIS ROUND: I walk out to the flat stone mid-ford and wait there with my hands empty and the pendant bright at my throat, the psalter tucked under my arm in plain sight. When the wagon stops on the bank, I call across the water, calm and clear enough for Hob and the villagers to hear. "Master Tallowmere, you wrote to me, so you can come to me. Bring your own two feet and leave Garrow on the bank."
+
+=== REPLY bard2-40-01 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 ~5:10 PM: arrived at the ford with the wagon, Garrow and the driver. Obeyed Wren's call to come alone to the mid-ford stone; sent Garrow to 
+The ford is loud around the flat stone, the water chattering over the weir below you. You stand on it with your hands empty, the pendant bright at your throat and the psalter under your arm. On the bank a few villagers hold their breath. Hob's pipe has stopped smoking. Somewhere in the willows, Alder and Kit are very still.
+
+The wagon creaks to a halt at the water's edge, its painted lantern swinging. Garrow stops at the lead horse's head. His easy smile is gone, and he looks at you the way a man looks at a bad debt. The driver stays on the box. Then a figure climbs down from the tailboard, and your stomach tightens before you've admitted who it is.
+
+Corvin Tallowmere is as you left him. He is silver-haired and warm-faced, in a long green-grey coat, with a walking stick he doesn't need. He lifts a hand to Garrow without looking at him. "Stay with the horses, Garrow. The girl asks it, and she's quite right to." His voice carries over the water, easy and fond, the voice that sold a hundred noble houses their ancestors.
+
+He steps onto the first stone, then the second, picking his way across like a man crossing his own hall. Halfway he stops. His eyes have found the silver lantern at your throat, and for one bare heartbeat the charm falls off his face, and what's under it is neither warm nor angry. It looks like fear, and something older than fear. Then the smile is back.
+
+"You've been to the spur," he says softly, and comes the last few stones to stand an arm's length from you, with the river running between his boots. "Well, my girl. You've been a good deal busier than I guessed. Shall we talk like family, then, or shall we talk like the truth?"
+
+His stick rests on the stone, and Garrow waits on the bank. The village watches. What does Wren say?
+
+=== REPLY bard2-40-02 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5, ~5:25 PM: arrives at Ashby Weir ford by wagon; appearance: tall, silver-haired, in a plum coat, soft-voiced, with a staff topped by a small
+You stand on the flat stone with the water running cold and quick on either side, the psalter under your arm and the pendant bright at your throat. Behind you on the bank, Hob's pipe-smoke drifts, and a dozen villagers hold the shore in uneasy silence. In the willows, you know, Alder and Kit are waiting.
+
+The wagon creaks to a halt on the far bank. The driver stays on the box. Garrow, in his brown coat, steps down and stands with his arms folded, and his smile is gone for once.
+
+Your voice carries clear across the water. For a long moment nobody answers. Then the canvas flap lifts and Corvin Tallowmere climbs down.
+
+He is as you remember: tall, silver-haired, in a plum coat that is a little too fine for the road, with a staff topped by a small brass lantern. His eyes find you, then the pendant, and something in his easy face goes still. He says a few quiet words to Garrow, who scowls but stays where he is, and Corvin comes out across the stepping stones alone, light-footed, never looking down. He stops one stone short of yours.
+
+"My girl," he says softly. "You've been busy." His gaze rests on the silver lantern. "I see you found the coffer. I did wonder if you would." He smiles, and for once it looks a little tired. "You said to come to you. Here I am. What would you have of me?"
+
+The river hisses around the stones. The villagers are close enough to hear every word. Garrow watches from the bank, and the sun is going down behind the spur.
+
+What does Wren say?
+
+=== REPLY bard2-40-03 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk at the ford: came on foot, alone, unarmed save a belt-knife, leaving Garrow on the bank. Wren's natural-20 Insight: his eyes went to th
+The stones are cold and wet under your boots. You stand on the flat one mid-ford with the river chattering around it, the psalter under your arm and the pendant catching the last copper light. On the bank Hob puffs his pipe and a knot of villagers watches. Alder and Kit are somewhere in the willows.
+
+The wagon halts at the water's edge, its painted lantern swinging. Garrow stops beside the lead horse, smile pinned in place. At your call he glances at the wagon. A figure climbs down from the box, and Garrow stays where he is.
+
+Corvin comes alone, picking his way over the stepping stones in his good grey cloak, belt-knife the only weapon you can see. He is thinner than you remember, and older.
+
+Your Insight check was a natural 20, so you see more than you meant to. His eyes go to the silver pendant at your throat, not the psalter, and they stay there. His hands are not quite steady. Beneath the charm his fear is real, but it isn't the fear of a man who has lost money. It's the fear of someone who ran from something once and has been running ever since. Whatever he did to Elowen, you'd stake your life it wasn't murder. There's an iron key on a cord at his neck, the decoy that never fit.
+
+He stops two stones short and spreads his empty hands, with the old warm smile gone thin. "Wren," he says. "You look like her. I hoped you wouldn't." His voice drops so only you can hear. "You opened the coffer. Then you know what I am. Ask me what you came to ask."
+
+The light is going. The villagers are watching, and Garrow is waiting. What does Wren say or do?
+
+=== REPLY bard2-40-04 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 ~5:45 PM: appeared at the ford in a travelling cloak, silver-haired, gentle voice, clove-and-ink smell. Left Garrow and the driver on the ba
+You walk out along the stepping stones, the water cold and quick around them, and stop on the broad flat stone mid-ford. The psalter is under your arm and the pendant catches the last copper light. On the bank Hob puffs his pipe, and a dozen villagers stand in a wary line, still sore from noon.
+
+The wagon halts under the willows. Your voice carries clear across the water, and for a moment nothing answers but the weir. Then a man climbs down from the box and says something short to Garrow, who stops where he is, smile fixed, hands loose. The driver stays seated.
+
+Corvin comes alone. He is silver-haired, lean, in a travelling cloak the colour of old wine, and he steps from stone to stone with the ease of someone who has crossed a thousand rivers. He smells of clove and ink, as he always did. His hands are open and empty. When he stops a few paces from you, his face is gentle, tired and fond, and it looks like grief.
+
+"Wren," he says softly. "You've grown thin. You've found Elowen's coffer, haven't you? I see it at your throat." He glances at the pendant, then at the psalter. "Your Insight isn't yet what I taught it to be, so I'll tell you plainly, because you've earned it. I did not kill her. But I am not clean of her either." His eyes hold yours. "Say what you came to say, child. They are listening."
+
+Your read of him is a 7, so you can't tell whether the sorrow is real or one of his best performances.
+
+The river runs between you, the villagers watch, and your people wait in the willows. What does Wren say?
+
+=== REPLY bard2-40-05 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 ~5:20 PM: appears at the ford, a tall silver-haired man in a travelling coat, warm voice, clove-and-ink scent. Wren's Persuasion 13 (one sho
+The wagon halts on the bank with a groan of axles. Your call carries over the water, clear enough that Hob takes his pipe from his mouth and the villagers by the willows go still. Your Persuasion check was a 13, one short of what it needed.
+
+Corvin steps down. He's tall and silver-haired in a good travelling coat, with the same warm, unhurried smile, and the clove-and-ink scent reaches you before he does. He walks out along the stepping stones with his hands visible and nothing in them, easy as a man crossing his own parlour. Garrow doesn't stay where you told him. He hangs back on the bank, but only to a bowshot, and there's a bulge under his brown coat that you'd bet is a crossbow. The driver stays with the wagon.
+
+Corvin stops a stone away. The water chuckles between you.
+
+"Elowen's girl," he says softly. "You've her way of standing, you know. Feet apart, as though the world might tip." His eyes drop to the pendant and stay there. "So the lamp finally opened the box. I wondered if it ever would." Then his gaze comes back up, and the smile is gone. "I did not kill her, Wren. Whatever she wrote. I'd like you to hear that first, before the villagers decide what to do with me."
+
+He nods at the psalter under your arm. "That's what I came for, but I think we both know it isn't what you came for. Ask me what you really want to ask."
+
+Behind him, the sun touches the spur. What does Wren say or do?
+
+=== REPLY bard2-40-06 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk at the ford: appears in person, silver-haired, fifties, clove-and-ink scent, warm voice. Came alone onto the stones at Wren's call, Gar
+You take the flat stone mid-ford with the river chattering around it, psalter under your arm, pendant catching the last copper light. When the wagon creaks to a halt on the bank, you call across the water, and your Performance check, a 16, carries every word to Hob's door and the villagers on the shore. Murmurs stop.
+
+For a long moment nothing moves. Garrow's hand drifts to his coat, and Corvin lays two fingers on his sleeve without looking at him. Garrow stops.
+
+Then the driver's box creaks and Corvin Tallowmere climbs down. Silver-haired, straight-backed, in a plain travelling coat, smelling even from here of cloves and ink. He walks to the water and, alone, steps onto the stones. He crosses them with the easy balance you remember from a hundred river crossings, and stops one stone short of yours.
+
+"Wren," he says, warm as ever. "You've grown into your voice."
+
+Your Insight check was a 22, and it's clear. The warmth is real and practised both, as it always was. But his hands are not steady, and his eyes keep dropping to the pendant at your throat and the psalter under your arm. He isn't afraid of you. He's afraid of what you've opened. He didn't expect the coffer to give.
+
+"I see you've been to the spur," he says quietly. "Then you've read her letter. I would ask you not to judge me before I say what became of Elowen." He glances at the shore, at Hob, at the watchers. "But not in front of a village. Walk with me three stones, and I'll tell you, or I'll tell you here if you insist."
+
+The water slides cold around the stones. Alder and Kit are in the willows, Hob is on his step, and Garrow waits on the bank. The sun is almost down.
+
+What does Wren do?
+
+=== REPLY bard2-40-07 ===
+Your Performance check was a 17. Your voice carries over the water as clear as a bell, and every head on the bank turns. Hob takes his pipe from his mouth. Along the shore, the villagers go quiet.
+
+The wagon creaks to a halt on the far bank. The driver sits rigid on the box. Garrow stops where he stands, glancing back at the wagon's canvas, and doesn't move again.
+
+The canvas parts. Corvin Tallowmere steps down, and he's exactly as you left him. He's a tall man in a fine, plain coat, silver-streaked at the temples, with warm dark eyes and a voice made for firelit rooms. He carries no weapon, only a small iron key on a cord at his neck, and he looks at you across the shining water with something that might be pride.
+
+"Wren," he calls, not loudly, because he doesn't need to. "Well said. Leave Garrow, she says. Very well." He lifts a hand, and Garrow takes a step back, his smile gone thin. Then Corvin takes off his boots, ties them together, and wades out onto the stepping stones, barefoot, unhurried, the water curling about his ankles.
+
+"You've been busy, my girl," he says, coming on. "A confession at the Heron and Net. A coffer opened in a strongroom." He stops three stones off and looks at the pendant at your throat. The smile falters, just slightly. "So she kept her promise to you after all. Elowen. I wondered if she would."
+
+The light is turning gold on the water. Hob is listening. Alder and Kit are somewhere in the willows. Corvin waits a stone's length away, with the key at his neck and the whole river behind him.
+
+What does Wren say or do?
+
+=== REPLY bard2-40-08 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 ~5:30 PM: met Wren mid-ford after her call (23). Silver-haired, sixtyish, clove-and-ink scent, gentle voice. Sent Garrow back and the driver
+Your voice carries over the water like a bell, and your check was a 23. On the bank the wagon stops. The driver sits stiff on the box. Garrow, a pace ahead, stops mid-stride and looks to the wagon's shadow.
+
+A curtain moves. Corvin Tallowmere climbs down.
+
+He is older than you remember, silver-haired and neat in a travelling coat, with a staff he doesn't lean on. He lifts one hand, and Garrow stops as if on a string. Then he walks out onto the stepping stones alone, unhurried, the water flashing around his boots, a man crossing a stage he built himself. On the bank, villagers murmur. Hob Crannock's pipe has gone out. In the willows, nothing moves.
+
+He stops two stones short of you, and the smell reaches you first, clove and ink. His eyes go to your throat, to the pendant, and something in his face closes and opens again.
+
+"You've been busy, my girl," he says gently. "You've opened her coffer. Then you know I didn't lie about the parchment." He glances at the psalter under your arm. "I did come to talk like family. But I think you'd better tell me first what you mean to do with what you know."
+
+The ford murmurs. Dusk is still a half hour off, and every eye on the bank is on the two of you. What does Wren say?
+
+=== REPLY bard2-40-09 ===
+You stand on the flat stone with the river chuckling around your ankles and the psalter under your arm. Your voice carries over the water. On the bank, Hob lifts his pipe a little, and a dozen villagers go quiet.
+
+The wagon stops at the edge of the ford. Garrow stands at the lead horse's head, smiling his thin smile. The driver stays on the box. Then the canvas curtain at the back parts, and Corvin Tallowmere climbs down.
+
+He looks as he always did: tall, silver at the temples, a plain grey travelling coat, a voice-trained face that seems to be always about to forgive you. He rests a hand on Garrow's shoulder, says something low, and Garrow's smile thins further. But he stays. Corvin takes off his hat, hands it to the driver, and wades out alone along the stepping stones, unhurried, boots in the shallows.
+
+Your Insight check was a 13, short of certain. You read this much. His hands are empty and he's walking carefully, but he isn't relaxed. His eyes go to the pendant at your throat and stay there a moment too long. Whatever he's feeling, it isn't the amusement he's wearing.
+
+He stops a pace from you on the next stone, and the water runs between you. "Wren," he says warmly. "You look well. You've been busy, I hear. A whole common room." He glances at the psalter, then at the pendant, and his voice drops so only you can hear. "Where did you get that, child?"
+
+Garrow watches from the bank. Alder and Kit are somewhere in the willows. It is nearly six, and the light is going gold.
+
+What does Wren say?
+
+=== REPLY bard2-40-10 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5, 5:20 PM: Met Wren mid-ford at Ashby Weir. Tall, silver-haired, clove-and-ink scent, warm voice, a lantern-topped cane. Ordered Garrow to st
+Your voice carries over the water, and the bank goes quiet. Hob takes his pipe from his mouth. In the willows, you know, Alder and Kit are holding their breath.
+
+The wagon stops with a creak, the painted lantern swinging. The driver stays on the box. Garrow halts at the verge, and his smile flickers when Corvin lifts two fingers without looking at him. Then Corvin Tallowmere climbs down.
+
+He looks as you remember him: tall, silver-haired, in a good grey coat, a cane topped with a little brass lantern in his hand. The scent of clove and ink reaches you before he does. He picks his way out along the stepping stones unhurriedly, like a man crossing his own garden, and stops a few paces from your stone with the river rushing between you.
+
+"Wren," he says. His voice is as warm as ever, and it still gets under your ribs. "You look well. Thinner." His eyes drop to your throat and the silver lantern there, and for a moment he goes completely still. Your Insight check was a 12. It tells you he looks grieved, truly, but you can't tell whether the grief is real or the finest work he's ever done.
+
+"You opened the coffer," he says quietly. "Then you know why I wrote what I wrote. I'd hoped to tell you myself." He nods at the psalter under your arm. "Shall we speak as family, in the open as you like, or would you rather the villagers hear everything, Elowen included?"
+
+He waits, cane planted on the wet stone. Garrow watches from the bank. The light is going gold on the water, and about forty minutes of dusk remain.
+
+What does Wren say or do?
+
+=== REPLY bard2-40-11 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 dusk: arrives at the ford by wagon with Garrow and the driver. Wren's call (7) did not sway him; he answers lightly and amused, does not lea
+You stand on the flat stone with the water chattering past your boots, the psalter under your arm and the pendant catching the last copper light. You call across the ford, clear and level. Your roll was a 7, and it doesn't land the way you hoped.
+
+The wagon creaks to a halt on the far bank. The driver stays on the box. Garrow stops at the lead horse's head, smiling his thin smile. Then the canvas flap lifts and Corvin Tallowmere steps down.
+
+He is exactly as you remember him: tall and silver-haired, in a good dark coat, a clove-and-ink scent drifting over the water, a lantern-headed cane in his hand. He looks at you across the stream with such open fondness that your stomach turns.
+
+"Leave Garrow?" he calls, amused, his voice warm and carrying the way you were taught to carry yours. "My girl, a man doesn't walk into a river to meet a cat with a knife in her sleeve unprotected. But I'll not make you shout." He nods, and Garrow doesn't move, but doesn't step back either. Corvin starts across the stepping stones alone, unhurried, his cane tapping each one. On the bank behind you Hob has stopped smoking, and villagers are edging down to the water. In the willows, something rustles faintly. That will be Alder and Kit.
+
+He stops two stones away, close enough to talk without raising his voice. His eyes go to the psalter, then the pendant at your throat, and for the first time his smile falters.
+
+"You found the coffer," he says softly. "Of course you did."
+
+The ford is between you, the crowd is listening, and Garrow is thirty paces behind him. What does Wren say or do?
+
+=== REPLY bard2-40-12 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 5 ~5:30 PM at the ford: Corvin climbed down from the wagon, tall, silver-haired, clove-scented, with a kind smile. He answered Wren's call by 
+You stand on the flat stone with the water sliding past your boots and the psalter under your arm, and you call it out across the ford, clear and level. Your Persuasion check was an 8, and it only half carries.
+
+The wagon stops on the bank. A tall man climbs down from the box, silver-haired, in a long dark coat, with the faint scent of clove drifting on the evening air. Corvin. He looks older than you remember, and kinder, which is the worst part. He raises both open hands to the villagers on the bank as if greeting a congregation, then to you.
+
+"My girl," he says, and the voice is the one that sang you to sleep for nineteen years. "Of course. My own two feet." He steps onto the first stone, then the second, light and unhurried. But he does not send Garrow back. The brown-coated man drifts along the near bank with an easy smile, "keeping the water-side clear," as Corvin calls over his shoulder, and the driver stays on the wagon box with one hand tucked beneath the seat where you remember a crossbow being kept.
+
+Hob sits by his green door with his pipe unlit. Villagers hover on the bank. In the willows, Alder and Kit haven't moved. Corvin reaches the stone beside yours, close enough to touch, and stops. His eyes drop to the silver lantern at your throat, and for a moment something crosses his face, quick as a fish under ice.
+
+"Well," he says softly. "She gave it to you after all."
+
+The sun is touching the spur. You have the ledger, Elowen's letter, her commission, and a crowd to hear it. What does Wren say?

@@ -1,0 +1,211 @@
+GAME barbarian2, ROUND 60
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 57 ==
+PLAYER: I set the boy down, tell him "Run to Tessa, lad, and don't stop," and climb onto the rubble heap with the shield up and the sword out, so the scouts have to look at me and not the column. Then I bellow up the gully in Goblin and Common alike, as loud as my cracked voice will go: "Two grey cloaks on a ridge, and a whole camp's worth of me already past you! Come down and learn what a Tally's axe is worth, or go and tell your Foreman Dargan's son walked ninety-four children out of his mine!"
+
+"Ninna, Tessa, keep them moving!"
+  [game] dice Korvash Charisma (Intimidation) bellowing at the two scouts from the rubble, DC 13: 1d20+3 = 1d20 [20] + 3 = 23 (natural 20)
+  [game] time: 20 minutes later: Day 19, 7:10:12 AM
+  [DM write_lore (hidden)] {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~7:10 AM: Korvash's nat-20 Intimidation unnerved the two scouts; they backed off and one let slip the Foreman ordered them to follow and count, not fight, and that a rider already went to Gorrak Vael at Cinder Ford: Vael will be on the road by dusk. Scouts shadow the column from afar."}
+  [game] notebook: updated Break the Foreman's Ledger
+DM: The boy goes pelting down the track and you climb the rubble heap with shield high and sword out. Then you let go the whole of the old noise, in Goblin first and then Common, pitched to ring off every wall of the gully: two grey cloaks, a camp's worth of you already past, come down and learn what a Tally's axe is worth, or go tell your Foreman that Dargan's son walked ninety-four children out of his mine.
+
+It carries. The archer takes a half step back and his string slackens. The swordsman looks at the length of the gully, at the tiny figure on the rubble that has not so much as flinched, and at what the camp's alarm bell must have sounded like from here, and he does not move.
+
+"We're not paid to die on slate," he calls down at last, flat and sour, in Goblin. "Foreman's orders were follow and count. Not fight." He spits over the edge. "Rider's gone to Cinder Ford already, for the Tally captain. Vael will be on this road by dusk, and he can fetch you himself."
+
+They do not come down. They do not go away either. They melt back from the lip of the ridge, and for the next half hour you catch a grey shape or two on the skyline, always the same distance behind, always keeping count.
+
+It is a little after seven. The column is a mile down the track now, and the children have been walking in silence since the bell. Tessa has dropped back to walk beside you, her hood up, watching the ridge. The stream and the high road are an hour ahead. Vael and his hobgoblins are somewhere on that road by dusk, and Harrowmere is nearly three days off for small feet. You are at 2 hit points, and the ledger sits behind you in its chest.
+
+What does Korvash do?
+
+== ROUND 58 ==
+PLAYER: I fall in beside Tessa and say quietly, "Gorrak Vael will be on this road by dusk, and I swore to stand before him with the ash on my hands, so I won't run from that. At the stream I'll stop the column, let the little ones drink and rest, and wait for him on open ground with the children behind me."
+
+I look at her sideways. "You said he saw you the night of the raid and let you live, Tess. If it comes to blades, tell me honestly: will he be ours, or the Foreman's?"
+  [game] time: 1 hour later: Day 19, 8:10:12 AM
+  [DM write_lore (hidden)] {"entry": "Tessa", "add_to_description": "Day 19 ~7:15 AM: Asked whether Gorrak Vael will be ally or the Foreman's, she said honestly she does not know: he let her go the night of the raid, but he fears the Foreman and the ledger counts him too. Day 19 ~8:10 AM: column reached the stream at the foot of the east track; Korvash chose to halt and wait for Vael there."}
+  [game] notebook: updated Tessa
+DM: Tessa walks a dozen paces without answering, eyes on the track and her small hands tucked up her sleeves. When she does, her voice is level and careful, the way you speak about a thing you have turned over too many nights.
+
+"I don't know, Kor. I'd like to say ours." She shakes her head. "He saw me go over the ledge, and he let me. A man who wants a hand for the quota doesn't do that. But he took the pass, and he took the children, and when the Foreman says a number, Vael's rod is the one that's counted against it. A man can owe two masters. I don't think he's loyal to the Foreman. I think he's afraid of him. That's not the same, and it's not the same as ours either." She glances at the ridge. "Don't wait for him with your blade out. And don't count on him to be gentle."
+
+Then the track drops, the gully opens, and you come down to the stream, a bright shallow braid of snowmelt over cobbles with a pale grass flat on its near bank and the high road a long way beyond. The children go to the water like a flock of lambs. Ninna posts older ones as lookouts without being asked and starts counting again. Somebody gives the smallest ones the last of the bread. On the ridge behind you, one grey shape stays against the sky, dark and patient.
+
+It is just past eight in the morning. You can have an hour here to rest, and a hit die to spend on your wounds, if you want it, though it puts you an hour closer to dusk. You have two hit points, the column is huddled at your back, and Vael is somewhere on the road ahead.
+
+What does Korvash do?
+
+== ROUND 59 ==
+PLAYER: I take the hour. I drink at the stream, spend a hit die while the children rest, and eat a strip of what's left of the dried goat meat with Tessa, shield propped against a boulder where I can reach it.
+
+DM: Ahead of Vael's arrival, how many hit dice do I have left after that long rest, and do I still have the key ring and Dargan's horn charm on me?
+  [game] sheet: short rest; spent 1 hit die (0/1 left): roll 1d12 and add the CON modifier (CON 14 (+2)), then pass the total as heal; the player decides whether to spend another after the roll; 1 hour later: Day 19, 9:10:12 AM
+  [game] dice Korvash hit die healing (short rest): 1d12+2 = 1d12 [1] + 2 = 3
+  [game] sheet: healed 3: HP 2 → 5
+DM: Out of game, to answer you: it was a short rest, not a long one. You have 0 of your 1 hit die left, and the roll was poor, so you're at 5 of 14 hit points. The rest did bring your breath weapon back. Rage is still 0 of 2 and won't return until a long rest. And yes, the key ring and Dargan's carved horn charm are both still on your belt.
+
+You drink at the stream with your muzzle in the cold water, then sit on the cobbles with your shield propped against a boulder where you can reach it. You share the last strips of Veshra's goat meat with Tessa, and she eats hers in tiny bites, like someone who has learned never to finish a meal first. Nobody speaks much. The children sleep in the grass in heaps, and Ninna, who does not sleep, sits on a rock with her chin on her knees, watching the ridge. The grey shape on the skyline is still there.
+
+It is a little after nine in the morning. The sun is full on the water and the high road lies bare beyond the far bank, nothing on it yet. Your breath is back in your chest, and the rest of you is stiff and hurting but standing.
+
+Vael will be here by dusk, or sooner if he rode hard. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 60, "category": "clock", "severity": 2, "quote": "A little after one in the afternoon, Tessa is back", "why": "Gorrak's column arrives about 6.5 hours after the alarm, with 'twenty, maybe more' hobgoblins. That conflicts with the three-day distance and with the scouts' own 'by dusk' (round 57)."}
+
+THE PLAYER'S LINE THIS ROUND: The rest is done and every hour nearer Greyshaft's hounds is an hour wasted, so I get the column on its feet. "Up, little ones, we cross here and take the high road home, and anyone too tired rides on my back."
+
+I send Tessa ahead along the road hooded and quick to scout for Vael's column, and I walk the rear with the shield on my arm and my breath weapon ready, so that if Gorrak arrives it's on the open road with the children well behind me.
+
+=== REPLY barbarian2-60-01 ===
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~5:10 PM: Vael was already marching north on the high road to reach Greyshaft's gate by midwinter's eve (Day 20), as he ordered Korvash to do; hi
+You get the column on its feet, and it moves. The littlest ride on bigger backs, Ninna keeps the count at every rest, and you walk the rear with the shield on your arm and the grey scouts always a long way behind. Tessa goes ahead along the high road, hooded and quick. The day wears down mile by mile. You carry two children in turn, drink at every brook, and the road stays empty.
+
+It is a little after five in the evening, with the light going long and amber, when she comes back at a run. She doesn't slow until she's at your elbow, and she speaks low and fast in Draconic.
+
+"Column on the road. South, maybe half a mile, and coming up at a march. Twenty or so, in the Tallies' grey. A tin mask at the head, and the sergeant with the ring in his ear beside him." She means Ushk, you think, though she doesn't know the name. "They haven't seen us. They're going to Greyshaft, Kor. He said midwinter's eve, remember? They're not hunting us. They're keeping your appointment."
+
+She has already tucked the children into a dry wash below the road, out of sight, with Ninna in charge. The grey scouts on the ridge behind are still there. Gorrak Vael's column will pass the head of the wash in a few minutes, on the open road.
+
+You are at 5 hit points, your breath is ready, and Rage is spent. You have a longsword, a shield, and a ring of keys. You swore Gorrak a year and a day, and you have just broken the spirit of it. What does Korvash do?
+
+=== REPLY barbarian2-60-02 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~12:10 PM: Column of 94 children crossed the stream and took the high road south, Korvash at the rear (5 HP, Rage spent, breath we
+You get them up, and they come. Ninna passes the word down the line, and the children cross the stream in knots of ten with the big ones carrying the small. You wade the rear with the shield on your arm. On the far bank the high road runs south, pale and rutted. For three hours you walk it, with the sun climbing and the children's feet dragging. Twice you take a tired one onto your back. The grey shape on the ridge falls farther behind and then is gone.
+
+Tessa went ahead hooded and quick, and she is back before noon, running low along the verge. She doesn't slow until she reaches you.
+
+"Vael," she says, breathless. "Two miles north-east, where the road comes down from Cinder Ford. He's mounted, with thirty hobgoblins behind him in column, banners up, the full Tallies. They're not hurrying. They've seen the dust." She wipes her mouth. "Sergeant Ushk is at his stirrup. I couldn't see the mask's face. I couldn't see Brakk."
+
+The road here crosses a long open shelf of grass, with a dry wall of tumbled stone along one side and nothing else for a mile. The children are strung out on it behind you, ninety-four of them, with no cover that would hide them from thirty soldiers.
+
+It is a little past noon. You are at 5 hit points with a longsword, a shield, and a breath that will warm one cone of hobgoblins. Your oath is to Vael. Your sister is at your elbow, and the children are at your back.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-03 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 9:10 AM-2:10 PM: column crossed the stream and marched the high road south; Tessa scouted ahead and found no sign of Vael yet; gre
+You get the column up and across the stream, the big children wading with the small ones on their backs. A girl who says her feet hurt rides your shoulders without further argument, shield on your arm. Tessa goes ahead along the road, hooded and quick, and is soon only a rust-colored speck between the boulders.
+
+The afternoon is slow. Ninety-four children cannot be hurried, and you don't try. Ninna keeps the count at every halt. The grey scouts stay on the ridges to either side, never closer, never gone. Twice you stop so the youngest can rest and drink at roadside seeps.
+
+Tessa comes back in the early afternoon, breathing hard. "Nothing yet," she says. "The road is empty for about six miles. There's a dry streambed with a shepherd's fold in it, stone walls and a roof half fallen in, where the road bends. It's good ground to hold if it comes to that. Open on one side, cliff on the other." She looks back at the ridge. "He's coming, Kor. I can feel it. The scouts wouldn't keep pace for nothing."
+
+It is a little after two in the afternoon. You are on the high road, at 5 hit points, with your breath weapon ready and the column strung out behind you. The fold is perhaps two hours' walk ahead. Dusk is about four hours off.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-04 ===
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~2 PM: came up the high road early with Sergeant Ushk and about a dozen Iron Tallies, halting at a shallow ford ahead of Korvash's column. Has no
+You get them up and moving, and the column crosses the stream in a long line, big children carrying little ones, your shield on your arm and the rear in your charge. Twice you stop to let the smallest drink. Twice the grey shape on the ridge stops when you do. Ninna keeps the count aloud, and it is never wrong.
+
+Tessa goes ahead hooded and quick, a rust-red shadow along the verge. She is gone most of the morning. The sun climbs, the road runs on between stone walls and bare larches, and by early afternoon the children have gone quiet with weariness.
+
+It is ten past two when she comes back at a run, dropping to a walk when she sees the column. "A mile on," she says, low, in Draconic. "Where the road goes down to a shallow ford. Soldiers. A dozen, maybe more, in a line across the road, and Ushk is with them. In the middle, the tin mask." She swallows. "They aren't hiding, Kor. They've stacked their spears and are sitting down. He's waiting for you."
+
+You are at 5 hit points, with your breath weapon back, no rage, a longsword and a shield. Ninety-four children are strung out behind you on an open road, and the grey scouts are still on the ridge. The ford is a mile off.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-05 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~3:10 PM: column marched six hours up the high road toward Harrowmere. Tessa scouted ahead and returned: a hobgoblin column (about
+You get them up. Ninety-four children rise out of the grass in ragged stages, and the smallest ride on bigger backs or on yours, a girl of four with her fists wound in your sash. You cross the stream at the shallows and take the high road south, shield on your arm, with the breath banked in your chest.
+
+Tessa goes ahead hooded and quick, a rust-colored shadow slipping along the verge, and is gone in minutes. The march is slow and quiet. Ninna keeps the count at every bend. By noon the children are dragging; you stop twice to drink. The grey shape on the ridge follows, always the same distance behind.
+
+It is a little after three in the afternoon when Tessa comes back, running low. "Twenty, maybe more," she says, breathless, in Draconic. "Hobgoblins on the road, two miles on. Marching, not running. Tin mask at the head with a rod, and a big sergeant beside him with no helm, Ushk. There's an old drovers' fold on the left and a narrow stone bridge past it. They'll reach the bridge before we do, if we keep on." She wipes her face. "They haven't seen me. I don't think they've seen us at all."
+
+The column behind you is strung out for a quarter mile along the road, children slumped and silent. You have 5 hit points, a longsword, a shield, a breath weapon, and your sister watching your face. The fold would hold the children out of the road. The bridge is the only crossing for miles.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-06 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~3:30 PM: column crossed the stream and marched the high road south with Korvash at the rear; one grey scout still shadows them. T
+You get them up with the old loudness pitched low, and the column crosses the stream in a chain of hands, the tallest boys wading the deep channel with the little ones on their shoulders. Nobody falls in, and nobody complains. Then it's the high road, a rutted track of grey gravel running south between the hills.
+
+Tessa goes ahead, hood up, quick and silent as a lizard on a wall. You take the rear with the shield on your arm, and the children plod on in their chains of ten, Ninna calling the count at every rest. Twice a small one goes down from weariness and rides a while on your back. Behind you, always the same distance, a grey shape keeps pace along the ridgeline.
+
+The day wears on to mid-afternoon. At about half past three, Tessa comes trotting back along the verge and drops into step beside you, breathing hard.
+
+"Hobgoblins," she says. "Thirty, maybe more, in good order, on the road a mile ahead and coming up fast. Spears and shields. There's a tall one in front with a tin mask, and a rod at his belt." She looks at you. "It's Vael, Kor. He rode hard. They'll be on us within the hour, and they haven't seen us yet."
+
+The road here runs in a shallow bowl between two low hills, with a dry stone wall along one side and a cluster of boulders on the other. The children are strung out behind you in the open. You are at 5 hit points, your breath weapon is ready, and Rage is spent.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-07 ===
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~2:10 PM: Reported by Tessa's scouting as marching up the high road toward the children's column with about twenty Iron Tallies, earlier than the
+You get them up, and they come. The ford is a bright cold rattle behind you, and then there is only the high road, rutted and pale, running south between brown slopes. You carry two small ones in turn, one on each arm over the shield, and when a girl's legs give out near noon she rides your back with her chin on your helm-less horns and falls asleep. Ninna keeps the count at every halt. It never comes up short. Behind you the grey shape on the ridge falls farther back, then drops from sight.
+
+Tessa goes ahead, hooded and quick, a rust-colored scrap that is soon out of sight over the rises. She is gone for hours. You do not like it.
+
+A little after two in the afternoon she comes back at a trot, from the south, and drops into step beside you without breath to spare. "Twenty of them," she says in Draconic. "Hobgoblins, mail and shields, walking in column, two miles on. Gorrak at the front in the tin mask, with the rod in his belt. They aren't running and no one's got a spear couched. They're just coming. They'll meet us before the next bend in the road, in an hour, no more."
+
+She looks back at the long straggling line of children, at the ridge, at you. "The grey cloaks behind, Vael ahead. If he means to turn us back, this is the place. If he means to deal, it's still the place. I'll stay with the little ones, or I'll stand by you. You say."
+
+You are at 5 hit points, with a longsword, a shield, your breath back in your chest, and your rage still cold. It is a little after two in the afternoon. What does Korvash do?
+
+=== REPLY barbarian2-60-08 ===
+  [hidden call] write_lore: {"entry": "Tessa", "add_to_description": "Day 19 ~noon: scouted ahead on the high road and spotted the Iron Tallies' column (about thirty hobgoblins, tin-masked captain at the head) marching north, ~2
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~noon: marching up the high road from Cinder Ford with about thirty Tallies, toward the column of freed children; will meet them within the hour.
+You get the column up and across the stream. Boys wade it holding smaller sisters, and Ninna counts them over twice. Then you take the high road at the rear with the shield on your arm and your breath banked in your chest. Tessa goes ahead, hooded and quick, and is soon only a rust-colored flicker among the roadside rocks.
+
+The morning wears on. The road climbs and bends, and the children walk in their silent chain. Twice you carry someone for a mile, and your side aches the whole way. The grey scouts stay on the ridge behind, always the same distance back.
+
+A little past noon Tessa comes down off a boulder and falls in beside you without a sound. "They're coming," she says, low. "Thirty hobgoblins, maybe more, marching in column. A tin mask at the head, with a rod in his belt. They're two miles ahead at the bend where the road meets the ford, and they're moving fast. He's earlier than the scouts said." She wets her lips. "They haven't seen us. We have maybe half an hour before they round the bend."
+
+The road here runs through a shallow dell with scree on one side and a dry stone wall on the other, open enough that nobody can be ambushed and nowhere for ninety-four children to hide. The grey shape on the ridge behind has crept a little closer.
+
+It is noon, you have 5 hit points and your breath weapon, and Vael is half an hour off. What does Korvash do?
+
+=== REPLY barbarian2-60-09 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~12:10 PM: column crossed the stream and took the high road south; Korvash 5 HP, breath weapon ready, Rage spent. Tessa scouted ah
+You get the column up with a growl and a few gentle hands, and the children cross the stream in a long wet line, the little ones riding the big ones, two on your own back. By the time the sun stands high you are a mile down the high road. You walk the rear with the shield on your arm and your breath banked, and the grey shape on the ridge keeps pace behind you.
+
+Tessa goes ahead as you told her, hooded, quick and silent, and you lose sight of her within a hundred paces. She is gone for most of two hours. She comes back low through the roadside brush, breathing hard, and drops beside you so that only you hear.
+
+"Two miles on, past the wooded rise. A column marching north, close order. Thirty hobgoblins, near enough, with shields and packs." Her mouth is tight. "A tin mask at the head. Ushk walks beside him, the sergeant from the cairn. I didn't see Brakk." She swallows. "They're coming fast. They haven't seen us, but the road is the only road here, and the grey cloaks behind will whistle the moment they do."
+
+It is just past noon. The column of children is strung out on the open road behind you, with fields on one side and a steep wooded bank on the other. There's no time to hide ninety-four children, but a hollow in the wood might hide them for a little while. Or you can walk down the road to meet the man you swore to answer to. You have 5 hit points, your breath weapon and a shield, and Gorrak Vael is two miles off.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-10 ===
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~3:10 PM: Tessa scouted ahead and saw his column (about twenty hobgoblins, tin mask, rod at his belt, Sergeant Ushk beside him) on the high road 
+You get them up one hand at a time. The smallest ride on bigger backs, and a girl of five rides on yours, her chin on your helmless head. You cross the stream at the shallows and take the high road south, the column strung out in tens behind Ninna's counting. You walk the rear, shield on your arm. On the ridge the grey shape follows, unhurried.
+
+The road is long and cold. Nobody complains. At noon you stop for water and the last scraps of bread, and push on. It is a little after three in the afternoon when Tessa comes back along the verge at a run, hood low, breathing hard.
+
+"Two miles on," she says in Draconic. "A column coming south. Twenty hobgoblins, maybe more, in good order. One in a tin mask with a rod at his belt, and Ushk walking at his shoulder. They haven't seen the children yet. The road runs between two rock shoulders there, narrow, with a dry wash on the east side." She wipes her mouth. "You can meet him there, with the children held back in the wash, or you can bring them off the road and hide them, and let him pass if he will. He'll know by the tracks soon enough. Tell me which."
+
+The children are resting on the verge behind you, ninety-four of them in the open, with the grey scout somewhere on the ridge behind. You are at 5 hit points, your breath weapon is ready, and the dusk is some three hours off.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-11 ===
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 19 ~12:10 PM: Came north up the high road from Cinder Ford with about a dozen Iron Tallies, Sergeant Ushk at his side, having ridden hard after the 
+You get them up and across the stream, the big ones wading with the little ones on their backs and Ninna counting heads on the far bank. Then Tessa slips ahead along the road, hooded and quick, and is gone around the first bend. You walk the rear with the shield on your arm and your breath ready in your chest. A boy of six falls asleep on your shoulder, and you let him.
+
+The road is empty for three hours. The grey shape on the ridge keeps pace behind you and never closes.
+
+A little after noon Tessa comes back at a trot. She waits until she is close, then speaks low in Draconic. "He's on the road, a mile on, where it bends round the red boulder. About a dozen hobgoblins, Ushk beside him. They've halted and made no camp. Vael is standing in the middle of the road with the rod in his hand, and he's alone out in front of them." She swallows. "He knows we're coming. He isn't hiding. He's waiting for you."
+
+Ahead, past the bend, you can just see the red boulder and a thin line of dark figures drawn up along the road under it, the glint of tin at the centre. The children have stopped walking without being told, and ninety-four faces are turned toward you. You have 5 hit points, your breath weapon, a longsword and shield, and a year-and-a-day oath that is still binding.
+
+What does Korvash do?
+
+=== REPLY barbarian2-60-12 ===
+  [hidden call] write_lore: {"entry": "Break the Foreman's Ledger", "add_to_description": "Day 19 ~3:10 PM: column crossed the stream and marched the high road six hours; Tessa scouting ahead saw dust and a hobgoblin column with
+You get them up and moving. Ninety-four children cross the braided stream hand over hand, the big ones carrying the small, and then there is the high road, rutted and pale under a thin sun. You walk the rear with the shield on your arm. Twice you lift a drooping child onto your back, and the grey shape on the ridge falls farther behind and then is gone.
+
+Tessa goes ahead, hooded and quick, and is lost around the bends. The march is slow, the pace of the smallest feet. Six hours pass. The ruts turn to a long straight stretch between low bare hills, and the wind comes down it cold.
+
+Just past three in the afternoon Tessa comes back at a run and drops into step beside you, breathing hard. "A column," she says in Draconic. "Two hundred paces past the next rise, a mile of road at most. Hobgoblins in red-and-tin. Forty, maybe more. A tall captain in front with a plain tin mask." She wets her lips. "They're marching, not hunting. He hasn't seen us yet. But the road is a gully there, with no way round that doesn't cost us the children's legs."
+
+Behind you the column has bunched to a halt, ninety-odd faces turned toward you. Ninna is counting them again, lips moving. You have 5 hit points, a shield, a longsword, your breath ready, and no rage left. The Tallies are at the top of the rise, and Gorrak Vael is walking toward the ash you swore to answer for.
+
+What does Korvash do?

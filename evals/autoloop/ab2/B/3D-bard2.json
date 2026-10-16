@@ -5,8 +5,36 @@
   "line": "I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.\n\nIn the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "dice Wren's Performance check telling the village the truth in the Heron and Net, DC 13: 1d20+5 = 1d20 [4] + 5 = 9",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception check scouting the ford and willows for watchers, DC 13: 1d20+1 = 1d20 [7] + 1 = 8",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ashby Weir",
+     "add_to_description": "Day 5 midday: Wren confessed the forged ford tale in the Heron and Net (Performance 9). The room was tense and partly sullen; the ferryman Dunstan Pike shouted the loudest that the toll should end, but Hob Crannock and Lady Maren backed Wren and the crowd stayed to hear. Lady Maren promised to review the toll with the village. Two men-at-arms (Alwin and Bess) will wait in the willows. Wren missed spotting Garrow, who is hidden in the reeds upstream of the stepping stones."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ashby Weir",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 9 hours 30 minutes later: Day 5, 4:30 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Lady Maren agrees over breakfast, though she goes pale doing it. \"Better from you than from the assessor,\" she says. \"And better from me beside you than from me hiding.\"\n\nAt midday the Heron and Net is packed, with fishers, weavers, and the ferryman Dunstan Pike glowering by the hearth. You stand on a bench and tell it straight. Your Performance check was a 9, and it's rough going. You stumble over the middle, the room mutters, and Pike shouts that the toll was always a swindle. But Lady Maren stands up beside you and says, \"She's right, and I'm sorry,\" and old Hob hobbles in to swear to Elowen's mark. The crowd doesn't riot. It goes quiet, then grumbles, and then Lady Maren promises to open the toll to the village's judgment. Nobody throws anything.\n\nThe afternoon goes to the ford. You pace the stepping stones and pick your spot, a flat shelf of rock mid-stream, within shouting distance of Hob's green door and the village bank. Alwin and Bess, two of Lady Maren's men-at-arms, take their places in the willows. Your Perception check was an 8, so you don't see the hint of brown in the reeds upstream of the stones, though it's there.\n\nIt's half past four. Dusk is a couple of hours off. The water chatters over the stones, the light is going gold, and Hob sits on his doorstep with his pipe. You hold the ledger, Elowen's letter, and the commission.\n\nWhat does Wren do?",
     "input": null
    }
   ],
@@ -232,7 +260,7 @@
    "last_long_rest": 272940
   },
   "clock": {
-   "now": 370800,
+   "now": 405000,
    "timers": {}
   },
   "fight": null
@@ -243,8 +271,36 @@
   "line": "I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.\n\nIn the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "dice Wren's Performance/Persuasion check: confessing the ford tale to the Heron and Net's common room, DC 13: 1d20+5 = 1d20 [17] + 5 = 22",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception check scouting the ford and its banks for hidden watchers, DC 13: 1d20+1 = 1d20 [4] + 1 = 5",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ashby Weir",
+     "add_to_description": "Day 5 noon: Wren confessed the forged ford tale to the village in the Heron and Net (Performance 22). Villagers angry at the toll but moved by the honesty; the miller's wife Dessa Alder and the innkeeper Piet Marsh agreed to a hearing before Lady Maren about ending the toll. About a dozen villagers will gather near the ford at dusk. Lady Maren lent two men-at-arms (Joss and Bren) to wait in the willows. Wren failed to spot any hidden watcher while scouting (Perception 5); Garrow is in fact hidden in the reeds upstream of the stepping stones."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ashby Weir",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 9 hours 30 minutes later: Day 5, 4:30 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Lady Maren hears your request over porridge and doesn't hesitate. \"Midday, then. I'll stand at the back so they see I'm not hiding.\" She also agrees to lend two men-at-arms, Joss and Bren, and tells them to find a patch of willow and be unremarkable.\n\nAt noon the Heron and Net is full of curious villagers, and you stand on a bench with no lute and no flourish. Your Performance check was a 22. You tell it plainly: the painting, the hero at the ford, the tale a charming man sold for gold, and your own part in the trade of such tales. The room goes very quiet, then loud, then quiet again. Anger rises over the toll, but Dessa Alder, the miller's wife, says someone had to be honest first, and the innkeeper Piet Marsh agrees to a hearing before Lady Maren about ending it. Lady Maren, at the back, nods once. A dozen villagers promise to be near the ford at dusk, as quiet as they can manage.\n\nIn the afternoon you walk the ford. The stepping stones are broad and slippery, the weir a long white lip upstream, and on the near bank is a flat grassy shelf under an alder, within earshot of Hob's green door. Hob has agreed to sit on his step with his pipe. Joss and Bren settle into the willows. Your Perception check was a 5, so if anyone else is watching from the reeds, you haven't seen them.\n\nIt's half past four, and dusk is a couple of hours off. You've got the shelf of grass, the witnesses, Elowen's letter, the commission, the pendant, and the ledger in your psalter. What does Wren do before Corvin arrives?",
     "input": null
    }
   ],
@@ -470,7 +526,7 @@
    "last_long_rest": 272940
   },
   "clock": {
-   "now": 370800,
+   "now": 405000,
    "timers": {}
   },
   "fight": null
@@ -481,8 +537,36 @@
   "line": "I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.\n\nIn the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "dice Wren's Performance/Persuasion confessing the ford tale to the Heron and Net crowd, DC 13: 1d20+5 = 1d20 [10] + 5 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception scouting the ford for watchers or an ambush, DC 13: 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ashby Weir",
+     "add_to_description": "Day 5 midday: Wren confessed the forged ford tale in the Heron and Net (Performance 15). Villagers angry but moved that Lady Maren will stand beside Wren; toll to be reckoned fairly by a village moot. Ford has a flat gravel bar mid-river reached by stepping stones, an old willow stump by the east bank where Hob can sit, and a reed bed upstream where someone could hide (Wren's Perception 11 missed what is in it: Garrow is lying in the reeds with a hand crossbow)."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ashby Weir",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 9 hours 30 minutes later: Day 5, 4:30 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Lady Maren agrees over breakfast, though she goes pale when she does. \"Better from you than from a magistrate,\" she says. \"I'll stand beside you.\"\n\nAt midday the Heron and Net's common room is packed, with fishermen, weir-keepers, wives with children on their hips, and the innkeeper with his arms folded. You stand on a bench with your lute silent and tell it plainly: the hero at the ford was a tale, bought and paid for, and the ferry-toll rested on it. Your check was a 15. There's a hard silence, then a roar. A man shouts that his father paid that toll for thirty years. But Lady Maren steps up beside you, grey-faced, and says she'll answer for it and open the ledgers to a village moot. The roar settles to a grumble, then to a muttering that sounds almost like relief. You've made some enemies today and a good number of witnesses.\n\nIn the afternoon you walk the ford. Your Perception check was an 11. You find a flat gravel bar midstream, reached by seven stepping stones, a good place to talk in the open. The east bank has a broad willow stump where Hob Crannock can sit with a blanket and a pipe, and a few villagers will drift down to watch whether you ask them or not. Lady Maren lends you two men-at-arms in faded blue, who settle quietly into the willows on the east bank. Upstream there's a reed bed, thick and rustling, and you see nothing in it. That doesn't mean there's nothing.\n\nIt's half past four. Dusk comes in a little over two hours, and the light on the water is turning gold.\n\nWhat does Wren do before Corvin comes?",
     "input": null
    }
   ],
@@ -708,7 +792,7 @@
    "last_long_rest": 272940
   },
   "clock": {
-   "now": 370800,
+   "now": 405000,
    "timers": {}
   },
   "fight": null
@@ -719,8 +803,36 @@
   "line": "I take breakfast with Lady Maren and ask for one thing: let me tell her village the truth about the ford hero myself, in the Heron and Net's common room, at midday. A confession from the storyteller who found the page would sting less than one from an assessor, and it would give me a crowd of honest witnesses at my back before dusk.\n\nIn the afternoon I'll scout the ford and its stepping stones, pick a spot where I can speak with Corvin in the open with Hob Crannock and a few villagers within earshot, and ask Lady Maren to lend me two of her men-at-arms to stand quietly in the willows.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "dice Wren's Performance check telling the Heron and Net the truth about the ford hero, DC 12: 1d20+5 = 1d20 [6] + 5 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception check scouting the ford and banks for hidden watchers, DC 13: 1d20+1 = 1d20 [8] + 1 = 9",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ashby Weir",
+     "add_to_description": "Day 5: Wren told the Heron and Net's common room the ford hero was invented (Performance 11, narrowly short of a clean win): villagers are split, some angry at Corvin and the Thistlewoods, the miller's widow Edda Marsh and Hob Crannock speak for her. Lady Maren publicly promised to review the ferry-toll with the village. Two Thistlewood men-at-arms (Dunn and Pike) hide in the willows by the ford for the dusk meeting. Wren's scouting missed a watcher in the reeds on the far bank (Garrow)."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ashby Weir",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 10 hours 30 minutes later: Day 5, 5:30 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Breakfast with Lady Maren is quiet and a little grim. She hears your request, sets down her spoon, and nods. \"It should be said by someone who isn't me. I'll stand at the back and take what's thrown.\" She also lends you two men-at-arms, Dunn and Pike, who will wait in the willows by the ford and say nothing unless called.\n\nAt midday the Heron and Net is packed, with fishers, weavers, and the miller's widow, Edda Marsh, arms folded by the hearth. You stand on a bench and tell them plainly that the hero at the ford never lived, that a storyteller sold the tale, and that the toll rests on it. Your Performance check was an 11. It's not quite enough to carry the room. Some of them growl at Corvin and some at Lady Maren. A few shout that you're a trickster paid by the toll's enemies. But Hob Crannock hobbles to his feet and swears on Elowen's lamp to what he saw, Edda Marsh says quietly that she always thought the story smelled of paint, and Lady Maren, at the back, promises aloud to open the toll to review with the village. The room settles into an uneasy, honest murmur. It isn't thanks, but it's no longer a lie.\n\nIn the afternoon you walk the ford and its stepping stones and choose a flat rock midstream, in earshot of Hob's cottage and the bank where villagers have gathered, with Dunn and Pike hidden in the willows. Your Perception check was a 9. You find nothing. The reeds on the far bank look empty, and you can't tell whether that's true.\n\nIt's half past five, and the sun is low and amber on the water. Dusk is under two hours away. Villagers drift toward the bank in twos and threes, pretending not to watch.\n\nHow does Wren spend the time before he comes, and how does she meet him?",
     "input": null
    }
   ],
@@ -946,7 +1058,7 @@
    "last_long_rest": 272940
   },
   "clock": {
-   "now": 370800,
+   "now": 408600,
    "timers": {}
   },
   "fight": null

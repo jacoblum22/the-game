@@ -1,0 +1,243 @@
+GAME bard2, ROUND 30
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 27 ==
+PLAYER: I toss the fishwife a copper and lean down from Biscuit's back. "Thank you, love. Was Corvin himself aboard, or only the driver and the man in the brown coat, and did either of them ask after a young woman with a lute?" Then I turn the mule toward the Ashby road, keeping to a steady walk so I don't spend him, and think it over as I go: the wagon is hours ahead, so I'd rather arrive after them and watch Lady Thistlewood's gate than ride in on their heels.
+
+DM: how much coin do I have now, and is the tinker's set of thieves' tools still 25 gp if I pass back through here?
+  [game] sheet: money -1 cp: now 14 gp 6 sp 1 cp
+  [DM write_lore (hidden)] {"create": "Lantern's Rest", "kind": "place", "description": "Small wayside shrine-house of the Lantern-Bearer on the Ashby road, half a day's ride north of Marrowford. A stone hut with a bunkroom, a hearth, and a brass lamp kept lit. Run by a lay-keeper named Marta Pell, a cheerful widow. Offers free bed and bread to Lantern-Bearer faithful (Wren's Shelter of the Faithful).", "relationships": ["o
+  [game] notebook: created an entry for Lantern's Rest; added 1 relationship to Lantern's Rest
+  [game] time: 5 hours 10 minutes later: Day 3, 6:39 PM
+DM: You flip her a copper and she snatches it neatly out of the air. "Only the driver and the brown-coated one," she says. "Not the master, not that I saw. The brown coat asked the stall-folk whether a young half-elf with a lute had come through, and he wasn't sweet about it. Sharp-faced fellow. Take care, love."
+
+You have 14 gp 6 sp 1 cp now, down a copper. And the tinker, if you ask, still wants his 25 gp for the thieves' tools. He hasn't moved his tray, and it's the same price, so it's out of reach for now.
+
+You turn Biscuit up the Ashby road at an easy walk and let the afternoon pass. The road climbs away from the river, runs through hop fields, then oak woods, then open heath. You keep the pace steady and the mule unhurried, watching for dust or wheel-ruts. About half past six, with the sky going the colour of a bruise, a thin thread of smoke and a small glowing lamp appear ahead where the road forks.
+
+It's a squat stone shrine-house with a tiled roof and a lantern hung on a pole by its door, a brass lamp with rays carved into the shutters, the Lantern-Bearer's sign. A hand-painted board by the gate says **LANTERN'S REST: BED, BREAD, AND A LIGHT FOR ANY WHO WALK.** A plump, grey-haired woman in a green apron is raking the yard and looks up as you approach.
+
+There are fresh wheel-ruts in the soft ground by the gate, two wheels, heavy, turned in and out. Wagon ruts, and recent.
+
+What does Wren do?
+
+== ROUND 28 ==
+PLAYER: I dismount, pat Biscuit's neck, and walk up with the reliquary held openly in my palm so the lamp catches its brass. "Evening, Mother. A traveler of the Lantern-Bearer asks shelter for herself and a mule, and if you've bread to spare, I'd be glad of it." Then, glancing at the ruts, lightly: "Looks like a wagon came through ahead of me. Did a shrine-wagon stop here, and did its driver say where they'd sleep?"
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 3: Corvin lodged at Lantern's Rest the night before and joined his wagon there at noon, charming the keeper Marta Pell. He left a sealed note for \"a young woman with a lute\" (Wren) in Marta's keeping, then took the wagon toward Ashby Weir with Garrow and the driver. He seems to have expected her."}
+  [game] notebook: updated Corvin Tallowmere
+  [DM write_lore (hidden)] {"entry": "Lantern's Rest", "add_to_description": "Keeper Marta Pell, grey-haired, plump, green apron, warm and talkative. Corvin is a regular guest and has charmed her; she holds his sealed note for Wren. She gives Wren free bed and bread as a follower of the Lantern-Bearer."}
+  [game] notebook: updated Lantern's Rest
+  [game] sheet: gained 1 × Sealed note from Corvin Tallowmere (unopened)
+  [game] time: 15 minutes later: Day 3, 6:54 PM
+DM: The woman's face crinkles into a smile at the sight of the little brass lantern. "Bless me, a real one! Marta Pell, keeper here these fourteen years. Come in, love, come in. There's a bunk and a bowl of barley broth and your mule can have the lean-to." She takes Biscuit's rein herself and clucks at him like an old friend. The bed and the bread are free, as the shrine's custom is for any of the faithful.
+
+As she leads the mule round the side, she answers you without needing to be asked twice. The wagon came through at noon, painted lantern and all, with a brown-coated man shouting at the driver. "But Master Tallowmere was already here. He's lodged with me the night before, the dear man, and he's been coming through these seven years. He gave that lamp over the door." She nods to the brass lantern. "He said he'd a lady to see about a ford, up at Ashby Weir, and took the wagon straight on. Left in a great hurry, the brown one in a terrible taking."
+
+She stops, wipes her hands on her apron, and fishes in a pocket. "And he left this for a young woman with a lute, if she should come by. 'Tall, half-elf, quick with a smile,' he said. I thought you'd be her the moment you rode up." She pushes a small, folded square of vellum into your hand, sealed with a blob of blue wax and the shrine-lantern stamped on it.
+
+Inside, a fire crackles in the hearth, and the smell of barley broth drifts out. Corvin knew you were coming, or guessed. He stayed one step ahead of you here.
+
+You can open the note now, take a moment with Marta first, or sleep on it. What does Wren do?
+
+== ROUND 29 ==
+PLAYER: I check the seal carefully under the lamp for signs of tampering or anything odd, like a pin-prick, powder or a trap, then break the wax and read it by the lantern's light. Whatever it says, I'll keep my face still, because Marta's watching and I'd like to hear it from my own head first.
+  [game] dice Wren's Investigation check examining the seal and vellum for tampering or a trap, DC 12: 1d20+2 = 1d20 [3] + 2 = 5
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Note to Wren (Day 3): affectionate, cool. Says she \"took the wrong book\" and that he is not angry; invites her to meet him at Ashby Weir's ford at dusk on Day 5 with the ledger, alone, \"to talk like family.\" Adds that the curl of parchment in her reliquary is NOT his work: \"I never wrote it. Ask yourself who did, and why I let you carry it
+  [game] notebook: updated Corvin Tallowmere
+  [DM write_lore (hidden)] {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: Corvin's note invites Wren alone to the ford at Ashby Weir at dusk on Day 5 with the ledger; claims the reliquary parchment isn't his. New thread: who wrote it and why Corvin let her keep it."}
+  [game] notebook: updated The Sealed Letter
+  [game] sheet: lost 1 × Sealed note from Corvin Tallowmere (unopened); gained 1 × Corvin's note to Wren (opened)
+  [game] time: 10 minutes later: Day 3, 7:04 PM
+DM: You turn the little square of vellum under the lamp, searching for a pin-prick, a dusting of powder, a thread of poison. Your Investigation check was a 5, and you can't tell either way. The wax looks ordinary, the vellum smells faintly of his clove-and-ink, and you can't be sure of anything.
+
+You break it with your thumbnail anyway, keep your face still, and read in the lantern's light. Marta is polishing a cup and pretending not to watch.
+
+*Wren, my girl.*
+
+*You took the wrong book. I'm not angry. A father isn't angry when a clever child proves she's clever. Come to the ford at Ashby Weir at dusk on the fifth day, alone, and bring it. We'll talk like family and see what can be mended, you and I, before someone less gentle than I am gets the idea of reading it for themselves.*
+
+*One thing more, for the road. That curl of parchment in your little brass lantern is not my work. I never wrote it. Ask yourself who did, and why I let you carry it all this way.*
+
+*C.* There's a tiny drawn lantern beneath the initial.
+
+The room feels quiet in a strange way. He knew about the reliquary, and about the parchment. He's telling you it's real, and that he let you keep it, and nothing about that note is the voice of a man who thinks he has lost.
+
+The fifth day is two days away. The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork. Marta has set a bowl of barley broth by the hearth for you.
+
+What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 30, "category": "contradiction", "severity": 2, "quote": "he sat up all night over that brass lamp over my door", "why": "R28 Marta says of that same lamp 'He gave that lamp over the door'. If Corvin gave it he would not study it on his first stay. R33 Hob says Elowen left it over the door twenty years ago."}
+{"round": 30, "category": "pacing", "severity": 1, "quote": "What does Wren do?", "why": "Nearly every reply ends on the identical closing question, and many replies recap state first."}
+
+THE PLAYER'S LINE THIS ROUND: I fold the note, tuck it into the psalter next to the ledger pages, and sit down to the broth with a calm face. "Mother Pell, you've known Corvin seven years. Did he ever mention who gave him the brass lantern-case, or a road-priest who wrote blessings in a looped hand? I'd also like a look at the lamp he gave you, if you'll let me, and I'll tell you a good story for it after supper."
+
+=== REPLY bard2-30-01 ===
+  [hidden call] write_lore: {"create": "Old Wick", "kind": "person", "description": "A true road-priest of the Lantern-Bearer, now dead (about twenty years ago), who wrote in looped hand. Per Marta, Corvin once travelled with hi
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "The lamp over the door bears the same ray-and-lamp etching as Wren's reliquary, and inside its base is scratched a small mark of looped W's: Old Wick
+The broth is thick and good, and Marta settles across from you with her chin on her fist. Your Persuasion check was a 24, and it opens her up like a window.
+
+"Old Wick," she says at once, as if the name had been waiting. "A real road-priest, the last I knew of, wrote in great loops like a child's drawing of waves. Corvin travelled with him years back, before my time here, and I only know it from Corvin's own telling. Wick died on this very road, and Corvin carried him here. They buried him under the lamp-pole." She nods toward the yard. "Corvin said Wick pressed a little brass lantern into his hands at the end and said, 'for the child.' He never said which child." She looks at you, and a slow wonder crosses her face. "Well. I never thought to put it together."
+
+Then she takes down the lamp from over the door for you. Your Religion check was a 19. The ray-and-lamp etching is the very twin of your reliquary's. Turning it over, you find scratched inside the base a tiny mark of three looped W's, the same hand as the parchment. Wick's own mark. Corvin gave the lamp in his memory.
+
+So the blessing is Wick's, and it was meant for a child, and Corvin carried it and kept it from you. Whether he stole it, hid it, or simply failed to give it, you don't yet know.
+
+You owe Marta a story, and she's earned it. It's near eight. The ford at Ashby Weir is a day's ride on, and Corvin wants you there at dusk on Day 5.
+
+What story do you tell, and what do you do after?
+
+=== REPLY bard2-30-02 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Day 3 evening: Wren's questions to Marta (Persuasion 8) and a look at Corvin's brass lamp (Religion 6) turned up nothing certain. Marta recalls only 
+You tuck the note into the psalter beside the ledger pages and take your broth. Your Persuasion check was an 8. Marta likes you, but it doesn't draw out what you want.
+
+She chats happily and wanders. Corvin is "a dear, a gentleman, tells a tale like a river runs." Did he ever speak of the lantern-case or a road-priest with a looped hand? She frowns and shakes her head. "He never told me where he got anything, love. Said once that the best blessings are the ones nobody remembers writing." She laughs, as if it were a joke.
+
+The lamp over the door gets a look too, lifted down in her careful hands. Your Religion check was a 6. It's good brass, rayed shutters, well made and well kept. You can't tell whether it's old, new, or anything more than a lamp.
+
+You pay for supper with the promised story, something warm about a ferryman and a lost lantern, and Marta wipes her eyes. As she bustles off she mentions, almost as an afterthought, that the shrine keeps a worn guest-book by the hearth that goes back long before her time, "all the travellers who ever lit a lamp here." You haven't opened it yet.
+
+It's eight in the evening on Day 3. The bunk is ready and the mule is fed. The ford at Ashby Weir is a day's ride on, and Corvin expects you there at dusk on Day 5. What does Wren do?
+
+=== REPLY bard2-30-03 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Marta says Corvin once told her he got the brass lantern-case from \"a road-priest who died owing him a debt\", a woman named Sister Ysolde Venn, who
+  [hidden call] write_lore: {"create": "Sister Ysolde Venn", "kind": "person", "description": "Dead road-priest of the Lantern-Bearer, buried at Lantern's Rest. Her looped hand wrote the true blessing in Wren's reliquary; the la
+You fold the note into the psalter beside the ledger pages and take the broth. It's hot and peppery, and Marta sits across from you, glad of company.
+
+"The brass lantern-case?" She thinks, spoon in the air. "He never said where he got it, love, only once, years back, with wine in him: that it came from a road-priest who died owing him a debt. Sister Ysolde Venn, a lovely soul, walked this very road. She's buried out in my yard under a plain stone. Corvin pays for the flowers."
+
+She lets you take the lamp down from its hook. Your Religion check was an 18. It's old brass, rays carved in the shutters, and it's not Corvin's showy kind of piece. Tilting it to the fire, you find a tiny looped mark scratched inside the base, with the same round, trailing hand as the lines on your parchment, as if the same pen made both. Whoever Sister Ysolde was, she made this lamp and wrote your blessing.
+
+You pay for it as promised, with a story over the empty bowls. Marta wipes her eyes at the end and says nothing for a while. Outside, the stars are out, and past the window a plain stone stands in the dark yard.
+
+It's nearly eight on Day 3. The ford is two days off, the wagon is somewhere ahead, and Marta has the bunk ready.
+
+What does Wren do?
+
+=== REPLY bard2-30-04 ===
+  [hidden call] write_lore: {"create": "Sister Ione Vale", "kind": "person", "description": "Road-priest of the Lantern-Bearer who walked the Marrow roads in a looped hand. Her mark is stamped under the base of the lamp at Lante
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: Wren (nat 20) found Sister Ione Vale's mark under the Lantern's Rest lamp, matching the reliquary. Ione had a ford-shrine at Ashby We
+Your Persuasion check was a 23, and Marta needs no coaxing past the first spoonful. Corvin was a pleasant guest, she says, who paid in stories and never haggled. He gave her the lamp seven years back. "From a dead friend's keeping, he said, and he went quiet after." She never knew who made the reliquary, but she's seen a road-priest's looped hand on old shrine boards along the Marrow.
+
+Then your Investigation check on the lamp comes up a natural 20. You lift it down, turn it over, and see a mark under the base that she has polished around for years without noticing. It's the same lamp-and-rays stamp as your reliquary, pressed by the same die, with a name cut small beside it: IONE VALE. The two pieces were made as a pair.
+
+Marta frowns, then remembers. "Sister Ione! She walked the Marrow roads when I was a girl. Kept a little ford-shrine up at Ashby Weir. We never heard what became of her."
+
+The ford is where Corvin wants to meet you. The fire has burned low, and you've paid your story, since Marta wouldn't take a lie and you didn't offer one. It's half past eight on Day 3. Corvin is a day ahead of you, and the ford is a day's ride off.
+
+What does Wren do?
+
+=== REPLY bard2-30-05 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Marta's tale (Day 3 night): seven years ago a dying road-priest named Brother Anselm Vane, with a looped hand, was nursed at Lantern's Rest and died 
+  [hidden call] write_lore: {"create": "Brother Anselm Vane", "kind": "person", "description": "Road-priest of the Lantern-Bearer who died at Lantern's Rest seven years ago. Wrote in a looped hand; likely author of the blessing 
+Your Persuasion check was a 17, and Marta warms like a banked fire. Over the broth she talks about Corvin: the clove-and-ink smell, the way he mends a hinge without being asked, the stories he tells guests.
+
+Then she pauses. "A looped hand, you said. That's Brother Anselm. Anselm Vane." Seven years ago a road-priest came in half-dead from fever, and she nursed him through a hard winter. He wrote constantly, small looping letters, blessings for the road. He died at Lantern's Rest in the spring. "Master Tallowmere came for his things. Said he'd carry the brass case to the god's greater shrine. I never saw it again." She looks at the reliquary on your belt, and her hand goes to her mouth. "Oh, love. That's it."
+
+She lets you hold the lamp over the door. It looks ordinary, but on the underside of its base, scratched small, are looped letters, *A.V.*, and a line of verse that matches the blessing in your reliquary. Anselm is buried behind the shrine under the pear tree.
+
+So Corvin took a dying man's relic, and years later let you carry it. Why? Marta can't say. You promised her a story, and she settles in to hear it. It's half past eight, the fire is warm, and the wagon is a night ahead.
+
+What does Wren do?
+
+=== REPLY bard2-30-06 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Marta (Persuasion 16) told Wren: Corvin's brass lamp over the door is a twin of Wren's reliquary, and he said it came \"from a woman priest of the ro
+  [hidden call] write_lore: {"create": "Sister Ilwen", "kind": "person", "description": "A road-priestess of the Lantern-Bearer who died on the Ashby road years ago while caring for a child who was never found. Probable author o
+The broth is thick and peppery, and Marta watches you eat with the pleasure of a woman who likes to be listened to. Your Persuasion check was a 16, and she opens up like a window.
+
+"The lamp over the door? Master Tallowmere's gift, aye, but he never made it. It's a twin of that little brass case of yours, bigger, is all. He told me once it came from a road-priest, a woman, who died out on the Ashby road years back, with a child in her keeping." She lowers her voice. "Sister Ilwen, he called her. The child was never found, and he never said more. He asked me not to speak of it."
+
+She takes the lamp down from its hook and sets it in your hands. It's heavy, warm from the flame, with rays pierced in the shutters. Turning it over, you find a small looped mark scratched beneath the base, and the loops are the same ones that curl through the parchment in your reliquary.
+
+You tell her a story in return, a short, true-ish one about a lantern that walked a road by itself, and she laughs and wipes her eyes. Then she shows you a bunk in the bunkroom, with clean blankets, a candle stub and no other guests.
+
+The evening has gone to nearly eight. Biscuit is warm in the lean-to, the road to Ashby Weir lies ahead, and Corvin's meeting is two days away. You now have a name, Sister Ilwen, and a child who was never found.
+
+What does Wren do?
+
+=== REPLY bard2-30-07 ===
+  [hidden call] write_lore: {"create": "Sister Ione", "kind": "person", "description": "Road-priest of the Lantern-Bearer who, per Marta Pell, died in the bunkroom of Lantern's Rest on a winter night about fourteen years ago, wi
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: Marta says a road-priest, Sister Ione, died at Lantern's Rest ~14 years ago; Corvin was there and left with the lantern-case and a bu
+Your Persuasion check was a 23, and Marta needs no coaxing past the first spoonful of broth.
+
+"A road-priest in a looped hand?" She sets down her cup. "Why, that's Sister Ione. She came in out of a winter storm fourteen years back, sick to the bone, and died in that very bunkroom. Master Tallowmere was here that night, the only other guest. He sat with her. I remember her writing in my guest-book before the end, all loops and long tails, and him bent close, as if she were telling him something." She frowns. "He left in the morning with her brass lantern-case, and a bundle in his arms I never saw open. He said he'd see them both to the right hands. I never thought to ask whose."
+
+She brings you the guest-book, and there's the entry: *Sister Ione, of the Lantern road. Lit and unlit alike.* The loops are the ones Osric knew. They match the parchment in your reliquary as far as a worn memory can say.
+
+Then you go out to look at the brass lamp over the door. Your Religion check was a natural 1. You fumble the pole, nearly drop the lamp, and spend several flustered minutes learning nothing from it at all, to Marta's cheerful laughter. It's only a lamp, as far as you can tell.
+
+It's nearly eight. Marta wants her story, and Corvin's ford is two days off.
+
+What does Wren do?
+
+=== REPLY bard2-30-08 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Wren's Religion check (12) on the brass lamp Corvin gave: it matches her reliquary's make: same ray-etched lid, same maker's mark scratched inside th
+You sit by the hearth with the broth and ask your questions as lightly as you can. Your Persuasion check was an 8, and it doesn't quite land. Marta's warmth cools a degree. "Seven years he's been a good friend to this house," she says. "He did mention an old road-priest once, who died owing him a kindness. That's all I know, and I'd not tell tales on a man who's never done me wrong." She turns the ladle in the pot and doesn't meet your eye.
+
+The lamp is another matter. She lets you take it down from its hook, still warm, and you turn it under the light. Your Religion check was a 12. It's the twin of your reliquary: the same ray-etched lid and the same shape of hinge. Inside the base, scratched small, is a maker's mark of two crossed keys, and when you check your own reliquary, the same mark is there, worn nearly smooth. Whoever made your case made this lamp. Corvin didn't just stumble on yours.
+
+You promise Marta a story and give her a good one, a tale of a tinker and a stubborn lantern. She laughs in the right places and softens again. The fire burns low, and a bunk waits in the back room. The wagon is a day's ride ahead, and the ford is two days off.
+
+What does Wren do?
+
+=== REPLY bard2-30-09 ===
+  [hidden call] write_lore: {"create": "Road-Priest Isolde", "kind": "person", "description": "A wandering priest of the Lantern-Bearer, now dead or vanished, with a looped hand. Marta remembers Corvin once arriving at Lantern's
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: Marta says Corvin first came to Lantern's Rest about seventeen years ago feverish, carrying a toddler and a priest's pack, claiming a
+You tuck the note into the psalter and take the broth. Over the bowl, with a story promised, Marta loosens like a knot. Your Persuasion check was a 17.
+
+She knew nothing of a looped-hand priest by name, but she remembers the first time Corvin came, about seventeen years ago. He turned up at the door feverish and grey, carrying a toddler on his hip and a battered priest's pack. "A dying friend gave it me," he'd said. She nursed him three days. "The little one never cried once. Hair like wet straw, and she looked at the lamp the whole time." Marta stops, and her eyes go to you. "I never thought of it till now."
+
+Then she lets you take down the lamp over the door. Your Religion check was an 18. It is a true shrine-lamp, old brass, the shutters carved with rays exactly like your reliquary's lid. Under the base, scratched small and deliberate, is a single word: *Isolde*.
+
+You can't say who that is, but the same hand that etched the lamp may have looped the blessing in your reliquary. Corvin gave Marta a lamp he knew carried a name, and he told you in his note to ask who wrote the parchment.
+
+You pay for supper with the story, a tale of a ferryman and a lantern that the whole room goes quiet for. Then you're shown a bunk. It's eight at night on Day 3, and Ashby Weir is a day's ride ahead, with two days before the ford.
+
+What does Wren do?
+
+=== REPLY bard2-30-10 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Marta's memory (Day 3): Corvin once told her he got the brass lantern-case from a dying road-priest named Brother Ansel Wick, who traveled the Ashby 
+  [hidden call] write_lore: {"create": "Brother Ansel Wick", "kind": "person", "description": "Dying road-priest of the Lantern-Bearer who, per Marta Pell, gave Corvin the brass reliquary years ago, asking it go to \"a child who
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3: Marta says the reliquary came to Corvin from a dying road-priest, Brother Ansel Wick, who asked it go to \"a child who needs to be told the
+You slip the note into the psalter beside the ledger pages and start on the broth. Your Persuasion check was a 16, and Marta warms like a banked fire.
+
+"The lantern-case? Oh, he told me once, years back, over a cup too many," she says. "A road-priest gave it him, dying, on this very road. Brother Ansel Wick, a thin old fellow with a looped hand, always writing blessings for strangers. He asked that it go to 'a child who needs to be told the truth.'" She chuckles. "Master Tallowmere laughed when he said it, and never said a word more. I thought it was a joke."
+
+She takes you out to the door and lifts the brass lamp down for you. On the base is a maker's mark: a tiny lantern with a looped letter W curling through it, the same loops as the parchment's script.
+
+After supper you pay for the supper with a story, and she's delighted. Then she tucks you into a bunk with a wool blanket. The night is quiet, and Biscuit snores in the lean-to.
+
+Brother Ansel Wick, then. A name, a road, and a purpose that someone had for you before you were ever a thief.
+
+It's nearly eight on Day 3. Ashby Weir is a day's ride on, and Corvin expects you at the ford at dusk on Day 5. Do you rest here, and how do you want to approach tomorrow?
+
+=== REPLY bard2-30-11 ===
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Marta Pell (Persuasion 11): Corvin gave the shrine its brass lamp seven years ago, saying it came \"from an old friend, a road-priest who died on the
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 3 night: the lamp at Lantern's Rest was given by Corvin seven years ago from \"an old friend, a road-priest who died on the Ashby road\"; base
+Marta ladles you broth and settles across the hearth, glad of company. Your Persuasion check was an 11, enough to loosen her tongue.
+
+"A road-priest? Now there's a thing." She wipes her hands. "Master Tallowmere gave us that lamp seven years back. Said it came from an old friend, a road-priest who died on the Ashby road, God keep her. He hung it himself, and I'll tell you, love, he wept doing it. A man who never prays, weeping at a lamp." She shakes her head. "I never asked."
+
+She fetches a stool, and you take the lamp down together. The brass is warm and old. Round its base runs a line of looped, flowing script, worn nearly smooth by years of hands and weather. You can read only the tail of a name: *...ith Vael.* The loops are the same sweeping hand as the curl of parchment in your reliquary.
+
+You pay for the bread with the story you promised, a tale of a lamp-bearer and a river, and Marta laughs and wipes her eyes in the right places. It's nearly eight. Corvin's note, the ledger and the lamp all point the same way: someone named Vael, a road-priest, dead on this road, and a man who wept.
+
+The ford is two days off. The wagon is a day ahead. You've a bunk, a mule in a lean-to, and a long night.
+
+What does Wren do?
+
+=== REPLY bard2-30-12 ===
+  [hidden call] write_lore: {"create": "Mother Idony", "kind": "person", "description": "Old road-priest of the Lantern-Bearer, now dead some fifteen years. Wrote with looped letters. Wandered the Marrow valley; kept a brass lan
+  [hidden call] write_lore: {"entry": "Lantern's Rest", "add_to_description": "Door-lamp is of the same make as Wren's reliquary: same etched rays, and a maker's mark of a small ring of looped letters under the base, \"I.\", mat
+Marta settles across the hearth from you, and your Persuasion check, a 21, opens her up like a tap. Her memory is long and fond.
+
+"A road-priest with looped writing? That'd be Mother Idony. She walked this valley when I was a girl, and she's been dead these fifteen years, poor soul. Wrote the prettiest hand, all loops. She kept a brass lantern-case just like yours." Marta frowns, remembering. "The last time I saw her she had a little one on her hip, a half-elf mite, and young Corvin walking beside her, carrying her bag. I thought him her nephew. I never asked."
+
+You go out with her to the door-lamp, and your Investigation check, a 17, finds what a casual glance wouldn't. It's the same make as your reliquary, with the same etched rays. Under the base, scratched small, is a ring of looped letters ending in an *I*. Marta says Corvin gave it years ago and called it "a dead woman's gift." He never said whose.
+
+You owe her a story, and you tell one. She laughs and wipes her eyes, and bed comes easy. The reliquary on your pillow feels heavier than it did.
+
+It's half past eight on Day 3. Idony may be tied to your birth, and Corvin knew it all along. Ashby Weir is a day's ride ahead, Corvin's meeting is dusk on Day 5, and the wagon has a head start.
+
+What does Wren do?

@@ -1,0 +1,228 @@
+GAME cleric2, ROUND 55
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 52 ==
+PLAYER: "Thank you, Wren. Take me to Perrin, and tell him on the way that I'm a friend of Maud's and I only want to look, not to fuss."
+
+At the dye-sheds I'll keep my distance, sit on an upturned tub where he can see my hands, and talk about the work first, how long he's dyed and what colors, before asking how he fell and what hurts. I'll offer to look at his back or leg only if he agrees, and I'll keep Cure Wounds ready in case it's a true injury.
+  [game] dice Brannoc's Persuasion check to win Perrin's trust, DC 13 (proud, gruff; a good approach): 1d20+2 = 1d20 [15] + 2 = 17
+  [game] dice Brannoc's Medicine check on Perrin Gale's fall injury, DC 12: 1d20+5 = 1d20 [3] + 5 = 8
+  [game] time: 45 minutes later: Day 4, 1:20:42 PM
+  [DM write_lore (hidden)] {"create": "Perrin Gale", "kind": "person", "description": "Old dyer of Greywater, proud and gruff, who fell from a drying rack a month ago and has walked crooked since; won't let anyone look at it. Brannoc won his trust by asking about the dye work. Injury: left hip and lower back; Brannoc's first read inconclusive (Medicine 8). DM ruling: Cure Wounds restores hit points only and cannot unset an 
+  [game] notebook: created an entry for Perrin Gale; added 1 relationship to Perrin Gale
+DM: Wren walks ahead of you on the way down and tells Perrin from the shed door that you are a friend of Maud Marrow's and want only to look. The old man grumbles from the dark inside that he has seen enough healers to last a hundred years, and none of them ever came to a clean thing.
+
+You do as you planned. You sit on an upturned tub where he can see your hands, rest the mace and shield against the wall, and say nothing about his fall. You ask about his dyes instead: how long he has been at it, what the madder does that the woad cannot, where he gets his weld. He is a long time answering, and then he cannot stop. He has been dyeing for fifty-one years, and he knows the river's moods like a woman's. Persuasion (17): by the time his hands have stopped tightening on the tub's edge, he is the one who says it, gruffly, to the vat. "Fell from the rack. Third rung. A month back."
+
+He lets you look, once you ask, and only as far as he will.
+
+Medicine (8): you can't make a clear read of it. He winces when you press his left hip and lower back, and the hip sits a little higher than the right, as if the whole frame has set at a slant. You can't tell whether it's a deep bruise that has knotted the muscle, a hip knocked out of its seat and left, or a cracked bone that healed crooked. He walks on it, and he won't go to bed. Each would need something different.
+
+One thing you can say. Cure Wounds restores hit points, and by my ruling it does not unset a month-old hurt that has already healed wrong. It could ease the wearing damage, but it would not make a crooked hip straight. You have all three slots, though, and you could spend one if you want to try anyway.
+
+It's about twenty past one. Perrin is watching you with wary, tired eyes. Wren is perched on a drying rack, quiet for once.
+
+What does Brannoc do?
+
+== ROUND 53 ==
+PLAYER: "Master Perrin, I can't promise to straighten what's healed crooked, but I can try to ease the ache and the wear on that hip. May I lay a hand on it and say a short prayer? It won't hurt, and it costs you nothing."
+
+If he agrees, I'll cast Cure Wounds on him at 1st level and see what it does. Either way, I'll show him a gentle stretch, and ask him to keep a stool at his vat so he isn't standing all day. DM: is there a bonesetter or surgeon in Greywater or nearby I could send him to for the hip itself?
+  [game] dice Cure Wounds on Perrin Gale (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [4] + 6 = 10
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 2/3
+  [game] time: 30 minutes later: Day 4, 1:50:42 PM
+  [DM write_lore (hidden)] {"create": "Mother Aldith", "kind": "person", "description": "Bonesetter and midwife at Stonebridge, the market town a day's walk further down the valley beyond Greywater. Known for setting hips and breaking and resetting badly healed bones; charges modest coin. Recommended to Perrin Gale by Brannoc.", "relationships": ["lives in Stonebridge, down the valley past [[Greywater]]"]}
+  [game] notebook: created an entry for Mother Aldith; added 1 relationship to Mother Aldith
+  [DM write_lore (hidden)] {"entry": "Perrin Gale", "add_to_description": "Day 4 ~1:50 PM: agreed to a prayer; Cure Wounds eased the ache. Hip still sits crooked. Brannoc showed him a stretch and told him to keep a stool at the vat; recommended Mother Aldith of Stonebridge."}
+  [game] notebook: updated Perrin Gale
+DM: He is silent for a moment. Then he gives a short, grudging nod, the nod of a man agreeing to a thing he plainly thinks is foolish. "Say your prayer, then. Mind the hip."
+
+You kneel and lay a hand on the small of his back, over the knotted muscle, and say it low. The warmth gathers and goes in. It is not a great working, and you can feel it spread through the band of tightness and then stop at the place where the bone sits wrong, like water finding a wall. Ten points of life go into him. Perrin draws a long breath through his nose, shoulders dropping an inch, and lets it out slowly.
+
+"Well," he says. "That's the first night I'd sleep through in a month."
+
+The hip itself is unchanged. When he stands, it still sits a little high, and he still carries it with the same cautious lean. But the grinding wince has gone out of his face. You show him a gentle stretch, one knee drawn slowly to the chest while lying flat on his back on a blanket, and you ask him to keep a stool at the vat and sit between pours, however much he scorns it. He grumbles that stools are for women and bairns. Wren says something sharp from the rack, and he scowls and takes the stool.
+
+Yes, there is a bonesetter. Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater. She sets hips and the like, and is known for breaking and resetting bones that healed wrong, which is hard, but it is the only thing that will straighten his. Perrin says he will think on it, which, from a man like him, you take to mean maybe.
+
+You have two 1st-level slots left. It is ten to two in the afternoon, and the village has been seen to. Wren is looking at you and the chapel and the road with a question in her face. Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+
+What does Brannoc do?
+
+== ROUND 54 ==
+PLAYER: I turn to Wren and kneel to her level. "You've done more than any one person should for Greywater, Wren. Let's sit in the chapel a moment, and I'll show you the dressing for Osric again and how to tell a fever from a chill, so there's someone here who knows."
+
+I'll stay the night in Greywater, sweeping the chapel with her and keeping watch over Ilsa's baby, then rest to restore my prayers before heading down to Stonebridge. DM: does Mother Aldith have a reputation I should know of, and could I ask her to take on Wren as an apprentice?
+  [game] time: 7 hours later: Day 4, 8:50:42 PM
+  [DM write_lore (hidden)] {"entry": "Wren", "add_to_description": "Day 4 afternoon-evening: Brannoc taught Wren to dress a burn, tell fever from chill, and to watch a baby's breathing; she wants to learn more. He will write her a letter for Mother Aldith at Stonebridge asking whether she might take Wren on as an apprentice, but Wren is a dyer's daughter and her parents have not been asked."}
+  [game] notebook: updated Wren
+  [DM write_lore (hidden)] {"entry": "Mother Aldith", "add_to_description": "Reputation (told to Brannoc Day 4 by Maud Marrow and Perrin Gale): blunt, loud, no patience for fools, and the best bonesetter in the valley; has had three apprentices, two of whom stayed. Wants coin, not charity, from those who can pay, but never turns away the poor. Owes Maud a favour (Maud wove her winter blankets)."}
+  [game] notebook: updated Mother Aldith
+DM: In the chapel, Wren sits cross-legged on the cold flags with her yarn basket still beside her. She drinks it all in as if she were hungry for it. You show her Osric's dressing again, slowly, with your hands over hers: boiled water, honey thin, linen firm but not tight. You teach her the plain signs. A fever is hot, dry, and still. A chill shivers and sweats and comes and goes. A baby's breath is counted against a slow count of sixty, and blue at the lips is the thing you never wait on. She repeats each step back, and where she gets one wrong she says it again until it is right. You also teach her the first line of Edda's hymn, and she hums it badly and with great seriousness.
+
+Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper. She is blunt, loud, and short of patience for fools, and she is the best bonesetter in the valley. She has had three apprentices and two of them stayed. She wants coin from those who can pay, but never turns the poor from her door. Maud weaves her winter blankets, so she owes her a favour. Whether she'd take Wren is another matter, and one the dyer's daughter's parents must also answer. You write a short letter of recommendation in the margin of your prayer book and tear the leaf out. Wren holds it as if it were made of glass.
+
+The evening goes on. You sweep the chapel with her, you set the kettle on for Ilsa, and you go twice to the low house on the east lane to count the baby's breaths against a slow sixty. Tessa sleeps easy on her mother's shoulder both times, the rattle looser than before.
+
+It is nearly nine at night, and you have settled onto a pallet in the little chapel. Your prayers will return at dawn when you finish the long rest. You can change your prepared list then.
+
+How does Brannoc spend the last of the evening, and which prayers does he prepare?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 55, "category": "clock", "severity": 2, "quote": "You wake at ten to five, before the first gray", "why": "Round 46 has 'first gray' at about 7:00 AM; the sun is also timed to rise around 6:30 AM in round 1."}
+{"round": 55, "category": "format", "severity": 1, "quote": "You can leave now, in the dark, or wait for the sun and Wren's waking.", "why": "Menu of options at the end."}
+
+THE PLAYER'S LINE THIS ROUND: I spend the last of the evening kneeling at the plain stone altar, thanking the gods for Piper's mending, Osric's arm, and little Tessa's easy sleep, and humming Edda's hymn until Wren drowses off on the bench with her yarn basket in her lap. Then I lay out my pallet and let the long rest take me.
+
+For tomorrow I'll keep my list as it is: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. I'll go down to Stonebridge in the morning to find Mother Aldith for Perrin and Wren, and keep my eyes open for the next place with no healer.
+
+=== REPLY cleric2-55-01 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel; the village left bread and a small purse of coin (a few silver) on the altar for the road. Wren sl
+Sleep takes you in the chapel's quiet, the stone cool at your back and Wren's slow breathing on the bench. Nothing wakes you.
+
+It is a little before five on Day 5, and the long rest is done. You are at 17 of 17 HP with all three slots and Channel Divinity restored, and your Hit Dice are back. Your list stands as you chose it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+The first gray is in the windows. On the altar, beside Wren's jar of wildflowers, someone has left a heel of fresh bread wrapped in cloth, a wedge of cheese, and a twist of paper with a few silver coins inside, the small gifts of a village that had no one to thank before. The paper is smudged blue at one corner, and you suspect Maud. Wren is awake, sitting up with the letter in both hands. She says nothing, but she looks at you with the whole of her face.
+
+The road to Stonebridge runs down-valley along the river, a day's walk. It is a bonesetter's town with a market, and the first real town you have seen since you left Millbrook Landing. You carry a letter for Mother Aldith, a purse, the Powder, and a promise to Perrin.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-02 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc rested in the chapel, prayers restored. Villagers left bread, a clean blanket and a small purse of coin (2 gp) on the altar in thanks.
+You sleep deep in the chapel, under a plain slate roof, with the altar flowers faintly sweet in the dark. When you wake, it is the gray before sunrise on Day 5, and the long rest is done. Your HP is full at 17, all three 1st-level slots are back, Channel Divinity is ready, and your Hit Dice are restored. Your prayers are as you chose them.
+
+You find the chapel changed. Wren is already up and sweeping the flags. On the altar beside the wildflowers sit a round loaf, a clean folded blanket, and a small purse of coin with a scrap of cloth tied around it. Nobody saw who left it. Inside are two gold pieces, and your purse now holds 17 gp. Osric's wife came before dawn to say the arm looked better, and Ilsa sent word by a neighbor's child that Tessa fed well and slept through. Perrin Gale's stool stands at his vat, and nobody has seen him sit on it, but it has moved.
+
+Wren walks you to the edge of the village with the folded letter in her apron pocket. She does not ask for much. "I'll ask my mam about Mother Aldith," she says. "I'll keep the chapel swept." She hums the first line of the hymn, almost right.
+
+The road to Stonebridge runs down the valley, a day's walk. The river widens, the hills flatten, and the mist burns off in the first long light. It is just past five in the morning. You have a bonesetter to find, a letter to deliver, and a road ahead.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-03 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel; the village woke to find the chapel swept, its lamp lit, and the healer packing for Stonebridge. W
+You kneel at the plain stone altar until the words run out, and then you hum. Edda's hymn fills the little chapel, low and unhurried, and the girl on the bench sags slowly against the wall with her basket sliding off her lap. You lay your blanket over her and put the basket where she can find it. Then you lie down on your pallet, and sleep takes you like warm water.
+
+You wake before dawn at a quarter to five, rested. The long rest is done. You are at 17 of 17 HP, with all three 1st-level slots, Channel Divinity, and both Hit Dice. Your list stays as you chose it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+The window is gray and the river is loud in the quiet. Someone has lit the chapel's lamp before you woke, and it burns on the altar beside the jar of wildflowers. Wren is already gone from the bench, though her blanket is folded neatly in its place. When you step out into the lane, you find her waiting on the step with a bundle in her arms: a loaf, a wedge of cheese, and a ball of blue wool with a needle stuck through it. Her mother stands behind her in the doorway, arms folded. She says nothing, but she nods once, stiffly, and that is enough.
+
+Down the lane you pass Osric, who raises his bandaged arm like a flag, and Ilsa's shutters, open, with the baby's cry coming thin and healthy from within. Perrin sits on his stool beside the vat with his eyes shut and his face to the sun. He does not look up, but he lifts two fingers from his knee as you pass.
+
+The road to Stonebridge runs south along the river, a day's walk, with Mother Aldith at the end of it and a letter in your pack. The morning is cold and clear. You have 15 gold pieces, a full list of prayers, and 400 XP.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-04 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel. Tessa and Ilsa mending, Osric's arm clean, Perrin sleeping better. Wren holds Brannoc's letter for
+You sleep deeply, in the cold quiet of the little chapel with Wren's soft breathing from the bench. Nothing wakes you. When you open your eyes, a gray light is creeping through the one window and the first birds are going in the thatch.
+
+It is ten to five on Day 5. You are at 17 of 17 HP with all three 1st-level slots, Channel Divinity, and your list as you chose it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+You wash in the river, eat the last of Maud's loaf with a spoon of her honey, and look in on the village before the sun is up. Ilsa is awake, with Tessa feeding, the rattle gone down to a whisper. Osric is already at his vat with his sleeve rolled and Wren's dressing neat on his arm. Perrin is on a stool, scowling, and does not say thank you but pushes a small bundle of dyed wool into your hands: a scarf, deep madder-red, plainly made for you. Wren is at the chapel door with her basket on her hip, her cheeks flushed, trying not to cry. She has the letter in her fist.
+
+"My mam says I can go," she says in a rush, "if Mother Aldith says yes. Will you wait?" You tell her you cannot, but that the road to Stonebridge is a day's walk and she can follow with her mother when the dye is done. You are not sure she heard you past the tears.
+
+The valley road runs south along the river, wide and rutted and well-used. By noon you will be in farmland, and by dusk at the market town. Beyond that is the great road to the coast, and beyond that, many places with no healer.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-05 ===
+  [hidden call] write_lore: {"create": "Stonebridge", "kind": "place", "description": "Market town a day's walk down the valley past Greywater, named for its old arched stone bridge over the river. Home of the bonesetter Mother 
+You wake at first light with the chapel's cold flags under your pallet and Wren asleep on the bench, still curled around her basket. You have the long rest behind you: 17 of 17 HP, all three 1st-level slots, and Channel Divinity ready. Your prayers are as you chose them.
+
+Before you leave, you look in on the east lane one last time. Tessa is feeding. Ilsa meets you at the door with the baby on her shoulder and a face that is no longer gray. Osric has already changed his dressing and sends Wren's mother up with a skein of undyed wool as thanks, which Wren's mother presses on you with a shy smile. Perrin Gale is sitting on his stool at the vat when you pass, and he lifts one hand without a word.
+
+Wren wakes as you gather your pack. You give her the letter for Mother Aldith, and she holds it against her chest. Her mother, a broad woman with stained arms, has come to the chapel door and listens, frowning, while you explain. She does not say yes and she does not say no. She says, "Bring word back from the bonesetter first. Then we'll see." It is a fair answer.
+
+The road to Stonebridge runs along the river, through rolling pasture and orchard, a day's walk. Morning mist is lifting off the water. You walk into the new sun with the loaf nearly gone, Maud's honey in your pack, and the memory of five lives mended by plain hands and a few prayers.
+
+It is seven in the morning of Day 5. Stonebridge is a market town, with a temple, a bridge, and a bonesetter waiting. The road is empty and bright.
+
+What does Brannoc do on the road?
+
+=== REPLY cleric2-55-06 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel. Osric, Ilsa and Tessa, and Perrin all tended; Wren is learning basic nursing. Next stop: Stonebrid
+You kneel at the plain stone altar, give your thanks, and hum until Wren is asleep on the bench with her basket in her lap. Then you lay out your pallet and let the rest take you. The chapel is quiet all night. Nothing wakes you.
+
+It is a little before five on Day 5, and the long rest is done. You're at 17 of 17 HP with all three 1st-level slots and Channel Divinity restored. The list you keep is Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+Gray light is coming through the chapel's one window, and the river is loud at the weir. Wren is stirring on her bench, and she sits up fast, remembering, and checks the letter in her sleeve. Down the lane a door opens. Ilsa is at her step with Tessa, and she lifts a hand to you. The baby is awake and pink and fussing for the breast, which is a good sign.
+
+Stonebridge is a day's walk down the valley. You can leave now and arrive by evening, or stay a little longer and see the village's sick once more. You carry honey, a loaf, 15 gp, and a letter for Mother Aldith. The Reach and the Lamp are behind you, and the road runs on. This is the end of the first great chapter of the story. Brannoc has come far, and the game is yours to take wherever you wish.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-07 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel. Wren swept it and left a jar of wildflowers; Ilsa's baby slept through. Brannoc leaves for Stonebr
+You sleep in the cold chapel on a stone floor and wake before dawn, rested all the same. Your prayers are restored: three 1st-level slots, Channel Divinity, and 17 of 17 hit points. Your list is as you set it, and the powder pouch is still at your belt.
+
+Wren has not gone home. She is curled up on the bench with her basket in her lap and a blanket someone has tucked around her, and she wakes the moment you stir. You give her the letter for Mother Aldith, and a few last words about Ilsa and Osric: count the baby's breath, change the dressing morning and night, and send word if anything worsens. She holds the page tight and nods. She has already asked her mother about Stonebridge, she says, and her mother said "we'll see," which in Greywater, she tells you, means maybe.
+
+Ilsa is at the door with Tessa on her shoulder when you pass. The baby's breath is quiet, and the mother's cough is looser. She presses a small cloth bundle into your hands with two boiled eggs and a heel of cheese, and she cannot find the words. You tell her you will remember them.
+
+The valley road to Stonebridge runs south along the river, a long day's walk through orchards and low meadows. Mist lies on the water. The sun comes up pale and gold behind the hills, and the air smells of cold apples. Somewhere ahead is a market town, a bonesetter, a church bell, or a crowd, and the next place that needs you.
+
+It is a little before five on the morning of Day 5. What does Brannoc do?
+
+=== REPLY cleric2-55-08 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel and prepared the same five spells. Osric, Ilsa and Tessa, Perrin and Piper's inn-bed all seen to. W
+You sleep on the chapel's stone flags, and nothing wakes you. At 4:50 you open your eyes to a gray window and the smell of old incense, and you feel it settle: all three slots, Channel Divinity, full hit points, and both Hit Dice. Your list is as you chose.
+
+Wren is already up. She has swept the chapel and put the wildflowers in fresh water. She looks tired and pleased, and she has Maud's yarn basket on her hip as if she were going somewhere. She says Ilsa's baby slept through the night, that Osric's dressing has been changed once, and that her mother has said she may go to Stonebridge if you will take her letter and see her safely there. Her mother stands behind her in the doorway, a plump, wary woman with dyed hands, who gives you a short nod and no more.
+
+Maud comes down the lane before you have finished your bread, bundled in a shawl and carrying a basket of her own. It holds a round of cheese, a flask of the river's cold water, and a small parcel wrapped in blue wool. "A blanket for Aldith," she says. "She'll know it's from me. Tell her Maud says she's to be kind to the girl, and that I know where she lives."
+
+It is dawn on Day 5, with Stonebridge a day's walk down the valley. You have a girl who wants to learn, a mother who is trusting you with her, a bonesetter with a sharp tongue, and a road in good weather. Perrin's hip, Wren's apprenticeship, and the next village without a healer all wait down it.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-09 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the village chapel; Wren sleeps on the bench. Osric, Ilsa and Tessa, and Perrin are mending. Brannoc plans to 
+You say your thanks at the plain stone altar: for Piper's slow breathing, for Osric's arm, for Tessa's easy sleep. You hum Edda's hymn until it runs out of words, and Wren's head drops against her basket on the bench. You lay your pallet by the cold hearth and sleep as the village sleeps, with the river running under it all night.
+
+You wake at ten to five in the morning, Day 5, with the sky still dark and the weir roaring softly. The long rest is complete. You are at 17 of 17 HP, with all three 1st-level slots, Channel Divinity ready, and both Hit Dice back. Your prayers are as you chose: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+
+Wren is awake already, folding the blanket she slept under, as if she's been up for hours. She has the torn leaf of your letter tucked inside her bodice and keeps touching it. Beyond the chapel door the dye racks stand out black against a paling sky, and somewhere a cock crows once, thinly.
+
+The road to Stonebridge runs on down the valley, a day's walk. Perrin may or may not follow your advice, and Wren's parents have yet to be asked. Hollow Reach and the Lamp are two days behind you now, with Maud coming up the track within the week. Your coin is 15 gp, your pack is lighter by a loaf and a jar of honey, and nothing in Greywater is crying out for you.
+
+Before you leave, there are a few things you could do: speak to Wren's parents about the letter and the apprenticeship, check on Ilsa and Tessa and Osric once more, say farewell to Maud, or simply set out at dawn.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-10 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel. Osric, Ilsa and Tessa, and Perrin all seen to; Wren taught basic care and given a letter for Mothe
+You sleep deep and clean on the chapel floor, with the altar flowers faintly sweet in the dark and Wren's soft breathing from the bench. When you wake it is not yet five. Gray light is coming through the east window, and the long rest is done.
+
+You are at 17 of 17 HP, with all three 1st-level slots, Channel Divinity, and both Hit Dice back. Your prepared list stands as you set it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. You still hold the pinch of powder for three castings.
+
+Greywater wakes slowly. Ilsa's baby has slept through, and her chest is easier. Osric's dressing is fresh, changed by Wren before dawn without being asked. Even Perrin has come to the chapel door, leaning on his stool, to tell you gruffly that he will "think on" Stonebridge. Wren walks you to the edge of the village, the letter inside her sleeve, and presses a twist of dyed blue thread into your hand without a word. You tie it round Edda's amulet.
+
+The valley road runs on south, wide and pale, along the river. It is a day's walk to Stonebridge, to a market town, a bonesetter, and whatever else the road holds. Mist lies in the low fields, and the sun is just reaching the hilltops.
+
+What does Brannoc do?
+
+=== REPLY cleric2-55-11 ===
+  [hidden call] write_lore: {"create": "Stonebridge", "kind": "place", "description": "Market town a day's walk down the valley past Greywater, named for its old arched bridge over the river. Home of Mother Aldith the bonesetter
+You wake at 4:50, long before the light, to the smell of cold stone and the sound of Wren breathing on the bench with her basket still in her lap. Prayers, slots, and Channel Divinity are all restored. Your list stays as you chose it: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. You are at 17 of 17 HP, with three first-level slots.
+
+You kneel at the altar a while in the dark and hum as the sky greys. Wren wakes with a start and a guilty look, and you tell her it is no sin to sleep in a chapel. She presses the letter into her apron pocket and walks you to the village edge. Behind her, Osric stands at his shed door with his arm in a clean dressing, and he lifts the good hand to you. A thin line of smoke rises from Ilsa's chimney.
+
+The valley road to Stonebridge runs south along the river, a day's walk. You take it at a steady pace through the morning mist, past the dye racks and the weir and out into pasture. The sun comes up behind you as you go.
+
+What does Brannoc do on the road?
+
+=== REPLY cleric2-55-12 ===
+  [hidden call] write_lore: {"entry": "Greywater", "add_to_description": "Day 5 dawn: Brannoc finished a long rest in the chapel. Osric, Ilsa and baby Tessa, and Perrin Gale all seen. Wren carries a letter of recommendation for 
+You pray until the words run out and the humming takes over, and Wren falls asleep on the bench with her chin on her basket. You lay a blanket over her, put out all but one candle, and lie down on your pallet with Edda's amulet in your hand. The long rest takes you almost at once, and for the first time in days you don't dream of claws.
+
+You wake at ten to five on Day 5 with the sky still dark outside the chapel's single window. You are at 17 of 17 HP, with all three 1st-level slots and Channel Divinity restored. Your list stays as you chose: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. Your two Hit Dice are back.
+
+Wren is already awake. She has swept the chapel floor in the half dark and set a pot of porridge on a brazier, and she is sitting very straight on the bench with the letter in both hands. She says, "I asked my mam last night. She said yes, if Mother Aldith will have me, and if you'll take me as far as Stonebridge." She lifts her chin. "I can walk a day. I'm not slow."
+
+Osric's dressing has been changed already, she says, and Ilsa's baby fed twice in the night. Beyond the door the first gray light is coming up over the weir, the dye racks are dim shapes, and a cock is crowing somewhere down by the river.
+
+Stonebridge is a day's walk down the valley road, and the walk is easier with company. Wren is twelve, her mother has said yes, and the road is not known to you. What does Brannoc do?

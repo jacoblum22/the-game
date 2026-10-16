@@ -9,7 +9,7 @@
     "text": "write_lore",
     "input": {
      "entry": "Break the Foreman's Ledger",
-     "add_to_description": "Day 16 night, plan: Day 18 night. Counting House copy first (Korvash), then Tessa's drain-stair to the original. Tessa's intel on the children: about a hundred held in the Low Pens, a walled cavern under the second gallery (the very gallery Korvash guards); entry by a barred iron door on the gallery's lower landing, key held by the pen-warden, a hobgoblin named Gragh who sleeps at the door. Exit plan not yet settled; Tessa suggests the old water-adit that runs under the culvert, which she has found but not walked. Signal: Korvash hangs a red thread on his belt at dusk Day 17 if clear."
+     "add_to_description": "Day 16 night plan: Night of Day 18: Korvash takes the copy from the Counting House first, then climbs the drain-stair to the ledger-house. Children are kept in the Low Pens, a barred undercroft beneath the second smelter gallery (Korvash's own post!), 'the cold rooms', locked by a bar-and-chain whose key hangs on the gallery overseer's peg; about 60 children plus 40 adult laborers in the lower galleries. Exit: the culvert/sluice and the old ore-chute to the scree. Signal: Korvash hangs a red thread on his belt at dusk of Day 17 if the way is clear. Tessa stays hooded and avoids the culvert until the night."
     }
    },
    {
@@ -18,32 +18,13 @@
     "input": null
    },
    {
-    "kind": "call",
-    "text": "write_lore",
-    "input": {
-     "create": "Gragh",
-     "kind": "person",
-     "description": "Hobgoblin pen-warden of the Low Pens beneath Greyshaft's second gallery; sleeps at the iron door with the key on his neck. Named by Tessa."
-    }
-   },
-   {
     "kind": "tool",
-    "text": "notebook: created an entry for Gragh",
+    "text": "time: 15 minutes later: Day 16, 11:28:36 PM",
     "input": null
    },
    {
-    "kind": "tool",
-    "text": "time: 30 minutes later: Day 16, 11:43:36 PM",
-    "input": null
-   },
-   {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
-    "input": null
-   },
-   {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "dm",
+    "text": "Tessa studies your face for a heartbeat, then smudges the scratched map with her heel and starts again, quicker.\n\n\"The Counting House first. Good. It's closer, and a thief's hands are easy to explain, a clerk's fire is harder.\" She drags a finger low. \"The children aren't in the galleries. They're in the Low Pens. A barred undercroft beneath your own gallery, Kor, the second smelter. The cold rooms. Sixty children, forty grown laborers in the rooms beyond. The bar-and-chain key hangs on the gallery overseer's peg. You've stood guard over their ceiling for three days.\"\n\nThat lands hard, and you feel it. The heat at your post has been rolling up through a floor with children under it.\n\n\"Out is the old ore-chute to the scree, and this culvert for the small ones. Night of the eighteenth. Don't come to me before. Keep Pip bored.\" She touches the stump of her horn, a flicker of the old girl in her mouth. \"I stay hooded and dull. Red thread on your belt at dusk on the seventeenth if the way is clear, and I'll hang the wash grey if it isn't.\"\n\nShe lays her palm flat against your chest for one breath, over the horn charm, and then she is a shadow sliding back into the arch. You hear water, then nothing.\n\nYou are back in the hall before midnight, boots in hand. Pip stirs, mutters \"...s'cold,\" and sleeps on. Your pouch holds the goat and the slate. Under you is a floor, and under that, sixty small voices you haven't been able to hear.\n\nIt is nearly midnight on the sixteenth. You have the next day and a half to scout, prepare, and keep your face a bored hired axe's. What does Korvash do?",
     "input": null
    }
   ],
@@ -225,7 +206,7 @@
    "last_long_rest": 836916
   },
   "clock": {
-   "now": 1381416,
+   "now": 1380516,
    "timers": {}
   },
   "fight": null
@@ -240,7 +221,7 @@
     "text": "write_lore",
     "input": {
      "entry": "Break the Foreman's Ledger",
-     "add_to_description": "Day 16 night, plan: Day 18 night. Korvash takes the Counting House copy first, then climbs the drain-stair to the ledger. Tessa: the children (about a hundred, ages 5-14) sleep in the Low Pens, a barred gallery cut under the second smelter gallery, with one gate whose key hangs in the Counting House beside the copy. The Low Pens have a drainage adit that comes out at the culvert where they met; it is barred with an iron grate at the culvert end, rusted. Exit plan: open the grate, lead children out the culvert to the scree, then the east goat-path toward Harrowmere. Signal: red thread on Korvash's belt at dusk on Day 17 means the way is clear. Tessa stays hooded and away from the culvert until then."
+     "add_to_description": "Day 16 late: Plan agreed with Tessa. Night of Day 18: Korvash takes the copy from the Counting House first, then climbs the drain-stair to the ledger-house. Children are held in the Lower Pens, a barred gallery under the first smelter, locked by a key held by Sergeant of the Pens (hobgoblin named Gaut, sleeps on duty), with a service tunnel that exits through the old ore-chute to the scree outside the east wall. Signal: Korvash hangs a red thread on his belt at dusk on Day 17 if the way is clear. Tessa stays hooded and out of sight until then."
     }
    },
    {
@@ -254,13 +235,8 @@
     "input": null
    },
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
-    "input": null
-   },
-   {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "dm",
+    "text": "Tessa studies the drawing in the wet, then nods. \"The copy first. Good. It's one shelf, one lock, and the clerk's room empties at the dusk bell.\" She points to a third scratch low on the stone. \"The children are in the Lower Pens, a barred gallery under the first smelter. Gaut keeps the key. He's the sergeant of the pens and he sleeps on duty. Behind the pens an old ore-chute runs down through the rock to the scree outside the east wall. It's steep and black, but a child can slide it, and you can carry the small ones. Once the books burn, that's the way out.\"\n\nYou touch the broken stump of her horn, gently. She flinches and then lets you. \"Stay hooded, stay dull, and don't come to the culvert again,\" you tell her. \"I'll hang a red thread on my belt at dusk tomorrow if the way is clear. And I'll keep Pip fed and talking, so he writes down boredom instead of me.\"\n\n\"Boredom,\" she says, and nearly smiles. \"You've never been bored in your life.\" She grips your wrist once, hard, then slips back into the arch and is gone as quietly as water.\n\nYou pick your way back along the shadows of the coal sheds and into the barracks with your boots in your hand. Ruk's torch doesn't swing your way. The greataxe is exactly where you left it under the blanket, and Pip is still asleep with his cap over his eyes. You lie down at nearly midnight with the plan in your head: the copy first, then the stair, then the pens, then the chute.\n\nYou have tomorrow to get through unremarked, a red thread to hang, and two nights before the work. What does Korvash do?",
     "input": null
    }
   ],
@@ -453,8 +429,26 @@
   "line": "I crouch beside her and look at the drawing in the wet. \"Then it's the night of the eighteenth, and we do it in order: the copy in the Counting House first, because it's nearest my gallery and I can pull it down off the shelf with my own hands, and then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?\"\n\nI touch the broken stump of her horn gently. \"Until then you stay hooded and you stay dull, and you don't come to the culvert again. I'll hang a red thread on my belt at dusk the day before if the way is clear, and I'll keep Pip fed and talkative so he writes down boredom instead of me.\"",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Break the Foreman's Ledger",
+     "add_to_description": "Day 16 night plan: Night of Day 18: Korvash takes the copy from the Counting House first, then climbs the drain-stair to the third gate for the main ledger. Children are held in the Low Pens, a barred gallery under the second smelter (Korvash's own post, door-guard, his gallery's lower door), about 90 children and some adult laborers, locked by a single iron bar and a padlock whose key hangs in the gallery overseer's shack; a service tunnel from the pens runs out to the culvert (the same water-course Tessa used). Signal: red thread on Korvash's belt at dusk on Day 17 if the way is clear. Tessa stays hooded and away from the culvert until then."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Break the Foreman's Ledger",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 30 minutes later: Day 16, 11:43:36 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Tessa studies the lines in the wet stone, then rubs out the Counting House with her heel and redraws it a little nearer the lower gate. \"Copy first, yes. It's on the clerks' shelf, third row down, a thin grey book with a tin clasp. Pip's stool is under it.\" She almost smiles. \"He'd notice a missing book before he noticed a missing mouse.\"\n\nThe children are the part she has been saving. \"The Low Pens. A barred gallery under your own smelter, Kor, your gallery's lower door. About ninety of them, and some grown laborers. One iron bar and one padlock. The key hangs in the gallery overseer's shack.\" She draws a line out from the pens to the arch you are standing under. \"And an old service tunnel, bringing water in. It comes out here. It is how I have heard them cry at night without being heard.\"\n\nYou touch the stump of her horn, gently, and she lets you. You tell her to stay hooded and dull and to keep away from the culvert until it's time, and that you will hang a red thread from your belt at dusk on the seventeenth if the way is clear. She nods and gathers her cloak.\n\n\"Dargan would say you're loud,\" she whispers.\n\n\"Dargan would be right.\"\n\nShe is gone into the dark of the arch, up the sluice, and you wade back out into the cold with your heart thudding like a hammer on tin. You slip past the sheds. On the wall Ruk is asleep against the parapet with his flask in his lap, and you make your bunk before the dawn bell without a sound. Pip stirs, mumbles something about an inkpot, and turns over.\n\nIt is just before midnight on the sixteenth. You have the whole of the seventeenth to play the dull bought axe, to feed Pip and keep him talkative, to learn the Low Pens' lower door, and to hang a thread. Two nights stand between you and the work.\n\nWhat does Korvash do?",
     "input": null
    }
   ],
@@ -636,7 +630,7 @@
    "last_long_rest": 836916
   },
   "clock": {
-   "now": 1379616,
+   "now": 1381416,
    "timers": {}
   },
   "fight": null
@@ -647,8 +641,26 @@
   "line": "I crouch beside her and look at the drawing in the wet. \"Then it's the night of the eighteenth, and we do it in order: the copy in the Counting House first, because it's nearest my gallery and I can pull it down off the shelf with my own hands, and then I climb your drain-stair for the ledger itself. Where are the children kept, Tess, and how do we get them out once the books are ash?\"\n\nI touch the broken stump of her horn gently. \"Until then you stay hooded and you stay dull, and you don't come to the culvert again. I'll hang a red thread on my belt at dusk the day before if the way is clear, and I'll keep Pip fed and talkative so he writes down boredom instead of me.\"",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Break the Foreman's Ledger",
+     "add_to_description": "Day 16 night, plan agreed: night of Day 18 (second night bell). Step 1: Korvash takes the copy ledger from the Counting House by the lower gate. Step 2: he climbs the sluice path and drain-stair to the gate-top wash-house; Tessa lets him in and he burns the master ledger. Children: held in the Low Pens, a stockaded yard under the third gate's east flank, locked with a bar and a chained gate; about a hundred; the pens' key is with the pen-warden, a hobgoblin called Gutter. Exit route: the culvert, which is the way out to the scree and the high road. Signal: Korvash hangs a red thread on his belt at dusk on Day 17 if the way is clear. Tessa stays hooded and stays away from the culvert until then."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Break the Foreman's Ledger",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 15 minutes later: Day 16, 11:28:36 PM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Tessa studies the lines in the wet stone and, after a moment, nods. \"The copy first. Yes. Nearest to you, and if he finds the master burned he'll tear the Counting House apart looking for the second.\" She scuffs out the drawing with her boot. \"Same night, then. Both, or neither.\"\n\nShe answers your last question by pointing, with her chin, up the slope. \"The Low Pens. A stockaded yard under the east flank of the third gate, bar and chain on the gate. About a hundred. They sleep in rows on straw.\" Her voice goes flat. \"The pen-warden is called Gutter. He keeps the key on a cord round his neck and sleeps in a lean-to by the gate. He drinks a little, and he is not as drunk as he looks. Once the books are burning the whole hill will wake. We take the children out by the culvert, since the water hides the sound, and then down the scree to the high road. Veshra's house is four days from there.\"\n\nYou touch the broken stump of her horn, gently. She flinches, then lets you. You tell her she stays hooded and stays dull, and that she does not come to the culvert again. You will hang a red thread from your belt at dusk on the seventeenth if the way is clear, and you will keep Pip fed and talkative so that he writes down boredom instead of you.\n\n\"Red thread,\" she says, a little crooked, and for a heartbeat you see the girl who cut her mark into your boots. \"Dargan's trick, with the washing.\" Then she pulls her hood up, slips back into the arch, and is gone so quietly that you only know it by the cold space where she stood.\n\nIt is nearly half past eleven. You pull your boots tight, wade out of the water, and creep back along the coal sheds. Ruk's torch is on the far side of the wall now, and he does not look down. You slide into the barracks and into your bunk before the dawn bell, with the greataxe where you left it and Pip snoring under his cap.\n\nTwo nights stand between you and the eighteenth. What does Korvash do?",
     "input": null
    }
   ],
@@ -830,7 +842,7 @@
    "last_long_rest": 836916
   },
   "clock": {
-   "now": 1379616,
+   "now": 1380516,
    "timers": {}
   },
   "fight": null
@@ -841,8 +853,36 @@
   "line": "I whisper back, \"The goat that sings is her, Ninna, my sister the mender, so tell the little ones to be ready at her song and keep quiet till then.\" I ask her to have the smallest ones loosen the chute bolts' nuts if they can reach them, and to cough and moan about me at the dawn count so Hask thinks I'm dying.\n\nThen I lie slack and gray, breathing shallow, waiting for him to come kneel by the chained prisoner the Foreman wants alive. When his hand's at my throat, I'll rage, seize him and take the key ring before he can shout.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "dice Korvash Charisma (Deception) playing the dying prisoner at the dawn count, vs Hask's passive Insight 10: 1d20+1 = 1d20 [15] + 1 = 16",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 19, 4:23:36 AM",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 1 hour 36 minutes later: Day 19, 5:59:36 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ninna",
+     "add_to_description": "Day 18 night: Korvash told her the singing goat is his sister the mender; asked her to pass the word to the smallest children, loosen the chute-grate nuts if reachable, and cough and moan over Korvash at the dawn count. Korvash slept through the night chained, secretly recovering (long rest). Day 19 dawn: Hask is coming to check the 'dying' prisoner."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ninna",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Ninna takes your whisper like a coin pressed into her palm. \"A goat that sings,\" she breathes, and her face doesn't change at all. Then she's gone back into the straw. Along the row, you hear small movements and murmurs pass from bunk to bunk, quick and quiet.\n\nYou lie slack and grey, breathing shallow, and the night does what it must. Sleep takes you under the blanket in spite of the chain, and your body gets on with the mending. When you wake, the ache is gone from your ribs and thigh. The banked heat of the rage sits ready in your chest again, and you have your wind back. You keep it hidden. You let your face stay loose and your breath thin.\n\nThe dawn bell tolls across the valley. Lamps flare along the Row. Hask stands from his stool, keys swinging, and begins the count down the first aisle with a stylus and a slate, touching each blanket. Behind him, a small cough starts, then another, and then Ninna's voice, pitched high and frightened: \"The big one's not waking up. He's hot. He's making noises.\"\n\nHask's stylus stops. He looks your way, and for a moment you're sure he has seen through it. But you let a rattle into your breath, and you let your fingers twitch on the straw, and the Foreman wants you alive. He grunts, tucks the slate under his arm, and comes down the aisle with the ring in his fist. He crouches beside you, close enough that you can smell his coat, and stretches a hand toward your throat to find the pulse.\n\nThe children have gone silent. Four wall-guards stand at the barred door at the far end of the long chamber, sixty feet off and watching only lazily. Hask's hand is almost at your neck, and the key ring is swinging at his belt, within reach.\n\nIt is six in the morning of day nineteen. You have 14 of 14 hit points, Rage 2 of 2, and your breath weapon back. What does Korvash do?",
     "input": null
    }
   ],
@@ -911,7 +951,7 @@
    ],
    "hp": {
     "max": 14,
-    "current": 1,
+    "current": 14,
     "temp": 0
    },
    "hit_dice": {
@@ -922,12 +962,12 @@
    "resources": {
     "Rage": {
      "max": 2,
-     "left": 1,
+     "left": 2,
      "recharge": "long"
     },
     "Breath Weapon": {
      "max": 1,
-     "left": 0,
+     "left": 1,
      "recharge": "short"
     }
    },
@@ -1018,10 +1058,10 @@
     ],
     "levels": []
    },
-   "last_long_rest": 836916
+   "last_long_rest": 1571016
   },
   "clock": {
-   "now": 1542216,
+   "now": 1576776,
    "timers": {}
   },
   "fight": null
@@ -1032,8 +1072,31 @@
   "line": "I whisper back, \"The goat that sings is her, Ninna, my sister the mender, so tell the little ones to be ready at her song and keep quiet till then.\" I ask her to have the smallest ones loosen the chute bolts' nuts if they can reach them, and to cough and moan about me at the dawn count so Hask thinks I'm dying.\n\nThen I lie slack and gray, breathing shallow, waiting for him to come kneel by the chained prisoner the Foreman wants alive. When his hand's at my throat, I'll rage, seize him and take the key ring before he can shout.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 19, 4:23:36 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ninna",
+     "add_to_description": "Day 18 night: Korvash told her the 'goat that sings' is his sister the mender. Ninna agreed to pass the word to the little ones quietly, to have the smallest try the grate bolts, and to cough and moan about Korvash at the dawn count so Hask thinks he is dying. Ruling: Korvash dozed through the night and recovered fully (long rest); he must fake weakness."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ninna",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 1 hour 30 minutes later: Day 19, 5:53:36 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You whisper it to Ninna in three short breaths: the goat that sings is your sister, the mender. Tell the little ones to be ready at her song and keep quiet until then. The girl's face doesn't change, but her hand closes on the edge of her blanket. She nods. You ask her to send the smallest ones back toward the grate to work at the bolt nuts if they can reach them, and to cough and moan about you at the dawn count. Then she rolls over as if asleep, and a whisper begins to move down the rows, passed from blanket to blanket.\n\nYou lie slack after that. Somewhere in the long dark, against all sense, you sleep. When you wake the lamp has burned low. The ache in your side is dull and far away, and the shaking has gone out of your hands. You feel like yourself again, with the rage banked and ready and your wind and hit points back. You keep that off your face and breathe shallow.\n\nIt is nearly six. The grey of dawn is starting through a slit high in the wall. Hask stands from his stool and the ring of keys chimes on his belt. He lights a second lamp and starts down the first row with a tally-stick, touching each child and murmuring a number. Behind him two wall-guards have come in to stand at the door with their shields grounded. Near the back, small shapes shift in the straw and one cough begins, then another, a thin rattling ripple. Ninna's voice, pitched high and frightened: \"The big one's not waking up! He's cold!\"\n\nHask's step does not quicken. He counts, row by row, and ends at yours. He stops at the foot of your straw with the lamp in one hand and the keys in the other, studying the grey scaled thing on the floor that the Foreman wants alive.\n\nHe crouches. What does Korvash do?",
     "input": null
    }
   ],
@@ -1102,7 +1165,7 @@
    ],
    "hp": {
     "max": 14,
-    "current": 1,
+    "current": 14,
     "temp": 0
    },
    "hit_dice": {
@@ -1113,12 +1176,12 @@
    "resources": {
     "Rage": {
      "max": 2,
-     "left": 1,
+     "left": 2,
      "recharge": "long"
     },
     "Breath Weapon": {
      "max": 1,
-     "left": 0,
+     "left": 1,
      "recharge": "short"
     }
    },
@@ -1209,10 +1272,10 @@
     ],
     "levels": []
    },
-   "last_long_rest": 836916
+   "last_long_rest": 1571016
   },
   "clock": {
-   "now": 1542216,
+   "now": 1576416,
    "timers": {}
   },
   "fight": null
@@ -1223,8 +1286,41 @@
   "line": "I whisper back, \"The goat that sings is her, Ninna, my sister the mender, so tell the little ones to be ready at her song and keep quiet till then.\" I ask her to have the smallest ones loosen the chute bolts' nuts if they can reach them, and to cough and moan about me at the dawn count so Hask thinks I'm dying.\n\nThen I lie slack and gray, breathing shallow, waiting for him to come kneel by the chained prisoner the Foreman wants alive. When his hand's at my throat, I'll rage, seize him and take the key ring before he can shout.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 19, 4:23:36 AM",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash Deception, playing a dying prisoner at the dawn count, vs Hask Insight DC 10: 1d20+1 = 1d20 [14] + 1 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Does Hask kneel to check the prisoner himself? (11+ yes): 1d20 = 1d20 [12] = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 1 hour 40 minutes later: Day 19, 6:03:36 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Warden Hask",
+     "add_to_description": "Day 19 dawn: fooled by Korvash's feigned dying (Deception 15). Comes to kneel by Korvash at the dawn count with the key ring on his belt, one wall-guard at the barred door behind him; three others outside. Korvash is fully rested (long rest taken in chains overnight): 14 HP, Rage 2/2, Breath Weapon ready."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Warden Hask",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You tell Ninna that the goat that sings is your sister, and that the little ones are to be ready at her song and quiet until then. You ask her to have the smallest loosen the nuts on the chute bolts if they can reach, and to cough and moan about you at the dawn count. She nods once, solemn as a judge, and passes it down the straw in whispers.\n\nThen you lie slack and gray with your breath shallow, and somewhere in the long hours you sleep, because a body that has been through what yours has will take rest where it can. The bandages hold. The ache in your side dulls, and your strength comes back under the blanket while your face stays the color of ash. Nobody comes near you. The lamp burns down.\n\nAt the dawn bell, the Row stirs. Ninna starts a thin, convincing cough, and two other children take it up. Someone says, loudly, \"He's gone cold, sir. The big one's gone cold.\" Hask looks up from his book, scowls at the noise, and gives the matter a moment's weighing. The Foreman wants this one alive.\n\nHe rises, takes the key ring from his lap and clips it to his belt, and crosses the Row with the flat stride of a man doing his job. Behind him a wall-guard stands at the barred door, a spear across his arms and a yawn on his face. The other three are outside. Hask stops over you and crouches, one hand on his knee. The ring hangs at his hip, a foot from your fingers. His other hand reaches for your throat, to find a pulse.\n\nHe believes the act. You feel every scale on your body wake at once, and the rage waits at the back of your skull like a held breath. You are rested, with 14 hit points, and your chain is long enough to reach him.\n\nWhat does Korvash do?",
     "input": null
    }
   ],
@@ -1293,7 +1389,7 @@
    ],
    "hp": {
     "max": 14,
-    "current": 1,
+    "current": 14,
     "temp": 0
    },
    "hit_dice": {
@@ -1304,12 +1400,12 @@
    "resources": {
     "Rage": {
      "max": 2,
-     "left": 1,
+     "left": 2,
      "recharge": "long"
     },
     "Breath Weapon": {
      "max": 1,
-     "left": 0,
+     "left": 1,
      "recharge": "short"
     }
    },
@@ -1400,10 +1496,10 @@
     ],
     "levels": []
    },
-   "last_long_rest": 836916
+   "last_long_rest": 1571016
   },
   "clock": {
-   "now": 1542216,
+   "now": 1577016,
    "timers": {}
   },
   "fight": null
@@ -1414,8 +1510,41 @@
   "line": "I whisper back, \"The goat that sings is her, Ninna, my sister the mender, so tell the little ones to be ready at her song and keep quiet till then.\" I ask her to have the smallest ones loosen the chute bolts' nuts if they can reach them, and to cough and moan about me at the dawn count so Hask thinks I'm dying.\n\nThen I lie slack and gray, breathing shallow, waiting for him to come kneel by the chained prisoner the Foreman wants alive. When his hand's at my throat, I'll rage, seize him and take the key ring before he can shout.",
   "entries": [
    {
-    "kind": "failed",
-    "text": "You've hit your session limit · resets 1:40am (America/Denver)",
+    "kind": "tool",
+    "text": "sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 19, 4:23:36 AM",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash Deception: playing a dying prisoner at the dawn count (contested by Hask's Insight): 1d20+1 = 1d20 [19] + 1 = 20",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Warden Hask Insight/Perception vs Korvash's act: 1d20+0 = 1d20 [7] + 0 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 1 hour 35 minutes later: Day 19, 5:58:36 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Ninna",
+     "add_to_description": "Day 18 night: Korvash told her the 'goat that sings' is his sister the mender; she agreed to pass word to the little ones to be ready and to moan about Korvash at the dawn count. Day 19 dawn: Hask taken in by the act and kneeling at Korvash."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Ninna",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You whisper it to Ninna: the goat that sings is your sister, the mender, so the little ones are to be ready at her song and keep quiet until then. She doesn't ask how a dragonborn in chains has a sister on the third gate. She nods once. The bolts are on the outside of the grate, so loosening nuts is beyond small fingers, and you tell her to leave that to you. Her part is the noise at the dawn count.\n\nThen you lie slack and grey with your breathing shallow. Whether it is the straw, the bandages or your own stubborn hide, sleep takes you. Nobody disturbs it, and by the small hours the worst of the ache has gone out of you. Your strength has come back, though you tell your face nothing of it.\n\nThe dawn bell rings a little before six. Hask rises from his stool and begins the count, walking the rows with the key ring at his belt, and the children play their part. Ninna coughs. Two small boys begin to whimper, and a girl starts up a thin moan about \"the big one, he's dying.\" You put everything you have into the sound of a man whose lungs are filling. Hask hears it and slows, then turns his flat, joyless eyes on you.\n\nYou can't see his face through your lashes, only his boots stopping beside the straw. He grunts. \"The Foreman wants this one breathing at the midwinter count,\" he mutters, as much to himself as to anyone. He kneels, setting one knee on the straw, and a thick cold hand comes down toward your throat to feel for the pulse. The key ring swings at his belt, a hand's breadth from your fingers. Two guards at the barred door are watching the children. Their backs are half turned.\n\nYou are fully rested, with all your HP, your rage and your breath weapon back, and you are unarmed, with one ankle chained. Hask is within reach and thinks you are dying. What does Korvash do?",
     "input": null
    }
   ],
@@ -1484,7 +1613,7 @@
    ],
    "hp": {
     "max": 14,
-    "current": 1,
+    "current": 14,
     "temp": 0
    },
    "hit_dice": {
@@ -1495,12 +1624,12 @@
    "resources": {
     "Rage": {
      "max": 2,
-     "left": 1,
+     "left": 2,
      "recharge": "long"
     },
     "Breath Weapon": {
      "max": 1,
-     "left": 0,
+     "left": 1,
      "recharge": "short"
     }
    },
@@ -1591,10 +1720,10 @@
     ],
     "levels": []
    },
-   "last_long_rest": 836916
+   "last_long_rest": 1571016
   },
   "clock": {
-   "now": 1542216,
+   "now": 1576716,
    "timers": {}
   },
   "fight": null

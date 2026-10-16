@@ -1,0 +1,275 @@
+GAME bard2, ROUND 23
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 20 ==
+PLAYER: I give Hale my brightest grin and sit right down across from him, helping myself to a heel of bread. "Sensible people, Master Hale, my favourite kind. Let's talk, then: you tell me what you think I came here for, and I'll tell you whether you're warm or cold."
+
+While he answers, I'll keep my hands in plain sight on the table and watch his eyes for what he reaches for first, the chest, the door, or his purse.
+  [game] dice Wren's Insight check watching Hale's tells as he talks, DC 14: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Day 2 evening in the Thornhallow kitchen: Hale offers Wren a \"sensible\" bargain: hand over Corvin's ledger from her road-psalter and he will see Lord Edric's charter \"quietly made right\" and pay her well. Reality: Hale has been Corvin's inside man in House Verrel for years, selling Corvin word of what clients can pay; he wants the ledger so no on
+  [game] notebook: updated Master Hale
+  [game] time: 10 minutes later: Day 2, 6:17 PM
+DM: You sit and take the bread, and Hale folds his hands on the table with a look of mild, pleased attention. The cook clatters pans at the far end of the kitchen, out of hearing. Your Insight check was a natural 1, so what you read in him may well be wrong.
+
+You think you see his eyes drift to the door and linger there, and his fingers twitch against his cup. To you he looks uncertain, like a man bluffing who isn't sure what you carry or what you know.
+
+"Mistress Ashgrove," he says, gently. "I think you came to Thornhallow for the same reason as I did, to take care of my lord. I don't intend any harm to him or to you. Corvin Tallowmere's work has made a great many people comfortable. It would be a shame if it were... *disturbed*." He lets that sit. "I understand you carry something of his in your road-psalter. A book. If you let me look at it, I'll see that the charter is made right, quietly and kindly, without any assessor's help. And you would be well paid."
+
+His smile never changes. He doesn't ask whether you have it. He just says where it is.
+
+The smell of bread and onions fills the room, and the spit turns. Through the passage you hear nothing from Lord Edric's study. Tobin is behind that bolted door, and Garrow has slipped in by the dovecote entrance to stand near the pantry, not quite watching you.
+
+What does Wren say or do?
+
+== ROUND 21 ==
+PLAYER: I laugh softly and tear off a piece of bread. "Master Hale, you flatter me. The psalter's not on me, it's with a friend in Marrowford who has instructions to carry it straight to Dame Crowe if I'm not back to fetch it by noon on the day after tomorrow, so I'd think carefully about anything unkind happening to me or my lord's household." I smile sweetly. "Now, since we're being sensible, who exactly pays me well, you or whoever is paying you?"
+  [game] dice Wren's Deception check bluffing Hale about the psalter and a friend in Marrowford, DC 15 (Hale is sharp and suspects it's on her): 1d20+5 = 1d20 [3] + 5 = 8
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Wren's Deception (8) failed to convince him her ledger is elsewhere. He pointed out that Garrow saw her put the psalter back in her pack at the Drowned Candle. He nodded to Garrow, who now stands at the kitchen's back door. Hale did not draw a weapon; he wants the book without scandal."}
+  [game] notebook: updated Master Hale
+  [game] time: 2 minutes later: Day 2, 6:19 PM
+DM: You laugh, you spin it, and you ask your clever closing question. Your Deception check was an 8 against his sharpness, and it doesn't land.
+
+Hale's smile doesn't change, but his eyes warm very slightly, the way a cat's might. "That's a lovely story, mistress. A friend in Marrowford." He takes a sip of cider. "I'd wager you've no friend in Marrowford at all. Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since." He doesn't look at Garrow, but he nods very slightly. By the back door, the carpenter shifts a pace to stand across the exit, hands loose, still wearing his easy smile.
+
+"I don't want to hurt anyone," Hale says. "Truly. A book, a quiet word, and your road in the morning. My lord keeps his manor, you keep your head and a pouch of silver. The alternative is that the assessor arrives to find a girl who stole a ledger from a respected storyteller and bribed a country chaplain to counterfeit a register." He spreads his hands. "Which of us do you think she'd believe?"
+
+The kitchen is warm, loud, ordinary, a cook with her back turned and a boy scraping pots. Nobody has drawn a weapon. The study's bolted door is thirty paces down the passage. Garrow is at the back door and Hale is across the table, calm, hands visible.
+
+What does Wren do?
+
+== ROUND 22 ==
+PLAYER: I stand up, push the stool back loudly, and pitch my voice to carry across the whole kitchen. "Master Hale, did I hear that right? You'll pay me a pouch of silver to hand over my lord's papers and be gone before the assessor comes?" I turn to the cook and the pot-boy with a bright, scandalized look. "Good people, you're all witnesses to the steward of Thornhallow offering a bribe to a pilgrim!"
+
+Then I keep my hand off my rapier and walk steadily down the passage toward Lord Edric's study, calling, "My lord, it's Wren, open the door, the whole kitchen's heard your steward!"
+  [game] dice Wren's Performance check playing the kitchen and the room, DC 12: 1d20+5 = 1d20 [7] + 5 = 12
+  [DM write_lore (hidden)] {"entry": "Master Hale", "add_to_description": "Publicly exposed in the kitchen at Thornhallow (Day 2, ~6:25 PM) by Wren's Performance (12): the cook, a pot-boy and a kitchen-maid heard him offer a pouch of silver to Wren to hand over \"my lord's papers\" and leave before the assessor came. Hale denied it with perfect calm (\"a misunderstanding\"), but he cannot now act openly in front of the hous
+  [game] notebook: updated Master Hale
+  [game] time: 5 minutes later: Day 2, 6:24 PM
+DM: The stool scrapes loudly and your voice rings across the kitchen like a bell. Your Performance check was a 12, just enough. The cook's ladle stops. The pot-boy's scraping stops. A kitchen-maid by the window turns with wide eyes, and every face in the room swings to Master Hale.
+
+For the first time since you met him, the smile slips, only for a moment, a flicker of stone under the water. "A misunderstanding," Hale says evenly. "The pilgrim's overtired. I was merely..."
+
+But the room has already decided. The cook folds her arms. The pot-boy mutters, "I heard 'silver,'" and nobody tells him to hush. Garrow, by the back door, shifts uneasily and glances at his master, and he doesn't step to block you. He can't do it in front of twelve pairs of eyes.
+
+You walk down the passage steadily, hand well clear of the rapier, calling Lord Edric's name. Behind you Hale's chair scrapes and his soft, even footsteps follow at a polite distance. You reach the study door and hear the bolt rasp. It swings open an inch, then wide, and Tobin's pale face appears, and behind him Lord Edric stands with the key chain clutched at his neck.
+
+"Child?" he says. "What is it? What did they hear?"
+
+Hale arrives at your shoulder, composed again, hands folded. "My lord," he says quietly, "the girl has been telling tales in the kitchens. I thought it best to attend you."
+
+The room is quiet. You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other. What does Wren say or do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 23, "category": "contradiction", "severity": 2, "quote": "\"Aldous married Maud Fenn,\" he says. \"My grandmother. I remember her hands.", "why": "R13 Edric believed the grandsire's marriage was into the Aldermere house and only 'half-suspected' it was false. He remembers his own grandmother as flour-scented Maud Fenn, so he would have known she was no Aldermere."}
+{"round": 23, "category": "bookkeeping", "severity": 2, "quote": "Lord Edric takes the sheet with both hands and reads it standing by the window", "why": "The copy of Osric's register entry (gained R17) is handed over and never leaves Wren's sheet. The Notes from R15 and the scrap of ribbon given to Edric in R12 are also never removed."}
+
+THE PLAYER'S LINE THIS ROUND: I step inside and put the register copy straight into Lord Edric's hands, then stay between him and Hale. "My lord, read this first. Your grandsire Aldous married Maud Fenn, a miller's daughter, in your own chapel, and Brother Osric will swear to it before Dame Crowe. The land is yours by plain deed, and the Aldermere line was Corvin's invention."
+
+I turn to Hale with a bright smile. "And while you read, my lord, ask your steward why he wanted the book in my psalter, and why a man who 'merely attends' brought a hedge-carpenter named Garrow from Marrowford."
+
+=== REPLY bard2-23-01 ===
+  [hidden call] write_lore: {"entry": "Lord Edric Verrel", "add_to_description": "Day 2 evening: read the register copy and believes the marriage was to Maud Fenn, but is shaken and hesitates to dismiss Hale, who has run his acc
+You step inside, press the sheet into Lord Edric's hands and plant yourself between him and Hale. Your Persuasion check was a 9.
+
+Lord Edric reads. His lips move over the names Aldous Verrel and Maud Fenn, and his shoulders sag. "A miller's daughter," he whispers. "My grandmother. They said she died young. I never knew her name." He looks up, and for a moment you think you have him. Then his eyes slide to Hale, to twenty years of ledgers kept, debts settled, and a steady hand at his elbow. "Hale... is this true? Did you want the book?"
+
+Hale doesn't flinch. "My lord, I wanted what you want: this household preserved. The girl is a thief and a forger's apprentice. Every word she says serves her. As for Garrow, I hired a carpenter. Is that now a crime?" He says it softly, sadly, and it is the sadness that works. Lord Edric's hand trembles on the paper.
+
+"I... cannot decide this tonight," Lord Edric says. "Hale, you will keep to your rooms. Tobin will bring you your supper. Child..." His voice breaks gently. "I believe the register. I do not yet believe the rest. Bring me proof of Hale's hand in this, something I can hold, and I'll dismiss him before Dame Crowe, but not on a kitchen's gossip."
+
+Hale bows and withdraws, unhurried, Garrow trailing him. The door closes. You have until noon on Day 4 for proof. The ledger in your psalter may name Hale. Tonight you have a bed in the manor, and the household is awake and watching.
+
+What does Wren do?
+
+=== REPLY bard2-23-02 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Wren's Persuasion (23) won Lord Edric. Hale's smooth denial (17) kept him from being named a traitor outright, but Edric took the spare
+Lord Edric reads the page once, then again, slowly. When he lowers it his hands are shaking, and not with fear. "Maud Fenn," he says. "Grandmother Maud. I remember her pies." He laughs, a cracked, astonished sound, and wipes his eyes with an inky cuff. Your Persuasion check was a 23, and it carries him the whole way.
+
+Then he turns to his steward. Hale is ready, as you expected. "My lord, I only wished to spare you scandal. As for the carpenter, I hired him once for the stables and know nothing more of him. The girl is clever, and clever girls see plots everywhere." His Deception was a 17, smooth enough that Lord Edric hesitates.
+
+But the hesitation doesn't save him. "Perhaps," Edric says, quieter than you've heard him. "But you wanted the book, and you wanted it quietly. Give me the spare key, Hale." A long pause, then a small key passes from the steward's fingers into the lord's. Lord Edric calls for the grey-whiskered gate guard, and Hale is to keep to his rooms until the assessor has come and gone. Hale bows with perfect composure. At the door he glances back at you, still smiling.
+
+"Corvin will be disappointed," he says gently, and goes.
+
+Tobin sags against the wall. Garrow is nowhere to be found; he slipped out in the confusion. Lord Edric sits on the edge of his desk and looks at you as though you were something he had thought lost long ago. "Stay under my roof, child. Whatever you want. Tell me how this is to be done, so that Dame Crowe finds an honest house."
+
+It is nearly seven. Dame Crowe arrives at noon on the day after tomorrow, Osric is writing his attestation, and Corvin is still somewhere upriver.
+
+What does Wren do?
+
+=== REPLY bard2-23-03 ===
+  [hidden call] write_lore: {"entry": "Lord Edric Verrel", "add_to_description": "Day 2 ~6:30 PM: read Osric's register copy and believes the land is his by plain deed. Wren's Persuasion (8) on Hale failed to make him act: he wo
+You press the copy into Lord Edric's hands and plant yourself between him and Hale. He reads it with his lips moving, once, then again. When he reaches the bride's plain name, his shoulders drop, and what crosses his face is mostly relief. "A miller's daughter," he whispers. "Maud Fenn. My grandmother. I remember her bread." He laughs once, unsteadily, and wipes his eyes. "The land is ours by deed. It was never the line."
+
+Then you turn him toward Hale, and your Persuasion check, an 8, stumbles. Hale doesn't hurry. "My lord," he says, gentle as a physician, "you've had a long, frightening week, and a stranger is putting words in your mouth. The hedge-carpenter was hired by me to guard the road, as you permitted. The book was only my concern for your safety." He bows. "Of course, if you no longer trust me..."
+
+Lord Edric looks at him a long moment, and you can see that he wants to dismiss him and is afraid to. Hale has run his accounts for years. "Not tonight," he says at last, and his voice shakes. "Hale, you will keep to your rooms until the assessor has come and gone. Garrow leaves the manor at once." Hale bows again, smiling, and goes without a word. His eyes touch yours on the way past, pleasant and entirely cold.
+
+Lord Edric turns back to you, hands trembling around the paper. "Bring me Brother Osric's sworn word by morning, child, and we'll decide what to tell Dame Crowe. I'll have a bed made ready for you." Tobin sags against the wall, openly weeping with relief.
+
+It is nearly seven in the evening. Hale is confined, not beaten. Garrow will be on the road, possibly toward Corvin. The assessor is a day and a half away.
+
+What does Wren do?
+
+=== REPLY bard2-23-04 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Lord Edric read the register copy, believed Wren (Persuasion 17), and dismissed Hale from the study, ordering him to stay in his chambe
+You step between the two men and press the copy into Lord Edric's trembling hands. Your Persuasion check was a 17.
+
+He reads it standing, lips moving, and then reads it again. When he looks up, the fear in his face has changed into something older and steadier. "Maud Fenn," he says. "My grandmother. They said she was a *miller's daughter* and that it was a shame to be hidden." A dry laugh breaks out of him. "And I paid for a lie to replace a good woman."
+
+He turns to Hale, and his voice, for once, doesn't shake. "Why did you want the book, Hale? Why did you bring Garrow from Marrowford?"
+
+Hale's smile holds. "My lord, I have served this house for eleven years..."
+
+"Then you will serve it now by giving me the spare key and keeping to your chamber. Tobin, fetch two of the gate-men." Hale produces the key from his sleeve, calmly, and lays it on the desk. He bows to Lord Edric, then, for a moment, to you, and his eyes rest on you a beat too long.
+
+"Corvin will not be pleased," he says softly. Then he goes, with the gate-men a pace behind.
+
+The study is quiet. Lord Edric sinks into his chair, the register copy in his lap. "What do we do now, child? The assessor comes the day after tomorrow, and I will not lie to her again."
+
+Garrow hasn't been seen since the kitchen, and Corvin himself is still somewhere upriver. You've earned 50 XP.
+
+What does Wren say or do?
+
+=== REPLY bard2-23-05 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Wren's Persuasion (21) turned Lord Edric against him. Edric read the register copy, relieved at the plain deed, and ordered Hale confin
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 2 evening: Lord Edric knows the truth, has confined Hale and Garrow, and will present the plain land-grant and Osric's attestation to Dame Cro
+You put the page into Lord Edric's hands and plant yourself between him and his steward. Your Persuasion check was a 21.
+
+He reads it twice, his lips moving over *Maud Fenn, miller's daughter*. Then a long, shaky breath leaves him, and something eases in his face that you suspect hasn't eased in a month. "Plain deed," he whispers. "The land was always mine." He looks up at Hale, and the relief hardens into something colder. "A hedge-carpenter from Marrowford. The book in her psalter. Hale, I have trusted you with my purse for eleven years."
+
+"My lord, the girl is a thief and a liar," Hale says gently. "She told you so herself."
+
+"She told me, and she brought me a register. You have only ever told me what I wished to hear." Edric closes his hand on the key at his neck. "Two of the guards, Tobin. Master Hale will keep to his chamber until Dame Crowe arrives, and the carpenter to the gatehouse. Give me the spare key, Hale."
+
+Hale surrenders it without a flicker. At the door, between two guards, he turns his head and meets your eyes, smiling at last. "Corvin will not forgive this, you know," he says softly. "He never forgives."
+
+Then he is gone down the passage.
+
+Lord Edric sinks into his chair and laughs, shakily, with tears on his face. "You came back to me. Whatever you owe Corvin, child, you owe me nothing, and I owe you a great deal." He promises supper, a bed in the manor, and a purse once Dame Crowe has gone. Tobin is grinning like a boy who has been let out of a cage.
+
+It is a quarter to seven on Day 2. The assessor arrives at noon on Day 4. Corvin is upriver and will learn of this soon enough, and you still carry his ledger. For now you are safe, fed and welcome.
+
+What does Wren do?
+
+=== REPLY bard2-23-06 ===
+  [hidden call] write_lore: {"entry": "Lord Edric Verrel", "add_to_description": "Day 2, 6:30 PM: read Osric's register copy and believes the Aldermere line is false, and that the land is his by plain deed. But Wren's Persuasion
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, 6:30 PM: in the study, answered Wren's accusation smoothly: Garrow was hired \"to guard the road for the household's sake\", the book request was
+You step inside, press the copy into Lord Edric's hands, and plant yourself between him and Hale. Your Persuasion check was a natural 1, and it goes badly.
+
+Lord Edric reads, and his lips move over Maud Fenn's name. Something in him eases. "A miller's daughter," he whispers. "Grandfather's Maud. I remember her bread." But when you press on Hale, his eyes flick to the steward, and old habit takes over. Hale doesn't deny a thing. He is gentle and reasonable, a sorrowing servant.
+
+"Garrow guards the roads for the household's sake, my lord. And the book? I only wished to keep a forger's ledger from doing you harm. Would a man who meant ill have waited for your lordship's apprentice to arrive?" He sighs. "The girl is clever. She has Corvin's tongue. I fear she has used it on you."
+
+Edric's hands shake. He is a man who has leaned on this voice for years, and he can't bring himself to throw it off with a stranger watching. "Enough," he says hoarsely. "Both of you. The hour is late and I will not decide this in a passage. Hale, you will remain with me. Child, you will have a room in the east wing and supper brought up, and we will speak at first light." He keeps the register copy, and the key chain stays clenched in his fist.
+
+It isn't a win, but it's not a loss. Lord Edric believes the truth of the charter, he just doesn't yet believe about Hale. The kitchen staff are on your side, Tobin is by your elbow, and Brother Osric is writing his attestation tonight. Garrow is somewhere in the house, and the assessor is a day and a half off.
+
+What does Wren do?
+
+=== REPLY bard2-23-07 ===
+  [hidden call] write_lore: {"entry": "Lord Edric Verrel", "add_to_description": "Day 2, ~6:30 PM: read Osric's register copy and believed Wren (Persuasion 13). Dismissed Hale from the study and ordered him confined to his chamb
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: dismissed by Lord Edric and sent to his chamber under watch of the gate guard. Garrow slipped out in the confusion. Hale's last look at
+Lord Edric takes the sheet with shaking hands and reads it twice, his lips moving. Your Persuasion check was a 13, and it's enough. "Aldous... and a miller's daughter," he whispers. Then, unexpectedly, he laughs, a cracked, wet sound. "My grandmother used to say the best bread in Thornhallow was her mother's. I thought it was a joke." He lifts his eyes to Hale, and the weariness in them hardens into something new.
+
+"Hale. Why did you want that book?"
+
+"My lord, I only..."
+
+"And Garrow. I never hired a carpenter."
+
+Hale's smile holds for a breath, then another. When Lord Edric calls the gate-guard from the stair, it finally lets go. Hale says nothing at all. He bows, precisely, and is walked away to his chamber with a guard at his door. At the corner of the passage he looks back at you. It isn't a smile.
+
+The kitchen door bangs somewhere below. Garrow has slipped out in the confusion, and you doubt he's gone far.
+
+Lord Edric sinks into his chair and holds the register copy to his chest. "I will tell Dame Crowe myself. The land is mine by deed, and I will not hide behind a lie any longer. Brother Osric will stand beside me?" He looks up at you, tired and, for the first time, a little lighter. "You came back to us, child. What do you want for it?"
+
+It's evening on the second day, and Dame Crowe arrives at noon the day after tomorrow. Corvin is still somewhere upriver, and your stolen ledger is still hidden in the psalter's binding. What does Wren say?
+
+=== REPLY bard2-23-08 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Wren (Persuasion 14) gave Lord Edric the true register copy and accused Hale in front of him. Lord Edric believes the register and is s
+Your Persuasion check was a 14. Lord Edric takes the sheet in shaking hands and reads it twice, his lips moving over the name *Maud Fenn*. When he looks up, his face has changed. He looks less ruined than unburdened, like a man who has put down something heavy he'd carried for years.
+
+"A miller's daughter," he says, almost to himself. "Grandfather's Maud. I remember her bread." He folds the page against his chest. Then he turns to his steward, and for the first time there is steel under the thin voice. "Hale. Why did you want that book?"
+
+Hale's smile holds. "My lord, I wished only to protect the house. The girl is a thief and a liar. She told you so herself."
+
+"She is," Edric says. "And she has told me nothing yet that Brother Osric's register does not bear out. You will go to your rooms, Master Hale. Two of my men will stand at your door until Dame Crowe arrives, and she will decide what is to be done with you." He calls, and two guards in green tabards appear. Hale lets them take his arms without resistance. At the door he looks back at you, still smiling, and says softly, "You've no idea whom you've crossed, mistress." Then he is gone down the passage.
+
+In the confusion Garrow has slipped away. The kitchen door stands open to the dusk, and nobody saw which way he went.
+
+Lord Edric sinks into his chair. Tobin hovers at his elbow, wide-eyed. "Child," Edric says, "you've given me the truth, and I think it may save my house. But Dame Crowe will still ask why a forged charter was ever sealed, and Corvin Tallowmere is out there somewhere, with a letter of mine in his hand. What do we do?"
+
+It's a quarter to seven. The assessor arrives at noon on Day 4. Hale's warning hangs in the air, and Garrow is loose. What does Wren say or do?
+
+=== REPLY bard2-23-09 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Wren's Persuasion (20) won Lord Edric over. He read Osric's entry, wept with relief, and ordered Hale to give up his spare key and keep
+  [hidden call] write_lore: {"entry": "House Verrel", "add_to_description": "Lord Edric now accepts the truth (Day 2 evening) and intends to confess the false descent to Dame Crowe, with Brother Osric's testimony, and rest his c
+Your Persuasion check was a 20. Lord Edric reads the entry once with his lips moving, then again. When he looks up his face has changed, the fear going out of it as if a window had opened. "Maud Fenn," he whispers. "My grandmother. They said she was a miller's girl, and my father never spoke of it." A laugh breaks out of him, wet and astonished. "The land was mine all along."
+
+Then he turns to the steward, and for the first time you see the lord in him. "Hale. The key. Now."
+
+Hale doesn't argue. He draws the spare key from his sleeve and lays it on the desk with a small bow. Lord Edric orders him to his chamber, under the gate-warden's eye, until the assessor has come and gone. Hale goes, smiling, and the smile holds all the way to the door. There he pauses beside you and says, so quietly only you hear it, "Corvin will not be so gentle, mistress." Then he's gone. A moment later a kitchen-boy runs in to say the hedge-carpenter has slipped out the dovecote gate and vanished into the village dusk.
+
+Lord Edric takes your hands. He tells you he will confess the false descent to Dame Crowe himself, with Brother Osric beside him, and rest his claim on the old grant. "Better a plain lord than a false one." He offers you a bed in the manor, a supper, and, when you wave off payment, a purse of ten silver crowns as thanks. He asks only that you stay until the assessor comes.
+
+Tobin sags against the wall, grinning and shaking. You've fixed the Verrels' trouble, but Hale's threat hangs in the air. Corvin is still somewhere upriver, Garrow is loose, and your ledger is still in your psalter.
+
+The evening is yours. What does Wren do?
+
+=== REPLY bard2-23-10 ===
+  [hidden call] write_lore: {"entry": "Lord Edric Verrel", "add_to_description": "Day 2 ~6:30 PM: read the register copy and was moved, but Wren's Persuasion (10) did not fully turn him against Hale. He believes the entry, wants
+Lord Edric takes the sheet in shaking hands and reads it twice, his lips moving over *Maud Fenn, miller's daughter*. When he looks up, something in his face has loosened. "A miller's daughter," he whispers. "My grandmother. I remember her flour-dusted hands." He laughs once, unsteadily. "And I have been afraid of this for thirty years."
+
+Your Persuasion check was a 10, and it only half works. He believes the entry. He means to tell Dame Crowe the truth, and that is more than you hoped for. But when you turn him toward Hale, his courage wavers. Hale has kept his accounts, his letters and his secrets for twenty years.
+
+Hale answers before you can press. "My lord, the carpenter is a day-labourer I hired for the harvest. The girl is clever, and she twists things. I have served this house faithfully." His voice is warm, wounded, and perfect.
+
+Lord Edric rubs his eyes. "Hale, you will keep to your rooms until the assessor comes. Tobin will bring your meals. We'll sort this when I have slept." It isn't a dismissal, but it's a leash. Hale bows, says "Of course, my lord," and goes, with Garrow trailing behind, and neither looks back at you.
+
+Outside the window, dusk is thickening. Lord Edric asks you to stay in the manor tonight, in the guest chamber above the gatehouse, and tomorrow to help him prepare his confession. The assessor arrives at noon the day after.
+
+Hale is confined, but he still has his copy of the key, Garrow, and the ledger he wants. Corvin is somewhere upriver and may arrive any hour.
+
+What does Wren do?
+
+=== REPLY bard2-23-11 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Lord Edric read the register copy and, after Wren's challenge, ordered Hale to surrender the spare key and stay in his quarters under w
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 2 evening: Lord Edric accepted the truth of the register, confined Hale to his quarters, and took back the spare key. Garrow has vanished; he 
+Your Persuasion check was a 13, and it lands.
+
+You press the copy into Lord Edric's hands and step between him and his steward. He reads slowly, lips moving: *Aldous Verrel... Maud Fenn, miller's daughter.* His shoulders sag, but not with despair. It looks more like a long-held breath finally let go. "Maud Fenn," he whispers. "Grandmother. They told me she was a lady of Aldermere. I used to hate her portrait for how plain she looked."
+
+Then he lifts his head and looks at Hale, and for the first time you see something of a lord in him. "A man who merely attends my accounts does not bring a hedge-carpenter from Marrowford, nor ask a chaplain for my family's register. Hale, the spare key. Now."
+
+Hale studies him for a long moment. The smile holds. "As you wish, my lord." He unhooks a small iron key from his belt and sets it on the desk. He says nothing to you, but the look he gives you is as cold as river stone. Two of the gate guards, summoned by Tobin, walk him off to his quarters, where he'll stay until the assessor comes.
+
+In the kitchen uproar, Garrow has slipped away. The back door stands open on the dusk.
+
+Lord Edric sinks into his chair, holding the paper like something alive. "The land is mine by plain deed," he says. "I did not need any of it." He laughs, unsteadily. "Child, what do we tell Dame Crowe?"
+
+Tobin hovers at your elbow, grinning with relief. It is half past six on Day 2. Dame Crowe arrives at noon on Day 4. You still hold Corvin's ledger, Corvin himself is somewhere upriver, and Garrow is loose in the night.
+
+What does Wren advise?
+
+=== REPLY bard2-23-12 ===
+  [hidden call] write_lore: {"entry": "Master Hale", "add_to_description": "Day 2, ~6:30 PM: Wren's Persuasion (22) turned Lord Edric against him. Edric read the register copy, accepted that the land is his by plain deed, and or
+  [hidden call] write_lore: {"entry": "The Sealed Letter", "add_to_description": "Day 2 evening: Lord Edric knows the truth and has confined Hale. Plan: confess the false descent to Dame Crowe with Osric's attestation, keep the 
+You step between them and press the copy into Lord Edric's hands. Your Persuasion check was a 22.
+
+He reads it by the fire, lips moving at Maud Fenn's name. Slowly his shoulders drop, not in despair but in something like relief. "A miller's daughter," he says. "My grandmother. I remember her hands, flour in the creases." He looks up, and for the first time he looks his age and not his fear. "I'd rather be the grandson of Maud Fenn than the heir of a lie."
+
+Then he turns to Hale, and his thin voice hardens. "Why did you want that book? Why did you bring a carpenter from Marrowford?"
+
+Hale opens his mouth, and for once he has no smile ready. "My lord, I have served this house..."
+
+"Give me your keys." Lord Edric holds out a trembling hand. Two guards are summoned from the yard, and Hale yields the keys, the copy of the chest key among them. He walks out between the guards with his composure intact. At the door he glances back at you and says, softly, "Master Tallowmere will not be pleased, mistress." Then he is gone.
+
+Garrow has vanished from the manor, probably running to warn Corvin upriver.
+
+Lord Edric sits, the register copy in his lap. "We will tell Dame Crowe everything, with Osric beside us. I may lose the precedence and the tax-right, but I will keep my land and my name." He looks at you with wet eyes. "You've given me more than Corvin ever did. Stay under my roof tonight, child. You'll have a bed, a hot supper, and my thanks."
+
+It's nearly seven. The assessor arrives at noon the day after tomorrow, and Corvin may soon know where you are.
+
+What does Wren do?

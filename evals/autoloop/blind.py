@@ -1,6 +1,7 @@
 """Blind packets for judging replay replies: per round, the three rounds before it (as dump.py writes them), what the
 readers found there, and every arm's replies shuffled under codes. The key (code -> arm) is written separately.
-    py -3.12 evals/autoloop/blind.py <replay folder> <out folder> [block, e.g. 61-120; default 1-60]"""
+    py -3.12 evals/autoloop/blind.py <replay folder> <out folder> [block, e.g. 61-120; default 1-60] [runs per round to
+    judge, the first N; default all]"""
 import json
 import random
 import re
@@ -11,12 +12,13 @@ from pathlib import Path
 READ = Path(__file__).parent / "games" / "read"
 src, out = Path(sys.argv[1]), Path(sys.argv[2])
 BLOCK = sys.argv[3] if len(sys.argv) > 3 else "1-60"
+RUNS = int(sys.argv[4]) if len(sys.argv) > 4 else 999
 out.mkdir(exist_ok=True)
 by_round: dict[tuple[str, int], list[tuple[str, dict]]] = defaultdict(list)
 for f in sorted(src.glob("*.json")):
     arm, game = f.stem.split("-")
     for r in json.loads(f.read_text(encoding="utf-8")):
-        if "error" not in r:
+        if "error" not in r and r["run"] < RUNS:
             by_round[(game, r["round"])].append((arm, r))
 key = {}
 rng = random.Random(7)
@@ -31,7 +33,7 @@ for (game, k), runs in sorted(by_round.items()):
              "WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):", *found, "",
              f"THE PLAYER'S LINE THIS ROUND: {runs[0][1]['line']}", ""]
     for i, (arm, r) in enumerate(runs, 1):
-        code = f"{game[:2]}{k}-{i:02d}"
+        code = f"{game}-{k}-{i:02d}"
         key[code] = arm
         reply = "\n\n".join(e["text"] for e in r["entries"] if e["kind"] == "dm" and e["text"])
         calls = [f"{e['text']}: {json.dumps(e.get('input'), ensure_ascii=False)[:200]}" for e in r["entries"] if e["kind"] == "call"]

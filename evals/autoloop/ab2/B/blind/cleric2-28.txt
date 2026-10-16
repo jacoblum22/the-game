@@ -1,0 +1,234 @@
+GAME cleric2, ROUND 28
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 25 ==
+PLAYER: I rest a hand on Wil's brow a moment, then turn to Pell's raw arm. "Widow Harrow, this one's still open and will fester. I'll use my last prayer on Pell's gash, and Joss can heal with rest and clean linen now that the worst has passed."
+
+Once that's done, I want to talk to the village about the cut bank by the Fenner fields. "DM: Cal told me he'd run hares near the track. Does anyone here know how deep that bank runs, or who dug it, so we can seal the second mouth with stone and fire before dark?"
+  [game] dice Cure Wounds on Pell Harrow (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [8] + 6 = 14
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 0/2
+  [game] time: 20 minutes later: Day 2, 9:05 AM
+  [DM write_lore (hidden)] {"create": "The Long Cut", "kind": "place", "description": "Cut bank in the wash below the Fenner fields where the stream undercut an old barrow mound. Old Garrit says the mound is the Hollow Reach folk's 'Old Ones' barrow', older than the village, sealed with fitted stones that the stream has been eating for years. Its mouth opens into the same crypt that lies under the Wayfarers' Lamp. Ghouls' t
+  [game] notebook: created an entry for The Long Cut; added 2 relationships to The Long Cut
+  [DM write_lore (hidden)] {"create": "Seal the Long Cut", "kind": "quest", "description": "Brannoc's plan: seal the second mouth of the barrow at the Long Cut with stone and fire before dark, so the two roaming ghouls (and the one that fled from the Lamp, 19/22 HP) cannot hunt Hollow Reach again. Hob Marrow keeps the lamp lit for the stones' upper mouth. Villagers (Dobb Harrow, Old Garrit, Joss Fenner when able) can help w
+  [game] notebook: created an entry for Seal the Long Cut
+DM: Pell wakes while you work, a lanky lad with his mother's jaw, and watches the torn edges of his arm knit together under your hand as if it were happening to someone else. Fourteen points of life go in, and the gash closes to a pink seam. He flexes his fingers, wide-eyed, and says only, "Thank you, sir." You have no prayers left now. The hearth gives off a steady warmth, and the barn smells of porridge and wet wool instead of blood.
+
+The village comes in bit by bit once the news runs door to door. Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while. Then you ask about the cut bank.
+
+Old Garrit answers, wheezing but upright on his pallet. "The Long Cut. Aye. That's the old barrow mound by the wash. My grandfather's grandfather said it was there before the first fence went up. Fitted stones, sealed. The stream's been undercutting it since the wet spring, and half the roof's fallen in at the south end, so the mouth's maybe ten feet across now, all scree and roots. Nobody goes down there. It goes under the fields, they say, clear to the Lamp."
+
+Joss, propped against a sack of grain, adds in his low rasp, "The roof's thin. I've plowed over the south end and felt it give. A few good wedges and a big beam, and you'd bring the bank down across the mouth. We've got an iron bar, and a sledge, and oil for the fire." He winces. "I'd come, if I could stand."
+
+Dobb nods slowly. "I'll come. Three or four of the lads from the Reach, with ropes and picks. It's near the road, midday sun on it. Whatever's below won't stir while it's light. But we'd best be done before the long shadows."
+
+It is a little past 9 in the morning. The tools are here, and so are the willing hands. You are out of prayers and have 10 HP, a mace, a shield, a crossbow, and a village that has decided to follow you. The barn has a few hours of daylight before you'd have to make your stand at the bank, and the two ghouls below will wake at dusk.
+
+What does Brannoc do?
+
+== ROUND 26 ==
+PLAYER: "Then let's do it now, while the sun is on it. Dobb, bring the iron bar, the sledge, a good beam, and ropes, and keep four lads with you; nobody works near the mouth alone, and everyone is back up the road well before the shadows lengthen."
+
+I'll go with them, shield up, and stand at the edge watching the dark gap while they wedge the roof. "If anything stirs below, we drop everything and pull back. Widow Harrow, keep the barn's hearth fed and a lantern lit at the door tonight, just in case." DM: before we go, do I have any chance to recover a prayer or two by midday, or am I stuck with no spells until tomorrow?
+  [game] dice Brannoc's Perception watching the dark mouth of the barrow, DC 12: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] time: 40 minutes later: Day 2, 9:45 AM
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~9:45 AM: Brannoc and Dobb Harrow's crew (four lads from the Reach, with iron bar, sledge, beam, ropes, oil) arrive. Brannoc rolled a natural 1 on Perception; hidden: the north lip of the roof is rotten and will slump if the beam is set there, risking the workers. Ghouls below are quiet by day."}
+  [game] notebook: updated The Long Cut
+DM: Your answer first, plainly: you are stuck without spells until tomorrow. You finished a long rest at 8 this morning, and the rules allow only one long rest in any 24 hours, so your next one cannot count until about midnight tonight. A short rest restores no spell slots for a cleric of your level, so an hour of waiting would only mend your body, not your prayers. Your Hit Die can heal you if you are hurt. That is all you have until tomorrow.
+
+The work goes on regardless. Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything. They bring an iron bar, a sledge, a big beam, coils of rope, and a covered jug of lamp oil. The track to the wash is dry and bright, and the sun lies warm on the stubble. You walk at the edge with your shield on your arm, and the group falls into a loose line behind you.
+
+The Long Cut is a raw gash in the earth where the stream has chewed under a low mound. Roots hang like tangled hair, and loose scree lies in a fan at the foot. At the south end the roof has fallen away, leaving a ragged mouth about ten feet wide, black inside and breathing a cold, sour draught. You stand at the lip and look down. You see worn flagstones slanting into the dark, a few gnawed bones, and nothing moving. Perception (4): you can't see much else. Nothing looks wrong.
+
+Dobb is already studying the roof with his hand shading his eyes. "Beam goes across there," he says, pointing to the left lip, "wedge the bar under, and we lever the slab down. Two of the lads on the ropes, two on the sledge, me on the bar."
+
+The sun is high, the cave is quiet, and the crew is waiting for your word. What does Brannoc do?
+
+== ROUND 27 ==
+PLAYER: "Good plan, Dobb. Before anyone swings a sledge, let me go to the lip and listen for a moment, and I'll tie a rope around my waist with two of the lads holding the end, so I can be hauled out fast if something stirs."
+
+I'll take a lit lantern and drop a pebble down the slope to check for movement. If it's quiet, we begin: Hennet and Marl on the ropes, the Fenner cousins with the sledge, Dobb on the bar, and I stand guard with my shield facing the mouth, ready to shout the moment anything moves.
+  [game] dice Brannoc's Perception listening at the lip and watching the pebble, DC 12: 1d20+3 = 1d20 [7] + 3 = 10
+  [game] dice Dobb Harrow leads the levering of the roof slab (Athletics, DC 13): 1d20+3 = 1d20 [10] + 3 = 13
+  [game] time: 1 hour 30 minutes later: Day 2, 11:15 AM
+  [DM write_lore (hidden)] {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:15 AM: Dobb's crew levered the slab; the rotten north lip crumbled, so the collapse covered about four-fifths of the mouth but left a gap ~2 feet wide at the top, north side. Faint scraping heard below as dust settled. Needs filling with rubble/beam/stone and the oil."}
+  [game] notebook: updated The Long Cut
+DM: You go to the lip with the rope looped at your waist and Hennet and Marl braced behind you, and you hold your breath and listen. Perception (10): you hear the stream, a crow, the creak of the rope, and not much else. A pebble dropped from your hand ticks down the slope and rolls to a stop, and nothing answers it. The dark gives you nothing either way. It is as quiet as a well.
+
+Then the work starts, and it goes the way you ordered. Hennet and Marl hold the ropes, the Fenner cousins stand ready on the sledge, Dobb sets the bar under the slab, and you stand at the edge with your shield facing the mouth, saying nothing, watching the black. Dobb grunts a count, and the beam bites, and the slab shifts with a groan like a tooth being drawn.
+
+Athletics (13), by the narrowest margin: it goes. The slab drops with a dull roar. Dirt and root-ends and a rain of loose stone come down across the opening in a gray cloud, and the lads scramble back, coughing. When the dust thins, the mouth is mostly gone, buried under a rough heap of earth and slabs, but the old roof was rotten along the north lip, as it turns out. A ragged gap about two feet wide is still open at the top corner, black and cold, breathing out the same sour draught.
+
+Then, as the last of the dust settles, you hear it: a thin dry scratching from far below, slow and patient, like a nail drawn along stone. It stops. It starts again.
+
+It is a little past 11 in the morning. The oil jug sits unopened, there is still a good beam, and the lads are watching you with white faces. Dobb says quietly, "That'll not hold a thing that wants out. Another hour with rubble, if we start now."
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 28, "category": "agency", "severity": 2, "quote": "your eyes are on the road and the tree line, and not on the gap, which you should have been watching", "why": "Player said he stands at the lip watching and would react if the scratching grew louder; the DM decides he was looking away and scolds him for it."}
+
+THE PLAYER'S LINE THIS ROUND: "Then another hour it is, and we don't stop until it's shut tight. Hennet, Marl, haul rubble to the gap; Dobb and the Fenner cousins, wedge the beam across it and pack stones and earth over that."
+
+"Pour the oil down the gap first, Dobb, a good soaking, then drop a lit rag after it. Fire and light are what they fear, and it may buy us the time. I'll stand at the lip with my shield, and if that scratching grows louder, everyone drops the tools and runs for the road."
+
+=== REPLY cleric2-28-01 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:30 PM: the gap was soaked with oil and fired, a beam wedged across, and packed with rubble and earth. Mouth sealed for now. The ghouls' 
+Dobb pours the oil down the gap in a long glugging stream, and you step back as he drops a burning rag after it. The flame catches with a soft *whump*. Orange light flickers far down the slope, and the scratching stops dead. For a breath there is a thin, dry hiss from the dark, and then nothing, only the crackle of oil and a sour smoke rising from the gap. Perception (13): you catch the sound of something dragging itself back from the light, deeper and deeper, until even that fades.
+
+The crew works with their jaws set. Hennet and Marl haul rubble in a steady line, and the Fenner cousins wedge the beam across the gap and drive it tight with the sledge. Dobb packs earth and stone over it, stamping each layer down. Athletics (15): it holds. When the fire gutters out, the smoke thins, and the last handful of earth goes on, you test the heap with your own weight. It does not shift.
+
+By half past noon the Long Cut is shut. A raw mound of earth and slab stands where the black mouth was, and the stream chuckles past it as if nothing had happened. Dobb wipes his face with a filthy sleeve. "Won't hold forever," he says quietly. "But it'll hold tonight, and tomorrow, and likely a good while."
+
+Hennet is grinning at the sky. Marl sits down hard in the dirt. Nobody speaks of the sound from below.
+
+Here is where things stand. The second mouth is sealed, and the Lamp's upper mouth is guarded by Hob's light. Three ghouls remain somewhere in the old crypt, trapped between the two, and one of them is badly hurt. Your prayers will not return until you take your next long rest, which will not count before midnight tonight. It is half past noon, the day is bright, and the village is yours to ask.
+
+You have time before dusk. You could rest and eat, tend Joss's leg with your hands and Medicine, go back up to speak with Hob about what lies below the Lamp, or something else. What does Brannoc do?
+
+=== REPLY cleric2-28-02 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:40 AM: oil poured and lit down the gap; a ghoul shrieked below. Crew's beam slipped (failed check), the rubble slumped inward and widened the
+Dobb tips the jug and the oil gurgles down into the dark. Marl touches a lit rag to it, and the gap fills with a hungry orange glow. From far below comes a thin, furious shriek. Hennet and Marl drag rubble to the edge while the Fenner cousins wedge the beam across the gap, and for a few breaths it looks like it will hold.
+
+Athletics (5): it doesn't. The beam skids on wet stone and drops sideways, and the packed rubble behind it slumps inward in a rush, dragging half the new fill into the hole. The gap is now three feet wide, ragged and smoking, and the men stagger back with their hands up.
+
+You are watching the flames at the lip. Perception (1): you hear the scraping change, faster and nearer, and you don't realise what it means until it is too late. The scorched fingers of a gray hand close on the rim of the gap, then a shoulder, and a long jaw heaves up through the smoke, one eye black with burn, claws raking at the stones. It is the wounded ghoul from the lamp, wedged in the hole, not yet free, and it is clawing straight toward Marl and Dobb, who are three feet away.
+
+It is just past 11:40 in the morning, in full sun. You have your mace, your shield, a crossbow, 10 HP, and no spells. The ghoul is pinned and cannot yet get out. The lads are frozen, and Dobb is shouting.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-03 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:30 PM: the Long Cut's mouth sealed with oil-soaked, burned rubble, a wedged beam and packed earth. Scratching below stopped when the oil
+Dobb takes the jug without a word, tips a long, glugging soak of oil down the gap, and hands you the first rag to light. You touch it to your lantern and drop it. The black throat answers with a soft *whump*, and an orange glow climbs the stones below. Smoke rolls up thick and bitter. The scratching stops, and then a thin, furious hiss comes up through the smoke. Perception (15): it is close, just beneath the gap, and something heavy flinches away from the heat. You step back with your shield up, and the sound recedes into the dark.
+
+The crew works fast and well. Hennet and Marl haul rubble in a steady line. Dobb and the Fenner cousins wedge the beam across the gap and ram it home. Athletics (16): the beam bites hard and holds. Stone goes over it, and earth over the stone, and everyone stamps it down. After an hour and a quarter the corner is a solid, packed slope that looks as though it has been part of the bank for a century. A last test with the bar, shoved hard, doesn't move it.
+
+At half past noon, nobody is hurt and the sun is still high. Marl lets out a whoop, and one of the Fenner cousins sits down on the heap and laughs, breathless. Dobb wipes his face and looks at you. "That'll hold a good while. Not for ever. They may find another way, or dig, if they're patient."
+
+That was a real bit of work. The lower mouth is shut, the Lamp still burns, and the barn is full of people who will live. The ghouls are still in the barrow below, hungry and trapped between two lights. The upper mouth under the Lamp is Hob's to keep, and you promised to send word to him. You are out of prayers until tomorrow, with the afternoon ahead.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-04 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:40 AM: Oil poured and lit in the gap; it burned a short time. The beam slipped (failed check) and packed rubble slumped, widening the gap. A 
+Dobb upends the jug into the gap, and the oil runs down into the dark with a glugging sound. He drops in a lit rag. The flame goes down, catches with a soft *whump*, and a sullen orange light shows for a moment on the walls below. Then it gutters out. The scratching stops. Nobody breathes.
+
+The crew goes back to work. Hennet and Marl haul rubble, and the Fenner cousins and Dobb lift the beam to wedge it across the gap. Athletics (6): it goes wrong. The beam slips off its seat, and the packed earth under it slumps with a hiss. The gap is now nearly three feet wide, and a long skid of rubble rattles away down the slope inside.
+
+Perception (14): you see it first. Something pale comes up out of the black beside the beam, a gray, long-fingered hand with hooked black nails, feeling along the loose stones. A second hand follows, then the top of a head, a narrow skull with dull eyes squinting against the daylight. It is a ghoul, and it is hauling itself up through the gap, only ten feet from you and the lads.
+
+The crew has not seen it yet. Hennet is facing the other way with a stone in his arms. Dobb, with his back to it, is reaching for the beam. You are the only one at the lip. You have your shield and mace, a crossbow on your back, no prayers, and 10 HP.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-05 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~12:30 PM: Gap soaked with oil and lit, then wedged with the beam and packed with rubble and earth. Sealed solid. Brannoc saw a pale hand-shape c
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "status": "done"}
+Dobb tips the jug into the gap in a slow, glugging pour. The oil runs down into the dark, and you hear it patter on stone far below. You touch a lit rag to the lip and let it fall. A soft *whump* sends orange light flaring up the shaft, and a wave of heat and black smoke rolls out over your shield.
+
+Perception (22): you see it plainly. Down in the flicker, a long gray hand with hooked black nails reaches up out of the shadows and rakes the stone below the gap once. Then it jerks back from the flames and is gone. The scraping stops. Nothing comes up.
+
+Then the work. Hennet and Marl haul rubble in a steady line, the Fenner cousins and Dobb wedge the beam across the gap and drive it tight with the sledge, and stones and earth go over it in layers, stamped down by boot heels. The crew's effort (13) just carries it. By half past noon the corner is a solid, sloping heap, packed hard, with the beam buried inside it. The fire gutters out beneath and the smoke thins. Nothing scratches, and nothing breathes up through the stone.
+
+Dobb sits down on the beam end and wipes his forehead with a black-streaked sleeve. "That'll hold," he says. "That'll hold longer than I will." Marl lets out a whoop. Hennet is grinning like a boy.
+
+The second mouth of the barrow is shut. Whatever is below is sealed in with the Lamp's light over the only other way out, and Hob to keep it.
+
+You earn 100 XP for seeing the village through, which brings you to 300 XP. Brannoc can now reach level 2.
+
+Do you want to level up now? If so, I'll walk you through the choices, starting with what the new level gives you.
+
+=== REPLY cleric2-28-06 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:25 PM: gap soaked in oil and fired, then wedged with the beam and packed with rubble and earth. Sealed solidly. The ghouls' scratching w
+Dobb tips the jug and lets the oil run down into the gap in a long gleaming rope. You hear it patter on stone far below. He touches a lit rag to the lip and drops it. The flame goes down with a soft whump, and orange light flickers up the shaft. The scratching stops. A thin, dry hiss rises, then a scrabble of claws retreating along the passage, fading into the dark.
+
+"Now," you say, and the crew moves. Hennet and Marl haul rubble, the Fenner cousins wedge the beam across the gap, and Dobb packs earth and stone over it, stamping it down. The work goes fast and without a word, and you stand at the lip with your shield facing the dark the whole time. Nothing comes back.
+
+The crew's work (20) holds up well. By twenty-five past noon the corner is shut under a tight plug of beam, rock, and clay, packed so hard that Dobb jumps on it and it does not shift. The sour draught has stopped. The Long Cut is now an ordinary mound of fallen earth.
+
+The lads sit down in the stubble, grinning in the way of men who didn't expect to live to see lunch. Dobb wipes his face. "That's the south mouth, then. They'll not come that way again."
+
+It is a little past noon. The ghouls still have the barrow under the Lamp, which Hob's light keeps shut, and they are cut off from the village. Two of them, at least, are trapped below with no way to hunt. You have no prayers until tomorrow. The village is safe tonight. You could return to the barn and rest, look in on Joss, check on Hob and the Lamp, or go down into the barrow while the ghouls are cornered.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-07 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:35 AM: oil poured and lit down the gap; fire burned out in a few rounds. Brannoc noticed a ghoul's pale hand and head at the gap, singed, bef
+The oil goes down the gap in a glugging rush, and Dobb touches a lit rag to it and drops it. There is a soft *whump*, a gout of orange light, and a rolling black smoke that curls up out of the ground. For a few heartbeats the fire roars below, and then it falls to a smoulder.
+
+Perception (12): you catch it. Through the smoke, a pale hand with black nails comes up over the lip of the gap, and then a gaunt, singed face, mouth open in a soundless snarl, eyes squeezed shut against the daylight. It sees nothing. It claws blindly at the edge, then jerks back and drops out of sight. Below, something shrieks, thin and furious, and the scratching turns into hard, scrabbling thuds against the rubble.
+
+Dobb and the Fenner cousins drag the beam into place, but Athletics (5): it goes wrong. The beam slips on loose scree, and a slide of rubble tumbles into the gap, widening it to about three feet before the beam jams crooked across it. It holds, barely, but it is no seal. The rubble is shifting. Something is pushing from below.
+
+The lads see it. Hennet has gone white and has dropped his rope, and Marl is already backing off. "Brannoc!" Dobb says hoarsely. "It's coming up. Say the word!"
+
+You have your shield, your mace, your crossbow, and no prayers. The gap is three feet wide, the beam is crooked, and at least one angry ghoul is right beneath it in the smoke. The daylight seems to bother their eyes, and the fire hurt them, but not enough. What does Brannoc do?
+
+=== REPLY cleric2-28-08 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~11:35 AM: oil poured and lit down the gap; fire burned below. The crew's first packing (beam + rubble) fell just short; a ghoul's claws came up 
+Dobb tips the jug and the oil gurgles down the gap. You strike a flame from your tinderbox, light a rag, and let it fall. The dark below answers with a soft *whump*, and orange light flickers deep in the throat of the barrow. A rank smoke curls up, and from far down comes a long, thin shriek that raises the hair on your neck. The scratching stops, then starts again, frantic.
+
+The crew goes to work. Hennet and Marl haul rubble in their arms, and the Fenner cousins and Dobb wrestle the beam across the gap. Athletics (11): it is a hair short. The beam sits crooked, the stones packed behind it are loose, and a hand's-width gap remains at one end, with the fire's glow flickering through.
+
+Perception (18): you are watching the lip and you see it. Something pale moves in the glow just under the beam. "Back!" you roar. "Off the beam, now!"
+
+They scatter. A moment later a gray arm, blackened and blistered, shoots up through the gap, claws raking blindly at the stones where Hennet was kneeling. It finds nothing. It scrabbles for a hold, and rubble trickles from the packing. Below it, a ghoul is shrieking in pain and fury, and the fire is still burning behind it. The arm is as far as it can reach, and it cannot force the gap wider yet, but it is working at it.
+
+Everyone is safe. Hennet is white and on his backside, ten feet away. The beam is wedged crooked, and the arm waves in the daylight, perhaps three paces from your shield. You have no prayers, only your mace, your shield, and your crossbow.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-09 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:25 PM: gap packed with oil-soaked, burnt beam and rubble; a ghoul shrieked below at the flames and withdrew. The Long Cut is sealed for 
+Dobb pours the oil down the gap in a long glugging stream, and you hear it patter on stone far below. Marl strikes a spark to a rag and drops it in. A soft *whump* rolls up from the dark, and orange light flickers on the broken walls of the shaft.
+
+Perception (15): you hear the scratching stop, then a thin, furious shriek that rises and cracks, and the quick slap of bare feet retreating down the passage. Something below is fleeing the fire. Heat breathes up through the gap and wavers the air.
+
+"Now!" Dobb roars. The beam goes across the gap, wedged by the Fenner cousins, and Hennet and Marl heave rubble over it in armfuls. Athletics (17): the packing holds. Stones, earth, and roots are stamped down hard as the flames gutter out under them. When the last of the draught dies away, the bank looks like any other collapsed bank, a raw heap of earth with a charred beam-end poking from it. Nothing moves behind it. No sound comes up through the stones.
+
+It is 12:25 PM. The lads sit down in the dirt, black with soot and grinning shakily. Dobb claps your shoulder with a hand like a spade. "That'll hold them. Not forever, but it'll hold."
+
+The village is safe tonight, as far as this mouth goes. The barrow still joins the crypt under the Wayfarers' Lamp, though, and Hob is still bound to a light that keeps three ghouls down there. You have the afternoon, no prayers until tomorrow, and a village that now wants to thank you. What does Brannoc do?
+
+=== REPLY cleric2-28-10 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:25 PM: gap at the Long Cut filled with oil-fire, beam, rubble and packed earth. Sealed. Brannoc heard at least two ghouls below shriekin
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "status": "done"}
+Dobb splashes the oil down the gap in a long glugging pour, and you hand him a rag from your pack. He lights it from the lantern and drops it. With a soft *whump*, gold light leaps in the throat of the barrow, and heat breathes up past your shield.
+
+Perception (19): you hear it all. Below the fire there is a high, dry shriek, then another, then the scrabble of clawed feet hurrying away from the light into the deep dark. Something strikes the underside of the rubble once, hard, and sends a trickle of dust down your collar. It does not strike again.
+
+The lads work like men with a debt to pay. Hennet and Marl haul rubble in a chain, the Fenner cousins drive the beam across the gap with the sledge, and Dobb sets the iron bar as a brace. Athletics (19): the beam bites into both lips and holds. Stone and packed earth go over it, layer on layer, tamped with boots and the flat of the sledge, until the gap is a solid scar in the bank. By half past noon the only sign of the old mouth is a raw mound of earth, and the draught is gone.
+
+Dobb sits on the sledge and wipes his face. "Nothing's coming out of that," he says. "Not tonight."
+
+You have sealed the Long Cut, and the village can sleep. For this, you have earned 100 XP, which brings you to 300, enough to go up to level 2. The ghoul that fled the Lamp and the Lamp's own crypt remain below, but with this mouth shut and Hob's light burning, the dark has lost its way into Hollow Reach.
+
+You are ready to level up. Before I start, tell me whether you would like to look at your options now or finish up here first. Perhaps you'd also like to carry word to Hob, return Cal's bow to his kin, and rest to regain your prayers tonight.
+
+=== REPLY cleric2-28-11 ===
+  [hidden call] write_lore: {"entry": "Seal the Long Cut", "add_to_description": "Day 2 ~12:25 PM: Gap soaked with oil and fired, beam wedged, packed with rubble and earth. The Long Cut mouth is sealed and holds. A faint hiss an
+Dobb takes the jug and pours it down the gap in one long glug. The oil runs black into the dark and you hear it patter on stone far below. Marl touches a lit rag to it and drops it. Fire blooms up from the hole with a soft whump, and a sudden thin shriek rises from underneath, dry and furious. It cuts off, and a scrabbling retreat follows. The lads flinch, but nobody drops a tool. You keep your shield toward the mouth.
+
+Perception (6): you catch only the heat and the smoke. You do not see what, if anything, looked up through the flames.
+
+While the oil still burns, Hennet and the cousins jam the beam across the gap, and Dobb hammers wedges under it. Then the rubble goes in, stone by stone, with earth tamped over every stone. The crew works hard and well. Athletics (20): it is the best work they could have done. By the time the fire has burned itself out, the gap is packed solid. The beam is locked under the weight of the earth, and roots and sod are laid back across it so that from a few paces off, it looks like part of the bank. There is no scratching now, and no draught.
+
+It is past noon. Dobb sits on a stone and wipes his face with his sleeve, and none of the lads speak for a while. Then Hennet laughs, short and cracked, and Marl joins him.
+
+"That'll hold," Dobb says. "That'll hold against anything with claws and no pickaxe."
+
+The mouth by the village is closed. The upper mouth, at the Wayfarers' Lamp, is held by Hob's light. But the three ghouls are still alive below, and the lamp-house door still opens on the crypt. You have no spells until midnight, 10 HP, and a village that now has a chance to sleep through a night.
+
+What does Brannoc do?
+
+=== REPLY cleric2-28-12 ===
+  [hidden call] write_lore: {"entry": "The Long Cut", "add_to_description": "Day 2 ~12:45 PM: oil poured and fired down the gap; a ghoul shrieked below and retreated. Crew's packing took 90 min and was imperfect: beam wedged but
+Dobb pours the oil in a slow dark rope down the gap, and you hear it patter on stone far below. He lights a rag from your tinderbox and drops it. For a heartbeat there is only the draught pulling at the flame. Then the dark below blooms orange, and a shriek rises from the barrow, thin and furious. Perception (14): you see a long gray shape dart back from the light at the edge of sight, and the scratching stops. Black smoke pours up through the gap and drifts off over the stubble. The lads cough and swear, but nobody runs.
+
+While the fire burns, the work goes on. Hennet and Marl haul rubble in a steady line, and the Fenner cousins wedge the beam across the gap. Athletics (9): it is not quite enough. The beam holds, but the stones heaped over it are loose and uneven, and when the smoke thins you see a hand-width of black still open at the north corner, and loose earth that a pair of clawed hands could dig out. It will keep them down awhile, but it will not keep them down for good.
+
+It is a quarter to one. The lads sit on the heap, black-faced and shaking out their arms. Dobb wipes his forehead. "That'll slow them," he says. "Not stop them. Clay from the stream bank, packed wet between the stones, and a few more big rocks over the corner, and it'd set hard by dusk. Another two hours, maybe."
+
+Your prayers are still gone. What does Brannoc do?

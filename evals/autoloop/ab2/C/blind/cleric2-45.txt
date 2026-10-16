@@ -1,0 +1,245 @@
+GAME cleric2, ROUND 45
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 42 ==
+PLAYER: I fetch the blue shawl from the chest, fold it carefully into my pack, and leave five of my ten candles on the step beside Hob. "Five for a bad night, and I'll keep five for the road. I'll tell Maud every word: that you kept the light, that you weren't afraid, that the shawl was warm, and that you had somewhere to be."
+
+Then I say goodbye with a hand on his cold shoulder and set out down the valley road at a steady pace, shield on my arm, Protection from Evil and Good ready. DM: if I'll arrive after dark, is there an inn or farmstead along the way where I could stop for the night rather than walk into Greywater at nine?
+  [game] sheet: lost 5 × Candle; gained 1 × Blue shawl (Maud Marrow's, to return to her)
+  [game] time: 40 minutes later: Day 3, 12:50:42 PM
+  [DM write_lore (hidden)] {"create": "The Millstone Inn", "kind": "place", "description": "Roadside inn about six hours' walk down the valley road from Hollow Reach, two hours short of Greywater, an old mill converted by a stout widow, Hesper Cole. Clean beds, a common room, stabling. Lodging a few silver; Brannoc may owe a small payment or earn it by tending a sick guest.", "relationships": ["lies on the valley road betwe
+  [game] notebook: created an entry for The Millstone Inn; added 2 relationships to The Millstone Inn
+  [DM write_lore (hidden)] {"entry": "Lamp Watch", "add_to_description": "Day 3 ~12:50 PM: Brannoc left five candles at the lamp-house, took Hob's blue shawl and his message for Maud, and set out for Greywater. Millstone Inn is on the way."}
+  [game] notebook: updated Lamp Watch
+DM: You fold the blue shawl into your pack, a soft, faded wool, still holding a faint smell of lamp oil and smoke. The five candles stand in a row on the step, and Hob looks down at them and then up at you. He cannot smile, but something shifts in the dull eyes.
+
+"...Go well, healer," he says. "The light will be here."
+
+You put a hand on his cold shoulder, and then you walk down the track in the early afternoon, past the Fenner fields and the ring of burnt lamps around the silent slab. A few people lift a hand from the furrows as you pass. Tam runs alongside for half a field, calls "Come back!", and gets no promise from you, only a nod.
+
+Your question: yes. About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole. It has clean beds, a common room, and a stable. You'd reach it near sunset, around seven. You could sleep there and arrive at Greywater fresh the next morning, instead of walking into a strange village in the dark. A bed there costs a few silver, and you have 15 gp.
+
+The road is a pale ribbon through brown stubble and the first red leaves. The sun is warm, and your prayers are with you. You have time, and a message to carry.
+
+What does Brannoc do on the road?
+
+== ROUND 43 ==
+PLAYER: I walk at a steady pace, shield slung on my arm, humming Edda's hymn and keeping an eye on the ditches and the tree line. I'll stop at the Millstone Inn for the night, and reach Greywater fresh in the morning with the shawl and Hob's words.
+
+If I meet anyone on the road who is hurt, lost, or frightened, I'll stop and help them. DM: how much of Hob's message do I remember exactly, and what would I say to Maud first when I find her at her loom?
+  [game] time: 6 hours later: Day 3, 6:50:42 PM
+  [DM write_lore (hidden)] {"create": "Hesper Cole", "kind": "person", "description": "Stout, sharp-eyed widow who keeps the Millstone Inn. Blunt, fair, and quick with a ladle. Has a carter's boy ill with a cough in the back room as Brannoc arrives, Day 3 ~7 PM.", "relationships": ["keeps the [[The Millstone Inn]]"]}
+  [game] notebook: created an entry for Hesper Cole; added 1 relationship to Hesper Cole
+DM: You remember Hob's words exactly, because you turned them over all the way down the road. He said:
+
+"Tell her I kept the light. Tell her I was not afraid, at the end. There is a shawl, blue. She wove it the winter I came here. She is to have it back. Tell her it was warm, every night." And last, a little wryly: "She talks too much. She will say I should have come home. Tell her I had somewhere to be."
+
+As for what you say first to Maud, that is yours to decide, but the simple truth is probably kindest. You could say your name and that you come from Hob, and that the shawl is in your pack, before you tell her the harder thing.
+
+The road goes by without trouble. The valley is a slow curve of stubble fields, hedgerows hung with red hips, and a river glinting on your left. You pass a goatherd who nods and a tinker's cart going the other way, and nobody who needs a healer. You hum the whole way, and a boy fishing the bank stops to listen.
+
+At ten to seven, with the sun low and gold behind you, the Millstone Inn comes up out of the river mist: a big old mill of gray stone, its waterwheel still turning, lamps lit in every window, smoke rising from two chimneys. A wide yard, a stable, and a signboard with a millstone painted on it hang over the door.
+
+You step into the common room and the warmth hits you. It is clean and full of the smell of bread and onions. A stout woman with her sleeves rolled to the elbow looks you up and down, mace, shield, and amulet, and says, "Healer? Gods be thanked. Hesper Cole. I've a carter's boy in the back room with a cough that's been going on three days, and he's going the wrong way. Will you look at him? Bed and supper are yours, either way."
+
+What does Brannoc do?
+
+== ROUND 44 ==
+PLAYER: "Of course, Hesper. Take me to him, and bring a lamp and a cup of warm water with a little honey if you have it."
+
+I'll kneel by the boy, listen to his breathing and feel his forehead and throat, and ask how long the cough has run, whether he's bringing up anything, and whether anyone else in the inn is sick. If it's more than I can ease with Medicine and rest, I'll use Cure Wounds or Healing Word as it fits.
+  [game] dice Brannoc's Medicine check examining the carter's boy, DC 12: 1d20+5 = 1d20 [3] + 5 = 8
+  [DM write_lore (hidden)] {"create": "Piper", "kind": "person", "description": "Carter's boy of about nine, ill at the Millstone Inn with a chest fever and a wet cough for three days. His father Garn the carter left for Greywater and is due back in two days. Brannoc tended him with Medicine, steam and honey water.", "relationships": ["lies sick in the back room of [[The Millstone Inn]]"]}
+  [game] notebook: created an entry for Piper; added 1 relationship to Piper
+  [game] time: 30 minutes later: Day 3, 7:20:42 PM
+DM: Hesper leads you through the kitchen to a narrow back room with a pallet under the eaves. Her lamp falls across a boy of about nine, flushed and sweat-damp, his hair stuck flat to his forehead. His name is Piper, and he does not stir when you kneel. His cough is wet and deep, and between spells his breath whistles.
+
+Medicine (8): you don't get a clear read. His forehead is hot, his throat is rough, and the cough is plainly wet, but you cannot tell whether this is a bad chill that has settled low or something worse. His chest sounds muddy under your ear, but the pulse and the heat don't settle it either way, and you are honestly unsure.
+
+What you do learn from asking is this. Hesper says the cough started three days ago, that he brings up a thick yellow-gray phlegm in the morning, and that no one else in the inn is sick. His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days. The boy has taken little but water and broth.
+
+You warm honey-water at the kitchen fire, and lift Piper to sip it. He takes half the cup and dozes off against your arm. Steam from a kettle in the room loosens his breath a little. Nothing you can do tonight will cure it outright, and Cure Wounds mends wounds, not fevers, so you hold it back.
+
+It's about twenty past seven. Supper is on the table, Hesper has a free bed for you, and the boy is not worse, though he is not better. You could sit up with him, check him through the night, ask more of Hesper, or try a different approach tomorrow.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 45, "category": "clock", "severity": 2, "quote": "a little before one o'clock his brow cools under your hand", "why": "The reply ends 'It is twenty past midnight on Day 4' and the clock reads 12:20:42 AM, so the 1 AM event has not happened yet."}
+
+THE PLAYER'S LINE THIS ROUND: I eat a quick supper, then bring a stool to Piper's bedside and keep the kettle steaming. "Hesper, would you prop his shoulders up with a rolled blanket and wake me if his breathing changes? I'll sit with him tonight, since I promised never to let anyone suffer alone."
+
+I'll check his breathing and brow every hour or so, humming low. DM: does Piper have a fever I could cool with a damp cloth, and can I try Medicine again with more time, or does anything in the room, like the phlegm or his lips, give me a clearer read?
+
+=== REPLY cleric2-45-01 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc's second Medicine check (23) showed an ordinary lung-fever (no plague, no poison): the fever peaks tonight and should break by dawn if he
+Hesper props Piper's shoulders with a rolled blanket, then leaves you the stool and the kettle with a grunt that is half thanks. You eat quickly, pull the stool close, and hum Edda's hymn under your breath. Through the evening you wet a cloth in cool water, lay it on his brow, and change it every time it warms.
+
+Yes, he has a fever. His brow is hot and dry, his cheeks are bright, and the damp cloth brings it down a little each time, though it climbs back. That is the plain answer.
+
+Medicine, second look (23): with hours of watching behind you, the picture comes clear. His lips are pink, not blue. The phlegm is thick and yellow-gray, with no blood and no foul smell. He has no rash and no swollen neck, and he keeps down his honey-water. Nothing points to plague, poison, or the Grey Fever you grew up with. This is an ordinary lung-fever, a bad one, and a child's body can win it. The fever will likely peak tonight, in the small hours, and break toward dawn if he stays propped up, cool, and drinking. No prayer is needed. What he needs is a pair of steady hands, and he has them.
+
+It is now twenty past midnight. Piper's breathing has deepened and slowed. Twice you steadied him through a coughing fit with a hand on his back, and twice he sank back into sleep. Hesper looked in at ten, grunted, and went to bed. The mill-wheel turns outside in the dark. A sitting watch of this kind counts only as light activity, so a proper long rest would have to wait. You have all your prayers anyway, since you didn't spend any.
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-02 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc sat up with him. Medicine 14 read it as a lung-fever from a chill settled low (not the Grey Fever, not contagious beyond ordinary). Propp
+You eat Hesper's onion stew standing, then drag a stool to the bedside. She props Piper on a rolled blanket without a word, and she lays a second stool by the door where she can see you, in case she is needed.
+
+Medicine (14): with an hour of watching, the picture clears. His lips are dry but not blue, his fingernails are pink, and the phlegm in the basin is thick yellow and not streaked with red. The fever is real, hot and dry to the touch, but his breathing, though wet, is steady and even. This is a lung-fever from a chill that settled low, the kind that strikes a boy who has spent too many nights on a cart. It is not the Grey Fever you grew up among. It is not likely to spread. Most important, it can be borne if he is kept upright, warm, and wet-lipped with broth.
+
+You bathe his brow and wrists with a cool damp cloth, change it every hour, and prop him as Hesper did. You hum Edda's hymn low, over and over. Around ten the fever turns. His skin goes damp and loose, he sleeps without shivering, and his breath comes easier, still whistling but lower. Around eleven he opens his eyes, looks at the strange man on the stool, says "Is Da back?" in a cracked whisper, and falls asleep again before you can answer.
+
+You have used no spells. The prayers are still yours. It is twenty past eleven at night. He will mend with rest, broth, and a few days. Hesper has stopped pretending she isn't watching, and leans in the doorway with her arms crossed, her eyes wet.
+
+"I've kept an inn twenty years," she says gruffly. "Folk come and go. Nobody ever sat up."
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-03 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~10:20 PM: Brannoc's second Medicine check (17) showed a lung chest-fever that is serious but not the Grey Fever: no rash, lips pink, fever breaks to sw
+You eat quickly, then settle on the stool with the kettle at your elbow while Hesper props Piper's shoulders on a rolled blanket. She goes, and comes back with a second blanket and a bowl of cold water and linen, and says nothing more than "Wake me." You hum Edda's hymn low and keep the room warm and damp.
+
+Yes, the boy has a fever, and a damp cloth helps. You wring one out in the cold water and lay it across his forehead and the back of his neck, and change it every time it warms. His skin cools a little under it each time.
+
+Yes, more time helps, and it is the right instinct. Medicine (17): this time the read is clear. Over three hours you watch the phlegm, the color of his lips, and the way the fever rises and breaks.
+
+- His lips are pink, not blue, so he is still getting enough air.
+- There is no rash and no gray cast to his skin. This is not the Grey Fever you grew up under, and you feel the knot in your chest loosen at that.
+- The fever comes in waves and breaks into sweat, which is a good sign. The phlegm is thick but not bloody.
+
+It is a deep chest-fever, serious in a child of nine, and nothing a prayer will cure. It should mend with steam, fluids, and rest. The danger is a bad turn in the small hours, when the breath can fail, and that is why a watcher matters.
+
+It is twenty past ten. The inn is quiet, Piper is asleep with his breathing steady, and you can hear the mill-wheel turning in the dark. Note that if you sit up all night you won't complete a long rest, since the rules allow only about two hours of light activity like standing watch, so you would wake tomorrow with the same prayers you have now and no more. That's a choice you can make freely.
+
+What does Brannoc do for the rest of the night?
+
+=== REPLY cleric2-45-04 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~8:50 PM: Brannoc's second Medicine check (20): a lung fever from an ordinary chill settled low, not a spreading plague; lips pale but not blue; fever h
+Hesper props Piper up with a rolled blanket, tucks a second one around his legs, and goes grumbling back to her kitchen with a promise to wake you if anything changes. You eat your bread and stew standing by the pallet, then settle onto a stool with the kettle steaming at your elbow, and hum Edda's hymn low and slow.
+
+Your questions: yes, he has a fever, and you cool it with a damp cloth across his brow and neck, changed every few minutes. You can try Medicine again, because you've now had time. I'm allowing the second check as a new look with new information.
+
+Medicine (20): this time the picture is clear. His lips are pale but not blue, which means he is still getting air. The phlegm in the cup by the bed is thick and yellow-gray, with no blood and no foul smell. The fever is high but even, with no wandering, no rash, no swelling in the neck. This is a lung fever from an ordinary chill that settled low in the chest. It is not a plague, and nothing here is spreading. It needs what you're already giving him: steam, fluids, cool cloths, and sleeping upright. It should break in two or three days, and the danger is that a small body grows tired. Spells wouldn't mend it, since Cure Wounds heals injuries, not sickness, and you don't need to spend a prayer. Rest and care are the cure.
+
+So you sit. You check his breathing and his brow every hour, and he wakes twice for sips of honey-water and calls you "Mam" once before he sleeps again. The kettle sings. Past midnight his breathing eases to a longer, steadier drag, and the whistle goes out of it.
+
+One thing to note as the DM: a night sitting up counts as light activity for a rest, but not as a full long rest. You are at full HP and all your prayers, so it costs you nothing today, but it will leave you tired in the morning. It's about 9 PM now. Do you sit through the whole night, or sleep a few hours and let Hesper take a watch?
+
+=== REPLY cleric2-45-05 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~11:30 PM: Brannoc's Medicine (22) after hours of watching: a lung fever (not plague) from a chill that settled low; no blue lips, no rash, phlegm yello
+Hesper props Piper's shoulders on a rolled blanket, then leaves you the stool, the kettle, and a stack of clean cloths. You take the watch the way you learned it at Edda's side: a hand on his brow, an ear near his chest, and Edda's hymn hummed low under the creak of the mill wheel.
+
+Yes, he has a fever, and you cool it. You wring a cloth in cold water from the pump and lay it across his forehead, and you change it every time it warms. You sponge his wrists and neck, and each time the heat eases a little before it creeps back.
+
+Medicine (22): with hours of watching to go on, the picture comes clear. The phlegm is thick and yellow-gray, with no blood in it. His lips are pink, not blue, and there is no rash on his chest or neck, no swollen glands, and none of the signs of the Grey Fever you remember from Millbrook Landing. It is a lung fever, a bad chill that settled low and is working through him. It is serious in a child, but it is the kind that turns. Steam, fluids, keeping him propped upright, and cooling the fever are the right treatment, and you are already giving all of it. Your best guess is that he will break within a day or two. Cure Wounds would do nothing for it, so you keep your prayers.
+
+By the fourth hour he is breathing a little easier. The whistle between coughs has softened, and he has taken two full cups of honey-water without choking. Around eleven he wakes for a moment, sees you, and whispers, "Are you a priest?" You say you are something like one. He sleeps again with his hand around your finger.
+
+It is twenty past eleven. You've been awake since early morning, and have the whole night still ahead. You could keep your vigil until dawn, or trust Hesper to wake you and take a few hours of sleep. Whatever you choose, the long rest you need to refresh your prayers will not count if you spend the night sitting up. What does Brannoc do?
+
+=== REPLY cleric2-45-06 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc sat up with him until ~11:30 PM, cooling his brow and keeping steam going. Fever steady, no worse, no better; Brannoc could not read the 
+You eat quickly, then drag a stool to the pallet. Hesper props Piper's shoulders with a rolled blanket, tells you to wake her if anything changes, and leaves the lamp turned low.
+
+Yes, he has a fever. His skin is hot and dry, and you cool it the way Edda taught you, with a cloth wrung out in well-water, laid on his brow and wrists and the back of his neck, then changed every time it warms. Each time, his breathing eases a little, and you hum low while you work. The kettle keeps the air soft and wet.
+
+The second Medicine check (7) doesn't give you the clearer read you wanted. Hour after hour you watch his lips, his color, and what he coughs up, and every sign points two ways. His lips are pinkish, not blue, which is good. But his breath rattles, and the fever neither climbs nor falls. You can't say with confidence whether he is turning the corner or slipping. I won't invent a certainty you haven't earned.
+
+What you can say is this. Cure Wounds mends injuries and won't touch an illness like this, and the prayer that could end a disease, Lesser Restoration, is a 2nd-level spell you cannot cast yet. So all you have is a cool cloth, steam, honey-water, patience, and your presence. That is what Edda gave dying neighbors, and it has often been enough.
+
+It is twenty past eleven. Piper has taken half a cup of broth and a few sips of water in the last few hours, and he has not worsened. He murmured "Da?" once, half awake, and settled when you answered "Soon." You are tired, but not beyond what the work needs. Hesper looked in at ten and went back to bed.
+
+Your prayers are all untouched, you can't rest properly if you sit up all night, and Greywater waits a morning's walk down the road, with Maud and her shawl. What does Brannoc do?
+
+=== REPLY cleric2-45-07 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~11:30 PM: second Medicine read (19) after hours at his bedside: a lung fever with a stubborn wet cough, no spotted skin, no swelling at the throat, not
+Hesper props Piper's shoulders on a rolled blanket without a word, then leaves you the lamp and a bowl of cool water. You sit on the stool with a damp cloth and keep the kettle steaming. You hum Edda's hymn low, and every hour you lay the back of your hand to his brow and count his breaths.
+
+To your questions: yes, he has a fever. His brow is hot and dry at first, and the cool cloth eases it, though only for a while. And yes, a second look helps. Medicine (19): hours at the bedside tell you what a quick glance could not.
+
+His lips are dry and chapped but not blue, so he is getting air. His skin has no spots and his throat is not swollen, so this is not the Grey Fever you remember from Millbrook Landing, and you let that fear go. The phlegm in the basin is thick and yellow-gray, with no blood. It is a lung fever, a stubborn chest chill that has settled low. It is nothing your prayers can mend, but it will mend with care. Keep him upright, keep the steam going, give him broth and honey-water, and cool his brow. A few days should do it. Around eleven, his fever breaks in a slow sweat, his breath comes easier, and he sleeps without the whistle.
+
+A practical note, as your DM. Sitting up like this means you aren't resting, and the night will not count as a long rest. You've lost nothing, since your prayers and hit points are already full. You can doze on the stool, but Hesper's free bed will go unused.
+
+It is about twenty past eleven. Piper is asleep and easier. Hesper stands at the door with her arms folded, looking at him, then at you.
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-08 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~10:20 PM: Brannoc's careful Medicine (19) shows an ordinary lung fever settled in the chest, not the Grey Fever or anything contagious: lips pink, no r
+Hesper props Piper's shoulders with a rolled blanket without a word, then pulls the door to and leaves you the lamp. You sit down on the stool, take the cloth from the basin, and begin.
+
+Yes, he has a fever, a real one. His skin is dry and hot to the back of your hand. You wring out a cool cloth and lay it on his brow, and when it warms you change it. You do it again and again, humming Edda's hymn low.
+
+Medicine (19): this time the look is slow and clear, and it tells you plenty.
+
+His lips are pink, not blue. His nails are pink too, with no dusk in the fingertips, so his blood is finding air. There's no rash on his chest or neck, and no swelling under the jaw. The phlegm in the basin is thick and yellow-gray, with no blood in it and no foul smell. His breath whistles on the out-breath but moves in both sides of his chest alike. It is an ordinary lung fever, settled low and angry, and it is not the Grey Fever you grew up with, or anything that will run through the inn. It is dangerous in a child of nine, but a boy who is kept cool, steamed, fed broth and kept upright can turn the corner in two or three days. Tonight, the thing he needs most is exactly what you are doing.
+
+Around ten he wakes once, confused, and asks for his father. You tell him Garn is on the road and will be back soon, and he sips water and sleeps again. Hesper looks in twice, once with a hot brick wrapped in flannel, once with nothing but a long look at you, and goes away again.
+
+Sitting up all night means you won't finish a long rest. You are at full strength and all your prayers are ready, so you lose nothing tonight. A night without sleep has no penalty in the rules you play by, but you'll be tired by morning, and the rest will need to wait for another night.
+
+It is twenty past ten. Piper's fever has eased a little, and his breathing is steadier. What does Brannoc do?
+
+=== REPLY cleric2-45-09 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc's second look (Medicine 13) found an ordinary lung-fever, not a plague: fever, wet cough, no rash, lips pink, no blue. Propped upright, c
+Hesper props Piper's shoulders with a rolled blanket, and you settle on the stool with the kettle steaming and a basin of cool water at your elbow. You wring a cloth for his brow every time his skin grows dry and hot, and you hum Edda's hymn low enough that it barely stirs the air.
+
+Yes, he has a fever. His forehead is hot under your palm, and the damp cloth does ease it each time, though the heat creeps back within the hour.
+
+Medicine (13): with time to look properly, you read him clearly. His lips are pink, not blue, so he is getting air. There is no rash on his chest or neck, no swollen glands, no stiff neck, and nothing in the phlegm but the thick yellow-gray you were told of. Nobody else in the inn is sick. It is an ordinary lung-fever, a hard one for a small body, but not a plague. It should break within two days with rest, warmth, steam, and fluids, and it is the kind that gets worse if a child is left alone and flat. Propped up, he breathes easier.
+
+Around ten he coughs hard, sits half up, and brings up a good deal, and afterward his breathing eases and he sleeps properly. His fever is a little lower. You still have all three of your prayers, since this is not what they heal.
+
+It is twenty past ten. Sitting up all night would keep you from a long rest, which needs at least eight hours, with no more than two of light activity such as watching. If you sleep now, you will wake at dawn rested. If you stay by Piper, you will reach Greywater tired, with your slots unchanged, because you have not spent any.
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-10 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 ~9:20 PM: Brannoc cooled him with damp cloths and kept steam going; a second Medicine check was again inconclusive. Fever is moderate, lips dry, not blu
+You eat quickly. Hesper's onion soup and bread are hot and good. Then you bring the stool in, and Hesper props Piper's shoulders with a rolled blanket without being asked. She says, gruffly, "I'll leave the door ajar." You keep the kettle at a low steam and hum Edda's hymn under your breath.
+
+Yes, he has a fever, and you can work on it. A cloth wrung in cool water laid on his brow and wrists, changed every little while, eases the flush. His skin is hot and dry to the touch, but not scorching.
+
+You try Medicine again, taking real time over it. Medicine (8): the second reading is no clearer than the first. His lips are dry and cracked but not blue, which is a good sign. The phlegm in the basin is thick and yellow-gray, and his chest is still muddy to the ear. None of it tells you whether this is a chill that will break on its own or a deeper rot in the lung. Both fit. You can't be sure, and I won't pretend otherwise. I can tell you plainly that nothing here looks magical or unnatural, and nothing suggests he is in immediate danger tonight. Cure Wounds won't help, since it mends wounds and not fever. The remedy is time, fluids, steam, and keeping him propped.
+
+Two hours pass. Piper sleeps more easily, and his breathing loosens a little under the steam. It is twenty past nine.
+
+One thing to weigh: if you sit up with him all night, you won't get a long rest, because a long rest needs at least 8 hours of sleep or light activity, with no more than 2 hours of watch. You could sit the first hours and then sleep on the pallet at his side, or sleep fully and let Hesper wake you if he changes. Your spells are all still ready, and you'd want them back before Greywater.
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-11 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc sat up with him. Second look (Medicine 20): a lung fever from a chill settling low, not a contagion; no one else at risk. Fever broke aro
+Hesper props Piper's shoulders with a rolled blanket, and you pull the stool close and settle in. You answer your questions as you go.
+
+Yes, he has a fever. His brow burns under your palm, and you cool it with a damp cloth, changing it each time it warms. Yes, a second look helps. Medicine (20): with the time and the quiet, you read him properly. His lips are dry but not blue, his nails are pink, and the phlegm in the basin is thick and yellow-gray with no blood in it. He is breathing hard, but he is not struggling. It is a lung fever from a chill that has settled low, the kind that kills a child who is left alone and neglected, and mends in one who is watched. It is not catching, so no one else at the inn is at risk.
+
+You hum Edda's hymn low, on and off, hour after hour. You turn him on his side to ease the cough, sit him up for the steam, and spoon honey-water between his lips. Around eleven the heat in his skin breaks all at once, in a long sweat that soaks the blanket. His breathing drops, slow and even, and he sleeps without the whistle for the first time. Hesper looks in from the doorway with her arms folded and says nothing, but she pulls the door gently shut when she goes.
+
+It is 11:20 PM. Piper will need rest and broth for several days, and Hesper has said she'll keep him until his father comes back. You didn't spend a spell on him tonight, and you hold all three slots.
+
+You can sleep in the free bed now and set out for Greywater in the morning, or sit up longer.
+
+What does Brannoc do?
+
+=== REPLY cleric2-45-12 ===
+  [hidden call] write_lore: {"entry": "Piper", "add_to_description": "Day 3 night: Brannoc's watch showed a lung-chest fever (a chill settled low), not a contagion: lips pink, no rash, phlegm yellow-gray without blood. Fever bre
+Hesper props Piper's shoulders on a rolled blanket without a word, and sets a basin of cool water and a clean cloth at your elbow. Then she leaves you the lamp. You keep the kettle steaming and the little room warm and quiet, and you hum Edda's hymn low under the creak of the mill wheel.
+
+Yes, he has a fever, and you cool it. The cloth goes on his brow, his neck, and the insides of his wrists, and you change it each time it warms. Over three hours the heat comes down a little at a time, and each time you wipe his face his breath eases.
+
+Medicine (20): your second look, with hours of watching behind it, tells you what the first could not.
+
+His lips stay pink, not blue, so he is getting air. There is no rash, no swelling at the throat or neck, and the phlegm in the cup is yellow-gray without a streak of blood. He is not wasting, and nothing in the room suggests a disease that would spread to Hesper's other guests. This is a chest fever, a chill that has settled low in the lungs. It is stubborn and dangerous for a child, but it answers to the things you are doing: upright rest, steam, fluids, cool cloths, and time. You judge it should turn within a day or two, and that Cure Wounds would do nothing for it, as you'd guessed.
+
+By half past ten Piper has taken a full cup of honey-water, slept deeper, and said "Mam?" once, very faintly, before sinking back. His breathing is slower and less ragged than it was.
+
+A note from the rules: a long rest allows no more than 2 hours of light activity, such as standing watch. If you sit up through the night, you won't finish a long rest in the morning, so your prayers would not renew. If you want your slots back tomorrow, you will need to sleep the full eight hours soon, and Hesper or her kitchen girl could take the cloth through the small hours.
+
+It is twenty past ten. Piper is resting easier, and Greywater is two hours down the road.
+
+What does Brannoc do?

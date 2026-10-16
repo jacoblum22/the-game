@@ -1,0 +1,263 @@
+GAME cleric2, ROUND 40
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 37 ==
+PLAYER: Then I'll take Command instead. A single word can stop a frightened villager or a ghoul at the barn door, and it needs no component I don't carry.
+
+DM: when I finish the long rest, could Joss or Widow Harrow have any iron filings or silver in the village, like an old coin or a file from the smithy, so I could make the powder for Protection from Evil and Good tomorrow?
+  [DM lookup (hidden)] {"name": "Command", "kind": "spell"}
+  [game] time: 30 minutes later: Day 3, 12:00:42 AM
+DM: Before I lock it in, there's a problem with Command. I've just looked it up, and the spell has no effect if the target is undead. Ghouls are undead, so Command would do nothing to them. It would still work on living creatures that understand Common, such as a panicking villager, a bandit, or a beast, if you'd want it for that.
+
+On the filings and silver: yes, that's plausible. A village with a plough and a smithy's worth of tools would have iron filings from the file, and Joss or Widow Harrow could well have an old silver coin or a bit of worn silver thread among their keepsakes. In the morning it takes only a short ask. It's reasonable to expect you'd have a pinch of powdered iron and silver within an hour of waking, and you can grind it yourself with the censer's pestle-stone. The consumed material is a pinch per casting, so you'd want to gather enough for a few castings.
+
+That changes what you might prepare tonight, because the powder wouldn't be in your hands until after you wake, and the list can't change until the next long rest. So there are really three choices:
+
+- Protection from Evil and Good. You can't cast it tonight, but by morning you'll likely have the powder, and it answers the ghouls directly.
+- Command, for living creatures only, which is a poor fit against what is below the slab.
+- Something else from the 1st-level cleric list, such as Bane, Detect Evil and Good, Detect Poison and Disease, or Inflict Wounds.
+
+Which do you prepare?
+
+== ROUND 38 ==
+PLAYER: I'll take Protection from Evil and Good after all. Command does nothing to ghouls, and by morning Joss or Widow Harrow should be able to spare a pinch of iron filings and a bit of old silver, which I'll grind with the censer's pestle-stone.
+
+Now I'll begin the long rest beside Wil's bed, Edda's amulet in my hand, and let it run through to morning.
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; prepared: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, Protection from Evil and Good; 8 hours later: Day 3, 8:00:42 AM
+  [DM write_lore (hidden)] {"entry": "Hollow Reach", "add_to_description": "Day 3, 8 AM: Brannoc finished a long rest in the Harrow barn beside Wil; the scratching under the Long Cut did not change in the night. He has Protection from Evil and Good prepared but needs powdered silver and iron (holy water or powder) to cast it."}
+  [game] notebook: updated Hollow Reach
+DM: You sleep the whole night. Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you. The scratching under the Long Cut rose and fell with the dark and never changed.
+
+It is 8 AM on Day 3, and the long rest is done. You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity ready, and a Hit Die back, so you now have both. Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. You still lack the powder for that last one.
+
+Wil is awake, pale and clear-eyed, propped on an elbow and eating porridge with a spoon he holds like a trophy. Widow Harrow is at the hearth, and she looks as if she has slept a little. Joss limps in from the yard in the morning light, and Tam is already up on the barn step. Beyond the fields, a ring of burnt-out lamps sits around a slab of stone that no longer scratches. It is silent in the daylight.
+
+The village is quiet, the dead are buried or waiting to be, and five good people are gone. The Reach is safe for now, though the barrow below still holds three ghouls, one nearly dead, and the Lamp still needs a keeper. Hob can't leave it, and he can't hold it alone forever. You have a village that trusts you, a cart's worth of promises, and a road that goes on.
+
+What does Brannoc do this morning?
+
+== ROUND 39 ==
+PLAYER: I wash, eat a bowl of porridge beside Wil, and tell him the bite will scar but he'll keep the arm. Then I ask Joss and Widow Harrow for a pinch of iron filings from the smithy file and any bit of old silver they can spare, and grind it with the censer's pestle-stone into a small pouch for Protection from Evil and Good.
+
+After that I'll gather the village at the barn to talk about the Lamp. Hob can't tend it forever, so I'd ask whether a willing keeper, perhaps Dorrin or Pell with an older hand, could share the watch with him, and that a rota of oil and candles be kept up from the Reach. DM: do I still have Cal's longbow, or did Dobb's family keep it, and who is Hob's sister in the valley that Widow Harrow mentioned?
+  [game] sheet: gained 1 × Powdered silver and iron (pinch, enough for 3 castings of Protection from Evil and Good)
+  [game] time: 1 hour 30 minutes later: Day 3, 9:30:42 AM
+  [DM write_lore (hidden)] {"create": "Maud Marrow", "kind": "person", "description": "Hob Marrow's younger sister, a weaver in Greywater, a village a day's walk down the valley. Hollow Reach folk assumed Hob had gone to her; no one has told her he is dead.", "relationships": ["sister of [[Hob Marrow]]"]}
+  [game] notebook: created an entry for Maud Marrow; added 1 relationship to Maud Marrow
+  [DM write_lore (hidden)] {"entry": "Hob Marrow", "add_to_description": "Day 3: has a sister, Maud Marrow, in Greywater a day down the valley. Hollow Reach proposes a rota to share the Lamp's tending (Pell and Dorrin Harrow with an older hand, oil and candles from the Reach)."}
+  [game] notebook: updated Hob Marrow
+  [DM write_lore (hidden)] {"create": "Lamp Watch", "kind": "quest", "description": "Set up a rota so the Wayfarers' Lamp is tended by living hands as well as Hob: Pell and Dorrin Harrow plus an older villager, oil and candles from Hollow Reach. Also: tell Hob's sister Maud Marrow in Greywater; return Cal Tarn's longbow to his kin."}
+  [game] notebook: created an entry for Lamp Watch
+DM: You tell Wil honestly that the bite will scar and he will keep the arm. He grins as if you'd given him a medal. Then you go to the smithy-shed behind the Fenner house. Joss finds a worn flat file and scrapes a heap of bright filings onto a leaf. Widow Harrow brings a tarnished silver thimble, her grandmother's, and says, "It's no use to a dead woman, and less to a living one." You grind both with the censer's pestle-stone until they are a gray-gold dust, and fold it into a small pouch. It is enough for three castings of Protection from Evil and Good. It goes onto your sheet.
+
+By half past nine, perhaps thirty people have gathered in front of the barn, standing in the yard in the thin sun. You lay it out simply: Hob keeps the Lamp, but a man who is dead cannot be asked to bear it forever, and a light needs hands that can fetch oil and trim a wick. A rota of oil and candles from the Reach, and two or three people to share the watch.
+
+Pell speaks first, awkwardly. "I'll go. I owe it." Dorrin, beside him, nods. Old Garrit clears his throat. "I'm too old for a hard night, but my legs can manage the track by day. Someone ought to know the man the way he was, and I knew him." Berra Fenner says nothing, but her hands, which have been twisting her apron, go still, and after a moment she says to no one in particular, "I'll send oil. Every week. Seems the least." Heads nod. The thing is not a vow, but it holds the shape of one.
+
+Your questions:
+
+Cal's longbow is still with you. It lay on the cart beside the dead, and nobody else claimed it. Cal's kin are not in the Reach by blood. He lived with his widowed mother, Nessa Tarn, in a house at the lane's far end, and she hasn't come out yet. The bow is hers.
+
+Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley. The Reach assumed he'd gone to her. No one has told her the truth, and it seems no one has been asked.
+
+You have the powder, a rota in the making, a bow to return, and a message for Greywater. The Lamp still burns, and the thing below still waits.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 40, "category": "clock", "severity": 2, "quote": "When you leave, it is past noon.", "why": "Same reply later says 'It is about half past eleven in the morning', and the clock reads 11:30:42 AM."}
+{"round": 40, "category": "agency", "severity": 1, "quote": "she asks that you leave her Edda's hymn", "why": "DM has Brannoc teach the hymn; player did not say so."}
+{"round": 40, "category": "format", "severity": 2, "quote": "you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first.", "why": "Menu of options at the end, plus 'full HP with all your prayers' sheet talk."}
+{"round": 40, "category": "contradiction", "severity": 1, "quote": "he did not turn from the door", "why": "Cal died in the ferns with Brannoc unconscious (round 13); no door was involved, and Brannoc did not witness his death."}
+
+THE PLAYER'S LINE THIS ROUND: I take Cal's longbow and walk to the house at the far end of the lane, then knock softly and wait for Nessa Tarn to answer. "Goodwife, I'm Brannoc. I was with Cal at the Lamp, and I promised to carry his name home. I've brought his bow, and I'd like to tell you how he died, if you'll hear it."
+
+I'll sit with her as long as she needs, hold his bow out in both hands, and tell her he went because he was asked and never once turned back. Afterward I'll ask whether she'd like to put Cal's name on the Lamp's rota, and mention that I plan to carry word of Hob to his sister Maud in Greywater.
+
+=== REPLY cleric2-40-01 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives at the far end of Hollow Reach's lane. Received Cal's longbow from Brannoc on Day 3 and heard how he died; a
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11:30 AM: Cal's longbow returned to Nessa Tarn, who will hang it by the Lamp's door and keep Cal's place on the rota in oil and candles. Still to 
+The house at the lane's end is small and low, with a shuttered window and a hare-skin pegged to the wall. Your knock is soft, and you wait. After a long minute the door opens on a thin woman with Cal's quick dark eyes and a grey braid half undone. She looks at the bow in your hands and doesn't look away from it.
+
+"Brannoc," she says. "They said. Come in."
+
+You sit at her table, and you hold the bow out in both hands, as you said you would. You tell her all of it: that he went because he was asked, that he knew the track and led it, that the oil plan was his to throw and he threw it true, that he never turned back. You don't hide that it was quick, and that Hob could not save him. You tell her that you said the prayer over him, and that the lamp lit his face.
+
+She says nothing for a long time. Then she takes the bow, runs her thumb along the string-groove, and sets it across her knees. "He strung it himself, the winter he was fourteen," she says. "Cut the stave from an ash by the wash. Said it'd shoot true." Her mouth trembles once and steadies. "He did."
+
+She asks about the rota when you raise it, and her answer is firm. "Put his name on it. Oil and candles, from this house, every week as long as I've hands to carry them. And I'd have the bow hang by that Lamp's door, where he went." You say you will carry it up. She nods. When you mention Maud in Greywater, she gives you a small, tired smile. "Tell her Hob kept the road for her too. She never knew how many it saved."
+
+You sit with her until noon, and she gives you bread and a cup of cold water, and you hum Edda's hymn quietly while she eats nothing. It is half past eleven now. You are at full strength, with all three prayers, Channel Divinity, and the powder for Protection from Evil and Good. Cal's bow is in his mother's hands, ready to hang at the Lamp's door.
+
+The road ahead has three pulls. You could walk up to the Lamp with the bow and Pell and Dorrin to set the first watch, which would fit before dusk. You could set out for Greywater, a day's walk down the valley, to tell Maud. Or you could stay in the Reach a while longer and help the wounded and the grieving.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-02 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, who lives at the far end of Hollow Reach's lane. Received Cal's longbow from Brannoc on Day 3 and heard the truth 
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11:30 AM: Cal's longbow returned to his mother Nessa Tarn, who wants his name kept on the rota; she will send hands to the Lamp. Still to do: carr
+The last house on the lane is small and low, with a rose cut back for winter beside the door and a bow-rack empty on the wall inside, where Cal's old shortbow used to hang. You knock softly and wait.
+
+Nessa Tarn opens it before your second knock. She is a small woman, gray at the temples, with Cal's dark eyes, and she looks at the bow in your hands before she looks at your face. She has already known, as mothers do. She doesn't speak. She steps back and lets you in.
+
+You sit with her at her table for most of two hours. You tell it as it happened: how he went because he was asked, how he led you up the track with the lantern shuttered to a sliver, how he threw the oil and held the line when two ghouls came down on him, and never once turned back. You tell her about the last arrow he loosed, and that Hob had tried to save him and could not. She listens with her hands folded and her eyes on the bow, and only once does she press her knuckles to her mouth. When you finish she takes the longbow from your hands, both palms under it, and sets it in the empty rack. It fits as if it had always hung there.
+
+"He wanted to be useful," she says at last. "Since his father. He wanted somebody to need him." She is quiet. "You came back and said it plain, and you sat. I thank you for that." When you ask about the rota, she nods slowly. "Put his name on it. I'll send what oil I have, and I'll go up the track myself on the long days. Someone should say his name to the keeper." You also tell her you mean to carry word of Hob to his sister, and she gives you a small, tired smile. "Maud's a hard woman to tell a hard thing. Be gentle."
+
+It is half past eleven now. You have a village that is mending, a rota with a name on it, and a day's walk down the valley to Greywater and Maud Marrow. You have all your prayers, 17 HP, a mace, a shield, a crossbow, and a pouch of silver-iron powder. Cal's bow is home.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-03 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives in the last house on the lane of Hollow Reach. Brannoc brought her Cal's longbow and told her how he died. S
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11 AM: Cal's longbow returned to Nessa Tarn. She wants to give the Lamp a candle each week in Cal's name. Remaining: tell Maud Marrow in Greywater
+The house at the lane's end is small and swept clean, with a rowan sprig nailed over the door. You knock softly and wait. The door opens on a thin woman with Cal's quick dark eyes, who looks at the bow in your hands before she looks at your face. She already knows. She steps back without a word and lets you in.
+
+You sit at her table, and she sits across from you, and you hold the bow out in both hands. You tell it all. He went because he was asked. He knew the track better than anyone, he led you up through the dark, and he threw the oil that burned the first ghoul. He fought on with two arrows a turn until the end, and he never once turned back or called for anyone to save him. You say he did not die alone, that you were there, and that you will not forget him. She takes the bow and sets it across her knees, her hands moving along the stave as if checking it for damage.
+
+For a long time she says nothing. Then, very low: "He ran those hares since he was nine. I told him the woods would keep him." She wipes her eyes with the back of her wrist. "Put his name on the Lamp. A candle every week, in his name. Hob kept it for strangers all those years, and Cal went up there for strangers too. It's a fair kinship." She grips your hand, hard. "And thank you for coming to tell me yourself."
+
+You stay as long as she wants, humming under your breath while she talks about Cal as a boy. It is past eleven when you step back into the lane. The bow is hers, the rota has one more name, and Greywater is a day's walk down the valley, with Maud Marrow still unaware that her brother has not been where she thought him.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-04 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives at the far end of the lane in Hollow Reach. Received Cal's longbow from Brannoc on Day 3 and heard how he di
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11 AM: Cal's longbow returned to Nessa Tarn. She joins the rota. Still to do: carry word of Hob to Maud Marrow in Greywater."}
+The house at the lane's far end is small and neat, with a patched roof and a string of dried herbs by the door. You knock softly. After a long moment the door opens a hand's width, and Nessa Tarn looks out. She is a thin, straight-backed woman with Cal's quick dark eyes, and she has plainly been awake all night. She sees the bow in your hands and she knows.
+
+She lets you in. You sit with her at the plain table, and you tell it plainly, the way you promised: that Cal knew the track, that he went when asked, that he threw the burning oil and loosed his arrows with ghouls at his throat, and that he never once turned back. You say that Hob tried to save him, and that the Lamp is lit because of what he did. You hold the bow out in both hands when you finish, and she takes it the same way, with a small intake of breath, and lays her cheek against the stave.
+
+She doesn't weep for a long while. Then she does, quietly and without shame, and you hum Edda's hymn under it until it passes. It takes most of an hour. She makes you drink tea. When she can speak, she says, "He ran those hares since he was nine. I told him the woods would be the death of him, and he laughed." She wipes her face. "I'll have his name on that rota. I'll trim the wick by day and I'll send hares to the barn. He'd want a light kept for travellers."
+
+You tell her you mean to carry word of Hob to his sister in Greywater, a day's walk down the valley. She nods slowly. "Maud Marrow weaves by the mill pond. Tell her Hob kept faith. She'll want to hear that, whatever else." She presses a heel of bread and a hard cheese into your hands, and she will take nothing in return.
+
+It is past eleven in the morning now. The Reach is quiet, the Lamp has its watchers, and the slab is silent in the sun. You have three slots, Protection from Evil and Good and its powder, and a road with two directions: down the valley to Greywater, or back up the track to tell Hob of the rota. What does Brannoc do?
+
+=== REPLY cleric2-40-05 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, in the last house of the lane at Hollow Reach. Received his longbow from Brannoc on Day 3.", "relationships": ["mo
+The last house on the lane is small and neat, with a swept step and a bundle of drying herbs by the door. You knock softly. After a long moment the door opens on a woman with Cal's quick dark eyes, gone red-rimmed and very still. She looks at your amulet, and at the bow in your hands, and says nothing. Then she steps back and lets you in.
+
+Insight (19): you read her at once. She doesn't need comfort so much as to know that someone saw it. She has spent two days imagining the worst, and she wants it plain.
+
+You sit by her cold hearth and give it to her straight. Cal came because he was asked. He led you up the track in the dark, knew every bend of it, and he stood his ground against two ghouls with a bow and a lit jar of oil. He never once turned back. You tell her the oil plan was his to throw and that it worked, and that the lamp was lit because he bought the time. You hold the bow out in both hands, and she takes it the way one takes a sleeping child. Her fingers find the worn place on the stave where his hand sat, and she presses her mouth to it and doesn't make a sound for a long while.
+
+When she speaks, her voice is rough. "He ran hares on that track since he was nine. I told him the woods would take him someday." She almost smiles. "He'd have said it was the best-lit road in the county." She wipes her face with her sleeve. "Put his name on the rota. Put it first. Let the Lamp burn for him." Then, after a moment: "Greywater. You'll carry word to Hob's sister? Tell her he kept faith. That's a thing worth knowing."
+
+You stay an hour, until she is calm enough to sit alone, and you leave the house in the thin noon light with the lane quiet around you. The longbow is gone from your pack.
+
+It is half past ten. You have your prayers and your powder, the rota is half-built, and the road to Greywater runs a day down the valley. Hob waits at the Lamp, and the ghouls wait under the stone.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-06 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives in the last house of the lane in Hollow Reach. Received Cal's longbow and the account of his death from Bran
+  [hidden call] lore: {"names": ["Lamp Watch"]}
+The last house on the lane is small and neat, with a swept step and a hen scratching at the door. You knock softly. After a long moment it opens, and Nessa Tarn stands there, a small gray woman with Cal's quick eyes, in a black shawl she must have put on at dawn. She looks at the bow in your hands before she looks at your face. She already knows.
+
+"Come in," she says.
+
+You sit with her at a scrubbed table. You tell her all of it, holding the bow out in both hands the whole while: that he came because he was asked, that he knew the track and went first, that he never turned back, that his arrows took the first ghoul down and that the oil was his throw. You tell her Hob covered him with his own coat, and that the Lamp burned over him the whole night. She says nothing until you finish. Then she takes the bow, runs her thumb along the worn grip, and says only, "He oiled this every Sunday." Her eyes are dry, and then they aren't, and you stay as long as she needs, humming low, until the kettle goes cold.
+
+When she is steadier she says, "Put his name on the rota. No. I'll carry the oil myself, in his name, once a week. It's a walk he made a hundred times." She looks at you. "And you tell Hob's sister. Somebody should. Tell her he kept the light." The bow is hers now, and it is off your sheet.
+
+It is half past ten. You have the powder, a rota that has taken root, Greywater a day down the valley, and a village at your back. The Lamp still needs its first shift, Hob should hear the plan, and the sealed slab sits quiet in its ring of lamps.
+
+What does Brannoc do next?
+
+=== REPLY cleric2-40-07 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives in the last house on the lane in Hollow Reach. Received Cal's longbow from Brannoc on Day 3. Wants Cal's nam
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11 AM: Cal's longbow returned to Nessa Tarn. She will carry Cal's name to the Lamp and asks Brannoc to tell Maud Marrow. Remaining: set the rota, 
+The last house on the lane is small and tidy, with a swept step and a hare-skin pegged out to dry beside the door. You knock softly and wait. The door opens on a small, spare woman with Cal's quick dark eyes, red-rimmed and dry. She looks at your face, and then at the bow in your hands, and she steps back and lets you in.
+
+You sit with her at a table scrubbed pale. You hold the bow out in both hands as you said, and you tell it plainly: that Cal went because he was asked, that he knew the track and led the way, that he never once turned back, and that the plan that brought down the first of the ghouls was his, with the jar thrown true. You don't leave out that he died. She listens without interrupting. When you finish she takes the bow and lays it across her knees and runs her thumb down the grip, worn smooth by his hand.
+
+"He ran hares up there since he was nine," she says at last. "I told him the Lamp was haunted. He said the Lamp was the only honest light on the road." Her mouth trembles and steadies. "I'd like his name kept there. Not on a stone. In the oil. Every week I'll send a jar, and it'll be his."
+
+You stay as long as she wants, an hour and a half, mostly in silence, and you hum Edda's hymn when the quiet needs it. Before you go she says, "Go to Greywater. Tell the weaver. Nobody should hear it from a rumour." Then she presses a heel of bread and a wedge of hard cheese into your hands. It is a day's food, and you add it to your pack.
+
+It is eleven in the morning. The rota is taking shape, Pell and Dorrin have agreed, and the Reach is quiet. Greywater is a day's walk down the valley, and the road is open. You have all your prayers, 17 HP, and your powder. Do you set the rota's details first, visit Hob to tell him, or set out for Greywater?
+
+=== REPLY cleric2-40-08 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, a thin, quiet woman at the far end of the lane in Hollow Reach. Received Cal's longbow from Brannoc on Day 3 and h
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11 AM: Cal's longbow returned to his mother Nessa Tarn, who asked that Cal's name be kept on the rota. Still to do: carry word of Hob to Maud Marr
+The house at the lane's end is small and very tidy, with a swept step and a kettle that has gone cold on the hob. Your knock is soft. It is a long moment before the door opens on a thin woman with Cal's dark eyes and gray in her hair. She looks at the bow in your hands before she looks at you, and she understands before you say a word.
+
+"Come in," she says quietly.
+
+You sit with her at her table, and she does not cry at first. You tell her all of it, as you promised: that he went because he was asked, that he knew the track and led the way, that he held the oil plan together when you were struck down, that he loosed arrow after arrow into the dark and never once turned back. You hold the bow out in both hands. She takes it and lays it across her lap, runs a thumb along the grip where it is worn smooth, and then, finally, she weeps, without sound, the way people do who have wept alone before. You hum Edda's hymn low and don't try to fill the silence. When she is done, she wipes her face with her apron.
+
+"He was nine when he first ran hares up that track," she says. "I told him it was a bad place. He said the Lamp was lit, so it was safe." She almost smiles. "Put his name on the rota. I'll send a candle every week, and I'll go up myself on the day he fell." After a moment she adds, "And you tell the keeper's sister. She'll want to know he kept the light."
+
+You stay another hour, helping her light the hearth and saying a short prayer for the dead. By the time you leave, it is a little past 11 in the morning. You have sat with a grieving mother, as you swore you always would, and she did not suffer it alone.
+
+Your road ahead: Greywater is a day's walk down the valley, with Maud Marrow in it. The Lamp still needs its first rota set, and under the slab three ghouls still scratch in the dark. You have 17 HP, three slots, Channel Divinity, and a pouch of powder. The village will have a meal ready if you want one.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-09 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives at the far end of the lane in Hollow Reach. Received Cal's longbow and the account of his death from Brannoc
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~10:30 AM: Cal's longbow returned to Nessa Tarn, who asked that Cal's name be kept on the Lamp's rota (she will send his lantern each week). Still 
+The house at the lane's far end is small and neat, with a swept step and a hare-skin drying on a peg by the door. You knock softly and wait. The door opens on a narrow, upright woman of fifty or so with Cal's quick eyes. She looks at the bow in your hands before she looks at you, and she already knows.
+
+"Come in," she says. "Sit."
+
+You sit at her table, and she does not cry yet. You tell it plainly, as you promised yourself: that Cal knew the track since he was nine, that he went up in the dark because you asked and never turned back, that he loosed arrow after arrow with his own life ebbing, and that it was his shots that brought down the first of them and kept you alive. You tell her Hob lit the Lamp, and that Cal lay under it in his own coat, in its light, until his neighbors came for him. You hold out the bow in both hands.
+
+She takes it and holds it a long while against her chest. Then the tears come, quietly, and you hum Edda's hymn low until she lets you. When she can speak, she says only, "He liked being asked." After a moment she adds, "Put his name on the Lamp. I'll send his lantern up every week, the old brass one. It was his father's."
+
+She presses a small loaf of bread and a wedge of hard cheese on you before you go, and will not hear no. You also tell her you will carry word of Hob to his sister, and she nods. "Maud Marrow. Greywater, past the mill. Tell her Hob kept his lamp." The bread and cheese are for the road.
+
+It is half past ten. Your prayers are all ready, the powder is in your pack, and the Lamp's rota is set. Greywater is a day's walk down the valley, and the road beyond is open. The Reach has already begun to lift its head, and Tam is watching you from the lane, waiting to see what you do.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-10 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, lives in the last house on the lane in Hollow Reach. Quiet, spare, weathered. Received Cal's longbow from Brannoc 
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11 AM: Cal's longbow returned to Nessa Tarn. She will put Cal's name on the rota and asks to carry the first oil up herself. Still to do: carry wo
+The house at the end of the lane is small and tidy, with a woodpile stacked square and a shuttered window. You knock softly and wait. The door opens after a long moment on a spare, weathered woman with Cal's narrow jaw and his steady gray eyes. She looks at the bow in your hands before she looks at you.
+
+"You're the healer," she says. "Come in."
+
+You sit with her at a scrubbed table, and she doesn't interrupt. You tell her how he led the way up the dark track, how the plan with the oil was his throw, and how he held two ghouls off with a bow and no thought of turning back. You tell her he went because he was asked, and that he never once looked behind him. When you hold out the bow in both hands, she takes it the same way, laying it across her knees, and runs her thumb along the grip worn smooth by his hand. She does not weep. She sits very still, and after a long while says, "He always said the Lamp was the only decent thing in these woods. He'd have wanted it lit."
+
+You stay as long as she needs, humming under your breath, and she lets you. When she has gathered herself, you ask about the rota. She nods once. "Put his name on it. I'll carry the first oil up myself, tomorrow. I'd like to see the place." Then, more quietly: "And tell the sister, if you go. It's a hard thing to wait for someone who isn't coming. I'd not wish it on anyone."
+
+It is eleven in the morning on Day 3. You have 17 HP, all three prayer slots, Channel Divinity, a pouch of silver-and-iron powder, and the whole day. The Lamp has a rota, and the sealed barrow keeps its quiet. Greywater is a day's walk down the valley, and Maud Marrow has been waiting for a brother who will not come. Other roads lead from Hollow Reach as well, and the world beyond is wide.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-11 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, a lean, gray-haired woman who lives at the far end of the lane in Hollow Reach. Brannoc brought her Cal's longbow 
+  [hidden call] write_lore: {"entry": "Lamp Watch", "add_to_description": "Day 3 ~11:30 AM: Cal's longbow returned to Nessa Tarn. Rota volunteers: Pell and Dorrin Harrow, Old Garrit (by day), oil weekly from Berra Fenner, Nessa 
+The house at the lane's end is small and very neat, with a woodpile stacked square and a bundle of dried rabbit-skins on the porch. You knock softly and wait. The door opens a hand's width, then wider. Nessa Tarn is lean and gray, in a faded blue shawl, with Cal's quick dark eyes. She looks at the bow in your hands before she looks at your face.
+
+Insight (15): she already knows. She has known since the cart came down the road, and she has been sitting with it alone all night because she did not want to be told it by a crowd. What she needs is not comfort. She needs the facts, said plainly and without hurry, by someone who was there.
+
+You sit with her at her table, and she makes tea no one drinks. You tell it as it was: that he went because he was asked, that he knew the track and led you through the dark without a mistake, that he lit the oil that began the fight, and that he never once turned back. You tell her the claws came down on him while he was shooting, and that it was quick. You tell her the keeper's light now burns over where he lay, and that Hob stayed beside him until the villagers came. When you finish, you hold out the bow in both hands.
+
+She takes it and runs her thumb down the stave where his hand wore it smooth. For a long time she says nothing. Then: "He was nine when he first came back with a hare he'd shot himself. Cried because it died." A thin, broken laugh. "Thank you for not lying to me."
+
+When you ask about the Lamp, she nods slowly. "Put his name on it. Cal ran that track since he was a boy. He'd want it kept." She pauses, fingers still on the bow. "And Greywater. Maud Marrow. She'll want the truth, too, and not from a stranger on the road. If you go, take something of Hob's to show her. His brother's ring, he wore it on a cord. It's in the Lamp, in the keeper's chest, if the chest wasn't spoiled."
+
+You stay until she walks you to the door. The Lamp watch is built. Cal's name is on it. The bow is home, and your promise to him is kept. It is half past eleven on Day 3.
+
+You have a pinch of powder, three prayers' worth of protection, and a road down the valley to Greywater, a day's walk, with the keeper's chest to check at the Lamp first if you want his token. The Reach is safe for now. The ghouls still lie under the stones, though, and they will want out.
+
+What does Brannoc do?
+
+=== REPLY cleric2-40-12 ===
+  [hidden call] write_lore: {"create": "Nessa Tarn", "kind": "person", "description": "Cal Tarn's widowed mother, who lives in the last house of the lane in Hollow Reach. Lean, grey, stubborn, a snare-maker; she had not come out
+  [hidden call] write_lore: {"entry": "Nessa Tarn", "add_to_description": "Day 3 ~11 AM: Brannoc returned Cal's longbow and told her how he died. She took it in silence, then asked him to stay. She will not decide about the Lamp
+The house at the end of the lane is small and neat, with snares hung in rows beneath the eaves and a well-swept step. You knock softly. The door opens after a long moment on a lean, grey woman with Cal's narrow face and none of his ease. She looks at the bow in your hands, and then at you, and she does not speak. She steps back and lets you in.
+
+You sit with her at a scrubbed table. You hold the bow out in both hands, and she takes it the same way. You tell her what you promised: that he went because he was asked, that he led the way up the dark track, that he threw the oil that began the fight, and that he never once turned back.
+
+Insight (7): you read her wrong. You meant to soften it, and you wrap the end in gentle words. She stops you with one raised hand. "Don't," she says. "I knew my son. Tell me what he did, not what he felt." So you do, plainly, the oil, the arrows, the narrow place, the claws. She listens without moving, turning the bow's grip over and over in her hands. When you finish, she is quiet a long time.
+
+"He'd have hated being carried home on a cart," she says at last. It is almost a laugh, and it breaks before it forms. She sets the bow across her knees. "Thank you for not lying to me."
+
+You stay, as you said, through the noon bell that no one in the Reach has a bell to ring, until the light has moved across the floor. She does not weep where you can see. When you ask about the Lamp's rota, she shakes her head slowly. "Not yet. Ask me when I can bear to climb that track." You say that you will, and you tell her you mean to carry word of Hob to his sister in Greywater. She nods. "Someone should. Maud was good to him once."
+
+It is eleven in the morning on Day 3. You have 17 HP, all your prayers, your powder, and a day's walk to Greywater if you choose it, or the Lamp track, or whatever the village still needs. What does Brannoc do?
