@@ -197,12 +197,13 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
     asyncio.run(go())
     data = json.loads(s.game.path.read_text(encoding="utf-8"))  # type: ignore[union-attr]
     assert data["backend"] == "sdk" and data["session_id"] == "sess-1" and "messages" not in data
-    assert data["cwd"] == str(sdk.DM_HOME) and opened[0].closed
+    assert data["cwd"] == play.home_relative(str(sdk.DM_HOME)) and opened[0].closed
     assert sum(t["kind"] == "tool" and t["text"].startswith("dice ") for t in data["transcript"]) == 2
     # resumed: the same Claude Code conversation
     s2 = play.Session(backend="api")  # a save carries on the way it was started
     asyncio.run(s2.play(play.Game(data, s.game.path)))  # type: ignore[union-attr]
     assert opened[-1].session_id == "sess-1" and s2.game.backend == "sdk"  # type: ignore[union-attr]
+    assert s2.game.cwd == str(sdk.DM_HOME)  # type: ignore[union-attr]
 
 
 def test_instructions_follow_the_sheets(monkeypatch: Any, tmp_path: Path) -> None:

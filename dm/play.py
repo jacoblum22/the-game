@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import sys
 import time
 from collections.abc import Callable
@@ -61,6 +62,15 @@ _USES = {"uses": {"type": "string", "enum": list(m.USES), "description": "in a f
                 "the one whose turn it is (a reaction, for example)"}}
 
 
+
+def home_relative(path: str) -> str:
+    """A path under the home folder as ~/..., so a save names no user."""
+    try:
+        return "~/" + Path(path).relative_to(Path.home()).as_posix()
+    except ValueError:
+        return path
+
+
 class Game:
     def __init__(self, data: dict[str, Any], path: Path) -> None:
         self.sheet: dict[str, Any] = data["sheet"]
@@ -82,7 +92,9 @@ class Game:
         self.backend: str = data.get("backend") or ("sdk" if data.get("session_id") else "api")
         self.messages: list[dict[str, Any]] = data.get("messages", [])
         self.session_id: str | None = data.get("session_id")
-        self.cwd: str = data.get("cwd", str(SAVES))  # an SDK save's session folder; saves from before 2026-10-11 used saves/
+        # an SDK save's session folder; saves from before 2026-10-11 used saves/. Kept as ~/... in the save so it carries
+        # no username and works on another machine.
+        self.cwd: str = str(Path(os.path.expanduser(data.get("cwd", str(SAVES)))))
         self.sdk: Any = None  # the open SDK client while an SDK game is played
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
@@ -92,7 +104,7 @@ class Game:
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
                 "transcript": self.transcript, "lore": self.lore, "backend": self.backend,
                 "story": self.story}
-        data |= ({"session_id": self.session_id, "cwd": self.cwd} if self.backend == "sdk" else {"messages": self.messages})
+        data |= ({"session_id": self.session_id, "cwd": home_relative(self.cwd)} if self.backend == "sdk" else {"messages": self.messages})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
         on_save(self.path, text)

@@ -18,7 +18,7 @@ from dm import mechanics as m
 from dm import play, sdk
 
 GAMES = Path(__file__).parent / "games"
-PROJECTS = Path.home() / ".claude" / "projects" / "C--Users-Nelly-AppData-Local-the-game-dm"
+PROJECTS = Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", str(sdk.DM_HOME))  # Claude Code's folder name
 NAME, POINTS, RUNS, OUT = sys.argv[1], [int(x) for x in sys.argv[2].split(",")], int(sys.argv[3]), Path(sys.argv[4])
 META = json.loads((GAMES / f"{NAME}.meta.json").read_text(encoding="utf-8"))
 SAVE = json.loads((GAMES / Path(META["save"]).name).read_text(encoding="utf-8"))

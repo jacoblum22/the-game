@@ -90,4 +90,7 @@ Next: confirm 1B and 2A with more runs, then block 2.
   repo: the DM's in ~/.claude/projects/<DM_HOME mangled>/ and the player's in ~/.claude/projects/<games dir mangled>/
   (session ids: the save's session_id and meta's player_session; pre-cut DM sessions c12bf076 cleric, b19f0b2a
   barbarian). Not committed. What a game does without them hasn't been checked.
-- The save's `cwd` is this machine's DM_HOME; set it to the new machine's (dm/sdk.py DM_HOME) before continuing.
+- The save's `cwd` (DM_HOME) is stored as ~/AppData/Local/the-game-dm and expanded on load, so it carries over as is.
+- 2026-10-16: took Windows usernames out of the repo (Jake's request, before it might go public). Meta `save` is
+  now just the file name, save `cwd` is ~/..., replay.py derives the DM's projects folder from DM_HOME, and
+  synthetic/BRIEF.md no longer names local paths. No DM behaviour change. Tests: 271 passed.
