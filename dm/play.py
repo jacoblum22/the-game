@@ -711,12 +711,15 @@ async def turn(game: Game | Creation, text: str) -> None:
     failed = await ask(game, text, said)
     if isinstance(game, Game):
         tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
-        if failed and tools and game.reply_len < FULL_REPLY:
+        if failed:
             game.log("failed", failed)  # kept in the save, never shown
+        if failed and tools and game.reply_len < FULL_REPLY:
             if held:
                 game.log("stub", "\n\n".join(held))
             held[:], game.reply_len = [], 0
             failed = await ask(game, CUT_SHORT_ASK.format(failed), said)
+            if failed:
+                game.log("failed", failed)
         elif not failed and tools and game.reply_len < FULL_REPLY:
             stub = "\n\n".join(held)
             game.log("stub", stub)  # kept in the save, never shown

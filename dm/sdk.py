@@ -66,6 +66,11 @@ class Client:
         await self.client.query(text)
         async for msg in self.client.receive_response():
             if isinstance(msg, AssistantMessage):
+                # An API error comes as Claude Code's own message ("API Error: ... safeguards flagged this message"):
+                # a failure, never the DM's words (it was shown as the reply in 7 rounds running; autoloop, 2026-10-16)
+                if msg.error or msg.model == "<synthetic>":
+                    failed = " ".join(b.text for b in msg.content if isinstance(b, TextBlock)).strip() or str(msg.error)
+                    continue
                 if msg.usage:
                     self.size = context_size(msg.usage)
                 for b in msg.content:
@@ -73,6 +78,6 @@ class Client:
                         on_text(b.text.strip())
             elif isinstance(msg, ResultMessage):
                 self.session_id = msg.session_id
-                if msg.is_error:
+                if msg.is_error and not failed:
                     failed = str(msg.result or getattr(msg, "errors", "") or "the SDK reported an error")
         return failed

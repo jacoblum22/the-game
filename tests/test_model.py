@@ -118,7 +118,7 @@ def test_too_many_rounds(monkeypatch: Any, tmp_path: Path) -> None:
     _, said = run(monkeypatch, [reply(use(f"t{i}", "next_turn"), stop="tool_use") for i in range(2 * model.MAX_ROUNDS)],
                   g, "go")
     assert any(f"more than {model.MAX_ROUNDS}" in s for s in said)
-    assert len([t for t in g.transcript if t["kind"] == "failed"]) == 1
+    assert len([t for t in g.transcript if t["kind"] == "failed"]) == 2
     assert g.messages[-1]["role"] == "user"  # the results are kept; the next line joins them
 
 
@@ -251,6 +251,27 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
     asyncio.run(go())
     assert len(opened) == 2 and opened[0].closed and not opened[1].closed
     assert opened[1].session_id == "sess-1" and "Tough as Old Boots" in opened[1].system  # the same conversation
+
+
+def test_sdk_api_error_is_a_failure(tmp_path: Path) -> None:
+    """Claude Code's own error message ("API Error: ... safeguards flagged this message") isn't the DM's reply."""
+    from claude_agent_sdk import AssistantMessage, ResultMessage, TextBlock
+
+    from dm import sdk
+    g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, Path("unused.json"))
+    c = sdk.Client("m", "system", g.tools(), str(tmp_path), None)
+    flagged = "API Error: Sonnet 5.5's safeguards flagged this message."
+
+    class Stub:
+        async def query(self, text: str) -> None:
+            pass
+
+        async def receive_response(self) -> Any:
+            yield AssistantMessage([TextBlock(flagged)], "<synthetic>", error="invalid_request")
+            yield ResultMessage("success", 1, 1, False, 1, "sess-1")
+    c.client = Stub()  # type: ignore[assignment]
+    said: list[str] = []
+    assert asyncio.run(c.respond("I slip in", said.append)) == flagged and said == []
 
 
 def test_sdk_bridge(tmp_path: Path) -> None:
@@ -393,7 +414,8 @@ def test_reply_cut_short_is_asked_for(monkeypatch: Any, tmp_path: Path) -> None:
 def test_failure_without_tools_is_not_asked_again(monkeypatch: Any, tmp_path: Path) -> None:
     g = new_game(tmp_path)
     fake, _ = run(monkeypatch, [reply(text("Half a"), stop="max_tokens")], g, "I look")
-    assert len(fake.calls) == 1 and not any(t["kind"] == "failed" for t in g.transcript)
+    assert len(fake.calls) == 1
+    assert [t["text"] for t in g.transcript if t["kind"] == "failed"] == ["the reply stopped: max_tokens"]
 
 
 def test_note_before_tool_calls_is_not_shown(monkeypatch: Any, tmp_path: Path) -> None:
