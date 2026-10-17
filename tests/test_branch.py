@@ -127,3 +127,49 @@ def test_lore_is_built_again_from_the_calls() -> None:
          {"kind": "call", "tool": "write_lore", "input": {"create": "Vessa", "kind": "person", "description": "a fence"}},
          {"kind": "call", "tool": "write_lore", "input": {"entry": "Nobody", "description": "x"}}]  # refused: skipped
     assert list(branch.rebuilt_lore(t)["entries"]) == ["Vessa"]
+
+
+# ---------- a new PC after a death ----------
+DUNMAR = {"name": "Dunmar", "race": "Human", "class": "Cleric", "ability_method": "standard_array",
+          "base_scores": {"STR": 8, "DEX": 10, "CON": 13, "INT": 12, "WIS": 15, "CHA": 14},
+          "choices": {"race.languages": "a", "class.proficiencies.1": ["c", "d"], "class.equipment.1": "a",
+                      "class.equipment.2": "b", "class.equipment.3": "a", "class.equipment.4": "a",
+                      "class.equipment.5": "Emblem", "background.languages": ["Dwarvish", "Giant"],
+                      "background.equipment.1": "Emblem", "background.equipment.prayer": "a"},
+          "cantrips": ["Light", "Sacred Flame", "Thaumaturgy"], "spells": [], "prepared": ["Sanctuary", "Healing Word"]}
+
+
+def test_new_pc_only_after_a_death_and_after_a_yes(tmp_path: Path) -> None:
+    g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, tmp_path / "g.json")
+    old = g.sheet["name"]
+    try:
+        g.new_pc({"character": DUNMAR})
+        raise AssertionError("refused while alive")
+    except play.m.Refused as e:
+        assert "only when the PC is dead" in str(e)
+    g.sheet["conditions"].append("dead")
+    shown = g.new_pc({"character": DUNMAR})
+    assert shown.startswith("BUILT, nothing changed yet") and g.sheet["name"] == old
+    try:
+        g.new_pc({"character": DUNMAR, "confirm": True})
+        raise AssertionError("refused without an opening")
+    except play.m.Refused as e:
+        assert "opening is empty" in str(e)
+    g.new_pc({"character": DUNMAR, "confirm": True, "opening": "Dunmar comes down the north road a year later."})
+    assert g.sheet["name"] == "Dunmar" and g.sheet["opening"].startswith("Dunmar comes")
+    assert [p["name"] for p in g.past_pcs] == [old] and "dead" in g.past_pcs[0]["conditions"]
+    assert "Dunmar" in play.system_prompt(g.sheet, g.companions)
+    g.save()
+    again = play.Game(json.loads(g.path.read_text(encoding="utf-8")), g.path)
+    assert again.sheet["name"] == "Dunmar" and again.past_pcs[0]["name"] == old
+
+
+def test_new_pc_rolls_once(tmp_path: Path) -> None:
+    g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, tmp_path / "g.json")
+    g.sheet["conditions"].append("dead")
+    assert g.roll_new_scores().startswith("ability scores rolled") and len(g.new_rolled or []) == 6
+    try:
+        g.roll_new_scores()
+        raise AssertionError("rolled twice")
+    except play.m.Refused:
+        pass

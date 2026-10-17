@@ -104,6 +104,8 @@ class Game:
         self.snapshots: list[dict[str, Any]] = data.get("snapshots", [])
         self.fork_at: str | None = data.get("fork_at")
         self.rebuild: bool = bool(data.get("rebuild"))
+        self.past_pcs: list[dict[str, Any]] = data.get("past_pcs", [])  # earlier PCs, after a death (new_pc)
+        self.new_rolled: list[int] | None = data.get("new_rolled")  # a new PC's rolled scores, until it's made
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
 
@@ -111,7 +113,8 @@ class Game:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
                 "transcript": self.transcript, "lore": self.lore, "backend": self.backend,
-                "story": self.story, "snapshots": self.snapshots}
+                "story": self.story, "snapshots": self.snapshots, "past_pcs": self.past_pcs}
+        data |= {"new_rolled": self.new_rolled} if self.new_rolled else {}
         data |= ({"session_id": self.session_id, "cwd": home_relative(self.cwd)} if self.backend == "sdk" else {"messages": self.messages})
         data |= ({"fork_at": self.fork_at} if self.fork_at else {}) | ({"rebuild": True} if self.rebuild else {})
         text = json.dumps(data, indent=1, ensure_ascii=False)
@@ -240,6 +243,46 @@ class Game:
             return f"{sheet['name']} is being built: {sheet['summary']} so far"
         return f"{sheet['name']} joined the party, {sheet['summary']}"
 
+    # A new PC after the old one dies (owner, 2026-10-17): the game goes on in the same world, with its notebook, clock
+    # and companions. Two autoloop PCs died in 60 rounds; with no way to make a new sheet the DM played one on the dead
+    # PC's sheet, and the other on none.
+    def _dead(self) -> None:
+        if "dead" not in self.sheet["conditions"]:
+            raise m.Refused(f"only when the PC is dead: {self.sheet['name']} isn't")
+        if self.fight:
+            raise m.Refused("end the fight first (end_fight)")
+
+    def roll_new_scores(self) -> str:
+        self._dead()
+        if self.new_rolled:
+            raise m.Refused(f"already rolled: {self.new_rolled}; scores are rolled once")
+        lines, rolled = [], []
+        for _ in range(6):
+            dice = sorted(m.roll("4d6")["parts"][0]["rolls"], reverse=True)
+            rolled.append(sum(dice[:3]))
+            lines.append(f"4d6 {dice} drop {dice[3]} = {rolled[-1]}")
+        self.new_rolled = rolled
+        return "ability scores rolled: " + "; ".join(lines) + f". Scores: {rolled}"
+
+    def new_pc(self, a: dict[str, Any]) -> str:
+        self._dead()
+        ch = a.get("character")
+        if not isinstance(ch, dict):
+            raise m.Refused("pass character: the new PC's full set of level-1 choices")
+        sheet, errs = create.build(ch, self.new_rolled)
+        if not sheet:
+            raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
+        if not a.get("confirm"):
+            return ("BUILT, nothing changed yet. Show the player this sheet and ask for a yes, then call again with the "
+                    "same character, confirm true and the opening:\n" + sheet_text(sheet) + "\n" + m.status(sheet))
+        opening = str(a.get("opening") or "").strip()
+        if not opening:
+            raise m.Refused("the opening is empty: where the new character is, why, and how they come into the story")
+        sheet["opening"] = opening
+        self.past_pcs.append({**self.sheet, "turn_ended": notebook.now(self.transcript)})
+        old, self.sheet, self.new_rolled = self.sheet["name"], sheet, None
+        return f"{sheet['name']}, {sheet['summary']}, is the player's character now, in {old}'s place"
+
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
     def run(self, label: str, fn: Callable[[], str], hidden: bool = False, inp: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -367,7 +410,25 @@ class Game:
                 res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c)
             return res
 
-        @tool("srd_options", "What the SRD offers, for building a companion. No arguments: every race, class and the "
+        @tool("new_pc", "Only after the PC has died, if the player wants to go on in this world with a new character: "
+              "the world, notebook, clock and companions carry on. Make it with the player as character creation does: "
+              "race, class, ability scores (standard_array, point_buy, or rolled with roll_ability_scores), the class's "
+              "and race's choices, equipment, spells, then name, personality and their past; srd_options gives the "
+              "ids. character: the full set of level-1 choices, in the form change_party's add takes. Without "
+              "confirm, the sheet is built and shown to you, and nothing changes: show it to the player and ask for a "
+              "yes. Then call again with the same character, confirm true, and opening: a paragraph on where they "
+              "are, why, and how they come into the story. They start at level 1.",
+              {"type": "object", "properties": {"character": {"type": "object"}, "confirm": {"type": "boolean"},
+                                                "opening": {"type": "string"}}, "required": ["character"]})
+        async def new_pc(a: dict[str, Any]) -> dict[str, Any]:
+            return self.run("new character", lambda: self.new_pc(a), hidden=not a.get("confirm"), inp=a)
+
+        @tool("roll_ability_scores", "Only for a new PC after a death (new_pc), if the player wants to roll: 4d6, drop "
+              "the lowest, six times. Once per character; the player sees every die.", {"type": "object", "properties": {}})
+        async def roll_ability_scores(a: dict[str, Any]) -> dict[str, Any]:
+            return self.run("dice", self.roll_new_scores)
+
+        @tool("srd_options", "What the SRD offers, for building a companion or a new PC. No arguments: every race, class and the "
               "background. race only: that race in full. class only: that class in full. race and class: every choice "
               "that character needs, with ids, options and spell lists.",
               {"type": "object", "properties": {"race": {"type": "string"}, "class": {"type": "string"}}})
@@ -596,7 +657,7 @@ class Game:
                                                               a.get("page") or 1), hidden=True, inp=a)
 
         return [self.after_reply(t) for t in (
-            roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
+            roll, change_pc, change_party, new_pc, roll_ability_scores, srd_options, level_up_options, level_up, add_combatants, change_creature,
             next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)]
 
     def after_reply(self, t: Tool) -> Tool:

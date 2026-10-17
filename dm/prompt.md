@@ -118,6 +118,8 @@ play every other character, call for checks, run fights by the rules, and keep t
 - Award XP when the PC overcomes encounters, and record it with `change_pc` `xp_gained`: for a fight by the rules,
   and for another kind of challenge (a tense negotiation, a rite, a deadly hazard) by a ruling that fits how hard it
   was.
+- If the PC dies, the player may go on in this world with a new character: make it with them with `new_pc`. The
+  player can also go back to before a line of theirs and play on from there; that's theirs to do, not yours.
 
 ## Levelling up
 - This game doesn't use the optional multiclassing or feat rules.

@@ -198,3 +198,22 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   2C didn't cause it (the old prompt does it as much), and no wording breaks it once the conversation is full of it.
   Nothing kept.
 - Final report: REPORT-set2-final.md.
+
+### After the second set: going back, edits, a new PC (2026-10-17, Jake's design)
+- Going back (dm/branch.py): a snapshot before each player line (sheet, companions, fight, clock, where the
+  conversation stood; the notebook is rebuilt from write_lore calls). /redo <turn> [line] forks into a new save,
+  leaving the old one as it was: the SDK session is forked at that point (resume_session_at), the API conversation
+  cut there, or, after a cut since, opened with the turns so far word for word. /edit <text> rewrites the DM's
+  latest reply in the transcript (the old text kept as kind "edited") and in its conversation (SDK: the session
+  file, then a reconnect). The sheet, clock and notebook stay. Buttons in dm/web.html and dm/page.html: ↺ on each of
+  the player's lines, and "Edit the DM's reply". Checked live on the SDK: after an edit the DM answered from the
+  edited text; a fork had a new session without the old line, and the source session file was unchanged.
+- The closing status line: a sentence "You have N of M hit points ..." in the reply's last paragraph is taken out
+  of the reply and the conversation (kind "trimmed"), unless the player's line asked about their sheet. On the
+  second set's saves it would have fired 48 / 1 / 1 times (bard2 / cleric2 / barbarian2).
+- New PC after a death: new_pc (build, show, then confirm with an opening) and roll_ability_scores, refused unless
+  the PC is dead and no fight is on. The old sheet goes to past_pcs; the instructions are rebuilt next turn. One line
+  in dm/prompt.md: "If the PC dies, the player may go on in this world with a new character: make it with them with
+  `new_pc`. The player can also go back to before a line of theirs and play on from there; that's theirs to do, not
+  yours." Not yet tried live by the DM.
+- No rules files touched (rules/ holds only process notes; there's no rules validator in this repo).
