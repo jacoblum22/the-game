@@ -35,7 +35,10 @@ DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MD
 class Client:
     """One DM conversation in Claude Code. `tools` are ours (dm/model.py Tool), handed to the SDK as they are."""
 
-    def __init__(self, model: str, system: str, tools: list[Tool], cwd: str, session_id: str | None) -> None:
+    def __init__(self, model: str, system: str, tools: list[Tool], cwd: str, session_id: str | None,
+                 fork_at: str | None = None) -> None:
+        """fork_at: an entry of session_id's file; the conversation goes on from there as a new session (a fork, the
+        source left as it was: dm/branch.py)."""
         Path(cwd).mkdir(parents=True, exist_ok=True)
         server = create_sdk_mcp_server("dm", tools=[sdk_tool(t.name, t.description, t.input_schema)(t.handler)
                                                      for t in tools])
@@ -49,6 +52,8 @@ class Client:
             system_prompt={"type": "file", "path": self.system_file}, extra_args={"system-prompt-snapshot": "off"},
             model=model, mcp_servers={"dm": server}, allowed_tools=[f"mcp__dm__{t.name}" for t in tools],
             resume=session_id)
+        if fork_at and session_id:
+            self.options.resume_session_at, self.options.fork_session = fork_at, True
         self.client = ClaudeSDKClient(options=self.options)
         self.session_id = session_id
         self.size = 0  # the conversation's length after the last model call, in tokens

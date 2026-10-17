@@ -4,7 +4,9 @@
     py -3.12 -m dm.play new                # make a character with the DM first
     py -3.12 -m dm.play --resume saves/<file>.json
 
-In play: type what your character does. /sheet shows your sheet, /quit saves and exits.
+In play: type what your character does. /sheet shows your sheet, /quit saves and exits. /back lists your lines;
+/redo <turn> [line] goes back to just before one (sent again, or changed) in a new save; /edit <text> rewrites the
+DM's latest reply (dm/branch.py).
 The DM runs on the Anthropic API, with the key in the ANTHROPIC_API_KEY environment variable.
 """
 
@@ -20,7 +22,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import create, lookup, model
+from dm import branch, create, lookup, model
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -96,6 +98,12 @@ class Game:
         # no username and works on another machine.
         self.cwd: str = str(Path(os.path.expanduser(data.get("cwd", str(SAVES)))))
         self.sdk: Any = None  # the open SDK client while an SDK game is played
+        # Going back (dm/branch.py, owner 2026-10-17): a snapshot before each of the player's lines. A fork's SDK
+        # conversation starts from its source's session at fork_at; an API fork from after a cut opens a new
+        # conversation with the turns so far (rebuild).
+        self.snapshots: list[dict[str, Any]] = data.get("snapshots", [])
+        self.fork_at: str | None = data.get("fork_at")
+        self.rebuild: bool = bool(data.get("rebuild"))
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
 
@@ -103,8 +111,9 @@ class Game:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
                 "transcript": self.transcript, "lore": self.lore, "backend": self.backend,
-                "story": self.story}
+                "story": self.story, "snapshots": self.snapshots}
         data |= ({"session_id": self.session_id, "cwd": home_relative(self.cwd)} if self.backend == "sdk" else {"messages": self.messages})
+        data |= ({"fork_at": self.fork_at} if self.fork_at else {}) | ({"rebuild": True} if self.rebuild else {})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
         on_save(self.path, text)
@@ -698,16 +707,14 @@ async def turn(game: Game | Creation, text: str) -> None:
         if system != game.system:
             game.system = system
             if game.sdk:
-                from dm import sdk  # here: the browser has no Agent SDK
-                await game.sdk.close()
-                game.sdk = sdk.Client(game.model, system, game.tools(), game.cwd, game.session_id)
-                await game.sdk.open()
+                await reconnect(game)
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
-        if game.story and not (game.session_id if game.sdk else game.messages):  # a new conversation after a cut
-            text = so_far(game) + "\n\n" + text
+        if (game.story or game.rebuild) and not (game.session_id if game.sdk else game.messages):
+            text = so_far(game) + "\n\n" + text  # a new conversation after a cut, or a fork from before one
     start = len(game.transcript)
+    edits: list[tuple[str, str]] = []  # (old, new) text the DM's conversation takes back: a trimmed status line
     failed = await ask(game, text, said)
     if isinstance(game, Game):
         tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
@@ -725,11 +732,22 @@ async def turn(game: Game | Creation, text: str) -> None:
             game.log("stub", stub)  # kept in the save, never shown
             held[:], game.reply_len = [], 0
             failed = await ask(game, STUB_ASK.format(stub), said)
+        player = next((e["text"] for e in reversed(game.transcript) if e["kind"] == "player"), "")
+        trimmed = ""
+        if held:
+            new, trimmed = branch.without_stat_line(held[-1], player)
+            if trimmed:
+                edits.append((held[-1], new))
+                held[-1] = new
         for t in held:
             print("\n" + t)
             game.log("dm", t)
+        if trimmed:
+            game.log("trimmed", trimmed)  # kept in the save, never shown
     if failed:
         print(f"\n[the DM call failed: {failed}]")
+    if edits and isinstance(game, Game):
+        await edit_conversation(game, edits)
     game.save()
     if isinstance(game, Game) and not failed and game.size >= CUT_AT:
         await cut(game)
@@ -739,6 +757,8 @@ async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) 
     """One message to the DM, and its whole reply. Returns None, or why the call failed."""
     if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
         failed = await game.sdk.respond(text, on_text)
+        if getattr(game, "fork_at", None) and game.sdk.session_id != game.session_id:
+            game.fork_at = None  # the fork is made: from now on it's a conversation of its own
         game.session_id, game.size = game.sdk.session_id, game.sdk.size
         return failed
     return await model.respond(game.model, game.system, game.tools(), game.messages, text, on_text, game.save,
@@ -764,11 +784,30 @@ SUMMARY_ASK = (
 
 def so_far(game: Game) -> str:
     """The opening of a conversation after a cut: the DM's summary, and the turns after it word for word, up to the
-    player's line now being sent."""
-    end, now = game.story[-1]["turn"], notebook.now(game.transcript)
+    player's line now being sent. With no summary yet (a fork from before the first cut), every turn word for word."""
+    now = notebook.now(game.transcript)
+    end = game.story[-1]["turn"] if game.story else -1
     turns = "\n\n".join(t for n in range(end + 1, now) if (t := notebook.turn_text(game.transcript, n)))
+    if not game.story:
+        return f"[The game so far, word for word: turns 0 to {now - 1}]\n{turns}"
     return (f"[The story so far: your own summary of turns 0 to {end}, written when the conversation was cut short]\n"
             f"{game.story[-1]['text']}\n\n[Turns {end + 1} to {now - 1}, word for word]\n{turns}")
+
+
+async def reconnect(game: Game) -> None:
+    """An SDK game's Claude Code conversation, opened again: after its instructions changed or its session file was
+    edited (Claude Code keeps the conversation in memory while it's open)."""
+    from dm import sdk  # here: the browser has no Agent SDK
+    await game.sdk.close()
+    game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, game.session_id, game.fork_at)
+    await game.sdk.open()
+
+
+async def edit_conversation(game: Game, pairs: list[tuple[str, str]]) -> None:
+    """The DM's conversation takes each old text back for its new one (dm/branch.py)."""
+    branch.edit_conversation(game, pairs)
+    if game.sdk:
+        await reconnect(game)
 
 
 async def cut(game: Game) -> None:
@@ -924,7 +963,7 @@ class Session:
         if isinstance(g, Game) and not g.session_id:
             g.cwd = str(sdk.DM_HOME)
         g.sdk = sdk.Client(g.model, g.system, g.tools(), g.cwd if isinstance(g, Game) else str(sdk.DM_HOME),
-                           g.session_id)
+                           g.session_id, getattr(g, "fork_at", None))
         await g.sdk.open()
 
     async def close(self) -> None:
@@ -947,15 +986,17 @@ class Session:
         name = sheet["name"].split()[0].lower()
         await self.play(Game({"sheet": sheet, "model": self.model, "backend": self.backend}, new_save(f"{name}-{stamp}")))
 
-    async def play(self, game: Game) -> None:
+    async def play(self, game: Game, show_last: bool = True) -> None:
         await self.close()
         self.game, self.creation = game, None
         game.system = system_prompt(game.sheet, game.companions)
         await self.connect(game)
-        print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-        if game.messages or game.session_id or game.story:
+        print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, "
+              "/back lets you go back, /quit exits.")
+        if game.messages or game.session_id or game.story or game.rebuild:
             last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
-            print("\n" + last)
+            if show_last:
+                print("\n" + last)
         else:
             await turn(game, "[Start] Begin the session. Begin with a short introduction before the first scene: a few "
                              "sentences on the world and region, who the character is and how they came to be here. "
@@ -988,9 +1029,53 @@ class Session:
         if line == "/sheet":
             print(sheet_report(game))
             return True
+        if line == "/back" or line.startswith(("/redo", "/edit")):
+            await self.back(game, line)
+            return True
+        game.snapshots.append(branch.snapshot(game))
         game.log("player", line)
         await turn(game, f"[The player]\n{line}")
         return True
+
+    async def back(self, game: Game, line: str) -> None:
+        """Going back (dm/branch.py). /back lists the lines you can send again. /redo <turn> [line]: the game as it
+        was just before your line of that turn, in a new save, and that line sent again (or the one given instead).
+        /edit <text>: the DM's latest reply becomes text (\\n for a new paragraph), and the DM reads it from now on;
+        what the reply did to the sheet, clock and notebook stays."""
+        cmd, _, rest = line.partition(" ")
+        if cmd == "/back":
+            found = branch.lines(game)
+            print("\n".join(f"  {t}: {x}" for t, x in found[-20:]) or "  nothing yet")
+            print("/redo <turn> sends that line again (/redo <turn> <new line> sends a different one), in a new save; "
+                  "/edit <text> rewrites the DM's latest reply.")
+            return
+        if cmd == "/edit":
+            try:
+                pairs = branch.edit_transcript(game, rest.replace("\\n", "\n"))
+            except LookupError as e:
+                print(f"[{e}]")
+                return
+            await edit_conversation(game, pairs)
+            game.save()
+            # the web pages redraw the reply from the first line on (dm/web.html, page.html)
+            print("[the DM's reply, as you edited it:]")
+            print("\n" + pairs[0][1])
+            print("\n[the DM reads your version from now on; the sheet, clock and notebook stay as they are]")
+            return
+        num, _, new = rest.strip().partition(" ")
+        try:
+            data = branch.fork_data(game, int(num))
+        except (LookupError, ValueError) as e:
+            print(f"[{e if isinstance(e, LookupError) else 'which turn? /back lists them'}]")
+            return
+        again = new.strip() or next(x for t, x in branch.lines(game) if t == int(num))
+        game.save()
+        fork = Game(data, new_save(f"{game.path.stem.split('-fork')[0]}-fork"))
+        print(f"[going back to turn {num}; {game.path.name} stays as it was]")
+        await self.play(fork, show_last=False)
+        print("\n> " + again)  # as if typed: the web pages show it as the player's line
+        await self.line(again)
+
 
 def sheet_report(game: Game) -> str:
     """What /sheet shows: the PC's part as before (the web page lays it out as one card); companions after it."""

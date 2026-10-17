@@ -172,7 +172,8 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None) -> None:
             self.tools, self.cwd, self.session_id, self.closed, self.size = {t.name: t for t in tools}, cwd, session_id, False, 0
             opened.append(self)
 
@@ -225,7 +226,8 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None) -> None:
             self.system, self.session_id, self.closed, self.size = system, session_id, False, 0
             opened.append(self)
 
@@ -345,7 +347,8 @@ def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None) -> None:
             self.session_id, self.closed, self.size, self.got = session_id, False, 0, []
             opened.append(self)
 
