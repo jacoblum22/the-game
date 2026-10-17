@@ -1,0 +1,1156 @@
+## Day (77 sentences in 68 rounds)
+R16: It is now 1 AM on Day 2.
+R38: It is 8 AM on Day 3, and the long rest is done.
+R45: It is twenty past midnight on Day 4.
+R48: It is a quarter to eleven on Day 4.
+R56: It is twenty past six on Day 5.
+R68: The long rest ends at ten to five on Day 6, and the lamp by the shrine is still burning.
+R70: It's a quarter to seven on Day 6.
+R71: It's about half past seven on Day 6.
+R72: It's twenty past eight on Day 6.
+R73: It's half past four on Day 6.
+R74: It's ten to five on Day 6.
+R75: It's half past six on Day 6.
+R76: As for Pell and Dorrin, Berra Fenner promised oil weekly and the rota began on Day 4.
+R76: You wake at ten to five on Day 7, before dawn, with the stone cold under your pallet.
+R77: It's ten past one on Day 7.
+R78: It's twenty past two on Day 7.
+R79: It's five o'clock on Day 7.
+R80: That would be the one you passed on Day 4, past the ford.
+R80: You wake on Day 8 at ten to five, with all your slots, Channel Divinity, and your hit points full, and the lantern on the barn porch is still lit.
+R81: The candles are the five that were left over from Day 3, and Pell's watch has its own.
+R81: It's half past eleven on Day 8.
+R81: The ruined chapel past the ford is about an hour south of the inn, an hour short of Greywater, on the road you walked on Day 4, and the afternoon is long and bright.
+R82: It's a quarter past one on Day 8.
+R83: It's twenty to two on Day 8.
+R84: It's five to three on Day 8.
+R85: You wake at ten to five on Day 9 with all your prayers, Channel Divinity, and 17 hit points.
+R86: It is ten to nine on Day 9.
+R87: It's half past ten on Day 9.
+R88: It's a quarter to eight on Day 9.
+R89: It's a quarter past nine on Day 9.
+R90: It's close to ten at night on Day 9.
+R91: It's twenty past ten on Day 9, and the ghoul is below you in the dark.
+R92: It's about twenty-five past ten on Day 9.
+R93: It's twenty-five to eight on Day 10.
+R94: It's a quarter to nine on Day 10.
+R97: It's ten to nine on Day 10.
+R98: You delivered all of it on Day 4, and the skein and the news about the lamp went to her and to Hob since.
+R98: It's a quarter past one on Day 10.
+R99: The long rest ends at twenty to eight on Day 11.
+R100: It's ten past five on Day 11, with Reedholm about a day and a half on.
+R101: It's eleven minutes past eight on Day 11.
+R102: It's a quarter past ten on Day 11.
+R103: It's twenty-six minutes to eleven on Day 11.
+R104: It's just after midnight on Day 12.
+R105: The long rest ends at a quarter past eight on Day 12.
+R106: At a quarter past five on Day 12, the light going orange, you reach the Black Ford.
+R107: It's a quarter to eight on Day 12.
+R108: It's six o'clock on Day 13, grey and still.
+R109: It's ten past noon on Day 13.
+R110: It's ten to one on Day 13.
+R111: It's seven in the morning on Day 14.
+R112: On Day 9 he crossed to the Isle at dusk alone in his skiff, to prove it and to fetch back the cutters' lost knives and a bundle of tools left behind.
+R112: It's half past three on Day 14.
+R113: It's five to four on Day 14.
+R115: It's twenty to six on Day 14.
+R116: At half past six on Day 15 the mist is thin and silver, and the village fires are still high.
+R116: It's ten past seven on Day 15.
+R117: It's twenty past seven on Day 15.
+R118: It's twenty-three minutes past seven on Day 15.
+R119: It's twenty-five minutes past seven on Day 15.
+R155: It's half past six on Day 2.
+R163: It's half past ten on Day 2.
+R164: It's a quarter past eleven on Day 2.
+R165: It's noon on Day 2.
+R166: It's half past six on Day 2.
+R167: It is half past six on Day 3, and you have a rested morning.
+R168: You'll go out at first light on Day 4, which is tomorrow.
+R168: It is a quarter past seven on Day 3, and you have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R170: Your last one ended at half past six on Day 2, more than a day ago, so the rules allow another.
+R170: It's eight o'clock on Day 3.
+R171: It's half past four on Day 4.
+R173: It's about six o'clock on Day 4.
+R174: It's a little after a quarter past six on Day 4.
+R176: It's about one o'clock on Day 4.
+R177: It is nearly two o'clock on Day 4.
+R178: It's ten past three on Day 4.
+R179: It is nearly seven on Day 4 and the light is going.
+
+## Divinity (69 sentences in 66 rounds)
+R34: Channel Divinity (once per rest): Turn Undead, where each undead that can see or hear you within 30 feet must make a Wisdom save (DC 13) or be turned for a minute, and Preserve Life, which restores up to 10 HP split among creatures within 30 feet, up to half their maximum each.
+R35: You are now a level 2 cleric with 17 hit points, and you have three first-level slots, one of them ready now, and Channel Divinity once per rest.
+R38: You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity ready, and a Hit Die back, so you now have both.
+R49: You have all three prayers ready, three 1st-level slots, and Channel Divinity.
+R55: Hit points 17 of 17, all three slots and your Channel Divinity restored, and both Hit Dice back.
+R58: You have three 1st-level slots, Cure Wounds and Healing Word both ready, and Channel Divinity's Preserve Life, with 10 hit points to divide among those at half their maximum or less.
+R59: Your Channel Divinity is spent until your next rest, and you have two 1st-level slots left.
+R59: You have two prayers left and no Channel Divinity, and a vault under the second arch that you have never seen.
+R60: You have two prayers left and no Channel Divinity.
+R61: You have two 1st-level slots, no Channel Divinity, Protection from Evil and Good ready with its powder, and Shield of Faith.
+R62: You still have two 1st-level slots, your mace, and no Channel Divinity.
+R68: Your prayers come back clean, with all three 1st-level slots and Channel Divinity, and your hit points are full.
+R72: You have one 1st-level slot, Channel Divinity, and 100 XP to go for level 3.
+R73: You have one 1st-level slot and Channel Divinity, 100 XP short of level 3.
+R75: The light is going, you've kept your promises, and you have one 1st-level slot with Channel Divinity ready.
+R76: Your hit points are full at 17, all three 1st-level slots are back, and Channel Divinity is ready.
+R77: You have 800 XP, 100 short of level 3, and all three 1st-level slots and Channel Divinity ready.
+R78: You have all three slots and Channel Divinity, and you're 100 XP short of level 3.
+R79: Your slots are full and your Channel Divinity is ready, and you're 100 XP short of level 3.
+R80: You wake on Day 8 at ten to five, with all your slots, Channel Divinity, and your hit points full, and the lantern on the barn porch is still lit.
+R81: You have all your slots, Channel Divinity, and 100 XP to go for level 3.
+R82: You have all your slots, Channel Divinity, Protection from Evil and Good and its powder, forty-five flasks of oil, and the road to Greywater a short walk beyond.
+R83: You have all your slots and Channel Divinity, and forty-five flasks of oil.
+R84: Your slots are full and your Channel Divinity is ready, and you have the afternoon and night in Greywater.
+R85: You wake at ten to five on Day 9 with all your prayers, Channel Divinity, and 17 hit points.
+R87: You have your new slots, Channel Divinity, and a letter for Brother Ansel.
+R88: You have all your slots and Channel Divinity, at 24 of 24 hit points.
+R90: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and forty-five flasks of oil.
+R91: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and a flask of oil in your hand.
+R92: You have three 1st-level slots, two 2nd-level slots, Channel Divinity, and forty-four flasks.
+R93: The long rest ends at twenty-five to eight, and you wake with 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R94: You have four 1st-level and two 2nd-level slots, Channel Divinity, Protection from Evil and Good with its powder, and thirty-eight flasks of oil.
+R95: You have three 1st-level slots, two 2nd-level slots, Channel Divinity, and a lantern at your belt.
+R97: You have three 1st-level slots, two 2nd-level slots, Channel Divinity, and thirty-seven flasks.
+R98: You have three 1st-level slots, two 2nd-level slots, Channel Divinity, and thirty-seven flasks of oil.
+R99: You wake with 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Channel Divinity ready.
+R100: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and thirty-seven flasks.
+R101: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and a fire that will last till midnight.
+R102: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and your door barred.
+R103: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, the willow-bark, and Lesser Restoration.
+R104: You have four 1st-level slots, one 2nd-level slot, and Channel Divinity, and you can't finish a long rest until a quarter to eight at the earliest.
+R105: You wake with 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R106: You have four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R107: You have four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R109: You have four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R110: You have four 1st-level slots, two 2nd-level slots, and Channel Divinity.
+R111: You have four 1st-level slots and no 2nd-level slots, and Channel Divinity.
+R112: You wake at half past three in the afternoon with 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Channel Divinity ready.
+R113: You have four 1st-level slots, no 2nd-level slots, and Channel Divinity.
+R114: You have four 1st-level slots, no 2nd-level slots, and Channel Divinity.
+R115: You can land at first light tomorrow with four 1st-level slots, Channel Divinity, and no 2nd-level slots.
+R115: You have four 1st-level slots, no 2nd-level slots, and Channel Divinity.
+R116: You have four 1st-level slots, no 2nd-level slots, and Channel Divinity.
+R117: The rope is tied off to the skiff behind you, and you have four 1st-level slots and Channel Divinity.
+R118: The skiff is far behind you, and you have three 1st-level slots and Channel Divinity.
+R119: You have three 1st-level slots and Channel Divinity.
+R120: You are unhurt, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good on you.
+R121: You have two 1st-level slots, Channel Divinity, and about nine minutes of Protection from Evil and Good.
+R122: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R123: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R125: You are at 12 of 24 hit points, with one 1st-level slot and no Channel Divinity.
+R126: You're at 12 of 24 hit points, with one 1st-level slot and no Channel Divinity.
+R127: You're at 12 of 24 hit points, with one 1st-level slot and no Channel Divinity.
+R128: Each round the wisp has roughly one chance in eight of landing 9 lightning damage on you, even while you dodge, and your last slot and your Channel Divinity won't stretch that far.
+R128: You're at 12 of 24 hit points, with one 1st-level slot and no Channel Divinity.
+R129: You have 12 of 24 hit points, one 1st-level slot, and no Channel Divinity.
+R130: You are at 12 of 24 hit points, with no spell slots and no Channel Divinity, and your last Protection from Evil and Good is still holding.
+R131: You are at 1 of 24 hit points, with no spell slots and no Channel Divinity.
+R135: You are at 1 of 24 hit points, with no spell slots and no Channel Divinity.
+
+## Isle (38 sentences in 28 rounds)
+R107: Three nights ago, at dusk, he saw Ode Rush's nephew Jory pole a skiff out toward the Isle with a lantern, alone.
+R107: Pim's lean-to has room on the floor for two, and the punt, if you wished, could carry you out toward the Isle by moonlight.
+R108: Jory's skiff set out from Reedholm's north landing, the Rush staithe, and headed west-northwest across open water to the Isle, about a mile out.
+R108: The lights, he says, first showed by the Isle's south tip, then crept to its west side, closer to the village channel.
+R109: Her husband Tam died of the fever, and her nephew Jory is lost on the Isle.
+R110: The pallets are stuffed with cut Isle reeds, and so are the thatch-bundles stacked on half the roofs for repairs.
+R111: The Isle is a mile out across the fen, and the Wick-fires have been seen in daylight mist from the landing this morning.
+R112: On Day 9 he crossed to the Isle at dusk alone in his skiff, to prove it and to fetch back the cutters' lost knives and a bundle of tools left behind.
+R112: The mist has not lifted all day, and the watcher says the Wick-fires showed at noon, three of them, low over the Isle's west side, nearer than before.
+R114: All three hold steady over the west side, pale and low and silent, and the cold that rolls off the Isle is a damp, unhealthy cold.
+R114: You know the Isle's shape now, the cut reeds, the gap on the west, and the three lights, and not whether Jory is alive.
+R115: The three pale glows hang over the west side of the Isle in the dusk.
+R116: The three pale Wick-fires hang over the Isle's west side as before, steady and quiet.
+R138: Wick and Gorm go back to the Isle with half the village in daylight, with salt and fire and the old rites for the dead.
+R146: You ask where the other three lie and who has handled the Isle's reeds or water.
+R146: Nobody in Reedholm has cut Isle reeds since the burning that Wren's own elders remember, she says.
+R146: They stand at the end of the west walk after dusk, hold up a candle toward the Isle, and say the old rhyme.
+R148: The three on the Isle do not move at all.
+R154: From the water to the west, three pale lights hang over the Isle as they always have.
+R155: Beyond him a mile of mist and the low shape of the Isle wait.
+R156: The fen is quiet, a heron stalks the shallows, and the three pale lights hang over the Isle's west side as they have all week, steady even in the morning.
+R156: The Isle is a low grassy hump, forty paces long and sedge-grown, with a raw swathe of old cut reeds long since grown back thin and grey-green.
+R158: You go round the Isle on the north side, with the grassy hump between you and the lights.
+R161: Behind you the three lights hang over the west side of the Isle, and the sarcophagus is still sealed in the dark.
+R162: Behind you, out on the water, the three lights are still pale over the Isle, and the stone still lies there with its seal unbroken.
+R163: Then you tell Wren and Ode what you saw on the Isle, away from the others, by the rope-post: the sealed sarcophagus rimed with frost, the three lights, and the fallen stone carved with a lamp, a reed and a wave.
+R163: Then she tells you that Wick and Gorm went back to the Isle once, years ago, after the burial of a man the village still speaks of: a young healer who died on the fen in a skiff.
+R163: Out on the water, small and far, the three pale lights hang over the Isle.
+R164: I'll only say this: a man who cured half a village and left you a trade did something that outlasts the Isle.
+R164: "He said the Isle was the seventh mound, of seven.
+R165: Out beyond the shutters, the three pale lights hang over the Isle in the grey midday, doing exactly what they were set there to do.
+R166: The three lights hang over the Isle exactly as they have every night.
+R167: The three pale lights are faint over the Isle in the dawn.
+R169: In the west, the three pale lights are coming up again over the Isle as the dusk deepens.
+R171: Out on the water the three pale lights hang over the Isle, as faint as breath.
+R174: After a long minute they lift and drift west, away along the flank of the Isle, back to the low square gap where they sit.
+R179: The dead on the Isle, the Wave-Keeper's wife, or the village for not paying all these years?
+R180: The second rushlight is lit on the Isle, and the third will be needed tomorrow at dusk.
+
+## Wren (37 sentences in 27 rounds)
+R49: Her name is Wren, a dyer's daughter of twelve or so, and she looks at you directly.
+R50: You show Wren how to change the dressing each morning and each night, with boiled water and fresh honey, and she nods gravely and repeats every step back to you.
+R50: Wren takes you next to a low house on the village's east lane, where a thin, tired woman stands in the doorway with a baby on her shoulder.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R51: Perrin Gale is waiting in the dye-sheds, the one who won't let anyone look at his fall, and Wren stands in the lane with her basket, watching you.
+R54: Whether she'd take Wren is another matter, and one the dyer's daughter's parents must also answer.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R56: Wren stirs at the first full light, blinks at your blanket, and sits up in alarm as if she had overslept her own life.
+R68: Mother Aldith is a few streets away, Perrin's hip and Wren's letter are still on your conscience, and the carter and the two children will need watching today.
+R73: Perrin and Wren are a certain errand, and the Reach is a day behind that.
+R73: On the lane by the dye-sheds, Wren sees you first.
+R74: She'll have Wren on trial for a month, too, once Maud takes her down.
+R74: Maud, when Wren tells her about the month in Stonebridge, only says, "I'll go.
+R85: Your question about the trip: Stonebridge lies south of Greywater, and the Ford Chapel lies north, so Maud and Wren aren't going past it either way.
+R87: Wren is waiting on the chapel step with her basket, and she runs to the cart before it stops.
+R87: Wren and Maud are ready to go, Perrin is on his stool at the vat, and the road to Stonebridge is a day's walk.
+R88: Persuasion (20): he is quiet a long while, then looks at Wren, who is trying very hard not to look at him.
+R93: Ansel has porridge on the table, and Wren and Maud come in from Aldith's with news: she looked at Perrin's hip at dawn, grunted, and has kept him in the back room since.
+R97: Perrin's hip is being seen to, Wren is learning, and Ansel's book has its six names.
+R138: The next morning Wren is up before dawn, counting breaths at a sick child's cot, humming a tune she doesn't know the words to.
+R146: Wren points to the back corner, where three small shapes lie under one blanket.
+R146: Nobody in Reedholm has cut Isle reeds since the burning that Wren's own elders remember, she says.
+R150: Wren sits two pallets down with her hands folded, awake, saying nothing.
+R150: You know it, because Wren said it to you an hour ago.
+R152: You tell Wren quietly, "It spoke one word: candle.
+R152: The four children sleep on, and Wren holds your hand just a moment longer than she needs to.
+R153: You ask how far the ford is, and Wren says it's a twenty-minute walk along the raised bank path.
+R155: Wren checks them every hour, and each time she touches the amulet at her neck.
+R162: The mist has burned thin, and Wren stands at the end of the west walk with her arms folded and her face set.
+R163: Wren checks them herself before you can offer, and reports with her usual flatness that all four are sitting up and asking for porridge.
+R163: Then you tell Wren and Ode what you saw on the Isle, away from the others, by the rope-post: the sealed sarcophagus rimed with frost, the three lights, and the fallen stone carved with a lamp, a reed and a wave.
+R164: " Wren's jaw tightens, and she gives one short nod and looks at the water.
+R164: Out past the shutters the three lights are pale over the water, and Wren stands in the doorway, listening with her arms folded.
+R165: The book is open in your hands, and the letter to Pell and Dorrin is half-written on Wren's knee.
+R168: By Wren's count and Ode's, the work is a day of gathering and mixing, clay carried from the bank, salt weighed, rushlights twisted, and the skiff made ready.
+R169: Wren spares you an hour, and she spends it the way she spends everything, counting.
+R175: Wren is farther back, arms folded, counting heads in the skiff, and her shoulders drop when she gets to three.
+
+## Shape (24 sentences in 24 rounds)
+R141: - Wild Shape: twice per short rest, beasts of CR 1/4 or less with no flying or swimming.
+R155: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, Wild Shape, and your prepared list as it stands: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Thunderwave, with Acid Arrow and Darkness always ready.
+R156: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R157: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R158: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R159: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R160: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R161: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R162: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R163: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R164: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R165: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R166: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R168: It is a quarter past seven on Day 3, and you have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R169: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R172: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, Wild Shape ready, and Thunderwave among your spells.
+R173: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R174: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R175: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R176: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R177: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R178: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R179: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+R180: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Wild Shape ready.
+
+## Reedholm (25 sentences in 23 rounds)
+R98: Before you leave, Captain Voss, who walked with you, gives you one more thing: Reedholm.
+R99: The east branch goes to Reedholm along a causeway, two days on foot, with a ferry-rope at the Black Ford, which a boy keeps.
+R100: It's ten past five on Day 11, with Reedholm about a day and a half on.
+R103: She gives her name between coughs: Marta Quill, a reed-cutter's wife from Reedholm.
+R104: As far as she knows, about fifteen in Reedholm are sick, out of perhaps sixty.
+R105: Reedholm is a day and a half on.
+R106: Reedholm lies beyond the ford, about half a day further on.
+R107: Reedholm is half a day on, and the track beyond the ford is dark.
+R108: Jory's skiff set out from Reedholm's north landing, the Rush staithe, and headed west-northwest across open water to the Isle, about a mile out.
+R108: Reedholm is about half a day's walk on, and Pim has the punt ready.
+R109: A little before noon the reeds open, and Reedholm comes into view: twenty low houses on stilts and mud-brick plinths, thatched with reed and patched with new green bundles, joined by plank walks over the shallows.
+R137: Brannoc Ashdown dies in the stern of a green-hulled skiff, a mile from Reedholm, with the amulet of old Mother Edda at his chest and a boy named Jory alive in the bow.
+R138: Then the fires on the landing flare up, and Ode Rush stands at the staithe with her pole-hook and half of Reedholm behind her, with torches.
+R138: Reedholm says your name as one of its own.
+R139: It would be years on, with Reedholm grown from a fen village into a river-landing people travel to on purpose.
+R141: It's a damp grey dusk, years after Brannoc, and Tamsin is walking the old river road toward Reedholm, with a green-white light in a dream she can't shake.
+R143: You are at the edge of Reedholm with a lantern, your pole, a full set of slots, and 24 of 24 hit points.
+R146: Nobody in Reedholm has cut Isle reeds since the burning that Wren's own elders remember, she says.
+R161: Reedholm is thirty-odd minutes ahead.
+R162: You come in to the Reedholm landing at five past nine.
+R164: You turn to Ode and ask whether anyone in Reedholm keeps the old tales or any record of the Lamp and the three marks.
+R165: On the last written page, in a different, rushed hand, written in Reedholm, are four lines.
+R166: She goes out to the landing, and within the hour every skiff in Reedholm has a rope round its bow, and Wick Hale stands at the end of the west walk with a spear and a bad temper.
+R175: Reedholm's landing comes up out of the grey at five past seven.
+R180: You reach the Reedholm landing at about twenty-five to eight.
+
+## Good (20 sentences in 20 rounds)
+R35: Two that might fit what you've seen are Protection from Evil and Good, which turns aside undead among other things, and Detect Poison and Disease.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R39: It is enough for three castings of Protection from Evil and Good.
+R61: You have two 1st-level slots, no Channel Divinity, Protection from Evil and Good ready with its powder, and Shield of Faith.
+R82: You have all your slots, Channel Divinity, Protection from Evil and Good and its powder, forty-five flasks of oil, and the road to Greywater a short walk beyond.
+R94: You have four 1st-level and two 2nd-level slots, Channel Divinity, Protection from Evil and Good with its powder, and thirty-eight flasks of oil.
+R95: Then you lay a hand on Bede's shoulder, since he's nearest, and sprinkle a pinch of your powdered silver and iron over him with the prayer of Protection from Evil and Good.
+R120: You are unhurt, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good on you.
+R121: You have two 1st-level slots, Channel Divinity, and about nine minutes of Protection from Evil and Good.
+R122: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R123: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R124: You are at 12 of 24 hit points, with two 1st-level slots and nine minutes of Protection from Evil and Good.
+R125: Protection from Evil and Good has about nine minutes left.
+R126: Protection from Evil and Good has about nine minutes left, and the village is perhaps twenty-five minutes away by pole.
+R127: The village is still a long pole away, and Protection from Evil and Good has about eight minutes left.
+R130: You are at 12 of 24 hit points, with no spell slots and no Channel Divinity, and your last Protection from Evil and Good is still holding.
+R133: Protection from Evil and Good has about eight minutes.
+R134: Protection from Evil and Good has about eight minutes.
+R135: Protection from Evil and Good has about eight minutes left.
+R136: Protection from Evil and Good has about eight minutes.
+
+## Evil (20 sentences in 20 rounds)
+R35: Two that might fit what you've seen are Protection from Evil and Good, which turns aside undead among other things, and Detect Poison and Disease.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R39: It is enough for three castings of Protection from Evil and Good.
+R61: You have two 1st-level slots, no Channel Divinity, Protection from Evil and Good ready with its powder, and Shield of Faith.
+R82: You have all your slots, Channel Divinity, Protection from Evil and Good and its powder, forty-five flasks of oil, and the road to Greywater a short walk beyond.
+R94: You have four 1st-level and two 2nd-level slots, Channel Divinity, Protection from Evil and Good with its powder, and thirty-eight flasks of oil.
+R95: Then you lay a hand on Bede's shoulder, since he's nearest, and sprinkle a pinch of your powdered silver and iron over him with the prayer of Protection from Evil and Good.
+R120: You are unhurt, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good on you.
+R121: You have two 1st-level slots, Channel Divinity, and about nine minutes of Protection from Evil and Good.
+R122: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R123: You are at 12 of 24 hit points, with two 1st-level slots, Channel Divinity, and Protection from Evil and Good still on you.
+R124: You are at 12 of 24 hit points, with two 1st-level slots and nine minutes of Protection from Evil and Good.
+R125: Protection from Evil and Good has about nine minutes left.
+R126: Protection from Evil and Good has about nine minutes left, and the village is perhaps twenty-five minutes away by pole.
+R127: The village is still a long pole away, and Protection from Evil and Good has about eight minutes left.
+R130: You are at 12 of 24 hit points, with no spell slots and no Channel Divinity, and your last Protection from Evil and Good is still holding.
+R133: Protection from Evil and Good has about eight minutes.
+R134: Protection from Evil and Good has about eight minutes.
+R135: Protection from Evil and Good has about eight minutes left.
+R136: Protection from Evil and Good has about eight minutes.
+
+## Pim (25 sentences in 20 rounds)
+R107: Pim's lean-to has room on the floor for two, and the punt, if you wished, could carry you out toward the Isle by moonlight.
+R108: Pim knows more than he thought he did.
+R108: Sedge came back from Stonebridge sick, and Pim hasn't seen him since.
+R108: Reedholm is about half a day's walk on, and Pim has the punt ready.
+R109: Ode Rush, as Pim and Marta describe her, is about fifty-five, broad and weathered, with a reed-cutter's scarred hands and a flat voice.
+R144: You press a third copper into Pim's palm and ask the dog's name.
+R154: Pim doesn't speak at first.
+R155: A skiff is tied at the west landing, tarred black with a blue eel on the bow, and Pim stands in it with a pole, a coil of rope, and Tar sitting very straight in the stern.
+R156: At ten past seven, Pim eases the skiff into a reed-lee at the south tip.
+R157: You tell Pim to hold the skiff steady in the lee for eleven minutes and keep his pole ready.
+R157: You ask whether he told Pim.
+R157: Pim looks at you across the skiff with his eyebrows raised, because you have been talking to his dog for eleven minutes.
+R158: Pim and the skiff are on the other side of the island, about a quarter of an hour away if you hurry.
+R160: Pim is a quarter hour away round the shore, still counting.
+R161: You step aboard with your pole, Tar leaps in after you, and Pim shoves off.
+R163: When Pim takes the first handful of earth, you take a handful too, and so does everyone else in turn, even Ode.
+R169: Two sacks of salt stand in the skiff, with six rushlights, a bucket of plug under wet sacking, and Pim's old pole.
+R172: Pim ties the skiff off to a half-sunk stone, and no one speaks.
+R173: Pim, crouched at your elbow, hands you the first rushlight without a word.
+R175: "Pim, that's the first door shut.
+R175: You give the box of five to Pim, and he holds it against his chest as he would hold a loaf.
+R176: Pim will cross at dusk, and the west gap and the frost sarcophagus are as they were.
+R177: Pim will cross at dusk to light the rushlight, and the west gap and the frost sarcophagus are as they were.
+R178: It is not yet dusk, and Pim waits at the landing for the hour to cross.
+R180: After a moment you step back from the ring, nod to Pim, and the two of you pole away with the mound between you and the lights.
+
+## Greywater (25 sentences in 19 rounds)
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R40: The rota is underway, and Greywater lies a day's walk down the valley, with a weaver there who doesn't know her brother is dead.
+R40: It is about half past eleven in the morning, and you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first.
+R41: Greywater is a day's walk.
+R42: About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole.
+R44: His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days.
+R45: In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+R46: At about nine, the road bends and Greywater comes into view below, a cluster of slate roofs along the river, with racks of dyed wool drying red and blue and ochre in rows along the bank, and a weir turning white across the water.
+R49: Three people in Greywater are suffering with no one to see to them.
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+R69: It's two lines: who you are, who sent you, and that a girl in Greywater wants to learn.
+R72: The road north is a day to Greywater and beyond that the Reach, and the valley south of Stonebridge is yet unwalked.
+R73: By half past four the slate roofs of Greywater come up out of the afternoon haze, with the dye racks red and blue along the bank and the weir white and loud.
+R80: One is the burial hill above Stonebridge, and the other is somewhere near the old ruined chapel on the valley road between the Millstone Inn and Greywater, the one with the fallen roof.
+R80: The road to Stonebridge is two days on foot, by way of the Millstone Inn and Greywater, eight hours to Greywater and another eight to the bridge.
+R80: Four of the seven mounds are known to you now, and the nearest unvisited one may be the ruined chapel on the road, a few hours short of Greywater.
+R81: It's been three days, no blue on his lips, and Garn took him a week's care of honey and broth and is off to Greywater again with his cart.
+R81: The ruined chapel past the ford is about an hour south of the inn, an hour short of Greywater, on the road you walked on Day 4, and the afternoon is long and bright.
+R82: You have all your slots, Channel Divinity, Protection from Evil and Good and its powder, forty-five flasks of oil, and the road to Greywater a short walk beyond.
+R83: You note the bones, the slab, and the position of the ruin: an hour south of the Millstone Inn, an hour short of Greywater, with a barrow mound hidden behind the brambles at its back.
+R83: Greywater is an hour on, with a chapel, a dyer's family who owe you no debt but a good will, and Maud, who knows most of the valley.
+R84: You reach Greywater a little before three, with the dye racks red and gold in the afternoon light.
+R84: Your slots are full and your Channel Divinity is ready, and you have the afternoon and night in Greywater.
+R85: Your question about the trip: Stonebridge lies south of Greywater, and the Ford Chapel lies north, so Maud and Wren aren't going past it either way.
+R98: The one small thing left is the last word Hob gave you for her, "tell Maud the lamp was lit," which you passed on in Greywater when you told her.
+
+## Hob (24 sentences in 18 rounds)
+R9: At the last bend, where the trees thin and the dark shape of a squat stone lamp-house crouches ahead against the sky, Hob's free hand rises and falls across your chest like a gate.
+R11: Hob stands about 10 feet behind you, rigid, the pale lantern shaking in his fist.
+R13: Hob had tried to bind his wounds with shaking dead hands, and he could not stop the bleeding.
+R20: Hob stands in its light a long time, looking south, his unlit lantern held toward a road he cannot walk.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R23: Hob keeps watch on the step the whole night.
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+R39: You lay it out simply: Hob keeps the Lamp, but a man who is dead cannot be asked to bear it forever, and a light needs hands that can fetch oil and trim a wick.
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R40: You tell her about the arrows and the burning oil, and that Hob, the dead keeper, wept for him in his own dry way and kept the light burning over him.
+R40: It is about half past eleven in the morning, and you could leave for Greywater now and arrive by dusk, rest another day in the Reach, or take Hob a word first.
+R41: Hob sits on the step as he sat in the night, lantern in his lap.
+R42: The five candles stand in a row on the step, and Hob looks down at them and then up at you.
+R43: You could say your name and that you come from Hob, and that the shawl is in your pack, before you tell her the harder thing.
+R47: I said, 'Hob, you'll die in that damned lamp-house and nobody'll know for a month.
+R48: At last she wipes her face with her sleeve and looks at you with Hob's steady eyes in a living face.
+R48: Hollow Reach has its rota, Hob has his sister, and the road runs on in two directions.
+R76: " You promise to hang it in the lamp-house yourself, and to tell Hob that his sister is coming early next week, talking all the way.
+R80: It is the only road you know of that fits what Hob heard, though Hob couldn't say where it surfaces.
+R97: " You tell her it's the one Hob heard, the last of the band you know of.
+R97: Hob counted four, and you've seen four fall.
+R98: You delivered all of it on Day 4, and the skein and the news about the lamp went to her and to Hob since.
+R98: The one small thing left is the last word Hob gave you for her, "tell Maud the lamp was lit," which you passed on in Greywater when you told her.
+R165: At the Wayfarers' Lamp, Hob told him the Lamp "holds the road at its head" and must be tended by living hands as well as the dead keeper.
+
+## Stonebridge (24 sentences in 17 rounds)
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+R53: Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+R55: Stonebridge is a day's walk down the valley.
+R56: You tell her you are going to Stonebridge with her letter, and that her parents should hear it from her first, before any road is chosen.
+R56: " At last they agree, on conditions: a one-month trial only, with Maud Marrow to go with her to Stonebridge when the weather holds, and a return at harvest if either of them wishes it.
+R56: You have all three prayers, a letter delivered, a hip to speak for, and the valley road down to Stonebridge, a day's walk, which you could take now.
+R57: Your questions: Stonebridge is a day's walk by the valley road, about eight hours at a steady pace, and you will arrive in the afternoon.
+R57: At twenty past two the town rises out of the valley haze: Stonebridge, a walled huddle of timber and tile at the foot of a long stone bridge of seven arches.
+R72: The road north is a day to Greywater and beyond that the Reach, and the valley south of Stonebridge is yet unwalked.
+R74: Maud, when Wren tells her about the month in Stonebridge, only says, "I'll go.
+R75: Maud says she'll take the girl down to Stonebridge in two days, once the loom order is done.
+R75: There is also the unwalked road south of Stonebridge.
+R79: The ghouls have gone south, along a road under the hill, toward Stonebridge, and you've already met two of them there.
+R80: One is the burial hill above Stonebridge, and the other is somewhere near the old ruined chapel on the valley road between the Millstone Inn and Greywater, the one with the fallen roof.
+R80: The road to Stonebridge is two days on foot, by way of the Millstone Inn and Greywater, eight hours to Greywater and another eight to the bridge.
+R85: Your question about the trip: Stonebridge lies south of Greywater, and the Ford Chapel lies north, so Maud and Wren aren't going past it either way.
+R87: She says she'll pack the loom-stool and a blanket, and they can leave for Stonebridge within the hour if you'll walk with them as far as the first milestone.
+R87: Wren and Maud are ready to go, Perrin is on his stool at the vat, and the road to Stonebridge is a day's walk.
+R88: The river runs on your left, and the seven arches of Stonebridge come up out of the dusk at a quarter to eight.
+R97: The road south of Stonebridge is unwalked, and nothing else holds you here.
+R103: She set out two nights ago to reach Stonebridge for a healer for her little son Dab, and was turned back at a flooded stretch of the causeway, so she's been trying to get home.
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+R108: Sedge came back from Stonebridge sick, and Pim hasn't seen him since.
+R165: The village's carters go north to Stonebridge twice a month, and from there word can reach Hollow Reach.
+
+## Maud (18 sentences in 14 rounds)
+R43: As for what you say first to Maud, that is yours to decide, but the simple truth is probably kindest.
+R49: You thank Maud once more, and she gives your hand a last squeeze and shoos you out.
+R50: You wash it with warm salt water, trim the dead skin back to the clean edge with the small knife from your pack, and spread honey thin over the raw places, honey from Maud's own jar.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+R74: She'll have Wren on trial for a month, too, once Maud takes her down.
+R74: He thanks you in three clumsy words, Maud tells him to sit down before he falls down, and he presses a small leather purse into your hand.
+R74: Maud, when Wren tells her about the month in Stonebridge, only says, "I'll go.
+R75: Maud says she'll take the girl down to Stonebridge in two days, once the loom order is done.
+R76: Your question about supplies: you have two day-rations, the heel of Maud's loaf, Hale's dried apples, and the jar of honey.
+R78: " You tell him Maud is coming early next week, and he nods slowly and says he'll sweep for her.
+R78: You tell him in your own words: Maud knows, she cried, she kept the shawl, she is coming up with a loom-stool, and she is going to talk the whole time.
+R83: Greywater is an hour on, with a chapel, a dyer's family who owe you no debt but a good will, and Maud, who knows most of the valley.
+R85: Your question about the trip: Stonebridge lies south of Greywater, and the Ford Chapel lies north, so Maud and Wren aren't going past it either way.
+R85: Maud says they'll wait a day and leave once the slab is dealt with.
+R87: Wren and Maud are ready to go, Perrin is on his stool at the vat, and the road to Stonebridge is a day's walk.
+R93: Ansel has porridge on the table, and Wren and Maud come in from Aldith's with news: she looked at Perrin's hip at dawn, grunted, and has kept him in the back room since.
+R98: The one small thing left is the last word Hob gave you for her, "tell Maud the lamp was lit," which you passed on in Greywater when you told her.
+
+## Hollow Reach (15 sentences in 13 rounds)
+R13: Hollow Reach is a mile south, with fifteen people behind a barred door and a boy with a fevered bite who needs you by dawn.
+R20: Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R32: If you want it lit all night, you will need more oil from Hollow Reach, and someone to tend it.
+R32: At the edge of Hollow Reach the dogs bark once, and then people come out, one door at a time, women with their sleeves still floury, two old men, children held back by the wrist.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+R48: Hollow Reach has its rota, Hob has his sister, and the road runs on in two directions.
+R53: Your prayers will come back by morning if you rest here, and Hollow Reach and the Lamp are a day behind you, with the road down to Stonebridge ahead.
+R72: You take your leave of Ansel, who gives you a hard, warm hand and a word: come back, and bring a letter from Hollow Reach for the wall, since the shrine keeps a book of the faithful.
+R75: The road north goes back to Hollow Reach and the Lamp, a day and a half away.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+R163: There's a Wayfarers' Lamp at a village called Hollow Reach, a long way up the river, and a keeper there who was dead and still kept it lit.
+R165: As far as she knows, the Lamp at Hollow Reach still burns.
+R165: The village's carters go north to Stonebridge twice a month, and from there word can reach Hollow Reach.
+
+## Jory (15 sentences in 13 rounds)
+R107: Three nights ago, at dusk, he saw Ode Rush's nephew Jory pole a skiff out toward the Isle with a lantern, alone.
+R108: Jory's skiff set out from Reedholm's north landing, the Rush staithe, and headed west-northwest across open water to the Isle, about a mile out.
+R109: Her husband Tam died of the fever, and her nephew Jory is lost on the Isle.
+R112: Jory is nineteen, her late husband's sister's boy, and she raised him from twelve.
+R113: You walk down to the landing and stand beside Ode, and tell her what you told yourself: the fever is breaking, and Jory is next, but you won't cross the water tonight.
+R114: You look hard for Jory's skiff, and your Perception is a natural 1, a 4 in all.
+R114: You know the Isle's shape now, the cut reeds, the gap on the west, and the three lights, and not whether Jory is alive.
+R115: The cost of waiting is a night and a day more for Jory, if he lives, and a daylight window that is shorter than you'd like.
+R120: Jory lies about twenty feet ahead at the gap's sill, watching with wild eyes.
+R122: Jory is alive, white-faced, and clinging on.
+R125: You cover the last ten feet and swing Jory into Gorm's arms, then leap in after him, and the skiff rocks hard.
+R137: Brannoc Ashdown dies in the stern of a green-hulled skiff, a mile from Reedholm, with the amulet of old Mother Edda at his chest and a boy named Jory alive in the bow.
+R137: Jory is alive because of him.
+R138: Wick poles the skiff with his teeth set and his eyes wet, and Gorm lies over Jory the whole way, as you told him.
+R147: Jory is a grown man now and has kept the fire-tale for years.
+
+## Cal (17 sentences in 12 rounds)
+R9: Cal goes first with his bow strung and a hooded lantern, shuttered to a sliver.
+R9: Cal has stopped too, bow half-raised.
+R11: Cal is crouched in the ferns off your left, roughly 20 feet from them, bow in hand with the oil jar and lit hooded lantern beside him.
+R11: Their reach is 5 feet and they move 30 feet a turn, so they can be on you before Cal gets two arrows off.
+R11: You could hurl oil yourself (throw range 20 feet), have Cal handle it on his turn, throw it, shoot your crossbow, hold the path with your shield, or something else.
+R13: At 0 HP you were out cold, stable but unconscious, and Cal went down beside you.
+R13: The last ghoul's claws came down on Cal while he lay paralyzed, and he did not get up.
+R14: You have 1 HP, no spells, and Cal's body.
+R15: Or go now, at 1 HP, with no spells, carrying Cal, or leaving him under the lamp's light for the Widow's folk to fetch.
+R16: You tuck Cal's coat around him and fold his hands, and speak the short prayer for the dead over him, with the lamp's steady gold light across his face.
+R17: Cal's jar shattered at the ghoul's feet and burned out in two rounds.
+R22: Because of the game's two nights of horror, the world will remember what happened to Brannoc and Cal.
+R25: Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while.
+R32: You tie the four of them onto Dobb's handcart with their coats tight around them, lay Cal's longbow beside, and take up the shafts.
+R40: Nessa Tarn is a small, weathered woman with Cal's quick dark eyes, and she looks at the bow in your hands before she looks at your face.
+R40: " She will put Cal's name on the rota and go up with the others, and she asks that you leave her Edda's hymn, the one you hummed, because she heard it from the barn the first night and it was the only thing that let her sleep.
+R48: She asks about the village, and you tell her about the Reach and the barn, about Cal and the others, and the five candles on the step.
+
+## Word (12 sentences in 12 rounds)
+R23: Your hit points are back to 10 of 10, and both prayers are with you again: Cure Wounds, Healing Word, Guiding Bolt, the others, ready on your tongue.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R46: Your answer first: Healing Word restores hit points and nothing else, so it can't ease a fever or a bad chest.
+R58: You have three 1st-level slots, Cure Wounds and Healing Word both ready, and Channel Divinity's Preserve Life, with 10 hit points to divide among those at half their maximum or less.
+R63: Shield of Faith and Healing Word both take a bonus action, and you only get one bonus action each turn.
+R71: Healing Word is ready, with two 1st-level slots left.
+R88: You teach her the first line of the hymn that goes with Healing Word, the plain words only.
+R109: The rest you'd help another way: Medicine, willow-bark, clean water, rest, Healing Word for the weak, Preserve Life's 15 hit points shared out, and your hands.
+R141: I'd suggest Healing Word (a ranged fix for a bleeding friend) and Thunderwave, or Speak with Animals, since it's a ritual.
+R145: You have a full set of slots, including Cure Wounds and Healing Word, and 24 of 24 hit points.
+R155: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, Wild Shape, and your prepared list as it stands: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Thunderwave, with Acid Arrow and Darkness always ready.
+R170: You have six prepared: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Speak with Animals, with Acid Arrow and Darkness always ready.
+
+## Wick-fires (12 sentences in 12 rounds)
+R99: The lights over the drowned barrow are pale green-white and seen on moonless nights, and the reed-cutters call them the Wick-fires.
+R104: The Wick-fires began that week.
+R107: Nobody has crossed to the Hollow Isle since the Wick-fires began, except one.
+R111: The Isle is a mile out across the fen, and the Wick-fires have been seen in daylight mist from the landing this morning.
+R112: The mist has not lifted all day, and the watcher says the Wick-fires showed at noon, three of them, low over the Isle's west side, nearer than before.
+R113: And there are the Wick-fires: three pale green-white glows hanging low over the west side, still and steady even in daylight.
+R116: The three pale Wick-fires hang over the Isle's west side as before, steady and quiet.
+R117: The three pale Wick-fires hang over the west side, still and silent.
+R118: You can make out the dark square of the gap, low in the grassy flank, and the three Wick-fires hanging above it.
+R119: The three Wick-fires turn.
+R120: As you come on, the three Wick-fires drop on you, each trailing a bright, crackling tail.
+R145: It started when the first of the Wick-fires came back.
+
+## Tam (12 sentences in 11 rounds)
+R1: A big man, Tam's father, has a torn, bound thigh and a gray face.
+R1: Tam tugs your hand toward his father.
+R5: Behind you, in the dim, Tam is whispering to his father.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R33: Tam presses against his father's side.
+R35: You see Tam on the barn step with his father's crutch across his knees, watching you, and when you nod he lifts a hand.
+R38: Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you.
+R42: Tam runs alongside for half a field, calls "Come back!
+R77: Tam sees you from the barn lane and comes running with his shirt untucked and his father's crutch banging behind him on the wall.
+R80: Tam sits beside your pallet until his mother calls him, and he doesn't ask again if you're staying.
+R104: Three are dead: old Hobb Sallow, a baby, and a reed-cutter named Tam Rush.
+R109: Her husband Tam died of the fever, and her nephew Jory is lost on the Isle.
+
+## Hodd (15 sentences in 11 rounds)
+R59: By half past three there is a lamp lit by every cot, and a bowl of oil beside each, and his apprentice, a freckled boy named Pip, runs to fetch Hodd.
+R60: By a quarter past four you are on the bridge with Hodd and the guards, looking over the parapet at the second arch.
+R60: Perception (14): the stair door is as Hodd said, a rusted grating, but a rusted chain hangs loose and the padlock is not rusted through; it has been forced from inside.
+R61: Hodd fetches two long lamp-poles from the bridge, and you hang four lit lanterns over the parapet, so that gold light falls down the stair's throat and shines on the wet steps.
+R61: Five guards and Hodd stand ready, the capstones are in the yard, and below the arch the lamplight holds.
+R62: The first capstone slid against the grating, the oak wedges went through the bars, Hodd tamped clay into the gaps, and Athletics (20) said the work went fast and sure.
+R67: All five guards and Hodd put their shoulders to the capstone and drive it home against the bars.
+R67: Hodd mutters that he'll add a second stone in the morning and have the watch look at the niches every night.
+R68: Hodd nods and says he'll stand the first watch himself, since he's the one who didn't look for thirty years.
+R69: Hodd's watch saw nothing and heard nothing.
+R72: Hodd says he'll set the second stone today and wants a priest's blessing on it.
+R88: Lanterns are lit along the parapet, and Hodd's niche-lamps glow under the second arch.
+R89: Hodd told the guard that the water under the second arch has been running oddly cold for two nights, and a mist has hung there at dawn.
+R90: Hodd climbed down to trim them himself an hour ago.
+R90: Hodd says he's heard it for two nights and told the captain.
+
+## Brannoc (12 sentences in 10 rounds)
+R20: Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+R22: Because of the game's two nights of horror, the world will remember what happened to Brannoc and Cal.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+R54: How does Brannoc spend the last of the evening, and which prayers does he prepare?
+R57: She says "Yes, sir," and then, after a moment, "Brannoc," and you both smile at it.
+R110: Marta steps forward, shaky but loud, and says she was dead on her feet in the Eel Fork hut and walked home on Brannoc's arm.
+R137: Brannoc Ashdown dies in the stern of a green-hulled skiff, a mile from Reedholm, with the amulet of old Mother Edda at his chest and a boy named Jory alive in the bow.
+R140: In the notebook, Brannoc taught her to dress a burn, tell fever from chill and watch a baby's breathing, and he wrote the letter to Mother Aldith that won her the apprenticeship.
+R140: Brannoc's sheet is still the one on file, and it reads dead.
+R141: That's 10 at 1st level (8 + CON 2) and 7 each at 2nd and 3rd, taking the fixed 5 + 2, as we did for Brannoc.
+R141: It's a damp grey dusk, years after Brannoc, and Tamsin is walking the old river road toward Reedholm, with a green-white light in a dream she can't shake.
+R166: You have Brannoc's prayer book in your pack, a village at your back that has put a rope round every boat, and a tomb of frost a mile off whose lid you were told not to break.
+
+## Mother Aldith (11 sentences in 10 rounds)
+R53: Mother Aldith keeps a house in Stonebridge, the market town a day's walk further down the valley past Greywater.
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R57: Mother Aldith's house is somewhere in the town, and Perrin's hip is a promise you carry.
+R58: Tobin, a boy of nine, has a badly crushed ankle that will need Mother Aldith's setting, and he is shivering with shock.
+R67: Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+R68: Mother Aldith's house is on the tanners' lane, about four streets from the hospice, a short walk.
+R68: Mother Aldith is a few streets away, Perrin's hip and Wren's letter are still on your conscience, and the carter and the two children will need watching today.
+R88: Tobin is there, and Mother Aldith's house on the tanners' lane is a few streets on.
+R138: Then he walks to Mother Aldith's with it and puts it in the hands of the girl who holds the lamp steady.
+R140: In the notebook, Brannoc taught her to dress a burn, tell fever from chill and watch a baby's breathing, and he wrote the letter to Mother Aldith that won her the apprenticeship.
+
+## Perrin (11 sentences in 10 rounds)
+R54: Your questions: Maud and Perrin both had something to say about Mother Aldith by the time you came for supper.
+R55: You carry the letter for Mother Aldith and Perrin's hip, and Wren's question, which is still unanswered.
+R57: Mother Aldith's house is somewhere in the town, and Perrin's hip is a promise you carry.
+R68: Mother Aldith is a few streets away, Perrin's hip and Wren's letter are still on your conscience, and the carter and the two children will need watching today.
+R73: Perrin and Wren are a certain errand, and the Reach is a day behind that.
+R74: "And Perrin's been sitting on the stool for two days, and he asked me what you meant about the bonesetter.
+R74: Perrin is sitting on the three-legged stool at his vat, scowling at the madder with his chin up.
+R87: Wren and Maud are ready to go, Perrin is on his stool at the vat, and the road to Stonebridge is a day's walk.
+R93: Ansel has porridge on the table, and Wren and Maud come in from Aldith's with news: she looked at Perrin's hip at dawn, grunted, and has kept him in the back room since.
+R97: Perrin's hip is being seen to, Wren is learning, and Ansel's book has its six names.
+R98: " Perrin, white and sweating, says it's the first time in a month he could feel his foot.
+
+## Ansel (12 sentences in 10 rounds)
+R57: We had a cart go over on the bridge this morning, three hurt, and Ansel's only got the two hands.
+R67: Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+R72: You take your leave of Ansel, who gives you a hard, warm hand and a word: come back, and bring a letter from Hollow Reach for the wall, since the shrine keeps a book of the faithful.
+R73: He promises to light the niches every dusk and send word to Ansel at the first scratch.
+R73: Ansel or Captain Voss could tell you more if you asked, and it's worth asking before you go.
+R75: The chapel is yours for the night if you want it, and Ansel asked you to send a letter from the Reach.
+R78: Joss, Wil and Widow Harrow are an hour's walk back at the Reach, and a letter for Ansel's book needs writing.
+R90: You take your lantern and three flasks, tell Ansel you'll be back within the hour, and walk the two streets to the bridge.
+R90: Ansel's cot is two streets away, and your prayers can't be refreshed until the morning.
+R93: Ansel has porridge on the table, and Wren and Maud come in from Aldith's with news: she looked at Perrin's hip at dawn, grunted, and has kept him in the back room since.
+R97: Perrin's hip is being seen to, Wren is learning, and Ansel's book has its six names.
+R138: Ansel turns it over for a night.
+
+## Ode (10 sentences in 9 rounds)
+R110: The sick lie in the Long House, Ode's own hall on stilts, eighteen pallets in two rows, with shutters closed and the air thick.
+R113: You walk down to the landing and stand beside Ode, and tell her what you told yourself: the fever is breaking, and Jory is next, but you won't cross the water tonight.
+R162: Ode gives one short nod, which from her is a great deal.
+R163: When Pim takes the first handful of earth, you take a handful too, and so does everyone else in turn, even Ode.
+R163: Then you tell Wren and Ode what you saw on the Isle, away from the others, by the rope-post: the sealed sarcophagus rimed with frost, the three lights, and the fallen stone carved with a lamp, a reed and a wave.
+R164: You turn to Ode and ask whether anyone in Reedholm keeps the old tales or any record of the Lamp and the three marks.
+R168: By Wren's count and Ode's, the work is a day of gathering and mixing, clay carried from the bank, salt weighed, rushlights twisted, and the skiff made ready.
+R172: " Gorm looks as if he wants to argue, since Ode promised you two pairs of hands, but he glances at the horn on Ode's neck and keeps his mouth shut.
+R176: You step onto the planks and tell Ode plainly, "The north crack is sealed and held.
+R177: Ode, watching from the Long House step, says the bell was never rung in her lifetime or her mother's, and that nobody remembers who hung it.
+
+## Wil (9 sentences in 8 rounds)
+R2: The two quiet ones are brothers, Pell and Dorrin Harrow, Wil's elder brothers.
+R2: "Joss and the old man were struck near dusk last night, and Wil at the fence just before dawn.
+R7: But it is also a dead keeper wrapped in rags at your door, and Wil is feverish, and the dark outside is deepening, and something called the hungry ones is under the stones of a shrine a mile north.
+R14: A full night's rest would restore your prayers, but it would be morning before you reached Wil.
+R15: You would wake at full HP with both prayers back, and Wil's wound would have had a full night to fester.
+R22: Resting first would have cost Wil a few hours of fever, and you would have walked in at dawn with both prayers and full hit points.
+R35: You carry Edda's amulet, a cart of the dead has gone to its rest, and your long rest can begin at midnight beside Wil's bed, in the Harrow barn, by the hearth.
+R38: Wil's slow breathing and the hearth's low crackle hold the barn like a held hand, and Tam, curled in straw at the foot of your pallet with his father's crutch across him, never has to wake you.
+R78: Joss, Wil and Widow Harrow are an hour's walk back at the Reach, and a letter for Ansel's book needs writing.
+
+## Pell (10 sentences in 8 rounds)
+R2: The two quiet ones are brothers, Pell and Dorrin Harrow, Wil's elder brothers.
+R2: Pell is asleep with a deep gash on his arm and is simply exhausted, but Dorrin lies still with his eyes half open, barely waking when you say his name, and his skin is cold and damp.
+R25: Pell wakes while you work, a lanky lad with his mother's jaw, and watches the torn edges of his arm knit together under your hand as if it were happening to someone else.
+R39: Pell speaks first, awkwardly.
+R76: As for Pell and Dorrin, Berra Fenner promised oil weekly and the rota began on Day 4.
+R78: Nessa went up on the second day with Pell, he says, carrying a cup of oil in both hands like a child with a candle.
+R78: Pell sits on a stool by the door with a knife and a half-carved spoon.
+R79: You leave ten of your fifty flasks, no, five, on the shelf by the door for Pell's watch, and tell him to send word through Brother Ansel if the stones ever stir.
+R81: The candles are the five that were left over from Day 3, and Pell's watch has its own.
+R165: The book is open in your hands, and the letter to Pell and Dorrin is half-written on Wren's knee.
+
+## Edda (8 sentences in 8 rounds)
+R14: The hymn comes without your deciding it, the low one Edda sang over the dead, and it steadies your breathing.
+R20: After a while he takes Edda's plain wooden amulet from your chest, wipes it clean on his sleeve, and carries it back to the barn in both hands, to the one person left there who knows how to pray.
+R21: Hob still keeps the lamp, Tam still carries Edda's amulet, and Hollow Reach has not forgotten the healer who came on the first night.
+R35: You carry Edda's amulet, a cart of the dead has gone to its rest, and your long rest can begin at midnight beside Wil's bed, in the Harrow barn, by the hearth.
+R40: " She will put Cal's name on the rota and go up with the others, and she asks that you leave her Edda's hymn, the one you hummed, because she heard it from the barn the first night and it was the only thing that let her sleep.
+R54: You also teach her the first line of Edda's hymn, and she hums it badly and with great seriousness.
+R87: Corwin wipes his hands on his apron and says the first thing he's said to you all morning that isn't about rope: "Edda's boy.
+R137: Brannoc Ashdown dies in the stern of a green-hulled skiff, a mile from Reedholm, with the amulet of old Mother Edda at his chest and a boy named Jory alive in the bow.
+
+## Wounds (8 sentences in 8 rounds)
+R23: Your hit points are back to 10 of 10, and both prayers are with you again: Cure Wounds, Healing Word, Guiding Bolt, the others, ready on your tongue.
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R52: Cure Wounds restores hit points, and by my ruling it does not unset a month-old hurt that has already healed wrong.
+R58: You have three 1st-level slots, Cure Wounds and Healing Word both ready, and Channel Divinity's Preserve Life, with 10 hit points to divide among those at half their maximum or less.
+R145: You have a full set of slots, including Cure Wounds and Healing Word, and 24 of 24 hit points.
+R147: So you take his hand and cast Cure Wounds at 1st level, and the warmth heals 10 hit points.
+R155: You have 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, Wild Shape, and your prepared list as it stands: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Thunderwave, with Acid Arrow and Darkness always ready.
+R170: You have six prepared: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Speak with Animals, with Acid Arrow and Darkness always ready.
+
+## Restoration (8 sentences in 8 rounds)
+R35: First, a correction on Lesser Restoration.
+R49: At 3rd level you would gain two 2nd-level slots, and Lesser Restoration is a Life domain spell for 3rd level.
+R87: You have four 1st-level slots and two 2nd-level slots, and the new always-prepared spells are Lesser Restoration and Spiritual Weapon.
+R99: Lesser Restoration touches a creature and ends one disease or one of four conditions: blinded, deafened, paralyzed, or poisoned.
+R103: You have four 1st-level slots, two 2nd-level slots, Channel Divinity, the willow-bark, and Lesser Restoration.
+R104: Then you lay your hand on her burning forehead, say the prayer of Lesser Restoration, and spend one of your 2nd-level slots.
+R109: With two 2nd-level slots you can cast Lesser Restoration twice a day, on two people at most, one disease each.
+R115: That means no Lesser Restoration if the dead mound's chill takes anyone, and no Spiritual Weapon.
+
+## Tobin (9 sentences in 8 rounds)
+R58: Tobin, a boy of nine, has a badly crushed ankle that will need Mother Aldith's setting, and he is shivering with shock.
+R58: Round Tobin's ankle, under the swelling, are long gray finger-marks, four of them, spread wide, with a cold, blue-white burn at each tip like frost-bite.
+R59: Imma has little to give back, since her knock has taken her nearly to nothing, and so does Tobin.
+R60: The niches on the arch hold two empty lamp-flasks and one overturned, and beside the third niche, on the stone, are long gray finger-marks, four of them, spread wide, like the ones on Tobin's ankle.
+R67: Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+R71: It restores hit points as a bonus action and wouldn't straighten a bone, but it would ease his body's hurt now, and Tobin is a small boy who has just been through a bad quarter hour.
+R72: You say the few words of the prayer, and eight points of life settle into Tobin.
+R88: Tobin is there, and Mother Aldith's house on the tanners' lane is a few streets on.
+R89: As for the Stair, Aldith says she went to the hospice at noon and reset Tobin's ankle herself, and it sat right the second time.
+
+## Bede (11 sentences in 8 rounds)
+R60: Voss listens to your account in the guardhouse doorway with her arms folded, and then gives you two guards, Bede, a big slow man with a halberd, and Corra, a young woman with a short sword and a quick eye.
+R61: Bede returns at half past five, red-faced and sweating, with two more guards, a sledge, an iron bar, and fifty flasks of oil in two sacks.
+R62: Your answer to the guards first: neither Bede nor Corra has fought a ghoul.
+R62: Corra knows only the tavern tales, and Bede has never seen one.
+R62: The claws bit deep through your chain mail, and your body locked stiff, paralysed for one long moment, while Bede and Corra stabbed at the thing through the bars.
+R62: Bede and Corra hold either side of you, 11 HP each, and a second ghoul waits behind the first.
+R67: Bede has 5 HP, a bruised pride and no lasting harm.
+R72: Two guards, Bede and a new man, lean on the parapet.
+R73: Bede grins and says he'll take the night watch himself.
+R95: Then you lay a hand on Bede's shoulder, since he's nearest, and sprinkle a pinch of your powdered silver and iron over him with the prayer of Protection from Evil and Good.
+R98: You help Bede and Corra pack the last clay into the slab.
+
+## Gorm (9 sentences in 8 rounds)
+R110: She lets you in, under the eyes of two reed-cutters, Gorm and Wick Hale, who'll go where you go.
+R113: She says her best poler is Wick Hale, who knows every channel in the fen, and that he and Gorm will go with you.
+R124: Wick and Gorm are shouting from the bank, ten feet away.
+R125: You cover the last ten feet and swing Jory into Gorm's arms, then leap in after him, and the skiff rocks hard.
+R138: Wick poles the skiff with his teeth set and his eyes wet, and Gorm lies over Jory the whole way, as you told him.
+R138: Wick and Gorm go back to the Isle with half the village in daylight, with salt and fire and the old rites for the dead.
+R163: Then she tells you that Wick and Gorm went back to the Isle once, years ago, after the burial of a man the village still speaks of: a young healer who died on the fen in a skiff.
+R168: Men, I'll give you Wick and Gorm, who've done it before.
+R172: " Gorm looks as if he wants to argue, since Ode promised you two pairs of hands, but he glances at the horn on Ode's neck and keeps his mouth shut.
+
+## The Millstone Inn (8 sentences in 7 rounds)
+R42: About six hours' walk down the valley road, two hours short of Greywater, stands the Millstone Inn, an old mill turned to lodging by a stout widow named Hesper Cole.
+R43: At ten to seven, with the sun low and gold behind you, the Millstone Inn comes up out of the river mist: a big old mill of gray stone, its waterwheel still turning, lamps lit in every window, smoke rising from two chimneys.
+R76: That's enough for a day and a half to the Reach if you eat plainly, and the Millstone Inn is on the road, where Hesper would feed you anyway.
+R77: You pass the Millstone Inn about seven.
+R80: One is the burial hill above Stonebridge, and the other is somewhere near the old ruined chapel on the valley road between the Millstone Inn and Greywater, the one with the fallen roof.
+R80: The road to Stonebridge is two days on foot, by way of the Millstone Inn and Greywater, eight hours to Greywater and another eight to the bridge.
+R81: At about half past eleven, the Millstone Inn comes into view with its wheel turning in the stream.
+R83: You note the bones, the slab, and the position of the ruin: an hour south of the Millstone Inn, an hour short of Greywater, with a barrow mound hidden behind the brambles at its back.
+
+## Hesper (8 sentences in 7 rounds)
+R44: Hesper says the cough started three days ago, that he brings up a thick yellow-gray phlegm in the morning, and that no one else in the inn is sick.
+R44: You could sit up with him, check him through the night, ask more of Hesper, or try a different approach tomorrow.
+R45: You eat Hesper's onion-and-barley stew, standing, and are back at the boy's side before the bowl is cold.
+R46: Hesper wakes you at first gray with a mug of hot tea.
+R76: That's enough for a day and a half to the Reach if you eat plainly, and the Millstone Inn is on the road, where Hesper would feed you anyway.
+R81: Hesper is at the door with her sleeves rolled, and she sees you before you speak.
+R82: He grumbles that a week is a very long time, and Hesper says it's what a week is for.
+R83: Hesper is an hour behind.
+
+## Sedge (9 sentences in 7 rounds)
+R99: A boy named Sedge brought the first fever cases to market last week and went home sick.
+R100: Yes, Sedge is a good first name to ask for.
+R103: Sedge was the first.
+R108: As for help, Ode Rush has sent no one but Marta and Sedge.
+R108: Sedge came back from Stonebridge sick, and Pim hasn't seen him since.
+R110: The sickest is Sedge, a thin boy of thirteen, delirious and grey at the lips, who may not last the night.
+R111: You go to Sedge first.
+R111: The two of them settle, and their breath goes slow and even, and Sedge opens clear eyes and asks, hoarse, whether he's missed the market.
+R138: Sedge, who has been out of bed for two days, brings the bowl of broth you never got to eat and sets it by your hand, then does not know what to do and stands there.
+
+## Long House (7 sentences in 7 rounds)
+R110: The sick lie in the Long House, Ode's own hall on stilts, eighteen pallets in two rows, with shutters closed and the air thick.
+R138: They bury you on the dry rise above the Long House, where the first light comes.
+R145: It's ten past six on a damp evening in the Long House.
+R153: It's twenty past nine on a damp night at the Long House door.
+R169: She walks the Long House with you and names the children one by one.
+R177: Ode, watching from the Long House step, says the bell was never rung in her lifetime or her mother's, and that nobody remembers who hung it.
+R180: A lantern burns in the Long House windows, and the village is shuttering itself for the night.
+
+## Joss (7 sentences in 6 rounds)
+R2: "Joss and the old man were struck near dusk last night, and Wil at the fence just before dawn.
+R33: Joss says four hands could put it over the gap before dark, but he cannot go himself, and every strong young man the Reach had is lying in a row on a cart.
+R78: Joss, Wil and Widow Harrow are an hour's walk back at the Reach, and a letter for Ansel's book needs writing.
+R79: At Joss's table you help him with the letter, which takes an hour.
+R80: Joss and Garrit are glad of the question, and they argue it for an hour over a jug of small beer.
+R80: You carry Joss's letter, and you are 100 XP from level 3.
+R88: Joss's letter is for Brother Ansel, whose hospice is past the tannery.
+
+## Dobb (6 sentences in 6 rounds)
+R23: Dobb said the barn held through the night.
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R28: The oil is gone, and Dobb is rubbing his shoulder and muttering about a second beam.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R32: You tie the four of them onto Dobb's handcart with their coats tight around them, lay Cal's longbow beside, and take up the shafts.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Ilsa (6 sentences in 6 rounds)
+R51: Ilsa's cough is dry and deep, of a fortnight's standing, with an ache under the ribs and a night sweat.
+R54: You sweep the chapel with her, you set the kettle on for Ilsa, and you go twice to the low house on the east lane to count the baby's breaths against a slow sixty.
+R74: Tessa fed all night, and Ilsa slept, and Osric's red has gone back down the arm, and I changed the dressing twice!
+R85: Tessa sleeps easy on her mother's shoulder when you count her breaths, and Ilsa has been up and about all day and is cross to be told to sit.
+R146: They're Fen, a boy of nine, Ilsa, eight, and Bett, seven.
+R170: Afterward you check on Nell, Fen, Ilsa and Bett one last time and tuck their blankets.
+
+## Brother Ansel (6 sentences in 6 rounds)
+R57: It is a small hospice of twelve beds with a plain shrine, kept by a Brother Ansel, and under Shelter of the Faithful you and any companions can expect free healing and care there, provided you bring any material components yourself.
+R58: Inside, Brother Ansel, a lean, gray, bright-eyed man in his sixties with a bandage roll in one hand and a bowl of water in the other, looks up and sees the amulet.
+R79: You leave ten of your fifty flasks, no, five, on the shelf by the door for Pell's watch, and tell him to send word through Brother Ansel if the stones ever stir.
+R87: You have your new slots, Channel Divinity, and a letter for Brother Ansel.
+R88: Joss's letter is for Brother Ansel, whose hospice is past the tannery.
+R138: The word reaches Brother Ansel in nine days.
+
+## Hollow Isle (6 sentences in 6 rounds)
+R104: The sick are those who cut reeds at the Hollow Isle, a low drowned barrow in the fen where they cut thatch two weeks ago after the autumn gale stripped the roofs.
+R105: Garrit named only two of the seven and heard of two more, so whether the Hollow Isle is one of them, or whether the fever has some other cause, you'll know only when you see it.
+R107: Nobody has crossed to the Hollow Isle since the Wick-fires began, except one.
+R113: The Hollow Isle, from the landing: a mile out across the fen, a low reed-ringed hump about forty paces long, grey-green in the mist, with a grey standing stone fallen at its west end.
+R139: Somewhere on the Hollow Isle, or under it, something still waits in the Sleepers' Chain, and your new character could be the one who finds out what it is.
+R147: Perception (22): the Hollow Isle is a long low shape a mile off, and over its west side three pale green-white lights hang very still.
+
+## Wick (8 sentences in 6 rounds)
+R114: At the south tip, about forty paces off, Wick eases the skiff to a stop in the reed-lee and holds her.
+R114: Wick says quietly that the mark in the mud was fresh a week ago.
+R124: Wick and Gorm are shouting from the bank, ten feet away.
+R138: Wick poles the skiff with his teeth set and his eyes wet, and Gorm lies over Jory the whole way, as you told him.
+R138: Wick and Gorm go back to the Isle with half the village in daylight, with salt and fire and the old rites for the dead.
+R163: Then she tells you that Wick and Gorm went back to the Isle once, years ago, after the burial of a man the village still speaks of: a young healer who died on the fen in a skiff.
+R166: At dusk you walk to the end of the west walk, past Wick and his spear, and look out at the water.
+R168: Men, I'll give you Wick and Gorm, who've done it before.
+
+## Tar (6 sentences in 6 rounds)
+R155: A skiff is tied at the west landing, tarred black with a blue eel on the bow, and Pim stands in it with a pole, a coil of rope, and Tar sitting very straight in the stern.
+R156: Tar sits very straight in the stern with his ears forward, a good dog who knows this water as well as his master does.
+R157: You have nine minutes of speech left with Tar.
+R158: It's twenty to eight, and Tar sits at your heel, ears pricked.
+R161: You step aboard with your pole, Tar leaps in after you, and Pim shoves off.
+R174: But Tar spoke of two doors, and the second is the low square gap on the west flank where the lights wait.
+
+## Hit Die (5 sentences in 5 rounds)
+R15: A short rest of 1 hour, in which you could spend your one Hit Die (1d8 + 2) to recover some HP.
+R16: Your Hit Die is spent, and 8 hit points have come back to you.
+R30: Your next long rest can't count until about midnight, so you have no spells until tomorrow, and you have 1 HP, a Hit Die, a mace, and a shield.
+R35: Your Hit Die is back to one of two.
+R38: You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity ready, and a Hit Die back, so you now have both.
+
+## Fenner (6 sentences in 5 rounds)
+R16: Somewhere out there, two ghouls are hunting low, and the cut bank by the Fenner fields lies on the way.
+R17: About forty feet ahead, where the track meets the ditch below the Fenner fields, a long gray shape stands upright in the middle of the road.
+R24: And the two ghouls are still somewhere under the Fenner fields, and a barrow with a second mouth lies a few hundred yards from this barn.
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R30: The two Fenner cousins fought on with a pick and a sledge, and they hurt it badly, but they were farm lads, and they died there too.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+
+## Hennet (7 sentences in 5 rounds)
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R30: Hennet did drag you back from the gap, and he put a hand to your throat and your side and stabilized you with his first aid.
+R30: Hennet pulled you clear, saved your life, and was killed where he knelt.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R32: A girl of eight or nine looks at Hennet's boots on the end of the cart and begins very quietly to cry.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Marl (6 sentences in 5 rounds)
+R26: Dobb gathers his four lads: Hennet, a broad young reed-cutter who is the biggest of them; red-haired Marl, who is quick on his feet; and two Fenner cousins who say little and carry everything.
+R28: Marl strikes flint to a rag and flicks it in after, and the gap blooms orange.
+R30: Its claws took Marl before he could turn, a single stroke, and he fell.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Tessa (7 sentences in 5 rounds)
+R51: The baby is Tessa, a girl of four months, round-faced and flushed, with a damp little fist knotted in her mother's collar.
+R51: Tessa has caught her mother's cough, and is likely to mend as her mother mends.
+R51: You leave a third of Maud's honey, and you tell her to eat when she can and to send Wren for you at once if Tessa's lips go blue, if she won't feed, or if she turns hot and still.
+R54: Tessa sleeps easy on her mother's shoulder both times, the rattle looser than before.
+R56: Before you go you count Tessa's breaths again, a slow sixty by the window.
+R74: Tessa fed all night, and Ilsa slept, and Osric's red has gone back down the arm, and I changed the dressing twice!
+R85: Tessa sleeps easy on her mother's shoulder when you count her breaths, and Ilsa has been up and about all day and is cross to be told to sit.
+
+## Imma (5 sentences in 5 rounds)
+R58: Imma, an eleven-year-old girl who was riding with him, has a head knock, vomits, is drowsy and slow to answer, and should be watched through the night but is not in immediate danger.
+R59: Imma has little to give back, since her knock has taken her nearly to nothing, and so does Tobin.
+R67: Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+R72: Imma tries to give you her last honey-cake and is talked out of it.
+R99: You sit with Imma's father at the cart-yard for a while, and ask the carters what you meant to.
+
+## Corra (8 sentences in 5 rounds)
+R60: Voss listens to your account in the guardhouse doorway with her arms folded, and then gives you two guards, Bede, a big slow man with a halberd, and Corra, a young woman with a short sword and a quick eye.
+R62: Your answer to the guards first: neither Bede nor Corra has fought a ghoul.
+R62: Corra knows only the tavern tales, and Bede has never seen one.
+R62: The claws bit deep through your chain mail, and your body locked stiff, paralysed for one long moment, while Bede and Corra stabbed at the thing through the bars.
+R62: Bede and Corra hold either side of you, 11 HP each, and a second ghoul waits behind the first.
+R64: Corra is untouched, 11 HP, spear ready.
+R65: Corra doesn't wait to be told twice.
+R98: You help Bede and Corra pack the last clay into the slab.
+
+## The Long Cut (5 sentences in 5 rounds)
+R79: Since the Long Cut, that one has not come back.
+R80: He can name only two, the Long Cut and the Lamp, and he has heard of two more but never seen them.
+R84: When the Reach sealed the Long Cut, I gave you 100 XP for it.
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+R165: At the Long Cut and the Drowned Stair he noted that each barrow of the Chain is held by a light, a reed-bond or running water, and that where one fails, the dead walk to the next.
+
+## Ode Rush (5 sentences in 5 rounds)
+R107: Three nights ago, at dusk, he saw Ode Rush's nephew Jory pole a skiff out toward the Isle with a lantern, alone.
+R108: As for help, Ode Rush has sent no one but Marta and Sedge.
+R109: Ode Rush, as Pim and Marta describe her, is about fifty-five, broad and weathered, with a reed-cutter's scarred hands and a flat voice.
+R138: Then the fires on the landing flare up, and Ode Rush stands at the staithe with her pole-hook and half of Reedholm behind her, with torches.
+R162: Ode Rush is beside her, broad and flat-eyed, and a dozen villagers stand behind them in a quiet line.
+
+## Dorrin (5 sentences in 4 rounds)
+R2: Pell is asleep with a deep gash on his arm and is simply exhausted, but Dorrin lies still with his eyes half open, barely waking when you say his name, and his skin is cold and damp.
+R76: As for Pell and Dorrin, Berra Fenner promised oil weekly and the rota began on Day 4.
+R77: The lanterns on the porches are lit in the afternoon, which was Dorrin's doing, no doubt, and not one door is shut.
+R77: He took the oil Berra sent, and Dorrin goes up at dusk, and nothing's come up the track for three nights, nothing at all!
+R165: The book is open in your hands, and the letter to Pell and Dorrin is half-written on Wren's knee.
+
+## Wayfarers' Lamp (4 sentences in 4 rounds)
+R5: Wayfarers' Lamp, up the north track, a stone lamp-house in the beechwoods where old Hob Marrow kept a light burning for travellers.
+R138: Then she walks up the road to the Wayfarers' Lamp with a new blue shawl and her brother's old flint.
+R163: There's a Wayfarers' Lamp at a village called Hollow Reach, a long way up the river, and a keeper there who was dead and still kept it lit.
+R165: At the Wayfarers' Lamp, Hob told him the Lamp "holds the road at its head" and must be tended by living hands as well as the dead keeper.
+
+## Faith (5 sentences in 4 rounds)
+R38: Your prayers for the day are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready.
+R61: You have two 1st-level slots, no Channel Divinity, Protection from Evil and Good ready with its powder, and Shield of Faith.
+R63: Shield of Faith and Healing Word both take a bonus action, and you only get one bonus action each turn.
+R63: Shield of Faith on yourself (AC 20 for up to 10 minutes, concentration) as your bonus action.
+R92: Shield of Faith still holds you for ten minutes.
+
+## Garn (4 sentences in 4 rounds)
+R44: His father, Garn the carter, left him here and went on to Greywater with a load of cloth, and is due back in two days.
+R46: You write a few lines in the margin of a page of your prayer book, tear it neatly out, and leave it under the lamp for Garn: your son is mending, and Brannoc of Hollow Reach sat with him.
+R81: It's been three days, no blue on his lips, and Garn took him a week's care of honey and broth and is off to Greywater again with his cart.
+R98: Garn's three silver went back into his own purse when you refused it, so your sheet is right.
+
+## Dead Road (4 sentences in 4 rounds)
+R61: The vault has a grated drain culvert opening to the river, too small for a man, and an old tale of a sealed passage called the Dead Road, running toward the burial hill outside the walls.
+R67: Down the stair there may be more of them, and the old tale of the Dead Road is still only a tale.
+R80: Yes, you remember the Dead Road.
+R92: The culvert leads back to the vault, and the vault to the Dead Road, and the burial hill outside the walls is the mound you have not seen.
+
+## Aldith (6 sentences in 4 rounds)
+R75: They'll stay a few days with Aldith and see how the month starts.
+R89: Aldith opens it before you knock, flour to the elbows again, and looks at the cart like a woman inspecting a sack of grain.
+R89: Insight (16): Aldith's grumbling is real, but under it she is glad.
+R89: As for the Stair, Aldith says she went to the hospice at noon and reset Tobin's ankle herself, and it sat right the second time.
+R93: Ansel has porridge on the table, and Wren and Maud come in from Aldith's with news: she looked at Perrin's hip at dawn, grunted, and has kept him in the back room since.
+R98: Aldith's Medicine check is a 10, short of the 14 the hip needed.
+
+## The Sleepers' Chain (4 sentences in 4 rounds)
+R80: Garrit's grandmother had a name for it: the Sleepers' Chain, seven mounds on seven hills, joined by a road under the ground that no living foot was meant to walk.
+R86: For overcoming a barrow mouth in the Sleepers' Chain, I've given you 100 XP, so you now stand at 900.
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+R139: Somewhere on the Hollow Isle, or under it, something still waits in the Sleepers' Chain, and your new character could be the one who finds out what it is.
+
+## Mina (5 sentences in 4 rounds)
+R155: Mina's candle burns on the sill through the night, steady and small, and in the small hours the four sick children's breathing eases and the grey in their fingertips fades away to nothing.
+R156: Mina's candle is back in the village, and the three lights haven't stirred.
+R163: "Mina's free, but whatever lies in that tomb still holds the lights, and I'd like to learn what it is before it wakes.
+R163: I give you 150 XP by my ruling for bringing Mina home, 1,250 in all.
+R170: "Stay in tonight, all four, and keep the candle on the sill lit for Mina.
+
+## Wave-Keeper (4 sentences in 4 rounds)
+R164: " The tomb under it, she says, belongs to the Wave-Keeper's wife, who was set to watch the water-road when the keepers made their seals.
+R167: Second, the Wave-Keeper's marks.
+R176: The Wave is the last seal, she says, and the Wave-Keeper's own bell was hung on a post at the water's edge.
+R179: The dead on the Isle, the Wave-Keeper's wife, or the village for not paying all these years?
+
+## Dobb Harrow (3 sentences in 3 rounds)
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+R25: Dobb Harrow is the first: a heavy, quiet man with Cal's family's shoulders, and he takes the longbow from you without a word and holds it a long while.
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+
+## Widow Harrow (3 sentences in 3 rounds)
+R24: " Inside, Widow Harrow looks as if she has not slept in two days, and she does not waste a word.
+R39: Widow Harrow brings a tarnished silver thimble, her grandmother's, and says, "It's no use to a dead woman, and less to a living one.
+R78: Joss, Wil and Widow Harrow are an hour's walk back at the Reach, and a letter for Ansel's book needs writing.
+
+## Ned (3 sentences in 3 rounds)
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R32: Ned's body and the wound: the drag-trail goes down the scree and into the dark at an angle, and you can see only about twenty feet of it before it vanishes under the roof.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Wat (3 sentences in 3 rounds)
+R30: Five men of Hollow Reach died here at your word: Marl, Hennet, Dobb Harrow, and the two Fenner cousins, Wat and Ned.
+R31: You lay the four of them out in a row with their coats over their faces, Dobb and Hennet and Marl and Wat, and say the old words over each, your voice rough, humming where the words give out.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Maud Marrow (3 sentences in 3 rounds)
+R39: Hob's sister is Maud Marrow, a weaver in Greywater, a day's walk down the valley.
+R56: " At last they agree, on conditions: a one-month trial only, with Maud Marrow to go with her to Stonebridge when the weather holds, and a return at harvest if either of them wishes it.
+R70: "Maud Marrow's blankets are the only reason I've not frozen these ten winters.
+
+## Piper (3 sentences in 3 rounds)
+R45: In a few hours Greywater's weaver will be waiting, and you may sleep for a while before the road, or stay longer with Piper.
+R49: It ends one disease or one condition (blinded, deafened, paralyzed, or poisoned), so it would have broken Piper's lung fever outright, and it would end a ghoul's paralysis on you or an ally.
+R82: You tell Piper to keep up the honey water and the eggs, and no running until the cough has been gone a full week.
+
+## Corwin (4 sentences in 3 rounds)
+R56: The father, Corwin, is a large, quiet man with arms stained to the shoulder, and the mother, Hale, is quick and careful and does not stop working while she listens.
+R56: Corwin wipes his hands and says to the vat, not to you, "She's been sweeping that chapel since she was eight.
+R85: You eat at Corwin's table, where nobody talks about the slab, and everyone says early nights.
+R87: Corwin wipes his hands on his apron and says the first thing he's said to you all morning that isn't about rope: "Edda's boy.
+
+## Hale (4 sentences in 3 rounds)
+R56: The father, Corwin, is a large, quiet man with arms stained to the shoulder, and the mother, Hale, is quick and careful and does not stop working while she listens.
+R56: Persuasion (19): they listen all through, and Hale is the one who asks the hard questions: how long, who feeds her, who keeps her safe, what happens if it is not a good fit.
+R76: Your question about supplies: you have two day-rations, the heel of Maud's loaf, Hale's dried apples, and the jar of honey.
+R106: You share the last of the bread and Hale's apples.
+
+## Flame (4 sentences in 3 rounds)
+R63: Your action could then be Sacred Flame on the ghoul (DEX save DC 13, 1d8 radiant) or a step back and the Dodge action.
+R63: It heals 1d4 + 3 + 3, about 8 to 12, and then Sacred Flame as your action.
+R65: Sacred Flame lands first.
+R129: What could hurt them is Sacred Flame, since radiant isn't one of their resistances, though they dodge it well.
+
+## Captain Voss (3 sentences in 3 rounds)
+R73: Ansel or Captain Voss could tell you more if you asked, and it's worth asking before you go.
+R89: And Captain Voss's men have walked the bridge twice a day.
+R98: Before you leave, Captain Voss, who walked with you, gives you one more thing: Reedholm.
+
+## Eel Fork (4 sentences in 3 rounds)
+R99: The river road south forks at a wooden milestone, the Eel Fork.
+R99: Nobody on her watch has been south of the Eel Fork this month.
+R100: You walk nine hours with a rest at noon, and the Eel Fork comes up a little after five: a wooden milestone at the split, with a worn carving of an eel, and the east branch dropping away onto a raised causeway between flooded fields.
+R110: Marta steps forward, shaky but loud, and says she was dead on her feet in the Eel Fork hut and walked home on Brannoc's arm.
+
+## Black Ford (3 sentences in 3 rounds)
+R99: The east branch goes to Reedholm along a causeway, two days on foot, with a ferry-rope at the Black Ford, which a boy keeps.
+R106: At a quarter past five on Day 12, the light going orange, you reach the Black Ford.
+R152: Nine years ago, in the spring flood, the punt rolled at the Black Ford.
+
+## Marta (3 sentences in 3 rounds)
+R108: As for help, Ode Rush has sent no one but Marta and Sedge.
+R109: Ode Rush, as Pim and Marta describe her, is about fifty-five, broad and weathered, with a reed-cutter's scarred hands and a flat voice.
+R110: Marta steps forward, shaky but loud, and says she was dead on her feet in the Eel Fork hut and walked home on Brannoc's arm.
+
+## Wick Hale (3 sentences in 3 rounds)
+R110: She lets you in, under the eyes of two reed-cutters, Gorm and Wick Hale, who'll go where you go.
+R113: She says her best poler is Wick Hale, who knows every channel in the fen, and that he and Gorm will go with you.
+R166: She goes out to the landing, and within the hour every skiff in Reedholm has a rope round its bow, and Wick Hale stands at the end of the west walk with a spear and a bad temper.
+
+## Bram Hale (3 sentences in 3 rounds)
+R112: Two, an elderly cutter named Bram Hale and a mother of four named Dessa Pike, are still hot and dangerous.
+R113: You go to Bram Hale first, an old cutter with a white beard drenched in sweat, and lay your hand on his brow.
+R138: By the third week the thatch is new, the wells are boiled, the last of the sick are on their feet, and Bram Hale and Dessa Pike carry the stones for your cairn.
+
+## Dessa Pike (3 sentences in 3 rounds)
+R112: Two, an elderly cutter named Bram Hale and a mother of four named Dessa Pike, are still hot and dangerous.
+R113: Then you go to Dessa Pike, whose four children watch from the corner with enormous eyes.
+R138: By the third week the thatch is new, the wells are boiled, the last of the sick are on their feet, and Bram Hale and Dessa Pike carry the stones for your cairn.
+
+## Animals (3 sentences in 3 rounds)
+R141: I'd suggest Healing Word (a ranged fix for a bleeding friend) and Thunderwave, or Speak with Animals, since it's a ritual.
+R156: You could cast Speak with Animals as a ritual here and ask him what he smells, which would take eleven minutes with the skiff drifting.
+R170: You have six prepared: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Speak with Animals, with Acid Arrow and Darkness always ready.
+
+## Speak (3 sentences in 3 rounds)
+R141: I'd suggest Healing Word (a ranged fix for a bleeding friend) and Thunderwave, or Speak with Animals, since it's a ritual.
+R156: You could cast Speak with Animals as a ritual here and ask him what he smells, which would take eleven minutes with the skiff drifting.
+R170: You have six prepared: Cure Wounds, Entangle, Goodberry, Fog Cloud, Healing Word and Speak with Animals, with Acid Arrow and Darkness always ready.
+
+## Fen (3 sentences in 3 rounds)
+R146: They're Fen, a boy of nine, Ilsa, eight, and Bett, seven.
+R147: " She says Fen started it last month, after Jory Rush told the children the tale of the bone whistle at a harvest fire.
+R170: Afterward you check on Nell, Fen, Ilsa and Bett one last time and tuck their blankets.
+
+## Nell (3 sentences in 3 rounds)
+R146: I didn't know they'd gone back to it until Nell took sick.
+R148: Dessa Quill, Nell's mother, puts one there every night.
+R170: Afterward you check on Nell, Fen, Ilsa and Bett one last time and tuck their blankets.
+
+## Cal Tarn (2 sentences in 2 rounds)
+R13: Cal Tarn died quickly and quietly in the ferns, without a sound.
+R79: Hollow Reach asks the house of the healing faith to keep a place in its book for Cal Tarn, Marl, Hennet, Dobb, Wat and Ned, who died keeping the dark out.
+
+## Widow (2 sentences in 2 rounds)
+R15: Or go now, at 1 HP, with no spells, carrying Cal, or leaving him under the lamp's light for the Widow's folk to fetch.
+R23: One was Dobb Harrow, the Widow's brother-in-law, whom Hob did not know by name until he spoke it.
+
+## Ashdown (2 sentences in 2 rounds)
+R20: Brannoc Ashdown, healer of Millbrook Landing, died on the road to Hollow Reach on his first night, keeping his word.
+R137: Brannoc Ashdown dies in the stern of a green-hulled skiff, a mile from Reedholm, with the amulet of old Mother Edda at his chest and a boy named Jory alive in the bow.
+
+## Berra (2 sentences in 2 rounds)
+R33: " Berra says nothing, but she turns and walks stiffly back toward her door, and a moment later two of the women follow her in.
+R77: He took the oil Berra sent, and Dorrin goes up at dusk, and nothing's come up the track for three nights, nothing at all!
+
+## Berra Fenner (2 sentences in 2 rounds)
+R39: " Berra Fenner says nothing, but her hands, which have been twisting her apron, go still, and after a moment she says to no one in particular, "I'll send oil.
+R76: As for Pell and Dorrin, Berra Fenner promised oil weekly and the rota began on Day 4.
+
+## Nessa Tarn (2 sentences in 2 rounds)
+R39: He lived with his widowed mother, Nessa Tarn, in a house at the lane's far end, and she hasn't come out yet.
+R40: Nessa Tarn is a small, weathered woman with Cal's quick dark eyes, and she looks at the bow in your hands before she looks at your face.
+
+## Perrin Gale (2 sentences in 2 rounds)
+R49: And old Perrin Gale, who dyes in the sheds, fell from a rack and hasn't walked straight since, and he won't let anyone look at it.
+R51: Perrin Gale is waiting in the dye-sheds, the one who won't let anyone look at his fall, and Wren stands in the lane with her basket, watching you.
+
+## Dice (2 sentences in 2 rounds)
+R55: Hit points 17 of 17, all three slots and your Channel Divinity restored, and both Hit Dice back.
+R134: Hit Dice are spent only at the end of a short rest, which is an hour of quiet.
+
+## Osric (2 sentences in 2 rounds)
+R55: By the door, Osric, awake before dawn as weavers are, leans on the frame with his bandaged arm held against his chest, and gives you a nod that says more than he'd say aloud.
+R74: Tessa fed all night, and Ilsa slept, and Osric's red has gone back down the arm, and I changed the dressing twice!
+
+## Rudd (2 sentences in 2 rounds)
+R59: Rudd first.
+R67: Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+
+## Voss (2 sentences in 2 rounds)
+R60: Voss listens to your account in the guardhouse doorway with her arms folded, and then gives you two guards, Bede, a big slow man with a halberd, and Corra, a young woman with a short sword and a quick eye.
+R94: On the walk Voss answers the second question without slowing her limp.
+
+## Stair-Wife (2 sentences in 2 rounds)
+R71: "My grandmother called that the Stair-Wife's grip," she says.
+R94: Her grandmother called it Stair-Wife's Hill and told the children to stay off it after dark.
+
+## Garrit (4 sentences in 2 rounds)
+R80: Joss and Garrit are glad of the question, and they argue it for an hour over a jug of small beer.
+R80: Garrit's grandmother had a name for it: the Sleepers' Chain, seven mounds on seven hills, joined by a road under the ground that no living foot was meant to walk.
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+R105: Garrit named only two of the seven and heard of two more, so whether the Hollow Isle is one of them, or whether the fever has some other cause, you'll know only when you see it.
+
+## Grey Fever (2 sentences in 2 rounds)
+R84: Shut up after the Grey Fever, when there was no one left to ring the bell.
+R94: The hill is the old plague-ground, she says, where the town buried its dead in the Grey Fever years, and no one has used it since.
+
+## Ford Chapel (3 sentences in 2 rounds)
+R85: Your question about the trip: Stonebridge lies south of Greywater, and the Ford Chapel lies north, so Maud and Wren aren't going past it either way.
+R85: The Ford Chapel is two hours up the road, about a mile past the ford.
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+
+## Dab (2 sentences in 2 rounds)
+R103: She set out two nights ago to reach Stonebridge for a healer for her little son Dab, and was turned back at a flooded stretch of the causeway, so she's been trying to get home.
+R104: Her son Dab is five, with a mild fever, and he is with her sister Wenna.
+
+## Hobb Sallow (2 sentences in 2 rounds)
+R104: Three are dead: old Hobb Sallow, a baby, and a reed-cutter named Tam Rush.
+R176: " She says nothing, but takes you by the sleeve to a reed-cutter named Hobb Sallow's brother, whose hand has been laid open by a sedge-knife and has gone red along the wrist.
+
+## Rush (2 sentences in 2 rounds)
+R104: Three are dead: old Hobb Sallow, a baby, and a reed-cutter named Tam Rush.
+R108: Jory's skiff set out from Reedholm's north landing, the Rush staithe, and headed west-northwest across open water to the Isle, about a mile out.
+
+## Wenna (2 sentences in 2 rounds)
+R104: Her son Dab is five, with a mild fever, and he is with her sister Wenna.
+R106: Your Wenna's been crying all day.
+
+## The Drowned Stair (2 sentences in 2 rounds)
+R105: Garrit said there were seven mounds in the Sleepers' Chain, and you have set foot at four: the Lamp, the Long Cut, the Ford Chapel, and the burial hill above Stonebridge, besides the vault under the Drowned Stair.
+R165: At the Long Cut and the Drowned Stair he noted that each barrow of the Chain is held by a light, a reed-bond or running water, and that where one fails, the dead walk to the next.
+
+## Tamsin (4 sentences in 2 rounds)
+R140: She'll test Tamsin before trusting her, probably with something small and practical, like a sick child and a pot of water, to see what Tamsin does with her hands rather than her words.
+R140: The first is for you to restart the game on your side with Tamsin as a new character.
+R140: If it's the second, give me Tamsin's ability scores and the druid spells you'd like her to know, or I can pick a standard array and a sensible starting kit for a 3rd-level druid, and you can change it.
+R141: It's a damp grey dusk, years after Brannoc, and Tamsin is walking the old river road toward Reedholm, with a green-white light in a dream she can't shake.
+
+## Bett (2 sentences in 2 rounds)
+R146: They're Fen, a boy of nine, Ilsa, eight, and Bett, seven.
+R170: Afterward you check on Nell, Fen, Ilsa and Bett one last time and tuck their blankets.
+
+## Gammer Hild (2 sentences in 2 rounds)
+R164: By a quarter past eleven you are in Gammer Hild's house, a stilted hut with a window full of drying herbs, and you've brought her a spoonful of honey.
+R176: At noon you sit with Gammer Hild again, and ask her what the last seal needs.
+
+## Wave (2 sentences in 2 rounds)
+R164: "The Lamp is the first seal," she says, "and the Wave is the last.
+R176: The Wave is the last seal, she says, and the Wave-Keeper's own bell was hung on a post at the water's edge.
+
+## Hild (2 sentences in 2 rounds)
+R166: " Hild's is slower, with one bright eye.
+R175: Hild's rite wants a new one lit each dusk, and that is the work you set yourself.

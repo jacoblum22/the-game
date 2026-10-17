@@ -1,0 +1,1011 @@
+## Day (64 sentences in 51 rounds)
+R13: You have until noon on Day 4, a copy of Corvin's draft, a tin of seal impressions, and a ledger of his methods.
+R24: It's a quarter past seven on Day 2.
+R25: It's just before seven now on Day 3, with the sun rising over a clean, cold morning.
+R26: It's half past one on Day 3.
+R30: It's near eight now on Day 3.
+R30: Corvin's rendezvous is dusk on Day 5.
+R37: It's ten past eight on Day 4.
+R38: It's seven in the morning on Day 5 now, and the village has been up for an hour.
+R44: It's nearly six now, on Day 5.
+R45: That's Day 9.
+R45: Saltmarsh is some five days' ride by the river road, so you won't make it by Day 9 without hard riding and a lucky road.
+R46: It's quarter to eight on Day 6.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+R47: You reach Thornhallow at a quarter to four on Day 7.
+R48: It's near midnight now on Day 7.
+R49: You stop at a lock-keeper's cottage in the afternoon for a few hours' sleep and some bread, then limp on through Day 8's evening and dawn along the widening river as the air turns to salt and gull-cry.
+R102: My ruling is that the day count and the calendar date match, so "month's end" is the 30th and Day 10 is the 10th.
+R116: It is a little after four in the morning on Day 13, with dawn about an hour and a half away.
+R121: You write in the margin, in your own plain letters, *Copy, made by Wren Ashgrove, Day 13.
+R121: It's nearly nine in the morning on Day 13.
+R123: It is nearly noon on Day 13.
+R123: You have all your slots and Inspirations, a lure, a wagon promised for Day 15, and two days to prepare.
+R124: The next high water after Day 13's nine o'clock peak falls near ten at night on Day 14, and on Day 15 it falls at about twenty to eleven in the morning, with low water near half past four in the afternoon.
+R124: A crossing on Day 15 would therefore be on the afternoon ebb, with the causeway opening around two.
+R124: It's twenty to six in the evening on Day 14, with the flats pink and the water coming back.
+R125: By six o'clock on Day 15 the Vantry yard is grey with dawn.
+R139: It's half past six in the evening on Day 15, and the first stars are coming out over the flats.
+R140: You wake at four on Day 16 with all 17 hit points, all three 1st-level slots, three Bardic Inspirations, and a Hit Die back for each of you.
+R141: You'll reach it on the afternoon of Day 18.
+R141: It's seven in the evening on Day 16.
+R143: It's a quarter to eight on Day 16.
+R145: It's half past ten at night on Day 16.
+R152: It's a quarter to eleven on Day 16.
+R153: You wake at half past seven on Day 17 with all 17 hit points, three 1st-level slots and three Bardic Inspirations.
+R153: You'll make it on the afternoon of Day 18.
+R154: It's seven in the evening on Day 17.
+R155: It's nearly half past nine on Day 17.
+R156: It's noon on Day 18.
+R157: It's a quarter to one on Day 18.
+R158: It's a quarter past one on Day 18.
+R159: It's a quarter to three on Day 18.
+R160: It's a quarter to six on Day 18.
+R161: It's twenty-five past six on Day 18.
+R162: It's ten past seven on Day 18.
+R163: It's nearly eight on Day 18.
+R164: It's nearly nine on Day 18.
+R165: It's twenty-five to ten on Day 18.
+R166: It's five days to Saltmarsh, so no answer can reach you before about Day 29, and only if the arbiter sends it straight to Marrowford.
+R166: At dawn you and Kit ride out of Thornhallow on Day 19.
+R166: It's half past four on Day 19.
+R167: It's twenty to five on Day 19.
+R168: It's five to five on Day 19.
+R169: It's twenty past five on Day 19.
+R170: It's twenty-five past five on Day 19.
+R171: It's a quarter to six on Day 19.
+R172: You wake at five on Day 20 with all 17 hit points, three 1st-level slots and three Inspirations, and Kit is whole too.
+R172: It's five in the morning on Day 20.
+R173: It's half past six on Day 20.
+R174: The Gullspit lamp lit on Day 10, not Day 7.
+R174: It is twenty to seven on Day 20.
+R175: It's twenty past nine on Day 20.
+R176: It's half past ten on Day 20.
+R177: It's twenty-five to eleven on Day 20.
+R179: It's twenty to eleven on Day 20.
+
+## Corvin (62 sentences in 47 rounds)
+R3: Inside are sheets of blank vellum, a tin of wax-impressions, a Verrel seal among them, and a half-finished draft in Corvin's neat, unmistakable hand.
+R3: So Corvin is fixing his own forgery, and he knows it's about to be exposed.
+R6: The charter, he says, was bought from Corvin years ago, and Lord Edric has barely slept since the assessor's letter came.
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R13: You have until noon on Day 4, a copy of Corvin's draft, a tin of seal impressions, and a ledger of his methods.
+R24: Corvin is somewhere upriver and may learn that his forgery has failed, and two other houses in your psalter are still owed the truth.
+R25: Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+R25: Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+R28: Corvin knew you were coming, or guessed.
+R30: Whoever made one made the other, and Corvin got both.
+R30: Corvin's rendezvous is dusk on Day 5.
+R31: The ford at Ashby Weir is where Corvin wants to meet you on the fifth day.
+R36: You've heard Corvin's name linked to this twice in a day.
+R37: Corvin is a day's wait away at the ford, and he knows it is true.
+R41: Corvin's gaze lingers on the letter in your hand, on the looped hand you both know, and for the space of one breath his face loses all its warmth and becomes only a thing at rest, thoughtful and cold.
+R41: You stand on a flat stone in the middle of a shallow ford, ten hit points, a rapier, and a lute on your back, with Corvin two stones away and his hand still open.
+R42: Corvin has stepped back two stones and watches with an odd, stilled expression, no longer smiling.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R43: Now there's only the driver on the bank, with the crossbow cocked and his face gone a nasty shade of grey, and Corvin, two stones away, perfectly still.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R61: You hold the Dray leaf under your psalter, in Corvin's neat hand, with the sum of 140 marks beside Isaude's name.
+R63: Corvin's gaze slides to you at last, and his voice drops so that only the front of the room can hear it.
+R69: And Corvin has known all along where your mother's staff lay, and for twenty years he hasn't touched it.
+R70: Corvin's goods in Saltmarsh are to be seized toward Sir Corwen's hundred and forty marks.
+R74: " is watching one door of it, and Corvin had a plan to get in through some other.
+R76: Corvin's cross marks a third spot, a shuttered window at the back, above the tide-line.
+R96: Corvin's statement should be ready, and the lamp has told the whole town something has happened on the spit.
+R97: Corvin signed last night.
+R98: You could also use these hours: go back to the Wick-House for Ysolde's counsel, visit Corvin, tell Sir Corwen's family what the lamp means, or fetch the reliquary from the spit when the weather clears.
+R100: He murmurs that the paper will go down within the hour, and that he'll bring whatever Corvin writes to you at the Salt Gull himself and not through the clerk.
+R100: Corvin's map, if it is one, will arrive by evening.
+R102: The arbiter must still see to Corvin's own journey to the assize, but you've promised to see him there alive.
+R102: The back road runs inland along the dike, longer than the main one, and Corvin warned against the main road.
+R103: You've three spell slots, three Bardic Inspirations, and Corvin's warning: *Say Elowen's name only after she has said yours.
+R104: Corvin told you to wait for the old woman to say your name first, and she hasn't said it yet.
+R114: You have 12 of 17 hit points, no slots, two Bardic Inspirations, two prisoners, Corvin's map fulfilled and not quite finished, and a day ahead.
+R121: The assize is a week and a half off, Corvin is in the cellar, and the Heron's Tithe is somewhere in Sedge Creek with a master who now knows you have what he wanted.
+R122: "Second, the Heron's Tithe may simply watch you leave and strike elsewhere: Thornhallow, or Brann at the Wick-House, or Corvin's cellar.
+R125: Corvin comes up the cellar stair between two guards with his hands unlocked and his feet shackled.
+R127: The wagon starts across at the first opening of the road, with Kit and you in plain sight beside it, and Corvin on the bench.
+R127: The wheels bite the gravel, Corvin sits with his hands in his lap like a hymn-singer, Kit walks at the near wheel with her shield on her arm, and you ride Ember at the far one, with the lamp-staff upright in your hand.
+R128: Kit stands at the near wheel, Corvin sits frozen on the bench, and the enemy is fifty feet away.
+R136: He walks to Dame Crowe's assize alive, same as Corvin, and tells it under oath.
+R136: The three living bandits are bound where they sat, one dead on the road, one dead at the wagon's tail, and Corvin hasn't moved from the bench.
+R137: The guards carry the two dead bandits to the second horse, and Corvin's wagon rolls on.
+R139: "Pell, Ansel and Corvin go to Lord Edric at Thornhallow first.
+R140: It's a day's ride to Thornhallow, with Ansel on the bench beside Corvin.
+R142: Corvin answers the second half first, in an easy tone.
+R142: "That's a half-lie, Corvin," you say quietly.
+R142: You now know Hale was Ansel's go-between and that Corvin took Ansel's coin for four years.
+R143: You tell Corvin evenly, "Four years of Ansel's coin and you let me grow up beside you.
+R143: "Corvin says you paid him for years to watch me," you say.
+R143: I did not learn the name 'Wren' until this spring, when Hale wrote from Thornhallow that Corvin's apprentice was a half-elf girl with Elowen's chin.
+R144: Corvin's four years of coin, H.
+R157: He rises from his desk, grey-faced and with ink on his fingers, and you give it to him in two sentences: Corvin and a man who calls himself the Grey Cloak are coming behind you in irons, and a wounded knife-man in a brown coat is somewhere ahead of you, hunting the chapel register.
+R158: Brother Osric has the chapel book, and Pell's wagon with Corvin and Ansel is half a day behind you.
+R160: " Twelve years is the same number Corvin gave you for the go-between who brought a green-ringed man's coin.
+R160: Corvin and Ansel are in the yard in chains with six tired guards, and the dusk meeting is set.
+R163: The tin box is in the east wing, Ferrand Oake is in Marrowford, Corvin waits in the gatehouse, and Lord Edric is at supper.
+R174: You've seen Corvin do exactly that when a story needed one more beat.
+
+## Inspirations (35 sentences in 35 rounds)
+R106: It is half past six, the night is coming on, and you have three slots, three Inspirations, Kit, and a village of strangers.
+R121: You have three slots, three Inspirations, and all your hit points.
+R123: You have all your slots and Inspirations, a lure, a wagon promised for Day 15, and two days to prepare.
+R125: You have 17 of 17 hit points, three slots, three Inspirations, the bait tube in your saddlebag, and Kit at your side.
+R126: You have three slots, all your Inspirations, and Kit.
+R128: You still have your bonus action and your movement, you hold Faerie Fire by concentration, and you have two slots and three Inspirations.
+R142: You have 17 of 17 hit points, three slots, three Inspirations, and an unanswered question about how much Ansel has been lying to you.
+R143: You have 17 of 17 hit points, three slots, three Inspirations, and two prisoners who each have a story.
+R144: You have 17 of 17 hit points, three slots, three Inspirations, and a barn full of prisoners.
+R154: You have 17 of 17 hit points, three slots and three Inspirations.
+R155: You have 17 of 17 hit points, three slots, three Inspirations, and 71 gp, 3 sp and 4 cp.
+R156: You have 17 of 17 hit points, three slots, three Inspirations, and 70 gp, 8 sp and 2 cp.
+R157: You have 17 of 17 hit points, three slots and three Inspirations.
+R158: You have 17 of 17 hit points, three slots and three Inspirations.
+R159: You have 17 of 17 hit points, three slots and three Inspirations.
+R160: You have 17 of 17 hit points, three slots and three Inspirations.
+R161: You have 17 of 17 hit points, three slots and three Inspirations.
+R162: You have 17 of 17 hit points, three slots and three Inspirations.
+R163: You have 17 of 17 hit points, three slots and three Inspirations.
+R164: You have 17 of 17 hit points, three slots and three Inspirations.
+R165: You have 17 of 17 hit points, three slots and three Inspirations.
+R166: You have 17 of 17 hit points, three slots and three Inspirations, and 80 gp.
+R167: You have 17 of 17 hit points, two 1st-level slots and three Inspirations.
+R168: You have 17 of 17 hit points, two 1st-level slots and three Inspirations, and Kit is at the stable two streets from Oake's, with the horses.
+R169: You have 17 of 17 hit points, two 1st-level slots and three Inspirations, and 80 gp.
+R170: You have 17 of 17 hit points, two 1st-level slots and three Inspirations, and 80 gp.
+R171: You have 17 of 17 hit points, two 1st-level slots and three Inspirations, and 80 gp.
+R172: You wake at five on Day 20 with all 17 hit points, three 1st-level slots and three Inspirations, and Kit is whole too.
+R173: You have 17 of 17 hit points, three slots and three Inspirations, and 78 gp.
+R174: You have 17 of 17 hit points, three slots and three Inspirations.
+R175: You have 17 of 17 hit points, three slots and three Inspirations, and 78 gp.
+R176: You have 17 of 17 hit points, three slots and three Inspirations, and Dame Crowe's clerk will reach the bridge-house around noon.
+R177: You have 17 of 17 hit points, three slots and three Inspirations.
+R179: You have 17 of 17 hit points, three slots and three Inspirations.
+R180: You have 10 of 17 hit points and two 1st-level slots, three Inspirations, a rapier and a dagger.
+
+## Inspiration (31 sentences in 28 rounds)
+R9: HP and spell slots are restored, and Bardic Inspiration is back to 3 uses.
+R31: You're rested, your spells and Bardic Inspiration are restored, and the clock reads half past six.
+R38: Bardic Inspiration is at 3 of 3, none spent.
+R45: You're whole again: all your hit points and your spell slots, and Bardic Inspiration back at three.
+R67: Bardic Inspiration stands at three.
+R75: The long rest has given back your hit points, your three spell slots and your Bardic Inspiration, and it has lifted exhaustion by one level, so you now carry level 1.
+R80: You have all three 1st-level slots, 17 of 17 hit points, and three uses of Bardic Inspiration.
+R84: You've two spell slots, three uses of Bardic Inspiration, and a minute at most.
+R85: She now carries a d6 of your Bardic Inspiration for the next ten minutes, and you have two uses left.
+R88: You have one 1st-level slot, two uses of Bardic Inspiration, and Kit holds a d6 of yours.
+R89: She snatched your Bardic Inspiration die and added a 2, which still wasn't enough, so that die is spent.
+R89: You are on the third step with one 1st-level slot, one use of Bardic Inspiration left (it's 1 of 3 now, since Kit's die is spent), and a clear head.
+R90: You have one use of Inspiration left.
+R90: Kit is at 12 of 20, holding a d6 of your Inspiration, with Second Wind and Action Surge unused.
+R91: You're on your step with one 1st-level slot, one use of Bardic Inspiration, 17 of 17 hit points, and your rapier.
+R93: Then she snatched your last Bardic Inspiration die, rolled a 6, and turned the miss into a hit.
+R98: Your slots stay at 0 of 3, your Bardic Inspiration at 1 of 3, and exhaustion 1 still sits on you.
+R100: You've no slots and one Bardic Inspiration, and your long rest can't finish until about four tomorrow morning.
+R117: You've three 1st-level slots, all your Inspiration, and the morning ahead.
+R118: You have three 1st-level slots, all your Inspiration, Kit at your shoulder, Brann holding the candle, and Dunn waiting at the landing.
+R122: You have three slots, all your Inspiration, and Brann safe at the Wick-House.
+R124: You've three slots, all your Inspiration, Kit, and a tracker.
+R127: You have three slots, all your Inspiration, Kit at the wheel, and eight guards in the reeds behind you.
+R132: You have 3 of 17 hit points, no spell slots, one Bardic Inspiration, a rapier, a dagger and the lamp-staff.
+R133: You have 3 of 17 hit points, no spell slots, one Bardic Inspiration, a rapier, a dagger and the lamp-staff.
+R134: Out of the story first: a Bardic Inspiration die can only go to a creature other than you, so I couldn't let you use it on yourself.
+R134: You have 3 of 17 hit points, no spell slots, one Bardic Inspiration, a rapier, a dagger and the lamp-staff.
+R135: You have 3 of 17 hit points, one Bardic Inspiration, and Kit at 3 of 20 beside you.
+R136: You have 3 of 17 hit points, no slots, and one Bardic Inspiration.
+R137: You have one Bardic Inspiration left.
+R139: You have 11 of 17 hit points, one Bardic Inspiration, no slots or Hit Dice, and a camp under a grey sky.
+
+## Pell (32 sentences in 27 rounds)
+R28: Marta Pell, keeper here these fourteen years.
+R33: "A traveler of the Lantern-Bearer, sent by Mother Pell, who says you keep the best memory on the river.
+R97: "Pell, the dead go to the dead-house, and nobody touches their pockets but me.
+R102: You send Pell your note, and Bess promises to hold the room for three days.
+R121: "It goes to Dame Crowe in my hand or in Pell's, and no one else's," she says.
+R122: "Eight guards, Pell to lead them, and a covered wagon with a good axle.
+R124: You sleep well, ride out at first light with Kit and Pell's tracker, a wiry, silent woman called Marl Sedge, and reach the flats a little before eleven.
+R125: I should say plainly that the guards you mentioned are back at Saltmarsh with Pell, since you rode out with only Marl and Kit.
+R126: Pell sends the six guards ahead into the landward reeds in twos, as agreed.
+R126: Eight guards are in reeds or at the road, with Pell.
+R128: Pell's six had been creeping along the drainage ditch below the road as the tide fell, and they are rising now, perhaps a hundred feet behind the wagon, with crossbows up.
+R133: Pell comes up the causeway at a run, with six grey cloaks behind him and crossbows already up.
+R134: Pell and six guards hold the line, and the longboat is useless.
+R136: " Pell does it without comment, with two guards beside him.
+R137: "Pell, Kit's thigh first, then me.
+R139: "Pell, Ansel and Corvin go to Lord Edric at Thornhallow first.
+R139: Pell rubs his jaw and does the sums out loud, like a man who has driven this road before.
+R139: Pell has set a watch of three.
+R140: You tell Pell you'll take the second watch with Kit, bank the fire low, and lie down.
+R141: Before you leave you take Pell aside, and he nods at every word.
+R141: At dusk the column stops at a wayside farm with a barn and a well, and the farmer, who knows Pell's grey cloak, gives you the barn without asking questions.
+R144: " You hand the lantern to Pell and tell him to keep the two at opposite ends of the barn overnight.
+R150: Pell's guards are putting out the last of the thatch and haven't reached the north side yet.
+R151: Behind you the guards are shouting along the north side of the barn, and Pell's voice is closer now.
+R152: You walk back across the trampled grass with Kit at your shoulder and call to Pell: "Two riders along the river bank, looking for a boat or lantern signals.
+R153: " You stand, and Pell takes your message word for word: Harrow sails at the dawn ebb the day after tomorrow unless the master pays him, so the arbiter's harbour man should be at Sedge Creek with every boat she can spare.
+R153: Pell sends the other two out again with your order to take the skiff boy alive and leave the skiff alone.
+R156: Pell's wagon with the prisoners is half a day behind you.
+R157: Pell's wagon is hours behind you.
+R158: Brother Osric has the chapel book, and Pell's wagon with Corvin and Ansel is half a day behind you.
+R160: A little before six you hear the wagon in the lane, Pell's horn, and the gate being unbarred.
+R166: Pell's wagon will arrive in a day or two.
+
+## Bardic Inspirations (27 sentences in 26 rounds)
+R87: You've two Bardic Inspirations left, and Healing Word is available, but you've only the one slot.
+R102: Your slots are back, and so are all three Bardic Inspirations.
+R102: You have 17 of 17 hit points, three 1st-level slots, three Bardic Inspirations and 71 gp.
+R103: You've three spell slots, three Bardic Inspirations, and Corvin's warning: *Say Elowen's name only after she has said yours.
+R108: You hold Faerie Fire with your concentration, and you have two slots, three Bardic Inspirations, a rapier, a dagger, Vicious Mockery, and Kit's crossbow still ringing.
+R109: You are at 7 of 17 hit points, with two 1st-level slots and two Bardic Inspirations.
+R110: You have 11 of 17 hit points, one 1st-level slot, two Bardic Inspirations, and a man on his knees in the yard.
+R111: Dawn is about five hours off, you've 11 of 17 hit points, one 1st-level slot, and two Bardic Inspirations.
+R112: You have 11 of 17 hit points, one 1st-level slot, two Bardic Inspirations, and a pair of friends in the dark.
+R113: You have 1 of 17 hit points, no spell slots, two Bardic Inspirations, and two prisoners in the byre: Dace Rook, bound, and the surviving pikeman.
+R114: You have 12 of 17 hit points, no slots, two Bardic Inspirations, two prisoners, Corvin's map fulfilled and not quite finished, and a day ahead.
+R115: You have 12 of 17 hit points, no spell slots, no Hit Dice, and two Bardic Inspirations.
+R116: You have 17 of 17 hit points, all three 1st-level slots, three Bardic Inspirations, and both Hit Dice back.
+R129: You have two 1st-level slots, two Bardic Inspirations, a rapier, a dagger and the lamp-staff.
+R130: You have 7 of 17 hit points, one 1st-level slot, two Bardic Inspirations, and your rapier, dagger and lamp-staff.
+R131: You have 14 of 17 hit points, no spell slots, two Bardic Inspirations, a rapier, a dagger and the lamp-staff.
+R140: You wake at four on Day 16 with all 17 hit points, all three 1st-level slots, three Bardic Inspirations, and a Hit Die back for each of you.
+R141: You have 17 of 17 hit points, all three slots, three Bardic Inspirations, and Kit is at full strength.
+R145: You have 17 of 17 hit points, three slots, three Bardic Inspirations, a rapier, a dagger, and the lamp-staff.
+R146: You have 2 slots, 3 Bardic Inspirations, and 17 of 17 hit points.
+R147: You have 17 of 17 hit points, two 1st-level slots, two Bardic Inspirations, and Faerie Fire has about forty seconds left.
+R148: You have 11 of 17 hit points, two 1st-level slots, two Bardic Inspirations, a rapier, a dagger, and a free hand.
+R149: You have 11 of 17 hit points, two 1st-level slots, two Bardic Inspirations, and a rapier in your hand.
+R150: You have 3 of 17 hit points, two 1st-level slots, two Bardic Inspirations, a rapier, a dagger and the lamp-staff.
+R151: You're at 8 of 17 with one 1st-level slot left and two Bardic Inspirations.
+R152: You have 8 of 17 hit points, one 1st-level slot and two Bardic Inspirations.
+R153: You wake at half past seven on Day 17 with all 17 hit points, three 1st-level slots and three Bardic Inspirations.
+
+## Sparrow (31 sentences in 25 rounds)
+R83: Along the spit's south shingle, six or seven hundred feet off, a longboat has grounded, and five figures are coming up the stones in a loose line: Sparrow's brown coat, three hands with boarding-pikes, and in the middle, a tall figure in a grey cloak, hooded, walking as though the spit belonged to h
+R87: The three bandits, and Sparrow beside them, all had to make Dexterity saves against your DC 13.
+R87: Only Sparrow failed (a 5).
+R88: Sparrow, still outlined in blue light, is circling the south corner of the tower with his hand crossbow and has no clear line yet.
+R90: Bandit 2 is hurt, Bandit 3 is untouched, and Sparrow and the Grey Cloak are still outside.
+R97: Three dead hands from the Heron's Tithe, a hooded man called Aldous, a man named Sparrow, and a request to give the full account by a fire.
+R111: And then, with the same fear: his orders were to follow you from Saltmarsh and signal from the dike with a shuttered lantern, so Sparrow, who waits in a skiff at Fenny Reach, a drowned boat-yard two miles downriver, would know where you slept.
+R113: Sparrow's save is a 17, one pikeman's is a 13, which meets the DC, and the other's is a 20.
+R113: The pikemen are on you before the light settles, and Sparrow, who counted the shed in the dark, was waiting for exactly that.
+R113: You gain 50 XP for the two pikemen (Sparrow got away, so no XP for him).
+R113: Sparrow knows you found Reedlow, and he will tell his master.
+R114: "I'm alive, which is more than Sparrow planned.
+R115: "Sparrow knows this house now," you tell her, "so Annis shouldn't sleep under its roof for a few nights.
+R115: After the Gullspit lamp lit, the master stood silent at the rail for an hour and then said to Sparrow, "Then the foot is the key, and the light is only the lock.
+R128: Sparrow's save is a 20, so he stays unlit.
+R130: " Sparrow's smile slips for the first time, and the insult cuts him for 4.
+R132: Then Sparrow, who has been waiting for exactly this, sees an enemy standing beside you and puts a bolt into your ribs for 11.
+R133: Sparrow's last shot hits the wood.
+R135: Sparrow is a dot moving across the mud toward the boat-shed, and no one is near enough to stop him.
+R136: Sparrow is a speck on the far flats, and Marl Sedge is already gone after him through the reeds.
+R137: Marl Sedge has gone after Sparrow along the reed edge and will report back.
+R141: Two riders go a mile ahead and two a mile behind, and a third goes back to Saltmarsh with your warning for the arbiter: the Heron's Tithe and Sparrow are both still loose, and Cobb Harrow may come for his coin.
+R145: Sparrow's Stealth, the one thing he's never failed at, comes to 22.
+R146: The two crewmen are about thirty feet off, lit and exposed, and Sparrow is in the dark behind them.
+R147: " Then you shout to the guards at the barn's front: "Two lit crewmen in the north hedge, crossbows on them, and watch the dark behind them, that's Sparrow!
+R149: Sparrow takes one more shot from the hedge while he can.
+R149: Sparrow is hiding somewhere in the north hedge with his hand crossbow, and he has missed you four times running, which can't last.
+R150: Sparrow is wounded, within thirty feet of you, and Kit is next to him.
+R151: Then you snap the mockery into the hawthorn: "Eleven misses and one lucky shot, Sparrow, and Kit just opened your coat, so how's that smile?
+R152: "Sparrow's skiff is in the drowned willows, a mile down the bank.
+R156: The only scrap of paper left in your pack is the one you've been saving, so you borrow a torn page from the landlord's tally-book and write by candle: "Sparrow comes to Osric, bar the chapel and keep him inside the manor.
+
+## Thornhallow (28 sentences in 23 rounds)
+R6: Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done.
+R7: A storyteller came to Thornhallow with a girl who sang at my lord's table, and my lord wept at the last verse and gave her a ribbon.
+R7: Thornhallow's a day's walk downriver, and the assessor comes in three days.
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R8: - Do you remember that night at Thornhallow at all?
+R9: The river road to Thornhallow runs downriver from the bridge, a day's walk through farmland and willow-banks.
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+R31: The assessor, if Lord Edric has told the truth, arrives at Thornhallow at noon today.
+R47: You reach Thornhallow at a quarter to four on Day 7.
+R97: The arbiter will keep the dead hands as witnesses and send a rider to Thornhallow with the name.
+R111: The master calls himself the natural son of the old Aldous Verrel, "born on the wrong side of the blanket and robbed of Thornhallow.
+R114: Tamsin knows a drover going upriver who'll carry it to Thornhallow.
+R120: In the tube is a leaf I cut from the Thornhallow register, which an old chaplain gave me because he knew a man would one day come to burn it or to use it.
+R121: "And I will send a rider to Thornhallow today with your news that the name is a dead child's grave.
+R122: "Second, the Heron's Tithe may simply watch you leave and strike elsewhere: Thornhallow, or Brann at the Wick-House, or Corvin's cellar.
+R135: You have seen that chin before, on Lord Edric Verrel at Thornhallow.
+R139: "Pell, Ansel and Corvin go to Lord Edric at Thornhallow first.
+R139: Thornhallow lies on the river road before Marrowford, so it's on your way.
+R140: It's a day's ride to Thornhallow, with Ansel on the bench beside Corvin.
+R141: I said Thornhallow was a day's ride from the causeway.
+R141: Saltmarsh to Marrowford is four days by the river road, and Thornhallow lies a day below Marrowford, on the way.
+R143: I did not learn the name 'Wren' until this spring, when Hale wrote from Thornhallow that Corvin's apprentice was a half-elf girl with Elowen's chin.
+R153: Thornhallow is about a day and a half off.
+R154: When we reach Thornhallow, do you want me to tell him who you are first, or will you?
+R154: Thornhallow is about a day off, and you will see its gatehouse tomorrow afternoon.
+R155: Thornhallow is a day's ride off, the prisoners are in the cellar and the guards are settling in.
+R163: The recommendation letter that brought him to Thornhallow came from Ferrand Oake, who keeps a counting-house in Marrowford and places clerks in half the minor houses on the river.
+R166: At dawn you and Kit ride out of Thornhallow on Day 19.
+
+## Saltmarsh (26 sentences in 23 rounds)
+R25: Sir Corwen Dray of Saltmarsh Keep, out on the estuary some three days downriver of here, bought a betrothal contract and a vow-tale tying his heir to a wealthy merchant family, and those merchants have begun to doubt.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R45: Saltmarsh is some five days' ride by the river road, so you won't make it by Day 9 without hard riding and a lucky road.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+R47: The road to Saltmarsh runs on three days further, and the ninth is two days off.
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R49: Saltmarsh spreads below you on a grey estuary: slate roofs, drying nets, a stone quay, the squat bulk of Saltmarsh Keep on a rise to the north.
+R70: Corvin's goods in Saltmarsh are to be seized toward Sir Corwen's hundred and forty marks.
+R94: The cutter is a speck on the grey water, three dead men lie on the shingle, and Saltmarsh is across the estuary.
+R95: Dunn is ready to take the dead and the living back to Saltmarsh, though he mutters about the weather.
+R101: He has drawn the lower Marrow as a ribbon, with Saltmarsh at its mouth and a mark a day's ride upriver on the east bank.
+R102: Marrowford is about four days' ride from Saltmarsh by the river road.
+R111: And then, with the same fear: his orders were to follow you from Saltmarsh and signal from the dike with a shuttered lantern, so Sparrow, who waits in a skiff at Fenny Reach, a drowned boat-yard two miles downriver, would know where you slept.
+R115: When not at the Saltmarsh quay, the Heron's Tithe lies up in Sedge Creek, a salt-cut inlet north of the town.
+R115: A little after five in the evening the low roofs and masts of Saltmarsh come up out of the haze, and the Gullspit light stands white on its spit, burning steadily in the dusk.
+R117: Taking the foot darkens the light, and that costs you the beacon Saltmarsh has been watching for three days.
+R123: The Gannet Causeway, half a day out of Saltmarsh on the Marrowford road, where the tide runs both sides.
+R125: I should say plainly that the guards you mentioned are back at Saltmarsh with Pell, since you rode out with only Marl and Kit.
+R126: At first light a tall man in grey stood on the shed roof for a while, looking toward Saltmarsh, and then went below.
+R138: What's established is that the arbiter at Saltmarsh told you to appear at Dame Crowe's assize at Marrowford at month's end, and I ruled that to be the 30th.
+R139: Saltmarsh is five and a half hours back by wagon.
+R141: Saltmarsh to Marrowford is four days by the river road, and Thornhallow lies a day below Marrowford, on the way.
+R141: Two riders go a mile ahead and two a mile behind, and a third goes back to Saltmarsh with your warning for the arbiter: the Heron's Tithe and Sparrow are both still loose, and Cobb Harrow may come for his coin.
+R152: She's been there since the Saltmarsh quay went hot.
+R166: It's five days to Saltmarsh, so no answer can reach you before about Day 29, and only if the arbiter sends it straight to Marrowford.
+
+## Lord Edric (23 sentences in 21 rounds)
+R6: The charter, he says, was bought from Corvin years ago, and Lord Edric has barely slept since the assessor's letter came.
+R11: "I was told a friend of Master Tallowmere was coming," Lord Edric says.
+R13: Hale has the spare key, and Lord Edric admits, with a flush, that he once saw Hale's hand on the copy "for safekeeping.
+R15: You copy the third descent's names and dates onto a clean sheet, and Lord Edric rolls the charter back into the chest and locks it, the key going back inside his collar.
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+R19: That's Lord Edric's study, and Tobin got there first.
+R22: You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other.
+R23: Then Lord Edric turns to Hale, who hasn't moved from your shoulder, and for the first time the steward's smile has gone entirely.
+R26: Lord Edric is at the kitchen table in his shirt-sleeves with a bowl of porridge, looking ten years younger.
+R31: The assessor, if Lord Edric has told the truth, arrives at Thornhallow at noon today.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+R95: It does collide with Lord Edric's long-dead grandsire, and you're right to notice.
+R98: The arbiter nods, and a rider in Vantry grey is sent off into the rain with your query for Lord Edric and Brother Osric.
+R114: It goes to Lord Edric and Brother Osric together: look in the chapel register for a leaf cut from it, perhaps one recording a natural son of the old Aldous Verrel, and know that a man who calls himself that son, a tall man in a grey cloak with a leaf-green ring, is hunting for proof.
+R121: Lord Edric should hear it before anyone else does.
+R138: The lamp's origin is something Lord Edric or Brother Osric could confirm, if you ask them.
+R139: "Pell, Ansel and Corvin go to Lord Edric at Thornhallow first.
+R156: Lord Edric read it with his hand shaking and had the chapel barred before he had his boots on.
+R158: Kit and two manor men take him to the manor on a hurdle, and Lord Edric sends for the surgeon.
+R158: Lord Edric will want to know what happens next.
+R161: You walk Ansel up to Lord Edric's door yourself, with two guards behind you.
+R161: Lord Edric is waiting for someone else to speak first.
+R163: The tin box is in the east wing, Ferrand Oake is in Marrowford, Corvin waits in the gatehouse, and Lord Edric is at supper.
+
+## Marrowford (28 sentences in 21 rounds)
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R9: You can head straight down the river road, or take a few minutes in Marrowford first for supplies, a better lockpick set, or anything else you want.
+R19: He lets slip that he came upriver from Marrowford the same day you did, and that he "keeps an eye on the road for the steward," then catches himself and laughs it off.
+R25: Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights.
+R26: By half past one you're clattering over the stone bridge into Marrowford.
+R32: The ford is two days of walking from Marrowford, and you've made it with a day to spare.
+R34: "Some months after, a storyteller came down the Marrowford road with a little girl of about that age on his cart.
+R47: You pass the night at Lantern's Rest, where Marta feeds you both and refuses payment, and ride on through Marrowford the next day.
+R47: She says a girl who confesses unprompted is worth hearing, and that she will be at the Marrowford assize at month's end.
+R70: As for you, the hall has no quarrel with a girl who brought it the truth, but you owe your appearance at Dame Crowe's assize at Marrowford at month's end.
+R102: Marrowford is about four days' ride from Saltmarsh by the river road.
+R123: The Gannet Causeway, half a day out of Saltmarsh on the Marrowford road, where the tide runs both sides.
+R137: You also have a mother's ring on the hand of the man who struck her, and a very long road to Marrowford.
+R138: What's established is that the arbiter at Saltmarsh told you to appear at Dame Crowe's assize at Marrowford at month's end, and I ruled that to be the 30th.
+R139: Thornhallow lies on the river road before Marrowford, so it's on your way.
+R141: Saltmarsh to Marrowford is four days by the river road, and Thornhallow lies a day below Marrowford, on the way.
+R160: A letter from a Marrowford merchant I trusted, a month after my father died.
+R162: I ride to Marrowford on the twenty-ninth with the register and Brother Osric, and Ansel rides with me.
+R162: The assize is twelve days off, and Marrowford is a day up the road.
+R163: Your twelve years, the letter from the Marrowford merchant, every coin you took.
+R163: The recommendation letter that brought him to Thornhallow came from Ferrand Oake, who keeps a counting-house in Marrowford and places clerks in half the minor houses on the river.
+R163: The tin box is in the east wing, Ferrand Oake is in Marrowford, Corvin waits in the gatehouse, and Lord Edric is at supper.
+R164: Five days there and five back, but she has the harbour man and the court ledgers, and she may know more than Marrowford does.
+R164: Marrowford, the assize and Ferrand Oake's counting-house are a day up the road.
+R165: You tell him you'll ride to Marrowford ahead of the prisoners tomorrow, with Kit and a disguise, to look at Oake's counting-house before the assize.
+R165: Marrowford is a day up the road, and the assize is twelve days off.
+R166: It's five days to Saltmarsh, so no answer can reach you before about Day 29, and only if the arbiter sends it straight to Marrowford.
+R166: At half past four in the afternoon, Marrowford's stone bridge rises ahead and the town's lantern-poles are being trimmed for dusk.
+
+## Vantry (22 sentences in 21 rounds)
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R49: In the town below, a bell has begun to toll the hour, and a small crowd is moving toward a hall by the quay marked with the Vantry scales.
+R51: Her Stealth was a 7, and at the turn of the quay the young man glances back, sees a stocky woman in a blue tabard, and picks up his pace toward the Vantry hall's wide doors.
+R52: Down on the quay, Kit is a blue spot at the edge of the crowd before the Vantry hall.
+R53: Your Deception check was a 7 with disadvantage, and the doorman, a stout man in Vantry grey with a ledger of his own, isn't fooled by a story, only unconvinced by a notary's junior who has no token.
+R61: Opposite them are the Vantry elder, stout and cautious, and his son, the intended groom, who looks mostly relieved to be spoken to.
+R62: The Vantry elder half rises.
+R63: The Vantry elder is whispering furiously to his son.
+R64: The Vantry elder has gone very quiet, and so has his son, who looks at Isaude with an expression that might be gratitude.
+R64: " Two men in Vantry grey straighten at the main doors.
+R65: Behind you, the two Vantry guards are crossing the floor at a steady jog, halberds up, and the arbiter's voice rings out: "Hold that man!
+R67: The Vantry elder's son shows you to a small room off the hall, with a long table, a bench, and a window onto the quay.
+R68: The hall is filling again behind you with the Vantry household, a few of Sir Corwen's men, and a dozen townsfolk who've caught the scent of scandal.
+R69: Sir Corwen and Isaude sit to one side, the Vantry elder and his son to the other.
+R70: " Isaude holds your eye, and the Vantry son is, for the first time all day, almost smiling.
+R75: The quay below is dark, damp, and mostly empty, with one lamp at the Vantry hall and fog off the estuary.
+R98: The arbiter nods, and a rider in Vantry grey is sent off into the rain with your query for Lord Edric and Brother Osric.
+R121: By a little before nine you're at the Vantry hall.
+R122: "A dozen is more than the hall can spare, with Sedge Creek to watch and a Vantry quay to keep," she says.
+R125: By six o'clock on Day 15 the Vantry yard is grey with dawn.
+R134: Then three Vantry spears find him one after another, and he goes down.
+R139: Two of his guards ride back with the dead bandits and a note for the arbiter, and they'll be at the Vantry hall by midnight.
+
+## Brother Osric (17 sentences in 17 rounds)
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R14: "Brother Osric keeps the parish register in the chapel vestry, on the green," he says.
+R15: Brother Osric is on his knees at a bench, a bent, white-haired man in a patched brown robe, polishing a pewter cup with great slowness.
+R16: For a long moment Brother Osric says nothing.
+R26: "I'll be Brother Osric's legs.
+R64: You set the rest of it on the table in a neat row: Lady Maren's letter under the Thistlewood seal, Lord Edric Verrel's letter vouching for you, and Brother Osric's copied register entry.
+R95: I picked "Aldous" for the Grey Cloak without checking it against Brother Osric's register, so it wasn't a planted clue.
+R98: The arbiter nods, and a rider in Vantry grey is sent off into the rain with your query for Lord Edric and Brother Osric.
+R114: It goes to Lord Edric and Brother Osric together: look in the chapel register for a leaf cut from it, perhaps one recording a natural son of the old Aldous Verrel, and know that a man who calls himself that son, a tall man in a grey cloak with a leaf-green ring, is hunting for proof.
+R120: It matches the register copy you carry, and the note about the missing page in Brother Osric's book.
+R138: The lamp's origin is something Lord Edric or Brother Osric could confirm, if you ask them.
+R155: That means Brother Osric, who keeps the register, and who has just been warned of a cut leaf by your letter.
+R156: Brother Osric's in the manor with a cup of broth and not a word to say.
+R157: He rings for Tobin, and within minutes the gatekeeper, Tobin and Brother Osric are in the hall.
+R158: Brother Osric has the chapel book, and Pell's wagon with Corvin and Ansel is half a day behind you.
+R159: You go up to the study with Brother Osric and the register in his arms.
+R162: I ride to Marrowford on the twenty-ninth with the register and Brother Osric, and Ansel rides with me.
+
+## Elowen (19 sentences in 16 rounds)
+R35: "If a lady asks me, I'll say what I saw, and swear it on Elowen's lamp.
+R38: I gave you 75 for finding Elowen's trail and opening the coffer.
+R68: All you know of it comes from Elowen's letter: it names you as her heir to her road-priest's lamp-staff.
+R69: You fold the paper away and spend the rest of the hour as you promised, laying out your account: ledger leaves first, then Osric's register, then Elowen's letter, murmuring it over to Kit in a low voice.
+R70: You don't dress any of it up, and when you finish you slide the last leaf and Elowen's paper into view and say you're not asking to be forgiven.
+R71: "Elowen was my teacher before I was yours.
+R71: There's a staff at the Wick-House that no one but Elowen's heir may take, and the keeper there showed me the door.
+R83: "Elowen's been dead sixteen years, girl.
+R84: Brann Tolliver hurries up ahead of you with his candle, breathless, and says Elowen's word as you climb, in the flat voice of a man who has said it to himself a thousand times:
+R94: Elowen came to the spit alone in the autumn sixteen years ago, already fevered and thin as a lath.
+R101: Say Elowen's name only after she has said yours.
+R101: You go through Elowen's letter and the strip from the staff, and your Investigation check is only a 4, with disadvantage from exhaustion.
+R103: You've three spell slots, three Bardic Inspirations, and Corvin's warning: *Say Elowen's name only after she has said yours.
+R117: Elowen told me never to open it without the foot, and I've never tried.
+R120: You take the leaf, the letter, and the little brass lantern (Elowen's last gift is a thumb-sized lamp with a wick the size of a whisker).
+R136: Tell the guards plainly: did you have Elowen killed?
+R142: I saw him once at Elowen's table, a younger Verrel with a ring on his hand.
+R142: He wanted me to watch a girl with Elowen's face, and the staff she might one day claim.
+R143: I did not learn the name 'Wren' until this spring, when Hale wrote from Thornhallow that Corvin's apprentice was a half-elf girl with Elowen's chin.
+
+## Ansel Verrel (21 sentences in 14 rounds)
+R135: "Ansel Verrel, once, before the family paper decided I had never been born.
+R136: "Ansel Verrel, you wore a dead child's grave for a lamp-staff.
+R136: Ansel Verrel offers his wrists as if he'd been waiting sixteen years to be asked.
+R138: It doesn't name Ansel, because nobody knew him then.
+R139: "Pell, Ansel and Corvin go to Lord Edric at Thornhallow first.
+R139: While the wagon is being drawn up, you murmur to Kit, "Watch Ansel's hands all night.
+R140: It's a day's ride to Thornhallow, with Ansel on the bench beside Corvin.
+R141: At one halt you catch Ansel looking at your lamp-staff, and when you meet his eye he looks away.
+R142: You now know Hale was Ansel's go-between and that Corvin took Ansel's coin for four years.
+R142: You have 17 of 17 hit points, three slots, three Inspirations, and an unanswered question about how much Ansel has been lying to you.
+R143: You tell Corvin evenly, "Four years of Ansel's coin and you let me grow up beside you.
+R158: Brother Osric has the chapel book, and Pell's wagon with Corvin and Ansel is half a day behind you.
+R159: You add quietly that Ansel means to tell him to his face before anyone else does, and that you'd like him to hear it with Osric beside him, not alone.
+R159: You skim the baptisms of fifty years back, and your Investigation is an 8, so you find the Fenns and the Verrels and a great many millers, but no Ansel.
+R159: "Ansel, son of Hugh Ve.
+R160: Corvin and Ansel are in the yard in chains with six tired guards, and the dusk meeting is set.
+R161: You tell him quietly, "Ansel goes up to the study first, with two guards.
+R161: You walk Ansel up to Lord Edric's door yourself, with two guards behind you.
+R162: "Ansel will stand before Dame Crowe at the assize, under oath, and she can weigh his crimes and his blood together.
+R162: I ride to Marrowford on the twenty-ninth with the register and Brother Osric, and Ansel rides with me.
+R175: "Warden, Oake's bill was paid two days after Ansel was taken.
+
+## Hale (16 sentences in 12 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R13: Only four people have ever read the charter: himself, Corvin, old Brother Osric the chaplain, and Hale.
+R13: Hale has the spare key, and Lord Edric admits, with a flush, that he once saw Hale's hand on the copy "for safekeeping.
+R13: Hale knows you're here.
+R16: You have the truth in hand, a day and a half before Dame Crowe arrives, and you can't be sure Hale hasn't another way into the chapel.
+R17: Hale is somewhere in the manor, and the assessor is a day and a half away.
+R18: that's one of Hale's men.
+R18: Hale is in the house, and he knows you went to the chapel.
+R23: Then Lord Edric turns to Hale, who hasn't moved from your shoulder, and for the first time the steward's smile has gone entirely.
+R75: "Hale's got more than one hand," she says, which is more sense than you were ready for.
+R97: And it says Hale acted for a patron the prisoner knew only as *Aldous*.
+R97: A dead man's name could mean a stolen alias, and the register Hale once tried to read could be where it came from.
+R142: You now know Hale was Ansel's go-between and that Corvin took Ansel's coin for four years.
+R143: I did not learn the name 'Wren' until this spring, when Hale wrote from Thornhallow that Corvin's apprentice was a half-elf girl with Elowen's chin.
+R156: Take Dunn and Hale's cousin Rafe, the two best riders I have.
+R160: While you wait, you ask Edric quietly when Hale first came into his service.
+
+## The Wick-House (13 sentences in 11 rounds)
+R71: There's a staff at the Wick-House that no one but Elowen's heir may take, and the keeper there showed me the door.
+R71: "Take me with you to the Wick-House, and I'll tell you everything I know about where she went.
+R72: Someone else has come asking at the Wick-House since I did.
+R73: It's nearly four, and you have the evening, a chance for a proper long rest, and the Wick-House waiting at dawn.
+R75: The dawn bell is a couple of hours off, and the keeper of the Wick-House sleeps until it.
+R77: The east door, a narrow plank door in the Wick-House flank, has fresh bright scratches all around its lock, like a pick that slipped many times.
+R94: " She said she had hidden the child's inheritance in three places: a coffer upriver, a staff at the Wick-House, and the lamp here.
+R98: You could also use these hours: go back to the Wick-House for Ysolde's counsel, visit Corvin, tell Sir Corwen's family what the lamp means, or fetch the reliquary from the spit when the weather clears.
+R121: Brann is given a bed at the Wick-House, where Mother Ysolde takes one look at him and puts the kettle on, as if she had been expecting him for sixteen years.
+R122: "Second, the Heron's Tithe may simply watch you leave and strike elsewhere: Thornhallow, or Brann at the Wick-House, or Corvin's cellar.
+R122: You have three slots, all your Inspiration, and Brann safe at the Wick-House.
+R123: At the Wick-House, Mother Ysolde hears you out, bars the door with her own hands, and tells Brann he may help her cut wicks, since he knows lamps.
+R142: "Twenty years you knew the staff was at the Wick-House and never dared take it.
+
+## Brann (15 sentences in 11 rounds)
+R86: You pound up the stair behind Brann's wavering candle, two steps at a time, with the lamp-staff clattering against the wall.
+R86: Brann heaves it up and you climb into the lantern-room, a round chamber of cracked glass, cold brass, and a great dead lamp at its heart, a drum of old lenses taller than you, black with fifteen years of salt.
+R92: Above you, Brann's voice cracks with strain: "One more turn on the ring, I swear it!
+R94: Brann leads you around the foot of the tower to the north wall.
+R101: You could fetch the reliquary from the spit first, since Brann has the lamp lit and the foot is the proof of your claim.
+R117: Brann has the door open before you have knocked.
+R117: Over a pot of hot tea, Brann tells you what he didn't say before.
+R118: You have three 1st-level slots, all your Inspiration, Kit at your shoulder, Brann holding the candle, and Dunn waiting at the landing.
+R119: You say the words and draw the sign in the air, and the ritual takes ten quiet minutes, long enough that Brann's candle gutters twice and Kit shifts her weight.
+R120: You read the leaf by Brann's candle: the baptism on one side, and the burial on the other, in the same cramped chaplain's hand.
+R121: Before you leave, you and Kit wedge a driftwood spar into the iron cellar door's frame, and Brann turns the old key in the tower door and gives it to you.
+R121: Brann is given a bed at the Wick-House, where Mother Ysolde takes one look at him and puts the kettle on, as if she had been expecting him for sixteen years.
+R122: "Second, the Heron's Tithe may simply watch you leave and strike elsewhere: Thornhallow, or Brann at the Wick-House, or Corvin's cellar.
+R122: You have three slots, all your Inspiration, and Brann safe at the Wick-House.
+R123: At the Wick-House, Mother Ysolde hears you out, bars the door with her own hands, and tells Brann he may help her cut wicks, since he knows lamps.
+
+## Oake (15 sentences in 11 rounds)
+R163: " He doesn't know whether Oake knows who "Aldous" really is.
+R164: Oake", and it is twelve years old.
+R165: You tell him you'll ride to Marrowford ahead of the prisoners tomorrow, with Kit and a disguise, to look at Oake's counting-house before the assize.
+R167: Your Deception is a 7, and Oake's Insight is an 11.
+R168: " You bob to the clerk and are out through the loading door before Oake can finish saying "Of course, of course.
+R168: You have 17 of 17 hit points, two 1st-level slots and three Inspirations, and Kit is at the stable two streets from Oake's, with the horses.
+R169: In a few words you tell her what you saw: three men heading for Oake's, one with a notched ear and a club.
+R169: Oake comes out in a hooded travelling cloak, no longer laughing, with the grey-coated man at his elbow and the two heavy-shouldered men a pace behind.
+R169: Dusk is coming, the lamps are being lit, and Oake's party is already thirty paces off in the crowd.
+R170: You follow Oake's party at thirty paces through the evening market, using stalls and carts as cover.
+R171: Lyle takes the barge and the banded chest under the bridge-house seal and holds Oake in the bridge-house, politely, with two of her watchmen.
+R173: Before you sit, you look over the room for anything Oake could use as a weapon or a signal: the table is bare, the bench is bolted down, and the window has no sill to hang a cloth on.
+R174: "Master Oake, your own tally says you paid Cobb Harrow forty marks to hold the Heron's Tithe at Sedge Creek until the 24th, 'for the lamp.
+R175: So the clerk wrote both, and the clerk has served Oake for at least twelve years.
+R175: "Warden, Oake's bill was paid two days after Ansel was taken.
+
+## Dame Crowe (10 sentences in 10 rounds)
+R16: You have the truth in hand, a day and a half before Dame Crowe arrives, and you can't be sure Hale hasn't another way into the chapel.
+R17: "I'll set my name to it, in writing and in person, before this Dame Crowe, so long as it's the truth you mean to tell and not another tale.
+R47: Dame Crowe came on the fourth day, at noon exactly.
+R70: As for you, the hall has no quarrel with a girl who brought it the truth, but you owe your appearance at Dame Crowe's assize at Marrowford at month's end.
+R102: That leaves twenty days to Dame Crowe's assize.
+R121: "It goes to Dame Crowe in my hand or in Pell's, and no one else's," she says.
+R136: He walks to Dame Crowe's assize alive, same as Corvin, and tells it under oath.
+R138: What's established is that the arbiter at Saltmarsh told you to appear at Dame Crowe's assize at Marrowford at month's end, and I ruled that to be the 30th.
+R162: "Ansel will stand before Dame Crowe at the assize, under oath, and she can weigh his crimes and his blood together.
+R176: You have 17 of 17 hit points, three slots and three Inspirations, and Dame Crowe's clerk will reach the bridge-house around noon.
+
+## The Frightened Page (13 sentences in 9 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R6: Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done.
+R7: Tell Tobin to speak of you or stay silent, whether you'll walk to Thornhallow, and whether you want to settle in for the night in Marrowford first.
+R8: Tobin takes a straw pallet against the wall near you, one hand never far from his knife.
+R19: By the time you reach the kitchen door, a quarter of an hour has gone, and Tobin has had all the time he needed.
+R19: That's Lord Edric's study, and Tobin got there first.
+R26: Tobin takes the last of your bread with both hands, as if it were a medal, and nods fiercely.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+R48: Before you go you press a thumb to Tobin's forehead and say the Lantern-Bearer's short blessing.
+R157: He rings for Tobin, and within minutes the gatekeeper, Tobin and Brother Osric are in the hall.
+R157: The doors are barred, the shutters pulled to, and Tobin posts two manor men on the yard stair.
+R164: He comes from supper with a napkin still in his hand, and Tobin trails after him with a lantern.
+R164: Edric calls Tobin, and the boy is out of the room before the wax is cool.
+
+## Wren (10 sentences in 9 rounds)
+R38: What does Wren do with the day?
+R40: "She's alive, Wren.
+R69: It reads, in short plain lines: *I, Elowen Ashgrove, road-priest of the Lantern-Bearer, name my daughter Wren heir to my lamp-staff.
+R70: The record shows 300 XP, so Wren can take level 2.
+R71: Wren has 17 hit points and three 1st-level slots, with Jack of All Trades, Song of Rest (d6), and Faerie Fire added to your spells.
+R71: "I don't know, Wren.
+R72: I wasn't the only one who knew about the staff, Wren.
+R105: Inside is a slip of paper in your mother's hand: *She is Wren.
+R121: You write in the margin, in your own plain letters, *Copy, made by Wren Ashgrove, Day 13.
+R143: I did not learn the name 'Wren' until this spring, when Hale wrote from Thornhallow that Corvin's apprentice was a half-elf girl with Elowen's chin.
+
+## Aldous (14 sentences in 8 rounds)
+R95: I picked "Aldous" for the Grey Cloak without checking it against Brother Osric's register, so it wasn't a planted clue.
+R97: Three dead hands from the Heron's Tithe, a hooded man called Aldous, a man named Sparrow, and a request to give the full account by a fire.
+R97: And it says Hale acted for a patron the prisoner knew only as *Aldous*.
+R99: "I told myself it was to keep Aldous from finding you, and that was partly true.
+R138: My grandsire Aldous gave it to the Lantern-Bearer, and your mother carried it to the sea.
+R161: "I am the son of Hugh Verrel, Aldous's eldest, and of Joan, a ferryman's daughter at Dunnock.
+R161: I lost this one and went by Aldous, for the grandsire, because I thought I might wear it until I'd earned the other back.
+R163: " He doesn't know whether Oake knows who "Aldous" really is.
+R173: Eleven years ago a man who signed himself Aldous wrote to him, wanting a safe go-between to buy news of Elowen Ashgrove's daughter.
+R173: He never saw Aldous's face.
+R173: " The forty marks to Harrow were Aldous's gold, passed by bill at his instruction.
+R174: It doesn't change your point, which is that a man who claims never to have known what "Aldous" wanted knew to write "for the lamp".
+R174: ' A man who never saw Aldous's face doesn't know about a lamp.
+R174: "Two days after Aldous was taken on the causeway.
+
+## Ashby Weir (7 sentences in 7 rounds)
+R25: Lady Maren Thistlewood of Ashby Weir, two days upriver of Marrowford, was sold a hero's tale of an ancestor who held the ford, to claim ferry-toll rights.
+R26: So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule.
+R29: Come to the ford at Ashby Weir at dusk on the fifth day, alone, and bring it.
+R31: The ford at Ashby Weir is where Corvin wants to meet you on the fifth day.
+R64: "Paid to a man at Ashby Weir three winters gone, for a tale of our house.
+R71: The last time I saw her she was at Ashby Weir, alive and furious, with you in her arms.
+R97: "It names the last places he knew Elowen Ashgrove to have been, Ashby Weir and then a spit he never found.
+
+## Sonnet (14 sentences in 7 rounds)
+R54: API Error: Sonnet 5.
+R54: Claude Code can't respond to this message with Sonnet 5.
+R55: API Error: Sonnet 5.
+R55: Claude Code can't respond to this message with Sonnet 5.
+R56: API Error: Sonnet 5.
+R56: Claude Code can't respond to this message with Sonnet 5.
+R57: API Error: Sonnet 5.
+R57: Claude Code can't respond to this message with Sonnet 5.
+R58: API Error: Sonnet 5.
+R58: Claude Code can't respond to this message with Sonnet 5.
+R59: API Error: Sonnet 5.
+R59: Claude Code can't respond to this message with Sonnet 5.
+R60: API Error: Sonnet 5.
+R60: Claude Code can't respond to this message with Sonnet 5.
+
+## Code (7 sentences in 7 rounds)
+R54: Claude Code can't respond to this message with Sonnet 5.
+R55: Claude Code can't respond to this message with Sonnet 5.
+R56: Claude Code can't respond to this message with Sonnet 5.
+R57: Claude Code can't respond to this message with Sonnet 5.
+R58: Claude Code can't respond to this message with Sonnet 5.
+R59: Claude Code can't respond to this message with Sonnet 5.
+R60: Claude Code can't respond to this message with Sonnet 5.
+
+## Dunn (8 sentences in 7 rounds)
+R82: Dunn takes the long way, as you asked, north around the mudflats with the grey cutter's sail always a smudge in the south and the wind in your favour.
+R83: Dunn's skiff is already pulling away off the point, and the north landing is empty at your feet.
+R94: Kit and Dunn, who has finally tied up the skiff, begin to lay the three dead hands out decently on the shingle, side by side, faces covered with their own cloaks.
+R95: Dunn is ready to take the dead and the living back to Saltmarsh, though he mutters about the weather.
+R96: You press two silver pieces into Dunn's palm.
+R96: Dunn's seamanship check is a 12 against a DC 12 that I set for the weather, so he scrapes through.
+R118: You have three 1st-level slots, all your Inspiration, Kit at your shoulder, Brann holding the candle, and Dunn waiting at the landing.
+R156: Take Dunn and Hale's cousin Rafe, the two best riders I have.
+
+## The Heron's Tithe (7 sentences in 7 rounds)
+R82: You can't be sure whether anyone has gone ashore, or whether the Heron's Tithe is still anchored off the south side.
+R97: Three dead hands from the Heron's Tithe, a hooded man called Aldous, a man named Sparrow, and a request to give the full account by a fire.
+R115: When not at the Saltmarsh quay, the Heron's Tithe lies up in Sedge Creek, a salt-cut inlet north of the town.
+R121: The assize is a week and a half off, Corvin is in the cellar, and the Heron's Tithe is somewhere in Sedge Creek with a master who now knows you have what he wanted.
+R122: "Second, the Heron's Tithe may simply watch you leave and strike elsewhere: Thornhallow, or Brann at the Wick-House, or Corvin's cellar.
+R141: Two riders go a mile ahead and two a mile behind, and a third goes back to Saltmarsh with your warning for the arbiter: the Heron's Tithe and Sparrow are both still loose, and Cobb Harrow may come for his coin.
+R174: "Master Oake, your own tally says you paid Cobb Harrow forty marks to hold the Heron's Tithe at Sedge Creek until the 24th, 'for the lamp.
+
+## Sedge Creek (7 sentences in 7 rounds)
+R115: When not at the Saltmarsh quay, the Heron's Tithe lies up in Sedge Creek, a salt-cut inlet north of the town.
+R117: "Around midnight a grey sail, no lights, crossed the estuary mouth, turned, and went north toward Sedge Creek.
+R121: The assize is a week and a half off, Corvin is in the cellar, and the Heron's Tithe is somewhere in Sedge Creek with a master who now knows you have what he wanted.
+R122: "A dozen is more than the hall can spare, with Sedge Creek to watch and a Vantry quay to keep," she says.
+R140: The harbour man who watches Sedge Creek for the arbiter told her the cutter's papers are in the name of Cobb Harrow, a heavy, weather-cracked man of fifty who sails for coin and asks no names.
+R153: " You stand, and Pell takes your message word for word: Harrow sails at the dawn ebb the day after tomorrow unless the master pays him, so the arbiter's harbour man should be at Sedge Creek with every boat she can spare.
+R174: "Master Oake, your own tally says you paid Cobb Harrow forty marks to hold the Heron's Tithe at Sedge Creek until the 24th, 'for the lamp.
+
+## Smiling Follower (7 sentences in 6 rounds)
+R21: Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since.
+R25: Corvin is somewhere upriver, and Garrow has had most of a night's start toward him.
+R26: So Garrow got word and the wagon moved, and the wagon is now on the road to Ashby Weir, the same road you meant to take, an hour or two of start ahead of you and a team of horses to your mule.
+R42: Before you can find your feet, Garrow comes splashing across the shallows with his short blade, and a slash opens your arm, three more.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R44: Garrow and the driver are dead, and the villagers are gathered quietly on the bank, looking at you with a different face than they wore at noon.
+R168: He leads you down a lane of tanneries to the riverside, then through the yard of the Drowned Candle, the inn where Garrow once saw you put your psalter in your pack.
+
+## Osric (6 sentences in 6 rounds)
+R22: You hold the copy of the register entry and Osric's promise, and Lord Edric is looking from one of you to the other.
+R25: Osric will be fetched to the manor under guard that very night, and if a storyteller named Corvin comes to the gate, a rider will find you before the door opens.
+R48: You eat, sleep a few hours, and Lord Edric keeps his word about Osric and Tobin without being asked twice.
+R69: You fold the paper away and spend the rest of the hour as you promised, laying out your account: ledger leaves first, then Osric's register, then Elowen's letter, murmuring it over to Kit in a low voice.
+R156: The only scrap of paper left in your pack is the one you've been saving, so you borrow a torn page from the landlord's tally-book and write by candle: "Sparrow comes to Osric, bar the chapel and keep him inside the manor.
+R159: You add quietly that Ansel means to tell him to his face before anyone else does, and that you'd like him to hear it with Osric beside him, not alone.
+
+## Lady Maren (6 sentences in 6 rounds)
+R34: "Lady Maren rules the spur now, her daughter," he adds.
+R39: Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar.
+R41: Not in Lady Maren's keeping, not in anyone's keeping but mine, where it can be put right before it hurts the innocent.
+R45: Lady Maren arrives at a run with a lantern and a blanket, takes one look at you, and says nothing at all for a moment.
+R46: " Alder claps her on the shoulder, and Lady Maren pays her a month's wage in advance without being asked.
+R64: You set the rest of it on the table in a neat row: Lady Maren's letter under the Thistlewood seal, Lord Edric Verrel's letter vouching for you, and Brother Osric's copied register entry.
+
+## Alder (6 sentences in 6 rounds)
+R39: Two of Lady Maren's men-at-arms, Alder and Kit by their badges, take you by the elbows and hustle you out the back as the room swells into a roar.
+R41: On the near bank, two shapes step out of the willows, Alder and Kit with their spears levelled, and the villagers' murmur sharpens into a shout.
+R42: You're at 1 hit point, with Garrow beside you, wounded and furious, the driver cocking his crossbow again on the bank, Alder and Kit wading in, and Corvin two stones off, silent.
+R44: Twice you hear Alder's voice and Hob's wheeze over you, hands pressing at your wound and failing, and Kit swearing in a language you don't know.
+R45: Alder and Kit haul you up the bank like a netted fish, and you cough up what feels like half the Marrow.
+R46: " Alder claps her on the shoulder, and Lady Maren pays her a month's wage in advance without being asked.
+
+## Dray (6 sentences in 6 rounds)
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R48: You take out the Dray leaf by the candle to check it again before the road.
+R61: You hold the Dray leaf under your psalter, in Corvin's neat hand, with the sum of 140 marks beside Isaude's name.
+R64: "I never met a Dray who needed a storyteller to be one.
+R66: He has gone grey and he's babbling already: *he only copied, he was paid by the Dray steward, there are two more copies in the case.
+R69: The arbiter sits behind the dais table with the Dray leaf and the clerk's case before her.
+
+## Sir Corwen (6 sentences in 6 rounds)
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R62: Sir Corwen is on his feet before you finish, his chair scraping.
+R68: The hall is filling again behind you with the Vantry household, a few of Sir Corwen's men, and a dozen townsfolk who've caught the scent of scandal.
+R69: Sir Corwen and Isaude sit to one side, the Vantry elder and his son to the other.
+R70: Corvin's goods in Saltmarsh are to be seized toward Sir Corwen's hundred and forty marks.
+R98: You could also use these hours: go back to the Wick-House for Ysolde's counsel, visit Corvin, tell Sir Corwen's family what the lamp means, or fetch the reliquary from the spit when the weather clears.
+
+## Gullspit (8 sentences in 6 rounds)
+R79: Inside, rolled thin as a cigarette, is a strip of paper in your mother's tilted hand: *I go to the Gullspit light.
+R79: The Gullspit light is a name you don't know.
+R115: After the Gullspit lamp lit, the master stood silent at the rail for an hour and then said to Sparrow, "Then the foot is the key, and the light is only the lock.
+R115: A little after five in the evening the low roofs and masts of Saltmarsh come up out of the haze, and the Gullspit light stands white on its spit, burning steadily in the dusk.
+R116: You wake at four to a still house and the faint, steady glow of the Gullspit light across the water, through a gap in the shutters.
+R121: The Gullspit light is dark over the estuary, the first time in three days.
+R158: Passed to me by a go-between the week before Gullspit.
+R174: The Gullspit lamp lit on Day 10, not Day 7.
+
+## Harrow (6 sentences in 6 rounds)
+R140: "If the master's in irons, Harrow either sails north or he comes for the coin owed him.
+R152: "Harrow's been paid half.
+R153: " You stand, and Pell takes your message word for word: Harrow sails at the dawn ebb the day after tomorrow unless the master pays him, so the arbiter's harbour man should be at Sedge Creek with every boat she can spare.
+R167: On the clerk's high desk lies an open tally-sheet, and one line is written large in the clerk's hand: "Harrow, Heron's Tithe: balance of 40 marks paid in full by F.
+R172: You bar the door and spend the evening at the table, writing up the quay: the tally-sheet line about Harrow and the forty marks, the banded chest, the clerk's note and the boy, Crake's face and the notch in his ear.
+R173: " The forty marks to Harrow were Aldous's gold, passed by bill at his instruction.
+
+## Master Tallowmere (6 sentences in 5 rounds)
+R1: He said Master Tallowmere would know what he meant.
+R7: He doesn't trust anyone but Master Tallowmere, and he's frightened because Master Tallowmere hasn't answered him in a month.
+R11: "I was told a friend of Master Tallowmere was coming," Lord Edric says.
+R97: "Master Tallowmere signed before dusk," she says.
+R97: Master Tallowmere says he never saw his face.
+R122: Third, Master Tallowmere is not mine to lend.
+
+## Aldous Verrel (5 sentences in 5 rounds)
+R16: Aldous Verrel, grandsire of Lord Edric, married in this chapel by plain rite to Maud Fenn, miller's daughter of Thornhallow.
+R111: The master calls himself the natural son of the old Aldous Verrel, "born on the wrong side of the blanket and robbed of Thornhallow.
+R114: It goes to Lord Edric and Brother Osric together: look in the chapel register for a leaf cut from it, perhaps one recording a natural son of the old Aldous Verrel, and know that a man who calls himself that son, a tall man in a grey cloak with a leaf-green ring, is hunting for proof.
+R120: One side is a baptism, Aldous Verrel the younger, a servant's child, his father consenting.
+R135: Aldous Verrel the younger died at three, and the grave won't speak for you.
+
+## Lantern-Bearer (5 sentences in 5 rounds)
+R33: "A traveler of the Lantern-Bearer, sent by Mother Pell, who says you keep the best memory on the river.
+R48: Before you go you press a thumb to Tobin's forehead and say the Lantern-Bearer's short blessing.
+R66: You say it low, in the warm voice he taught you, and the last of your Lantern-Bearer's small magic goes out of you with a flick of the fingers.
+R69: It reads, in short plain lines: *I, Elowen Ashgrove, road-priest of the Lantern-Bearer, name my daughter Wren heir to my lamp-staff.
+R138: My grandsire Aldous gave it to the Lantern-Bearer, and your mother carried it to the sea.
+
+## Elowen Ashgrove (5 sentences in 5 rounds)
+R46: She has written it in her own square hand, naming you her friend and Elowen Ashgrove's daughter, "with every claim on the house of Thistlewood that her mother had, and gladly given.
+R64: When she gets to the line about Elowen Ashgrove's daughter, she looks up at you for a moment.
+R69: It reads, in short plain lines: *I, Elowen Ashgrove, road-priest of the Lantern-Bearer, name my daughter Wren heir to my lamp-staff.
+R97: "It names the last places he knew Elowen Ashgrove to have been, Ashby Weir and then a spit he never found.
+R173: Eleven years ago a man who signed himself Aldous wrote to him, wanting a safe go-between to buy news of Elowen Ashgrove's daughter.
+
+## Isaude (7 sentences in 5 rounds)
+R61: Beside him is his daughter Isaude, a pale girl of perhaps eighteen, gripping the arm of her chair.
+R61: You hold the Dray leaf under your psalter, in Corvin's neat hand, with the sum of 140 marks beside Isaude's name.
+R63: Isaude is staring at the page in your hand with her lips parted, and you realise she has understood it before her father has.
+R64: "Father," Isaude says.
+R64: The Vantry elder has gone very quiet, and so has his son, who looks at Isaude with an expression that might be gratitude.
+R69: Sir Corwen and Isaude sit to one side, the Vantry elder and his son to the other.
+R70: " Isaude holds your eye, and the Vantry son is, for the first time all day, almost smiling.
+
+## Hit Dice (6 sentences in 5 rounds)
+R114: You had two Hit Dice and you've now spent both, so you have none left until a long rest.
+R114: The two Hit Dice give you 3 and 4, and your own Song of Rest adds a 2.
+R115: You have 12 of 17 hit points, no spell slots, no Hit Dice, and two Bardic Inspirations.
+R116: You have 17 of 17 hit points, all three 1st-level slots, three Bardic Inspirations, and both Hit Dice back.
+R137: You spend your last Hit Die for 6 and your own Song of Rest adds 2, so you're at 11 of 17, with no spell slots or Hit Dice left.
+R139: You have 11 of 17 hit points, one Bardic Inspiration, no slots or Hit Dice, and a camp under a grey sky.
+
+## Edric (7 sentences in 5 rounds)
+R160: While you wait, you ask Edric quietly when Hale first came into his service.
+R161: " Edric says at last.
+R162: Edric sends for supper, wine and a clerk to copy the scraped line before dawn.
+R164: Edric leads you up the east stair to a plain room with a narrow bed and a desk bare of everything but a sand-shaker.
+R164: Edric calls Tobin, and the boy is out of the room before the wax is cool.
+R166: Edric's purse holds ten gold crowns, in a plain leather bag.
+R166: You take Edric's letter and purse with a grin and turn in for the night.
+
+## Drowned Candle (4 sentences in 4 rounds)
+R6: He's lodging for the night at the Drowned Candle, an inn on the near bank, and is meant to leave at dawn.
+R21: Garrow here saw you stow that psalter back in your pack at the Drowned Candle, and I rather think it hasn't left your side since.
+R168: He leads you down a lane of tanneries to the riverside, then through the yard of the Drowned Candle, the inn where Garrow once saw you put your psalter in your pack.
+R169: You see the three men from the Drowned Candle go in at the front door with the grey-coated man first.
+
+## Thistlewood (4 sentences in 4 rounds)
+R29: The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork.
+R44: Corvin said "Saltmarsh," and you still have the ledger in your psalter, two leaves for Thistlewood and Dray, and a night of rest ahead.
+R46: She has written it in her own square hand, naming you her friend and Elowen Ashgrove's daughter, "with every claim on the house of Thistlewood that her mother had, and gladly given.
+R64: You set the rest of it on the table in a neat row: Lady Maren's letter under the Thistlewood seal, Lord Edric Verrel's letter vouching for you, and Brother Osric's copied register entry.
+
+## The Salt Gull (4 sentences in 4 rounds)
+R45: Inside, packed in straw, lie a good set of lock-picks and tools, a full forgery kit in a lacquered case, a purse of sixty gold pieces in mixed coin, and one slip of paper in Corvin's neat hand: *The Salt Gull, Saltmarsh, the ninth.
+R46: Saltmarsh is days away, and the Salt Gull meeting is on Day 9.
+R75: The Salt Gull settles into its night noises of creaking beams, a drunk singing on the quay, and the slap of the tide.
+R100: He murmurs that the paper will go down within the hour, and that he'll bring whatever Corvin writes to you at the Salt Gull himself and not through the clerk.
+
+## Ember (4 sentences in 4 rounds)
+R46: My father's grey, Ember, who's too good for this village and bored with it.
+R47: Ember sulks for the first mile and then, as you sing, begins to keep time with his ears.
+R127: The wheels bite the gravel, Corvin sits with his hands in his lap like a hymn-singer, Kit walks at the near wheel with her shield on her arm, and you ride Ember at the far one, with the lamp-staff upright in your hand.
+R132: Then you drop off Ember's flank, skid on the gravel, and lunge at Bandit 3.
+
+## Rest (4 sentences in 4 rounds)
+R71: Wren has 17 hit points and three 1st-level slots, with Jack of All Trades, Song of Rest (d6), and Faerie Fire added to your spells.
+R98: Kit spends a Hit Die and rolls a 7 plus 2, and your Song of Rest adds a 6.
+R114: The two Hit Dice give you 3 and 4, and your own Song of Rest adds a 2.
+R137: You spend your last Hit Die for 6 and your own Song of Rest adds 2, so you're at 11 of 17, with no spell slots or Hit Dice left.
+
+## Mother Ysolde (4 sentences in 4 rounds)
+R80: Mother Ysolde turns the lantern-foot over in her fingers and answers in her dry voice.
+R121: Brann is given a bed at the Wick-House, where Mother Ysolde takes one look at him and puts the kettle on, as if she had been expecting him for sixteen years.
+R123: At the Wick-House, Mother Ysolde hears you out, bars the door with her own hands, and tells Brann he may help her cut wicks, since he knows lamps.
+R142: "As for dare, Mother Ysolde would have taken the skin off me, and I'm fond of mine.
+
+## Marl Sedge (4 sentences in 4 rounds)
+R124: You sleep well, ride out at first light with Kit and Pell's tracker, a wiry, silent woman called Marl Sedge, and reach the flats a little before eleven.
+R136: Sparrow is a speck on the far flats, and Marl Sedge is already gone after him through the reeds.
+R137: Marl Sedge has gone after Sparrow along the reed edge and will report back.
+R139: Marl Sedge appears out of the reeds a little after half past six, with mud to the knees.
+
+## Verrel (5 sentences in 3 rounds)
+R3: Inside are sheets of blank vellum, a tin of wax-impressions, a Verrel seal among them, and a half-finished draft in Corvin's neat, unmistakable hand.
+R3: The Verrel charter's third descent must hold, or the ink on the whole line will not.
+R3: "* Beneath it is a list of three noble houses with sums beside them, two struck through and one circled: Verrel.
+R7: Whatever you choose to do about Verrel's third descent, you can do it with all of them.
+R142: I saw him once at Elowen's table, a younger Verrel with a ring on his hand.
+
+## Marrow (3 sentences in 3 rounds)
+R10: The river road runs down the Marrow's north bank through willow-banks, wheat fields gone gold, and stone farmsteads with smoke rising.
+R45: Alder and Kit haul you up the bank like a netted fish, and you cough up what feels like half the Marrow.
+R101: He has drawn the lower Marrow as a ribbon, with Saltmarsh at its mouth and a mark a day's ride upriver on the east bank.
+
+## Marta (5 sentences in 3 rounds)
+R28: Marta Pell, keeper here these fourteen years.
+R28: You can open the note now, take a moment with Marta first, or sleep on it.
+R30: The first year he stopped here, he sat up all night over that brass lamp over my door, turning it in his hands and saying, 'The same hand, Marta.
+R30: You tell Marta a story for the lamp, one about a tinker's daughter and a lantern that wouldn't go out, and she laughs and wipes her eyes at the end.
+R47: You pass the night at Lantern's Rest, where Marta feeds you both and refuses payment, and ride on through Marrowford the next day.
+
+## Ashby (3 sentences in 3 rounds)
+R29: The wagon is somewhere on the Ashby road, and Lady Thistlewood's gate is a day's ride past this fork.
+R31: Biscuit is fed and saddled in the yard, and the Ashby road runs north under a white morning mist.
+R39: In the green and gold light, down the Ashby road, comes the creak of a wagon, a painted lantern swinging on its side, and a lean man walking before it in a brown coat.
+
+## The Grey Cloak (3 sentences in 3 rounds)
+R90: Bandit 2 is hurt, Bandit 3 is untouched, and Sparrow and the Grey Cloak are still outside.
+R95: I picked "Aldous" for the Grey Cloak without checking it against Brother Osric's register, so it wasn't a planted clue.
+R157: He rises from his desk, grey-faced and with ink on his fingers, and you give it to him in two sentences: Corvin and a man who calls himself the Grey Cloak are coming behind you in irons, and a wounded knife-man in a brown coat is somewhere ahead of you, hunting the chapel register.
+
+## Hit Die (3 sentences in 3 rounds)
+R98: Kit spends a Hit Die and rolls a 7 plus 2, and your Song of Rest adds a 6.
+R137: You spend your last Hit Die for 6 and your own Song of Rest adds 2, so you're at 11 of 17, with no spell slots or Hit Dice left.
+R140: You wake at four on Day 16 with all 17 hit points, all three 1st-level slots, three Bardic Inspirations, and a Hit Die back for each of you.
+
+## Reedlow (3 sentences in 3 rounds)
+R102: Do you stop at the spit first, or ride straight for Reedlow?
+R113: Sparrow knows you found Reedlow, and he will tell his master.
+R123: Is she alive, the old woman at Reedlow?
+
+## Gannet Causeway (3 sentences in 3 rounds)
+R123: The Gannet Causeway, half a day out of Saltmarsh on the Marrowford road, where the tide runs both sides.
+R124: The Gannet Causeway is about nine hundred paces long.
+R126: A little before half past eleven the road drops to the salt flats, and the Gannet Causeway lies ahead: a long gravel line running across wet silver mud, with the tide still lapping its timber edge, and the drowned boat-shed a dark smudge on the far bank.
+
+## Marl (3 sentences in 3 rounds)
+R124: Marl's tracking roll is an 11, which isn't enough to read the banks with confidence.
+R125: I should say plainly that the guards you mentioned are back at Saltmarsh with Pell, since you rode out with only Marl and Kit.
+R137: The causeway will stay open for another three hours or so, Marl hasn't come back yet, and you have a prisoner who has said he'll testify.
+
+## Cobb Harrow (3 sentences in 3 rounds)
+R140: The harbour man who watches Sedge Creek for the arbiter told her the cutter's papers are in the name of Cobb Harrow, a heavy, weather-cracked man of fifty who sails for coin and asks no names.
+R141: Two riders go a mile ahead and two a mile behind, and a third goes back to Saltmarsh with your warning for the arbiter: the Heron's Tithe and Sparrow are both still loose, and Cobb Harrow may come for his coin.
+R174: "Master Oake, your own tally says you paid Cobb Harrow forty marks to hold the Heron's Tithe at Sedge Creek until the 24th, 'for the lamp.
+
+## Ferrand Oake (4 sentences in 3 rounds)
+R163: The recommendation letter that brought him to Thornhallow came from Ferrand Oake, who keeps a counting-house in Marrowford and places clerks in half the minor houses on the river.
+R163: The tin box is in the east wing, Ferrand Oake is in Marrowford, Corvin waits in the gatehouse, and Lord Edric is at supper.
+R164: Marrowford, the assize and Ferrand Oake's counting-house are a day up the road.
+R166: Ferrand Oake's house is a three-storey timber-and-plaster building with a gilded wheat-sheaf over the door, and a loading door gapes onto the alley at the side.
+
+## Market Row (4 sentences in 3 rounds)
+R165: "A grain-factor on the Market Row, plump, jovial, a man who laughs before the joke is over.
+R168: All three go out by the front door toward Market Row.
+R168: Three men with a club are heading for Market Row, where the widow is supposed to come back before the bell.
+R169: You keep the disguise up so the clerk won't know you, and find a wine-shop on the far side of Market Row with a window onto the wheat-sheaf sign.
+
+## Crake (3 sentences in 3 rounds)
+R172: You bar the door and spend the evening at the table, writing up the quay: the tally-sheet line about Harrow and the forty marks, the banded chest, the clerk's note and the boy, Crake's face and the notch in his ear.
+R179: You're in a wet ditch thirty feet from the sluice, and the nearest of Crake's men is just across the yard.
+R180: You called out to Crake, and then your spell caught only one man.
+
+## Master Hale (2 sentences in 2 rounds)
+R5: You've learned that Master Hale exists, that Tobin fears him, and that Hale sends smiling people after Tobin.
+R13: Master Hale is there, a pace from the frame with his head cocked, and for half a breath the smile is not on his face.
+
+## Aldermere (2 sentences in 2 rounds)
+R13: " The whole line rests on the third descent, his grandsire's marriage into the old Aldermere house.
+R161: Your father cut my name from this book when I was ten, because a ferryman's grandson could not stand in the line of the Aldermere blood.
+
+## Verrels (2 sentences in 2 rounds)
+R17: The Verrels are good people, and a miller's daughter was a good woman.
+R159: You skim the baptisms of fifty years back, and your Investigation is an 8, so you find the Fenns and the Verrels and a great many millers, but no Ansel.
+
+## Corvin Tallowmere (2 sentences in 2 rounds)
+R23: Corvin Tallowmere's ledger is a record of the forgeries he sold to three houses.
+R69: * Beneath, smaller: *Corvin Tallowmere knows where it is.
+
+## Biscuit (2 sentences in 2 rounds)
+R31: Biscuit is fed and saddled in the yard, and the Ashby road runs north under a white morning mist.
+R32: Biscuit eats the miles patiently.
+
+## Heron (2 sentences in 2 rounds)
+R39: " She gives the order, and by eleven the Heron and Net's common room is jammed with fishermen, ferry-hands, weavers and children.
+R167: On the clerk's high desk lies an open tally-sheet, and one line is written large in the clerk's hand: "Harrow, Heron's Tithe: balance of 40 marks paid in full by F.
+
+## Isaude Dray (2 sentences in 2 rounds)
+R48: Corvin's neat hand: the betrothal ties Sir Corwen's daughter and heir, Isaude Dray, to the Vantry merchant-house of Saltmarsh, wool and salt.
+R68: Beyond her, by the dais, Isaude Dray stands with her father.
+
+## Lord Edric Verrel (2 sentences in 2 rounds)
+R64: You set the rest of it on the table in a neat row: Lady Maren's letter under the Thistlewood seal, Lord Edric Verrel's letter vouching for you, and Brother Osric's copied register entry.
+R135: You have seen that chin before, on Lord Edric Verrel at Thornhallow.
+
+## Bess (2 sentences in 2 rounds)
+R75: Bess herself sends up hot supper: eel pie, bread, and a warning that the east stair creaks.
+R102: You send Pell your note, and Bess promises to hold the room for three days.
+
+## Ysolde (2 sentences in 2 rounds)
+R79: "That's all she left," Ysolde says quietly, "except that I was to give the staff to you and no one else.
+R98: You could also use these hours: go back to the Wick-House for Ysolde's counsel, visit Corvin, tell Sir Corwen's family what the lamp means, or fetch the reliquary from the spit when the weather clears.
+
+## Pip (2 sentences in 2 rounds)
+R80: I have a bell-boy called Pip, who is nine and afraid of his own shadow.
+R82: Before you board, you press a copper into Pip's small fist and give him your message for the arbiter, word for word.
+
+## Reedlow Landing (2 sentences in 2 rounds)
+R101: You could ride to Reedlow Landing in the morning after your long rest finishes at about four.
+R102: Reedlow Landing lies a day upriver on the way, so it is on your road and you'd lose almost nothing by going.
+
+## Annis (3 sentences in 2 rounds)
+R105: The year after, a different man came to the door, and Annis's voice drops.
+R105: "I kept it fifteen years," Annis says.
+R115: "Sparrow knows this house now," you tell her, "so Annis shouldn't sleep under its roof for a few nights.
+
+## Dace (2 sentences in 2 rounds)
+R111: " Dace says it quickly, like a story he has heard told too many times.
+R113: You have 1 of 17 hit points, no spell slots, two Bardic Inspirations, and two prisoners in the byre: Dace Rook, bound, and the surviving pikeman.
+
+## Tamsin (2 sentences in 2 rounds)
+R113: Tamsin crosses the yard with her ferry-hook, kneels over you, and stabilises you with a successful first-aid check.
+R114: Tamsin knows a drover going upriver who'll carry it to Thornhallow.
+
+## Miss Ashgrove (2 sentences in 2 rounds)
+R116: "You went out for your mother, Miss Ashgrove, and you came back with a prisoner and a debt owed to you.
+R122: "Three faults in it, Miss Ashgrove.
+
+## Dunn Orrin (2 sentences in 2 rounds)
+R116: Dunn Orrin's skiff is at the east quay when the tide allows.
+R117: You walk down to the east quay in the dark, and Dunn Orrin is already sitting on a bollard, mending a net by lantern-light.
+
+## Crewman (4 sentences in 2 rounds)
+R148: You throw the insult at Crewman 2: "You look like you'd lose a fight to your own boots!
+R148: Crewman 1's scimitar bites you for 6 while Crewman 2, still smarting, swings wide.
+R148: Crewman 2 is hurt and rattled and right in front of you.
+R149: Your rapier takes Crewman 2 high on the arm and his scimitar drops from his hand.
+
+## Plough (2 sentences in 2 rounds)
+R154: At seven in the evening the column reaches a roadside inn, the Plough and Pail.
+R155: The Plough and Pail is half drovers, half bargemen and a few farmhands with mud to the knee.
+
+## Pail (2 sentences in 2 rounds)
+R154: At seven in the evening the column reaches a roadside inn, the Plough and Pail.
+R155: The Plough and Pail is half drovers, half bargemen and a few farmhands with mud to the knee.
+
+## Hugh (4 sentences in 2 rounds)
+R159: "Ansel, son of Hugh Ve.
+R159: If Hugh had a lawful son, then that son stood before your father in the line.
+R162: "My lord, nobody here can undo what your father did to Hugh's son.
+R162: If he is Hugh's son, he'll not sleep in a hole in my cellar.
+
+## Dunstan Crake (2 sentences in 2 rounds)
+R170: Your Stealth is an 8, and Dunstan Crake's Perception is a 9.
+R179: The mill door bangs wide, and a lean man in a grey coat comes out with a short club, Dunstan Crake, with two heavy men behind him.
+
+## Hand (2 sentences in 2 rounds)
+R177: You are not yet in range of the knot for Mage Hand, which reaches thirty feet.
+R178: Mage Hand reaches 30 feet, so the knot is farther off still.

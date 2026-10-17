@@ -167,3 +167,34 @@ with the same analysis after each block and a detailed report in evals/autoloop/
 - New cause found: check totals narrated with a different modifier than the roll used (bard2 R73, R76, R77); the DM
   writes the modifier itself. Proposed D4 (a sheet-backed skill field on dice), waiting on Jake.
 - Report: REPORT-set2-block2.md.
+
+### Second set, block 3 (rounds 121-180), 2026-10-17
+- Played with 2C. barbarian2's last 6 rounds (its player lines 179-184) were all refused by the safeguards
+  ("[reasoning_extraction]"), 8 failed calls: nothing shown, as fixed in block 1, but the game can't go on (D2).
+- Regex counts in play (fmt.py on the saves; menu at end per 60 rounds, block 2 → block 3): cleric2 2 → 0,
+  barbarian2 10 → 2, bard2 2 → 1. Sheet numbers in the last paragraph: 2 → 1, 3 → 2, **12 → 45** in bard2. By ten
+  rounds, bard2's read-outs were 1, 1, 1, 2, 3, 4 in rounds 61-120 (rising before 2C), then 1, 8, 9, 9, 10, 8: a
+  closing status line nearly every reply ("It's half past ten at night on Day 16. You have 17 of 17 hit points, three
+  slots, three Bardic Inspirations ... What does Wren do?", R146). To test: is it 2C, or a habit the conversation
+  taught itself?
+- cleric2: Brannoc died by the rules at R137 (Consume Life, then a critical Shock at 0 HP: three failures). The DM
+  told the ending (R138-139); the test player asked to play on with a new character, Tamsin Vale, a human druid,
+  "years later" (R140). Play has no way to make a new PC, so from R141 the DM ran Tamsin on Brannoc's sheet: her
+  Fog Cloud was refused ("Brannoc can't cast Fog Cloud", R149), and her slots are kept by hand in the notebook ("The
+  tool sheet is Brannoc's and refuses her spells, so the DM tracks her slots by hand"). Cleric2 rounds 141-180 are on
+  the wrong sheet; this is D1 again, with a cost.
+- barbarian2: Korvash died at R144. The DM offered "I can start a new character in Harrowmere", then in R145-149
+  said it couldn't ("My tools only add companions to an existing party"), with bold, bullets and numbered menus and
+  tool talk, and played the new PC (Grunna) on no sheet. Both deaths in block 3 end the same way: D1 is now the top
+  open decision.
+- Readers (READ.md, rounds 121-180): cleric2 49, barbarian2 43, bard2 53 findings. Checked and rejected: bard2 R153
+  "a second long rest inside 24 hours" (the rest before began Day 15 ~8 PM, this one Day 16 11:25 PM: 27 h apart; the
+  tool is right).
+- A/B on bard2's closing status lines (ab4/S; rounds 126, 146, 156, 161, 166, 176; 4 runs each), arms: base (2C),
+  pre2C (block 2's prompt), 5A (after "Plain text.": "The player sees their sheet whenever they ask: say a number
+  from it only when it changed this turn."), 5B (2C plus "or end on a tally of what they have"). fmt.py, sheet
+  numbers in the last paragraph: base 18/24, pre2C 20/24, 5A 18/24, 5B 18/24. Menus 0/2/1/0. Not judged blind: every
+  arm is the same, so there is nothing to tell apart and judging would cost about as much as the replays. Reading:
+  2C didn't cause it (the old prompt does it as much), and no wording breaks it once the conversation is full of it.
+  Nothing kept.
+- Final report: REPORT-set2-final.md.
