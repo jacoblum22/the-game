@@ -224,3 +224,15 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   player lines, 2 runs each. Untouched: 5 of 6 replies closed on a read-out. Cleaned: 3 of 6. Both arms wrote one on
   the first line ("I take stock of where we are..."), which invites it. Lines 2-3: 3 of 4 untouched, 1 of 4 cleaned.
   Cleaning the history helps but doesn't stop it; the code strip stays the fix.
+
+## Causes of the set 2 contradictions (Jake, 2026-10-17)
+- evals/autoloop/context.py prints what the DM had at a round: its conversation (word for word, or only the summary),
+  the notes shown, and the notebook as it was. CAUSES.md: six Sonnet readers sorted the 118 contradiction findings;
+  out files in games/read/causes/. 1 not a contradiction, 22 doubtful.
+- Where the earlier fact was: still in the conversation word for word in 108; only in a summary, or lost, in 7. In the
+  notebook right in 43, both versions in 12, wrong in 2, not at all in 60; shown in the notes in only 18. Distance from
+  the earlier fact: same reply 19, 1-3 rounds 37, 4-20 rounds 42, more 20.
+- Kinds: restated a scene detail differently (counts, positions, who holds what) 37; made up something new that clashes
+  31; worked out a sum wrong (days, distances, ages) 14; both sides in one reply 14; went back to a fact it had
+  corrected 3; claimed a tool it lacks 1; other 17 (narration against its own dice or tracker, loose wording).
+- So it isn't memory loss: the fact was nearly always in front of it, mostly from the last few rounds.
