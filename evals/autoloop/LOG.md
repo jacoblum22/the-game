@@ -217,3 +217,10 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   `new_pc`. The player can also go back to before a line of theirs and play on from there; that's theirs to do, not
   yours." Not yet tried live by the DM.
 - No rules files touched (rules/ holds only process notes; there's no rules validator in this repo).
+
+## Cleaned-history probe (Jake, 2026-10-17)
+- evals/autoloop/probe_strip.py: bard2's DM conversation as it is now, copied twice; one copy with every "You have N of
+  M hit points" sentence taken out (21 in the live conversation, the rest were before the cuts), one untouched. Same 3
+  player lines, 2 runs each. Untouched: 5 of 6 replies closed on a read-out. Cleaned: 3 of 6. Both arms wrote one on
+  the first line ("I take stock of where we are..."), which invites it. Lines 2-3: 3 of 4 untouched, 1 of 4 cleaned.
+  Cleaning the history helps but doesn't stop it; the code strip stays the fix.
