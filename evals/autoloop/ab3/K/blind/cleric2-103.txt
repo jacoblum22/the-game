@@ -1,0 +1,238 @@
+GAME cleric2, ROUND 103
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 100 ==
+PLAYER: I thank Ansel, take the bread and the willow-bark, and bless the hospice door before I go. "Keep the book open for Reedholm's names, Brother. I'll write if I can."
+
+Then I set out south on the river road toward the Eel Fork, keeping a steady pace and an eye on the reeds. DM: the carters said Sedge, the boy with the fever, went home sick, so is he the first person I should ask for when I reach Reedholm?
+  [game] sheet: gained 1 × Willow-bark (dried, for fever)
+  [game] time: 9 hours 30 minutes later: Day 11, 5:11:06 PM
+  [DM write_lore (hidden)] {"create": "Sedge", "kind": "person", "description": "Boy of about thirteen from Reedholm who carried eels to Stonebridge market and brought the first marsh-fever cases there; went home sick. Brannoc should ask for him first on arrival. Not yet met.", "relationships": ["from [[Reedholm]]"]}
+  [game] notebook: created an entry for Sedge; added 1 relationship to Sedge
+DM: Yes, Sedge is a good first name to ask for. He is the boy who carried the fever to market, so whoever tends him will know how it began, and the first sick are often the best clue to how a sickness spreads. He is about thirteen, a Reedholm eel-boy, and the carters could tell you nothing more of him. You've never met him.
+
+You bless the hospice door with a thumb of ash from the shrine lamp, and Ansel says he will keep the book open. The willow-bark goes in your pack, a bitter, useful thing for a fever. The road south is flat and good at first, then rougher as the valley widens into low water-meadows. The day is cold and clear, with geese in the sky. You walk nine hours with a rest at noon, and the Eel Fork comes up a little after five: a wooden milestone at the split, with a worn carving of an eel, and the east branch dropping away onto a raised causeway between flooded fields.
+
+The light is going amber. Ahead the road runs out over black water and reeds, the reeds waist-high and hissing in the wind. There is a shepherd's hut a hundred paces off the road, empty, with its roof sound and a hearth. Beyond the reeds, far off, a mist is rising.
+
+It's ten past five on Day 11, with Reedholm about a day and a half on. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and thirty-seven flasks. Night is a couple of hours off, and the moon is a thin sliver.
+
+What does Brannoc do?
+
+== ROUND 101 ==
+PLAYER: I take the east branch onto the causeway and walk on a little way, then turn back to the shepherd's hut before dark. "Better a dry hearth tonight than the reeds at night with a thin moon."
+
+I'll check the hut for anything unwelcome first, light a small fire, and keep a lantern hooded by the door. DM: from the hut, can I see the mist or any green-white lights over the reeds once it's dark?
+  [game] dice Brannoc's Perception checking the shepherd's hut for anything unwelcome, DC 12: 1d20+3 = 1d20 [4] + 3 = 7
+  [game] dice Brannoc's Perception watching the reeds after dark for green-white lights, DC 14: 1d20+3 = 1d20 [8] + 3 = 11
+  [game] time: 3 hours later: Day 11, 8:11:06 PM
+  [DM write_lore (hidden)] {"create": "Shepherd's hut at the Eel Fork", "kind": "place", "description": "Empty shepherd's hut a hundred paces off the Eel Fork, roof sound, hearth working. Hidden: a sweat-stained pallet pushed under the bench where a fever-sick traveller (a Reedholm woman, Marta Quill, trying to reach Stonebridge) rested days ago and moved on or collapsed in the reeds; Brannoc's Perception 7 missed it. Faint
+  [game] notebook: created an entry for Shepherd's hut at the Eel Fork; added 1 relationship to Shepherd's hut at the Eel Fork
+DM: You walk on a little way along the causeway, with black water either side and the reeds hissing, and then think better of it and turn back. A dry hearth is wiser than a night in the reeds under a thin moon.
+
+The shepherd's hut is low and stout. You push open the door with the mace in your hand, and look it over with some care. You find a bench, a hearth, a hook for a lantern, a stack of dry reed-bundles, and a roof that doesn't leak. Perception (7): it seems empty and safe. You didn't look into the corners as carefully as you might have, since the light was fading and you were tired.
+
+You light a small fire with the tinderbox and hood your new lantern by the door. You eat Ansel's bread and some of Hale's apples and warm your hands. Dark falls by seven. From the doorway at about eight you watch the reeds. A mist lies on the water, thick and low. Perception (11): there may be a pale, greenish glimmer far out low over the reeds, or it may be the glow of your own eyes after the fire. You cannot swear to it. It does not move. The wind drops. A heron calls once and is quiet.
+
+It's eleven minutes past eight on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and a fire that will last till midnight. You can't complete a long rest before ten to eight tomorrow morning.
+
+What does Brannoc do?
+
+== ROUND 102 ==
+PLAYER: I bar the door, bank the fire low, and sit up the first watch with my mace and shield beside me, humming softly and keeping the hooded lantern at hand. I'll sleep in my armor after midnight, with a flask of oil and the rope within reach.
+
+If the pale glimmer comes nearer or moves, I'll wake at once and look for it from the doorway. DM: does the hut have a second door or window, and can I see the causeway from where I sit?
+  [game] time: 2 hours 5 minutes later: Day 11, 10:16:06 PM
+  [DM write_lore (hidden)] {"create": "Marta Quill", "kind": "person", "description": "Reed-cutter's wife of about thirty from Reedholm, fever-sick, who set out two nights ago to reach Stonebridge for a healer for her small son Dab (left with kin). Staggers up the causeway with a failing lantern around 10:15 PM Day 11 and reaches the hut. Has the marsh-fever (hot, shivering, delirious in bursts). Carries news: the Wick-fire
+  [game] notebook: created an entry for Marta Quill; added 2 relationships to Marta Quill
+DM: The hut has one door, which you bar, and one small shuttered window beside it that looks out along the causeway. If you ease the shutter back a finger's width, you can see the pale ribbon of the road running out into the dark. You sit by the banked fire with your mace and shield at your side, the lantern hooded at your boot, and hum Edda's hymn under your breath. The glimmer over the reeds does not come nearer. It doesn't move at all.
+
+At about a quarter past ten, something does. A small, wavering yellow light comes up the causeway out of the dark, a lantern held low and unsteady. It stops, and goes on, and stops again. Behind it, you can make out a shape bent double, walking like someone who has been walking too long. A cough carries on the still air, wet and deep. Then a woman's voice, thin and cracked, calling to nobody: "Please. Is it a house? Please."
+
+She is alone as far as you can tell. The lantern is nearly out. She is about forty paces off and coming straight for the hut.
+
+It's a quarter past ten on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and your door barred. Your shield is by your hand.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 103, "category": "contradiction", "severity": 2, "quote": "was turned back at a flooded stretch of the causeway, so she's been trying to get home", "why": "Marta is walking up the causeway toward the hut, away from Reedholm (R102 'out of the dark... coming straight for the hut'), which is the opposite of trying to get home. Also she says she slept in this hut 'on the way out' two nights ago, yet Reedholm is a day and a half away."}
+
+THE PLAYER'S LINE THIS ROUND: I unbar the door, keeping my mace in my left hand and my shield on my arm, and step into the doorway with the hooded lantern opened a little. "Over here, goodwife, the door's open. I'm Brannoc, a healer. Come to the fire and sit, and don't try to talk yet."
+
+Before she crosses the threshold I'll look her over: her lips and eyes for blue or yellow, her hands, and whether she walks like someone sick or something else, since I'm wary after the Drowned Stair. DM: does she cast a shadow and do her lips show any frost-burn like the gray marks on Tobin's ankle?
+
+=== REPLY cleric2-103-01 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Reached the hut ~10:20 PM Day 11. Living, casts a shadow, no frost-marks. Fever (hot, shaking, thirsty); Brannoc's Medicine 12 could not tell whether it
+You push the door wide, mace in your left hand and shield on your arm, and open the lantern a little. "Over here, goodwife. I'm Brannoc, a healer. Come to the fire and don't try to talk yet."
+
+You look her over as she comes, before she crosses the threshold. Medicine (21): she is alive and nothing else. She casts a clear shadow on the doorframe in the lantern light. Her lips are cracked and dry, not gray, with no frost-burn at the mouth, and her hands are hot and sweating. Her eyes are bright with fever and the whites are a little yellowed. She walks like a woman sick and spent, one hand on the doorpost. She is perhaps thirty, in a reed-cutter's coat gone black with wet to the knees.
+
+You sit her by the fire, wrap her in your blanket, and put the waterskin to her mouth. She drinks like someone who has not in a day. Then the words come out of her in a rush. She is Marta Quill of Reedholm. Her nephew Sedge is the boy who took the fever to market. Her son Dab, five, has it too, and she left him with her sister and set out two nights ago for Stonebridge to find a healer. The first to fall ill were the reed-cutters who worked the east beds by the drowned barrow, she says, and the lights began on the night they cut there.
+
+Your second look, Medicine (12), is not enough to be sure. She has a fever and a chill and a wet cough, but you cannot tell whether it is a true disease that Lesser Restoration would end, or exhaustion with a fever from bad water on top. A prayer might settle it either way, but it would spend one of your two 2nd-level slots, and there may be many more like her at Reedholm.
+
+It's twenty-five to eleven on Day 11. Marta is wrapped by the fire, shaking, and watching you. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, the willow-bark, and the honey.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-02 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 ~10:30 PM: Brannoc examined her (Medicine 23). Marsh-fever: sweating, shivering, yellow tinge in the eyes, cracked lips, a cough, pulse fast; she
+You step into the doorway with the mace in your left hand and the shield on your arm, the lantern's hood opened a hand's width. "Over here, goodwife. The door's open. I'm Brannoc, a healer. Come to the fire, and don't try to talk yet." She stumbles toward the light with her own lantern guttering at her knee.
+
+Medicine (23): she is alive and nothing else. Her shadow stretches out behind her on the plank-path as plain as yours, long and thin in the lantern-light. No frost-burn on her lips or hands, and no gray smear on her wrists. Her lips are cracked and dry. The whites of her eyes have a faint yellow tinge. She shivers though her brow is burning, her cough is wet, and her pulse is fast and thready. It's a fever, and a real one, not a haunting. She is a woman of about thirty in a reed-cutter's wet wool, with a dry-mouthed smell of sweat and sickness. She is perhaps a day from bad trouble.
+
+You sit her by the fire with your blanket round her shoulders and warm water with a pinch of the willow-bark in it. In pieces, between coughs, she tells you. Her name is Marta Quill, of Reedholm. Her husband Tam and her boy Dab, six, are down with the same fever, and she set out two nights ago for Stonebridge to find a healer, leaving the boy with her sister. Her nephew Sedge is the eel-boy you were told of. She says the sick are the cutters, those who went into the reeds by the drowned barrow, where the green-white lights began after the reeds were cut. She doesn't know what the lights are. She says it is why no one will go out there now.
+
+It's twenty-five to eleven on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and a sick woman by your fire. Lesser Restoration is a 2nd-level spell, and you have two slots. A long rest can't finish before ten to eight tomorrow.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-03 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 ~10:30 PM: Brannoc (Medicine nat 20) found a ring of old reed-cuts on her hands and shins, each rimmed with a faint pale-green line, the fever's 
+You unbar the door and step into the doorway with the mace in your left hand, the shield on your arm, and the hood of the lantern cracked a finger's width. Your voice is low and even. "Over here, goodwife. The door's open. I'm Brannoc, a healer. Come to the fire, and don't try to talk yet."
+
+She stops at the edge of the lantern's light, swaying. She is about thirty, thin, her hair stuck to her face, her shawl soaked to the knees with fen-water. You check her before she comes in, as you promised. Medicine (25, a natural 20): the picture comes clear at once.
+
+She casts a long, ordinary shadow behind her, pooled by the lantern she carries. Her lips are dry and cracked and a little blue at the corners from chill, with no frost-burn and no gray marks. Her eyes are yellowed at the edges and glassy with fever, but they track you. Her breath smokes in the cold air, and she shivers like a living thing. She is sick and she is alive.
+
+Because your hand is steady and your eye is good, you notice more. Round her wrists and shins is a scatter of old, shallow cuts, the kind a reed-cutter gets from the sharp leaf-edges, and each one is rimmed with a thin pale-green line, as if the skin there were dyed with weak woad. Where the cuts are oldest the line has crept a finger's length up the flesh, spreading like frost on a pane. The sickness is not a cold, and not a chest-fever. It enters through the cuts. That is how it began, and how it spreads. You've never seen the like, but you know where to start. A cut washed clean early, in boiled water and honey, might stop the line. And Lesser Restoration would end the disease in anyone it has already taken.
+
+She reaches the threshold, and her knees go. You catch her. "Marta Quill," she whispers. "From Reedholm. My boy Dab... I was going to Stonebridge... for a healer."
+
+It's half past ten on Day 11. She is in your arms, shaking. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, a fire, and honey, linen, willow-bark and water.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-04 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Night of Day 11: Brannoc's Medicine (natural 20) revealed the fever is water-borne, not caught from touch: every case drank or washed in the Reedholm sl
+  [hidden call] write_lore: {"entry": "Reedholm", "add_to_description": "Night of Day 11: Marta Quill, a sick Reedholm woman, reaches Brannoc's hut. The marsh-fever is water-borne from the sluice-pool fed from reeds around the d
+You unbar the door and step into the frame with your mace in your left hand, the shield on your arm, and the lantern hood cracked open a hand's width. The light falls yellow across the causeway. "Over here, goodwife, the door's open. I'm Brannoc, a healer. Come to the fire and sit, and don't try to talk yet."
+
+She stops ten paces off, swaying, and lifts her failing lantern to look at you. You use the minute she takes to look at her, as you promised yourself.
+
+Medicine (25, a natural 20): she is a small, rawboned woman of about thirty in a patched shawl, with reed-cutter's hands and cracked knuckles. She casts a shadow, a thin one, long across the planks in your lantern's glow. Her lips are cracked and dry, and not blue. There is no frost-burn on her skin, no gray marks, nothing of the grave about her. Her eyes are glassy and bright and her cheeks are flushed hot, with the fine shiver of a high fever running through her. She walks like someone sick, not like something dead. She is only a woman who has walked two nights.
+
+And the great clarity of that look gives you more. This isn't a plague that spreads from person to person. The pattern is all wrong for that, and the shape of her sickness, a gut-fever with a cough, is the shape of a water-sickness. In her apron pocket you can see the stoppered neck of a tiny glass phial with a pale green-white scum inside. When she sees you look, she whispers, "From the stems. Where the lights are. I scraped it." Whatever she knows, she has put it together herself. Every case, she says between coughs, drank or washed at the sluice-pool, which is fed from the reeds around the drowned barrow. It is a hard fever and the pool is the source.
+
+You get her to the fire. She sits like a puppet with its strings cut and says her name is Marta Quill and her boy Dab is with her sister, and she was going to Stonebridge for a healer and has gone two nights without sleeping. Her skin is hot and dry. She will not be well without help.
+
+It's a quarter to eleven on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and willow-bark. Lesser Restoration would end her disease outright, and you've two such slots to spend today. You haven't rested since seven this morning.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-05 ===
+You unbar the door and step into it with your mace in your left hand, shield on your arm, the hooded lantern cracked open at your boot. You call to her, name and trade, and tell her to come to the fire and not to try to speak yet. She stumbles the last ten paces and stops at the threshold, swaying, as you asked.
+
+You look her over before she crosses. She is a woman of about thirty in a patched wool shawl, soaked to the knee. She does have a shadow, long and thin in your lantern light, and it falls the way a living woman's should. Her hands are shaking, with clean, ordinary skin, no gray finger-marks, no frost-burn at the tips. Her lips are cracked and dry, flushed rather than blue, and her eyes are bright and glassy with fever. She is plainly sick, not something else. You let her in.
+
+Medicine (16): you read it plain. Her skin is burning and dry, her pulse fast and thin, and the shaking comes in waves, hot and cold. There is no cough from the chest as Piper's was, no wet rattle. It is a fever of the blood and guts, with a swollen, tender belly and a yellow tinge under the eyes. A marsh-fever, then, the sort the reed-cutters get from bad water, and it has been on her three days. It is a disease, so Lesser Restoration would end it. The willow-bark will ease her without magic, but cannot cure it.
+
+She gives her name in pieces between gasps. Marta Quill, a reed-cutter's wife from Reedholm. She set out two nights ago for Stonebridge to fetch a healer for her small son Dab, who has it worse. The sick are those who cut reeds beside the drowned barrow, she says, and she thinks the Wick-fires began after the cutting. Then her eyes roll and her knees go, and you catch her before she falls.
+
+It's twenty-five to eleven on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and the willow-bark. She lies across your blanket by the fire, hot as a stove and mumbling about her boy.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-06 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 ~10:25 PM: Brannoc examined her at the hut door (Medicine 16): living, casts a shadow, no frost-burn. Marsh-fever: burning skin, chills, yellowed
+You unbar the door, mace in your left hand, shield on your arm, and step into the doorway with the lantern opened a hand's breadth. You call to her gently, and she lifts her head and stumbles the last twenty paces toward your voice. You keep your eyes on her the whole way, and the Drowned Stair is not far from your mind.
+
+You answer your own question first. In the lantern-light she throws a shadow long and clear behind her on the causeway. There is no frost on her lips and no gray finger-mark on her. She is a living woman, and she walks like one who is dying slowly of something ordinary.
+
+Medicine (16): she is thirty or so, thin, wrapped in a reed-cutter's wool cloak. Her skin burns to the touch, and the shaking in her hands is a chill, not a fear. The whites of her eyes have a yellow tinge, her head aches so she can barely lift it, and when you press under her ribs she gasps. That is the marsh-fever, the one the carters spoke of. She is two days into it. It is dangerous but not yet at its worst, and a fever of this kind can kill in a week without care. It's a disease, which Lesser Restoration could end.
+
+She says her name is Marta Quill, of Reedholm, and she was walking to Stonebridge for a healer for her small son Dab, who is sick with the same. She sags against your arm and says, in a cracked voice, "Sedge is my sister's boy. They said the lights came when the reed-cutters cut the stand by the drowned barrow. Everyone who cut there is down. Everyone." Then she coughs for a long time.
+
+You take her weight and help her to the bench by the fire. It's twenty-six minutes past ten on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, and a pouch of willow-bark. The hut is warm. Marta has a burning brow and a dying lantern, and she looks at you as if you're the end of a very long road.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-07 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 10:25 PM: reached the hut, collapses at the fire. Casts a shadow; no frost marks. Fever hot and dry, lips cracked, a yellowish tinge to the eyes;
+  [hidden call] lookup: {"name": "Medicine", "kind": "rule"}
+You unbar the door, mace in your left hand and shield on your arm, and open the hooded lantern a hand's width. "Over here, goodwife. I'm Brannoc, a healer. Come to the fire and sit, and don't try to talk yet."
+
+She comes the last twenty paces in a stumbling rush. She casts a shadow, a long, wavering one, thrown by her own failing lantern against the hut wall, and there are no frost-burns on her hands or face. Her fingers are cracked and cold and ordinary. She is a woman in her thirties in a patched reed-cutter's coat, soaked to the knees, lips dry and split, her hair plastered with sweat. She steps over the threshold and her knees go. You catch her under the arms and ease her down on the bench by the fire.
+
+Medicine (11), a hair short of what a clear read would need: she is feverish, that much is plain. Her skin is hot and dry, her pulse thin and quick, and her breath rattles on the in-breath. Something in her eyes looks pale or yellow in the lantern light, but the light is bad and you can't swear to it. You cannot yet tell whether this is a fever alone, a bad lung, or something that has settled in the liver. You'd want more light and more time to know.
+
+She grips your sleeve and says between coughs: "Marta Quill. Reedholm. My boy, my Dab, he's four, he's with my sister-in-law, I was going to Stonebridge..." Her eyes go unfocused. "The Wick-fires. They came when we cut the reeds by the old mound. Everyone who cut there is sick."
+
+It's twenty-six past ten on Day 11. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, the willow-bark, and honey. Marta is conscious but weakening, and her breath is wet and loud.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-08 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 ~10:30 PM: At the hut. Living, casts a shadow, no frost-burn. Marsh-fever: burning, shaking, cracked lips, yellowed eyes, bad cough, pulse racing
+You unbar the door, keep the mace in your left hand with the shield on your arm, and open the lantern a little. Then you step out into the doorway and call to her. Your voice carries across the reeds, gentle and level. "Over here, goodwife. The door's open. I'm Brannoc, a healer. Come to the fire and sit, and don't try to talk yet."
+
+She stops dead at the edge of the lantern light. She stands there a moment, swaying, then steps forward with her own lantern held out like an offering. You look her over before she crosses the threshold, as you said.
+
+Medicine (23, and 22 on the closer look): she is a thin woman of thirty or so in a reed-cutter's wet wool, and she is alive. Her shadow falls long and black behind her in the lamplight. Her lips are cracked and dry, not blue, and there's no frost-burn on them or on her hands. Her eyes are yellow at the whites, her pulse races under your fingers, and her skin burns. She shivers hard even in the warm doorway. It is a true fever, with a deep wet cough and a dull, bruised look under the eyes. She has had it at least four days. She walks like someone who is sick and has been walking too long. She is not anything else.
+
+She grips your sleeve and says her name is Marta Quill, of Reedholm. She was going to Stonebridge for a healer for her boy Dab, who is sick too, but the fever took her feet on the causeway. In the fire's light she says it in bursts, between coughs. About twenty are down in Reedholm now, three are dead, and Sedge is her nephew. The lights over the drowned barrow began when the reed-cutters opened the old kerb-stones to cut the good reeds behind them. Everyone who cut there is sick.
+
+It's half past ten on Day 11. She is sitting on the bench by your fire with a blanket round her, and she can barely lift her head. The fever is a disease. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, Lesser Restoration, the willow-bark, and the honey.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-09 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 ~10:30 PM: Brannoc examined her at the hut door (Medicine 16, Insight 17): living, casts a shadow, fever-flushed, lips cracked and dry, not frost
+You unbar the door and step into the doorway with the hooded lantern opened a hand's width, shield on your arm and mace in the other hand. You call to her as you planned. She flinches at the voice and then stumbles toward you.
+
+Your questions first. Yes, she casts a shadow. It slides long and wavering across the road behind her in the lantern's last light. Her lips are cracked and dry, flushed with fever, with no frost-burn and no gray marks on her hands or throat.
+
+Medicine (16): this is a living woman with a fever. Her skin is hot and dry, her eyes have a faint yellow cast, and she shivers hard in bursts. There is a wet, tearing cough. The sweat on her has an ugly sweetish smell, like standing marsh-water. Her pulse is fast and thin. It is not the lung-fever Piper had, but something that settles in the blood and the belly, the marsh-fever the carters named. Insight (17): she is frightened and honest. She is exactly what she seems.
+
+You get her to the fire and into your blanket, and you hold a cup of water with a pinch of the willow-bark to her lips. She sips and sags. Her name is Marta Quill, a reed-cutter's wife from Reedholm, and she has been walking two days to reach Stonebridge for a healer for her son. Dab is six and sick as she is, and he's with his aunt. She talks in bursts, in between shaking fits. The Wick-fires started when the cutters went into the reeds near the drowned barrow, she says, to cut the thick old reeds on the mound for the winter thatch. Every one who cut there is sick. Her nephew Sedge was one. He took the eels to market because the elders would not let anyone else go.
+
+She won't sleep until you promise that someone will see Dab. She stares at you with fever-bright eyes, and her grip on your wrist is hot and strong.
+
+It's twenty-five to eleven on Day 11. You have four 1st-level slots and two 2nd-level slots, Lesser Restoration, Channel Divinity, and willow-bark. The disease is a true one, and Lesser Restoration would end it. Reedholm is a day and a half on, and she'd never make it back on her own.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-10 ===
+You unbar the door with the mace in your left hand and the shield on your arm, and step into the doorway with the lantern opened a hand's width. "Over here, goodwife. The door's open. I'm Brannoc, a healer. Come to the fire, and don't try to talk yet."
+
+She comes the last forty paces in a stumbling run and stops short of the light, swaying, her fingers hooked in the doorframe. You look her over before she crosses the threshold, as you said.
+
+Medicine (24): she is alive, and living folk only. The lantern light throws her shadow long and black on the causeway behind her, as it should. Her lips are cracked and dry, flushed rather than blue, with no frost-burn and no gray marks on her wrists or ankles. Her eyes are bright and glassy, the whites tinged faintly yellow. Her skin burns under your hand and is dry as paper, with the fine tremor of a long fever. She breathes fast and shallow with a rattle at the bottom, and she has a rash of tiny red spots along her forearms. It is the marsh-fever, and it is far along. She has been walking on it for two nights. She is not undead, and she is not a trap.
+
+You guide her in, sit her by the fire, and hold the cup of water to her lips. She says her name is Marta Quill, of Reedholm, and that she was walking for Stonebridge and a healer. She has a small son, Dab, left with her sister. She begs you not to let her sleep, and then she can't help it. The fever is high enough to be dangerous by morning.
+
+Lesser Restoration, a 2nd-level slot, would end the disease on her at a touch. You have two. You have willow-bark for the fever, and your Medicine, but those only ease it.
+
+It's twenty-six minutes past ten on Day 11. Marta sits slumped by the fire, shaking, with her lantern guttered out beside her.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-11 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Night of Day 11: reached the hut at ~10:20 PM. Alive, casts a shadow, no frost-marks. Brannoc's Medicine (6, a natural 1) could not tell how far gone sh
+You unbar the door, shield on your arm and the mace in your left hand, and open the lantern to a slit. "Over here, goodwife. The door's open. I'm Brannoc, a healer. Come to the fire and sit, and don't try to talk."
+
+She stops at the edge of your light and sways, and you take her in before she crosses the sill. She casts a shadow, a long, thin one, thrown back across the causeway by the light behind you. Her lips are cracked and dry, flushed rather than blue, with no gray finger-marks and no frost-burn on her hands, throat or face. She is no ghoul-handled thing. She is a living woman, about thirty, soaked to the knees, shaking so hard the lantern chatters in her grip.
+
+Medicine (6, a natural 1): the read gets away from you. She's hot, shivering, and coughing, and her eyes are bright and wandering, and you can't tell whether it is the marsh-fever at its start or deep in it, or something worse. You can't gauge how long she has. A night? A week? She isn't steady enough to say.
+
+You get her inside, and sit her on the bench by the fire with your blanket round her. She grips your sleeve and says "Marta," and then "Marta Quill," as if she'd lost it a moment. Then, urgently, "Dab. My boy's got it. I was going for the healer at Stonebridge. Is it Stonebridge? Are you from Stonebridge?" You tell her gently that you are, and that you're going to Reedholm. She laughs, once, a wet, awful sound, and starts to cry.
+
+It's a quarter to eleven on Day 11. The fire is low, the door is open on the dark, and the pale glimmer on the reeds hasn't moved. You have four 1st-level slots, two 2nd-level slots, and Channel Divinity. Lesser Restoration could end her disease. Cure Wounds can't. You have willow-bark, honey, water, a fire, and the night.
+
+What does Brannoc do?
+
+=== REPLY cleric2-103-12 ===
+  [hidden call] write_lore: {"entry": "Marta Quill", "add_to_description": "Day 11 10:20 PM: Living, casts a shadow, no frost-burn. Real marsh-fever. Brannoc's Medicine read (10) was inconclusive about how advanced it is or whet
+You unbar the door and step into the doorway with the mace low in your left hand, your shield on your arm, and the hooded lantern opened a little. You call out as you planned. The bent shape lifts its head at your voice and nearly falls.
+
+You look her over as she comes into the light, and you answer your own caution plainly. She casts a shadow, a thin long one thrown by the dying lantern in her hand. Her lips are cracked and dry and flushed, with no blue and no gray on them, and no frost-burn anywhere that you can see. Her breath steams in the cold like anyone's. She is a living woman, thirty or so, in a reed-cutter's patched wool, with mud to her thighs. Her cheeks are high with fever and her eyes are too bright. She's shivering hard, even as sweat runs down her face.
+
+Medicine (10): beyond that, you can't read her well. The fever is real and she is badly spent. You can't tell how far along it is, whether she might mend with rest, or whether it is the kind that spreads from person to person. She might even be worse than she looks.
+
+She reaches the threshold, grips the door-frame, and says in a cracked whisper, "Marta. Marta Quill. From Reedholm. I was going to Stonebridge. My boy... Dab..." Then her knees go, and you catch her under the arms before she hits the floor. She weighs almost nothing.
+
+It's eighteen past ten on Day 11. She is in your arms, fever-hot, breathing fast. You have four 1st-level slots, two 2nd-level slots, Channel Divinity, willow-bark, a jar of honey, and a fire.
+
+What does Brannoc do?

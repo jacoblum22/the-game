@@ -1,0 +1,272 @@
+GAME bard2, ROUND 70
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 67 ==
+PLAYER: I take a long breath and speak to Sir Corwen and the arbiter together. "I'll give the hall my full account at noon, ledger and all, and swear it before the Lantern-Bearer, but first may I sit down, drink something, and sleep two hours? I'm half-dead on my feet, and I'd like to be clear-headed when I speak against a man like Corvin."
+
+Then, quieter, to Kit: "Guard that case with your life. And afterward I want to speak to Corvin in the cellar, with the arbiter's leave, because whatever he knows about my mother, he won't say it to anyone else."
+  [game] time: timer Wren's Charm Person removed
+  [game] sheet: short rest; Kit: short rest; 1 hour later: Day 9, 11:52:36 AM
+  [game] time: 1 hour 5 minutes later: Day 9, 12:57:36 PM
+  [DM write_lore (hidden)] {"entry": "Vantry Hall", "add_to_description": "Day 9: arbiter set Wren's full account for the second hour after noon (2 PM) and let her sleep in the elder's counting-room; Kit guards the clerk's case. Corvin held in the hall cellar; Wren may see him after her account with a guard at the door."}
+  [game] notebook: updated Vantry Hall
+DM: The arbiter considers you over the rim of her spectacles. A girl swaying on her feet isn't much of a witness, and she knows it. "Sit, drink, sleep," she says. "I will hear you at two bells past noon, in this hall, with the ledger and your oath. The elder will lend you his counting-room." She glances at the leather case in Kit's arms. "That stays under your companion's hand and my seal. I'll have it counted when you wake." She gives a dry nod. "As for the cellar, you may have a quarter hour with the prisoner after you've spoken, with a guard at the door. Not before."
+
+It isn't what you asked for, but it's fair. The Vantry elder's son shows you to a small room off the hall, with a long table, a bench, and a window onto the quay. Someone brings bread, cold fish and a jug of small beer. You eat half of it standing. Kit takes the chair across the door, with the case on her knees and her longsword across it, and says nothing, which is what you'd have wanted from her anyway.
+
+You sleep like a dropped stone. It's a short rest only, and you wake stiff, still hollow-eyed and heavy-limbed, with your spell slots still empty and the exhaustion still on you. A long rest will mend that, not a nap. Bardic Inspiration stands at three.
+
+It is almost one in the afternoon. Gulls are crying on the quay. Kit hasn't moved, but a folded scrap of paper is lying on the table by your elbow, with no one near who could have put it there but the elder's son, who has gone. In a small, hurried hand: *The cellar guard says the prisoner has asked for you by name, and for no one else. He says to tell you "it was never the ledger." Isaude Dray*.
+
+The hearing is at two. What does Wren do?
+
+== ROUND 68 ==
+PLAYER: I read the note twice, fold it into the psalter, and look at Kit. "Whatever 'it was never the ledger' means, I'd rather decide with a clear head. Take me to the arbiter. I'll ask her to let me see Corvin for a few minutes now, with a guard at the door and you beside me, since he's asked for me and nobody else."
+
+DM: before I go, what exactly does Elowen's commission-paper say, and does it name the Lantern-Bearer's order or any shrine I'd report to?
+  [DM lore (hidden)] {"names": ["Elowen's Coffer"]}
+  [DM recall (hidden)] {"search": ["commission-paper"]}
+  [game] dice Wren's Persuasion asking the arbiter to allow the cellar visit before the hearing (exhaustion disadvantage), DC 13: 1d20+5 (disadvantage) = 1d20 [5, 19]→5 + 5 = 10
+  [game] time: 10 minutes later: Day 9, 1:07:36 PM
+DM: Out of the story first, on your question. The commission-paper is still folded and sealed in your satchel, and nothing in play has opened it. All you know of it comes from Elowen's letter: it names you as her heir to her road-priest's lamp-staff. You have no idea yet whether it names an order or a shrine to report to. If you want to break the seal, say so, and I'll show you what it says.
+
+Now the story. Kit rises without a word and walks you through the hall to the arbiter's table, where she sits with the Dray leaf and the clerk's case, pen scratching. You make your request plainly, with the note from Isaude in your hand and Kit at your shoulder.
+
+Your Persuasion check was a 10 with disadvantage, and it isn't enough. The arbiter doesn't look up. "I said after, mistress, and I meant after." She does lay down the pen. "A man who asks for a particular girl by name, an hour before she is to speak against him, is a man who wants to talk her out of it. I'd rather you spoke first and heard him second." There's a flicker of something less stern in her voice. "I'm not unkind. If he has something true to say, it will keep an hour."
+
+Beyond her, by the dais, Isaude Dray stands with her father. She meets your eye and gives the faintest shrug, as if to say *I tried.*
+
+It's seven minutes past one. The hearing is at two. The hall is filling again behind you with the Vantry household, a few of Sir Corwen's men, and a dozen townsfolk who've caught the scent of scandal. The clerk sits on a bench under guard, still talking quietly to anyone who'll listen.
+
+You have nearly an hour. What does Wren do?
+
+== ROUND 69 ==
+PLAYER: I accept the ruling with a small bow, then break the seal on Elowen's commission-paper at the nearest bench, with Kit watching the room, and read it through slowly. After that I spend the remaining time arranging my account in order, ledger leaves first, then Osric's register, then Elowen's letter, and I murmur it over to Kit so she can catch any holes.
+  [DM lore (hidden)] {"names": ["The Road-Priest's Hand"]}
+  [DM lore (hidden)] {"names": ["Lantern's Rest"]}
+  [DM write_lore (hidden)] {"create": "The Wick-House", "kind": "place", "description": "Shrine-house of the Lantern-Bearer on Saltmarsh's quay, small and old, keeper's name not yet given. Named in Elowen Ashgrove's commission-paper as the keeper of her lamp-staff; the bearer must show the reliquary's lantern-foot and the paper to claim it. Wren's Shelter of the Faithful applies here.", "relationships": ["named in Elowen's 
+  [game] notebook: created an entry for The Wick-House; added 3 relationships to The Wick-House
+  [DM write_lore (hidden)] {"entry": "Elowen's Coffer", "add_to_description": "Day 9: Wren opened the commission-paper. It names Wren Ashgrove heir to Elowen's lamp-staff, left in keeping of the keeper of the Wick-House on Saltmarsh's quay, to be given to the bearer who shows the paper and the reliquary's lantern-foot. Sealed with Elowen's crooked-flame lantern. Last line: 'Corvin Tallowmere knows where it is. He has never 
+  [game] notebook: updated Elowen's Coffer
+  [game] time: 50 minutes later: Day 9, 1:57:36 PM
+DM: You accept the ruling with a small bow, and the arbiter's pen goes back to scratching. At a quiet bench by the wall, with Kit's shoulder to the room, you break the seal on Elowen's commission-paper.
+
+It's one sheet in a firm, tilted hand, with the crooked-flame lantern pressed into the wax. It reads, in short plain lines: *I, Elowen Ashgrove, road-priest of the Lantern-Bearer, name my daughter Wren heir to my lamp-staff. It is in the keeping of the keeper of the Wick-House on the quay at Saltmarsh. Give it to the bearer of this paper who can also show the lantern-foot of my reliquary. Let no one else carry it.* Beneath, smaller: *Corvin Tallowmere knows where it is. He has never dared ask for it.*
+
+So there's a shrine you can report to, the Wick-House, here in Saltmarsh, just down the quay. And Corvin has known all along where your mother's staff lay, and for twenty years he hasn't touched it. Whatever *it was never the ledger* means, it may start there.
+
+You fold the paper away and spend the rest of the hour as you promised, laying out your account: ledger leaves first, then Osric's register, then Elowen's letter, murmuring it over to Kit in a low voice. She listens with her arms folded. When you finish, she grunts. "You say you took the book. They'll ask why you kept it two weeks and didn't burn it." After a moment she adds, "Tell them straight." It's the longest speech you've had from her all day. The rehearsal helps, and I rule it gives you advantage on the speaking check at the hearing.
+
+At two the hall is full. The arbiter sits behind the dais table with the Dray leaf and the clerk's case before her. Sir Corwen and Isaude sit to one side, the Vantry elder and his son to the other. A guard stands at the cellar door at the back. Every eye in the room is on you.
+
+"Wren Ashgrove," the arbiter says. "Speak."
+
+What does Wren say?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 70, "category": "format", "severity": 2, "quote": "- Hit points: take the fixed 7, or roll a d8 and add 2 (at least 1 added).", "why": "A bulleted list of level-up features and spell names, plus a long spell list and a multi-part menu question."}
+
+THE PLAYER'S LINE THIS ROUND: I stand, set the psalter on the table, and speak plainly, not performing. "My name is Wren Ashgrove. I was raised by Corvin Tallowmere, and for nineteen years I helped him tell tales for money, until I found his ledger of forged pedigrees, sold to three houses, and I took it and ran."
+
+I take the Verrel and Thistlewood outcomes in order, and I admit what I kept: "I kept the ledger for two weeks because I didn't know who to trust with it, and because I wanted to see for myself whether he'd harmed the houses or only flattered them." I slide the last leaf and the commission-paper into view. "I'm not asking you to forgive me, only to read what's written, and let Dame Crowe's court and Sir Corwen's keep decide what's true."
+
+=== REPLY bard2-70-01 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2-2:40 PM hearing: Wren told her account plainly; Persuasion 10, not fully trusted. Arbiter keeps the Dray leaf and the clerk's case as evidence,
+You stand, set the psalter on the table and tell it plainly. You tell the hall about nineteen years of tales, the ledger, the three houses, and the two weeks you kept it. You don't perform. You lay out Verrel and Thistlewood in order, the page burned and the ford confessed, and then slide the Dray leaf and Elowen's paper into the light.
+
+Your Persuasion check was a 10. Your rehearsal and your exhaustion cancelled out, so it was a straight roll, and it isn't enough to carry the room.
+
+The arbiter listens to all of it without moving. Then she says, "It is a good account. It is also the account a clever girl would give." She lifts a hand before Sir Corwen can speak. "I believe the page. I cannot yet believe the bearer. So: I keep the Dray leaf and the clerk's case in the hall's seal. My clerk will copy your Thistlewood leaf and Osric's entry, and you will keep your originals. You will remain in Saltmarsh until Dame Crowe's assize or the keep's justice calls for you, and you'll lodge twenty gold pieces with the hall as a bond, returned if you're found honest."
+
+Sir Corwen rises heavily. "I'll stand surety for the girl," he says, "if she'll lodge with my steward. My daughter says her word's good enough for the ledger. It is good enough for me to be ashamed in front of." Isaude gives you a brief, almost shy smile.
+
+The arbiter allows it with a thin nod. "The sealing is stayed. Sir Corwen's reeve will read the contract against the keep's rolls tomorrow. Mistress Ashgrove." She looks at you a long moment. "You have your quarter hour with the prisoner, as I promised. The guard will stand at the door."
+
+It is twenty-three minutes to three. The cellar door at the back of the hall is open, and the guard waits beside it, one hand on his keys. Down the quay, you know, stands the Wick-House with your mother's lamp-staff in its keeping. Kit is at your shoulder, and you still have 54 gold pieces and four silver after the bond, if you pay it.
+
+What does Wren do?
+
+=== REPLY bard2-70-02 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9 2 PM: Wren gave her plain account (Persuasion 16). Arbiter accepted it as testimony, will send the ledger leaf and clerk's case to Dame Crowe's as
+You speak plainly, without the performer's lift in your voice, and the hall listens. Exhaustion should have dragged at you, but last hour's rehearsal with Kit cancels it. Your Persuasion check was a 16.
+
+You tell it in order: nineteen years at Corvin's side, the ledger, the three houses, Thornhallow's confession, the ford at Ashby Weir, and why you kept the book two weeks. You don't dress it up. When you say "I'm not asking you to forgive me," a Vantry clerk near the back stops writing and just looks at you.
+
+The arbiter lets the silence run. Then she taps the leaf. "You stole a book, mistress, and then you used it to stop a lie. I'll not call that clean, but I've heard worse from people who never meant to mend anything." She turns to the hall. "This account is taken as testimony. The leaf and the clerk's case go under my seal to Dame Crowe's assize at Marrowford, with the clerk himself. The Dray contract will be read against the keep's rolls before any seal is set. Tallowmere stays below."
+
+Sir Corwen rises stiffly. "The Drays will answer for what we bought," he says, "and so will I." Isaude takes his arm. The Vantry son nods to her, shy and hopeful.
+
+The arbiter looks at you last. "Your quarter hour with the prisoner. A guard at the door, and the door stays open."
+
+It is half past two. Kit stands at your shoulder, and the cellar stair lies at the back of the hall. Down the quay, the Wick-House is waiting. What does Wren do?
+
+=== REPLY bard2-70-03 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave a plain honest account (Persuasion 13, just made it). Arbiter accepts it as sworn testimony but not as a ruling; contract
+You don't perform. You set the psalter down, and for once you tell it in the order it happened, without a flourish. Your Persuasion check was a 13. That's exactly the DC, and it holds. The rehearsal with Kit cancelled out your exhaustion, so you rolled it straight.
+
+The hall is quiet while you speak. When you admit you kept the ledger two weeks because you wanted to see for yourself whether he'd harmed the houses or only flattered them, someone on the Vantry bench lets out a breath. Sir Corwen doesn't move, but his jaw loosens a little. Kit stands at your shoulder and says nothing.
+
+The arbiter lets the silence stand when you finish. Then she lays down her stylus.
+
+"A confession is not an absolution," she says. "I will not call it one. But I will call it testimony, sworn before this hall and set down." She taps the Dray leaf. "The contract is not sealed. The Keep's rolls will be read against it, and that will take days, not hours. This leaf stays with me as evidence. The case with the copies is mine now too." She looks at you over her spectacles. "You will remain in Saltmarsh until the Keep's justice has spoken, mistress. I do not say it as a threat. A girl who walks into a hall and names herself had better stay to be heard."
+
+Sir Corwen rises. He says nothing grand. He only gives you one stiff nod, the nod of a proud man with a debt he doesn't yet know how to pay. Isaude is smiling at the table.
+
+"Quarter hour," the arbiter says, and nods to the guard at the cellar door. "As I promised. The door stays open."
+
+It's half past two. Corvin is below, and he has asked for you by name. What does Wren do?
+
+=== REPLY bard2-70-04 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave her plain account (Persuasion 22). Arbiter accepted it: Wren released on her own word to stay in Saltmarsh until Dame Cro
+You stand, set the psalter on the table and speak plainly, with no flourish and no lute. The hall is so still that the gulls outside are the loudest thing in it.
+
+Your Persuasion check was a 22. Rehearsing with Kit gave you advantage, and exhaustion's disadvantage cancelled it, so it was a single plain roll, and it was a good one.
+
+You tell it in order: the ledger, the three houses, the two weeks you kept it, and why. When you say "I wanted to see whether he'd harmed them or only flattered them," Sir Corwen's head lifts. When you say Lord Edric burned his own page and confessed it, the Vantry elder mutters, "Well." You slide the last leaf, Osric's copied entry and Elowen's letter across the table. You don't ask for forgiveness.
+
+The arbiter reads everything twice. She takes off her spectacles and rubs her nose.
+
+"You are a thief, mistress," she says, "and a liar by training, and you have told this hall the one truth that none of its liars could." She replaces the spectacles. "My finding is this. The Dray–Vantry contract is void as drafted, and will be redrawn from the keep's own rolls, in true words. Sir Corwen's name is not touched by what you have shown, for he paid for a tale and was cheated. The clerk's case and this leaf go under my seal to Dame Crowe's assize at month's end, where the forger will answer. You are free on your own word, to stay in Saltmarsh until she sends for you." A dry pause. "Do not make me regret taking it."
+
+Sir Corwen rises and gives you a short, stiff nod. Isaude is smiling at the table. The Vantry son bows to you outright.
+
+The arbiter lifts her hand toward the cellar door. "Your quarter hour, as I promised. The guard will stand at the door, and I'll hear nothing."
+
+It is twenty to three. Spells are still spent and exhaustion still holds you, and the Wick-House lies somewhere down the quay. First there's a man in the cellar who said, *it was never the ledger*.
+
+What does Wren do?
+
+=== REPLY bard2-70-05 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave her honest account (Persuasion 18). Arbiter accepts it: Wren not charged by the hall; ledger leaves and clerk's case held
+You speak plainly, without a flourish, and for once without a single embroidered word. When you're done, the hall is so quiet the gulls on the quay are loud.
+
+Rehearsing gave you advantage, and the exhaustion that has dogged you since the road gave you disadvantage. They cancel, so it's a plain roll. Your Persuasion check was an 18, and it carries.
+
+The arbiter lets the silence sit. Then she turns the Dray leaf over, reads the Thistlewood letter again, and lays Elowen's commission-paper down last, not reading it, only looking at the lantern in the wax. "You kept a thief's book two weeks," she says. "You might have sold it, or ransomed it, or burned it. You came to this hall and set it in my hand with your name." She takes up her stylus. "The hall of Vantry lays no charge on you. The leaves and the clerk's case go under my seal to Dame Crowe's assize, and Sir Corwen's reeve will read the contract against the keep's rolls." She looks at the Vantry elder. "And the sealing stays unset until the two young people say, of their own mouths, what they want."
+
+Isaude stands up before her father can speak. "Of my own mouth," she says, and the elder's son, red to the ears, says, "And mine," and it seems that for the first time that day nobody in the hall is lying. Sir Corwen sits down heavily and puts his face in his hand.
+
+Then the arbiter points her stylus at the cellar door. "A quarter hour," she says, "with a guard on the stair. Not a minute over."
+
+It is twenty to three. The guard unlocks the heavy cellar door and lights a lantern. Kit comes with you down the stone steps, which smell of tar, salt and cold stone. At the foot is a low vaulted room with barrels along the walls, and in the middle of it, on an upturned cask, Corvin Tallowmere sits with his gloved hands in his lap, as comfortable as a man at his own fireside. His wrists are bound before him with a cord, not iron. The guard stops halfway down the stair and folds his arms.
+
+Corvin looks up and smiles his gentle smile again. "You read it, didn't you?" he says. "The paper. I can see it in your face." He tilts his head. "Sit down, my dear. You asked for a quarter hour. Ask me what you came to ask."
+
+What does Wren say?
+
+=== REPLY bard2-70-06 ===
+  [hidden call] write_lore: {"create": "Elowen's Vantry Deposit", "kind": "item", "description": "Small sealed packet with Elowen's crooked-flame lantern, deposited with the Vantry house of Saltmarsh about nineteen years ago 'fo
+You speak plainly, with none of the performer's lilt, and the hall listens. Your Persuasion check was a natural 20.
+
+You give the three houses in order: the Verrel register, Osric's word, the Thistlewood ford, and the common-room confession that cost you a crowd's anger. You admit what you kept and why. When you lay the last leaf and Elowen's paper beside the Dray page, nobody coughs. Sir Corwen looks at his boots. Even the clerk has stopped whispering.
+
+The arbiter reads the commission-paper twice. At the crooked-flame seal her pen goes still.
+
+"I have seen that lantern," she says slowly. "Not on paper. In our strongroom." She sends a runner. He returns within minutes with the Vantry elder's steward, who carries a small packet in oilcloth, no bigger than a hand, sealed with the same crooked flame. The steward reads from the deposit book. "Received nineteen years past from a road-priest, E. Ashgrove, by the elder's late father. 'For my daughter Wren, to be opened by none other.' It has never been claimed. We did not know the daughter's name was spoken aloud in this town until today." The arbiter sets it before you, unopened. "The hall finds your account honest and its documents sound. The Dray contract is struck. Tallowmere is held for Dame Crowe's assize, and the hall will write to her. Your own taking of the ledger is noted, and I'll ask her to hear it with mercy."
+
+Sir Corwen rises and gives you a short bow. Isaude is smiling, and doesn't hide it.
+
+The packet lies in front of you, and it's twenty to three. You earned 75 XP for the hearing, and with it you've reached 300, enough for level 2. Corvin is in the cellar, and the Wick-House is down the quay.
+
+What does Wren do?
+
+=== REPLY bard2-70-07 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave a plain, honest account (Persuasion 16). Arbiter accepted it: Wren not charged; ledger leaves and Osric's copy to be sent
+You don't perform. You say it flat and plain, the way Kit told you to, and the hall listens. You give the three houses in order: Verrel, Thistlewood, Dray. You admit the two weeks you held the ledger and your reasons for it, and you lay the leaves and your mother's paper where the arbiter can reach them. Your Persuasion check was a 16. The rehearsal with Kit gave you advantage, which cancelled the disadvantage from exhaustion, so it was a single straight roll. It lands.
+
+When you stop, nobody speaks for a moment. A Vantry clerk has stopped writing. Sir Corwen is looking at his hands.
+
+The arbiter reads the leaves again, then Osric's copy, then sets them down in a neat stack. "The court does not charge a girl who comes before it unprompted and lays the evidence on the table," she says. "Let it be written that Wren Ashgrove surrendered the ledger leaves of her own will." She turns to the Dray table. "Sir Corwen, the contract stays unsealed until the keep's rolls are read against it. Your daughter has said she will marry on the truth. I'd suggest the Vantry house is of the same mind."
+
+The Vantry elder clears his throat. His son, rather pink, says, "We are." Isaude almost smiles. Sir Corwen doesn't answer, but he doesn't object either.
+
+"The prisoner goes to Dame Crowe's assize at Marrowford with the leaves and the clerk's case under seal," the arbiter finishes. "You'll carry the Verrel and Thistlewood pages there yourself, mistress. And you have your quarter hour." She nods to the guard at the cellar door.
+
+It's about twenty to three. Kit falls in beside you, and the guard unlocks the door onto a stair going down into cool, salt-smelling dark. At the bottom, in a small stone room with a lantern on a hook, Corvin sits on a barrel with his gloved hands on his knees, as though waiting for a late carriage.
+
+"There you are," he says. "Sit, if you like. We haven't long."
+
+What does Wren do?
+
+=== REPLY bard2-70-08 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave her honest account (Persuasion 7, did not land well; the hall murmured, the Vantry elder doubtful). Sir Corwen spoke for 
+You stand, set the psalter on the table, and say it plainly, without performing. Kit's rehearsal and your tiredness cancel out under the rules, so I rolled it straight: your Persuasion check was a 7. It doesn't land.
+
+You say it all, the nineteen years, the ledger, the two weeks, and you keep your voice level. But the hall has been waiting for a performance and doesn't get one. A murmur runs along the benches. A plain confession from a forger's apprentice carries a sour note, and the Vantry elder's mouth has pursed as though he's smelling something off. "Two weeks," he says to his son, not quite quietly. "Two weeks, and she sat on it."
+
+It's Sir Corwen who breaks the silence. He doesn't stand. He says gruffly, to the arbiter: "She walked into a hall full of strangers and put my own name in front of me. A thief doesn't do that. A fool might, or a girl who means it." He doesn't look at you. "I'll not call it kindness. Call it a fact."
+
+The arbiter lets that settle. Then she taps the leaf and the commission-paper into a neat stack. "The hall finds that the contract of Isaude Dray is withdrawn from sealing until the keep's rolls and a royal assessor have spoken. The prisoner Tallowmere is held for Dame Crowe's assize at Marrowford at month's end." She looks at you over her spectacles. "You will give me the Thistlewood leaf, as evidence. The rest of what you carry, the register copy and your mother's papers, you may keep, as they are yours. And you will swear before the hall not to leave Saltmarsh until the assessor has been sent for."
+
+That's a fair price, and a cheap one. A closer look at the hall tells you it could have been far worse: a few of the Vantry household are watching you with open dislike.
+
+Then, drily: "You asked for a quarter hour with the prisoner. You have it now. A guard at the door, your companion beside you, and the door ajar." She stands. "I would not trust a word he says. But I am not a fool: he has said he wants to speak to you, and I'd like to know why."
+
+It's half past two. The cellar door stands open at the back of the hall, with a lamp burning on the stair, and Kit is already at your shoulder. What does Wren do?
+
+=== REPLY bard2-70-09 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave plain account (Persuasion 19). Arbiter accepted her as a witness, not an accused: the ledger is to be sent to Dame Crowe'
+You don't perform. You say it flat and plain, and the hall, which came for a scandal, goes quiet for the truth. Your Persuasion check was a 19. Kit's rehearsal advantage cancelled the weight of exhaustion, so it was a straight roll, and it was a good one.
+
+When you admit you kept the ledger two weeks because you wanted to see the harm for yourself, someone in the Vantry benches murmurs, and it isn't hostile. When you slide the last leaf and the commission-paper forward, the arbiter reads both without interrupting, and her stylus doesn't move for a long moment.
+
+"You took what wasn't yours," she says at last. "You kept it too long. And you brought it to the one room where it would cost the most to be honest." She sets down the paper. "I find you a witness, not an accused. Let the record say so."
+
+Her rulings come in order. The Dray contract is voided pending the keep's own rolls. The clerk's case and its copies stay under the hall's seal. Corvin is held for Dame Crowe's assize at Marrowford, and you are summoned there as witness with the ledger. Sir Corwen rises, stiff, and says only, "The house of Dray will stand surety for her passage." Isaude's hand is on his sleeve.
+
+"And the quarter hour I promised," the arbiter adds, dry. "Sergeant, the cellar."
+
+It is twenty to three. Down a short stair, behind an iron-banded door, a guard lifts a lantern. Corvin sits on an upturned cask in the dim, gloves folded in his lap, as if he were waiting for a late supper. He looks up when you come in, and Kit takes the step behind you.
+
+"Well," he says softly. "You spoke well. Better than I'd have written it." He tilts his head. "Sit, Wren. You asked about your mother. I'll tell you the first part for nothing, since it was never the ledger that you should have taken."
+
+What does Wren do?
+
+=== REPLY bard2-70-10 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9 2-2:40 PM: Wren gave her full honest account (Persuasion 13, just enough). Arbiter accepted it as testimony: the Dray betrothal is stayed pending 
+You speak plainly, with no lute and no flourish, and the hall goes quiet in a way it didn't for your cleverness. You set the leaves in order and say what you kept and why.
+
+Your Persuasion check was a 13. Rehearsing with Kit cancels the disadvantage from exhaustion, so it's a straight roll, and it just meets the DC. It's enough.
+
+The arbiter listens without interrupting. When you finish, she reads the Verrel and Thistlewood outcomes against the leaves, turns Elowen's commission-paper over once, and sets it down gently. "A thief who returns the goods, unasked, is a rare thing," she says drily. "A forger's apprentice who tells the truth about it is rarer. I won't call you innocent, mistress. But I'll not call you the villain of this room."
+
+Her ruling is brisk. The Dray betrothal is stayed until the keep's rolls are read against the contract. The clerk will be questioned. Corvin stays in the cellar until a royal officer can take him. You are bound to carry the ledger leaves to Dame Crowe's assize at Marrowford, and she will write that into the hall's record. Sir Corwen says nothing, but he gives you a short, stiff nod. Isaude's eyes are bright.
+
+"Your quarter hour with the prisoner," the arbiter adds. "Now. A guard at the door, and your companion beside you."
+
+It's twenty to three. The cellar door stands open at the back of the hall, with stairs going down into cool, lamp-lit dark. What does Wren do?
+
+=== REPLY bard2-70-11 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9 2 PM hearing: Wren's Persuasion 7, account halting. Arbiter keeps the Dray leaf and clerk's case as evidence, orders Wren to remain in Saltmarsh u
+You begin plainly, as you promised yourself, and for a while it goes well. The hall is quiet while you name the houses, Verrel, Thistlewood and Dray, and the Vantry elder shifts uneasily at the third.
+
+But the words won't hold their order. Your Persuasion check was a 7. The rehearsal's help and the weight of exhaustion cancel each other out, and the roll itself was poor. You lose your place between the Thistlewood ford and the Thornhallow register, and have to start the sentence again. When you slide the commission-paper forward, you do it a beat too eagerly, and a murmur runs along the benches. A girl showing a dead priest's will in a merchant's hall looks to some like a girl with a story to sell.
+
+The arbiter lets you finish. She reads the commission-paper twice, then sets it down by the Dray leaf without comment. She is not unkind, but she is precise.
+
+"What I have heard is a confession of theft and a request for faith," she says. "The page is sound. The prisoner has admitted it before the hall. That much stands." She taps the ledger leaf. "This hall keeps the Dray leaf as evidence, and the clerk's case. You will not leave Saltmarsh until Dame Crowe's assize at Marrowford or a writ in her hand releases you, and you will say so in front of the Lantern-Bearer's shrine, since you claim one." She slides the commission-paper back across the table. "The keeper of the Wick-House should be asked to attest this. I'll not stand between a priest's heir and her staff, if she is one."
+
+Sir Corwen says nothing as you sit, but Isaude reaches across the aisle and touches your sleeve for a heartbeat.
+
+"Quarter of an hour," the arbiter adds, "as promised. The cellar. One guard at the door. Your companion may stand beside you."
+
+It's twenty to three. The cellar guard is already holding the heavy door open, and a stair goes down into lamplight and the smell of cold stone and tar. Somewhere at the bottom, a calm voice is humming the road song you taught Kit. The Wick-House is just down the quay.
+
+What does Wren do?
+
+=== REPLY bard2-70-12 ===
+  [hidden call] write_lore: {"entry": "Vantry Hall", "add_to_description": "Day 9, 2 PM hearing: Wren gave an honest account (Persuasion 20). Arbiter struck the Dray–Vantry contract as unsealed pending the keep's rolls, took the
+You don't perform. You set the psalter down and say it plain, and the hall, which came for scandal, goes quiet to hear a confession. Your Persuasion check was a 20, and Kit's rehearsal paid for itself.
+
+You take the houses in order: Verrel, Thistlewood, Dray. You say what you kept and why, and you don't ask to be forgiven. When you slide the last leaf and your mother's paper into the light, nobody is looking at the floor.
+
+The arbiter reads for a long moment. "You kept the book two weeks and spent them putting right what you could," she says. "That is not the conduct of a thief, though I don't say it isn't theft." She taps the stylus on the table. "The contract is struck unsealed, and the keep's rolls will be read against it. The leaf and the clerk's case go into this hall's keeping for Dame Crowe's assize at Marrowford, and you will attend it with the other leaves. You are not held."
+
+Sir Corwen stands, stiff and old, and bows his head to you. It costs him. Isaude presses your hand, and says nothing at all.
+
+Then the arbiter nods toward the cellar door. "Your quarter hour, mistress. The guard stays at the door."
+
+The effort has also earned you something. You have 300 XP, enough for level 2. You can level up as soon as you're ready, and I'd suggest doing it with a rest soon, but it's your call.
+
+It's half past two. Beyond that door Corvin is waiting, with an answer he says is not about the ledger. What does Wren do?

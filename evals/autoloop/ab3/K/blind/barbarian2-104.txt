@@ -1,0 +1,259 @@
+GAME barbarian2, ROUND 104
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 101 ==
+PLAYER: I help Tessa to her feet, shoulder the greataxe, and tie Dargan's sash tight on the haft. "It's there, Tess, and Aunt Veshra has the table laid by now. Pip, stay between us and keep your head down."
+
+Then I take the front of the column with Gorrak at my side. "Dreg, keep your forty spears on the flanks and the rear, and let the freed hands set the pace, so the slowest walk first and nobody gets left behind."
+  [DM write_lore (hidden)] {"create": "Hollin Cairn Camp", "kind": "place", "description": "Sheltered hollow with a spring beside the ore road, a day's slow walk below Greyshaft. The freed column camped here on Day 22 night. Harrowmere is about another day's walk beyond.", "relationships": ["campsite of the freed column led by [[Korvash Emberhide]] and [[Gorrak Vael]] on Day 22", "on the ore road between Greyshaft and Harro
+  [game] notebook: created an entry for Hollin Cairn Camp; added 2 relationships to Hollin Cairn Camp
+  [game] time: 12 hours later: Day 22, 4:48:06 PM
+DM: You tie the sash tight, haul Tessa up, and take the front of the column with Gorrak a pace to your left. Dreg grunts and sends his spears to the flanks and rear. The freed hands set the pace, and the slowest walk first.
+
+It is a slow march. The ore road drops out of the scree bowl in long switchbacks, and the grey light turns to a thin winter sun. The children keep close in knots, counting one another's heads the way Ninna taught them. The miners walk with their eyes on the ground, then on the sky, then on the road ahead. Around mid-morning an old woman stops, takes a handful of snow, and holds it to her face. Nobody hurries her. A Tally spearman waits beside her with his helm off, and that's the whole of it.
+
+Pip keeps between you and Tessa as told, with his head down and his ink-stained hands tucked in his sleeves. At noon he asks Tessa, in a whisper, how many flour sacks a table feeds. She says it depends on the table. He nods gravely, as if that were a fair answer.
+
+Gorrak says little all day. Once, on a steep stretch, he stops to look back at the grey mouth of the mountain, then walks on. Near evening he says without looking at you, "Six winters I counted toward a day I thought would come. It did not come as I imagined." He doesn't say more, and you don't press him.
+
+By late afternoon the column reaches a sheltered hollow with a cold spring and a ring of old fire-stones, a day short of the lowlands. Dreg calls the halt. Fires are lit, water is carried, and the children are bedded down in the lee of the rocks. Harrowmere is another day's walk, and you may reach it tomorrow by dusk. It's about five in the afternoon, and you're unhurt and rested.
+
+Brun comes to you across the fire-light, twisting his helm in both hands. He is young, thin-necked, and scared of his own question. "Sir," he says in Goblin. "When we get to the town, what happens to the Tally-sworn who walked out of the mountain? Will they let us in the gates?"
+
+Tessa looks at you, and so does Gorrak. What does Korvash say or do?
+
+== ROUND 102 ==
+PLAYER: I put a hand on Brun's shoulder. "I won't promise you a warm welcome, lad, because Harrowmere has buried folk from Tally raids, but I'll promise this: you and the Tally-sworn who walked out stay at the Border Stones under my eye until I've spoken for you."
+
+"Tessa and I go in first with the freed children and Pip, and Aunt Veshra and Hale Orrin will hear every word of what you did, and what you did at the stair door. Keep your spears sheathed, your helms off, and let the town see who you are."
+  [refused] lore: no entry 'Hale Orrin'
+entries whose description mentions it:
+Aunt Veshra (person): Korvash's aunt in Harrowmere; raised him, sends word by travelers. Day 1 evening: lives two streets from the market; sent Pell for Korvash. Told him a drover…
+Border Stones (place): Three weathered standing stones marking Harrowmere's northern border on the high road, ten miles south of the drovers' fold. Day 3 ~11 AM: Aunt Veshra and…
+  [DM lore (hidden)] {"names": ["Aunt Veshra"]}
+  [DM write_lore (hidden)] {"entry": "Brun", "add_to_description": "Day 22 evening at Hollin Cairn Camp: asked whether the Tally-sworn would be let into Harrowmere. Korvash promised they'd wait at the Border Stones, helms off and spears sheathed, under his eye until he speaks for them; he will bring the story of the stair door to Aunt Veshra and the drover Hale Orrin."}
+  [game] notebook: updated Brun
+  [game] time: 2 hours later: Day 22, 6:48:06 PM
+DM: You put a hand on Brun's shoulder and tell him straight: no promise of a warm welcome, because Harrowmere has buried folk from Tally raids. But he and the others who walked out will wait at the Border Stones under your eye until you've spoken for them. You and Tessa will go in first with the freed children and Pip, and Aunt Veshra and Hale Orrin will hear every word of what he did at the stair door. Spears sheathed, helms off, and let the town see who they are.
+
+Brun's throat works. He nods hard, twice, and says nothing, because he can't. He goes back to the fire and says it to the others in a low voice. You watch it travel from helm to helm. Dreg listens with his arms folded and his jaw working. At the end he takes his own helm off, slowly, and sets it on a stone.
+
+Gorrak has heard it all from across the fire. He says to you, quietly, "You speak for my men without asking me." There is no heat in it. After a moment he adds, "It is the right thing. I would not have thought of it." He turns his face to the flames, the burn on it livid in the light. "A captain should have."
+
+The evening goes quietly. The children eat and are bedded down. Pip falls asleep with his head on Tessa's knee. She sits with her back against the rock, humming the counting song. Beyond the firelight the road runs down into the dark. Tomorrow it brings you to the Border Stones, and then Harrowmere. It's nearly seven.
+
+What does Korvash do with the evening?
+
+== ROUND 103 ==
+PLAYER: I take my bread over to Gorrak's side of the fire and sit down across from him, axe on my knees. "You owe nobody an apology, Captain, but I'll ask you something: when this march is over, what becomes of the Iron Tallies without a Foreman's coin, and without a rod to count by?"
+
+"And I meant what I said at the stove. Aunt Veshra's table has room for a man with a burned face, if you can bear to eat bread with the folk your warband once raided."
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 22 evening at Hollin Cairn Camp: Korvash asked what becomes of the Tallies without the Foreman's coin or the rod, and offered a place at Veshra's table. Gorrak said the Tallies were a debt-band; without the ledger half will drift to banditry and half want honest pay. He is considering offering the band as paid escorts and guards for the ore road 
+  [game] notebook: updated Gorrak Vael
+  [game] time: 1 hour later: Day 22, 7:48:06 PM
+DM: You carry your bread across the fire and sit down opposite Gorrak with the axe across your knees. He doesn't look up at once. He turns a stick in the coals.
+
+"What becomes of them," he says. "The Tallies were never an army, Emberhide. They were a debt with spears. Men who owed the Foreman, or whose fathers did, and a captain who kept the count so they would not starve." He breaks the stick. "Without the book, half of them will drift to the high roads and take what they can carry. That is what hungry men with spears do. The other half will ask me what honest pay looks like, and I have never once paid a man in anything but fear."
+
+He is quiet for a time. "Dreg has said a thing I did not like. That a drover's road is only as safe as the men who walk it, and the ore road wants guards. I told him no town would hire the men who burned its steadings." His eye moves to you at last. "Perhaps he is right. I am not asking."
+
+Then you speak of Veshra's table. Gorrak's mouth twists, and for a moment you can't tell if it is pain or something near a smile. "A burned face at the table of a woman whose brother's pass I took. She would feed me and she would be right to hate me." He sets the broken stick down. "I will come to the Stones. I will not promise the table. I will promise to decide there, with my eyes open."
+
+Across the fire Dreg pretends not to listen, and Tessa pretends to be asleep. It's nearly eight. The camp has gone quiet, the children are bedded down, and the sentries walk the ring of the hollow.
+
+What does Korvash do now?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 104, "category": "contradiction", "severity": 2, "quote": "Behind you, forty hobgoblin spears stop walking.", "why": "Round 115 says Brakk and nine Tally-sworn deserted the column on Day 22 night, and Gorrak knew by morning. The column should be about thirty spears. Rounds 104, 106 and 107 still say forty."}
+
+THE PLAYER'S LINE THIS ROUND: "Then that's the thing to put to Harrowmere, Captain," I say, leaning in. "Hale Orrin's a drover, and he'll know better than anyone what the high road needs, so I'll bring you to him and Aunt Veshra at the Stones, and let you ask for honest pay in your own voice."
+
+I stand, stretch my sore shoulders, and add, "Tonight, though, we sleep. Tessa, budge up, and make room by the fire for a big brother."
+
+=== REPLY barbarian2-104-01 ===
+Gorrak says nothing for a moment. Then he gives one short nod, the kind a captain gives a sentry who has reported correctly. "At the Stones, then. In my own voice." It seems to cost him something to say it, and he looks lighter for having said it.
+
+You stand, stretch your sore shoulders, and go around the fire. Tessa shifts without opening her eyes and makes room, muttering that you snore like a landslide. You lie down beside her with the axe at your hand and Pip's small back against your arm. For the first time since the pass, nobody is counting you.
+
+The night passes quietly. Dreg's sentries change twice, and a wind comes down off the mountain and smells of snow. Once you wake to find Tessa awake too, looking at the stars over the lip of the hollow and humming under her breath. She stops when she sees you looking and says only, "I keep thinking someone will come and take it back." You tell her no one will. She isn't sure she believes it yet, but she sleeps again.
+
+Dawn comes grey and cold, a little before six on Day 23. The camp stirs. Dreg's sergeants walk the rows rousing the freed hands, and the smell of woodsmoke and thin porridge drifts through the hollow. Ahead lies the last stretch of the ore road down to the lowlands, and by dusk, the Border Stones. Beyond them, Harrowmere and Aunt Veshra's table.
+
+You are rested and unhurt. What does Korvash do?
+
+=== REPLY barbarian2-104-02 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~5 PM: the freed column from Greyshaft arrived here. Aunt Veshra, the drover Hale Orrin and a crowd of Harrowmere folk, with Ushk and his ten s
+You lean toward Gorrak and put it plainly: Hale Orrin knows what the high road needs better than anyone, and you'll bring him and Aunt Veshra to the Stones so the captain can ask for honest pay in his own voice. Gorrak grunts, which is not a yes but is not a no. Then you stand, stretch your shoulders, and wedge yourself in beside Tessa. She mutters something in her sleep about the seventh goat and shoves her cold feet against your shin. Pip is a small lump on her other side. The fire burns down. You sleep.
+
+The next day is a long one. The column leaves the hollow with the grey light, comes down out of the rocks, and the land opens. Frosted pasture, dry stone walls, a shepherd's hut with its door hanging open. At a ford the children stop to wash and gape at a flock of ordinary sheep. Some of the older miners cry. No one hurries them.
+
+Near five in the afternoon, the three weathered Border Stones rise ahead against a sky the colour of pewter. A crowd waits around them: herders in wool and sheepskin, women with shawls over their heads, a boy on a fence rail who sees you first and begins to shout. Ushk and his ten spears stand off to one side, helms off, as you told them to. And at the front of the crowd, her hands folded under her shawl, stands a small, square dragonborn woman with scales faded to the colour of old brick. She doesn't wave. She just looks at Tessa, then at you, then at Tessa again, and her whole face comes apart.
+
+Beside her, a lean weathered man with a drover's staff and a grey braid, who must be Hale Orrin, is staring up the road at forty hobgoblin spears and ninety freed hands, and doesn't yet know what he is seeing.
+
+Behind you Dreg's column has halted at a hundred paces, as you told them. Gorrak stands at its head, bare-faced, with his hands empty. Pip has gone very still against Tessa's side.
+
+You are at the Border Stones, with the town in front of you and the Tallies behind. What does Korvash do?
+
+=== REPLY barbarian2-104-03 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~4:48 PM: the freed column from Greyshaft (about 90 hands plus Dreg's 40 Tally spears, Gorrak Vael, Korvash and Tessa) reached the Stones. Ushk
+"Then that's what we put to Harrowmere, Captain," you say. Hale Orrin is a drover and knows what the high road needs better than any soldier. You'll bring Gorrak to him and Aunt Veshra at the Stones, and he can ask for honest pay in his own voice.
+
+Gorrak says nothing, but he doesn't say no. You stand, stretch your sore shoulders, and tell Tessa to budge up and make room for a big brother. She does it with a snort. Pip is already asleep between you. You sleep sound, and nobody wakes you with a boot.
+
+The next day is a long walk. The ore road flattens, the snow thins to frost, and the lowlands open below you, grey fields, pale smoke, and a winding river. The children go quiet when they see the first walled steading. Some of them start to run, and the Tallies let them.
+
+You reach the Border Stones at a little before five in the evening. The three weathered pillars stand black against a low gold sky, and a crowd is waiting on the road beyond them. Ushk stands at the front with his helm under his arm and a few of his ten spears at his back. Beside him, small and upright with her shawl pulled tight, is Aunt Veshra. A lean, grizzled drover with a crook in his hand stands at her shoulder. That must be Hale Orrin. Behind them stand half the town, herders and carters and shopkeepers, all silent. Pell is there, and a small girl in a hobgoblin's blanket clings to his hand. Wren.
+
+The freed children see their own people. For a breath nothing moves. Then the whole column breaks, and the road fills with running and crying, names shouted, and mothers on their knees in the frost.
+
+Veshra doesn't run. She looks along the road until she finds you and Tessa side by side, and her hand goes to her mouth. Dreg, behind you, has halted forty spears at the first stone and ordered the helms off, as promised. Gorrak stands at the head of them with his burned face bare. The crowd has seen him, and the silence in it has changed.
+
+What does Korvash do?
+
+=== REPLY barbarian2-104-04 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~5 PM: the freed column from Greyshaft reached the stones. Aunt Veshra and Hale Orrin waited there with townsfolk, warned by Ushk's earlier ret
+You tell Gorrak that Hale Orrin is a drover who knows what the high road needs, and that he can ask for honest pay there in his own voice. Then you stretch your sore shoulders and settle beside your sister. "Budge up, Tess. Make room for a big brother." She grumbles in Draconic and doesn't budge an inch, so you lie down in the cold anyway, with Pip's feet in your ribs. You are asleep before the fire has burned low.
+
+The next day is long and grey, and the column walks it. The ore road flattens into the lowland high road, and the first stubble fields appear, then the first drystone walls. By the afternoon the children have gone quiet and then loud. Ninna's friends point at hillsides they know. A girl starts to run and is called back, and runs anyway. Nobody stops her.
+
+You reach the Border Stones a little before five, as the light goes copper. The three weathered stones stand on the rise as they always have, and there is a crowd beneath them. Herders in wool, a few townsfolk, shopkeepers with lanterns not yet lit. Ushk's ten spears stand at the back, helms off. They have kept their word too.
+
+At the front stand Aunt Veshra, small and square in her grey shawl, and beside her a lean weathered drover with a crooked staff, who must be Hale Orrin. Pell stands between them, and a small girl with a blanket round her shoulders holds his hand. She sees you and shouts your name.
+
+Behind you the column slows and stops. Dreg's forty spears halt at the foot of the rise. Gorrak walks up beside you, burned face bare, with his helm in his hand. The crowd goes absolutely silent.
+
+Veshra's eyes find Tessa first. She puts her hand over her mouth.
+
+It's nearly five in the evening. The children are home, your sister is at your side, and the whole town is watching. What does Korvash do?
+
+=== REPLY barbarian2-104-05 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~5:30 PM: the freed column from Greyshaft arrived at the Border Stones. Veshra and Hale Orrin are to hear Korvash speak for the Tally-sworn, an
+"Then that's the thing to put to Harrowmere," you say. Hale Orrin is a drover and knows what the high road needs. You'll bring Gorrak to him and Veshra at the Stones and let him ask for honest pay in his own voice. Gorrak only grunts, but he doesn't say no.
+
+You stand, stretch your shoulders, and tell Tessa to budge up and make room for a big brother. She does, without a word, and pulls the blanket over both of you. Pip is snoring on her other side. That night the sentries are Tally spears and freed miners, standing watch together over the same fire. Nobody wakes you with a boot.
+
+The next day is the long one. The road leaves the mountain behind and begins to smell of grass and woodsmoke. The children start to run ahead, then come back, then run ahead again. By midafternoon someone sees the roofs of Harrowmere in the distance, small and blue with chimney smoke, and the column goes quiet. A girl starts to cry, and her brother puts his arm around her.
+
+Near half past five you come to the Border Stones, three weathered standing stones against a pale sky. The road beyond them is lined with people. Herders are there in sheepskins, women with babies on their hips, old men leaning on staves, and Pell in the front, thin and straight, with a small girl riding on his shoulders who must be Wren. Behind them, with a shawl round her shoulders and her arms folded tight, stands a tall dragonborn woman with greying scales. You'd know that stance anywhere. Beside her a weather-beaten drover leans on a crook and watches the Tally spears with narrow eyes. Hale Orrin, you guess.
+
+The column halts at the Stones. Behind you forty hobgoblins stand with their helms in their hands. Gorrak has stopped at your left, bare-faced and very still.
+
+Aunt Veshra has seen Tessa. She hasn't moved. Her mouth has begun to shake.
+
+What does Korvash do?
+
+=== REPLY barbarian2-104-06 ===
+  [hidden call] write_lore: {"create": "Hale Orrin", "kind": "person", "description": "Harrowmere drover who first saw the Iron Tallies' camp at Cinder Ford and told Aunt Veshra. Day 23 dusk: waits at the Border Stones with Aunt
+You answer Gorrak that Hale Orrin is a drover and knows better than anyone what the high road needs. You'll bring him and Aunt Veshra to the Stones, and Gorrak can ask for honest pay in his own voice. Then you stand, stretch your sore shoulders, and tell Tessa to budge up and make room for a big brother. She does, without opening her eyes. "You snore," she says. You sleep.
+
+The march next day is long and quiet. The ore road flattens, the scree gives way to frost-bitten grass, and the first dry-stone walls and sheep-folds of the lowlands appear. The children begin to run ahead and are called back. By late afternoon, when the light goes copper, you see three weathered standing stones against the sky, and a crowd waiting in front of them.
+
+Aunt Veshra stands at the front, broad-shouldered and grey-braided, with a shawl over her arms and her chin set against the wind. Beside her is a lean man with a drover's staff, who must be Hale Orrin. Pell is at her elbow, holding a small girl by the hand. Wren, you'd know that stubborn chin anywhere. Behind them stand a few dozen townsfolk with lanterns not yet lit, and Ushk with his ten spears, helms off, standing apart in a respectful line.
+
+The freed children see the crowd and stop. Then someone screams a name, and the column breaks like a wave. Mothers and fathers run out over the frozen grass. For some minutes nobody can hear anything at all.
+
+Veshra hasn't moved. She is looking at you, and then at Tessa at your side, and her face does something you've never seen it do. Her shawl drops.
+
+"Korvash," she says, rough and quiet. "Is that who I think it is?"
+
+Dreg's spears have halted a hundred paces back, helms off as you asked, with Brun among them and Gorrak at their head, bareheaded and still. The town has noticed them, and the murmur is turning ugly.
+
+It is almost five in the evening. What does Korvash do?
+
+=== REPLY barbarian2-104-07 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23, late afternoon: the freed column reached the Stones. Aunt Veshra, drover Hale Orrin and a crowd of Harrowmere folk were waiting, warned by Ush
+"Then that's what you put to Harrowmere in your own voice, Captain," you say. "Hale Orrin knows what the high road needs, and I'll bring you to him and Aunt Veshra at the Stones." Gorrak inclines his head and says nothing. It's an answer of a kind.
+
+You stand, stretch your sore shoulders, and tell Tessa to budge up. She does, with a snort, and her back is warm against yours. Pip is wedged on her other side, and the fire ticks down to coals. Nothing stirs in the dark but the sentries. For once the night is only a night.
+
+The second day on the road is easier. The ore road flattens out of the foothills into frost-bitten pasture, and the children begin to point at things: a crow, a wall, a thread of chimney smoke. The miners walk lighter. Around noon, Pip asks if the town has a clerk already. Tessa tells him it doesn't have an honest one.
+
+It is nearly five in the afternoon when the three weathered Border Stones rise out of the grass ahead, long-shadowed in the low sun. You've stood here before, at dawn, with a promise and an axe taken from your hands. Today the road in front of the Stones is crowded. A hundred of Harrowmere's people are waiting, herders in wool and drovers with crooks, market-women, old men leaning on sticks. Ushk is among them, with his spears drawn up in a quiet line. At the front stands a broad, grey-braided dragonborn woman in a herder's cloak with her arms folded. Beside her a lean, weathered man leans on a drover's staff.
+
+"That's her," Tessa says, very softly. She has stopped walking. Her hand finds yours. "Korvash. She's older."
+
+Veshra has seen you both. Her arms come unfolded.
+
+Behind you the column has halted, and Dreg's spears have taken their helms off. Gorrak stands a little apart with his bare face to the crowd. Brun has his eyes on the ground. Ninety-odd freed hands stare at the town they were taken from.
+
+The Stones, the crowd, and the aunt who raised you are all in front of you. What does Korvash do?
+
+=== REPLY barbarian2-104-08 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~5 PM: the freed column from Greyshaft reached the Stones. Aunt Veshra, the drover Hale Orrin and a crowd of Harrowmere townsfolk with lanterns
+You lay your case to Gorrak plainly: Hale Orrin knows the high road better than anyone, and he can ask for honest pay in his own voice at the Stones. Gorrak says nothing, but he doesn't say no. Then you stand, stretch your sore shoulders, and drop down beside Tessa by the fire. "Budge up," you tell her, "and make room for a big brother." She shoves over with a snort and leans on you. Pip sleeps across her feet.
+
+The night passes without a sentry's cry. In the morning the column rises with the light, and you walk the rest of the road with the sun on your left. The children begin to run ahead, then come back, then run ahead again. By the last hours of the afternoon they have stopped counting heads and are simply walking.
+
+At about five, with the light going copper over the lowlands, you come over the last rise and see the three Border Stones against the sky, and below them the roofs and chimneys of Harrowmere, small and warm.
+
+There are lanterns at the Stones. A crowd of townsfolk stands there, herders and drovers and women with shawls over their heads, forty or fifty of them. Ushk's returned children must have told them everything. At the front stands a broad old woman with iron-grey braids and a cloak the colour of dried blood, her hands folded in front of her. Beside her is a lean, weathered drover with a crook. The old woman has been looking up the road for a long time, and she knows your walk from half a mile away.
+
+"That's Aunt Veshra," Tessa whispers. Her hand finds yours and grips it hard. Pip presses against her hip. Behind you the column has slowed. The Tally spears have fallen back, helms off as you asked, and they stand in a ragged line under the first stone. Gorrak is among them, bareheaded, with his burned face to the lanterns.
+
+You are at full strength, with your sister's hand in yours and your aunt a hundred paces off. What does Korvash do?
+
+=== REPLY barbarian2-104-09 ===
+  [hidden call] write_lore: {"create": "Hale Orrin", "kind": "person", "description": "Harrowmere drover who first saw the Iron Tallies' camp at Cinder Ford and told Aunt Veshra. Korvash plans to introduce Gorrak to him on Day 2
+You tell Gorrak that's what to put to Harrowmere. Hale Orrin knows the high road better than any man living, and you'll bring the captain to him and Veshra at the Stones so he can ask for honest pay in his own voice. Gorrak says nothing, but he doesn't say no.
+
+Then you stand, stretch your shoulders, and tell Tessa to budge up. She does, with a snort that is almost a laugh. For the first time in more years than you care to count, you sleep with your sister's breathing beside you.
+
+The next day is the lowland road: frost on the ruts, then mud, then a thin warm sun. The mountains fall behind you. Around noon the children begin to recognize hills. One girl stops and points, and a boy cries out. By mid-afternoon a few have started to run, and nobody tries to stop them.
+
+Just before five you come over the last rise, and there are the Border Stones, three grey stones against a sky going gold. A crowd is waiting at them. Aunt Veshra stands in front with her shawl pulled tight, small and straight and fierce. Beside her is a weathered man in a drover's coat, who must be Hale Orrin. Behind them are fifty or sixty townsfolk, herders, and parents who have waited here since Ushk brought the first children home. Pell is among them, with Wren on his hip.
+
+The children break from the column like water from a dam. Names are shouted, and the sound goes up into the evening and doesn't stop. Pip stops dead beside you, gripping the hem of your coat. Tessa has gone absolutely still, with one hand over her mouth, looking at Veshra. Veshra is looking at her.
+
+Behind you the Tally spears have halted at your word, helms off, and the townsfolk are looking at them. Gorrak stands beside Dreg, bareheaded, with his burned face to the crowd. Nobody in the crowd moves toward him. Someone near the back spits.
+
+It's a little before five on Day 23. What does Korvash do?
+
+=== REPLY barbarian2-104-10 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~3 PM: the freed column from Greyshaft arrives; a crowd of Harrowmere folk, including Aunt Veshra and the drover Hale Orrin, waits there, warne
+Gorrak gives a short nod. You say you'll bring him to Hale Orrin and Veshra at the Stones, so he can ask for honest pay in his own voice. "We will see whether the drover has ears," he says, and no more. You stretch the stiffness from your shoulders and tell Tessa to budge up. She does, without opening her eyes, and says, "You snore like a landslide." Pip is already asleep against her other side. You sleep with the fire at your feet and the sentries on the rim, and nothing wakes you.
+
+The morning is grey and cold. The column rises, eats what is left of the bread, and goes on down the ore road. The scree gives way to scrub, then to pasture still white at the edges. The children begin to name the hills. By midday someone sees a thread of chimney smoke, and a sound goes through the column that isn't quite a cheer. Ninna's friends, who have been counting heads all morning, start counting the number of days instead.
+
+It's near three in the afternoon when the Border Stones come up out of the haze: three weathered pillars on the high road, where you swore your first oath. Today they are not alone. Half of Harrowmere seems to be there. Drovers, wives, herder families in their good wool, and a handful of the town watch stand in a loose, silent ring on the frozen grass. Ushk's ten spears stand among them, helms off. He must have kept faith: no grey cloak and no hobgoblin has been harmed. Kneeling by the nearest stone is a small, upright old woman in a faded blue shawl with a basket at her knee. She doesn't call out. She just stands up.
+
+Beside her is a broad-shouldered man with a drover's crook, who must be Hale Orrin. Behind them a boy of about twelve, Pell, is holding a small girl's hand. The girl is staring straight at you. It is Wren.
+
+Behind you the column has stopped. The Tally-sworn have taken their helms off, as you told them. Gorrak is at your left, bareheaded and bare-faced, and Dreg and Brun are a step behind him. Tessa's hand has found your sleeve.
+
+Aunt Veshra takes one step forward. The whole crowd is waiting to see what you do.
+
+=== REPLY barbarian2-104-11 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 ~3 PM: the freed column reached the Stones. Korvash plans to leave the Tally-sworn here under his eye while he brings Gorrak to speak to Aunt V
+You tell Gorrak the thing to put to Harrowmere is exactly that. Hale Orrin is a drover and knows what the high road needs better than any man, and you'll bring him and Aunt Veshra to the Stones to hear it in Gorrak's own voice. Gorrak says nothing, but he doesn't say no. Then you stand, stretch your shoulders, and go to make room by the fire. "Budge up, Tess," you say, "and make room for a big brother." She does, without opening her eyes, and shoves her cold feet against your leg.
+
+The night passes without a boot at your ribs. The sentries change. Once you wake to the sound of Pip talking in his sleep, reciting sums in Goblin, and Tessa's hand patting his back without waking. In the grey before dawn, the column wakes and moves. Another long day of road, the lowlands opening beneath you in a quilt of frosted fields and chimney smoke.
+
+It's a quarter to three in the afternoon when you see the Border Stones: three weathered standing stones on the high road. You've seen them before with Wren's hand in a stranger's, and your axe at your back.
+
+The road in front of the Stones is not empty. A crowd stands there. Drovers, herd-wives, townsfolk with their cloaks pulled tight, somebody's dog. Word has run ahead of the column, as it always does. At the front, small and straight in her grey shawl, stands Aunt Veshra. Beside her is a lean, weathered man with a drover's crook, who must be Hale Orrin. Pell stands close at her elbow, and beside him a small girl holds his hand and stares up the road with her mouth open. Ninna is there too, with Ushk close behind her, out of his armour, looking uncomfortable.
+
+When they see the column, the crowd goes quiet. Behind you the Tallies have stopped dead, helms in their hands, spears furled. Dreg's jaw is tight. Brun is white. Gorrak has halted a pace behind your shoulder, burned face bare to the afternoon light.
+
+Veshra's eyes are on Tessa. She hasn't yet moved, and her hand has gone to her mouth.
+
+What does Korvash do?
+
+=== REPLY barbarian2-104-12 ===
+  [hidden call] write_lore: {"entry": "Border Stones", "add_to_description": "Day 23 dusk (~5:20 PM): the freed Greyshaft column reached the Stones. Harrowmere folk with lanterns gathered there, Aunt Veshra among them, warned by
+"Then that's what we put to Harrowmere," you tell Gorrak. He looks at you for a long moment, and then, slowly, he nods. You will bring him to Hale Orrin and Veshra at the Stones and let him ask for honest pay in his own voice.
+
+You stand and stretch. Tessa, already half asleep, slides over on her bedroll without a word, and you lie down beside her like a big brother. Pip is a small warm lump on her other side. The fire ticks down. Nothing stirs in the night but the sentries' boots.
+
+Morning is cold and clear. The column rises stiff and quiet and takes the last long stretch of the road. The hills open into rolling pasture, with stone walls, frost on the grass, and the first smoke of far chimneys. The children begin to run ahead, and no one calls them back. By afternoon an old miner is weeping openly, not from sorrow.
+
+At dusk, the three Border Stones stand ahead against a pale sky, and the road below them is lit with lanterns.
+
+A crowd waits there. Herders in sheepskins, women with babes on their hips, men with staves, townsfolk in wool cloaks, and a line of children who came home before. Ushk stands among them, bareheaded, with his ten spears behind him. He must have run his people hard to be here. A small wiry figure in a patched shawl stands at the front, and she has your father's jaw. Aunt Veshra. Beside her is a lean, weathered drover with a crook, who can only be Hale Orrin. Pell is there too, and a small girl on his shoulders with a wool ribbon in her hair. She sees you and shrieks.
+
+Behind you the column has stopped. Forty Tally spears are grounded and forty helms are coming off. Gorrak walks to your shoulder, bareheaded, burn bare to the lanterns. He doesn't speak. A murmur starts in the crowd when they see his face, and then it dies.
+
+It is just past five. Your aunt takes a step toward you, and Tessa's hand finds yours.
+
+What does Korvash do?

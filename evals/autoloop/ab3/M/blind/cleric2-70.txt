@@ -1,0 +1,266 @@
+GAME cleric2, ROUND 70
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 67 ==
+PLAYER: I keep my distance and cast Sacred Flame at the ghoul, since it has only 5 HP left and I don't need to get within its reach. "Corra, if it drops, help me and Bede drive that capstone home. Hodd, keep the oil burning on the steps!"
+  [game] dice Ghoul B's Dexterity save vs Sacred Flame, DC 13: 1d20+2 = 1d20 [4] + 2 = 6
+  [game] dice Sacred Flame radiant damage on Ghoul B: 1d8 = 1d8 [6] = 6 (Brannoc Ashdown has used its action: no more actions this turn.)
+  [game] fight: Ghoul B removed from the fight. Order: Brannoc Ashdown (16), Bede (14), Corra (14)
+  [game] fight: Fight over after 5 round(s). 30 seconds of fighting; now Day 5, 5:31:12 PM.
+  [game] sheet: XP +400: 800
+  [game] time: 40 minutes later: Day 5, 6:11:12 PM
+  [DM write_lore (hidden)] {"entry": "The Drowned Stair", "add_to_description": "Day 5 dusk: two ghouls (A and B) came up the stair and were killed at the grating by Brannoc and the guards Bede and Corra. The grating was then sealed with a capstone, oak wedges and clay. Any further ghouls and the Dead Road passage remain unknown."}
+  [game] notebook: updated The Drowned Stair
+DM: Sacred Flame drops out of the sky onto the crouching ghoul. It fails to dodge and the radiance burns through what the fire and the bolt left of it. It falls back from the bars and doesn't rise again. The scraping on the steps stops, and the only sound is the oil hissing on the wet stone.
+
+Nobody cheers. Corra lets out a long breath, and Bede sits down hard against the parapet with his halberd across his knees. Then the work starts again. All five guards and Hodd put their shoulders to the capstone and drive it home against the bars. The oak wedges go in, the clay is packed hard, and the iron bar is jammed across. When it's done the grating is stopped solid, with no gap anywhere. You hold your lantern to the seam and see no crack to put a finger in, unlike the Long Cut. Hodd mutters that he'll add a second stone in the morning and have the watch look at the niches every night.
+
+For the two ghouls at the grating, you have 800 XP, 100 short of level 3. Bede has 5 HP, a bruised pride and no lasting harm. Corra is unhurt. Your spell slots are all gone, and Channel Divinity with them. The gray finger-marks on the stone are the only sign of what came up.
+
+It's about eleven minutes past six, with the light failing and the river going dark. Down the stair there may be more of them, and the old tale of the Dead Road is still only a tale. Ansel's cots are a short walk away, with Rudd, Imma and Tobin in them, and Mother Aldith still has to be found.
+
+What does Brannoc do?
+
+== ROUND 68 ==
+PLAYER: I check Bede first, kneeling to look him over and bind what needs binding, then tell Hodd, "Keep two guards on this grating tonight with every lantern lit, and send for me at once if the scratching starts again."
+
+Then I head back to Brother Ansel's hospice to look in on Rudd, Imma and Tobin, take the free bed and the long rest that Shelter of the Faithful promises, and in the morning ask Ansel where I can find Mother Aldith. DM: how far is Bede from needing real care, and is Mother Aldith's house near the hospice?
+  [game] time: 1 hour 20 minutes later: Day 5, 7:31:12 PM
+  [refused] sheet: one long rest in 24 hours: the last finished Day 5, 4:50:42 AM, so the next can finish Day 6, 4:50:42 AM at the earliest. A short rest is allowed
+  [game] time: 1 hour 19 minutes 30 seconds later: Day 5, 8:50:42 PM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 6, 4:50:42 AM
+  [DM write_lore (hidden)] {"entry": "Mother Aldith", "add_to_description": "Day 5 evening: Brannoc has not yet met her. Her house in Stonebridge is a few streets from the hospice (Ansel can direct him)."}
+  [game] notebook: updated Mother Aldith
+DM: You kneel by Bede at the parapet and look him over by lantern-light. There's no wound on him, only the stiffness of the paralysis wearing off and a bruise on his hip from the stones. His grip is firm and his eyes are clear. You turn his hand over, count his pulse, make him follow your finger, and wrap the hip in a strip of linen. He grins weakly and says he's never been so glad of a spear. For answer to your question: he's nowhere near needing real care. A night's rest and a hot meal will mend him. If his breath goes short, or numbness lingers in his limbs past morning, send him to Ansel. Corra is untouched.
+
+You tell Hodd what you said you would. Two guards on the grating all night, every lantern lit, and a runner to the hospice at the first scratch. Hodd nods and says he'll stand the first watch himself, since he's the one who didn't look for thirty years.
+
+Mother Aldith's house is on the tanners' lane, about four streets from the hospice, a short walk. Ansel can point you to it in the morning.
+
+At the hospice, the lamps burn by every cot as you asked. Rudd sleeps with his splinted thigh propped high, and his colour is better. Imma wakes enough to tell you her head hurts "less than a drum", and Tobin sleeps curled round his bad ankle with his fist against his mouth. Ansel presses a bowl of lentil broth into your hands and shows you a cot at the end of the row, under the shrine lamp. Shelter of the Faithful, as promised, and no coin asked.
+
+You sleep from ten to nine at night. Your prayers come back clean, with all three 1st-level slots and Channel Divinity, and your hit points are full. The long rest ends at ten to five on Day 6, and the lamp by the shrine is still burning. Nobody woke you in the night.
+
+You're 100 XP short of level 3. Mother Aldith is a few streets away, Perrin's hip and Wren's letter are still on your conscience, and the carter and the two children will need watching today. Under the second arch, the bridge is quiet.
+
+What does Brannoc do?
+
+== ROUND 69 ==
+PLAYER: I rise, wash at the basin, and cast Cure Wounds on Rudd's thigh and a gentle check over Imma and Tobin before I leave. Then I ask Brother Ansel to show me the way to Mother Aldith's house on the tanners' lane, and thank him for the bed.
+
+At her door I'll introduce myself, hand her Wren's letter, and tell her about Perrin Gale's crooked hip in Greywater and Tobin's crushed ankle here, asking if she can see the boy today. DM: has Hodd's night watch at the grating seen or heard anything since I left?
+  [game] dice Cure Wounds on Rudd Fenwick (1d8 + WIS 3 + Disciple of Life 3): 1d8+6 = 1d8 [7] + 6 = 13
+  [game] sheet: Brannoc casts Cure Wounds at level 1; level-1 spell slots: 2/3
+  [game] time: 1 hour 30 minutes later: Day 6, 6:20:42 AM
+  [DM write_lore (hidden)] {"entry": "Mother Aldith", "add_to_description": "Day 6 ~6:30 AM: Brannoc reaches her house on the tanners' lane. Wren kept her original letter, so Brannoc wrote a fresh note in his prayer book for Aldith."}
+  [game] notebook: updated Mother Aldith
+DM: You wash at the basin, then lay your hand over Rudd's splinted thigh and say the prayer low. Thirteen points of life go in. His colour comes up and the ache eases from his face. The bone still has to knit, and he'll be on a crutch for weeks. But he'll live, and he'll keep the leg. Imma sits up, hungry and cross, her head clear enough to complain about it. Tobin's ankle is still swollen and purple, and the gray finger-marks have faded to a bruise. He needs a bonesetter. You have two 1st-level slots left.
+
+Ansel meets you at the green door with a heel of bread. The night was quiet, and he has the answer to your question. Hodd's watch saw nothing and heard nothing. One of the guards swore he heard water dripping on stone near midnight, but it didn't move, and no runner came. Ansel gives you directions with the bowl still in his hand. Down the tanners' lane, third door past the dye-pit, and look for the bone hung over the lintel. He'll send Tobin along on a litter once the boy has eaten.
+
+A mistake of mine first. Wren kept the letter you gave her, and she held it too tightly to give back. So you tear a fresh leaf from your prayer book and write a new note by the shrine lamp. It's two lines: who you are, who sent you, and that a girl in Greywater wants to learn.
+
+The tanners' lane stinks, and the morning is cold. The door is the one with the pale bone nailed above it. Before you can knock, a voice from inside bellows, "If you're bleeding, come in. If you're selling, go to the devil!"
+
+Inside is a low, hot room with a table scarred by knives, a shelf of splints and rolled bandages, and a heavy woman of sixty with forearms like a smith's. She is up to her elbows in a bowl of flour and looks you over without stopping. "A priest. You've the look of Edda's. Well? Speak."
+
+What does Brannoc say?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 70, "category": "clock", "severity": 1, "quote": "It's a quarter to seven on Day 6.", "why": "No time line in this round; the clock is still 6:20:42 AM from R69 (about 25 minutes of conversation unaccounted for)."}
+{"round": 70, "category": "format", "severity": 1, "quote": "Persuasion (18): she asks what you want in plain words", "why": "Roll names and totals in the narration (also 'Athletics (20)', 'Medicine (15)', 'Perception (22)' and so on in later rounds)."}
+
+THE PLAYER'S LINE THIS ROUND: "Good morning, Mother Aldith. I'm Brannoc Ashdown, Edda Thorne's foster-son, and I've come with two matters. A boy named Tobin has a crushed ankle at Brother Ansel's hospice, and a dyer in Greywater, Perrin Gale, has a hip that healed crooked after a fall from a rack."
+
+I hold out the note. "This is also from me, for a dyer's daughter named Wren, twelve, who sweeps the chapel there and wants to learn the work. Maud Marrow vouches for her, and her parents have agreed to a month's trial. Will you read it, and will you see Tobin today?"
+
+=== REPLY cleric2-70-01 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: agreed to see Tobin that day, to look at Perrin Gale's hip if he comes to Stonebridge, and to meet Wren for a trial visit with Maud Mar
+Mother Aldith doesn't stop kneading. She jerks her chin at the note and says, "Read it to me. My hands are floury." You read the two lines aloud.
+
+She grunts at the first line, and at the second she stops. "Maud Marrow's put her name to it, has she? That woman owes me two blankets and a lie about her brother's wool." She wipes her hands on her apron, takes the leaf, and reads it herself, lips moving. Persuasion (16): when she looks up, the scowl has not gone, but it has changed. "A dyer's girl who sweeps a dead priest's chapel for nothing. Edda took in strays too, and the best ones stayed." She tucks the note in her apron. "A month's trial, with Maud to chaperone. Send her in spring if the weather's foul. I'll not have a child on the road in mud. Tell her to learn her breaths and her bandages first. If she can't keep a wound clean, I can't use her."
+
+Tobin she'll see today. "Send the boy on his litter. I'll have the table ready by noon. Crushed ankles want setting before the swelling sets hard." For Perrin, she is blunt. "Hips set crooked a month are a bad business. Tell him to come, and tell him I'll break it if I must and he'll hate me for it. Better hated than lame." She names a price, two silver, and says it can be paid in kind if he can't manage it.
+
+She sizes you up once more. "You've a good face for the sick. A bad one for the rest. Don't spend yourself, boy. It's a long road for a cleric with no one behind him." Then she turns back to the dough as if you were already gone.
+
+It's a quarter to seven on Day 6. You have two 1st-level slots, Channel Divinity, and 800 XP, 100 short of level 3. The hospice is waiting, Tobin will be carried here by noon, and the bridge is quiet. You may also take the valley road further, or stay in Stonebridge awhile and see whether the second arch is truly done.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-02 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: knew of Edda Thorne. Agreed to see Tobin that day and will see Perrin Gale if he comes. Will meet Wren for a trial, subject to a month 
+Mother Aldith wipes her hands on her apron, takes the note between two floury fingers, and reads it standing, with her lips moving. She reads it twice. Then she grunts.
+
+"Edda Thorne's boy. She turned my first apprentice out of Millbrook with a cough and a loaf, and the girl's still the best midwife on the river. I'd know that hand of prayer anywhere." She squints at you. "You've her patience, I'd wager, and none of her sense, spending your slots on every crooked back in the valley."
+
+She taps the note. "A dyer's girl of twelve who sweeps a chapel nobody asked her to sweep. That's the right sort, or the worst sort, and I'll know which in a week. Maud Marrow vouches for her?" Her mouth twitches. "I owe that woman a blanket and a favour. Send her down when the weather holds, with Maud for company and a month's trial, and I'll not promise more. I've had three apprentices and two stayed. Don't tell her I said yes before she's scrubbed a floor."
+
+On Tobin, she is brisker. "A crushed ankle's no use waiting. Have Ansel bring him on a litter by nine, and I'll set it with my own hands. I'll want you there to hold the boy and say your hum, if you've a hum. Children set quieter with one." She jerks her chin. "And your dyer with the hip. Let him come, or not. A hip that's healed wrong must be re-broken to set right, and I won't do it to a man who's not ready for the pain. I'll tell you that plain, so you tell him plain."
+
+She turns back to her dough. "Well? You've got to nine o'clock. Sit if you want to be useful, or go and fetch the boy."
+
+It's a little past half past six on Day 6. You have 800 XP, two 1st-level slots, and Channel Divinity. The hospice is a short walk, the bridge is quiet, and Greywater is a day behind you.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-03 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 ~6:30 AM: Met Brannoc. Read his note, agrees to a month's trial for Wren if Maud brings her. Will set Tobin's ankle at noon Day 6 and wants Bran
+Aldith doesn't stop kneading. She holds out a floury elbow for the note, and you lay it on her forearm. She reads it with her lips moving, then reads it again, slowly.
+
+"Edda's boy. She wrote to me twice in forty years, and both times it was to tell me I was wrong." She snorts, and it might be a laugh. "Maud Marrow's name on a girl, is it? Maud weaves my winter blankets and she's never once let me forget the price. Twelve is old enough to learn, and young enough to be spoiled by a bad teacher. I'm a bad teacher. Tell her parents that, so nobody weeps later."
+
+She slaps the dough into a pan and wipes her hands on her apron. "A month's trial is sense. I'll take her if she doesn't faint at the sight of bone. Have Maud bring her down when the weather holds, and I'll see what she's made of."
+
+Then she looks at you properly. "The boy. Crushed ankle, you say. How long, and was it bruised black or only swollen? Send him over on Ansel's litter. I'll set it at noon, while I've a clear table. It'll hurt him, and he'll scream. If you've a prayer that eases a child's pain and steadies his heart when I pull, you'll stand by and say it. I'll not turn down a cleric's hands."
+
+On the hip, her face goes flat. "A month healed crooked, and a dyer too proud to see anyone. I can't go to him. A bone that's knit wrong has to be broken again and reset, and I won't do it in a dye-shed, on a man who's not asked. He'd have to come here. Three weeks laid up, if he's lucky, and he'll hate me for it. Tell him that straight. If he comes, I'll do it for Maud's sake and charge him only what he can pay."
+
+It's about half past six. The hospice is close, Tobin needs to eat before the litter, and you have two 1st-level slots and Channel Divinity ready. You also have a few hours before noon.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-04 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: Brannoc spoke for Wren and Perrin Gale. Aldith (heavy, sixty, forearms like a smith's, floury hands) will see Tobin today. She is uncon
+Aldith wipes one floury hand on her apron, takes the note, and reads it at arm's length with her lips pressed thin. She reads it twice, once for the words and once, you suspect, for the hand that wrote them.
+
+"Edda's boy," she says. "She sent me a lad once with a broken wrist and a lecture. I set it and ignored the lecture." She sniffs. "Tobin first, because he's here and children's bones don't wait. Bring him on the litter and I'll have the table cleared. Crushed, you say? How crushed? Grip or weight?"
+
+You tell her about the cart, the swelling, and the four gray marks round the ankle. She goes quiet at that last, and her eyes flick to the door. "Aye. Ansel's boy told me last night. Keep that to yourself in the market. Folk panic."
+
+Then the note. Your Persuasion (8) doesn't move her far. She tucks the paper into her apron and shakes her head. "I've had three apprentices, and two stayed, and I buried my patience with the third. A letter's not a pair of hands. Maud Marrow's blankets keep my feet warm, and I'll not insult her by saying no outright. Bring the girl when the weather holds, and I'll see her hands work, one day, before I say yes or no. No promises." She jabs a finger at you. "And no lecture from you about it either."
+
+On Perrin she is blunter. A month-old hip, healed crooked, is a hard business. She would have to break it again, and he would be abed for weeks. She'll not do it unless he walks the road to her door himself and asks. "Tell him a stool at the vat is sense, and that the rest is his to choose."
+
+It is twenty to seven on Day 6. Tobin is still at the hospice, and Aldith is already shoving the dough aside to clear her table. You have two 1st-level slots, Channel Divinity, and 100 XP to go. Rudd, Imma and the bridge are all quiet.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-05 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 ~6:30 AM: Blunt, heavy, sixty, forearms like a smith's, kneading dough when Brannoc arrived. Read his note about Wren, agreed to see Tobin today
+Aldith keeps kneading while you speak. She doesn't interrupt, and she doesn't look up until you hold out the note. Then she wipes her hands on her apron, takes it between a floury finger and thumb, and reads it with her lips pressed thin.
+
+"Edda Thorne's foster-son," she says. "Edda once told me I set bones like a butcher with a grudge. She was right, and it works." She grunts. "Tobin first. A crushed ankle in a nine-year-old can't wait. I'll be at Ansel's before the bread is out of the oven. Tell him to have the boy fed and the bed clear, and to keep the child from his own mother's panic, if he's got one."
+
+She taps the note against the table. "A dyer's girl who sweeps a priestless chapel unasked. Hm. I've had three apprentices, and two stayed. The ones who stay are the ones nobody had to ask. Maud Marrow's word is good, and I owe her a blanket's worth of favours. Send the girl down with Maud when the weather holds, and I'll look at her hands before I look at anything else. I promise nothing past that. A month's trial suits me. A year's would suit me better."
+
+On Perrin she is less gentle. "A hip that's healed crooked a month? I can break it and set it again, and it will hurt him worse than the fall did. I'm not walking two days to do it. If the old fool wants it straight, he comes to me, on a cart, with someone to hold his hand. Tell him that. Tell him Aldith says pride is a bad splint."
+
+She jerks her chin at the door. "Go on. I'll bring my own splints."
+
+It is a little before seven on Day 6. You have two 1st-level slots, Channel Divinity ready, and 800 of the 900 XP you need. Tobin is in good hands, Perrin's road is plain, and Wren's is as open as you can make it.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-06 ===
+Aldith doesn't stop kneading. She jerks her chin at the table, and you set the note down on the one clean corner. She wipes her hands on her apron, one finger at a time, then picks it up and reads it with her lips pressed thin.
+
+"Edda Thorne's boy," she says. "I met Edda once, thirty years back. She told me I was too loud for a sickroom. I told her she was too soft for a bone." A grunt that might be a laugh. "Maud Marrow vouches for the girl? Maud's blankets have kept my feet warm eleven winters, so that counts for something. A dyer's child with a steady hand and a chapel broom. Hm."
+
+She folds the note into her apron pocket. "A month's trial, and the parents can fetch her home at harvest? That's sensible. I don't take a child who's been shipped to me like a sack of meal. Tell her to come with Maud when the roads are dry, and I'll find out whether she faints at the sight of a bone."
+
+Then she looks at you properly. "Tobin. Crushed, you say, and not set? Don't tell me you've been pushing healing prayers into it. Magic closes a bone any way it likes, and then I have to break it again." She wipes her hands again, harder. "Has anyone touched that ankle but you and Ansel?"
+
+On Perrin's hip, her face closes up. "A month healed crooked, and a hip, not a wrist. That's a hard, ugly job, and he'd have to come to me. I'm not walking to Greywater with my saws. If the old fool will make the journey, tell him to bring a cart and a bottle."
+
+She is waiting for your answer about the ankle. It is a little past half past six on Day 6.
+
+What does Brannoc say?
+
+=== REPLY cleric2-70-07 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: met Brannoc. Heavy woman of sixty with smith's forearms, loud and blunt, baking when he arrived. She knew Edda Thorne by reputation. Sh
+Aldith doesn't stop kneading until you've finished. Then she wipes her hands on her apron, takes the note between a floury finger and thumb, and reads it standing, with her lips moving. She reads it twice.
+
+"Edda Thorne's boy," she says. "She set a collarbone of mine forty years back, when I was young and thought bones were simple. Hmph. She's dead, then." It isn't a question, and she doesn't wait for you to answer. She folds the note small and tucks it into her bodice. "Gods keep her. I'm sorry. You'll have your tea first."
+
+Then she starts on your matters, one at a time. "The boy. A crushed ankle, a day old, and not set? Ansel knows better than to leave it. Send him on his litter and I'll have him on this table by the hour. I'll want the swelling down a bit, so he'll sit with his foot up and be bored. Crushed's not the worst. Crushed and clean, I can do. It's the ones that heal wrong that make me cuss."
+
+At Perrin's hip she grunts. "A month crooked? Aye. I can break and reset it, but it's a bad business and a long one. Weeks on his back, and an old man's bones don't love it. He'll have to want it himself. I don't go hunting men who'd rather limp. Tell him to come to me, or send word, and I'll see him. Maud's blankets keep my feet warm. I'll not turn her friend's friend away."
+
+On Wren she is slower. She turns the matter over, looking not at you but at the fire. "Twelve. Sweeping a dead priest's chapel because no one else would. That's a girl who stays, I'd wager." She sniffs. "A month's trial, parents' leave, Maud to bring her. Good. I won't have children running off from their mothers. I've had three prentices and kept two, and I'm not too proud to take a third if she's got a stomach and doesn't faint at the sight of a bone. Tell her to bring a clean apron and a stout heart, and not to be late."
+
+She thumps a mug of tea down in front of you, strong and bitter. "Now sit. Drink. You've the look of a man who's not slept right since he left home."
+
+It's twenty to seven. Tobin is a few streets away waiting for his litter. Your errands here are nearly all done. You are 100 XP short of the next rung, the Drowned Stair is sealed, and the valley road runs on south past the town.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-08 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: met Brannoc. Heavy woman of sixty with a smith's forearms, bakes while she works, bellows at visitors. Knew Edda Thorne. Agreed to see 
+Aldith keeps kneading while you speak. At "Edda Thorne" her hands slow, and at "foster-son" they stop. She wipes them on her apron, takes the note and reads it at arm's length, lips moving. It is short, and she reads it twice.
+
+"Edda's boy. She wrote me once, forty years back, to tell me I set a wrist like a butcher." She grunts, almost fondly. "She was right. I've set it better since."
+
+She folds the note into her apron. "The boy first. Crushed, you say? Have Ansel's lad carry him here on a litter, and keep him still on the way. I'll have my table ready. A crush heals worse for being left, so I'll see him within the hour."
+
+Then she squints at you. "The dyer's hip is another thing. A hip healed crooked has to be broken and set again, and I won't do that by letter or on hearsay. He comes to me himself, and he pays what he can, which is more than he'll want to. Tell him Aldith says a crooked man walks twice as far as a straight one." She sniffs. "The girl I'll look at when she stands in my door with Maud Marrow at her back. A month's trial, is it? Sensible parents. Most prentices come with none. If she can stomach blood and doesn't faint at a snapped bone, we'll talk."
+
+She jerks her chin at the bench by the wall. "Sit, if you've time. Tell me how that hip looked, which side, and how high. And what you did for it. I'd hear it from the hands that touched it."
+
+It's a little before seven on Day 6. Tobin is waiting on a litter, the town is waking, and you have two 1st-level slots left.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-09 ===
+Aldith wipes one hand on her apron and takes the note with two floury fingers. She reads it standing, lips moving, and then reads it again. "Edda Thorne's lad," she says. "She set a collarbone for me once, forty years back, and told me I held a hammer like a woman who'd never been hit. She was right." She tucks the note into her apron.
+
+She goes through your matters in order, the way a person does who counts bones for a living.
+
+"The boy first. A crush, you say? Then it's today, and not by a litter that jolts him over the cobbles. I'll walk to the hospice myself when this dough is in. Bone doesn't wait, and nor does a child's fear." She jerks her chin at you. "You'll hold him. Children bite and kick me, but they listen to a man in a mail shirt humming."
+
+On Perrin's hip, her face closes up. "A month healed crooked is a hard one. I would have to see it, and I won't promise he'll thank me. Rebreaking a hip is no kindness, and a proud old man will curse me all the way through it. Tell him to come when the roads are dry, and bring someone to carry him home. Tell him I'll look first, and I'll tell him straight if I won't do it."
+
+Then she pauses over the note, and for the first time she looks at you instead of the dough. "Maud Marrow's wool is on my bed, and I owe her more than a blanket's worth. A dyer's girl who wants to learn and has parents who said yes, which is rarer than you'd think. A month's trial, is it? I take that kindly. Two of my three stayed. The third was a fool, and I don't miss him. Send her down with Maud when the weather holds, and I'll see what she's made of. I'll tell you now that I'll work her until she cries, and then I'll work her more."
+
+She slaps the dough into a pan and puts it by the hearth. "Well? Are you wanting breakfast, or just standing there? I've an hour before I can leave this house."
+
+It's about half past six on Day 6. You have two 1st-level slots, Channel Divinity ready, and 100 XP to go before your next level. What does Brannoc do?
+
+=== REPLY cleric2-70-10 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: Brannoc fumbled his pitch (Persuasion natural 1); she bristled at being told her business. She will see Tobin today (never turns the po
+You start well and go wrong in the middle. You name Edda, and then the boy, and the hip, and the girl, and Maud, and the parents, and the trial, all in one breath and in the order that suits you. You even hold out the note with the same hand that is still gesturing. Mother Aldith keeps kneading and doesn't look up until you're done.
+
+"Two matters," she says. "You've given me five. And you've told me my business as if I'd lost the way to it." She wipes her hands on her apron, takes the note between two floury fingers and reads it in three breaths. "Edda's boy. She talked like a petition, too."
+
+The mention of Maud earns you a grunt. It earns you nothing more.
+
+"Tobin first. I don't turn a child from my door, and I'll not make him wait on your manners. Have Ansel's apprentice carry him here on a litter. I'll see to the ankle before noon, and I'll tell you now it'll be a bad week for him." She taps the note against the table. "The girl, no. I don't take prentices on a paper from a stranger. If she wants it, she walks here on her own feet, shows me her hands, and sits through a day of my temper. If she lasts, we talk. As for your dyer, a hip healed wrong is a month of work and a week of misery, and I'll not promise it for a man I've never seen. He can come, or not."
+
+She turns back to the flour, and her voice softens by a hair. "Your note was well written, though. Put your name to the next one properly. I'd have said yes to Maud's stitches before I said yes to yours, and she knows it."
+
+It's about twenty to seven on Day 6. Tobin can be carried over within the hour, and Aldith says she'll tend him and allow you to stay if you want to learn something. You've two 1st-level slots and full hit points. You're 100 XP short of level 3. The road home is open, and there's the bridge, Hodd, and whatever lies under the second arch.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-11 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6: agreed to see Tobin that day and Perrin Gale if he comes to her. Regarding Wren: wary of taking an apprentice on a stranger's letter; says the 
+Mother Aldith wipes her hands on her apron, takes the note, and reads it at arm's length with her lips moving. She snorts at the second line.
+
+"Edda's boy. I heard she'd died. Good woman, hands like iron, never charged a widow a copper." She folds the note into her apron. "The ankle, yes. Bring the lad, or I'll come to him. A crushed ankle won't wait, and I'll set it before the swelling goes hard. Tell Ansel to have the boy fed and a strong dose of poppy in him by noon. I'll be there at the first bell."
+
+Perrin Gale is a different matter. "A hip that healed wrong a month back? I can break it and set it again, but the old fool must want it. I'll not drag a man from his vats. If he comes, I'll see him. Tell him Aldith says it's the pain you remember, not the setting."
+
+She puts your note on the shelf and tilts her head at you. "And your dyer's girl. A letter's a letter. I've had three prentices and two stayed, and I took the third on paper. She cried at the first bone. No. If the child wants it, she can walk here herself with Maud Marrow, who owes me a blanket, and I'll look at her hands and her stomach before I say a word. A month's trial I'll honour if she's fit. I'll not promise more."
+
+It's not a refusal, and she isn't unkind. She goes back to the flour, and over her shoulder she says, "You've two prayers left, I'd guess, if you've sense. You'll want them today."
+
+It's about twenty to seven on Day 6. You have 800 XP, 100 short of level 3, and the spells you prepared are all still ready. Tobin's bone will be set by noon. Perrin and Wren are both a journey away, and the bridge was quiet. The road beyond Stonebridge is open, but there may be more ghouls under the Drowned Stair.
+
+What does Brannoc do?
+
+=== REPLY cleric2-70-12 ===
+  [hidden call] write_lore: {"entry": "Mother Aldith", "add_to_description": "Day 6 morning: Met Brannoc, read his note about Wren, agreed to see Tobin today. Will not decide on Wren without seeing the girl; wants her sent with 
+Mother Aldith doesn't stop kneading. She holds out one floury hand, takes the note between two fingers and reads it with her lips pressed thin. She reads it twice.
+
+"Edda Thorne's boy," she says. "I met your Edda once, forty years back, at a bad birthing. She didn't say much. She didn't need to." She sniffs. "Maud Marrow vouches for the girl, does she? That woman talks the ears off a mill-wheel, but she's never once lied to me. A month's trial, with her parents' say-so. That's more sense than most come with."
+
+She wipes her hands on her apron and drops the note on the table. "I'll not promise the girl a place. I'll see her hands and hear her talk, and I'll know in a morning. Have her sent down with Maud when the weather holds. If she faints at blood, she goes home. If she asks me why every time I tell her to do something, she'll do."
+
+The crushed ankle gets a harder look. "Ansel's boy? Yes. Have him carried here by noon, and I'll set it while he's too sore to fight me. It's a fresh break, not an old one, and it will mend straight if it's done right." Then she turns on the hip. "Your dyer. A hip that's healed wrong must be broken again and reset, and it's ugly work. I won't do it on a road or in a dye-shed. He comes to me himself, on his own two feet, and he makes up his own mind. A man who's dragged here fights the bone, and the bone wins. Tell him that. Tell him it hurts, and that he'll walk straight after. Both are true."
+
+She jerks her chin at the bench. "Sit. Eat something before you go preaching at anyone else. You look like you slept in a barn."
+
+It's a little before twenty to seven on Day 6. You've two 1st-level slots and Channel Divinity, and 100 XP to go to level 3. Tobin's litter will be at the door by noon, and the road to the next place without a healer lies open.
+
+What does Brannoc do?

@@ -143,3 +143,27 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   full results and causes in REPORT-set2-block1.md. Fixed: blind.py codes used the game's first two letters, so
   bard2 and barbarian2 rounds with the same number collided; codes now carry the game's name (score.py follows).
   Budget from now on (Jake): 4 runs per round on 6 rounds to screen, 8 only for a winner.
+
+### Second set, block 2 (rounds 61-120), 2026-10-16/17
+- Played all three games to round 120 with the block-1 fixes; bard2 R113 hit 40 model calls and the new ask
+  recovered its reply. Metrics in games/metrics2-b2.json.
+- Readers (READ.md, rounds 61-120): cleric2 43, bard2 49, barbarian2 48 findings. Whole-story readers (READ_STORY.md,
+  rounds 1-120, findings in 61-120): 15 / 15 / 17. Spot checks held (barbarian2 R86 "three of the other shift" then
+  R87 "a dozen boots"; R63 "three days' road" then R64 "a night's march").
+- A/B (4 runs x 6 rounds, judged blind, one Sonnet judge per set; ab3/):
+  - K, contradiction rounds (cleric2 85,103; bard2 97,110; barbarian2 90,104): base 9/24, DM_SAID=2 9/24, DM_SAID=4
+    9/24 (repeats of the original contradiction 7/9/8). Dropped: showing the DM its own earlier sentences about the
+    names in play made no difference. In cleric2 R85 the shown lines said the chapel is "about an hour south of the
+    inn" and 7 of 12 replies still said two hours. said4 barbarian2 first hit the weekly usage limit (6 of 8 runs
+    failed) and was rerun after the reset.
+  - M, menu rounds (cleric2 70,114; bard2 70,101; barbarian2 97,120): base menu 4/24, 2C 1/24, 2D 1/24; contradiction
+    8/8/9, agency 5/4/6, sheet read-out 16/15/12. 2C ("the player knows what they can do, told as the story: don't
+    list their choices.") is the third set in a row with fewer menus and nothing worse; confirming at 8 runs (ab3/M8).
+  - M8, 4 more runs of base and 2C on the same rounds: menu 9 vs 3, contradiction 8 vs 4, agency 8 vs 2, read-out
+    12 vs 10. Over 48 a side: menu 13 vs 4, contradiction 16 vs 12, agency 13 vs 6, read-out 28 vs 25. **Kept 2C** in
+    dm/prompt.md: "End each reply with the situation clear enough that the player knows what they can do, told as the
+    story: don't list their choices." (was "... knows what they can do.").
+  - DM_SAID reverted (6ad6efb, ba2a396); its A/B arms and results stay in ab3/.
+- New cause found: check totals narrated with a different modifier than the roll used (bard2 R73, R76, R77); the DM
+  writes the modifier itself. Proposed D4 (a sheet-backed skill field on dice), waiting on Jake.
+- Report: REPORT-set2-block2.md.

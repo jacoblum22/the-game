@@ -1,0 +1,295 @@
+GAME barbarian2, ROUND 97
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 94 ==
+PLAYER: I whip my head back, spit the gag clear with a snap of my jaw, and drive my forehead into the grey cloak at my shoulder. Then I roar again with everything I have left, straight at the shutters: "Dreg! The Foreman holds the book in the chamber behind him! Break the stair door, take the gate-top, and don't let them hang Gorrak!"
+
+"Tess, the lock on your wall-ring, the pins in your hair, now!"
+  [game] dice Korvash initiative: 1d20+1 = 1d20 [3] + 1 = 4
+  [game] dice Tessa initiative: 1d20+3 = 1d20 [12] + 3 = 15
+  [game] dice Foreman initiative: 1d20+1 = 1d20 [14] + 1 = 15
+  [game] dice Grey cloaks initiative (group of six): 1d20+1 = 1d20 [16] + 1 = 17
+  [game] fight: Fight started. Order: Cloak A (17), Cloak B (17), Cloak C (17), Cloak D (17), Cloak E (17), Cloak F (17), Tessa (15), Foreman (14), Korvash Emberhide (4). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Cloak A. Cloak A (initiative 17): HP 11/11, AC 18 Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak A has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Cloak B. Cloak B (initiative 17): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak B has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Cloak C. Cloak C (initiative 17): HP 11/11, AC 18 Cloak C's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak C has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Cloak D. Cloak D (initiative 17): HP 11/11, AC 18 Cloak D's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak D has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Cloak E. Cloak E (initiative 17): HP 11/11, AC 18 Cloak E's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak E has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Cloak F. Cloak F (initiative 17): HP 11/11, AC 18 Cloak F's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Cloak F has used its action: no more actions this turn.
+  [game] fight: Round 1, now: Tessa. Tessa (initiative 15): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Tessa picks her wall-ring wrist lock with hairpins (improvised), DC 15: 1d20+4 = 1d20 [8] + 4 = 12 (Tessa has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Foreman. Foreman (initiative 14): HP 2/2, AC 12 Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Foreman: Dodging (Foreman has used its action: no more actions this turn.)
+  [game] fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The grey cloaks move before you do. Two of them cross to the shutters and slam the bars home, and the dawn light goes out of the room. A third takes the door and shoves it open a hand's breadth to bark an order up the walk, then pulls it shut. The one at your shoulder stays where he is, with one hand on the gag, wide-eyed and breathing through his nose. He hasn't yet seen what you mean to do.
+
+Tessa has her free hand in her hair. She is working at the lock on the wall ring with a hairpin, and the pin turns without catching. Her jaw is set. The tumblers shift and don't give, and her whole body tenses with the effort. The Foreman rises and steps back behind the nearest grey cloak with his soft hands tucked in his sleeves. He's watching you and the door both, with his weight off his heels.
+
+It is your turn. The cloak at your shoulder is a pace from your forehead, and the gag hangs in your teeth. Out beyond the shutters the bell is still ringing, and the yard is beating time on its spears.
+
+You are at 1 hit point, wired to the table leg, with five more cloaks in the room and your sister still chained to the wall. What does Korvash do?
+
+== ROUND 95 ==
+PLAYER: I spit the gag out with a snap of my jaw and drive my forehead into the nose of the cloak at my shoulder. As he reels, I slam my chained wrists across his sword arm and rip the blade from his belt, so I have a weapon the moment the wire gives.
+
+Then I roar for the walk to hear: "Dreg! The stair door! Break it!"
+  [game] dice Korvash headbutt (unarmed strike) vs Cloak A (AC 18): 1d20+6 = 1d20 [6] + 6 = 12 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Cloak A. Cloak A (initiative 17): HP 11/11, AC 18 Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cloak A longsword (pommel, subdue) vs Korvash AC 13, shackled: advantage: 1d20+3 (advantage) = 1d20 [5, 5]→5 + 3 = 8 (Cloak A has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Cloak B. Cloak B (initiative 17): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Cloak B longsword (subdue) vs Korvash AC 13, shackled: advantage: 1d20+3 (advantage) = 1d20 [12, 17]→17 + 3 = 20 (Cloak B has used its action: no more actions this turn.)
+  [game] dice Cloak B damage to Korvash (pommel, subdue): 1d8+1 = 1d8 [4] + 1 = 5
+  [game] sheet: took 5 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Fight over after 2 round(s). 12 seconds of fighting; now Day 21, 5:56:54 AM.
+  [game] dice Hours until knocked-out Korvash regains 1 HP: 1d4 = 1d4 [4] = 4
+  [game] dice Outcome of Dreg's Tallies storming the stair after Korvash's roar: 1-2 crushed by Foreman's crossbows, 3-4 stalemate (stair held by the Tallies, ledger-house held by cloaks), 5-6 Tallies take the gate-top: 1d6 = 1d6 [4] = 4
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+  [game] time: 4 hours later: Day 21, 9:56:54 AM
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 21 morning: after Korvash's roar, Sergeant Dreg and Brun led the Tallies up the stair and held it; the hanging was stopped and Gorrak and Krell freed; the Foreman and his grey cloaks hold the barred ledger-house with Korvash and Tessa inside. Stalemate; parley through the door."}
+  [game] notebook: updated Gorrak Vael
+  [DM write_lore (hidden)] {"entry": "Brun", "add_to_description": "Day 21 morning: sided with Dreg and Gorrak's Tallies in storming the stair."}
+  [game] notebook: updated Brun
+DM: You spit the gag and drive your forehead at the nose of the cloak at your shoulder. He sees it coming. The blow glances off his helm and your skull rings, and the sword stays on his belt. You roar anyway, with blood in your mouth. "Dreg! The stair door! Break it!"
+
+He answers with the pommel. Two blows come at once, one wide and one true, and the true one lands on the same ridge of bone as the last. The room tilts and goes out.
+
+You wake slowly, in a grey light, on the floor under the table. The wire at your wrists is cut and the iron is still on. Your head is a drum, and a cold cloth lies across your eyes. It is about ten in the morning, and you have 1 hit point.
+
+The ledger-house is not what you left. The door is barred and braced with the table's twin, and a heavy chest has been dragged against it. Four of the grey cloaks stand at the shutters with crossbows, shuttered slits open a finger wide. The other two have the door. The Foreman sits behind the desk with his hands folded on the beads, very upright. He looks like a man who has not slept and has no intention of saying so. Tessa still sits on her stool by the wall with her wrist in iron, but she is watching the door with her chin lifted.
+
+Through the oak, a voice you know is bellowing in Goblin, a sergeant's voice, cracked from hours of use. "OPEN IT, FOREMAN. We'll read the page. We'll count it aloud. Open it, or we'll burn the walk from under you."
+
+Another voice answers from the stair-head, lighter and thin, a boy's: Brun's. "Captain's alive! The hanging's stopped! He's alive!"
+
+"There," the Foreman says to no one, mildly. "The stair is held by my own men, and the door is held by my own men, and yet here we sit." His eyes find yours, and for the first time you see that he is afraid. It does not make him gentle. "It seems you have made a mess, Emberhide. But a mess can still be tidied. Your voice is the one they heard. You will tell them the page was a lie, that you spoke from fear, and that Greyshaft's books are honest. You will do it at that door, with a knife at your sister's throat and the contract in your hand, and then they will go home. Or you will not."
+
+He nods to the nearest cloak. The cloak sets the point of a blade against the hollow of Tessa's neck.
+
+"Choose," says the Foreman.
+
+You are at 1 hit point, on the floor, with the iron still on your wrists. The Tallies hold the stair and the cloaks hold the room. It's a little before ten in the morning, and your sister has a blade at her throat. What does Korvash do?
+
+== ROUND 96 ==
+PLAYER: I push myself up onto one elbow and look at the knife at Tessa's throat, then at the Foreman, and shake my head. "I'll not lie to those men, Foreman, not for her and not for me, but I'll give you a tidier way out than a knife."
+
+"Take the blade off her neck, open the door a hand's width, and let Gorrak read the page aloud before Dreg and the whole stair. If it's honest, I swear your contract at once, and if it isn't, you walk out alive with a safe-conduct, and Greyshaft's miners keep the rest."
+  [game] dice Korvash Persuasion: offering the Foreman a tidy way out — Gorrak reads the page at a hand-wide door; if honest Korvash swears, if not the Foreman walks free, DC 16 (the page is true and the Foreman knows it): 1d20+1 = 1d20 [7] + 1 = 8
+  [game] time: 1 minute later: Day 21, 9:57:54 AM
+DM: You push up onto one elbow, look at the knife at your sister's throat, and shake your head. You won't lie to those men, for her or for yourself, but you'll offer a tidier road. The blade comes off her neck, the door opens a hand's width, Gorrak reads the page aloud to Dreg and the stair, and if it's honest, you swear the contract on the spot. If it isn't, the Foreman walks out alive with a safe-conduct.
+
+He listens to every word, head tilted, as a clerk listens to a column being read to him by a child. When you finish he lets the silence run a breath too long.
+
+"That is very neat," he says. "And it is exactly the offer a man makes when he knows what is on the page." His eyes slide to the shuttered slit where Dreg's voice is still raging. "If the page were false, Emberhide, you would not be so eager to have it read. I am not going to hand my own throat to a mob with a clean conscience. No."
+
+The cloak at Tessa's neck shifts the blade a finger's width closer. Tessa doesn't flinch, but her breath stops. The two nearest crossbows swing from the shutters to you. The Foreman stands, slowly, and walks to the barred door. He doesn't touch it.
+
+"Sixty breaths," he says, quietly, to the room. "Then the lie is spoken at that door in your voice, or the mender bleeds on my floor, and the cloaks with the bows will do what they are told. I count aloud. I shall start now."
+
+He starts. "One."
+
+You can hear it through the oak: Dreg's voice, the beat of spears, the stair full of men you are fairly sure are on your side. You can see the whole room. Six cloaks, four bows trained at the shutters and you, two blades at the door and at Tessa's throat. The inner door to the bedchamber is barred but unguarded, because the two cloaks that carried the chest are now behind the bows. The lantern burns on the Foreman's desk. Your wrists are in iron, with no wire to hold them now, and your ankles are hobbled.
+
+You are at 1 hit point on a stone floor, thirty breaths from your sister's death. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 97, "category": "contradiction", "severity": 2, "quote": "you swing your chained fists across the desk. The lantern bursts", "why": "Round 96 puts Korvash on the floor and then at the barred door, and has the Foreman walking to the barred door too ('He doesn't touch it'), with the lantern on his desk. Round 97 has Korvash smash that lantern from the door and set the Foreman's sleeve alight, with no movement between."}
+{"round": 97, "category": "format", "severity": 2, "quote": "You are at 1 hit point, but you stand at 300 experience, which is enough to rise to second level", "why": "Narration quotes experience points and level thresholds as game terms in the middle of a scene."}
+
+THE PLAYER'S LINE THIS ROUND: I get to my feet slowly, the way a beaten man does, and shuffle to the door in my hobbles as if I mean to obey. Through the hand-wide gap I call out in Goblin, loud and flat as a hanged man: "Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door."
+
+On the last word I swing my chained fists down across the Foreman's lantern, smashing it off the desk so the burning oil spills across his sleeve and the floor between him and the cloaks.
+
+=== REPLY barbarian2-97-01 ===
+You get to your feet slowly, like a beaten man, and shuffle toward the door in your hobbles. The cloaks let you. The crossbows follow you, and the blade stays at Tessa's neck. You put your mouth to the gap by the hinge and call it out in Goblin, flat and loud. Greyshaft's books are honest, honest as the knife at your sister's throat. You speak from a cold heart and a full belly.
+
+Outside, the spears stop beating. For a breath the stair is silent. Then Dreg's voice comes back, low and puzzled, and it has the sound of a man who has just heard a lie told badly on purpose.
+
+Behind you the Foreman's count falters. He's the one who stands nearest the door, a pace from your shoulder, and he is watching your face and not your hands. The lantern is on the desk across the room. You hadn't weighed the distance when you planned this, and in your hobbles it is more than you can cover and still reach.
+
+It is your turn, with the whole room at the top of a held breath. You are at the door, 1 hit point, with chained fists and hobbled feet. The Foreman is a pace away, with two hit points and no weapon. The lantern is out of reach, and the knife is still at Tessa's neck. What does Korvash do?
+
+=== REPLY barbarian2-97-02 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10:00 AM: DEAD. Korvash smashed the lantern; burning oil caught the Foreman's sleeve (nat 1 save) and killed him while he counted sixt
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 21 ~2 PM: after the Foreman's death, Dreg's Tallies broke the ledger-house door, killed the one loyal cloak, and took the barred bedchamber. Gorrak 
+"Come and break this door," you call through the gap, in the flat voice of a hanged man, and the Foreman almost smiles. He does not hear the joke. His lips are still moving over the count when your chained fists come down across the lantern on his desk.
+
+It bursts. Burning oil runs across the desk and the Foreman's sleeve and down onto the floor between him and his cloaks. He screams, once, small and high, and tries to beat out his own arm. Tessa's wall-ring lock clicks open in her fingers, unseen. Five of the six grey cloaks stare at the man who paid them, burning, and drop their bows. The sixth does not.
+
+An arrow takes you in the chest. A second finds you on the floor. You hear Tessa's voice, thin and furious, saying your name, and her small hands are on you, pressing, pressing. Then she is gone, and the dark comes.
+
+You wake in a bed, which is the first strange thing. The second is that nothing hurts as much as it ought to. It is about two in the afternoon on the day after midwinter's eve. You have 1 hit point. The ledger-house is much emptier than you remember. The shutters are open, the walk is full of grey daylight, and the burn on the floor has been scrubbed to a black stain. The big table is back against the wall, and the Foreman is not in it. The desk is just a desk.
+
+Tessa sits on the edge of your cot with a bowl of broth, and she is the first thing you see when your eyes focus. Her wrist is bandaged where the iron was, her split lip is crusted, and she looks as though she hasn't slept. "Don't," she says, before you can speak. "Drink first. You've been out four hours. You nearly didn't come back."
+
+She tells it in short pieces while you swallow. The Foreman died of the burn, quickly, before the cloaks could decide what to do. Five of them gave up their weapons. The sixth kept shooting until Dreg's spear came through the door. Dreg and Brun and twenty Tallies took the walk, and nobody had the stomach to fight them. Gorrak lives; Krell lives. The hanging beam stands empty.
+
+Dargan's greataxe leans against the wall by your bed, with the ember-red sash still tied to the haft. Tessa found it in the bedchamber beside the Foreman's papers and carried it in herself. The horn charm lies on the blanket beside your hand.
+
+"There's one more thing," she says. She nods at the doorway. "The chest. It's sitting in the next room with a Tally on either side. Nobody's opened it. Gorrak says it's yours."
+
+Gorrak Vael stands in the door. He has no mask, and the burn from jaw to ear is plain in the daylight. He holds his notched rod in one hand and a key chain in the other, and behind him on the walk Dreg is waiting with his spears grounded. He looks at you, and then at the chest in the next room.
+
+"The Foreman's chain came off his body," he says. "I have not used it. Whatever is in that book is my name and forty other men's, and I would rather you stood at my shoulder when it is read." He holds out the keys. "Or you may burn it unread. I leave it to the man who burned the first one."
+
+You have 1 hit point, your axe, your sister, and a captain with a key. What does Korvash do?
+
+=== REPLY barbarian2-97-03 ===
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10 AM: Korvash shouted a coded \"confession\" through the door (\"honest as the knife at my sister's throat\") and tried to smash the 
+You shuffle to the door in your hobbles, a beaten man doing as he's told, and put your mouth to the gap. You say it flat and loud in Goblin: Greyshaft's books are honest, honest as the knife at your sister's throat, spoken from a cold heart and a full belly. Now come and break the door.
+
+On the last word you swing your chained fists at the lantern. You're hobbled and light-headed, and you misjudge the distance by a finger. The lantern skids across the desk with its shutter clanging and stays upright, the oil unspilled. Before you can try again, the nearest cloak's pommel comes down on the ridge of bone above your ear, and the floor takes you.
+
+You come back slowly, an hour later, at 1 hit point. It is just before eleven in the morning. The cold cloth is on your eyes again.
+
+The room has changed little. The four bows are still at the shutters. The Foreman has taken his chair and counted nothing aloud for a long while. He looks pleased, which is worse than angry. Tessa still sits on her stool with her wrist in iron. Her hairpin is hidden in her fist, and the lock on the ring has a bright scratch around it. She is a few turns of the wire from free. The blade at her throat is steady.
+
+Through the door you can hear the stair. The beating of spears has stopped. Dreg's voice comes now in short, flat questions, and a cloak answers each one in the Foreman's soft Goblin through the gap. Your shout reached them, and they have heard the words. They have also heard the way you said them. The sergeant is not storming the door. He is waiting for a sign.
+
+"Your sergeant is a careful man," the Foreman says, without looking at you. "He's weighing a confession that sounds like a taunt against a hanging he saw stopped. I could ask no more of him." He turns his beads. "I'll give you one more chance to say it plainly. Slowly. At the door, so that he can't mistake it."
+
+You have 1 hit point and iron on your wrists. The Tallies are one clear word from either storming the door or going home. Your sister's lock is nearly picked. What does Korvash do?
+
+=== REPLY barbarian2-97-04 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10 AM-1 PM: Korvash smashed the lantern (Foreman dodged the fire), then was knocked out. Dreg and the Tallies broke into the ledger-ho
+You slam your chained fists down on the lantern. It bursts off the desk in a spray of glass and burning oil, and the Foreman throws himself aside with a hiss. The flame skims his sleeve and dies on the stone. Fire runs across the floor between him and his cloaks, and for a heartbeat the room is smoke and shouting.
+
+A grey cloak hits you from the side with the flat of a blade. You hear the crack of it before you feel it.
+
+You wake in a different light. The shutters have been ripped away, and thin winter sun lies across a floor that is scorched black and trampled with boots. The air smells of old smoke. It is about one in the afternoon, and you have 1 hit point. The iron is off your wrists. Someone cut it away with a cold chisel. Your wrists are raw, and a clean cloth is wound around each.
+
+Gorrak Vael is crouched beside you. His mask is still gone, and the long seam of burn stands plain in the light. A fresh linen binding shows under his torn shirt, and the rod is back at his belt, one notch fresh. "Easy," he says, low, in Common. "You are not dying. Be quiet and listen."
+
+He lays Dargan's greataxe on the floor beside you, with the ember-red sash knotted at the haft. "It was in the rack by the door. Dreg found it."
+
+Behind him the outer room is full of Tallies. Dreg stands by the broken door with a bleeding scalp, Brun is at his shoulder with a bandaged arm, and Krell leans on the wall with a splint on his swollen hand. A dozen more spears hold the stair beyond. At the far end of the room is the narrow door to the Foreman's bedchamber, and it is barred from the inside.
+
+"The Foreman, four cloaks, the chest with the book, and your sister," Gorrak says. "They took her in with them when the oil went up. He has a knife on her and he will not open. We have held this room for three hours. He sends out one message." His good eye is on yours. "He wants you. Only you. At the door, with the axe laid down. He says he will talk to the man who keeps his word."
+
+From behind the door, very faintly, you hear the click of brass beads.
+
+You are at 1 hit point, with the axe at your hand and the Tallies at your back. Your sister is behind a barred door with a knife at her throat. What does Korvash do?
+
+=== REPLY barbarian2-97-05 ===
+You rise slowly, the way a beaten man does, and shuffle to the door in your hobbles. Through the gap you call out in Goblin, flat as a hanged man: "Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door."
+
+It lands. The cloak at Tessa's neck eases his blade a finger's breadth, satisfied. The Foreman, standing by the desk, lets his breath go. For one moment he thinks he has won.
+
+Your chained fists come down on the lantern. Glass cracks, and the oil jumps in a bright sheet across the desk, over the contract, over his sleeve. The Foreman cries out and tears at the cloth, throws himself back and beats the flame out against the wall, and he is unhurt, but the floor between him and his cloaks is a burning pool. Smoke rolls along the ceiling.
+
+Outside, Dreg's voice has stopped bellowing. In its place there is a silence, and then the crash of a spear-butt on oak, and another. Whoever is on the other side of that door has heard you say the one thing a man like you never says, and has understood it exactly.
+
+The Foreman has not waited to watch. He's already at the narrow door to the bedchamber, dragging the bar off its pegs with both hands, and the cloaks with bows are turning to face you, torn between the fire and their orders. Tessa is working at her wall ring with a hairpin. She hasn't got it yet. The blade is still at her neck.
+
+It is your turn again, with a burning room, a door shaking on its hinges, and the bows swinging toward you. Your wrists are in iron, your ankles are hobbled, and you are at 1 hit point. What does Korvash do?
+
+=== REPLY barbarian2-97-06 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10:00 AM: Korvash feigned a lie at the door then smashed the lantern; the Foreman dodged the burning oil. Cloaks A and B dropped Tessa
+You shuffle to the door in your hobbles, put your face to the gap, and call it out in Goblin, flat as a hanged man: Greyshaft's books are honest, honest as the knife at your sister's throat. The Foreman smiles faintly at the sound. Then you turn, swing your chained fists down, and the lantern goes off the desk. It hits the flagstones and bursts, and burning oil runs across the desk, the floor and the tails of the ledgers. The Foreman, quick as a cat, hops clear of it with his hem untouched.
+
+That is the last thing that goes your way. The flames light the room, and the cloaks stop pretending. The blade at Tessa's neck comes across and she goes down in a heap, her hand still closed on the hairpin, and her wrist-lock lies open beside her. A bolt from the shutters takes you in the ribs, and you fold. Another is levelled at your back, and the Foreman lifts one soft hand and says, "Not that one. I want him breathing." The bolt stays in the bow.
+
+You lie on hot stone. You're unconscious, at 0 hit points, and the smoke is rising. Tessa is down a pace away, and her chest is moving. In your darkness there is one thing you can feel, and it is a drumbeat. It is the Tallies' spears on the stair, and it is much closer than it was. A door is splintering. You have one death save passed, and two more to go.
+
+It is your turn, but you can't act. You are unconscious and bleeding. A little after ten in the morning, the ledger-house is on fire.
+
+=== REPLY barbarian2-97-07 ===
+You get to your feet slowly, the way a beaten man does, and shuffle toward the door in your hobbles. You lean to the gap and say it flat and loud in Goblin, like a hanged man reading out his sentence. Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door.
+
+Dreg gets it. A moment of silence on the other side of the oak, then a roar, and the thud of a spear-butt on the planks. It comes again, and then something much heavier, a bench or a beam, driven against the door by a dozen shoulders.
+
+Then you swing your chained fists for the lantern, and the hobbles betray you. Your feet tangle in their own chain. You go down hard against the edge of the desk, and your swing goes wide. The lantern rocks on its base, throws its light across the ceiling, and stays upright. Cloak A makes a grab at you. The big cloak, B, lunges for your collar, and you roll out of his hands, your whole weight and a lifetime of wrestling goats behind it. They back off with their hands open, and for a heartbeat nobody touches you.
+
+Across the room, Tessa's face goes blank, then fierce. Her chained wrist twists once behind her back, and the lock gives. You hear it click. Her hand is free, hidden at her side. The cloak with the blade at her neck hasn't noticed.
+
+The Foreman is standing by the barred bedchamber door with his hands inside his sleeves, and his face has gone the colour of tallow. "Hold the door," he says, small and fast. "Hold the girl. Keep the big one off the lantern." The crossbows have swung from you to the door. Behind it, the ram strikes again, and the bar creaks in its brackets.
+
+It is your turn, with the lantern still burning on the desk beside you and the Foreman three paces away. You are on the floor at 1 hit point, in iron, with a sister about to move and six cloaks in the room. What does Korvash do?
+
+=== REPLY barbarian2-97-08 ===
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] lookup: {"name": "Lantern, hooded"}
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "DEAD, Day 21 ~10:00 AM: Korvash smashed the lantern on the desk; burning oil caught the Foreman's sleeve (failed Dex save) and he burned to de
+You shuffle to the door and say it in Goblin, flat as a hanged man: Greyshaft's books are honest, honest as the knife at your sister's throat. It's a poor lie. You hear how poor it is, and so does he. The Foreman's eyes narrow, and he has the beginning of a word in his mouth.
+
+You don't give him the rest. Your chained fists come down on the lantern, and it bursts across the desk. Burning oil runs over the wood, over the floor, over the Foreman's sleeve. He tries to twist away, but he's slow, and it takes him. He doesn't scream. He goes down on one knee, beating at his arm with the other hand, and the small gentle voice says, almost puzzled, "That is not tidy," and does not say anything after that.
+
+The grey cloaks watch him burn. Nobody moves to put him out. The man at Tessa's neck has taken the blade away without knowing he has done it. The crossbows have come off the shutters. Then the nearest cloak sets down his spear, and the next, and the rest follow, quiet as men setting down a load.
+
+Behind the chair, Tessa's hairpin turns, and the wall ring springs open. She crosses the room at a run and reaches you before the smoke does, with her cut lip and her bruised skull and her hands shaking, and she doesn't say anything. She just puts her forehead against your chest.
+
+Dreg's men come through the door when the cloaks lift the bar. The stair is full of hobgoblins in red-and-tin, and Brun is at the front with his spear held upright and his face wet. Gorrak limps in behind them with Krell on his arm, and stops at what is left of the desk. The fire has been smothered with a cloak. The Foreman is a dark shape on the boards, and at his belt the key chain still hangs, blackened. Through the narrow door to the bedchamber, the bar is still down.
+
+It's a little after ten in the morning on the day after midwinter's eve. You've earned a hundred experience points, and you stand at 1 hit point with the iron still on your wrists. Gorrak is looking at the dead man's belt, then at the barred door, and then at you. The ledger, with his number in it, lies behind that door.
+
+What does Korvash do?
+
+=== REPLY barbarian2-97-09 ===
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10 AM: Korvash fooled him with a feigned surrender (Deception 20 vs Insight 12), shouted a coerced 'honest books' line to Dreg as a si
+The Foreman is too slow to see it. You shuffle to the door like a beaten man, and the cloaks watch your hobbles instead of your hands. You bawl the lie through the oak in Goblin, flat and loud: Greyshaft's books are honest, honest as the knife at your sister's throat. Then you tell them to come and break the door, and your chained fists come down on the lantern.
+
+It goes off the desk and bursts. The oil runs out in a bright sheet across the flags, and the Foreman, who is quick for a soft man, throws himself back from it, and the fire misses his sleeve by a hand's breadth. Every cloak in the room is staring at the flames. Tessa uses the moment. Her hairpin clicks, the ring lock falls open, and she is across the room and at your wrist before the first sword comes up. One cuff pops loose. Then the cloaks are on you.
+
+Cloak A's pommel finds the same ridge of bone for the fourth time, and this one is a clean hit. Cloak B drops your sister as she turns. The last thing you see is the oil guttering out on the stone and the Foreman straightening his apron with a hand that shakes.
+
+You wake on the floor with one wrist free and the other still in iron. It is about eleven in the morning, and you have 1 hit point. The fire is a black scorch across the flags and the lantern is a twist of tin. The door is still barred and braced. Behind it, muffled, a heavy ram or shoulder thumps twice and stops, and Dreg's voice swears at it.
+
+Tessa lies a pace from you with her chest rising. Two cloaks stand over her. The Foreman has retreated to his desk and sits very still, and his voice, when it comes, is the thinnest you have heard it.
+
+"You have cost me a lantern, Emberhide, and a morning, and I now have two choices, neither of them tidy. I can hang you both from my own window, or I can open that door and trade you for the walk out. Gorrak Vael has offered me the second." He rubs his beads between finger and thumb. "He is, I am told, willing to leave my ledger alone. For a price. You have until I finish this thought to decide whether I believe him."
+
+He waits for you to speak. What does Korvash do?
+
+=== REPLY barbarian2-97-10 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10:00 AM: Korvash smashed the lantern in the ledger-house; burning oil caught the Foreman's sleeve (failed save) and the fire killed h
+  [hidden call] write_lore: {"entry": "Gorrak Vael", "add_to_description": "Day 21 ~10 AM-1 PM: with the Foreman dead the Tallies broke the ledger-house door; three grey cloaks fought on and were cut down, three yielded. Dreg ho
+You shuffle to the door in your hobbles like a beaten man and call it through the gap in flat Goblin: Greyshaft's books are honest, honest as the knife at your sister's throat. On the last word you bring your chained fists down across the lantern. It shatters, and burning oil runs over the desk and up the Foreman's sleeve.
+
+He stands too close and has no time to step back. The flame climbs his arm, he claws at the sleeve, and his small voice, for once, is not tidy. The fire takes more of him than he can bear. He goes down beside the desk and doesn't get up.
+
+The room breaks in two. The cloak who held the blade at Tessa's neck lowers it and backs away, staring at the man on the floor. Two more drop their points. Three do not. They have no paymaster, but they have swords and a prisoner in front of them. Tessa strains at her wall-ring and the pick slips. Then the pommel comes down on you again, and you hear the oak splinter as you fall.
+
+My ruling: with the Foreman dead and the door breaking, the three who fought on struck to knock you down and did not finish you.
+
+You wake on a bench in the ledger-house in the white light of early afternoon, with a cloth under your head and the iron gone from your wrists. It is about one o'clock, and you have 1 hit point.
+
+The room is full of Tallies. The door hangs off one hinge. Three grey cloaks lie dead along the wall, and three more kneel under Dreg's spear. The burned shape of the Foreman has been covered with a cloak. Tessa sits beside you with her wrist rubbed raw and a cup of water in her hands. She tips it to your mouth, and her eyes are bright.
+
+Gorrak Vael stands at the barred bedchamber door with his face bare, his ribs bound, and his arms folded. He hasn't touched the bar. "The book is behind this door," he says quietly, in Common. "I would not open it until you woke, Emberhide. It is your fire. I want to see how you spend it." Dreg stands at the doorway with his spear grounded and doesn't look at either of you. Out on the walk, the Tin Row's leavings are being brought up from the deep shaft into the light.
+
+What does Korvash do?
+
+=== REPLY barbarian2-97-11 ===
+  [hidden call] lookup: {"name": "Oil (flask)"}
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~10 AM: Korvash smashed the lantern; burning oil caught the Foreman's sleeve and the floor, cloaks beat it out; Dreg's Tallies broke th
+You shout it at the gap in the door, flat and cold, a hanged man's voice: *Greyshaft's books are honest, Sergeant, now come and break this door.* On the last word your chained fists come down on the lantern, and it bursts across the desk's edge. Burning oil runs over the Foreman's sleeve and across the flags, between him and his cloaks.
+
+The room screams. The Foreman claws at his arm and backs into the door, and two cloaks drop their bows to beat at him with their cloaks. For half a heartbeat nobody is looking at you. Then a flat of steel comes down on your shoulder and a second blow takes you across the temple, and you go under.
+
+You come back slowly, on your back, to a smell of scorched cloth and wet char, and to daylight. It is nearly two in the afternoon, and you have 1 hit point. The door lies off its hinges. The desk is blackened, and the burn on the Foreman's chair is a long brown tongue. Hobgoblins in the Tally-sworn iron and red stand along the walls. The grey cloaks are on their knees in a row with their hands on their heads, and Dreg's thick-necked bulk stands over them, one forearm wrapped in a bloody rag.
+
+Tessa is kneeling at your side with a wet cloth. Her wrist is raw where the iron was, but she is free, and she is crying and laughing at once. "You *idiot*," she says, "you magnificent *idiot*. Brun was through the door with an axe before the oil had finished burning."
+
+The Foreman sits against the far wall, his right arm bandaged to the shoulder, his face grey, his soft hands bound before him. He is alive. The beads are gone. The chest from the bedchamber stands open on the desk, and Gorrak Vael is bent over it, bare-faced, with the scorched ledger open under his hand. Krell sits beside him, one eye swollen shut, holding a lamp. Gorrak is not reading. He has found his own line, and he is looking at it. He doesn't look up when you stir.
+
+You are at 1 hit point, with your sister at your side and the book open on the desk. Whatever happens to it next is a choice, and everyone in the room is waiting to see who makes it. What does Korvash do?
+
+=== REPLY barbarian2-97-12 ===
+  [hidden call] lookup: {"name": "Oil (flask)"}
+You shuffle to the door like a man walking to his own hanging, and you put your mouth to the hand-wide gap. In Goblin, flat and hollow: Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat. Come and break this door.
+
+It rings true. The cloaks hear a beaten man, and the knife at Tessa's neck sags a finger's width as its owner relaxes. The Foreman nods once, thin and satisfied, and for a breath he is looking at the oak and not at you.
+
+Then you turn and bring your chained fists down on the lantern. It goes off the desk with a crack of tin, and the oil sheets across the planks and over the hem of his sleeve. A sheet of low yellow flame runs out between the Foreman and the cloaks along the wall. He yelps and throws himself back from it, hugging his arm, and his eyes find you with a look of pure, startled hatred.
+
+Nobody else has understood yet. The four bows are still pointed at the shutters, the blade is still at Tessa's neck, and the cloaks are looking at the fire. Ruling of mine: burning oil on the floor deals 5 fire damage to anything that enters it or ends its turn there, as the oil rules say. The flames will burn for two rounds.
+
+It is your turn, with 1 hit point. The Foreman has backed against the wall beyond the fire and stands guarded. Tessa is chained by the wrist, a pace from the cloak with the knife. The door is behind you, barred, with Dreg beyond it. The flames are close. What does Korvash do?

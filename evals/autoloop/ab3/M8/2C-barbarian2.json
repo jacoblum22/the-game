@@ -1,0 +1,2537 @@
+[
+ {
+  "round": 97,
+  "run": 0,
+  "line": "I get to my feet slowly, the way a beaten man does, and shuffle to the door in my hobbles as if I mean to obey. Through the hand-wide gap I call out in Goblin, loud and flat as a hanged man: \"Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door.\"\n\nOn the last word I swing my chained fists down across the Foreman's lantern, smashing it off the desk so the burning oil spills across his sleeve and the floor between him and the cloaks.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash Deception: sounding like a broken man at the door, vs the cloaks' passive Insight 10 (surprise): 1d20+1 = 1d20 [13] + 1 = 14",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash initiative: 1d20+1 = 1d20 [18] + 1 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa initiative: 1d20+3 = 1d20 [17] + 3 = 20",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Foreman initiative: 1d20+1 = 1d20 [14] + 1 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Grey cloaks initiative (group of six): 1d20+1 = 1d20 [17] + 1 = 18",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Tessa (20), Korvash Emberhide (19), Cloak A (18), Cloak B (18), Cloak C (18), Cloak D (18), Cloak E (18), Cloak F (18), Foreman (15). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Tessa. Tessa (initiative 20): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa picks the wall-ring wrist lock with hairpins, DC 15: 1d20+4 = 1d20 [1] + 4 = 5 (natural 1) (Tessa has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash smashes the lantern off the desk with chained fists (object AC 13, my ruling): 1d20+6 = 1d20 [6] + 6 = 12 (Korvash Emberhide has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Cloak A: Surprised",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Foreman: Surprised",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak A. Cloak A (initiative 18): HP 11/11, AC 18, Surprised Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak B. Cloak B (initiative 18): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak C. Cloak C (initiative 18): HP 11/11, AC 18 Cloak C's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak D. Cloak D (initiative 18): HP 11/11, AC 18 Cloak D's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak E. Cloak E (initiative 18): HP 11/11, AC 18 Cloak E's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak F. Cloak F (initiative 18): HP 11/11, AC 18 Cloak F's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Foreman. Foreman (initiative 15): HP 2/2, AC 12, Surprised Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Tessa. Tessa (initiative 20): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa picks the wall-ring wrist lock again, DC 15: 1d20+4 = 1d20 [1] + 4 = 5 (natural 1) (Tessa has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Your fists come down on the lantern and it only rocks. The iron shutter is thick, and the blow slides off the curve of it. The lantern skids across the desk and fetches up against the ledger-chest's empty place, still lit, still whole.\n\nThe ruse has worked, though. Your flat dead voice carried through the gap in the door, and the cloaks heard a beaten man. Not one of them has moved. The one at Tessa's throat has his eyes on the door, his blade still where it was. The Foreman has his lips parted on the next number. All of them are a heartbeat behind you.\n\nTessa's hairpin snaps on the wall-ring lock. She has failed twice, and her face says she knows it. She is still chained by the wrist.\n\nIt is your turn, and you have the room's one moment. The lantern is within reach, and so are the Foreman and the door. The cloak holding the blade at Tessa's neck is surprised and so are the other five, and you are at 1 hit point, ankles hobbled, wrists in iron. What does Korvash do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 1, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 1,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 14,
+    "current": 1,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "Manacled (chain cut; cuffs still on wrists)",
+    "Prisoner (Greyshaft ledger-house, chained)"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 100,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": []
+   },
+   "last_long_rest": 1571016
+  },
+  "clock": {
+   "now": 1763880,
+   "timers": {}
+  },
+  "fight": {
+   "round": 2,
+   "turn": 1,
+   "order": [
+    {
+     "name": "Tessa",
+     "initiative": 20,
+     "pc": false,
+     "hp": 1,
+     "max_hp": 1,
+     "ac": 13,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Korvash Emberhide",
+     "initiative": 19,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak A",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [
+      "Surprised"
+     ],
+     "used": []
+    },
+    {
+     "name": "Cloak B",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak C",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak D",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak E",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak F",
+     "initiative": 18,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Foreman",
+     "initiative": 15,
+     "pc": false,
+     "hp": 2,
+     "max_hp": 2,
+     "ac": 12,
+     "conditions": [
+      "Surprised"
+     ],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 97,
+  "run": 1,
+  "line": "I get to my feet slowly, the way a beaten man does, and shuffle to the door in my hobbles as if I mean to obey. Through the hand-wide gap I call out in Goblin, loud and flat as a hanged man: \"Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door.\"\n\nOn the last word I swing my chained fists down across the Foreman's lantern, smashing it off the desk so the burning oil spills across his sleeve and the floor between him and the cloaks.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash Deception: feigning surrender at the door, against the Foreman's Insight: 1d20+1 = 1d20 [5] + 1 = 6",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Foreman Insight vs Korvash's feigned surrender: 1d20+2 = 1d20 [15] + 2 = 17",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash smashes the lantern with chained fists (improvised, vs AC 10 object): 1d20+6 = 1d20 [18] + 6 = 24",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash initiative: 1d20+1 = 1d20 [5] + 1 = 6",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Grey cloaks initiative (group of six): 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Foreman initiative: 1d20+1 = 1d20 [6] + 1 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa initiative: 1d20+3 = 1d20 [7] + 3 = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Cloak A (11), Cloak B (11), Cloak C (11), Cloak D (11), Cloak E (11), Cloak F (11), Tessa (10), Foreman (7), Korvash Emberhide (6). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak A. Cloak A (initiative 11): HP 11/11, AC 18 Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak A bow vs Korvash (AC 13, shackled: advantage): 1d20+3 (advantage) = 1d20 [10, 6]→10 + 3 = 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak B bow vs Korvash (advantage): 1d20+3 (advantage) = 1d20 [14, 14]→14 + 3 = 17",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak A bow damage to Korvash: 1d8+1 = 1d8 [3] + 1 = 4",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: took 4 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns (Cloak A has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak B. Cloak B (initiative 11): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak C. Cloak C (initiative 11): HP 11/11, AC 18 Cloak C's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak D. Cloak D (initiative 11): HP 11/11, AC 18 Cloak D's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak E. Cloak E (initiative 11): HP 11/11, AC 18 Cloak E's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak F. Cloak F (initiative 11): HP 11/11, AC 18 Cloak F's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Tessa. Tessa (initiative 10): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa picks her wrist lock with the hairpin, DC 15: 1d20+4 = 1d20 [2] + 4 = 6 (Tessa has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Foreman. Foreman (initiative 7): HP 2/2, AC 12 Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Foreman has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash death saving throw: 1d20 = 1d20 [15] = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: death save successes: 1/3",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Dreg and the Tallies ram the braced ledger-house door, DC 15 (my ruling): 1d20+4 = 1d20 [17] + 4 = 21",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "The Greyshaft Foreman",
+     "add_to_description": "Day 21 ~10:00 AM: Korvash feigned surrender at the door and smashed the lantern; oil fire spread between the Foreman and his cloaks. Foreman saw through the act. Cloak A shot Korvash to 0. Dreg's Tallies rammed the braced door open (round 2 begins with the Tallies in the doorway). Tessa still chained at the wall ring."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated The Greyshaft Foreman",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You walk to the door like a beaten man, in your hobbles, with your chained hands hanging. You pitch the lie through the gap in flat Goblin: *Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat.* Then you say \"Come and break this door,\" and on the last word your fists come down on the lantern.\n\nThe glass bursts and the oil goes across the Foreman's sleeve and the flagstones in a sheet of flame. He cries out and staggers back, beating at the cloth.\n\nHe was not fooled. He had read your cold heart in the first breath, and his voice is already rising over the fire: \"The big one! Put him down!\"\n\nA bowstring snaps. The first shaft takes you low in the ribs, and the floor comes up under you. The second cloak has you in his sights and holds, because the Foreman shouts again: \"*Alive.* I want him alive!\" Fire runs along the boards between the cloaks and the desk, and the room fills with the stink of burning oil.\n\nYou lie on the stones with your cheek against cold iron, and the world is a long way off. Through the floor, through the oak, you feel a heavy blow land on the door. Dreg's voice is roaring in Goblin, and spears are hammering the beat. Tessa's hairpin scrapes in the wall-ring lock behind you, and then it slips.\n\nThe blow comes again. The braced door cracks down its length, the chest behind it skids, and light and cold air and the shapes of the Tally-sworn spill in through the breach. Cloaks scramble back from the fire, and the room becomes a tangle of spears and shadows.\n\nYou are at 0 hit points, dying, with one death save made. Whatever happens next happens around you, and the next heartbeat is the fight's second round.",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 1, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 1,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 14,
+    "current": 0,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "Manacled (chain cut; cuffs still on wrists)",
+    "Prisoner (Greyshaft ledger-house, chained)",
+    "unconscious"
+   ],
+   "death_saves": {
+    "successes": 1,
+    "failures": 0
+   },
+   "xp": 100,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": []
+   },
+   "last_long_rest": 1571016
+  },
+  "clock": {
+   "now": 1763874,
+   "timers": {}
+  },
+  "fight": {
+   "round": 1,
+   "turn": 8,
+   "order": [
+    {
+     "name": "Cloak A",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Cloak B",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak C",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak D",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak E",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak F",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Tessa",
+     "initiative": 10,
+     "pc": false,
+     "hp": 1,
+     "max_hp": 1,
+     "ac": 13,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Foreman",
+     "initiative": 7,
+     "pc": false,
+     "hp": 2,
+     "max_hp": 2,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Korvash Emberhide",
+     "initiative": 6,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 97,
+  "run": 2,
+  "line": "I get to my feet slowly, the way a beaten man does, and shuffle to the door in my hobbles as if I mean to obey. Through the hand-wide gap I call out in Goblin, loud and flat as a hanged man: \"Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door.\"\n\nOn the last word I swing my chained fists down across the Foreman's lantern, smashing it off the desk so the burning oil spills across his sleeve and the floor between him and the cloaks.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash initiative: 1d20+1 = 1d20 [7] + 1 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Grey cloaks initiative (group of six): 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa initiative: 1d20+3 = 1d20 [8] + 3 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Foreman initiative: 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Tessa (11), Foreman (11), Korvash Emberhide (8), Cloak A (2), Cloak B (2), Cloak C (2), Cloak D (2), Cloak E (2), Cloak F (2). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Tessa. Tessa (initiative 11): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Foreman. Foreman (initiative 11): HP 2/2, AC 12 Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash Dexterity check: smashing the lantern off the desk with chained fists as he shuffles past, hobbled, DC 10 (my ruling): 1d20+1 = 1d20 [15] + 1 = 16 (Korvash Emberhide has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak A. Cloak A (initiative 2): HP 11/11, AC 18 Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak B longsword (flat, to subdue) vs Korvash AC 13: 1d20+3 = 1d20 [3] + 3 = 6 (Cloak B has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak C longsword (flat, to subdue) vs Korvash AC 13: 1d20+3 = 1d20 [9] + 3 = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Cloak A has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak B. Cloak B (initiative 2): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak C. Cloak C (initiative 2): HP 11/11, AC 18 Cloak C's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Cloak C has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak D. Cloak D (initiative 2): HP 11/11, AC 18 Cloak D's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Cloak D has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak E. Cloak E (initiative 2): HP 11/11, AC 18 Cloak E's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Cloak E has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak F. Cloak F (initiative 2): HP 11/11, AC 18 Cloak F's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Tessa. Tessa (initiative 11): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa works her wrist lock with the hairpin under cover of the fire, DC 15: 1d20+4 = 1d20 [9] + 4 = 13 (Tessa has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Foreman. Foreman (initiative 11): HP 2/2, AC 12 Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Foreman has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Tessa's wrist lock came loose, and I got the turn order muddled at the start of that last stretch. You don't lose anything for it. Here is the scene as it stands.\n\nYou shuffle toward the door in your hobbles, shoulders slumped, and shout it flat through the gap in Goblin: Greyshaft's books are honest, honest as the knife at your sister's throat, and you speak from a cold heart and a full belly. Come and break the door.\n\nOn the way you pass the desk, and your chained fists come down across the lantern. It bursts off the edge. Burning oil runs over the desk, the Foreman's papers and the contract, and spreads across the flags in a bright sheet. It doesn't reach his sleeve, because he is standing at the door, but it cuts the room in two and lights every face.\n\nThe cloaks flinch. Two of them swing at you, one wide and one glancing off your hip, both blows meant to put you down alive. The cloak at Tessa's neck doesn't cut. His eyes jump to the fire and back to the Foreman, and the blade shakes. Three others beat at the flames with their cloaks. Behind the Foreman's chair, Tessa has her free hand at her wrist-ring, and you hear a small click as the lock gives. She hasn't moved. She is waiting for you.\n\nThe Foreman has stopped counting. His mouth is thin. \"Seize him,\" he says softly, \"and put out that fire.\"\n\nFrom beyond the door comes Dreg's roar, and the crash of a shoulder against oak.\n\nYou are at 1 hit point, hobbled, with the iron still on your wrists. The burning desk is at your hip, the cloak with the knife is ten feet away, and the door is shuddering. What does Korvash do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 1, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 1,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 14,
+    "current": 1,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "Manacled (chain cut; cuffs still on wrists)",
+    "Prisoner (Greyshaft ledger-house, chained)"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 100,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": []
+   },
+   "last_long_rest": 1571016
+  },
+  "clock": {
+   "now": 1763880,
+   "timers": {}
+  },
+  "fight": {
+   "round": 2,
+   "turn": 2,
+   "order": [
+    {
+     "name": "Tessa",
+     "initiative": 11,
+     "pc": false,
+     "hp": 1,
+     "max_hp": 1,
+     "ac": 13,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Foreman",
+     "initiative": 11,
+     "pc": false,
+     "hp": 2,
+     "max_hp": 2,
+     "ac": 12,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Korvash Emberhide",
+     "initiative": 8,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak A",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Cloak B",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Cloak C",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Cloak D",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Cloak E",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Cloak F",
+     "initiative": 2,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 18,
+     "conditions": [],
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 97,
+  "run": 3,
+  "line": "I get to my feet slowly, the way a beaten man does, and shuffle to the door in my hobbles as if I mean to obey. Through the hand-wide gap I call out in Goblin, loud and flat as a hanged man: \"Greyshaft's books are honest, Sergeant, honest as the knife at my sister's throat, and I speak from a cold heart and a full belly. Now come and break this door.\"\n\nOn the last word I swing my chained fists down across the Foreman's lantern, smashing it off the desk so the burning oil spills across his sleeve and the floor between him and the cloaks.",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Oil (flask)"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash initiative: 1d20+1 = 1d20 [9] + 1 = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloaks initiative (group of six): 1d20+1 = 1d20 [6] + 1 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Foreman initiative: 1d20+1 = 1d20 [14] + 1 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa initiative: 1d20+3 = 1d20 [16] + 3 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Tessa (19), Foreman (15), Korvash Emberhide (10), Cloak A (7), Cloak B (7), Cloak C (7), Cloak D (7), Cloak E (7), Cloak F (7). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Tessa. Tessa (initiative 19): HP 1/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa quietly works the wall-ring lock with her hairpin, blade at her throat, DC 15: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20) (Tessa has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Foreman. Foreman (initiative 15): HP 2/2, AC 12 Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Foreman has used its action: no more actions this turn.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Korvash Emberhide. Korvash Emberhide's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash smashes the lantern with his chained fists (improvised, AC 10 object): 1d20+6 = 1d20 [20] + 6 = 26 (natural 20) (Korvash Emberhide has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Foreman took 5: HP 2 → 0 (0 HP); Foreman: Unconscious (0 HP, ruled knocked out); Foreman: Burning sleeve",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak A. Cloak A (initiative 7): HP 11/11, AC 18 Cloak A's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak A knife-man vs Tessa (AC 13): 1d20+3 = 1d20 [11] + 3 = 14",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak B crossbow vs Korvash (AC 13): 1d20+3 = 1d20 [10] + 3 = 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak C crossbow vs Korvash (AC 13): 1d20+3 = 1d20 [5] + 3 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak A knife damage to Tessa: 1d4+1 = 1d4 [4] + 1 = 5",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Cloak B crossbow damage to Korvash: 1d8+1 = 1d8 [7] + 1 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Tessa took 5: HP 1 → 0 (0 HP) (Cloak A has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: took 8 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak B. Cloak B (initiative 7): HP 11/11, AC 18 Cloak B's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak C. Cloak C (initiative 7): HP 11/11, AC 18 Cloak C's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak D. Cloak D (initiative 7): HP 11/11, AC 18 Cloak D's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak E. Cloak E (initiative 7): HP 11/11, AC 18 Cloak E's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Cloak F. Cloak F (initiative 7): HP 11/11, AC 18 Cloak F's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Tessa. Tessa (initiative 19): HP 0/1, AC 13 Tessa's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Tessa death saving throw: 1d20 = 1d20 [9] = 9",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Korvash death saving throw: 1d20 = 1d20 [10] = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Dreg's Tallies: 1-2 break the door this round (fire and fallen Foreman), 3-6 not yet: 1d6 = 1d6 [2] = 2",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: death save successes: 1/3",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight over after 2 round(s). 12 seconds of fighting; now Day 21, 9:58:06 AM.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Hours until stabilized Korvash regains 1 HP: 1d4 = 1d4 [4] = 4",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: condition added: Stable (unconscious)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: healed 1: HP 0 → 1; conscious again; death saves reset; condition removed: Stable (unconscious); condition removed: Prisoner (Greyshaft ledger-house, chained); condition removed: Manacled (chain cut; cuffs still on wrists)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 4 hours later: Day 21, 1:58:06 PM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "The Greyshaft Foreman",
+     "add_to_description": "Day 21 ~9:58 AM: Korvash's coded lie (\"honest as the knife at my sister's throat\") and his smashing of the lantern set the Foreman's sleeve alight; the Foreman fell unconscious at 0 HP (not dead). A cloak stabbed Tessa, a crossbow dropped Korvash; Dreg's Tallies broke the door moments after. The Foreman is bound and held by the Tallies; the scorched ledger is in the chest in his bedchamber, unburnt, awaiting Gorrak's judgement."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated The Greyshaft Foreman",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Tessa",
+     "add_to_description": "Day 21 ~10 AM: stabbed by a grey cloak in the ledger-house at 0 HP; failed one death save; Tallies broke in and Dreg/Gorrak's healer stabilized her. Alive but gravely hurt; she had picked her wall-ring lock (nat 20)."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Tessa",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You shuffle to the door like a beaten man, put your mouth to the gap, and give them the lie in a flat, dead voice. Greyshaft's books are honest, honest as the knife at your sister's throat. Dreg has twenty years of hearing men lie to him. Beyond the oak the spear-beat stops.\n\nOn the last word your chained fists come down on the lantern. It bursts across the desk and the floor in a sheet of burning oil, and it takes the Foreman's sleeve with it. He staggers, beats at the flame, and goes down on the flags with a soft, surprised sound. He is not dead. He is out, with his beads scattered round him.\n\nYou don't get to enjoy it. A knife goes into Tessa, and a crossbow bolt hits you from the shutters. Your legs go, and the room tilts into the dark.\n\nWhat you know of the rest, you learn afterwards. The Foreman's fall broke the doorway before the cloaks could make their minds up. Dreg and Brun and a dozen Tallies hit the bar together, and the oak split. The cloaks threw down their weapons, all but one, who died on a Tally spear. Gorrak came in behind with Krell, got to you first, and bound the wound with the same linen they used on him. A Tally healer worked on your sister while her breath fluttered on the flags. It was close, but she lives.\n\nYou wake on a pallet in the sun, a little before two in the afternoon, with a clean bandage and one hit point. There are no irons on your wrists. Your sister lies on the next pallet, grey-faced and sleeping, with her side wrapped in linen. Gorrak sits on a stool between you with no mask and no rod, the scar-seam pale in the light. Through the open door you can see the barracks yard: Tallies in cloaks of rust and tin, the grey cloaks roped in a row, and in the middle the Foreman, bound hand and foot on a bench, his burned sleeve stripped, his small gentle face quite calm.\n\nThe iron-bound chest stands at Gorrak's feet. The lid is open. The scorched ledger lies on his knee, shut.\n\n\"They gave it to me,\" he says. \"Dreg did. Twenty spears, and every one of them asked me what to do with it.\" He looks down at the book. \"I have not opened it. I thought you should be awake.\"\n\nYour axe isn't here, nor your sword, but you're alive, your sister is alive, and the ledger is in the hand of the man whose number it carries.\n\nWhat does Korvash say or do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 1, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 1,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Javelin: +6 to hit, 1d6+4 piercing; range 30/120 (thrown)",
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Handaxe: +6 to hit, 1d6+4 slashing; range 20/60 (light, thrown)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 14,
+    "current": 1,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 1,
+    "left": 0
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 100,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": []
+   },
+   "last_long_rest": 1571016
+  },
+  "clock": {
+   "now": 1778286,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 120,
+  "run": 0,
+  "line": "I drop behind a boulder out of the archers' line and shout down, \"Call off your bowmen, Brakk, and I'll meet you at the ford-stones, you and me alone with blades and shields, no archers and no ambush. If I put you down, you and your nine lay down your arms and walk to Harrowmere to answer, and if you beat me, my spears go home and the barrel is yours.\"\n\nThen I whistle two notes back toward the gully, calling Ushk to the head of the goat-path as witness, and I check my breath weapon and rage, ready for the moment he steps out to meet me.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Brakk's answer: 1-2 honors a fair duel, 3-4 accepts but keeps archers hidden, 5-6 refuses and orders attack on the ridge: 1d6 = 1d6 [1] = 1",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Brakk",
+     "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's challenge to single combat at the ford-stones, shield and blade, archers called down. Stakes: if Korvash wins, Brakk and his nine lay down arms and walk to Harrowmere; if Brakk wins, Korvash's spears go home and the barrel is his. Ushk is called to the head of the goat-path as witness. Brakk seems to mean it: it is a point of pride for him."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Brakk",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 20 minutes later: Day 27, 7:23:06 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You drop behind a boulder out of the archers' line and shout your terms down the slope: no bowmen, no ambush, you and Brakk alone at the ford-stones with blade and shield. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his. Then you whistle two notes back toward the gully.\n\nThe silence below runs long. You hear a low voice and a muttered argument among the men, and then Brakk's flat answer. \"Done. My word on it, and a sergeant's word is worth more than the Foreman's ink.\" He barks an order. On the roof the archers lower their bows and climb down, and the shield-men step back from the foot of the track. Brakk lays his spear-arm men in a ring about the ford-stones, an arena of grey shields on the frosty ground, then walks out to its centre alone and sets his back to the open morning, for once, as if to show you he means it.\n\nUshk comes up the goat-path at a run, helm in hand, with Hale behind him and the six Tally spears spread along the slope. He stops beside you, breathing hard, and looks down at his old sergeant. \"He'll keep it,\" he says quietly. \"Brakk keeps a word he has made before witnesses. It's the only thing about him that was ever worth anything.\" He swallows. \"He's quick with the shield. Don't give him your back, and don't let him pin your axe.\"\n\nYou've breathed on the ridge long enough to settle. Rage and breath are both ready. Below you, ten hobgoblins stand in a ring on frost-white ground with their weapons grounded, and the man who killed your father waits in the middle with the sun on his shield.\n\nIt's a little after seven twenty. You can go down to meet him, and you may choose how: when to rage, whether to breathe, how to fight him.\n\nWhat does Korvash do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 2, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 2,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again. At level 2: rage damage bonus +2; 2 rages before a long rest.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Reckless Attack: Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+    "Danger Sense: At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 23,
+    "current": 23,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 2,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 1,
+     "recharge": "short"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 400,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1,
+    "Greataxe": 1,
+    "Horn charm (Dargan's, carved)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": [
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1831686
+  },
+  "clock": {
+   "now": 2272986,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 120,
+  "run": 1,
+  "line": "I drop behind a boulder out of the archers' line and shout down, \"Call off your bowmen, Brakk, and I'll meet you at the ford-stones, you and me alone with blades and shields, no archers and no ambush. If I put you down, you and your nine lay down your arms and walk to Harrowmere to answer, and if you beat me, my spears go home and the barrel is yours.\"\n\nThen I whistle two notes back toward the gully, calling Ushk to the head of the goat-path as witness, and I check my breath weapon and rage, ready for the moment he steps out to meet me.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash Persuasion: Brakk accepts a single combat at the ford-stones with archers called off, DC 16 (he holds every advantage but is proud and wants the coin and his name cleared before his men): 1d20+1 = 1d20 [17] + 1 = 18",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Ushk's Stealth: reaching the head of the goat-path behind cover after Korvash's whistle, vs the archers' passive Perception 10: 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Brakk",
+     "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's single-combat terms at the ford-stones (shields and blades, no archers). Stakes: if Korvash wins, Brakk and his nine lay down arms and walk to Harrowmere; if Brakk wins, Korvash's spears go home and the barrel is Brakk's. Brakk ordered his archers to lower bows but keeps the shield-line in the yard. Ushk reached the head of the goat-path unseen and stands as witness."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Brakk",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 12 minutes later: Day 27, 7:15:06 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You drop behind a boulder, out of the archers' line, and shout your terms down the slope. No bowmen. The ford-stones, you and Brakk alone, blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his.\n\nThe quiet below stretches long. Then Brakk laughs, a short dry sound with no joy in it. \"Alone, with his father's axe. The old man would be proud.\" He turns his head and says a word to the roof. The two archers lower their bows, though they don't unstring them. \"Done,\" he calls. \"Ford-stones. My men keep the yard, yours keep the ridge. If a spear moves that shouldn't, the whole bargain's off and I take your head as a gift.\"\n\nYou whistle two notes back toward the gully. A few minutes later Ushk comes crawling over the crest below you, helm off, face grey. He saw nothing of how he got here, and neither did the archers. He lies beside you in the scree and looks down at the yard. \"He means it,\" he says quietly. \"Brakk keeps a bargain when it suits him, and this one does. He thinks he'll win.\" He pauses. \"He might. He's fought for eight winters and he has never once lost a duel I saw.\"\n\nHale and the six spears hold the gully, out of sight. Your rage and your breath are both ready.\n\nIt is a quarter past seven. Below, Brakk walks out of the fold-house yard alone, shield on his arm and longsword low. He crosses the dry stones of the ford and stops at the middle one, flat and wide as a threshing floor, and waits. His men stand silent along the yard wall. The stream chatters round his boots.\n\nYou can go down the goat-path now. Do you rage before you reach him, or hold it for the stones, and what do you say to Ushk before you go?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 2, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 2,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again. At level 2: rage damage bonus +2; 2 rages before a long rest.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Reckless Attack: Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+    "Danger Sense: At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 23,
+    "current": 23,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 2,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 1,
+     "recharge": "short"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 400,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1,
+    "Greataxe": 1,
+    "Horn charm (Dargan's, carved)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": [
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1831686
+  },
+  "clock": {
+   "now": 2272506,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 120,
+  "run": 2,
+  "line": "I drop behind a boulder out of the archers' line and shout down, \"Call off your bowmen, Brakk, and I'll meet you at the ford-stones, you and me alone with blades and shields, no archers and no ambush. If I put you down, you and your nine lay down your arms and walk to Harrowmere to answer, and if you beat me, my spears go home and the barrel is yours.\"\n\nThen I whistle two notes back toward the gully, calling Ushk to the head of the goat-path as witness, and I check my breath weapon and rage, ready for the moment he steps out to meet me.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash Persuasion: Brakk accepts a single combat at the ford-stones with archers called off, DC 15 (cautious, but the barrel and his pride are at stake): 1d20+1 = 1d20 [18] + 1 = 19",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Brakk",
+     "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's challenge to single combat at the ford-stones. Terms: archers called off, blades and shields only. If Korvash wins, Brakk and his nine lay down arms and walk to Harrowmere; if Brakk wins, Korvash's spears go home and the barrel is Brakk's. Brakk asked for Ushk to be named witness to the terms, and he is wary of tricks."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Brakk",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 10 minutes later: Day 27, 7:13:06 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You drop behind a boulder, out of the archers' line, and shout down your terms in Goblin: bowmen called off, the two of you alone at the ford-stones with blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his.\n\nSilence follows. You hear the wind and a bowstring easing. Then Brakk laughs, a short dry sound, and you can tell the barrel and his pride have both taken the bait.\n\n\"Alone, then. Blades, shields, no tricks.\" He lifts a hand and the archers lower their bows. \"Name your witness. I want the sergeant who lay in the stones. Let him hear the terms from my mouth and yours, and let him count my men to see none moves.\" His voice goes soft. \"He'll watch me kill you, and he'll tell your sister.\"\n\nYou whistle two notes back toward the gully. Ushk comes up the goat-path at a jog, helm under his arm, with Hale and the six spears fanned out behind him, staying well short of the ford. He reaches the boulder and takes in the yard below with one look. Quietly he says, \"He will keep to the terms while he thinks he's winning. When he stops thinking it, watch his shield-men, not him.\"\n\nYou check yourself. Your rage is whole, two uses, and your breath weapon is ready in your chest. Your axe is a heavy greataxe in two hands, and a shield isn't in the bargain, so you'll want to decide how to use that.\n\nIt's a little past seven. Brakk is walking out from the fold-house to the ford-stones, a big hobgoblin with a ring in his ear, round shield on his arm, longsword in his hand, and nine men standing very still behind him. The stream runs black and loud between the stones.\n\nWhat does Korvash do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 2, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 2,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again. At level 2: rage damage bonus +2; 2 rages before a long rest.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Reckless Attack: Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+    "Danger Sense: At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 23,
+    "current": 23,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 2,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 1,
+     "recharge": "short"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 400,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1,
+    "Greataxe": 1,
+    "Horn charm (Dargan's, carved)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": [
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1831686
+  },
+  "clock": {
+   "now": 2272386,
+   "timers": {}
+  },
+  "fight": null
+ },
+ {
+  "round": 120,
+  "run": 3,
+  "line": "I drop behind a boulder out of the archers' line and shout down, \"Call off your bowmen, Brakk, and I'll meet you at the ford-stones, you and me alone with blades and shields, no archers and no ambush. If I put you down, you and your nine lay down your arms and walk to Harrowmere to answer, and if you beat me, my spears go home and the barrel is yours.\"\n\nThen I whistle two notes back toward the gully, calling Ushk to the head of the goat-path as witness, and I check my breath weapon and rage, ready for the moment he steps out to meet me.",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Korvash Persuasion: Brakk accepts a single combat at the ford-stones with archers called off, DC 14 (his men are watching; refusing looks like fear, but he is cunning): 1d20+1 = 1d20 [3] + 1 = 4",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Brakk",
+     "add_to_description": "Day 27 ~7:10 AM: refused Korvash's offer of single combat. Said he'd not trade ten lives on one man's arm, and that the ford-stones are his to hold. Offered instead that Korvash come down unarmed, or he will send his archers up the path when the sun is high. He is using the delay to move two men along the rock face to flank the ridge."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Brakk",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 7 minutes later: Day 27, 7:10:06 AM",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You drop behind a boulder out of the archers' line and shout your terms down the slope. Single combat at the ford-stones, shield and blade, the bowmen called off. If you put him down, he and his nine lay down their arms and walk to Harrowmere. If he beats you, your spears go home and the barrel is his. Then you whistle two notes back toward the gully.\n\nIt doesn't take. Your voice cracks on the last words, and it sounds like a boy making a dare. Brakk lets the silence run, and then he laughs, short and dry.\n\n\"A fine offer from a man with six spears in a ditch behind him.\" He hasn't moved from the rock. \"I'll not trade ten lives on one man's arm, Emberhide. And the stones are mine to hold. Come down unarmed and we'll talk. Or stay up there until the sun's high, and my archers will come up the path to fetch you.\"\n\nYour whistle is answered faintly from the gully, a single note: Ushk, coming. Below, two of Brakk's shield-men have slipped along the foot of the rock face, keeping low, moving to climb the scree on your left. They mean to get above you or behind you before the sun is high. He is buying time with talk, and using it.\n\nYou're behind a boulder on a bare ridge. Two archers watch the path, two flankers are on the scree, three shields hold the foot of the track, and Brakk waits in the yard with his back to the cliff. Your breath and both rages are ready. Ushk and Hale, with six spears, are a few minutes behind you.\n\nIt's ten past seven. What does Korvash do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Korvash Emberhide",
+   "summary": "Dragonborn barbarian 2, acolyte background",
+   "opening": "Korvash Emberhide, a hulking red-scaled dragonborn barbarian (Chaotic Good, loud, proud, quick to anger; ideal Charity; bond: he keeps his word no matter what; flaw: inflexible), arrives at dusk in a lowland market town near the foot of the mountains, driving off a pack of bullies shaking down a family of herders, as he has done for years. His past, which the opening must respect: he comes from a clan of mountain herders. When he was young, hobgoblins of the Iron Tallies warband, led by a tin-masked captain named Gorrak Vael (who notches a rod for every raid), overran his village. His father Dargan held the narrow Goat's Throat pass, losing a hand and then his life, so the herd and the children could flee; Korvash swore to him, with his blood on his hands, to protect the weak. His younger sister Tessa was lost in the raid and her fate is UNKNOWN: he never saw her fall and has never stopped wondering, so she must not be confirmed alive or dead unless discovered in play. The survivors fled to Harrowmere, where his aunt Veshra raised him and still sends word by travelers. The clan built a cairn at the Goat's Throat, which he has never had the heart to revisit. His shame at being too young to stand beside his father is why he is loud and makes sure everyone knows he is standing. He carries his father's second-best greataxe with Dargan's ember-red scale-sash tied to the haft. Hook for the opening: just after the bullies flee, a frightened young herder or a traveler brings him word, perhaps carried from Aunt Veshra, that a hobgoblin warband bearing a tin-masked captain and a notched rod has been seen again, or that something connected to the Goat's Throat has turned up. This pulls him toward an oath-bound choice: someone weak is in immediate danger, he promises to help, and keeping that word will lead him back toward the mountains and the questions about Tessa. Invent only original places and people; keep it grounded in the SRD's monsters (hobgoblins, goblins, bugbears, wolves, etc.).",
+   "level": 2,
+   "race": "Dragonborn",
+   "class": "Barbarian",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "Chaotic Good",
+   "personality": {
+    "traits": [
+     "I'm loud, proud, and quick to anger.",
+     "I can't stand to see someone weaker get pushed around."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I keep my word no matter what.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Unarmored Defense: 10 + DEX + CON",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 18,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 9,
+    "WIS": 10,
+    "CHA": 13
+   },
+   "abilities": {
+    "STR": "18 (+4)",
+    "DEX": "13 (+1)",
+    "CON": "14 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "10 (+0)",
+    "CHA": "13 (+1)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +6*, DEX +1, CON +4*, INT -1, WIS +0, CHA +1 (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +0, Arcana -1, Athletics +6*, Deception +1, History -1, Insight +2*, Intimidation +3*, Investigation -1, Medicine +0, Nature -1, Perception +0, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +0 (* proficient, ** expertise)",
+   "passive_perception": 10,
+   "senses": "normal",
+   "languages": "Common, Draconic, Goblin, Giant",
+   "proficiencies": "Light Armor, Martial Weapons, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Greataxe: +6 to hit, 1d12+4 slashing (heavy, two-handed)",
+    "Unarmed strike: +6 to hit, 5 bludgeoning"
+   ],
+   "features": [
+    "Draconic Ancestry: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon and damage resistance are determined by the dragon type, as shown in the table.",
+    "Breath Weapon: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation. When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level. After you use your breath weapon, you cannot use it again until you complete a short or long rest.",
+    "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+    "Draconic Ancestry (Red): breath weapon 15 ft cone, DEX save DC 12, 2d6 Fire damage (half on a success); resistance to that damage type",
+    "Rage: In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action. While raging, you gain the following benefits if you aren't wearing heavy armor: - You have advantage on Strength checks and Strength saving throws. - When you make a melee weapon attack using Strength, you gain a bonus to the damage roll that increases as you gain levels as a barbarian, as shown in the Rage Damage column of the Barbarian table. - You have resistance to bludgeoning, piercing, and slashing damage. If you are able to cast spells, you can't cast them or concentrate on them while raging. Your rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action. Once you have raged the number of times shown for your barbarian level in the Rages column of the Barbarian table, you must finish a long rest before you can rage again. At level 2: rage damage bonus +2; 2 rages before a long rest.",
+    "Unarmored Defense: While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier. You can use a shield and still gain this benefit.",
+    "Reckless Attack: Starting at 2nd level, you can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn.",
+    "Danger Sense: At 2nd level, you gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 23,
+    "current": 23,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d12",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Rage": {
+     "max": 2,
+     "left": 2,
+     "recharge": "long"
+    },
+    "Breath Weapon": {
+     "max": 1,
+     "left": 1,
+     "recharge": "short"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 400,
+   "coins_cp": 0,
+   "items": {
+    "Backpack": 1,
+    "Bedroll": 1,
+    "Mess Kit": 1,
+    "Tinderbox": 1,
+    "Torch": 10,
+    "Rations (1 day)": 10,
+    "Waterskin": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Amulet": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer wheel": 1,
+    "Dried goat meat (pouch)": 1,
+    "Greataxe": 1,
+    "Horn charm (Dargan's, carved)": 1
+   },
+   "build": {
+    "choices": {
+     "name": "Korvash Emberhide",
+     "race": "Dragonborn",
+     "class": "Barbarian",
+     "ability_method": "rolled",
+     "base_scores": {
+      "STR": 16,
+      "DEX": 13,
+      "CON": 14,
+      "INT": 9,
+      "WIS": 10,
+      "CHA": 12
+     },
+     "choices": {
+      "trait.draconic-ancestry": [
+       "h"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Athletics",
+       "Skill: Intimidation"
+      ],
+      "class.equipment.1": [
+       "a"
+      ],
+      "class.equipment.2": [
+       "a"
+      ],
+      "background.languages": [
+       "Goblin",
+       "Giant"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "b"
+      ]
+     },
+     "alignment": "Chaotic Good",
+     "personality": {
+      "traits": [
+       "I'm loud, proud, and quick to anger.",
+       "I can't stand to see someone weaker get pushed around."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I keep my word no matter what.",
+      "flaw": "I am inflexible in my thinking."
+     }
+    },
+    "rolled": [
+     9,
+     13,
+     10,
+     16,
+     12,
+     14
+    ],
+    "levels": [
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1831686
+  },
+  "clock": {
+   "now": 2272206,
+   "timers": {}
+  },
+  "fight": null
+ }
+]

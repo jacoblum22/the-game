@@ -1,0 +1,267 @@
+GAME barbarian2, ROUND 120
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 117 ==
+PLAYER: I touch the three knots on my wrist, nod once to Veshra and Pip at the gate, and ride out at the head of the column with Hale at my right and Ushk at my left. "We keep the pace of the slowest pony, Hale, and no fires after dark, because Brakk knows the ford and these roads as well as we do."
+
+At the first rest, I'll sit with Ushk and have him tell me everything he remembers of Brakk, his habits, his hiding places, and how he fights, so I can take him without killing him.
+  [game] dice Hale Orrin's Survival: finding the tracks of Brakk's ten along the high road, DC 12 (3 days old, but a dry cold road): 1d20+3 = 1d20 [9] + 3 = 12
+  [DM write_lore (hidden)] {"entry": "Brakk", "add_to_description": "Day 26 (from Ushk): Brakk fights with longsword and shield, is patient, sits with his back to rock, and keeps a sentry rota; bullies the weak and goes quiet and mean when cornered. Never drinks on duty. He knows Cinder Ford's ruined fold-house and the ford-stones where the coin is cached. Hale found the tracks of ten men leaving the ore road for the high r
+  [game] notebook: updated Brakk
+  [game] time: 13 hours later: Day 26, 7:00:06 PM
+DM: You touch the three knots at your wrist, nod once to Veshra and Pip at the gate, and ride out at the head of the column with Hale on your right and Ushk on your left. You tell Hale you'll keep the slowest pony's pace and light no fires after dark, since Brakk knows these roads as well as any of you.
+
+The high road runs north through winter fields and then up into rough country, and the day goes by in cold sun and ponies' breath. Hale does the work of a tracker, leaning from his saddle. At the fork below the Hollin spring he stops, dismounts, and kneels in the frozen mud. "Ten," he says at last. "Heavy boots, one set dragging a left foot. Three days old, maybe four. They've gone north." He is sure of it, and it settles your route.
+
+At midday you rest in the lee of a dry-stone wall. You sit down by Ushk with your bread and ask him to tell you everything he remembers of Brakk. He considers it, chewing slowly. "He fights with a longsword and shield, never the spear. He sits with his back to rock and never to open ground, and he keeps a sentry rota even in his sleep. He doesn't drink on duty. He bullies the weak, and with the strong he goes very quiet." Ushk's mouth twists. "When he's cornered, he doesn't shout. He gets mean and still. That's when to watch him." He thinks a moment more. "He knows the fold-house at Cinder Ford, the ruined one with the half roof, and the ford-stones. If the coin is under them he'll stay close, so he can watch it. He won't leave it for the first soldier that asks."
+
+You turn what you know over in your head the rest of the afternoon. Brakk is no coward. He'll fight, but there's a way to take a man like that without killing him, and it's a matter of where you stand.
+
+By seven the light is gone. You make a cold camp in a dry gully off the road, with the ponies hobbled and no fire. Hale takes the first watch. The six Tally spears lie on the frozen ground without complaint. Ushk sits with his back to a rock, as he must have learned from Brakk, and watches the road.
+
+Cinder Ford is half a day's ride ahead. The stars are out and the frost is deepening. Your wrist is cold under Tessa's knots.
+
+What does Korvash do?
+
+== ROUND 118 ==
+PLAYER: I take the second watch so Hale can sleep, and sit with the greataxe across my knees, running my thumb over Tessa's three knots while I think it through. At the bell before dawn I'll wake Hale and Ushk, leave the ponies a mile off with two of Dreg's men, and go up the north ridge above Cinder Ford, the old goat-path my father used, to count Brakk's sentries before the sun's up.
+
+Then I'll lay it out for them in the dark: Ushk walks down with an open hand to call Brakk out to parley, the rest of the spears hold the road behind, and I wait above the ford so that when he gets mean and still, I'm the one at his back, not the other way round.
+  [game] dice Korvash's Stealth: climbing the north ridge above Cinder Ford in the pre-dawn grey, vs Brakk's sentries (passive Perception 11): 1d20+1 = 1d20 [6] + 1 = 7
+  [game] dice Korvash's Perception: counting Brakk's sentries and spotting the fold-house layout from the ridge, DC 12: 1d20+0 = 1d20 [2] + 0 = 2
+  [DM write_lore (hidden)] {"entry": "Cinder Ford", "add_to_description": "Day 27 dawn: Brakk's band of ten holds the ruined fold-house (half roof, back against the rock) just above the ford. Korvash climbed the north ridge but kicked a loose stone and was seen by a sentry; he miscounted the sentries (saw three; there are at least five, two hidden in the tumbled wall by the ford-stones). Brakk has been alerted that someone 
+  [game] notebook: updated Cinder Ford
+  [game] time: 12 hours later: Day 27, 7:00:06 AM
+DM: You take the second watch so Hale can sleep and sit with the greataxe across your knees, thumbing Tessa's three knots while the frost deepens. Nothing stirs but the ponies. Near two in the morning you wake Hale and Ushk and lay out the plan in a whisper, and they listen without arguing. You ride the last stretch at a walk, then leave the ponies a mile short with two of Dreg's men.
+
+The north ridge above the ford is the old goat-path your father used, and you find it in the dark by touch and memory. But you're a big man in frozen scree, and the dark is turning grey. Near the top, your boot comes down on a slab that rocks, and a stone the size of a loaf goes clattering away down the slope. You freeze with your heart hammering.
+
+Nothing comes of it at first. You crawl the last few yards and look down. Cinder Ford lies below you in the grey light: the shallow black stream, the humped ford-stones, and the ruined fold-house on the near bank with half its roof gone and its back against a wall of rock. You count three sentries, one at the ford-stones and two on the fold-house roof. It looks a thin watch for ten men. You tell yourself that's right, and then you notice you're not sure. The light is poor and your eyes are tired.
+
+A hobgoblin on the roof turns his head toward the ridge. He stands very still. He lifts a hand to his mouth, and a low, flat whistle carries up the slope, two notes, then two again.
+
+Below, the fold-house yard comes alive. Men you did not count rise out of the tumbled wall beside the ford-stones, two more at least. Others come out of the doorway, shields up, swords out, quick and silent. You see a big shape come last, a ring glinting in one ear, a longsword in one hand and a round shield in the other. He doesn't shout. He stands in the yard with his back to the rock, looks up at the ridge, and waits.
+
+Ushk is two hundred paces back with Hale and the spears, hidden in the gully. Brakk knows someone is on the ridge. It's seven in the morning, the sun is just touching the ridge-top, and you are on the skyline alone.
+
+What does Korvash do?
+
+== ROUND 119 ==
+PLAYER: I stand up on the ridge in plain sight so Brakk can see who it is, shed the cloak, and bellow down the slope in Goblin and Common both: "BRAKK! You killed Dargan from behind at the Goat's Throat, and his son's come for you. Your Foreman is dead and your ledger is ash. I want you alive, and I'll hear you answer for it."
+
+If he and his nine come up the slope, I'll hold the narrow goat-path where only two can reach me at a time, and I'll whistle Hale and Ushk's spears in from the road behind them.
+  [DM write_lore (hidden)] {"entry": "Brakk", "add_to_description": "Day 27 dawn at Cinder Ford: answered Korvash's challenge from the fold-house yard, back to the rock, men in a shield-line. He does not rise to bait. He denies the murder (says Dargan was already dying and it was mercy), says the coin is Tally-sworn wages owed, and offers a parley on the ford-stones at the open ground, with Korvash coming down alone. Two ar
+  [game] notebook: updated Brakk
+  [game] time: 3 minutes later: Day 27, 7:03:06 AM
+DM: You stand up on the skyline, drop your cloak, and bellow down the slope in Goblin and Common both. You name Brakk, name Dargan, and name the Goat's Throat. You tell him the Foreman is dead, the ledger is ash, and you want him alive to answer.
+
+The echo rolls off the rock and dies. Down in the yard nobody moves. Brakk has not so much as shifted his shield. When he answers, it is in Goblin, flat and unhurried, in a voice that carries easily across the cold air.
+
+"Emberhide. I wondered which of the old man's brats would come." He sounds almost pleased. "You're mistaken. Your father was dying on his feet when I reached him. I gave him mercy. Ask the sergeant, if he's with you. He lay with his face in the stones and saw nothing, I'll wager."
+
+Behind that, a murmur from his men, the sound of ten hobgoblins deciding to be steady. Brakk goes on. "The coin is wages. Eight winters I've bled for the Tallies and been paid in promises. The Foreman is dead? Then the debt is dead, and the barrel under the ford-stones is mine and my men's. If you've come to take it, come and take it. Come down to the stones, alone, and we'll speak like men." A beat. "Or bring your friends in the gully, and we'll speak differently."
+
+He knows about the gully. That settles any thought of surprise. Two archers on the fold-house roof have bows drawn and aimed at the ridge-path, and three more shield-men have come out of the doorway to bar the track at its foot. The yard is a dry-stone box with Brakk's back to the cliff, and the narrow goat-path is the only slope that reaches it.
+
+Up on your ridge the wind blows steadily. You're alone on the skyline with the greataxe at your back and two arrows trained on you. Ushk, Hale, and six Tally spears wait two hundred paces behind, and they can be whistled in whenever you choose. The sun is up. It's a few minutes past seven.
+
+What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 120, "category": "format", "severity": 2, "quote": "you can begin the duel by roaring your rage at him, or by speaking first", "why": "The reply ends by offering the player a short menu of options for the next move and listing his resources as game terms ('a greataxe, a rage and a breath weapon')."}
+
+THE PLAYER'S LINE THIS ROUND: I drop behind a boulder out of the archers' line and shout down, "Call off your bowmen, Brakk, and I'll meet you at the ford-stones, you and me alone with blades and shields, no archers and no ambush. If I put you down, you and your nine lay down your arms and walk to Harrowmere to answer, and if you beat me, my spears go home and the barrel is yours."
+
+Then I whistle two notes back toward the gully, calling Ushk to the head of the goat-path as witness, and I check my breath weapon and rage, ready for the moment he steps out to meet me.
+
+=== REPLY barbarian2-120-01 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:05 AM: refused Korvash's offer of single combat at the ford-stones. Sent three shield-men up the goat-path and kept two archers pinning the ridge; h
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope. Alone at the ford-stones, blade and shield, no bows, no ambush. If you win, Brakk and his nine lay down their arms and walk to Harrowmere. If he wins, your spears go home and the barrel is his. Then you whistle two notes back toward the gully, and you hear a faint answering whistle: Ushk is coming.
+
+Brakk takes his time. When he answers it is without heat.
+
+"A fair offer, from a man who knows I'd take it if I were a fool." You can hear the smile in the flat voice. "I was never one for fair, boy. Your father found that out." Then, sharper, in Goblin: "Pin him. Third file, up the path."
+
+Two arrows hiss over the boulder and crack against rock behind you, and a splinter of stone cuts your cheek. Below, three shield-men step out from the fold-house doorway and start up the goat-path, locked shield to shield. The path is narrow enough that only two can reach you at a time, as you hoped. But the archers on the roof have the boulder's edge marked, and any move out of cover will draw their shafts.
+
+Brakk himself stays where he is, back to the rock, watching with his sword down. Behind you, Ushk's boots are coming up the scree at a run, with Hale and six spears a short way behind. The shield-men have perhaps twenty paces of path left before they reach you.
+
+Your rage and your breath are both ready, and you hold the high ground. Roll for initiative when you've told me what you do first.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-02 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's challenge to single combat at the ford-stones, terms: if Korvash wins Brakk's nine lay down arms and walk to Harrowmere; i
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope. Call off the bowmen, meet at the ford-stones, blades and shields only. If you win, Brakk and his nine lay down their arms and walk to Harrowmere. If he wins, your spears go home and the barrel is his.
+
+The silence runs long. Then Brakk laughs once, short and dry. "Done," he calls. "On the ford-stones, then. Bows unstrung, you have my word." He raises a hand, and on the roof both archers lower their bows and make a show of slackening the strings. The three shield-men at the foot of the track step aside.
+
+You whistle two notes back toward the gully. Within a few minutes Ushk comes up the goat-path at a crouching run, helm in hand, with Hale labouring behind him. The six Tally spears stay hidden in the gully, as you said. Ushk looks down at the yard and his face tightens. "He gave his word on the bows," he murmurs, "and I have never known his word to be worth the breath. Look at the wall by the stones." You look. Two hunched shapes lie in the tumbled stonework beside the ford-stones, where the dark water runs. They have not moved, and they have not been called off.
+
+Hale grunts. "Two in the wall, and he's counting on you not seeing them. Archers' strings are slack for show; I can see one thumb still on a nock." He spits. "Man's honest the way a fox is honest."
+
+Below, Brakk walks out of the yard alone, shield on his arm and longsword drawn, the ring glinting in his ear. He stops on the flat ford-stones and waits, easy, back to the stream. Behind him the fold-house wall holds nine silent watchers.
+
+It's a quarter past seven. You have your rage and your breath weapon ready, Ushk and Hale beside you, and a path down to the ford. What does Korvash do?
+
+=== REPLY barbarian2-120-03 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: Korvash offered single combat at the ford-stones (no archers; if Korvash wins, Brakk and nine surrender and go to Harrowmere; if Brakk wins, 
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope: no bowmen, no ambush, you and Brakk alone at the ford-stones with blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere. If he beats you, your spears go home and the barrel is his.
+
+Then you whistle two notes back toward the gully. Within a few minutes Ushk comes up the goat-path at a crouching run, helm in hand, and drops down beside you, breathing hard. He says nothing. He looks over the boulder once and nods, as if he'd expected exactly this.
+
+Brakk's answer takes a while. It is not the one you wanted.
+
+"Alone, is it?" His flat voice carries up the slope. "Tell your bowmen to go home, Emberhide. I'll not walk onto open ground with a man whose friends are hiding in a gully. Bring the sergeant and your six spears down onto the road where I can count them, and I'll hear your terms. The archers stay on my roof. That is how a man talks who is not afraid of you." He pauses. "I am not."
+
+Ushk's jaw tightens. "He wants us in the open, under the bows," he mutters in Goblin. "And he wants you down at the stones with nothing at your back. He'll keep the terms if it suits him and not otherwise."
+
+You check your breath and your rage. Both are ready, a fire in the chest and a drum in the ears. Hale is still back in the gully with the spears, waiting on your word. Five archers and a shield-line hold the yard below, and Brakk sits with his back to the rock, patient as a stone. Whatever happens next, he has set the board.
+
+It's a little past seven in the morning. What does Korvash do?
+
+=== REPLY barbarian2-120-04 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's duel at the ford-stones, sword and shield against axe, with the stakes Korvash named (if Brakk loses, he and his nine lay 
+You drop behind a boulder out of the archers' line and shout your terms down the slope. The archers hold their bows and the wind carries your words down to the yard. Brakk's men go quiet. You name the stakes: you and he alone at the ford-stones with blades and shields, no archers and no ambush. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his.
+
+The silence runs long. Then comes his flat voice, almost amused. "Pride's a cheap thing to bet, boy. Fine." He gives his conditions plainly. His bowmen stay on the roof with shafts held. Your sergeant and the drover come to the head of the track, close enough to see and no closer. The six spears stay in the gully. "Whistle for your witness," he says. "I want him to watch."
+
+You whistle two notes back toward the gully. It takes a few minutes. Ushk comes up the goat-path at a jog with Hale behind him, breathing hard. Ushk looks down at the yard and his face goes grey. "He'll let you set your feet," he says, low. "Then he'll make you come to him. He wins by waiting. Don't chase the shield." Hale spits and says nothing, only grips his staff.
+
+You flex your shoulders and take stock. Your rage is full, both uses. Your breath is ready. Tessa's three knots sit tight on your wrist. Below, Brakk walks out of the fold-house yard alone, longsword in his right hand and round shield on his left arm, with the ring in his ear catching the early sun. He crosses the dry stream by the ford-stones and stops in the open, square to the ridge, and waits for you with the stillness of a man who has done this before.
+
+It's about ten past seven. The ten hobgoblins ring the yard behind him and watch. The ford-stones lie between you, grey and flat, and under one of them a barrel of tin.
+
+You are at full strength, 23 hit points, on the ridge. How does Korvash come down?
+
+=== REPLY barbarian2-120-05 ===
+  [hidden call] lookup: {"name": "Hobgoblin", "kind": "monster"}
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:30 AM: ACCEPTED Korvash's challenge. Terms: single combat at the ford-stones, blades and shields, archers called off. If Korvash wins, Brakk and his
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope in Goblin: call off the bowmen, and meet you at the ford-stones with blade and shield, no ambush. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his.
+
+Then you whistle two notes back toward the gully, and a minute later Ushk and Hale come up the goat-path behind you, quiet as wind. Ushk takes in the whole yard in a glance. Hale says only, "He'll take it. He's the kind who can't leave a challenge lying," and spits. You check your breath in your chest, the slow fire there, and the rage waiting like a coal beneath it.
+
+Brakk takes his time. The yard is silent. At last, in the same flat voice: "Done. My bowmen come down off the roof. You come down alone. Your Tallies stay on the ridge." Two archers lower their bows and climb down. You can see the others fall back to the fold-house wall, shields grounded, watching. It is the kind of promise a man like him keeps, because it costs him nothing to keep and a great deal to break in front of his own men.
+
+You walk down the goat-path alone, with the axe in your hands and the sun at your back. It's about half past seven. The ford-stones are a ring of flat grey boulders in the shallows, with a dry shelf of gravel in front of them, thirty feet across. Brakk comes out of the yard to meet you at the near edge. He is big for a hobgoblin and grey at the temples, a heavy round shield on one arm, longsword in the other, and the ring in his ear catches the light. He stops at ten paces and looks you over, the red scales, the axe, the sash tied at the haft.
+
+"Dargan's," he says. "He'd have been proud. Pity he's not here." He lifts the sword. "Say when."
+
+Behind him his nine stand in a half-ring with shields down. Behind you, on the ridge, Ushk and Hale and the spears watch in silence. There's frost on the gravel and the stream is running loud. Your rage is ready, and so is your breath. You have 23 hit points and a plan.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-06 ===
+  [hidden call] lookup: {"name": "Combat Step by Step"}
+  [hidden call] lookup: {"name": "Hobgoblin", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: refused Korvash's duel offer. Sent three shield-men to bar the foot of the ridge path and two more to climb the scree to the west to flank th
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope: archers called off, the two of you at the ford-stones with blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere. If he beats you, your spears go home and the barrel is his. Then you whistle two notes back toward the gully, and a moment later you hear boots on the scree. Ushk and the spears are coming up. You check your breath in your chest and the rage coiled behind your ribs. Both are ready.
+
+Brakk lets you finish. He is quiet a long time, and then he laughs, one short dry sound.
+
+"You'd have me throw away ten spears' advantage for a boy's fair fight," he says. "Your father fought fair, and look where it left him." There is no heat in it. "No. The archers stay on the roof. Come down alone, or don't come."
+
+His men take it as an order. Three shield-men move to bar the foot of the goat-path, closed up shoulder to shoulder. Two more peel away from the yard and start up the western scree at a steady trot, to come round behind your boulder and take you from the side. The archers on the fold-house roof have an arrow nocked on each string. Brakk stands in the yard with his back to the rock and does not move.
+
+Ushk reaches you at a crouching run, breathing hard, and drops beside the boulder with his helm in his hand. He looks down at the yard, at the flankers, at the man he served for years. "He's good," he says. "He'll hold the yard and let you bleed on the slope." Behind him come Hale and the six Tally spears, going to ground along the ridge in a loose line. Hale has a short bow strung. The spears wait for your word.
+
+The two flankers are about a hundred paces off and closing. The wind is steady and the sun is barely over the ridge. This is where it starts, and it starts however you say.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-07 ===
+  [hidden call] lookup: {"name": "Hobgoblin", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 7:10 AM: on Korvash's duel offer (blades and shields, no archers; if Korvash wins Brakk's ten lay down arms and go to Harrowmere, if Brakk wins Korvash
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope. It's blades and shields at the ford-stones, no bowmen, no ambush. If you win, Brakk and his nine lay down their arms and walk to Harrowmere. If he wins, your spears go home and the barrel is his.
+
+You hear Brakk laugh once, shortly. "You've your father's mouth." Then a pause long enough that you hear the stream running. "No archers. Fine." Two shapes slide down off the fold-house roof, and their bows go slack. But he doesn't send the others back. "My men stand as witnesses," he calls. "Ten of us, one of you. Come and be heard." It's the oldest trick there is, a duel with nine hobgoblins in a ring and no one to say they must stand still.
+
+You whistle two notes back toward the gully, as you meant to. Before the second ends, there's an answering whistle, and then the quick scrape of boots on scree. Ushk comes up the goat-path in a crouch with his shield on his back and a spear in his fist. Hale follows, breathing hard, and then the six Tally spears, fanning out behind the boulders. Ushk reaches you and looks down at the yard. His face doesn't change, but he grips his spear tighter.
+
+"He'll have the nine on the ford-stones," Ushk mutters. "Shields up, two ranks. That's how he fought the pass." He doesn't need to say more.
+
+A glance tells you the ground. The goat-path is the only way up or down, narrow enough that two can stand abreast. The yard below is a stone box with its back to the cliff, and the ford-stones lie in open ground to the side, forty paces from the fold-house door. Brakk is already walking out toward the stones with his shield on his arm, and his nine are falling in around him as if on parade. He has seen you've got friends and has chosen to meet them anyway. Whatever he is, he isn't afraid.
+
+You've got a rested body, a full rage and your breath weapon in hand, seven allies on the ridge, and an enemy waiting below who wants you to come down alone.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-08 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:05 AM: Korvash challenged him to single combat at the ford-stones. Brakk refused the terms: he will keep his archers, and says he'll meet Korvash at
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope. Call off the bowmen, meet you at the ford-stones with blade and shield, no ambush. If you fall, he and his nine lay down their arms and walk to Harrowmere. If he wins, your spears go home and the barrel is his. Then you whistle two notes back toward the gully, and you feel your breath and your rage waiting in your chest like coals under ash.
+
+The answer takes a while. Brakk's laugh is short and humourless. "A fine speech, Emberhide. You have your father's mouth." He doesn't move from the rock. "No. The archers stay. I've buried too many men who trusted a clean fight. If you want the stones, come down and stand on them, and my shield-line will stand beside me. Or don't."
+
+It isn't a refusal of the fight. It's a refusal of your terms. Behind him you see a lean hobgoblin slip along the tumbled wall toward the ford-stones, where the barrel lies, and begin prying at a flat slab. Brakk is not hurrying. He is buying time.
+
+Boots scrape on scree behind you. Ushk comes up the goat-path at a crouch, helm on, with Hale a pace behind him breathing hard and the six Tally spears strung out below. Ushk looks down at the yard and his face goes grey. "That's him," he says softly. "That's the stance. He's already counted us, Emberhide."
+
+The two archers on the roof haven't lowered their bows. The path below is a single file of loose stone with the shield-line waiting at its foot, and the ford-stones are open ground beyond. Hale mutters that there's a second way down on the east side, a sheep-drop through broken rock, steep enough to break a pony's leg but not a man's. It's a few minutes past seven. Brakk's man is working at the slab.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-09 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: refused Korvash's single-combat terms. He keeps his archers, will not leave the rock, and has sent two men creeping along the stream-bed to f
+You drop behind the boulder, out of the archers' line, and shout your terms down the slope: the bowmen called off, you and Brakk alone at the ford-stones with blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he beats you, your spears go home and the barrel is his.
+
+It comes out like a challenge rather than an offer, and Brakk hears it that way. He laughs, a short dry sound. "A fair fight. Dargan's whelp wants a fair fight." The laugh stops. "I'm not a fool, boy. Nobody walks to Harrowmere to hang. Not me, not my men." Over the lip of the boulder you hear him give a quiet order. The two archers keep their bows on the ridge, and he does not leave the rock.
+
+You whistle two notes back toward the gully, and Ushk's answering whistle comes thin on the wind. Then you see what Brakk's order was. Two hobgoblins have slipped out of the yard and are creeping down the stream-bed, bent low behind the bank. They're heading for the gully where Ushk, Hale and the six spears wait, and they are not in the line of the ridge-path. The archers keep your head down while the pair work around the flank.
+
+You can feel your rage waiting, and your breath, banked like coals. Both are ready, and both are whole. The sun is clear of the ridge now, and every shadow is short. Brakk has ten, with archers on the roof and a wall at his back, and you are alone on the slope above him with a boulder for cover, a goat-path, and a whistle that can bring your people in. It's a little past eight minutes after seven.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-10 ===
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: accepted Korvash's single-combat offer at the ford-stones (terms: if Korvash wins, Brakk and his nine lay down arms and go to Harrowmere; if 
+You drop behind a boulder, out of the archers' line, and shout your terms down the slope: archers called off, you and Brakk alone at the ford-stones with blades and shields. If you put him down, he and his nine lay down their arms and walk to Harrowmere. If he beats you, your spears go home and the barrel is his.
+
+The quiet stretches. Then Brakk laughs, short and dry, and answers in Goblin. "Terms I can count. Done." He barks an order. The two on the roof lower their bows, though not far.
+
+You watch him while he speaks, and you read him true. The duel he means to keep. The terms are a gift to him, and he is too patient a man to spoil a gift. But a hand goes up to the roof, two fingers, and the archer at the left corner nods. Your spears are not to move. If they do, he will loose.
+
+You whistle two notes back toward the gully. Ushk comes up the goat-path at a crouching run and drops beside you, breathing hard. He sees the yard, and you see his jaw tighten at the sight of the big shape with the ring in its ear. "Witness," you tell him. He nods. "I'll see it all," he says.
+
+You check yourself the way Dargan taught you: breath in the chest, rage ready in the belly, the axe light in your hands. Tessa's three knots are tight on your wrist. Hale and the six spears hold the road behind, still hidden, still silent.
+
+Below, Brakk walks out of the yard alone, longsword in his right hand and round shield on his left arm, to the humped ford-stones. He sets his back to nothing now, in open ground, and waits. His men watch from the wall. It is a quarter past seven, the sun is full on the ford, and the stream runs black and loud.
+
+What does Korvash do?
+
+=== REPLY barbarian2-120-11 ===
+  [hidden call] lookup: {"name": "Hobgoblin", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:10 AM: refused Korvash's duel offer. Held his shield-line at the fold-house, archers still on the roof, and sent a shield-man to shadow the ridge pa
+You drop behind a boulder, out of the archers' line, and shout your offer down the slope: no bowmen, no ambush, you and Brakk alone at the ford-stones with blades and shields. If you fall, your spears go home and the barrel is his. If he falls, he and his nine lay down their arms and walk to Harrowmere. Then you whistle two notes back toward the gully, and a moment later Ushk's grey shape ghosts up the goat-path to the lee of your boulder, helm off, breathing hard.
+
+Brakk's answer takes its time. When it comes it is almost a laugh.
+
+"A fair fight, with Dargan's pup picking the ground? No." His voice stays flat and unhurried. "I've outlived better men by never fighting on terms they set. Come down alone and speak, or stay on your rock. My bows can wait longer than your legs."
+
+Ushk, crouched beside you, mutters in Goblin: "He won't fight you. He'll sit, with archers on the roof, until you do something stupid."
+
+Below, the shield-line holds. Two shield-men edge up the foot of the goat-path and stop where the slope narrows, blocking the way down. Two bows stay trained on your boulder. The sun climbs, the frost starts to run, and nobody in the yard is in any hurry. Hale and six Tally spears wait in the gully behind. You have your axe, your rage and your breath, and a witness at your shoulder.
+
+It's a few minutes past seven. What does Korvash do?
+
+=== REPLY barbarian2-120-12 ===
+  [hidden call] lookup: {"name": "Hobgoblin", "kind": "monster"}
+  [hidden call] write_lore: {"entry": "Brakk", "add_to_description": "Day 27 ~7:15 AM: accepted Korvash's single combat at the ford-stones (blades and shields, no archers). Terms spoken before both bands: if Korvash wins, Brakk 
+You drop behind a boulder, out of the archers' line, and shout the terms down the slope. You'll meet him at the ford-stones, alone, with blades and shields and no archers. If you put him down, he and his nine lay down their arms and walk to Harrowmere to answer. If he puts you down, your spears go home and the barrel is his.
+
+There is a long silence. You can hear the stream, and the pulse in your own ears. Then Brakk gives a short, humourless bark of a laugh.
+
+"Big words from a boy with a goat's axe." He pauses. "I'll take that wager, Emberhide. Ten men heard it, and ten men will keep it. Lower your bows."
+
+Down the slope the two archers on the roof ease their strings. The shield-men at the path's foot step back. You whistle two notes toward the gully, and in a few minutes Ushk appears at the head of the goat-path with his helm in his hand, Hale at his shoulder, the six Tally spears behind them. They stop where you tell them, the witnesses to your word. Ushk meets your eye, nods once, and takes up position beside the path's end where all ten of Brakk's men can see him. Hale Orrin settles his weight on his staff. He doesn't speak.
+
+You check what you have: both rages, your breath weapon, and your father's axe on your back. Your thumb finds Tessa's three knots.
+
+You walk down the goat-path, the same your father walked, into the cold gold of the morning. The ford-stones are a ring of flat black rocks half-sunk in the stream bank, forty paces from the fold-house. Brakk comes out to meet you. Up close, he is big, scarred and heavy-shouldered, with a ring glinting in one ear. The round shield is dented, and his chain mail is oiled and clean. He sets himself in the middle of the stones with his back to the cold sun and the light in your eyes. Behind him nine hobgoblins ring the yard in a silent line, hands on their hilts.
+
+"No tricks," Brakk says. "You'll want to say a word to the old man before you start. Go on. I'll wait."
+
+He means to say a thing like this to hurt you. He wants you angry. He is standing with the sun behind him and his back to the stream, and the stones are slick with frost.
+
+It's a quarter past seven. You have a dozen paces and a heartbeat to think. What does Korvash do?

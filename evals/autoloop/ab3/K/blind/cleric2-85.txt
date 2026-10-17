@@ -1,0 +1,205 @@
+GAME cleric2, ROUND 85
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 82 ==
+PLAYER: I eat Hesper's stew and sit a few minutes with Piper. "Keep the honey water coming and the eggs too, and no running until the cough is gone a full week." Then I thank Hesper and walk down in the bright afternoon to look at the ruined chapel from a distance.
+
+I'll stop at the ford and study the roofless walls, the ground around the door, and any signs of missing lamps or gray handprints before going near. DM: from the ford, can I see anything unusual, like scorched earth, fresh tracks, or an open crypt door?
+  [game] dice Brannoc's Perception studying the ruined chapel from the ford, DC 13: 1d20+3 = 1d20 [6] + 3 = 9
+  [game] time: 1 hour 45 minutes later: Day 8, 1:15:42 PM
+  [DM write_lore (hidden)] {"create": "Ruined chapel at the ford", "kind": "place", "description": "Roofless old chapel on the valley road about an hour south of the Millstone Inn, just past a ford. Behind it, hidden by brambles, is a low barrow mound, one of the Sleepers' Chain. Hidden truth: a fallen altar-slab inside covers a stair to a crypt, and the slab has been shifted a hand's width from below; faint gray finger-mar
+  [game] notebook: created an entry for Ruined chapel at the ford; added 2 relationships to Ruined chapel at the ford
+DM: You tell Piper to keep up the honey water and the eggs, and no running until the cough has been gone a full week. He grumbles that a week is a very long time, and Hesper says it's what a week is for. You thank her, and she sends you off with a pasty wrapped in cloth. The stew was as good as ever.
+
+The road south is bright and dry, and the afternoon is warm. A little after one you reach the ford. The river is low and clear over brown stones. You stop on the near bank, under an alder, and study the ruin from across the water.
+
+Perception (9): it's an old chapel, roofless, with three walls and part of a fourth standing, the gable end black with age. Nettles and brambles crowd it. A stone doorway has no door. You can make out nothing out of the ordinary from where you are. No scorching, no tracks you can read at this distance, no open crypt door. The ground round the walls is thick with weeds, and the daylight lies flat on everything. It doesn't say it's safe. It just doesn't say anything. If there is something to see, you'd have to go closer.
+
+It's a quarter past one on Day 8. You have all your slots, Channel Divinity, Protection from Evil and Good and its powder, forty-five flasks of oil, and the road to Greywater a short walk beyond. The light is good for another six hours. You could cross and look properly, in daylight, with care. You could light your way on, or go back and ask Hesper whether anyone has seen anything strange on the road. The ford is knee-deep and easy.
+
+What does Brannoc do?
+
+== ROUND 83 ==
+PLAYER: I cross the ford slowly, shield on my arm, and approach the chapel in the good light, stopping at the doorway to look and listen before I step in. I'll look for a flagstone or stair that has been moved, any missing lamps or old oil flasks, and gray finger-marks on the stone, and I'll keep a flask of oil and my lantern ready to light.
+
+If I find a sealed crypt, I won't open it alone. I'll mark the place, and bring Greywater's folk and some oil to seal it properly, as we did at the Long Cut.
+  [game] dice Brannoc's Perception searching the chapel doorway and floor up close in good light, DC 12: 1d20+3 = 1d20 [14] + 3 = 17
+  [game] time: 25 minutes later: Day 8, 1:40:42 PM
+  [DM write_lore (hidden)] {"entry": "Ruined chapel at the ford", "add_to_description": "Day 8 ~1:40 PM: Brannoc searched up close (Perception 17) and found the shifted altar-slab, the finger-marks and the gnawed bones. He chose not to open it alone; plans to bring Greywater folk and oil to seal it."}
+  [game] notebook: updated Ruined chapel at the ford
+DM: You wade the ford slowly, with the water cold round your knees and your shield on your arm. On the far bank you stop and listen. There's the river, a wood-pigeon, and the wind in the nettles, and nothing else. You go up to the doorway with a flask in your hand and your lantern at your belt, and you look before you step in.
+
+Perception (17): the floor is flagstone under a skin of moss and rubble, the altar a long slab at the east end, toppled at one corner. Under the nettles by the east wall lie a few bones, a sheep's, gnawed and scattered, and not by a fox. Then you see the slab. It has been moved. A hand's width of black gap shows along its near edge, as if it had been pushed from below, and on the underside of the lip, where the dust is thin, are four long gray smears like finger-marks, spread wide. The air coming up out of the gap is cold and smells of grave-earth. You hear nothing from below.
+
+You don't open it, as you decided. You tie a strip of your linen to a bramble at the doorway to mark the place, then back out the way you came. You note the bones, the slab, and the position of the ruin: an hour south of the Millstone Inn, an hour short of Greywater, with a barrow mound hidden behind the brambles at its back. You've found your fifth mound.
+
+It's twenty to two on Day 8. You have all your slots and Channel Divinity, and forty-five flasks of oil. Greywater is an hour on, with a chapel, a dyer's family who owe you no debt but a good will, and Maud, who knows most of the valley. Hesper is an hour behind. The slab won't wait for ever, though no sign of anything stirring has come up since you arrived.
+
+What does Brannoc do?
+
+== ROUND 84 ==
+PLAYER: I head on to Greywater to raise help rather than seal it alone. "Maud knows this valley, and Osric and Corwin will have hands, ropes and a cart. I'll ask for a few strong volunteers, the capstone-and-clay method we used at the bridge, and a few of my flasks of oil, and we'll come back at first light."
+
+I'll also ask Maud if she knows any tale of this chapel. DM: since I'm 100 XP short of level 3, would helping seal this barrow count as a milestone worth the XP?
+  [game] time: 1 hour 15 minutes later: Day 8, 2:55:42 PM
+  [DM write_lore (hidden)] {"entry": "Maud Marrow", "add_to_description": "Day 8 ~3 PM: Told Brannoc the ruined chapel at the ford was the Ford Chapel, abandoned after the Grey Fever years ago; shepherds say sheep vanish near it, and her grandmother called its mound the Sleepers' Hill. She offers her cart-owning cousin and a fortnight's worth of lamp oil from the dye-sheds."}
+  [game] notebook: updated Maud Marrow
+DM: On XP: yes. When the Reach sealed the Long Cut, I gave you 100 XP for it. Sealing a barrow mouth with a threat behind it, at real risk, is the same kind of challenge. I'd rule it worth at least 100, which is exactly what takes you to 900 and level 3. If it goes badly, with a fight at the slab, ghouls count by the book on top of that.
+
+You reach Greywater a little before three, with the dye racks red and gold in the afternoon light. You go straight to Maud's blue door. She is at her loom, hears you out without a word, and stops the shuttle. "The Ford Chapel," she says. "Sleepers' Hill, my grandmother called the mound behind it. Shut up after the Grey Fever, when there was no one left to ring the bell. Shepherds don't graze that bank. They lose ewes there and blame foxes." She wipes her hands. "My cousin Tobias has a cart and a mule. I'll send him. And the dye-sheds have lamp oil to spare."
+
+Within the hour you have your help. Corwin comes without being asked, with a coil of rope and a crowbar the length of his arm. Osric brings his good hand and his stubbornness. Tobias arrives with the cart and a young apprentice named Fenn, and Wren hovers at the edge of everything with a face like a fist. She is told she is not coming, and she nods with her jaw set. Corwin says dryly she may bring the lamp.
+
+The plan is yours: capstone-and-clay, as at the bridge, oil poured and lit, wedges, and the slab dragged back into its seat with the cart-mule, at first light. You have forty-five flasks, and the village adds a dozen more.
+
+It's five to three on Day 8. You can't take a full rest until tomorrow morning, because your last one ended at ten to five today. Your slots are full and your Channel Divinity is ready, and you have the afternoon and night in Greywater.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 85, "category": "contradiction", "severity": 1, "quote": "The Ford Chapel is two hours up the road, about a mile past the ford.", "why": "R82/R83 put the chapel 'just past a ford', an hour from Greywater (R84 took 1h15 to walk back). Distance and ford relation both shift."}
+
+THE PLAYER'S LINE THIS ROUND: I thank Maud, Corwin, Osric and Tobias, and ask everyone to rest and eat well tonight so we start fresh at first light. "Nobody goes near that slab alone, and nobody goes down. If anything stirs, we drop the tools and pull back to the cart."
+
+Tonight I'll check Ilsa, Tessa and Osric's arm one last time, then sleep in the chapel with Wren's sweeping for company. DM: can Wren and Maud be on their way to Stonebridge before we go, or will they wait until the barrow is sealed?
+
+=== REPLY cleric2-85-01 ===
+On your question: Stonebridge lies south of Greywater, and the chapel is north of it, so the two errands go in opposite directions. Maud says Wren and she will wait until the barrow is sealed. "I'll not send that child down the road while something's stirring on it," she says. They'll leave the day after, together, with Tobias's cart for the first stage.
+
+You spend the afternoon and evening on small things. You count Tessa's breaths one last time in the window light, and they're easy and slow. Ilsa laughs for the first time since you met her. Osric's arm has closed clean, and he lets you check it without a word of complaint. You eat with Corwin and Hale, and Hale slips a second twist of dried apple into your pack. At dusk the volunteers go home early with their tools by the door, as asked. Wren sweeps the chapel until her mother fetches her, and sleeps in her own bed for once.
+
+You sleep on the pallet in the chapel under the shrine lamp. Your prayers return with the long rest. At ten to five on Day 9 you wake with 17 of 17 hit points, all three 1st-level slots, and Channel Divinity ready. Your prepared list is unchanged unless you say otherwise. A bowl of porridge and a twist of blue wool sit by the altar.
+
+Outside, in the gray before dawn, the volunteers are gathering by the cart under a lantern. Corwin has the crowbar over his shoulder, Osric has a coil of rope, Tobias is feeding the mule a carrot, and Fenn is yawning. A dozen flasks of the village's oil and your forty-five are stacked in the cart, with the capstone-and-clay kit and a sack of wedges. Wren is at the chapel door with her basket, not quite allowed to come.
+
+It's ten to five on Day 9. The ford is two hours up the road by cart, and the sky is just going pale. You're 100 XP short of level 3.
+
+What does Brannoc do?
+
+=== REPLY cleric2-85-02 ===
+  [hidden call] write_lore: {"entry": "Wren", "add_to_description": "Day 8: Maud and Wren have delayed their trip to Stonebridge until the Ford Chapel mound is sealed, since the road passes it. Wren was told she may bring the la
+On your question: Maud and Wren will wait. The Stonebridge road runs right past the Ford Chapel, and Maud flatly refuses to walk a girl of twelve past a mound she knows has something in it. They'll go the day after it's sealed. That puts the trip off by a day, and Wren takes it better than you'd have guessed. She has the Lamp, which means she has a job.
+
+You spend the evening going about your small rounds. Tessa breathes easily at your count, and Ilsa is up and about the room with a spoon in her hand. Osric's arm is dry and clean along the seam. Hale feeds you supper at the dyers' table, and Corwin says very little and loads the cart himself. Maud has the crowbar sharpened. You sleep in the little chapel to the sound of Wren's broom going back and forth, until it stops and you hear her breathing from the bench. You wake at ten to five on Day 9 in the dark, rested, with seventeen hit points, all three 1st-level slots and Channel Divinity. Your prepared prayers are as before, and you may change them now.
+
+The cart is ready in the lane with its lamps lit, and the mule stamps. Corwin, Osric, Tobias, Fenn and Wren are waiting, and Maud has pulled her shawl over her head. The ford is two hours away on foot, and the light will come up on the road. You are 100 XP short of level 3, and a slab with four gray finger-marks waits on the far bank.
+
+Do you change your prepared prayers, and how does Brannoc lead the party out?
+
+=== REPLY cleric2-85-03 ===
+Your question about Wren and Maud: they'll wait. The road to Stonebridge runs straight past the Ford Chapel, so Maud won't walk a twelve-year-old girl past an open slab. She says, "Seal it first, then I'll go." That's one more reason to do it well.
+
+The evening goes quietly. Tessa's breath is easy against Ilsa's shoulder, and you count it against a slow sixty in the window. Ilsa is on her feet, her colour back, and she's started talking about Garrick coming home. Osric's arm has closed clean along the split, with no red, and he flexes his fingers to show you. Corwin has laid out ropes, wedges and the crowbar by the door, and Tobias has the mule fed and watered. Nobody argues with your rule about the slab.
+
+You sleep in the chapel, with Wren sweeping around the altar until Hale comes to fetch her home. You wake at ten to five on Day 9. Your hit points are 17 of 17, all three 1st-level slots are back, Channel Divinity is ready, and your prepared list is unchanged. The lane is dark and cold. By the chapel door stand Corwin, Osric, Tobias with the mule and cart, the apprentice Fenn, and Wren, who has a lantern and is trying very hard to look as though she wasn't told to stay behind.
+
+It's ten to five on Day 9. The Ford Chapel is two hours up the road, and first light is nearly an hour off. You'll be there as the sun rises. You're 100 XP short of level 3.
+
+How does Brannoc set out, and in what order does he want things done at the slab?
+
+=== REPLY cleric2-85-04 ===
+  [hidden call] write_lore: {"entry": "Wren", "add_to_description": "Day 8: Maud and Wren delay the Stonebridge trip until the Ford Chapel barrow is sealed, since the road passes it. Wren is told she may bring the lamp but not c
+Maud and Wren will wait until the slab is sealed. That's my ruling, and Maud's own choice. She isn't taking a twelve-year-old down a road past an open barrow, and she says so flatly. They'll go to Stonebridge the day after, with the weather fair and the road safe.
+
+The evening is quiet. You count Tessa's breaths in Ilsa's window, a slow sixty, easy and even. Osric's arm is closing clean under Wren's linen. Corwin and Hale feed you at their table, and Hale watches you eat like a woman checking a loaf. Tobias oils the cart axle. Corwin sharpens the crowbar. Nobody says much, and nobody sleeps badly. Wren sweeps the chapel one last time and goes home to bed under protest.
+
+You sleep in the chapel, and the prayers return with the long rest. At ten to five on Day 9 you wake rested, at 17 of 17 hit points, with all three 1st-level slots and Channel Divinity. The lane is dark. Corwin is already outside with the cart and the mule, and a lantern hangs from the tailboard. Osric stands beside him with a rope over his good shoulder. Tobias and the apprentice Fenn are loading flasks and the long wedges. Wren stands at the chapel door with a small covered lamp, as promised, and says nothing. You may change your prepared prayers before you go.
+
+The Ford Chapel is two hours up the road at cart pace. You have 800 XP, 100 short of level 3, and the plan you laid down: capstone and clay, oil lit, nobody alone, nobody down.
+
+Which prayers does Brannoc prepare, and how does he lead them out?
+
+=== REPLY cleric2-85-05 ===
+  [hidden call] write_lore: {"create": "Ford Chapel sealing party", "kind": "quest", "description": "Seal the slab and stair in the Ford Chapel (roofless chapel at the ford, an hour south of the Millstone Inn), a mound of the Sl
+Maud answers your question first, with a sniff. She and Wren will not go to Stonebridge until the slab is shut. "It's on the road. I'm not walking my girl past a hole in the ground I've heard about." She says it as if it were her own idea, and Wren, who has been hearing every word, pretends not to be pleased.
+
+You spend the evening as you said you would. Ilsa has her cheeks full and Tessa asleep and easy. You count a slow sixty at the window and the baby's breath comes quiet and even. Osric's arm is closing, and Wren's linen is clean. The villagers eat well and early, and Tobias grumbles about the hour but stacks the capstone, ropes and wedges in the cart. Wren sweeps the chapel floor around your pallet until she is sent home again. Sleep comes quick, and the long rest takes you.
+
+You wake at ten to five on Day 9 in the cold, dark chapel, with all your hit points and three 1st-level slots, and Channel Divinity ready. Outside, the cart is waiting with the mule snorting in the cold. Corwin has lit the lantern, Osric is yawning, Tobias is checking the rope, and Fenn clutches a crowbar as if he might break it. There's a heap of oil flasks, your forty-five and the village's dozen. Wren is on the step with a shuttered lamp, looking fierce.
+
+You can change your prepared list now. Your plan is the capstone and clay, the oil, and the cart-mule to drag the slab home, with everyone ready to pull back to the cart at the first sign of trouble. The Ford Chapel is two hours south. It's about ten to five on Day 9, and you're 100 XP short of level 3.
+
+How does Brannoc set out?
+
+=== REPLY cleric2-85-06 ===
+  [hidden call] write_lore: {"create": "Tobias", "kind": "person", "description": "Maud Marrow's cousin, a Greywater carter with a cart and a mule. Volunteered for the Ford Chapel sealing, with his apprentice Fenn.", "relationsh
+Maud answers your question over the loom. She and Wren will wait for the barrow to be sealed. The Stonebridge road runs past the Ford Chapel, and she won't have her cousin's apprentice-to-be walking by an open slab. They will go down in two days, as planned, after the work is done.
+
+The evening goes the way the last one did. You count Tessa's breaths in Ilsa's window. Her cough is nearly gone and her colour is good. Osric's arm has closed clean, and he flexes his fingers at you with a scowl, which from him is delight. Wren sweeps the chapel around your pallet with great seriousness until her father comes for her. She says a stiff goodnight and then, at the door, a small one. You sleep.
+
+You wake on Day 9 at ten to five, an hour before first light. Your hit points are full at 17 of 17, with all three 1st-level slots and Channel Divinity ready, and your list is as it was. In the lane outside, Tobias is already backing the mule into the cart's shafts by lantern light. Corwin has the rope and the crowbar, Osric the clay pail, and a dozen flasks of lamp oil sit in a crate. A bowl of porridge waits by the altar, and a twist of blue wool lies on the spoon.
+
+You're 100 XP short of level 3. The Ford Chapel is two hours' walk with a loaded cart, and the sealing should be done by mid-morning.
+
+Do you change your prepared prayers, and what does Brannoc do?
+
+=== REPLY cleric2-85-07 ===
+  [hidden call] write_lore: {"entry": "Wren", "add_to_description": "Day 8: Maud and Wren will leave for Stonebridge only after the Ford Chapel barrow is sealed (their road runs south, away from the chapel, but Maud wants to see
+Your answer first: Maud has settled it. Stonebridge is south and the chapel is north, so the barrow is not on their road. She says she won't leave a stirring thing at her back door with her girl on the cart. She and Wren will wait until it's sealed, and go the same day if all is well. Wren hears this with her mouth shut and her eyes very bright.
+
+You spend the evening as you said. Tessa's breaths come easy against Ilsa's shoulder, a slow sixty by the window, with no rattle in them at all. Osric's arm has closed clean along the split, and he flexes the fingers and says it itches, which is a good sign. Corwin has laid out the ropes and the crowbar by the cart. Tobias's mule is bedded down with an extra feed.
+
+You sleep in the chapel with the broom leaned against the altar, and Wren's sweeping fades off somewhere before you do. You wake at ten to five on Day 9, in the dark, with the frost on the window and the smell of baking from a house nearby. Your hit points are full at 17, all three 1st-level slots are back, and Channel Divinity is ready. Your prayers are as you left them, and you may change the list now.
+
+Outside, the cart is waiting with the mule in harness, the crowbar in the straw, and a heap of sacks that smell of lamp oil. Corwin, Osric, Tobias, Fenn and two more dyers stand round it in the dark with lanterns, stamping to keep warm. Wren is on the chapel step with a lit lamp in both hands. She says nothing at all and holds it out to you.
+
+You are 100 XP short of level 3. The ford is two hours up the road, and the slab lies a hand's width open.
+
+What does Brannoc do?
+
+=== REPLY cleric2-85-08 ===
+Your question: Stonebridge lies south of Greywater, and the Ford Chapel is north of it, so the two roads never cross. Maud says the loom order is done. But she looks at Wren's set face and decides the girl will not be easy until the slab is shut, so they will go down to Stonebridge when you and the crew are back, around noon tomorrow. Wren takes this with the dignity of a general who has lost a council vote.
+
+The evening goes as you planned. You count Tessa's breaths by the window, and they are easy and even. Ilsa has the first real colour you've seen in her face and is humming something tuneless. Osric's arm is closing clean, and he lifts it to show you like a man showing a fish. You eat with Corwin and Hale, and Hale slides a second bowl across without comment. At the chapel Wren has swept the floor twice. She does not ask to come, and she does not stop sweeping. You lie down on your pallet at ten to nine.
+
+You wake at ten to five on Day 9 with 17 of 17 hit points, all three 1st-level slots, and Channel Divinity ready. Your list is as it was: Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good. You may change it now. Outside the door it is dark and cold, and a lantern bobs in the lane. It's Corwin with his crowbar, and behind him the cart creaks in the dark, with Osric, Tobias, Fenn and the mule. The oil sloshes in its crocks. A small shape is trying to hide behind the cart wheel. It is not hiding well.
+
+It's ten to five. What does Brannoc do?
+
+=== REPLY cleric2-85-09 ===
+Maud says she and Wren will wait. The Stonebridge road runs right past the Ford Chapel, and she wants no part of walking by an open slab. They'll join Tobias's cart after the barrow is sealed and ride south with the mule. Wren takes it better than you feared, since it means she sees the sealing from the road, at a distance, and Corwin doesn't say no.
+
+You spend the evening as you said. Tessa is asleep upright against Ilsa's shoulder, her breath easy and even. Ilsa's cough is nearly gone, and her husband Garrick is due tomorrow or the day after. Osric's arm is closed to a pink seam, and he unwinds the dressing himself to show you. Corwin sets the watch, and you lay out your pallet in the chapel. Wren sweeps the floor in a wide circle around you until Hale calls her home, and she goes without argument.
+
+You sleep, and the long rest takes you. You wake at ten to five on Day 9 with 17 of 17 hit points, all three 1st-level slots, and Channel Divinity ready. The lantern by the altar is still burning. It is cold and dark outside, and the river runs loud over the weir. In the lane, you can hear the mule stamping and Corwin's low voice, and a pale line of light is just coming over the hills.
+
+Your prayers are Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, and Protection from Evil and Good, with Bless and Cure Wounds always ready. You may change them now.
+
+Do you prepare the same list, and how do you want to set out and arrange the party at the chapel?
+
+=== REPLY cleric2-85-10 ===
+  [hidden call] write_lore: {"entry": "Maud Marrow", "add_to_description": "Day 8 night: Decided with Brannoc that she and Wren will wait until the Ford Chapel barrow is sealed before leaving for Stonebridge, since the road pass
+Your question: they will wait. Maud and Wren were to leave in two days, which is now. But the Stonebridge road runs past the Ford Chapel, and Maud won't walk a girl of twelve past an open slab. She says so with her mouth set, and Corwin agrees. So the trip begins once the barrow is sealed, and the two of them can ride behind Tobias's mule and be dropped at Stonebridge's gate.
+
+The evening is a long one. You see Ilsa and the baby, and Tessa's breath is easy and even at a slow sixty. You check Osric's arm, and it has closed clean to the wrist. You tell the crew again, at supper in the dye-shed, that nobody goes near the slab alone and nobody goes down, and that if anything stirs they drop their tools and fall back to the cart. Corwin repeats it to the others, word for word, like a man reading a charge. Wren sweeps the chapel around you until her mother comes for her.
+
+You sleep on the pallet under the plain stone altar. You wake at ten to five on Day 9 with full hit points, all three 1st-level slots, Channel Divinity ready, and your prepared list as it stands. A bowl of porridge sits by the altar with a twist of blue wool on its spoon, as before. The lane outside is grey and cold, and the cart is already waiting at the corner, with Tobias in the box, Corwin walking beside the mule, and Osric with a crowbar over his shoulder. Wren stands at the edge with a lantern.
+
+You're 100 XP short of level 3. The ford is two hours up the road, and the slab is as you left it.
+
+What does Brannoc do?
+
+=== REPLY cleric2-85-11 ===
+Maud and Wren can go either way, because the Ford Chapel lies north of Greywater and Stonebridge lies south, so the road to the bonesetter doesn't pass it. Maud says her loom order will be done by tomorrow noon in any case. She'll leave with Wren in the afternoon, once she's seen the work done and heard that you're all home, and not before. "I'll not go down the valley with a hole open behind me," she says.
+
+You thank everyone and give your orders plainly: nobody near the slab alone, nobody goes down, and if anything stirs, drop the tools and fall back to the cart. Corwin repeats it back to the men in his slow, careful voice. Osric says that after the dye vats he's not afraid of much, but he'll do as he's told.
+
+The evening is quiet. You count Tessa's breaths at Ilsa's window. They are slow and even, and she grabs your finger in her sleep. Ilsa has her colour back and her cough is mostly gone. Osric's arm has closed well, and Wren's linen is spotless. Then you sleep in the chapel, with the swept floor around you and the plain altar at your head. You wake at ten to five on Day 9, rested, at 17 of 17 hit points, with all three 1st-level slots and Channel Divinity. You may change your prepared prayers.
+
+Outside, the village is gray and still, and breath hangs in the air. Corwin and Osric are loading the cart by lantern-light with rope, crowbars, clay, wedges and a sack of the village's oil. Tobias is harnessing the mule. Wren stands by the altar with the lantern ready, and she doesn't ask again if she can come.
+
+What does Brannoc do?
+
+=== REPLY cleric2-85-12 ===
+On Wren and Maud: they had meant to leave for Stonebridge today. Maud tells you flatly that she'll wait one day, because their road runs straight past the Ford Chapel and she'll not walk a twelve-year-old by an open grave. They'll leave when you've sealed it, and walk together behind your cart.
+
+The evening is quiet. Ilsa has Tessa on her shoulder and the baby sleeps easily, without a rattle, and Ilsa herself is breathing deeper. Osric's arm is closed and clean, and he flexes his fingers and tells you the dye-vat will have to wait another fortnight. Perrin watches you from his stool, says nothing about his hip, and grunts when you nod to him.
+
+Wren sweeps the chapel around your pallet again and sets the lamp by the altar before she goes. Her father has told her she may bring the lamp, but only as far as the cart. You hum Edda's hymn until the room is dark.
+
+You wake at ten to five on Day 9, rested and clear. You're at 17 of 17 HP, with all three 1st-level slots and Channel Divinity restored. Your prepared list is unchanged. Outside the chapel the cart is waiting in the grey, with Tobias at the mule's head and Corwin, Osric and the apprentice Fenn loading rope, crowbars, clay, and Maud's lamp-oil. Wren stands at the tail of the cart with her chin up, as if daring anyone to send her home.
+
+It's ten to five on Day 9. The Ford Chapel is two hours' cart-ride south, and the light will come up on the way.
+
+What does Brannoc do?

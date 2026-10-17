@@ -1,0 +1,177 @@
+GAME cleric2, ROUND 114
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 111 ==
+PLAYER: I go straight to Sedge and cast Lesser Restoration on him with a 2nd-level slot, then do the same for Gammer Hild Pike. "Those two were the likeliest to die tonight, Goodwife Rush."
+
+Then I turn to Ode. "Your pallets are stuffed with the Isle reeds, and so is the thatch on the roofs. I think that's what is making your people ill. Have Gorm and Wick carry out every bundle and burn them away from the village, and boil all drinking water. With that done, I'll tend the rest with willow-bark, honey and my hands, and sit with them through the night."
+  [game] sheet: Brannoc casts Lesser Restoration at level 2; level-2 spell slots: 1/2
+  [game] sheet: Brannoc casts Lesser Restoration at level 2; level-2 spell slots: 0/2
+  [game] dice Brannoc's Medicine tending the sixteen other sick through the night with willow-bark, honey, water and nursing, DC 13: 1d20+5 = 1d20 [12] + 5 = 17
+  [game] time: 18 hours 10 minutes later: Day 14, 7:00:06 AM
+  [DM write_lore (hidden)] {"entry": "Ode Rush", "add_to_description": "Day 14 dawn: Brannoc cured Sedge and Hild Pike with Lesser Restoration; Ode saw Sedge's fever break and now trusts him. Reed bundles burned on a mud-flat away from the village; water boiled. No more deaths overnight. She asks him to find Jory but will not give permission to go to the Isle by night."}
+  [game] notebook: updated Ode Rush
+DM: You go to Sedge first. He is hot as a coal, mumbling, his wrists spotted. You lay your hand on his brow, say the prayer, and the warmth goes in. Then you go to Gammer Hild, tiny and dry as a leaf in her pallet, and do the same. That uses both your 2nd-level slots. The two of them settle, and their breath goes slow and even, and Sedge opens clear eyes and asks, hoarse, whether he's missed the market.
+
+Ode has watched all of it from the door. She says nothing for a long moment, and then, "Gorm. Wick. Do as he says." The men carry out every bundle and burn them on a mud-flat well away from the stilts, a rank smoke with a green tinge at its core. The thatch bundles go too. A pot is set on every fire. You tell her plainly that the burning is only a guess, and that if the sick keep falling you'll look elsewhere.
+
+Then you sit with the rest, sixteen of them, through the long afternoon and the night. Medicine (17): willow-bark in warm water, honey, clean boiled water in small sips, and cool cloths, and you move from pallet to pallet humming low. Nobody dies. By the small hours fevers have begun to turn all along the rows, one and then another, with the cool sweat breaking on foreheads. Marta takes the cloths and the cups without being asked. Wenna, a thin worn woman with Marta's chin, brings Dab in his blanket, flushed but cheerful. At dawn Ode comes in and stands over Sedge's cot a long time. She puts her scarred hand on the boy's head, briefly, and takes it away.
+
+It's seven in the morning on Day 14. You are tired but steady. You have four 1st-level slots and no 2nd-level slots, and Channel Divinity. You have been awake a day and a night, so you could sleep, and a long rest would restore your 2nd-level slots by mid-afternoon. Ode wants to speak with you about her nephew. The Isle is a mile out across the fen, and the Wick-fires have been seen in daylight mist from the landing this morning.
+
+What does Brannoc do?
+
+== ROUND 112 ==
+PLAYER: I wash my face, drink a cup of boiled water, and sit with Ode by the Long House door. "Goodwife, tell me about Jory: why he went, and what he took with him. Then I'll sleep a few hours so my prayers come back, and we'll talk about the Isle after."
+
+I'll ask her to have someone watch the landing and keep the fires burning, and to wake me at once if the Wick-fires come closer to the village. DM: the sick all seem to be turning, so can I count the fever as broken for the sixteen I nursed?
+  [game] time: 30 minutes later: Day 14, 7:30:06 AM
+  [game] sheet: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 14, 3:30:06 PM
+  [DM write_lore (hidden)] {"create": "Jory Rush", "kind": "person", "description": "Nineteen-year-old nephew of Ode Rush, a reed-cutter. Sure the Wick-fires were marsh-gas; crossed to the Hollow Isle alone by skiff on Day 9 dusk with a lantern, a rope, two eel-spears and candle-stubs, to fetch back the cutters' lost knives and a bundle of tools left on the Isle, and to prove the lights harmless. Never returned. Fate unknow
+  [game] notebook: created an entry for Jory Rush; added 2 relationships to Jory Rush
+DM: Your question first. For most of them, yes, the turn has begun. Fevers have broken in fourteen of the sixteen you nursed, with the cool sweat and the easing breath. Two, an elderly cutter named Bram Hale and a mother of four named Dessa Pike, are still hot and dangerous. They are holding, but I wouldn't call them out of danger. Fever that turns can turn back, and they need watching.
+
+You wash your face, drink a cup of boiled water, and sit with Ode on the step. She tells it plainly, looking out at the fen. Jory is nineteen, her late husband's sister's boy, and she raised him from twelve. He was sure the Wick-fires were marsh-gas and nothing more. On Day 9 he crossed to the Isle at dusk alone in his skiff, to prove it and to fetch back the cutters' lost knives and a bundle of tools left behind. He took a lantern, a rope, two eel-spears, and a handful of candle-stubs. "I told him no," she says. "He's a boy. He heard it as a dare."
+
+You ask her to keep a watch at the landing and keep the fires burning, and to wake you if the lights come closer. She nods. Then you lie down on a pallet in the Long House's quiet end and sleep. The rest runs from half past seven to half past three. Nobody wakes you.
+
+You wake at half past three in the afternoon with 24 of 24 hit points, four 1st-level slots, two 2nd-level slots, and Channel Divinity ready. Your prepared list is unchanged, and you may change it. The sick are better, though Bram and Dessa still burn. The village has burned the last of the bundles. Marta is on her feet, and Sedge is sitting up with a bowl of broth. Ode stands at the landing, looking out across the water. The mist has not lifted all day, and the watcher says the Wick-fires showed at noon, three of them, low over the Isle's west side, nearer than before.
+
+It's half past three on Day 14. There are about two hours of good light left. Ode is waiting for you.
+
+What does Brannoc do?
+
+== ROUND 113 ==
+PLAYER: Before anything else I go to Bram Hale and Dessa Pike, still burning, and cast Lesser Restoration on each of them, using both my 2nd-level slots. Then I walk down to the landing and stand beside Ode. "Goodwife, the fever is breaking in the village. Now let's talk about getting Jory back, and I won't cross the water tonight."
+
+I'll ask her for the best poler in Reedholm and a daylight look at the Isle from the water's edge, with rope, oil, and two reed-cutters who know the channels. DM: do I have time before dusk to scout the Isle's south tip from a skiff, and what does the Hollow Isle look like from the landing?
+  [game] sheet: Brannoc casts Lesser Restoration at level 2; level-2 spell slots: 1/2
+  [game] sheet: Brannoc casts Lesser Restoration at level 2; level-2 spell slots: 0/2
+  [game] dice Brannoc's Perception studying the Hollow Isle from the landing, DC 13: 1d20+3 = 1d20 [19] + 3 = 22
+  [DM write_lore (hidden)] {"create": "Hollow Isle", "kind": "place", "description": "Low reed-fringed island about a mile west-northwest of Reedholm's landing, a drowned barrow mound of the Sleepers' Chain. A grassy hump about forty paces long, ringed by thick reeds, with a fallen standing stone at its west end and a dark gap in the mound's flank facing west. The reeds cut there two weeks ago released a grave-sickness (the
+  [game] notebook: created an entry for Hollow Isle; added 3 relationships to Hollow Isle
+  [game] time: 25 minutes later: Day 14, 3:55:06 PM
+DM: You go to Bram Hale first, an old cutter with a white beard drenched in sweat, and lay your hand on his brow. Then you go to Dessa Pike, whose four children watch from the corner with enormous eyes. Both prayers take, and both burning bodies go slack and cool. Bram groans and asks for water. Dessa weeps and reaches for her youngest. That's both your 2nd-level slots spent, and everyone in the Long House is now out of danger.
+
+You walk down to the landing and stand beside Ode, and tell her what you told yourself: the fever is breaking, and Jory is next, but you won't cross the water tonight. She nods slowly. She says her best poler is Wick Hale, who knows every channel in the fen, and that he and Gorm will go with you. There is a skiff on the staithe, and rope, and she'll not stop you. She does not say thank you. She says, "You came when no one else did," and looks at the water.
+
+The Hollow Isle, from the landing: a mile out across the fen, a low reed-ringed hump about forty paces long, grey-green in the mist, with a grey standing stone fallen at its west end. Perception (22): the reeds on the south tip are cut back in a raw swathe where the cutters worked, and a skiff's bow-mark runs in the mud there. On the west flank is a dark gap, low and square, like a door half sunk in the earth. And there are the Wick-fires: three pale green-white glows hanging low over the west side, still and steady even in daylight. They don't flicker like fire or drift like gas. The reeds near them are grey, as if all colour had been drawn out.
+
+It's five to four on Day 14. The trip is about forty minutes each way by skiff, so there's time to scout the south tip and return before dusk, which falls near half past five. You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. Wick and Gorm wait at the staithe.
+
+What does Brannoc do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 114, "category": "format", "severity": 1, "quote": "your Perception is a natural 1, a 4 in all", "why": "Dice talk in the narration."}
+{"round": 114, "category": "clock", "severity": 1, "quote": "at the earliest a quarter past three in the afternoon", "why": "The long rest finished at 3:30:06 PM (R112), so the next can finish at half past three; R115 says half past three."}
+
+THE PLAYER'S LINE THIS ROUND: I'll go, but only to scout. "Wick, Gorm, we pole to the south tip, look from the water, and turn back at the first sign of the lights moving. Nobody lands after four-thirty, and nobody goes near that west door."
+
+I'll bring the rope, the hooded lantern, and a few flasks of oil, and keep Shield of Faith ready. I'll watch the bow-mark and the cut reeds for Jory's skiff or any sign of him. DM: can I see from the water whether Jory's skiff is still tied up at the south tip?
+
+=== REPLY cleric2-114-01 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:35 PM: Brannoc scouted from the water with Wick Hale and Gorm. Jory's skiff is tied at the south tip, half-sunk, a faint rope-mark leads from 
+Wick poles the skiff out through the channels in the thin mist. Gorm sits in the bow with a reed-knife and says nothing. The fen is silent, only the pole dipping and the drip of water. The Isle grows from a grey smudge into a hump of green and reeds. You hold your shield on your arm, with the hooded lantern, rope and flasks at your feet, and Shield of Faith ready on your lips.
+
+You come in by the south tip and hold off thirty paces in open water, as you said. Perception (9): you see the raw swathe of cut reeds, and a skiff tied there, low in the water and half-sunk, with its painter trailing into the weeds. Beyond that, the reed-tops and the mist blur together and tell you little. What you miss, Wick catches. He lifts a hand sharply, and the three of you go still. From far off, from somewhere in the mound, comes a thin human cry, hoarse and broken, a single word. "...Ode..."
+
+Wick goes white. "That's Jory." He whispers it.
+
+At the same moment, the three pale lights over the west side, which have hung still all day, begin to slide. They come around the Isle's south flank toward the skiff, slow and even, as if someone had noticed you.
+
+It's twenty-five to five on Day 14. Dusk is an hour off, but the lights are moving, and you set the rule yourself: turn back at the first sign. You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. Jory is alive, and the lights are coming.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-02 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:30 PM: from the water Brannoc saw Jory's skiff drawn up on the south tip, empty, lantern smashed on the stones, one eel-spear stuck upright in
+You take the rope, the hooded lantern, and three flasks, and climb into the skiff with Wick at the pole and Gorm in the bow. You tell them again that nobody lands, and nobody goes near that west door. Wick poles in silence for forty minutes through channels you would never find alone. The reeds close behind the skiff like a curtain, and the mist beads on your shield.
+
+At half past four you glide to a stop a stone's throw off the Isle's south tip. Perception (19): Jory's skiff is there, drawn up on the mud, empty. His lantern lies smashed on the stones, and one eel-spear is stuck upright in the mud like a marker. From the skiff, a trail of crushed reeds and boot-prints runs round the east flank toward the west door, and no more than that. There is no sign of Jory, living or dead, and no blood. A cold draught breathes round the Isle's flank, and the reeds on that side are the grey of old ash. The Wick-fires hang over the west side, three pale glows. They hold still, and they do not come near.
+
+Gorm whispers that the boy was careless, and that the boy was brave, and that they are the same thing. Wick says nothing at all. You do as you said and turn back at once. The pole drips, the mist thickens, and the grey light goes. By a quarter past five you are at the staithe, and Ode is standing on the plank walk waiting, her pole-hook in her hand. She sees your face and asks nothing.
+
+It's a quarter past five on Day 14, and dusk is a quarter-hour off. You have four 1st-level slots and no 2nd-level slots, and Channel Divinity. You can't reach the full-prayer rest until the morning. Jory's trail leads to the west door. Bram and Dessa are cooling, and the village is out of danger.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-03 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:35 PM: Brannoc scouted from the water with Wick and Gorm Hale (Perception 6, saw little himself). Wick spotted Jory's skiff pulled up empty in
+Wick Hale poles the skiff with long, quiet strokes, and Gorm sits in the bow with a reed-knife across his knees. You have the rope, the hooded lantern, and three flasks of oil at your feet. The mist closes behind you until the landing is a smudge, and the only sounds are the pole in the water and the hiss of the reeds.
+
+Perception (6): you see very little yourself. The south tip is a wall of grey reeds in the failing light, and to your eyes it is all one colour. Wick, who has cut these reeds for twenty years, sees what you cannot. He lifts two fingers and points without a word.
+
+Jory's skiff is there, pulled up empty in the cut reeds, its painter tied to a stake. A burned-out lantern sits on the thwart, and the two eel-spears are gone. A trail of boot-prints runs from the bow north along the flank of the mound, then bends west, toward the dark gap you saw from the landing. That is as much as the water shows.
+
+You don't linger. When you do hold a moment to look, one of the Wick-fires lifts from the west side and slides a few paces toward you across the reeds, pale and soundless, and the reeds beneath it go grey as ash. Gorm mutters a charm. It is half past four, your own cutoff, and you say turn back. Wick turns the skiff without argument. The light follows you for a little way, then stops and hangs, and you leave it behind in the mist.
+
+You are back at the landing at a quarter past five, with dusk coming on. Ode is waiting at the staithe with her arms folded. You tell her what you saw: the skiff, the trail, the dark door. You say Jory may still be alive, since his boot-prints go toward the mound and not away, and nothing was left to tell otherwise. She hears you out without a word and then nods once.
+
+You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. You can't rest again until tomorrow afternoon at the earliest, as the last long rest ended at half past three today. Dessa and Bram are sleeping easy, and the Long House is quiet.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-04 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:35 PM: Brannoc scouted from a skiff (Perception 20) with Wick and Gorm Hale. Jory's skiff is drawn up on the south tip, hull sound, painter ti
+You pole out with Wick at the stern and Gorm in the bow. Wick knows every channel, and he brings the skiff through the reeds without a sound. You carry the rope, the hooded lantern, and a few flasks of oil. The fen is silent but for the knock of the pole. The mist lies thick, with the Isle a grey hump that grows out of it slowly.
+
+At about half past four, you come in sight of the south tip, and you hold the skiff off thirty paces out, as you said you would. Perception (20): there is a skiff drawn up on the mud, its painter tied to a stump. The hull is sound, the oars still shipped. It is Jory's, Wick confirms in a whisper. A lantern lies broken beside it, its glass in the mud. One eel-spear is stuck upright in the bank, as if dropped, and a trail of crushed reeds leads from it round the flank toward the west. There is no body, and no blood you can see. The cut swathe is raw and pale.
+
+And the lights move. As the skiff nears, the three pale glows over the west side drift a few paces toward the south tip, slow and steady, then stop. Gorm's pole-hand trembles. You hold up a hand. This is your sign, and you take it. "We turn back," you say, low. Wick doesn't need telling twice. You back water in silence, and the glows hang where they stopped, then slowly drift back. The mist closes over the Isle.
+
+You are back at the landing at a quarter past five, light failing. Ode meets you on the planks and reads your face. You tell her what you saw: Jory's skiff, the broken lantern, the dropped spear, and the trail toward the west. No body, and no blood. She is quiet a long while. "Then he walked," she says. "He walked on."
+
+It's a quarter past five on Day 14. You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. You can't finish a long rest before half past three tomorrow afternoon. The Isle waits, with the Wick-fires on its west side. Dusk is minutes away.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-05 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:40 PM scouted from the water: Jory's skiff is hauled up empty on the south tip, his lantern smashed, one eel-spear stuck upright in the mud; b
+You take the rope, the hooded lantern, and four flasks. Wick poles the skiff and Gorm sits in the bow with a boat-hook. You set a shield of faith in your mind, but you don't cast it yet, since it would only run down the clock. The fen is silent in the mist, with the reeds closing in on either side. Wick knows every channel, and the poling is soft and sure. In forty minutes you are at the Isle's south tip.
+
+Perception (16): Jory's skiff is there, hauled up on the mud at the water's edge, empty. His lantern lies smashed on the thwart, and one eel-spear stands upright in the mud like a marker. His boot-prints lead up the shore and around the flank of the mound toward the west, and beside them runs a long dragging smear, as if something was pulled, or someone crawled. The cut reeds on the south tip are grey as ash.
+
+You're a stone's throw off, holding the skiff still, when the Wick-fires rise. There are three pale green-white lights, low over the west side. They lift without sound and begin to drift toward you, slow and steady, across the water. They do not flicker. Wick swears under his breath. It is a quarter to five, and you said you would turn back at the first sign they moved. You do. Wick bends to the pole, and the skiff slips away through the channels. The lights follow, a long way, and then they stop at the edge of the reed-beds, hanging low, and hold there, watching. Wick says he has never seen them leave the Isle before.
+
+You reach the landing at a quarter past five, as the light goes grey. Ode is waiting. Nobody is hurt. You know where Jory landed, and that the drag-marks lead toward the west gap. You've seen the lights hunt, and they will come at night. You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. The village's sick are mending, and Dusk is near.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-06 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:30 PM: Brannoc scouted from the skiff with Wick Hale and Gorm (Perception 8). Jory's skiff lies tied in the reeds at the south tip, empty, its
+You take the rope, the hooded lantern, and four flasks of oil, and step into the skiff with Wick at the pole and Gorm in the bow. The fen is silent but for the knock of the pole and the drip of water from it. Reeds close in on both sides. The mist lies low and cold, and you can taste it.
+
+At the south tip you ship the pole and drift, thirty paces off, as agreed. Perception (8): you can't make out much through the mist. The cut swathe is there, raw and pale, and beyond it a dark tangle of reed. You think you see a shape low in the water by the shore, but it could be a log. Wick, who has better eyes, says quietly that it's a skiff, tied off in the reeds, empty. There's no lantern on its hook. A track of trampled reed runs from it inland, toward the west side. He doesn't say it's Jory's, but his voice does.
+
+Then the light changes. The three green-white glows over the west flank, which hung still all day, shift together, a hand's breadth, toward you. The reeds near them go still. The air turns colder, and Gorm's breath smokes. Wick reaches for the pole without being told. You said you'd turn back at the first sign of the lights moving.
+
+It's twenty to five on Day 14. You have four 1st-level slots, no 2nd-level slots, and Channel Divinity. The skiff is thirty paces from the south tip. Dusk is under an hour off.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-07 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:45 PM: Brannoc scouted from a skiff (Perception 19). Jory's skiff is pulled up in the cut reeds at the south tip, empty and unharmed, with a l
+Wick poles the skiff through narrow lanes in the reeds, and Gorm sits in the bow with a spear across his knees. Neither speaks. The water is black and still, and the reeds are dry and loud against the hull. You sit amidships with your shield on your arm, a flask of oil by your knee, the rope coiled, and the hooded lantern lit but dimmed. The village shrinks behind you to a smudge of smoke.
+
+It takes you fifty minutes, slow and careful, to reach the Isle's south tip. You keep forty paces off and let the skiff drift.
+
+Perception (19): Jory's skiff is there, pulled up neat in the raw swathe of cut reeds, empty and unharmed. A lantern lies beside it, burnt out. The cutters' knives and a bundle of tools lie in a heap not ten paces off, untouched, so he never got his errand done. Boot-prints lead up from the boat through the cut stubble and then bend away around the mound's flank toward the west. Beside them runs a drag-mark, two parallel furrows in the mud, as of a man dragged by the heels, or a man too weak to walk.
+
+The Wick-fires hang where they were, three low pale glows over the west side. They hold still. They don't come nearer. The reeds around them are bleached and grey. It's cold here, a damp, bone-deep cold, though the air is not moving.
+
+It's a quarter to five on Day 14. Dusk is about forty minutes off. Wick whispers that he doesn't like the quiet, and Gorm has gone pale. You have four 1st-level slots and no 2nd-level slots. Channel Divinity is ready, and you have rope, oil and the lantern. The boat is by the shore, and you could take Jory's trail around the flank by water, or turn back now.
+
+What does Brannoc do?
+
+=== REPLY cleric2-114-08 ===
+  [hidden call] write_lore: {"entry": "Hollow Isle", "add_to_description": "Day 14 ~4:35 PM: Brannoc scouted from a skiff poled by Wick Hale, with Gorm. Jory's skiff lies drawn up on the south tip, empty, lantern gone; his boot-
+Wick Hale poles the skiff out through the channels with long, silent strokes, and Gorm sits in the bow with a spear. The mist lies low and the water is black and still. You have the rope coiled at your feet, the hooded lantern shuttered, and three flasks of oil in your lap. Nobody speaks. The reeds slide by, grey at the tips.
+
+Perception (19): as you come in sight of the south tip, you see it all. Jory's skiff is drawn up on the mud, empty and dry, with the lantern gone from the thwart. Boot-prints lead up the shore from it, a young man's stride, to the cut reeds and on toward the west flank. At one place they stop and turn back, a few steps toward the boat, and then go on again. They do not come back down. The cut swathe is raw and pale, and the reeds near the skiff are grey, with no green left in them. The three Wick-fires hang still over the west side, steady as lamps. As you watch, one of them drifts slowly a hand's breadth toward you and settles again.
+
+Gorm whispers, "It saw us." Wick is already backing the pole.
+
+You are fifty paces from the shore, and it's thirty-five minutes past four, with the light going gold. The cold off the water is strong. You haven't landed, and the lights haven't moved toward you. You have four 1st-level slots, no 2nd-level slots, Channel Divinity, and Shield of Faith ready.
+
+What does Brannoc do?

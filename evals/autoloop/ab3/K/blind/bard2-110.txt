@@ -1,0 +1,245 @@
+GAME bard2, ROUND 110
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 107 ==
+PLAYER: I whisper to Kit and Tamsin, "He's watching a dark house, so let's make him think it's asleep." I light nothing, have us all lie low through the first half of the night, and plan a trap for the second: Kit at the byre door, Tamsin with her hook at the ferry shed, me at the east shutter with Faerie Fire ready if anyone approaches, and Annis kept safe behind the hearth.
+
+If he sends a scout, I'll cast Faerie Fire on him in the dark so Kit can take a shot, then call out in my best fishwife voice, "Ferry's closed till morning, friend!"
+  [DM lookup (hidden)] {"name": "Faerie Fire", "kind": "spell"}
+  [game] dice Scout's Stealth creeping up on the dark shrine-house (my ruling +4): 1d20+4 = 1d20 [8] + 4 = 12
+  [game] dice Wren's Perception at the east shutter, awake on watch, after midnight: 1d20+2 = 1d20 [9] + 2 = 11
+  [game] time: 6 hours later: Day 12, 12:32:12 AM
+  [DM write_lore (hidden)] {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:30 AM: creeps from the byre side toward the shrine-house's dark door on foot, hooded, a hand crossbow at his belt (Stealth 12). Wren (Perception 11) missed him; Kit's passive 13 caught him."}
+  [game] notebook: updated Sparrow's Watcher
+DM: You bar the shutters, light nothing, and let the house go cold and silent. Tamsin gets Annis behind the hearth with a blanket and the cat. Kit takes the byre door, and Tamsin takes the ferry shed with her hook. You sit by the east shutter with an eye to the crack and your breath slow. The first half of the night is long, and nothing moves but the river and the reeds.
+
+It is half past midnight, with no moon, when the crack in the shutter shows you nothing at all. Your Perception check is an 11, and the dark yard stays empty to you. But Kit's low voice carries from the byre, hardly more than breath: "Door. Left of the water-butt. Hooded. One."
+
+You squint where she means, and your darkvision finds it. There is a hooded shape, low against the wall, easing along the shingle toward the shrine's dark door, with something small and black held at his hip. He hasn't seen the byre. He is thirty feet from you, well inside the spell's range, and in the open yard.
+
+You're at the east shutter with Faerie Fire ready, three slots, and Kit's crossbow loaded. Tamsin is a shadow near the ferry shed. He takes another slow step. What does Wren do?
+
+== ROUND 108 ==
+PLAYER: I ease the shutter open a finger's breadth and cast Faerie Fire on the hooded shape, outlining him in cold violet light so Kit can see every move. Then, in my best gruff fishwife voice, I call out, "Ferry's closed till morning, friend! State your business or the hook comes down!"
+  [DM lookup (hidden)] {"name": "Combat Step by Step"}
+  [DM lookup (hidden)] {"name": "Scout", "kind": "monster"}
+  [DM lookup (hidden)] {"name": "Surprise"}
+  [game] dice Wren's Stealth at the shutter vs scout's passive Perception 15: 1d20+3 = 1d20 [12] + 3 = 15
+  [game] dice Kit's Stealth in the byre (chain mail: disadvantage) vs scout's passive Perception 15: 1d20+2 (disadvantage) = 1d20 [14, 9]→9 + 2 = 11
+  [game] dice Wren's initiative (DEX +2, Jack of All Trades +1): 1d20+3 = 1d20 [12] + 3 = 15
+  [game] dice Kit's initiative: 1d20+2 = 1d20 [19] + 2 = 21
+  [game] dice Scout's initiative: 1d20+2 = 1d20 [4] + 2 = 6
+  [game] fight: Fight started. Order: Kit (21), Wren Ashgrove (15), Scout (6). Nobody has had a turn yet: next_turn starts the first one.
+  [game] fight: Round 1, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM lookup (hidden)] {"name": "Ready", "kind": "rule"}
+  [refused] fight: Kit's HP and conditions live on their sheet: use change_pc with who
+  [game] fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] sheet: Wren casts Faerie Fire at level 1; timer Wren's Faerie Fire: 1 minute; level-1 spell slots: 2/3; concentrating on Faerie Fire (Wren Ashgrove has used its action: no more actions this turn.)
+  [game] dice Scout's DEX save vs Faerie Fire, DC 13: 1d20+2 = 1d20 [6] + 2 = 8
+  [game] dice Kit's readied crossbow shot at the lit Scout (advantage from Faerie Fire): 1d20+4 (advantage) = 1d20 [16, 14]→16 + 4 = 20 (Kit has used its reaction: no more reactions until the start of its next turn.)
+  [game] dice Kit's crossbow damage on the Scout: 1d8+2 = 1d8 [1] + 2 = 3
+  [game] fight: Scout took 3: HP 16 → 13
+  [game] fight: Round 1, now: Scout. Scout (initiative 6): HP 13/16, AC 13 Scout's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] fight: Round 2, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's crossbow shot at the lit Scout (advantage): 1d20+4 (advantage) = 1d20 [8, 13]→13 + 4 = 17 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's crossbow damage on the Scout: 1d8+2 = 1d8 [1] + 2 = 3
+  [game] fight: Scout took 3: HP 13 → 10
+  [game] fight: Round 2, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: The shutter opens a finger's breadth, and you say the spell's word. A violet glow bursts across the yard and picks out the hooded man in cold light, with every fold of his cloak and his hand on a small crossbow standing clear against the dark wall. Your gruff fishwife's voice rings out: "Ferry's closed till morning, friend! State your business or the hook comes down!"
+
+He had no warning. Your spell uses one slot (two left), and he fails his Dexterity save with an 8, so he stays lit. He's so startled that he freezes where he stands.
+
+Kit's readied crossbow takes him in the shoulder for 3, and her second shot in the next breath hits for 3 more. He's hurt, though not badly. He is still on the shingle in the violet light, ten paces from the shrine door, and he hasn't yet acted. Tamsin's hook shifts in the dark by the ferry shed.
+
+It's round 2, your turn. You hold Faerie Fire with your concentration, and you have two slots, three Bardic Inspirations, a rapier, a dagger, Vicious Mockery, and Kit's crossbow still ringing. What does Wren do?
+
+== ROUND 109 ==
+PLAYER: I keep the shutter cracked, point at the lit figure, and snap Vicious Mockery at him in my fishwife's rasp: "Nice light on you, friend, it's the first time your face has been worth looking at!" Then I hum a bar of the road song and spend a Bardic Inspiration on Kit as a bonus action, calling out, "Drop the crossbow or Kit puts the next one through your hat!"
+  [DM lookup (hidden)] {"name": "Vicious Mockery", "kind": "spell"}
+  [game] dice Scout's WIS save vs Vicious Mockery, DC 13: 1d20+1 = 1d20 [13] + 1 = 14
+  [game] sheet: Bardic Inspiration: 2/3 (Wren Ashgrove has used its bonus action: no more bonus actions this turn.)
+  [game] sheet: Wren casts Vicious Mockery (Wren Ashgrove has used its action: no more actions this turn.)
+  [game] fight: Round 2, now: Scout. Scout (initiative 6): HP 10/16, AC 13 Scout's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [DM lookup (hidden)] {"name": "Cover", "kind": "rule"}
+  [game] dice Scout's first hand-crossbow shot at Wren in the shutter gap (three-quarters cover, AC 18): 1d20+4 = 1d20 [16] + 4 = 20 (Scout has used its action: no more actions this turn.)
+  [game] dice Scout's second hand-crossbow shot at Wren (AC 18): 1d20+4 = 1d20 [16] + 4 = 20
+  [game] dice Scout's first shot damage on Wren: 1d6+2 = 1d6 [1] + 2 = 3
+  [game] dice Scout's second shot damage on Wren: 1d6+2 = 1d6 [5] + 2 = 7
+  [DM lookup (hidden)] {"name": "Concentration", "kind": "rule"}
+  [game] sheet: took 3 damage: HP 17 → 14; Wren is concentrating on Faerie Fire: Constitution saving throw, DC 10 (10 or half the damage, whichever is higher); on a failure, end it with concentration_end (and remove the spell's timer)
+  [game] dice Wren's concentration save (CON) after 3 damage, DC 10: 1d20+2 = 1d20 [10] + 2 = 12
+  [game] sheet: took 7 damage: HP 14 → 7; Wren is concentrating on Faerie Fire: Constitution saving throw, DC 10 (10 or half the damage, whichever is higher); on a failure, end it with concentration_end (and remove the spell's timer)
+  [game] dice Wren's concentration save (CON) after 7 damage, DC 10: 1d20+2 = 1d20 [19] + 2 = 21
+  [game] fight: Round 3, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Kit's crossbow shot at the lit Scout (advantage): 1d20+4 (advantage) = 1d20 [16, 10]→16 + 4 = 20 (Kit has used its action: no more actions this turn.)
+  [game] dice Kit's crossbow damage on the Scout: 1d8+2 = 1d8 [4] + 2 = 6
+  [game] fight: Scout took 6: HP 10 → 4
+  [game] fight: Round 3, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+DM: Your insult bounces off him. He keeps his nerve, and his face stays hidden under the hood. Kit's Inspiration die is ready on her shoulder, though she doesn't need it yet.
+
+The scout's answer is quick and professional. He shoots twice at the shutter gap, through a crack no wider than your finger. Both bolts find it, 3 and 7. You drop to 7 of 17, and your ears ring. Faerie Fire holds on both concentration saves (12 and 21). The violet light still clings to him.
+
+Kit's next bolt takes him low in the ribs for 6. He is staggering now and bleeding through his sleeve, but he's still on his feet in the yard, half-turned toward the dike, where his pale horse waits somewhere beyond the crest. He is about thirty feet from you and well within Kit's range.
+
+It's your turn in round 3. Faerie Fire has about 40 seconds left. You are at 7 of 17 hit points, with two 1st-level slots and two Bardic Inspirations. What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 110, "category": "contradiction", "severity": 1, "quote": "where his horse is a dark mile away", "why": "Earlier the watcher sat the dike 'a quarter mile off' (R106) and the horse waits 'beyond the crest' (R109)."}
+
+THE PLAYER'S LINE THIS ROUND: I drop below the sill, cast Healing Word on myself as a bonus action to patch my ribs, and then pop up and snap Vicious Mockery at him again: "You're bleeding, friend, and the horse is farther than the hook!"
+
+Aloud to the whole yard I add, "Surrender now, and you'll leave with a bandage and your life. Run, and Kit shoots you in the back."
+
+=== REPLY bard2-110-01 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: fought at Reedlow (Scout stat block, hand crossbow); brought to 4 HP by Kit's crossbow and surrendered, dropping his weapon. Pri
+You duck below the sill and say the Lantern-Bearer's word to your own ribs. The stinging in your side eases, and you heal 7 to 14 of 17, with one slot left. Then you pop up at the gap and call it across the yard, loud enough for the whole village: "Surrender now, and you'll leave with a bandage and your life. Run, and Kit shoots you in the back."
+
+Your insult about the horse lands on stone. His Wisdom save is a 15 and he shrugs it off. But the rest of it lands. He stands in the violet light with blood running down his sleeve, looks at the dike where his horse is a long way off, and hears Kit's crossbow ratchet in the dark behind him. Tamsin steps out of the ferry-shed shadow with the hook up and says nothing. It's quite enough.
+
+The little crossbow clatters onto the shingle. He drops to one knee with both hands raised. "All right," he says, hoarse, young, with the accent of the lower river. "All right, mistress. I yield."
+
+You release Faerie Fire, and the cold light fades from him. The fight is over in eighteen seconds. You get 100 XP for the scout, so you have 475 of 900.
+
+He is a lean, hooded man in his twenties. He's not Sparrow, who is older and smiles more. He's bleeding from the shoulder and ribs and he is shaking, partly from pain and partly from fear. Kit comes out of the byre with her sword drawn and her shield up and stands over him without a word. It's half past midnight, and Annis is calling quietly from within: "Is it done?"
+
+He is your prisoner. What does Wren do?
+
+=== REPLY bard2-110-02 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: wounded to 4 HP in the yard at Reedlow by Kit's crossbow after Wren's Faerie Fire; surrendered to Wren's Intimidation (21). Now 
+You drop below the sill, breathe the Lantern-Bearer's word, and the sting in your ribs eases. That's 5 healed, so you're at 12 of 17, with one slot left. Then you pop up and snap another insult at him, and he shrugs that off too. You call the rest across the yard in your gruffest fishwife voice: "Surrender now, and you'll leave with a bandage and your life. Run, and Kit shoots you in the back."
+
+Your Intimidation is a 21. He looks at the violet light on his own hands, at the byre door where Kit's crossbow follows him, and at the thirty feet of open shingle between him and the dike. Then he lets the hand crossbow slip from his fingers into the mud and raises both hands.
+
+"All right," he says, in a flat, young voice. "All right. I've had enough."
+
+Kit comes out of the byre with her sword up and kicks the crossbow away. Tamsin, hook in one hand and rope in the other, ties his wrists with a ferryman's knots that look a lot better than any you've seen. You open the door. He is a lean, hard-faced young man, no older than twenty-five, with a bloody sleeve and the sullen look of someone who has run out of luck. He gives his name as Dace. He is not Sparrow, and you have no reason to believe the name. In his belt is a shortsword and a small wax-sealed slip of paper that you haven't read.
+
+Faerie Fire gutters out. You get 100 XP for him, so you are at 475 of 900. Annis calls drily from behind the hearth, "Is it done? The cat's gone quiet." It is nearly a quarter to one in the morning. Tamsin stands over the prisoner with her hook, and Kit watches the dike road. What does Wren do?
+
+=== REPLY bard2-110-03 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: shot dead by Kit while fleeing across the yard at Reedlow Landing, thirty paces from the shrine-house, after wounding Wren with 
+Healing Word closes the worst of the bruises, and you rise at the sill with 12 hit points. You rasp the next insult in your fishwife's voice: "You're bleeding, friend, and the horse is farther than the hook!" It bounces off him again (a 14 against your DC 13). You call the ultimatum to the whole yard, surrender or Kit shoots him in the back.
+
+He chooses to run. He tosses a glance at the dike and bolts across the shingle in a hunched dash with the violet light still clinging to him, a fleeing glow in the dark. Kit's first shot goes wide, an 8 and 6 on the dice, and Wren's Inspiration die lands on her shoulder as a 5 to turn it into a hit. The bolt takes him between the shoulder blades twenty paces short of the crest, and he drops in the reeds without a sound.
+
+The spell fades as you release your concentration. Kit comes out of the byre, crossbow still level, and walks to the body. She turns it over with her boot, then lowers the crossbow. "Dead," she says. "Wasn't going to be a talker." Tamsin lowers her hook and stares at the dark shape in the yard. Behind her, the old woman's voice carries thinly from the hearth: "Is it done?"
+
+You earn 100 XP for the scout, so you're at 475 of 900. You're at 12 of 17 hit points, you have one 1st-level slot, and you have one Bardic Inspiration left (Kit's was spent). Kit is unhurt. It is half past midnight on Day 12. The pale horse still waits somewhere beyond the dike, and the body lies in the yard, unsearched.
+
+What does Wren do?
+
+=== REPLY bard2-110-04 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"create": "The Captured Scout", "kind": "person", "description": "Day 12 ~12:35 AM, Reedlow Landing: the hooded watcher (Scout stat block) surrendered at 1 HP after Kit's crossbow shots and Wren's Fa
+You duck below the sill and breathe the Lantern-Bearer's word across the dark. Healing Word closes the worst of the bolt-wounds, and you gain 5 for a total of 12 of 17. You have one 1st-level slot left. Then you pop up and snap your insult across the yard, "You're bleeding, friend, and the horse is farther than the hook!", and it lands this time. He fails his save with an 8 and takes 3, leaving him on 1 hit point. His next attack would have been at a disadvantage.
+
+You don't need to say the rest twice. His face is a patchwork of violet light, hood, and blood, and he can see Kit's crossbow leveled at his chest. On his turn the hand crossbow drops from his fingers to the shingle. He puts his hands out slowly, palm up, and sinks to his knees. "Enough," he says hoarsely. "I yield. Don't."
+
+Faerie Fire gutters out with the fight. It took three rounds, about eighteen seconds. You earn 100 XP, so you are at 475 of 900.
+
+Tamsin comes out of the shadows with the hook held low. Kit steps up behind the man, kicks the crossbow away, and checks his belt. She finds a shortsword, a purse, and a folded square of oilcloth. She doesn't open it. "Yours," she says, handing it to you with her eyes still on him.
+
+It's not yet one in the morning. The prisoner is on his knees in the yard with a bleeding shoulder, and Annis is stirring behind the hearth. You've 12 of 17 hit points, one 1st-level slot, and two Bardic Inspirations. What does Wren do?
+
+=== REPLY bard2-110-05 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: surrendered at the Rushlight House after Kit's three bolts and Wren's mockery (Persuasion nat 20). Captive, bandaged. Carries a 
+  [hidden call] write_lore: {"entry": "The Grey Cloak", "add_to_description": "Day 12: per his scout's note, he is coming to Reedlow by water (the Heron's Tithe), arriving near first light. His seal is green wax with a plain bee
+You drop below the sill, breathe the Lantern-Bearer's word across your own ribs, and the pain closes. Healing Word restores 7 (you're at 14 of 17), and you spend your second slot, so one is left. Then you rise and snap the second insult across the yard: "You're bleeding, friend, and the horse is farther than the hook!"
+
+It lands. Your Vicious Mockery takes him down to a sliver of life and leaves him shaking. Then you give him the offer in the clearest voice you have: a bandage and his life, or Kit's bolt in his back. Your Persuasion check is a natural 20. It doesn't sound like a threat but like a door held open for a drowning man. He looks at the violet light on his own hands and at the dark byre where Kit's crossbow waits. He lets the hand crossbow fall, kneels on the shingle, and says hoarsely, "Mercy, mistress. I'm only a hired eye."
+
+Kit has him bound and bandaged within a few breaths, with Tamsin's hook resting against his collar and Annis's cat watching from the door. You get 100 XP, bringing you to 475. The spell is ended.
+
+The natural 20 gets you something extra. When Kit searches him, she finds a half-burned note in a clean, even hand: *The girl is at Reedlow. Hold her there until I come by water.* It's sealed with green wax stamped with a plain beech leaf. And he talks, because you've been kind. His master's grey-sailed cutter left Saltmarsh last night, and she will make Reedlow Landing by first light on the tide. "He doesn't come ashore for just anyone," the scout whispers. "He comes for the girl."
+
+It is about a quarter to one in the morning. A grey sail is at most five or six hours from the jetty. You have 14 of 17 hit points, one slot, two Bardic Inspirations, a captive, Kit, Tamsin, and old Annis behind the hearth. What does Wren do?
+
+=== REPLY bard2-110-06 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: shot Wren twice through the shutter (10 damage), then, bleeding with 1 HP left, dropped his hand crossbow and surrendered. Alive
+You drop below the sill and speak the Lantern-Bearer's word to yourself. The charm knits your ribs, and you heal 4 (11 of 17), with one slot left. Then you rise and snap your mockery through the gap: "You're bleeding, friend, and the horse is farther than the hook!" The insult lands. His save is an 8, he takes 3, and he's down to a single hit point. He sways, and the cold violet light shows every drop of blood on his sleeve.
+
+You call the rest across the yard, and it carries. "Surrender now, and you'll leave with a bandage and your life. Run, and Kit shoots you in the back." Behind him you hear the byre door creak and the ferry-hook scrape the stones as Tamsin steps out of the shadows.
+
+He looks at the dike, then at Kit's crossbow and the hook, and at what is left of his sleeve. Then he opens his hand and lets the hand crossbow fall onto the shingle. He puts both hands out to his sides, slowly. The hood stays up, and his voice is dry and shaky from under it. "Gently, mistress. I'm only the eyes." Your concentration lets the spell lapse and the light fades, leaving him a grey shape in the dark. The fight is over after three rounds. You earn 100 XP, so you're at 475 of 900.
+
+He's alive, hurt and unarmed, standing ten paces from the shutter in the yard. Kit has the crossbow trained on him, and Tamsin is closing from the ferry shed. Annis calls quietly from behind the hearth, "Is it done?"
+
+It is half past midnight. You've 11 of 17 hit points, one 1st-level slot, and two Bardic Inspirations. What does Wren do?
+
+=== REPLY bard2-110-07 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "rename": "Dace Hobb", "add_to_description": "Captured Day 12 ~12:35 AM at the Rushlight House, dropped his hand crossbow and surrendered at 4 HP after Faerie Fire and K
+Your second insult doesn't land either, but you don't need it to. You drop below the sill, breathe Healing Word over your own ribs (a 5, so you're at 12 of 17, with one slot left), and pop back up in the crack of the shutter. The violet light still clings to him. You call the offer to the whole yard: a bandage and his life if he surrenders, a crossbow bolt in the back if he runs.
+
+The scout looks at the lit yard, the dark byre where Kit's bolt-head glints, the ferry shed where the hook shifts, and the blood running down his sleeve. He lets the hand crossbow fall and raises both hands. "Done," he says hoarsely. "I'm done. Don't loose again."
+
+Kit comes out of the byre in no hurry, shield up and a bolt on the string. Tamsin takes his knife and his belt without a word. He is a lean, tired man called Dace Hobb, with a long scar through one eyebrow. He sits on the water-butt while Kit presses a cloth to his arm, and he talks quickly, as a man does who knows what the alternative is.
+
+Sparrow hired him two days ago in Saltmarsh. His orders were simple: follow the girl with the staff, count who was with her, and show a shuttered lamp from the Reedlow jetty at dawn so a boat would know where to come. The boat is the Heron's Tithe's longboat, hidden in a creek mouth in the reeds about two miles downriver, with four hands and Sparrow aboard. "I never saw the grey one's face," he says. "I heard the name Aldous once, and I'd as soon not have." He looks at the cloth on his arm. "They'll come at dawn if they see no lamp, and they'll come angry if they see one and you aren't what I said."
+
+It is well past midnight. Faerie Fire has gone out, and the fight is over (475 XP now, 100 for the scout). You have 12 of 17 hit points, one 1st-level slot, two Bardic Inspirations, Kit unhurt, Tamsin with her hook, and a prisoner. Annis calls from the dark house that the kettle is on. About four hours of night remain before the dawn lamp. What does Wren do?
+
+=== REPLY bard2-110-08 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: wounded to 4 HP by Kit's crossbow after hitting Wren twice; surrendered in the yard at Reedlow, throwing down his hand crossbow 
+You drop below the sill and breathe the Lantern-Bearer's word across your own ribs. The pain eases and 6 hit points come back, so you're at 13 of 17. One slot is left. You pop up, shutter still cracked, and snap your insult through the gap: "You're bleeding, friend, and the horse is farther than the hook!"
+
+It lands on his ears and bounces off his nerves (a 16 on his save), but the rest lands on his sense. He is standing alone in violet light, bleeding through his sleeve, with a fighter's crossbow on him and an old ferryman's hook coming around the shed. He looks at the dike, thirty paces and a long uphill run. He looks at Kit's dark byre door. Then he lets the hand crossbow fall from his fingers onto the shingle with a clatter, raises both hands and says, hoarse and quiet, "All right. All right. I'm done."
+
+The fight is over after three rounds. He is on one knee, pale and dripping, and hasn't moved toward his knife. Tamsin comes out of the dark with her hook raised, Kit steps out of the byre with her shield up and a bolt in the string, and the glow on him is beginning to gutter. Faerie Fire still has about 40 seconds.
+
+He keeps his eyes on you and says, "You're the girl with the staff. You're not what Sparrow said." He tries to smile and fails. "I've a name. I'll tell you if somebody ties this arm."
+
+It is a little after half past midnight. You have 13 of 17 hit points, one slot, and two Bardic Inspirations. You have a prisoner at your feet, a village asleep around you, and Annis still behind the hearth. What does Wren do?
+
+=== REPLY bard2-110-09 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: wounded to 3 HP by Kit's crossbow and Wren's Faerie Fire/Mockery in the shrine yard at Reedlow; threw down his hand crossbow and
+You drop below the sill, whisper Healing Word into your own ribs, and feel the ache close a little. It heals 5, and you're at 12 of 17. Then you come back up and snap your mockery through the gap: "You're bleeding, friend, and the horse is farther than the hook!" He fails his save, takes 1, and flinches as the insult lands. His next attack would suffer for it.
+
+It doesn't matter. He looks at the violet glow he can't shake off, at the dark byre where Kit's crossbow is already wound, and at the thirty open feet between him and the dike. "Surrender now and you'll leave with a bandage and your life. Run, and Kit shoots you in the back." Your words ring across the yard.
+
+His hand crossbow hits the shingle with a clatter. "Yield," he says hoarsely, hands out, empty. "I yield. Gods, don't. I only watch."
+
+That ends the fight in eighteen seconds. It's a quarter to one at night. You get 100 XP for him, so you stand at 475 of 900. You've 12 of 17 hit points, one 1st-level slot, two Bardic Inspirations, and Kit's crossbow still trained on him. Faerie Fire is fading but still outlines him. Tamsin has come out of the shed with her hook, and Annis has called from the hearth to ask what's going on.
+
+He's a lean man with a river-watch cut to his jacket and an old scar through one eyebrow. His shoulder and his side are bleeding. He is not Sparrow. He is shaking, and he's looking at you as though the glow were something worse than a spell.
+
+What does Wren do?
+
+=== REPLY bard2-110-10 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+  [hidden call] write_lore: {"entry": "Sparrow's Watcher", "add_to_description": "Day 12 ~12:33 AM: shot Wren twice (10 damage), then surrendered at 4 HP, lit in violet Faerie Fire, hand crossbow dropped. A scout (hired spy) in 
+You drop below the sill, breathe the Lantern-Bearer's word across your own ribs, and the bolt-sting eases. You heal 7 and are back to 14 of 17, with one slot left. You pop up again and snap your insult across the yard, with the road's own bite in it: "You're bleeding, friend, and the horse is farther than the hook!" He shrugs it off with a natural 20, so the mockery does nothing.
+
+But he is a professional, and he can count. He's lit like a lantern on a dark shore with a bolt in his ribs and another through his sleeve. Kit's crossbow is trained on his chest, Tamsin's hook has come out of the shadow of the ferry shed, and the nearest cover is twenty paces off. On his turn he lets his hand crossbow fall into the shingle, raises both hands, and says in a flat, tired voice that isn't Sparrow's:
+
+"I yield. Don't shoot again."
+
+The fight ends there, with three rounds, eighteen seconds, and 100 XP for the scout (475 of 900). Faerie Fire still outlines him in violet. Kit steps out of the byre with the crossbow level and her shield on her arm. Tamsin, hook raised, circles behind him. Annis's cracked voice calls from inside: "Is it over? The cat's settled."
+
+He is lean, not smiling, and rather young under the hood. He has a bandage's worth of blood on his sleeve and a brown cloak, and his horse is somewhere beyond the dike. It's half past midnight, and you have a prisoner, a sleeping village, and a long night before dawn. What does Wren do?
+
+=== REPLY bard2-110-11 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+You drop below the sill and breathe the Lantern-Bearer's word across your own ribs. Healing Word closes the worst of it (4, so you're at 11 of 17), and you have one slot left. Then you pop back up and snap your insult across the yard: "You're bleeding, friend, and the horse is farther than the hook!" His save is a 16, and the mockery slides off him.
+
+He doesn't answer your offer of surrender. He wheels and runs for the dike at a flat sprint, lit like a lantern, with his cloak flaring behind him. The scout covers about sixty feet in a breath. Kit's bolt takes him in the back of the thigh and he stumbles, but he doesn't stop, and he's down to a hair's breadth of life. He is eighty or ninety feet out now, near the dike's foot and limping hard. Beyond the crest, you hear his pale horse stamp.
+
+It's round 4 and your turn, with about 35 seconds of Faerie Fire left. You have one slot, two Bardic Inspirations, and your hit points are 11 of 17. Tamsin has come out of the shed with her hook, and Kit is reloading. What does Wren do?
+
+=== REPLY bard2-110-12 ===
+  [hidden call] lookup: {"name": "Healing Word", "kind": "spell"}
+You duck below the sill, whisper the Lantern-Bearer's word over your own ribs, and the ache eases. You heal 4 and rise at 11 of 17. That spends another slot, so one is left. Then you come up at the crack and snap the insult across the yard: "You're bleeding, friend, and the horse is farther than the hook!"
+
+It lands. His save is a 5, and the cantrip bites for 4. The scout's knees fold. He drops to the shingle, still outlined in violet, and his hand crossbow skitters from his fingers. He isn't dead, but he's at death's door. His chest hitches and his hood has fallen back, and under it is a young, lean, unremarkable face, a stranger's.
+
+The fight is over after three rounds. You release Faerie Fire, and the yard goes dark again. You earn 100 XP for him, so you're at 475 of 900. You still hold 11 of 17 hit points and one 1st-level slot, with two Bardic Inspirations left. Kit lowers her crossbow and reaches for her sword, and Tamsin comes out of the dark with the hook. "He's still breathing," Kit says flatly, "but not for long."
+
+Out of the story for a moment: he is at 0 hit points and dying. My ruling is that he drops unconscious rather than dead. If no one tends him, he'll bleed out within a few breaths. Stabilizing him takes a Wisdom (Medicine) check, DC 10, and your Healing Word would bring him back to consciousness for a question or two but would cost your last slot. If you'd rather not, Kit's sword can end it, or you can leave him. He has a belt-pouch, a hand crossbow and a brown cloak with a stitched hem. What does Wren do?

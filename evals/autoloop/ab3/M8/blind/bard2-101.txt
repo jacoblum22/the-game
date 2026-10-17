@@ -1,0 +1,211 @@
+GAME bard2, ROUND 101
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 98 ==
+PLAYER: I pocket a copy of Corvin's statement, thank the arbiter, and ask to have a rider carry word to Lord Edric: "Ask him whether any Verrel relative or old friend took the name Aldous, and have Brother Osric check the parish register for any Aldous baptised, buried, or struck out." Then Kit and I go to the Salt Gull, take a room, eat, and take a full long rest, because I'm out of spells and can barely see straight.
+  [game] time: 30 minutes later: Day 10, 11:37:12 AM
+  [refused] sheet: one long rest in 24 hours: the last finished Day 10, 3:57:36 AM, so the next can finish Day 11, 3:57:36 AM at the earliest. A short rest is allowed
+  [game] sheet: short rest; money -6 sp: now 71 gp 7 sp 1 cp; Kit: short rest: Second Wind, Action Surge restored; 1 hour later: Day 10, 12:37:12 PM
+  [game] sheet: Kit: spent 1 hit die (1/2 left): roll 1d10 and add the CON modifier (CON 15 (+2)), then pass the total as heal; the player decides whether to spend another after the roll
+  [game] dice Kit's Hit Die healing (1d10 + CON 2): 1d10+2 = 1d10 [7] + 2 = 9
+  [game] dice Song of Rest extra healing for Kit: 1d6 = 1d6 [6] = 6
+  [game] sheet: Kit: healed 15: HP 15 → 20
+  [DM write_lore (hidden)] {"entry": "Lord Edric Verrel", "add_to_description": "Day 10 ~noon: Wren asked the Vantry arbiter to send a rider to Lord Edric asking whether any Verrel relative or old friend took the name Aldous, and for Brother Osric to check the Thornhallow register for any Aldous baptised, buried or struck out. Rider expected back in 2-3 days."}
+  [game] notebook: updated Lord Edric Verrel
+  [DM write_lore (hidden)] {"entry": "Vantry Hall", "add_to_description": "Day 10 ~noon: arbiter accepted Wren's request for a rider to Thornhallow (Aldous query). Wren holds a copy of Corvin's signed statement. The Salt Gull room taken; Wren and Kit short-rested there; next long rest can finish only at Day 11 3:57 AM or later."}
+  [game] notebook: updated Vantry Hall
+DM: The arbiter nods, and a rider in Vantry grey is sent off into the rain with your query for Lord Edric and Brother Osric. You pocket your copy of Corvin's statement. It's a good plan, but the answer will take two or three days to come back.
+
+Then you and Kit squelch to the Salt Gull. Bess Harl lets you back into the cleaned room across the landing without a word, though she stoops to put a hot bowl of fish stew in your hands first. You pay six silver for a hot meal, a fire and a bed.
+
+Here the rules bite, and I'd rather tell you straight. Your last long rest finished at 3:57 this morning, and only one long rest counts in any 24 hours. Another cannot finish until about 4 AM tomorrow. So you can't recover your spell slots or Bardic Inspiration yet. What you can have is a short rest, and you take it.
+
+It's an hour of dry clothes and quiet. Kit spends a Hit Die and rolls a 7 plus 2, and your Song of Rest adds a 6. She heals 15 and is back to 20 of 20, and her Second Wind and Action Surge return. You have full hit points already. Your slots stay at 0 of 3, your Bardic Inspiration at 1 of 3, and exhaustion 1 still sits on you. It is about half past twelve.
+
+You could sleep through the afternoon, but the long rest can't finish until the small hours of tomorrow. You could also use these hours: go back to the Wick-House for Ysolde's counsel, visit Corvin, tell Sir Corwen's family what the lamp means, or fetch the reliquary from the spit when the weather clears. The storm is still battering the shutters. What does Wren do?
+  [game] conversation shortened: the DM's summary of turns 0 to 84, then turns 85 to 104
+
+== ROUND 99 ==
+PLAYER: I leave Kit to rest and sleep, and ask the arbiter for a guard-escorted visit to Corvin while the storm keeps the streets empty. Down in the cellar I sit across from him with the guard at the door and Corvin's signed statement in my hand, and say, "You wrote that Aldous wears a dead man's name, so tell me what you meant by that, and tell me the truth about how you came to have me: 'bought for the price of a good story' was never the whole of it, was it?"
+  [DM lore (hidden)] {"names": ["Corvin Tallowmere"]}
+  [DM recall (hidden)] {"search": ["price of a good story"]}
+  [game] dice Wren's Insight reading Corvin (exhaustion 1 disadvantage): 1d20+3 (disadvantage) = 1d20 [15, 10]→10 + 3 = 13
+  [game] dice Corvin's Deception (my ruling, +7) vs Wren's Insight: 1d20+7 = 1d20 [14] + 7 = 21
+  [game] time: 40 minutes later: Day 10, 1:17:12 PM
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~1:30 PM, Vantry Hall cellar (Wren's Insight 13 vs his Deception 21, she can't read him): told Wren (unverified) that 'a dead man's name' means Aldous took the name of a real man who died long ago; he heard it once when Aldous, drunk on a wet night, said 'I'm only wearing it until I've earned it back' and that the true Aldous was 'a Verr
+  [game] notebook: updated Corvin Tallowmere
+DM: The arbiter doesn't ask why. She looks at the rain on the shutters and at your face, then sends Pell down with you. Pell stays at the cellar door with his halberd grounded and his eyes on the ceiling, a man who is hearing nothing.
+
+Corvin sits on a cot with a blanket over his knees. The black gloves are gone, and his hands look older without them. He sees the folded statement and smiles, rueful and tired. "You came back. I did wonder."
+
+You read him his own line. He doesn't flinch.
+
+"A dead man's name." He turns it over like a coin. "I heard it once, on a wet night in a roadhouse, when he'd had too much of the good wine and thought I was too far gone to listen. He said, 'It's only borrowed, Corvin. I'm wearing it until I've earned it back.' And later: the real Aldous was 'a Verrel by blood, and no friend to the Verrels' paper.' That's all he ever gave me. I think the man he is was never meant to have a name, and he's trying on one that has a claim attached." He spreads his hands. "Whether that makes him a bastard, a cousin, or a thief, I never learned. I swear it on the Lantern, whatever you think that's worth."
+
+You ask about yourself, and the room gets quieter.
+
+"No," he says. "It was never the whole of it." He looks at the wall for a while. "I didn't buy you, Wren. I told the caravan I did because it made a better tale. You were four, perhaps five. Elowen had left you at a roadside shrine-house on the lower Marrow, with a woman who took coin to keep you and ask nothing. I found it. I paid the woman more than Elowen had, and I took you." His voice stays level. "I told myself it was to keep Aldous from finding you, and that was partly true. The rest is that a child with Elowen's face, kept near the lantern-foot, was worth keeping. I won't dress that up. I raised you well enough, and I used you, and both are so."
+
+You press for the name of the shrine-house and the woman. He shakes his head slowly. "Not from this cot. Get me out of this cellar into Dame Crowe's keeping, where the road is open to me and the man who smiles can't reach me, and I'll draw you the map myself." A thin, dry smile. "I know how that sounds. Your mother's staff is in your hands, and you've still not trusted me, which is the best thing I ever taught you."
+
+You study him as he speaks. Your Insight check is a 13 (with disadvantage from exhaustion), and he doesn't give you anything to hold. Every word sounds like the truth, and it sounds the same way his best tales always did. You can't tell which parts are true and which are his craft.
+
+It is a little after one. The storm is still grumbling overhead, Kit is asleep upstairs, and Pell is very carefully not listening. What does Wren do?
+
+== ROUND 100 ==
+PLAYER: I stand, tuck the statement away, and look at him steadily. "You're not getting out of that cellar, Corvin, not by a bargain. Dame Crowe holds the assize at Marrowford at month's end, and I'll make sure you reach it alive and in one piece, because I want you to stand there and say all of it under oath, including how you came by me."
+
+At the door I add, without turning, "And if you draw me that map from the cot, honestly and in writing, with the shrine-house's name and the woman's, I'll put in a word for you with Dame Crowe. Not before."
+  [game] time: 10 minutes later: Day 10, 1:27:12 PM
+  [DM write_lore (hidden)] {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~1:25 PM: Wren refused any bargain but promised to see him alive to Dame Crowe's assize and to speak for him if he writes the shrine-house's name and the woman's, honestly, in his own hand, from the cot. He asked Pell for paper and pen; he will have it done by evening. Wren cannot judge whether it will be true."}
+  [game] notebook: updated Corvin Tallowmere
+DM: Corvin is quiet for a long moment. When he speaks, the warmth has gone out of his voice, and what's left is plainer.
+
+"Alive, and in one piece, and under oath." He gives a short, dry laugh. "You'd have made a poor forger, Wren. You always told the truth in the wrong places." He lifts a hand toward Pell. "Guard. Paper and a pen, if the hall can spare them."
+
+You don't turn around. Behind you the cot creaks as he settles. "In my own hand, then. The shrine-house, the woman, the year. If I lie, you'll know it when you've seen the place, and then you'll have the pleasure of being right." A pause. "Go and sleep, child. You look like a candle at the end of its wick."
+
+Pell, who has heard nothing at all, unlocks the door for you. He murmurs that the paper will go down within the hour, and that he'll bring whatever Corvin writes to you at the Salt Gull himself and not through the clerk. "Seeing as the clerk was Hale's friend," he adds, to the ceiling.
+
+It is half past one, and the storm is still wrestling the shutters. Up in the Salt Gull, Kit is sleeping. You've no slots and one Bardic Inspiration, and your long rest can't finish until about four tomorrow morning. Corvin's map, if it is one, will arrive by evening. What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 101, "category": "format", "severity": 2, "quote": "You could fetch the reliquary from the spit first", "why": "Another menu of options ('You could ride... You could fetch... You could wait... Or you could do something else') closing the reply."}
+
+THE PLAYER'S LINE THIS ROUND: I climb back to the Salt Gull, take off my wet boots, and sleep through the afternoon beside the fire with Kit snoring across the room. When Pell arrives at dusk with Corvin's map, I read it by the lamp, check the shrine-house's name against the places Elowen mentions in her letter and the strip of paper, and then decide our next move over supper.
+
+=== REPLY bard2-101-01 ===
+  [hidden call] write_lore: {"create": "Sedge Stop", "kind": "place", "description": "Day 10 evening: roadside wayside shrine-house of the Lantern-Bearer on the lower Marrow, about a day's ride upriver of Saltmarsh at a reed-cho
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 dusk: Pell brought Corvin's map in his own hand: Sedge Stop, a Lantern-Bearer wayside shrine-house at a reed ferry landing on the lower Mar
+You sleep the afternoon away beside the fire, with Kit snoring across the room and the storm slowly wearing itself out against the shutters. It isn't a long rest, and your spells stay empty. But you wake with your head clearer, and the light is going amber at the edges. It is about half past six.
+
+Pell comes up the stair at dusk, damp to the knees. He hands you a folded sheet and says nothing, and goes to stand at the landing with his back to the door.
+
+The map is in Corvin's own hand, neat and unhurried, in the ink he uses for pedigrees. A thin river line runs down to the estuary. A day's ride upriver of Saltmarsh, at a bend where reeds crowd the bank, he has drawn a small lantern and labelled it *Sedge Stop, a wayside shrine-house, ferry landing*. Below it: *Dilly Marsh, called Goodwife Sedge. She kept you the winter you were four, and some of the next. Fifteen years gone, or a little more.* At the bottom, a single line: *Everything else I said was craft. This is not.* He has signed it with the little drawn lantern.
+
+You lay it beside Elowen's letter and the strip from the staff and go over them by the lamp. Your Investigation check is a 5 (disadvantage again), and it gets you nothing. Neither paper names a shrine-house or a woman, and your tired eyes find nothing that confirms or contradicts the map. Corvin's hand looks honest, but then it always did. Mother Ysolde Vane has kept the Wick-House thirty years, though. If a Sedge Stop is on the Lantern-Bearer's old roll of wayside shrines, she'd know.
+
+Kit sits up, rubs her face, and pulls the stew pot toward her. Supper is on the table, with bread, fish and a jug of small beer. Bess Harl hovers in the doorway, pretending she isn't listening. Your reliquary still burns in the Gullspit lamp. The arbiter's rider won't be back from Thornhallow for two or three days. Dame Crowe's assize is at the month's end, and your long rest can't finish until about four tomorrow morning. Kit looks at you across the bowl, waiting.
+
+What does Wren decide?
+
+=== REPLY bard2-101-02 ===
+  [hidden call] lore: {"names": ["Elowen's Coffer"]}
+  [hidden call] recall: {"search": ["my wren", "letter"]}
+  [hidden call] write_lore: {"create": "The Reedmother's Lantern-House", "kind": "place", "description": "Small roadside shrine-house of the Lantern-Bearer at Withy Reach on the lower Marrow, a day's ride upriver of Saltmarsh, h
+You sleep like a stone. The rain thins to a drip somewhere past four and the fire sinks to red. When Pell raps on the doorframe at dusk, Kit is already awake, sitting on her bedroll and oiling her shield-strap. Your exhaustion hasn't lifted: a few hours' nap is no long rest, and that has to wait for the small hours.
+
+Pell hands over a single folded sheet and stays on the landing, looking at nothing. It is in Corvin's neat copperplate hand, inked in a strict line, without a single flourish. A small map of the lower Marrow. A bend in the river marked *Withy Reach*, a day's ride upriver of Saltmarsh. Below it, in tidy letters:
+
+*The Reedmother's Lantern-House. Green velvet at the door and the altar. The woman was Nan Sedge, a ferryman's widow. I left her eleven silver and a promise. The child was called "Wren" by her already, and no one knew why. Elowen's hand put her there. Mine took her.*
+
+You read it by the lamp. The name of the place isn't in your mother's letter or the strip from the staff, and you can't prove a word of it from paper. But the green velvet sits oddly well. The scrap of ribbon sewn in your cloak hem is the same moss green, and the coffer lay on a bed of the same stuff. A forger would know to put that in. A man telling the truth about a place he'd stood in would too. You can't tell which.
+
+Over supper Pell adds what the hall knows. The Heron's Tithe has not come back to any port the harbour watch can reach, and no rider has returned from Thornhallow yet. He leaves it at that and goes. Kit eats, then says in her dry way: "Withy Reach is on the road back to Marrowford. Nothing's pulling us the other way but the lamp, and that's lit. And the assize is at month's end."
+
+Your options, as you see them: ride upriver to Withy Reach and find Nan Sedge or whoever kept the shrine after her, with Marrowford and Dame Crowe on the same road. Or fetch the reliquary from the spit first, if you want it in your hand. Or wait here for the rider from Thornhallow, which means two or three days. The long rest can finish at about four tomorrow morning if you go to bed now. What does Wren do?
+
+=== REPLY bard2-101-03 ===
+  [hidden call] recall: {"search": ["Elowen's letter"]}
+  [hidden call] write_lore: {"create": "Withy Ferry Wayshrine", "kind": "place", "description": "Day 10 evening: per Corvin's hand-drawn map, a small roadside shrine-house on the lower Marrow at the Withy Ferry, about a day's ri
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 dusk: sent his map by Pell. Shrine-house = Withy Ferry Wayshrine, woman = Goodwife Annet Sallow; note: 'Ask for the nine-fingered ferryman.
+You sleep through the afternoon by the fire with your boots steaming and Kit snoring across the room. The squall blows itself out around four. You wake to a clear, cold dusk and the smell of Bess Harl's supper coming up the stair. It is a quarter past six. This is only a rest, and your slots haven't come back. Your long rest still can't finish until about four tomorrow morning.
+
+Pell arrives with the last light, damp to the knees. He hands you a folded sheet and says only, "He wrote it himself, and I watched every stroke." Then he goes.
+
+It is a plain map in Corvin's neat hand, inked with a steady line. It shows the lower Marrow, a ferry-crossing marked *Withy*, and a small shrine-house on the near bank with a lantern drawn over its door. Beneath it are two lines.
+
+*Withy Ferry Wayshrine, a day's ride upriver of Saltmarsh. Goodwife Annet Sallow kept you the winter you were four, and I paid her to forget. Ask for the nine-fingered ferryman. If she is dead, her daughter keeps the key.*
+
+Under that is his small drawn lantern, and nothing else.
+
+You set it beside Elowen's letter and the strip from the staff. Elowen's words name no ferry and no shrine-house, only the three hiding places and the Gullspit light. Nothing contradicts him, and nothing confirms him either. The ferry lies on the road back upriver toward Marrowford, and the map costs you no detour. Dame Crowe's assize is at month's end, and you must be there, with Corvin alive.
+
+Kit sits up, eats half a loaf and listens as you read it. Her only comment is, "Thin." Then she reaches for the stew.
+
+Over supper the pieces are on the table. Your slots are empty until the small hours. The reliquary is on the spit with Brann, and the lamp burns only while it sits there. The rider carrying your question about Aldous won't return for a couple of days. Corvin must be escorted to Marrowford. Sir Corwen and Isaude would like to see you before you leave, and the arbiter still owes you a sealed copy of her ruling.
+
+What does Wren decide?
+
+=== REPLY bard2-101-04 ===
+  [hidden call] recall: {"search": ["Elowen's letter", "lower Marrow"]}
+  [hidden call] lore: {"names": ["Elowen's Coffer"]}
+  [hidden call] write_lore: {"create": "Rushlight Shrine at Withy Reach", "kind": "place", "description": "Small roadside shrine-house of the Lantern-Bearer on the lower Marrow, per Corvin's hand-drawn map (Day 10 evening, unver
+You sleep the afternoon away by the fire, boots steaming on the hearth, with Kit snoring across the room. The storm wears itself out against the shutters. This is a long nap, not a rest that counts. Your slots are still empty and the exhaustion is still there, because the long rest can't finish before about four tomorrow morning. You wake a little after five. It's dusk, and Bess Harl is banging a ladle on the stair for supper.
+
+Pell comes up as the lamps are lit, rain-dark and awkward in the doorway. He hands you a folded sheet and says, "Straight from his hand to yours, and I didn't read it." He then takes a bowl of stew from Bess and goes to eat it on the landing, where he can hear anyone climbing.
+
+Corvin has drawn the map in his careful, ink-black hand, and it is a good map. A river line runs up from Saltmarsh. About a day and a half upstream, on the east bank, he has drawn a small lantern-shape and named it: the Rushlight Shrine at Withy Reach. Below it he wrote: *The keeper was a goodwife, Annet Sedge. She took Elowen's coin to keep you and ask nothing. I paid her double and took you, in the year you were four or five. If she lives, she'll know your face. If she doesn't, ask who tends the lamp. C.T.* In the corner is the small crooked-flame lantern he used to sign his notes.
+
+You set it beside Elowen's letter and the strip from the lamp-staff. Neither names the Rushlight Shrine or any goodwife, so nothing in your mother's hand confirms it. Nothing contradicts it either. The strip speaks only of the Gullspit light, and the letter says only that you were left "among people who will love her", which could be anyone at all. The map is either true or the best forgery Corvin ever made.
+
+Kit sits up, rubs her face and reads it over your shoulder without comment. Then she says, "Aldous wants the staff, and he's got a ship. He'll know we've got it and where. Staying here, he finds us. Going upriver, we'd be on the road toward Marrowford anyway, for Dame Crowe." She spoons stew. "Withy Reach is on the way. Your call."
+
+So the choices on the table are these. The Rushlight Shrine lies upriver, on the way to Marrowford. The reliquary stays with Brann on the spit, and the arbiter's rider hasn't returned. The Heron's Tithe is still out there. It's about six in the evening, with a hot supper in front of you. What does Wren do?
+
+=== REPLY bard2-101-05 ===
+  [hidden call] write_lore: {"create": "Sedgeholm Wayshrine", "kind": "place", "description": "Small Lantern-Bearer wayshrine-house at Sedgeholm, a reed-ferry hamlet on the lower Marrow, a day and a half upriver of Saltmarsh by 
+  [hidden call] write_lore: {"create": "Edda Marsh", "kind": "person", "description": "Woman who, per Corvin, kept the child Wren at the Sedgeholm wayshrine for coin from Elowen; sold her care to Corvin. Corvin's note adds: 'bro
+You peel off your wet boots, set them by the fire and sleep like a dropped sack. Kit snores across the room, and the storm wears itself out against the shutters. It isn't a long rest. You'll still have no slots in the morning unless you sleep through the night. But you wake at dusk with your head clearer, and the rain has stopped.
+
+Pell knocks at half past six, as promised. He hands over a single folded sheet, says "Seen by nobody but me," and goes back down the stair before you can thank him.
+
+Corvin's hand is the same careful, looping script that taught you your letters. The map is simple: a line of the lower Marrow, a bend, a little ferry mark and a reed-hut sketch, labelled in neat capitals SEDGEHOLM WAYSHRINE. A day and a half upriver of Saltmarsh by the river road, he notes, below Thornhallow. Under it: *Edda Marsh. Broad, one-eyed, keeps bees. If she is dead, ask the ferryman. Autumn, the year you were four. I paid her eleven silver more than Elowen had. I have written nothing here that I know to be false. — C.* There is a small drawn lantern at the foot.
+
+You check it against what you carry. Elowen's letter and the strip don't mention Sedgeholm or Edda by name. The Wick-House paper and Ysolde point you only at the Gullspit light, which is done. But the route lies along the old road-priest circuit your mother must have walked, and a Lantern-Bearer wayshrine on a ferry is exactly where a priest with a fevering secret and a small child would stop. It fits. Whether it is true, or a place where Corvin wants you to go, is something you can't settle from a page.
+
+Kit sits up, rubs her face and reads it over your shoulder with a dry grunt. "Sedgeholm's on the way to Thornhallow," she says. "Past it, anyway." Supper arrives, fish stew again. The arbiter owes you a sealed copy of the judgment, Dame Crowe's assize is at the end of the month, and Corvin has to be brought to Marrowford alive. Your reliquary is in the lamp on the spit, and Brann is minding it. A rider to Lord Edric and Osric won't be back for a couple of days.
+
+You have no slots, one Bardic Inspiration, and a long rest still owed until the small hours. What does Wren decide over supper?
+
+=== REPLY bard2-101-06 ===
+  [hidden call] write_lore: {"create": "Reedhithe Shrine-House", "kind": "place", "description": "Per Corvin's map (Day 10 evening): a small roadside Lantern-Bearer shrine-house at Reedhithe, a landing on the lower Marrow about 
+You sleep through the afternoon with your boots steaming by the fire. The storm wears itself thin against the shutters, and Kit's snoring keeps time with it. Sleep like this isn't a long rest. It eases the ache, but your slots stay at 0 of 3, your Bardic Inspiration at 1 of 3, and the exhaustion stays. A real rest has to wait for the small hours.
+
+Pell knocks at six, with the rain gone to a drip. He hands over a folded sheet, says "From his own hand, as promised, and I watched him write it," and goes back down the stairs looking relieved.
+
+Corvin has drawn the map in tidy ink. It shows the Marrow's lower reach, then a bend, a landing, and a small square marked with the crooked flame. Under it is written: *Reedhithe Shrine-House, keeper Tamsin Orle. Two days upriver of Saltmarsh by the water road. Elowen left the child with her. Fifteen years gone this autumn.* Below that, in a smaller hand: *I paid her thirty marks and a promise. She may not forgive either.*
+
+You read it by the lamp, then lay it beside Elowen's letter and the strip from the staff. Neither names a place except the Gullspit light, so there's nothing to match. But *safe among people who will love her* is what Brann said Elowen told him, and a shrine-house keeper fits that. You turn the sheet over and hold it to the flame, and your Investigation check is an 8 (disadvantage again). It reads as a plain, honest map, but you can't say whether it's honest or just very good. The hand is steady, the ink old, and the lie, if there is one, doesn't show.
+
+Kit has woken and is eating cold stew with her usual attention. "Two days upriver," she says. "That's back toward Marrowford, near enough. Assize is at month's end." She looks at you. "Or the spit, for the foot. Or the arbiter, for Aldous. Pick."
+
+Your options at supper, as I see them:
+- Go to Reedhithe by the water road. It's two days up, and then Marrowford for the assize is on the way back.
+- Fetch the reliquary from Brann first when the weather clears, then go.
+- Wait here a few days for the riders' answers about Aldous, and use the time to rest properly and let the exhaustion wear off.
+
+It is six in the evening. What does Wren decide?
+
+=== REPLY bard2-101-07 ===
+  [hidden call] recall: {"search": ["Elowen's letter", "my wren"]}
+  [hidden call] write_lore: {"create": "The Reed Lantern", "kind": "place", "description": "Small ferry-chapel and shrine-house of the Lantern-Bearer at Sedgeholm, a reed-village on the lower Marrow about a day's ride upriver of
+You sleep the afternoon away beside the fire, with Kit snoring across the room and the storm slowly wearing itself out against the shutters. It isn't a long rest. The slots stay at nothing, and the small hours are still ten hours off. You wake a little after six, stiff and warmer, to a knock at the door.
+
+It's Pell, rain-dark and unsmiling, with a folded sheet. "From the cellar," he says. "Not through the clerk. He wrote the whole afternoon and asked for a second sheet." He goes down for supper before you can thank him.
+
+You read it by the lamp. It is a map in Corvin's neat hand, a river bend drawn in a few strokes, and a village marked **Sedgeholm**, a day's ride upriver of Saltmarsh on the lower Marrow. A tiny lantern with a crooked flame sits over a ferry-landing, and beside it:
+
+*The Reed Lantern. A ferry-chapel. Keeper then: Hesper Wynn, a widow who took coin to keep children and ask no questions. Elowen left you with her in the autumn of your fourth year. I paid her twice what Elowen had, and she did not argue. If she's dead, ask the ferryman. I have written nothing here that I didn't see with my own eyes. C.T.*
+
+You check it against what you carry. Elowen's letter and the strip of paper never name a place, only "people who will love her", which doesn't sit comfortably with a woman who took coin. Nothing in them contradicts it, though, and the crooked flame over the door matches the mark in your sketch of the E.A. lantern. It might be true. It might be a very good lie drawn by a man who has made his living from those.
+
+You and Kit share supper in the common room: fish stew again, and bread. She listens to all of it, chewing, and says only "A day up the river" and, a moment later, "Ember's rested."
+
+Your choices are plain enough. You could ride to Sedgeholm to find the Reed Lantern, which is a day's ride upriver, then return for the Gullspit reliquary. You could go back to the spit first and fetch the lantern-foot, since the lamp burns only while it's seated, and the proof of your claim lies in it. Or you could stay near Saltmarsh until the arbiter's rider brings word of "Aldous" from Thornhallow, which may take two or three days. Dame Crowe's assize at Marrowford is at month's end, and Corvin must be taken there alive.
+
+It is a little after six. What does Wren decide?
+
+=== REPLY bard2-101-08 ===
+  [hidden call] write_lore: {"create": "Sallow Reach Shrine", "kind": "place", "description": "Small, half-forgotten wayside shrine-house on the lower Marrow, a day and a half by road upriver from Saltmarsh, at a reed-choked ben
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 dusk: sent Wren a map in his own hand via Pell: Sallow Reach Shrine on the lower Marrow, keeper Tamsin Orle. Unverified. Pell reports Corvi
+You climb back to the Salt Gull, peel off your wet boots and sleep beside the fire until the light in the shutters has gone from grey to copper. Kit's snore carries on across the room like a slow saw. The storm has blown itself thin. It's a quarter to seven when Pell knocks, hands you a folded sheet, and goes back down to the common room without a word.
+
+Corvin's map is neat and unhurried, in the same black ink he used for all his best forgeries. It shows the lower Marrow below Saltmarsh's road-fork, with a reed-choked bend marked in a small drawn lantern. Beneath it he has written: *Sallow Reach Shrine. Tamsin Orle, keeper. A day and a half upriver from Saltmarsh by the east bank track. You were four, perhaps five. She had a cat called Biscuit. I never lied to you about the cat.* At the bottom, no signature, only the crooked flame.
+
+You check it against what you have. Elowen's letter and the strip of paper name no shrine-house on the lower Marrow, and Brann only repeated her saying that her daughter was "safe among people who will love her." A woman who took coin to keep a child fits that badly, or fits it exactly if Elowen had no choice. The map doesn't contradict anything, which proves nothing from a man who writes true things in order to be believed.
+
+Over stew at the common-room fire, Kit listens, chewing. "Day and a half there," she says. "Day and a half back. Your assize is at month's end, and the reliquary's still on the spit." She wipes her bowl with bread. "Bess says the squall's blown out. Dunn will run to the spit at first tide if you pay him."
+
+You have no spell slots, one Bardic Inspiration, and a long rest due to finish in the small hours. The arbiter's rider won't be back from Thornhallow for two days or so. What does Wren do?
