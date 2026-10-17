@@ -479,8 +479,7 @@ def notes(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[s
 # turns, the latest sentences of its own earlier replies (before the last SAID_AFTER turns) that name them.
 SAID = bool(os.environ.get("DM_SAID"))
 SAID_AFTER = 3  # turns too recent to repeat: they're in the conversation as it is
-SAID_EACH = int(os.environ.get("DM_SAID") or 0) if (os.environ.get("DM_SAID") or "").isdigit() else 2  # a name
-SAID_MAX = 4 * SAID_EACH  # sentences in all
+SAID_EACH, SAID_MAX = 2, 8  # sentences per name, and in all
 _SENTENCE = re.compile(r"[^.!?\n]+[.!?]?")
 
 
