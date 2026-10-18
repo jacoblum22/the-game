@@ -264,3 +264,8 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   those 28 looks about half real (misses by the readers: the Foreman's terms changing a turn later, a distance that
   shrank) and half nitpicks or misreadings. Severity 3 alone: 4 of 105.
 - Cost about $11 in all (Haiku $0.50, the two Sonnet runs about $5 each). Nothing built into the game.
+- 1 to 5 scale with an example per level, plus a fix per problem: 'text' with a replacement, or 'dm' when the sheet,
+  fight, clock or notebook must change (haiku_check.py `five`; games/read/causes/sonnet-five.json). Acting on 3+:
+  caught 47 of 105, flagged 14 of 60 clean (2+: 92 and 41; 4+: 4 and 2; nothing got 5). 71 of 73 quotes at 3+ are the
+  reply's exact words, so code could swap them. It chose 'text' for 68 of 73 and 'dm' for 5; sampled replacements
+  read well, but some 'text' fixes paper over a time or count problem instead of sending it to the DM. About $5.6.

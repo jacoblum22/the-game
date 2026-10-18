@@ -38,7 +38,31 @@ SCHEMA2 = {"type": "object", "additionalProperties": False, "required": ["proble
                "type": "object", "additionalProperties": False, "required": ["quote", "clashes_with", "severity"],
                "properties": {"quote": {"type": "string"}, "clashes_with": {"type": "string"},
                               "severity": {"type": "integer", "enum": [1, 2, 3]}}}}}}
-MODE2 = len(sys.argv) > 4 and sys.argv[4] == "severity"
+MODE2 = len(sys.argv) > 4 and sys.argv[4] in ("severity", "five")
+
+# Third try (Jake): a 1-5 scale with an example per level, and the checker says how to fix each problem: a
+# replacement sentence when words alone fix it, or "dm" when the fix touches the sheet, fight, clock or notebook.
+SYSTEM5 = SYSTEM + (
+    " List each problem with a severity from 1 to 5. 1: a nitpick no player would notice (the clock a few minutes off, "
+    "loose wording). 2: a careful player might notice but wouldn't mind (a crowd of 'about twenty' becomes 'thirty'). "
+    "3: a player paying attention would notice (a named NPC's title or terms change; a distance or travel time shrinks). "
+    "4: it changes something the player relied on (a promised payment, an item they hold, how many enemies remain). "
+    "5: it breaks the story (a dead character acting, a place in two directions, a count that can't be). Quote the NEW "
+    "REPLY's exact words, and in clashes_with name the earlier line it clashes with. Then say how to fix it: fix 'text' "
+    "with a replacement for the quoted words when changing the words alone fixes it, or fix 'dm' with an empty "
+    "replacement when the fix also needs a change to the character sheet, fight, clock or notebook (hit points, "
+    "items, gold, enemy numbers, time passing). Return an empty list if none.")
+SCHEMA5 = {"type": "object", "additionalProperties": False, "required": ["problems"],
+           "properties": {"problems": {"type": "array", "items": {
+               "type": "object", "additionalProperties": False,
+               "required": ["quote", "clashes_with", "severity", "fix", "replacement"],
+               "properties": {"quote": {"type": "string"}, "clashes_with": {"type": "string"},
+                              "severity": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
+                              "fix": {"type": "string", "enum": ["text", "dm"]},
+                              "replacement": {"type": "string"}}}}}}
+FIVE = len(sys.argv) > 4 and sys.argv[4] == "five"
+if FIVE:
+    SYSTEM2, SCHEMA2 = SYSTEM5, SCHEMA5
 
 
 def ask(case: dict) -> dict:
@@ -70,7 +94,7 @@ def main() -> None:
           f"caught {sum(r['contradiction'] for r in pos)} of {len(pos)} contradiction rounds; "
           f"flagged {sum(r['contradiction'] for r in neg)} of {len(neg)} clean rounds", file=sys.stderr)
     if MODE2:
-        for cut in (2, 3):
+        for cut in ((2, 3, 4, 5) if FIVE else (2, 3)):
             print(f"severity {cut}+: caught {sum(r['severity'] >= cut for r in pos)} of {len(pos)}; "
                   f"flagged {sum(r['severity'] >= cut for r in neg)} of {len(neg)} clean", file=sys.stderr)
 
