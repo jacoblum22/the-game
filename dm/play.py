@@ -729,8 +729,9 @@ def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> st
 RULES_REMINDER = (
     "[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a "
     "spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD "
-    "text must already be in this conversation from a lookup. If it isn't, look it up first. Roll and look up first; "
-    "then write your reply, with the clock, notebook and sheet calls in the same message after it.")
+    "text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups "
+    "first; then one last message: your whole reply, written out, then the clock, notebook and sheet calls after it in "
+    "that same message, never before it.")
 
 
 # The DM's reply is held until its turn is over (owner, 2026-10-14). A reply under FULL_REPLY characters after tool

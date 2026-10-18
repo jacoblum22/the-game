@@ -307,3 +307,7 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   Pip do?"), a stub, so the game asked for the full reply: one more query each. The order cost more, not less, when
   the DM got it wrong. After a roll it never wrote the reply first. No cut: the conversation grew about 3k a round
   (19k to 58k), so 60k is reached near round 16; the cut is untested.
+- Prompt made explicit (one last message: the whole reply, then its record calls; never the calls first, after a roll
+  too; a reply drafted in thinking isn't written) and the per-turn reminder to match. Replay of 6 bard3 rounds x 2:
+  still 8 of 12 stubs (record calls first, then a closing line, then the game's ask for the full reply); 1 of 12 did it
+  in one call. The prompt alone doesn't move the habit.
