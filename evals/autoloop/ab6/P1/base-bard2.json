@@ -1,0 +1,1168 @@
+[
+ {
+  "round": 125,
+  "run": 0,
+  "line": "\"That fresh stake means someone's already scouting the same ground we are.\" I tell Marl and Kit, \"Marl, you stay hidden in the reeds near the boat-shed tonight with two of Pell's quietest guards, just to watch and count who comes and goes, and don't touch anything. Kit and I ride back to Saltmarsh for supper and sleep, and tomorrow we bring the bait wagon out at dawn with the other six.\"\n\nBefore I leave I place a few bits of dry reed across the mooring stake's path as a tell, so tomorrow I'll know if anyone has used it.",
+  "session": "75f2b10e-9ec0-4aef-b9e3-7e849ca49475",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Marl Sedge's Stealth hiding in the reeds near the boat-shed overnight (my ruling +4) vs the watchers' passive Perception 14: 1d20+4 = 1d20 [15] + 4 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception on the reed tell at the mooring stake next morning, DC 12: 1d20+2 = 1d20 [10] + 2 = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 12 hours later: Day 15, 5:38:48 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Gannet Causeway",
+     "add_to_description": "Day 14 night: Wren laid dry reeds across the far-bank mooring stake's path as a tell and left Marl Sedge with two guards hidden in the reeds (Stealth 19, unseen). Just before dawn on Day 15 Marl reports that a skiff with muffled oars came to the stake around 3 AM with two men, who looked over the culvert, then left toward the estuary. They did not see the watchers. Wren's tell was scuffed. Neither man was Sparrow by Marl's account (one tall, one stocky)."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Gannet Causeway",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "\"A few reeds across the path,\" you tell Kit, and you lay them out with care before riding back for supper and sleep. Marl and two of Pell's quietest guards melt into the reeds by the boat-shed.\n\nDay 15 comes up grey and cold, and you are at the Vantry hall before the dawn bell is done. Marl is already waiting in the yard, damp to the knees, and she tells it flatly. Her Stealth was a 19, and nobody saw her. A little before three, a skiff with muffled oars came to the mooring stake with two men in it, one tall and one stocky. They paced the end of the causeway, looked a long while at the culvert, and left toward the estuary. Neither man was Sparrow, she thinks, and neither was the hooded tall man you described. They touched nothing but the stake.\n\nYou ride out to check it yourself. Your Perception check is a 12, just enough, and the reeds you laid are scuffed and kicked aside. So the master's people are surveying the same ground, and it fits Corvin's advice. If the rest of it holds true, they will strike at the culvert, in the middle of the causeway, on the afternoon ebb.\n\nBy half past five, the covered wagon is in the Vantry yard. It is a sound vehicle with a good axle, and a pair of stout horses. Pell stands beside it in his halberdier's grey. Eight guards are drawn up, checking girths. Corvin is brought up from the cellar with his hands free, as promised, and he climbs in under the canvas with a look of faint amusement. The bait tube rides in your saddlebag. Your honest copy and the real leaf stay with the arbiter.\n\nYou have three slots, three Inspirations, and Kit at your shoulder. The plan is for the wagon to leave at dawn, reach the causeway when the ebb opens it about two, and for the eight guards to follow half a mile behind. What does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 1
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1051368
+  },
+  "clock": {
+   "now": 1229928,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 125,
+  "run": 1,
+  "line": "\"That fresh stake means someone's already scouting the same ground we are.\" I tell Marl and Kit, \"Marl, you stay hidden in the reeds near the boat-shed tonight with two of Pell's quietest guards, just to watch and count who comes and goes, and don't touch anything. Kit and I ride back to Saltmarsh for supper and sleep, and tomorrow we bring the bait wagon out at dawn with the other six.\"\n\nBefore I leave I place a few bits of dry reed across the mooring stake's path as a tell, so tomorrow I'll know if anyone has used it.",
+  "session": "4a4bdbd3-fcc1-412b-80cd-960b4fa0baa3",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Marl Sedge's Stealth in the reeds with two guards, watching the boat-shed overnight (vs Sparrow's passive Perception 13): 1d20+4 = 1d20 [7] + 4 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception at the stake at dawn: did the reed tell get disturbed, DC 12: 1d20+2 = 1d20 [1] + 2 = 3 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 12 hours 20 minutes later: Day 15, 5:58:48 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Gannet Causeway",
+     "add_to_description": "Day 14 night (hidden): Wren laid dry reed across the mooring stake's path as a tell. Marl Sedge and two guards hid in the reeds near the boat-shed; Marl's Stealth 11 failed against Sparrow's passive 13. Sparrow, scouting the same shed after dark, spotted the watchers, did not act, and withdrew. The Grey Cloak now knows the causeway is watched and will adjust: expect him to strike elsewhere, or to turn the trap (e.g. at the culvert from both ends, or by sending a decoy). The reed tell was trodden down. On Day 15 Wren rolled a natural 1 (total 3) on her Perception check of the tell, so she will misread it."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Gannet Causeway",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You lay the dry reeds across the mooring stake's path, and Marl Sedge melts into the reed-bed with two of Pell's quietest guards. She nods once and says nothing. You and Kit ride back through the dusk and reach Saltmarsh late, with the Gullspit light still dark across the water. The Salt Gull has your bed and a bowl of Bess's chowder waiting. You sleep well.\n\nAt dawn on Day 15, a little before six, the courtyard of the Vantry hall is full of morning noise. Pell has a covered wagon with a good axle, a pair of steady greys, and six guards in grey tabards mounting up. The arbiter stands at the door with her stylus behind her ear. The sealed tube holding the bait is in your saddlebag. Corvin sits on the wagon's bench between Pell and a guard, his hands free of irons, gloveless, wrapped in a plain cloak. He looks like a tired old tradesman on a day out. \"Fine weather for a hanging,\" he says to nobody.\n\nOne of the two guards you left on the flats has ridden in ahead of the wagon, mud to the knee. Marl's report is short. A quiet night. Nobody came to the boat-shed that they saw, no light, no boat. Marl stayed on watch and will meet you at the causeway. He couldn't say why, but he seemed uneasy. \"It was too quiet, miss. The gulls wouldn't settle.\"\n\nThe reed tell, you can't judge yet; you will see it when you reach the causeway. The plan stands. The wagon travels the half day to the flats, so you'd reach the Gannet Causeway around one in the afternoon, just before it opens on the ebb. You've three slots, three Inspirations, Kit, Pell, six guards, and Corvin in the wagon.\n\nWhat does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 1
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1051368
+  },
+  "clock": {
+   "now": 1231128,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 125,
+  "run": 2,
+  "line": "\"That fresh stake means someone's already scouting the same ground we are.\" I tell Marl and Kit, \"Marl, you stay hidden in the reeds near the boat-shed tonight with two of Pell's quietest guards, just to watch and count who comes and goes, and don't touch anything. Kit and I ride back to Saltmarsh for supper and sleep, and tomorrow we bring the bait wagon out at dawn with the other six.\"\n\nBefore I leave I place a few bits of dry reed across the mooring stake's path as a tell, so tomorrow I'll know if anyone has used it.",
+  "session": "e1646c79-1bc9-4b8a-8e43-3bd2f4c09a68",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Marl Sedge's Stealth hiding in the reeds overnight vs the watchers' passive Perception 14 (my ruling): 1d20+4 = 1d20 [6] + 4 = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Marl's Perception counting arrivals at the boat-shed overnight, DC 13: 1d20+2 = 1d20 [11] + 2 = 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 12 hours later: Day 15, 5:38:48 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Gannet Causeway",
+     "add_to_description": "Night Day 14-15: Marl Sedge and two guards watched the far-bank boat-shed from the reeds. Marl's Perception 13 counted a skiff with two men landing there about midnight; her Stealth 10 was below the watchers' passive 14, so one of them looked toward the reeds a long moment. They did not search. They took the reed tell from the stake, left, and left a man behind in the shed. Marl does not know whether she was seen."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Gannet Causeway",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You lay the dry reeds across the stake's path, ride back with Kit through the dusk, and sleep in the Salt Gull. Marl and two quiet guards slip into the reeds opposite the boat-shed.\n\nYou are at the east quay before dawn on Day 15 when Marl finds you. She is wet to the thighs and her face is grim.\n\nHer Perception check was a 13, just enough. About midnight a skiff with two men landed at the boat-shed. One crouched at the stake, swept your reed tell aside with his boot without looking down, and spoke low to the other. Then they left, but a third man stayed in the shed. Marl's Stealth was only a 10, and the watchers' awareness was higher. One of the pair stared at the reeds a long moment. Nobody came to search, but she can't swear they didn't see her. She withdrew with the guards before first light.\n\nSo the stake is in use, the far bank is watched, and the master may know you scouted. Perhaps that is exactly what he wants, or perhaps he thinks the ambush is still his secret.\n\nPell has the covered wagon in the hall yard with six guards mounted behind it, and Corvin sits inside with his hands free and Pell's knee against his. Your bait tube is in your saddlebag. It is a little before six, three slots and three Inspirations are ready, and the causeway opens near two this afternoon. What does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 1
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1051368
+  },
+  "clock": {
+   "now": 1229928,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 125,
+  "run": 3,
+  "line": "\"That fresh stake means someone's already scouting the same ground we are.\" I tell Marl and Kit, \"Marl, you stay hidden in the reeds near the boat-shed tonight with two of Pell's quietest guards, just to watch and count who comes and goes, and don't touch anything. Kit and I ride back to Saltmarsh for supper and sleep, and tomorrow we bring the bait wagon out at dawn with the other six.\"\n\nBefore I leave I place a few bits of dry reed across the mooring stake's path as a tell, so tomorrow I'll know if anyone has used it.",
+  "session": "0f5354cb-ba8e-432c-81fb-5d6b56d3e03b",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Marl Sedge's Stealth hiding in the reeds near the boat-shed overnight vs. a watcher's passive Perception 13 (my ruling): 1d20+4 = 1d20 [8] + 4 = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's Perception on the morning after, noticing the reed tell and signs at the stake, DC 12: 1d20+2 = 1d20 [2] + 2 = 4",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 2 hours later: Day 14, 7:38:48 PM",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: long rest: HP, spell slots and features restored; hit dice regained; Kit: long rest: HP, spell slots and features restored; hit dice regained; 8 hours later: Day 15, 3:38:48 AM",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 2 hours later: Day 15, 5:38:48 AM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Gannet Causeway",
+     "add_to_description": "Day 14 night: Wren laid dry reeds across the far-bank mooring stake's path as a tell. Marl Sedge and two guards hid in the reeds near the boat-shed (Marl's Stealth 12 vs watcher's passive 13). About midnight a lone figure in a small skiff came to the stake, stepped over/around the reeds without disturbing them, stood a long while looking at the reed-bed where Marl lay, then poled away downstream without a sound. Marl's party held still and did not engage. The enemy probably knows the causeway is watched, or wants us to think so. Wren's morning Perception was 4 and told her nothing of the tell herself."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Gannet Causeway",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You leave a few dry reeds across the mooring stake's path, give Marl and her two quietest guards their orders, and ride back to Saltmarsh with Kit through a violet dusk. Supper is hot and the sleep is whole, so you wake at dawn with all your slots and Inspirations, and your spare Hit Die back.\n\nThe watchers have a report for you. A rider from Marl reaches the Salt Gull as the bell rings six, mud to the knee. Around midnight a lone figure in a small skiff came to the stake. He stepped carefully around your reeds without disturbing one of them, which suggests he saw the tell and respected it. Then he stood a long while looking at the reed-bed where Marl lay, and you can guess what he was seeing. At last he poled away downstream without a sound. Marl's party held still and did not engage, as you ordered. The rider didn't see a face. The figure was tall, though, and he wore something pale.\n\nSo the enemy has almost certainly noticed the watch on the flats. Either he is walking into the trap knowing it's there, or he will pick another ground, or he wants you to think he's coming when he isn't. The wagon is waiting in the Vantry yard. Pell is checking the axle, six guards are saddling, and Corvin, hands unchained, is being helped up onto the bench with a rueful smile. It's nearly half past five, the causeway opens on the afternoon ebb, and you have a full day's ride to decide how to play it. What does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1222728
+  },
+  "clock": {
+   "now": 1229928,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": null
+ }
+]

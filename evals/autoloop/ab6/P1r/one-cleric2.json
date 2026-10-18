@@ -1,0 +1,1160 @@
+[
+ {
+  "round": 150,
+  "run": 0,
+  "line": "I eat the broth and keep my seat by the door, pole across my knees, listening. I hold the Fog Cloud as long as I can without straining, and when it thins I'll let it go rather than risk losing my focus if something stirs.\n\nEvery little while I'll check the children's fingertips with Wren's lantern, and if the grey creeps past the knuckles I'll ask her before casting anything. DM: since the prints stopped at the sill, can I hear anything small moving under the floorboards, since the hall stands on stilts?",
+  "session": "f7a6e950-28cf-46e2-a03e-dff5a10433e3",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Tamsin's Perception listening for movement under the stilted floor, DC 13: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 40 minutes later: Day 1, 8:00 PM; timer Tamsin's Fog Cloud (concentration) removed",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Nell Quill",
+     "add_to_description": "Day 1, ~8 PM: Tamsin sat up by the Long House door. Her Perception was a natural 1: she heard only the water, the stilts creaking and her own pulse, and could not tell whether anything small moved under the floor. Fog Cloud released near 8 PM. Children's grey holds at the knuckles, no worse."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Nell Quill",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You eat the broth and keep your seat, pole across your knees. The Long House is full of small night sounds: the stove ticking, the old man's breathing, the stilts creaking as the water shifts under them.\n\nYou listen for anything moving beneath the floor. Perception (4, a natural 1): the creaks and drips run together, and every one of them could be something small. You can't tell a child's step from a plank settling, and you can't swear that nothing is down there. The doubt itself is uncomfortable.\n\nEvery little while you take Wren's lantern to the back corner and check the children's fingertips. Fen's grey sits at the fingers, and Ilsa's and Bett's stop at the first knuckle. Nell's has not moved since the spell. Nothing has crept past a knuckle, so you cast nothing and spare the slots. Wren watches you do it each time without comment. Once, near the end, she sets a second bowl by your hand.\n\nAt eight the fog begins to thin, and you let it go rather than hold your focus on it. The grey shreds drift off the water. The fourth light is not in view, and the three on the Isle hang where they always have. The ferry-rope across the sill hasn't been touched.\n\nIt's eight o'clock at night. You have one 1st-level slot and two 2nd-level slots left, and 24 of 24 hit points. The night is only beginning.\n\nWhat does Tamsin do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Brannoc Ashdown",
+   "summary": "Human cleric 3 (Life), acolyte background",
+   "opening": "Brannoc Ashdown, a young human cleric of the Life domain, has been on the road only a few weeks, walking out from Millbrook Landing, the little river town of fishermen and reed-cutters where he grew up. He was orphaned at six when the Grey Fever emptied the houses along the water, and was raised by the temple's old healer, Mother Edda Thorne, who died last winter of old age and left him her plain wooden amulet. He keeps a promise to carry her work to places that have no healer at all. His past (true and not to be contradicted): as a child he sat beside dying neighbors because Edda had too few hands; the night she told him to leave a dying fisherman and rest, he refused, and the man's daughter later thanked him, which is the root of his stubbornness. He hums hymns while he works, is warm and patient, and swore never to let anyone suffer alone again. He is inflexible in his thinking. Open play on a muddy back road at dusk, at the edge of a small, struggling settlement with no priest or healer, its few lanterns lit early and its doors shut. Something has just happened that needs him: a frightened child or farmer hurries out to flag him down, begging for help for sick or wounded people sheltering in a barn, where the trouble is more than illness alone (for example, injuries from a recent attack by raiders or wild beasts, with the threat possibly still near). Brannoc has his mace, chain mail, shield, light crossbow, priest's pack, and 15 gp. Give him a clear, immediate call to act, and room to choose between healing, protecting, and investigating.",
+   "level": 3,
+   "race": "Human",
+   "class": "Cleric",
+   "subclass": "Life",
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+     "I am a bit stubborn once I have made up my mind."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I swore never to let anyone suffer alone again.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest.",
+   "ac": 18,
+   "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 14,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 9,
+    "WIS": 16,
+    "CHA": 11
+   },
+   "abilities": {
+    "STR": "14 (+2)",
+    "DEX": "13 (+1)",
+    "CON": "15 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "16 (+3)",
+    "CHA": "11 (+0)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +2, DEX +1, CON +2, INT -1, WIS +5*, CHA +2* (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +3, Arcana -1, Athletics +2, Deception +0, History -1, Insight +5*, Intimidation +0, Investigation -1, Medicine +5*, Nature -1, Perception +3, Performance +0, Persuasion +2*, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +3 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "normal",
+   "languages": "Common, Celestial, Elvish, Dwarvish",
+   "proficiencies": "Heavy Armor, Light Armor, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Mace: +4 to hit, 1d6+2 bludgeoning",
+    "Crossbow, light: +3 to hit, 1d8+1 piercing; range 80/320 (ammunition, loading, two-handed)",
+    "Unarmed strike: +4 to hit, 3 bludgeoning",
+    "Sacred Flame (cantrip): DEX save DC 13, 1d8 radiant, range 60 feet"
+   ],
+   "features": [
+    "Divine Domain: Choose one domain related to your deity, such as Life. Each domain is detailed at the end of the class description, and each one provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+    "Domain Spells: Each domain has a list of spells--its domain spells--that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day. If you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
+    "Bonus Proficiency: When you choose this domain at 1st level, you gain proficiency with heavy armor.",
+    "Disciple of Life: Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
+    "Channel Divinity (1/rest): At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
+    "Channel Divinity: Turn Undead: As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+    "Channel Divinity: Preserve Life: Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct. At level 3: 15 hit points to divide.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 24,
+    "current": 0,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 3,
+    "left": 3
+   },
+   "resources": {
+    "Channel Divinity": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "unconscious",
+    "dead"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 3
+   },
+   "xp": 1100,
+   "coins_cp": 400,
+   "items": {
+    "Shield": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Mace": 1,
+    "Chain Mail": 1,
+    "Crossbow, light": 1,
+    "Crossbow bolt": 20,
+    "Backpack": 1,
+    "Blanket": 1,
+    "Candle": 10,
+    "Tinderbox": 1,
+    "Rations (1 day)": 2,
+    "Waterskin": 1,
+    "Alms box": 1,
+    "Block of incense": 2,
+    "Censer": 1,
+    "Vestments": 2,
+    "Amulet": 2,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Loaf of bread": 1,
+    "Jar of honey": 1,
+    "Oil (flask)": 37,
+    "Letter from Hollow Reach for Brother Ansel's book of the faithful": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Lantern, hooded": 1,
+    "Willow-bark (dried, for fever)": 1,
+    "Powdered silver and iron (pinch, enough for 1 casting of Protection from Evil and Good)": 1
+   },
+   "spellcasting": {
+    "ability": "WIS",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Sacred Flame",
+     "Guidance",
+     "Spare the Dying"
+    ],
+    "class": "cleric",
+    "max_level": 2,
+    "prepared": [
+     "Healing Word",
+     "Shield of Faith",
+     "Guiding Bolt",
+     "Sanctuary",
+     "Protection from Evil and Good",
+     "Command"
+    ],
+    "always_prepared": [
+     "Bless",
+     "Cure Wounds",
+     "Lesser Restoration",
+     "Spiritual Weapon"
+    ],
+    "prepare_count": 6,
+    "prepare_from": "class",
+    "notes": "Prepare up to 6 spells from the whole cleric list after a long rest (domain spells are always prepared and don't count)."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 4,
+     "left": 0,
+     "recharge": "long"
+    },
+    "2": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Brannoc Ashdown",
+     "race": "Human",
+     "class": "Cleric",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 13,
+      "DEX": 12,
+      "CON": 14,
+      "INT": 8,
+      "WIS": 15,
+      "CHA": 10
+     },
+     "choices": {
+      "race.languages": [
+       "Celestial"
+      ],
+      "class.proficiencies.1": [
+       "Medicine",
+       "Persuasion"
+      ],
+      "class.equipment.1": [
+       "Mace"
+      ],
+      "class.equipment.2": [
+       "Chain Mail"
+      ],
+      "class.equipment.3": [
+       "a"
+      ],
+      "class.equipment.4": [
+       "Priest's Pack"
+      ],
+      "class.equipment.5": [
+       "Amulet"
+      ],
+      "background.languages": [
+       "Elvish",
+       "Dwarvish"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Sacred Flame",
+      "Guidance",
+      "Spare the Dying"
+     ],
+     "spells": [],
+     "prepared": [
+      "Healing Word",
+      "Shield of Faith",
+      "Guiding Bolt",
+      "Sanctuary"
+     ],
+     "personality": {
+      "traits": [
+       "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+       "I am a bit stubborn once I have made up my mind."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I swore never to let anyone suffer alone again.",
+      "flaw": "I am inflexible in my thinking."
+     },
+     "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest."
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed"
+     },
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1179006
+  },
+  "clock": {
+   "now": 72000,
+   "timers": {
+    "Brannoc's Guiding Bolt": -1664442
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 150,
+  "run": 1,
+  "line": "I eat the broth and keep my seat by the door, pole across my knees, listening. I hold the Fog Cloud as long as I can without straining, and when it thins I'll let it go rather than risk losing my focus if something stirs.\n\nEvery little while I'll check the children's fingertips with Wren's lantern, and if the grey creeps past the knuckles I'll ask her before casting anything. DM: since the prints stopped at the sill, can I hear anything small moving under the floorboards, since the hall stands on stilts?",
+  "session": "333d873a-4431-42d7-a303-eb7bcb4e08b9",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Tamsin's Perception listening for movement under the stilted floor, DC 13: 1d20+3 = 1d20 [20] + 3 = 23 (natural 20)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 40 minutes later: Day 1, 8:00 PM",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Nell Quill",
+     "add_to_description": "Day 1 ~8:00 PM: Tamsin (natural 20 Perception) heard the small wet-footed thing under the Long House floor, dragging its left side, humming Wren's hymn (Edda's tune, which Brannoc used to hum) a breath behind her. Not hostile so far; lonely. Children's grey holds at the knuckles. Fog Cloud actually ends 8:20 PM."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Nell Quill",
+    "input": null
+   },
+   {
+    "kind": "stub",
+    "text": "You listen, still with the pole across your knees. Beneath the boards something small is humming, a breath behind Wren, and it stops when she stops. It hasn't struck at anyone.\n\nWhat does Tamsin do?",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "Wren's broth is thick with eel and barley. You drink it slowly with the pole across your knees. The hall settles into the sounds of the sick: a cough, a murmur, the stove ticking as it cools. You listen under them, the way you once listened for a snag under black water.\n\nPerception (natural 20): beneath the boards, among the stilts, something moves. It isn't rats. It's slow and small, and it drags a little on the left side, the same short stride as the prints. It stops under the back corner, where the three children lie. Then it hums.\n\nThe tune is thin and flat, like wind in a wet reed. It is a plain hymn. Above you, Wren is sitting with the children and humming the same tune under her breath, so low she may not know she's doing it. When she pauses, the humming below stops. When she starts again, it picks the tune up a breath behind her.\n\nThere's no hunger in it, and no pull or chill like the lights have. It sounds like something that came a long way in the cold to be near a voice.\n\nYou check the children's fingertips by Wren's lantern, as you said you would. The grey hasn't moved past the knuckles on Ilsa or Bett, and on Fen it holds at the fingers. You don't cast anything.\n\nI need to correct something I said. I told you the fog would last until eight, but you cast it at twenty past seven, so it holds until twenty past eight. You can keep it up or let it go. You have one 1st-level slot and two 2nd-level slots left, and 24 of 24 hit points. It's eight o'clock. The thing under the floor has gone quiet again, as if waiting for the next verse.\n\nWhat does Tamsin do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Brannoc Ashdown",
+   "summary": "Human cleric 3 (Life), acolyte background",
+   "opening": "Brannoc Ashdown, a young human cleric of the Life domain, has been on the road only a few weeks, walking out from Millbrook Landing, the little river town of fishermen and reed-cutters where he grew up. He was orphaned at six when the Grey Fever emptied the houses along the water, and was raised by the temple's old healer, Mother Edda Thorne, who died last winter of old age and left him her plain wooden amulet. He keeps a promise to carry her work to places that have no healer at all. His past (true and not to be contradicted): as a child he sat beside dying neighbors because Edda had too few hands; the night she told him to leave a dying fisherman and rest, he refused, and the man's daughter later thanked him, which is the root of his stubbornness. He hums hymns while he works, is warm and patient, and swore never to let anyone suffer alone again. He is inflexible in his thinking. Open play on a muddy back road at dusk, at the edge of a small, struggling settlement with no priest or healer, its few lanterns lit early and its doors shut. Something has just happened that needs him: a frightened child or farmer hurries out to flag him down, begging for help for sick or wounded people sheltering in a barn, where the trouble is more than illness alone (for example, injuries from a recent attack by raiders or wild beasts, with the threat possibly still near). Brannoc has his mace, chain mail, shield, light crossbow, priest's pack, and 15 gp. Give him a clear, immediate call to act, and room to choose between healing, protecting, and investigating.",
+   "level": 3,
+   "race": "Human",
+   "class": "Cleric",
+   "subclass": "Life",
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+     "I am a bit stubborn once I have made up my mind."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I swore never to let anyone suffer alone again.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest.",
+   "ac": 18,
+   "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 14,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 9,
+    "WIS": 16,
+    "CHA": 11
+   },
+   "abilities": {
+    "STR": "14 (+2)",
+    "DEX": "13 (+1)",
+    "CON": "15 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "16 (+3)",
+    "CHA": "11 (+0)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +2, DEX +1, CON +2, INT -1, WIS +5*, CHA +2* (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +3, Arcana -1, Athletics +2, Deception +0, History -1, Insight +5*, Intimidation +0, Investigation -1, Medicine +5*, Nature -1, Perception +3, Performance +0, Persuasion +2*, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +3 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "normal",
+   "languages": "Common, Celestial, Elvish, Dwarvish",
+   "proficiencies": "Heavy Armor, Light Armor, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Mace: +4 to hit, 1d6+2 bludgeoning",
+    "Crossbow, light: +3 to hit, 1d8+1 piercing; range 80/320 (ammunition, loading, two-handed)",
+    "Unarmed strike: +4 to hit, 3 bludgeoning",
+    "Sacred Flame (cantrip): DEX save DC 13, 1d8 radiant, range 60 feet"
+   ],
+   "features": [
+    "Divine Domain: Choose one domain related to your deity, such as Life. Each domain is detailed at the end of the class description, and each one provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+    "Domain Spells: Each domain has a list of spells--its domain spells--that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day. If you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
+    "Bonus Proficiency: When you choose this domain at 1st level, you gain proficiency with heavy armor.",
+    "Disciple of Life: Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
+    "Channel Divinity (1/rest): At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
+    "Channel Divinity: Turn Undead: As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+    "Channel Divinity: Preserve Life: Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct. At level 3: 15 hit points to divide.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 24,
+    "current": 0,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 3,
+    "left": 3
+   },
+   "resources": {
+    "Channel Divinity": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "unconscious",
+    "dead"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 3
+   },
+   "xp": 1100,
+   "coins_cp": 400,
+   "items": {
+    "Shield": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Mace": 1,
+    "Chain Mail": 1,
+    "Crossbow, light": 1,
+    "Crossbow bolt": 20,
+    "Backpack": 1,
+    "Blanket": 1,
+    "Candle": 10,
+    "Tinderbox": 1,
+    "Rations (1 day)": 2,
+    "Waterskin": 1,
+    "Alms box": 1,
+    "Block of incense": 2,
+    "Censer": 1,
+    "Vestments": 2,
+    "Amulet": 2,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Loaf of bread": 1,
+    "Jar of honey": 1,
+    "Oil (flask)": 37,
+    "Letter from Hollow Reach for Brother Ansel's book of the faithful": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Lantern, hooded": 1,
+    "Willow-bark (dried, for fever)": 1,
+    "Powdered silver and iron (pinch, enough for 1 casting of Protection from Evil and Good)": 1
+   },
+   "spellcasting": {
+    "ability": "WIS",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Sacred Flame",
+     "Guidance",
+     "Spare the Dying"
+    ],
+    "class": "cleric",
+    "max_level": 2,
+    "prepared": [
+     "Healing Word",
+     "Shield of Faith",
+     "Guiding Bolt",
+     "Sanctuary",
+     "Protection from Evil and Good",
+     "Command"
+    ],
+    "always_prepared": [
+     "Bless",
+     "Cure Wounds",
+     "Lesser Restoration",
+     "Spiritual Weapon"
+    ],
+    "prepare_count": 6,
+    "prepare_from": "class",
+    "notes": "Prepare up to 6 spells from the whole cleric list after a long rest (domain spells are always prepared and don't count)."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 4,
+     "left": 0,
+     "recharge": "long"
+    },
+    "2": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Brannoc Ashdown",
+     "race": "Human",
+     "class": "Cleric",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 13,
+      "DEX": 12,
+      "CON": 14,
+      "INT": 8,
+      "WIS": 15,
+      "CHA": 10
+     },
+     "choices": {
+      "race.languages": [
+       "Celestial"
+      ],
+      "class.proficiencies.1": [
+       "Medicine",
+       "Persuasion"
+      ],
+      "class.equipment.1": [
+       "Mace"
+      ],
+      "class.equipment.2": [
+       "Chain Mail"
+      ],
+      "class.equipment.3": [
+       "a"
+      ],
+      "class.equipment.4": [
+       "Priest's Pack"
+      ],
+      "class.equipment.5": [
+       "Amulet"
+      ],
+      "background.languages": [
+       "Elvish",
+       "Dwarvish"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Sacred Flame",
+      "Guidance",
+      "Spare the Dying"
+     ],
+     "spells": [],
+     "prepared": [
+      "Healing Word",
+      "Shield of Faith",
+      "Guiding Bolt",
+      "Sanctuary"
+     ],
+     "personality": {
+      "traits": [
+       "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+       "I am a bit stubborn once I have made up my mind."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I swore never to let anyone suffer alone again.",
+      "flaw": "I am inflexible in my thinking."
+     },
+     "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest."
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed"
+     },
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1179006
+  },
+  "clock": {
+   "now": 72000,
+   "timers": {
+    "Brannoc's Guiding Bolt": -1664442,
+    "Tamsin's Fog Cloud (concentration)": 73200
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 150,
+  "run": 2,
+  "line": "I eat the broth and keep my seat by the door, pole across my knees, listening. I hold the Fog Cloud as long as I can without straining, and when it thins I'll let it go rather than risk losing my focus if something stirs.\n\nEvery little while I'll check the children's fingertips with Wren's lantern, and if the grey creeps past the knuckles I'll ask her before casting anything. DM: since the prints stopped at the sill, can I hear anything small moving under the floorboards, since the hall stands on stilts?",
+  "session": "4cf5f963-8037-49d9-addf-ba18dfbfa404",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Tamsin's Perception listening for movement under the stilted floor, DC 13: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 40 minutes later: Day 1, 8:00 PM; timer Tamsin's Fog Cloud (concentration) removed",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Nell Quill",
+     "add_to_description": "Day 1, ~8 PM: Tamsin let Fog Cloud lapse as it thinned. She heard nothing under the floor (natural 1) but a faint wet knocking began beneath the Long House's boards after the fog went; something small is under the hall, among the stilts. The children's grey creeps slowly; none past the knuckles yet."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Nell Quill",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You eat the broth, keep your seat, and listen. Perception (4, a natural 1): the hall is full of small noises, the stove ticking, the baby snuffling, the water lapping the stilts, and you can't sort one from another. If something moves under the floor, you can't tell it from the rest. The roll was bad, and I'll say so plainly.\n\nThe fog thins as the hour runs out, and you let it go rather than strain your focus. It was never meant to hold all night. The grey cloud pulls apart over the water and the mist comes back the ordinary way.\n\nEvery little while you take Wren's lantern to the back corner and check the children's fingertips. The grey is slow and steady. Fen's is at the fingers, Nell's at the first knuckle, Ilsa's and Bett's a shade behind. Nothing has passed the knuckles, so you cast nothing and ask Wren nothing yet.\n\nAt eight o'clock, as the last of the fog goes, you hear it. It's very faint, and you can't tell if it's new or if you only now have the quiet to hear it. A soft, wet knock comes from below, from under the boards near the back corner where the children lie. It's like a knuckle on a wet plank, once, and again, and again. It is slow and patient, and it's directly beneath the pallets.\n\nWren has stopped moving. She is looking at the floor.\n\nIt's eight o'clock. You have one 1st-level slot and two 2nd-level slots, with 24 of 24 hit points. The rope lies across the sill. The pole is on your knees.\n\nWhat does Tamsin do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Brannoc Ashdown",
+   "summary": "Human cleric 3 (Life), acolyte background",
+   "opening": "Brannoc Ashdown, a young human cleric of the Life domain, has been on the road only a few weeks, walking out from Millbrook Landing, the little river town of fishermen and reed-cutters where he grew up. He was orphaned at six when the Grey Fever emptied the houses along the water, and was raised by the temple's old healer, Mother Edda Thorne, who died last winter of old age and left him her plain wooden amulet. He keeps a promise to carry her work to places that have no healer at all. His past (true and not to be contradicted): as a child he sat beside dying neighbors because Edda had too few hands; the night she told him to leave a dying fisherman and rest, he refused, and the man's daughter later thanked him, which is the root of his stubbornness. He hums hymns while he works, is warm and patient, and swore never to let anyone suffer alone again. He is inflexible in his thinking. Open play on a muddy back road at dusk, at the edge of a small, struggling settlement with no priest or healer, its few lanterns lit early and its doors shut. Something has just happened that needs him: a frightened child or farmer hurries out to flag him down, begging for help for sick or wounded people sheltering in a barn, where the trouble is more than illness alone (for example, injuries from a recent attack by raiders or wild beasts, with the threat possibly still near). Brannoc has his mace, chain mail, shield, light crossbow, priest's pack, and 15 gp. Give him a clear, immediate call to act, and room to choose between healing, protecting, and investigating.",
+   "level": 3,
+   "race": "Human",
+   "class": "Cleric",
+   "subclass": "Life",
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+     "I am a bit stubborn once I have made up my mind."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I swore never to let anyone suffer alone again.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest.",
+   "ac": 18,
+   "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 14,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 9,
+    "WIS": 16,
+    "CHA": 11
+   },
+   "abilities": {
+    "STR": "14 (+2)",
+    "DEX": "13 (+1)",
+    "CON": "15 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "16 (+3)",
+    "CHA": "11 (+0)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +2, DEX +1, CON +2, INT -1, WIS +5*, CHA +2* (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +3, Arcana -1, Athletics +2, Deception +0, History -1, Insight +5*, Intimidation +0, Investigation -1, Medicine +5*, Nature -1, Perception +3, Performance +0, Persuasion +2*, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +3 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "normal",
+   "languages": "Common, Celestial, Elvish, Dwarvish",
+   "proficiencies": "Heavy Armor, Light Armor, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Mace: +4 to hit, 1d6+2 bludgeoning",
+    "Crossbow, light: +3 to hit, 1d8+1 piercing; range 80/320 (ammunition, loading, two-handed)",
+    "Unarmed strike: +4 to hit, 3 bludgeoning",
+    "Sacred Flame (cantrip): DEX save DC 13, 1d8 radiant, range 60 feet"
+   ],
+   "features": [
+    "Divine Domain: Choose one domain related to your deity, such as Life. Each domain is detailed at the end of the class description, and each one provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+    "Domain Spells: Each domain has a list of spells--its domain spells--that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day. If you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
+    "Bonus Proficiency: When you choose this domain at 1st level, you gain proficiency with heavy armor.",
+    "Disciple of Life: Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
+    "Channel Divinity (1/rest): At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
+    "Channel Divinity: Turn Undead: As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+    "Channel Divinity: Preserve Life: Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct. At level 3: 15 hit points to divide.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 24,
+    "current": 0,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 3,
+    "left": 3
+   },
+   "resources": {
+    "Channel Divinity": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "unconscious",
+    "dead"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 3
+   },
+   "xp": 1100,
+   "coins_cp": 400,
+   "items": {
+    "Shield": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Mace": 1,
+    "Chain Mail": 1,
+    "Crossbow, light": 1,
+    "Crossbow bolt": 20,
+    "Backpack": 1,
+    "Blanket": 1,
+    "Candle": 10,
+    "Tinderbox": 1,
+    "Rations (1 day)": 2,
+    "Waterskin": 1,
+    "Alms box": 1,
+    "Block of incense": 2,
+    "Censer": 1,
+    "Vestments": 2,
+    "Amulet": 2,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Loaf of bread": 1,
+    "Jar of honey": 1,
+    "Oil (flask)": 37,
+    "Letter from Hollow Reach for Brother Ansel's book of the faithful": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Lantern, hooded": 1,
+    "Willow-bark (dried, for fever)": 1,
+    "Powdered silver and iron (pinch, enough for 1 casting of Protection from Evil and Good)": 1
+   },
+   "spellcasting": {
+    "ability": "WIS",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Sacred Flame",
+     "Guidance",
+     "Spare the Dying"
+    ],
+    "class": "cleric",
+    "max_level": 2,
+    "prepared": [
+     "Healing Word",
+     "Shield of Faith",
+     "Guiding Bolt",
+     "Sanctuary",
+     "Protection from Evil and Good",
+     "Command"
+    ],
+    "always_prepared": [
+     "Bless",
+     "Cure Wounds",
+     "Lesser Restoration",
+     "Spiritual Weapon"
+    ],
+    "prepare_count": 6,
+    "prepare_from": "class",
+    "notes": "Prepare up to 6 spells from the whole cleric list after a long rest (domain spells are always prepared and don't count)."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 4,
+     "left": 0,
+     "recharge": "long"
+    },
+    "2": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Brannoc Ashdown",
+     "race": "Human",
+     "class": "Cleric",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 13,
+      "DEX": 12,
+      "CON": 14,
+      "INT": 8,
+      "WIS": 15,
+      "CHA": 10
+     },
+     "choices": {
+      "race.languages": [
+       "Celestial"
+      ],
+      "class.proficiencies.1": [
+       "Medicine",
+       "Persuasion"
+      ],
+      "class.equipment.1": [
+       "Mace"
+      ],
+      "class.equipment.2": [
+       "Chain Mail"
+      ],
+      "class.equipment.3": [
+       "a"
+      ],
+      "class.equipment.4": [
+       "Priest's Pack"
+      ],
+      "class.equipment.5": [
+       "Amulet"
+      ],
+      "background.languages": [
+       "Elvish",
+       "Dwarvish"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Sacred Flame",
+      "Guidance",
+      "Spare the Dying"
+     ],
+     "spells": [],
+     "prepared": [
+      "Healing Word",
+      "Shield of Faith",
+      "Guiding Bolt",
+      "Sanctuary"
+     ],
+     "personality": {
+      "traits": [
+       "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+       "I am a bit stubborn once I have made up my mind."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I swore never to let anyone suffer alone again.",
+      "flaw": "I am inflexible in my thinking."
+     },
+     "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest."
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed"
+     },
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1179006
+  },
+  "clock": {
+   "now": 72000,
+   "timers": {
+    "Brannoc's Guiding Bolt": -1664442
+   }
+  },
+  "fight": null
+ },
+ {
+  "round": 150,
+  "run": 3,
+  "line": "I eat the broth and keep my seat by the door, pole across my knees, listening. I hold the Fog Cloud as long as I can without straining, and when it thins I'll let it go rather than risk losing my focus if something stirs.\n\nEvery little while I'll check the children's fingertips with Wren's lantern, and if the grey creeps past the knuckles I'll ask her before casting anything. DM: since the prints stopped at the sill, can I hear anything small moving under the floorboards, since the hall stands on stilts?",
+  "session": "4d45e682-4be5-4d86-b6c2-0984811eb290",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Tamsin's Perception listening for movement under the stilted floor, DC 13: 1d20+3 = 1d20 [19] + 3 = 22",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: 40 minutes later: Day 1, 8:00 PM; timer Tamsin's Fog Cloud (concentration) removed",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Nell Quill",
+     "add_to_description": "Day 1, ~8 PM: Tamsin heard soft wet tapping under the Long House floor, beneath the children's corner, and a faint child's humming of the Calling the Lights rhyme. The fourth light is a drowned child's ghost-light (unresolved); it wants the candle-callers. Tamsin let Fog Cloud lapse at 8 PM. Children's grey holds at the knuckles."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Nell Quill",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You eat the broth and keep your seat, pole across your knees, and listen. The fog holds as long as you can hold it without strain. At eight, as it thins, you let it go, and the slot stays spent.\n\nPerception (22): the hall is full of small honest sounds, the stove ticking, the baby's breath, the water lapping at the stilts. Under them is something that doesn't belong. Beneath the back corner, where the four children lie, there is a soft wet tapping on the underside of the boards, slow and patient, like a fingernail. Between taps comes a thread of humming, high and thin, a child's voice with no breath behind it. It's the tune of the rhyme, \"come to the candle, come to the door.\" It stops when you stop breathing, and starts again when you do.\n\nYou check the children by Wren's lantern, as you promised. The grey is holding at the knuckles on Nell, Ilsa and Bett, and Fen's has not moved past his fingers since your spell. Nobody needs a spell yet. When you tell Wren what you hear, she goes still, then kneels, lays her palm flat on the floor over the tapping, and says nothing. The tapping answers, three soft knocks, right under her hand.\n\nHer voice is level, but her fingers are white. \"It's under the children. It's not harming them, only waiting.\" She looks at you. \"What do you want to do?\"\n\nIt's eight o'clock. You have one 1st-level slot and two 2nd-level slots left, and 24 of 24 hit points. The lantern is hooded at your boot, the rope lies across the sill, and the tapping goes on beneath the floor.\n\nWhat does Tamsin do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Brannoc Ashdown",
+   "summary": "Human cleric 3 (Life), acolyte background",
+   "opening": "Brannoc Ashdown, a young human cleric of the Life domain, has been on the road only a few weeks, walking out from Millbrook Landing, the little river town of fishermen and reed-cutters where he grew up. He was orphaned at six when the Grey Fever emptied the houses along the water, and was raised by the temple's old healer, Mother Edda Thorne, who died last winter of old age and left him her plain wooden amulet. He keeps a promise to carry her work to places that have no healer at all. His past (true and not to be contradicted): as a child he sat beside dying neighbors because Edda had too few hands; the night she told him to leave a dying fisherman and rest, he refused, and the man's daughter later thanked him, which is the root of his stubbornness. He hums hymns while he works, is warm and patient, and swore never to let anyone suffer alone again. He is inflexible in his thinking. Open play on a muddy back road at dusk, at the edge of a small, struggling settlement with no priest or healer, its few lanterns lit early and its doors shut. Something has just happened that needs him: a frightened child or farmer hurries out to flag him down, begging for help for sick or wounded people sheltering in a barn, where the trouble is more than illness alone (for example, injuries from a recent attack by raiders or wild beasts, with the threat possibly still near). Brannoc has his mace, chain mail, shield, light crossbow, priest's pack, and 15 gp. Give him a clear, immediate call to act, and room to choose between healing, protecting, and investigating.",
+   "level": 3,
+   "race": "Human",
+   "class": "Cleric",
+   "subclass": "Life",
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+     "I am a bit stubborn once I have made up my mind."
+    ],
+    "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+    "bond": "I swore never to let anyone suffer alone again.",
+    "flaw": "I am inflexible in my thinking."
+   },
+   "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest.",
+   "ac": 18,
+   "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 14,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 9,
+    "WIS": 16,
+    "CHA": 11
+   },
+   "abilities": {
+    "STR": "14 (+2)",
+    "DEX": "13 (+1)",
+    "CON": "15 (+2)",
+    "INT": "9 (-1)",
+    "WIS": "16 (+3)",
+    "CHA": "11 (+0)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR +2, DEX +1, CON +2, INT -1, WIS +5*, CHA +2* (* proficient)",
+   "skills": "Acrobatics +1, Animal Handling +3, Arcana -1, Athletics +2, Deception +0, History -1, Insight +5*, Intimidation +0, Investigation -1, Medicine +5*, Nature -1, Perception +3, Performance +0, Persuasion +2*, Religion +1*, Sleight of Hand +1, Stealth +1, Survival +3 (* proficient, ** expertise)",
+   "passive_perception": 13,
+   "senses": "normal",
+   "languages": "Common, Celestial, Elvish, Dwarvish",
+   "proficiencies": "Heavy Armor, Light Armor, Medium Armor, Shields, Simple Weapons",
+   "attacks": [
+    "Mace: +4 to hit, 1d6+2 bludgeoning",
+    "Crossbow, light: +3 to hit, 1d8+1 piercing; range 80/320 (ammunition, loading, two-handed)",
+    "Unarmed strike: +4 to hit, 3 bludgeoning",
+    "Sacred Flame (cantrip): DEX save DC 13, 1d8 radiant, range 60 feet"
+   ],
+   "features": [
+    "Divine Domain: Choose one domain related to your deity, such as Life. Each domain is detailed at the end of the class description, and each one provides examples of gods associated with it. Your choice grants you domain spells and other features when you choose it at 1st level. It also grants you additional ways to use Channel Divinity when you gain that feature at 2nd level, and additional benefits at 6th, 8th, and 17th levels.",
+    "Domain Spells: Each domain has a list of spells--its domain spells--that you gain at the cleric levels noted in the domain description. Once you gain a domain spell, you always have it prepared, and it doesn't count against the number of spells you can prepare each day. If you have a domain spell that doesn't appear on the cleric spell list, the spell is nonetheless a cleric spell for you.",
+    "Bonus Proficiency: When you choose this domain at 1st level, you gain proficiency with heavy armor.",
+    "Disciple of Life: Also starting at 1st level, your healing spells are more effective. Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level.",
+    "Channel Divinity (1/rest): At 2nd level, you gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects. You start with two such effects: Turn Undead and an effect determined by your domain. Some domains grant you additional effects as you advance in levels, as noted in the domain description. When you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again. Some Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC. Beginning at 6th level, you can use your Channel Divinity twice between rests, and beginning at 18th level, you can use it three times between rests. When you finish a short or long rest, you regain your expended uses.",
+    "Channel Divinity: Turn Undead: As an action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage. A turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+    "Channel Divinity: Preserve Life: Starting at 2nd level, you can use your Channel Divinity to heal the badly injured. As an action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct. At level 3: 15 hit points to divide.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 24,
+    "current": 0,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 3,
+    "left": 3
+   },
+   "resources": {
+    "Channel Divinity": {
+     "max": 1,
+     "left": 0,
+     "recharge": "short"
+    }
+   },
+   "conditions": [
+    "unconscious",
+    "dead"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 3
+   },
+   "xp": 1100,
+   "coins_cp": 400,
+   "items": {
+    "Shield": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Mace": 1,
+    "Chain Mail": 1,
+    "Crossbow, light": 1,
+    "Crossbow bolt": 20,
+    "Backpack": 1,
+    "Blanket": 1,
+    "Candle": 10,
+    "Tinderbox": 1,
+    "Rations (1 day)": 2,
+    "Waterskin": 1,
+    "Alms box": 1,
+    "Block of incense": 2,
+    "Censer": 1,
+    "Vestments": 2,
+    "Amulet": 2,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Loaf of bread": 1,
+    "Jar of honey": 1,
+    "Oil (flask)": 37,
+    "Letter from Hollow Reach for Brother Ansel's book of the faithful": 1,
+    "Rope, hempen (50 feet)": 1,
+    "Lantern, hooded": 1,
+    "Willow-bark (dried, for fever)": 1,
+    "Powdered silver and iron (pinch, enough for 1 casting of Protection from Evil and Good)": 1
+   },
+   "spellcasting": {
+    "ability": "WIS",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Sacred Flame",
+     "Guidance",
+     "Spare the Dying"
+    ],
+    "class": "cleric",
+    "max_level": 2,
+    "prepared": [
+     "Healing Word",
+     "Shield of Faith",
+     "Guiding Bolt",
+     "Sanctuary",
+     "Protection from Evil and Good",
+     "Command"
+    ],
+    "always_prepared": [
+     "Bless",
+     "Cure Wounds",
+     "Lesser Restoration",
+     "Spiritual Weapon"
+    ],
+    "prepare_count": 6,
+    "prepare_from": "class",
+    "notes": "Prepare up to 6 spells from the whole cleric list after a long rest (domain spells are always prepared and don't count)."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 4,
+     "left": 0,
+     "recharge": "long"
+    },
+    "2": {
+     "max": 2,
+     "left": 0,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Brannoc Ashdown",
+     "race": "Human",
+     "class": "Cleric",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 13,
+      "DEX": 12,
+      "CON": 14,
+      "INT": 8,
+      "WIS": 15,
+      "CHA": 10
+     },
+     "choices": {
+      "race.languages": [
+       "Celestial"
+      ],
+      "class.proficiencies.1": [
+       "Medicine",
+       "Persuasion"
+      ],
+      "class.equipment.1": [
+       "Mace"
+      ],
+      "class.equipment.2": [
+       "Chain Mail"
+      ],
+      "class.equipment.3": [
+       "a"
+      ],
+      "class.equipment.4": [
+       "Priest's Pack"
+      ],
+      "class.equipment.5": [
+       "Amulet"
+      ],
+      "background.languages": [
+       "Elvish",
+       "Dwarvish"
+      ],
+      "background.equipment.1": [
+       "Amulet"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Sacred Flame",
+      "Guidance",
+      "Spare the Dying"
+     ],
+     "spells": [],
+     "prepared": [
+      "Healing Word",
+      "Shield of Faith",
+      "Guiding Bolt",
+      "Sanctuary"
+     ],
+     "personality": {
+      "traits": [
+       "I am warm and patient with the sick and frightened, and I hum hymns while I work.",
+       "I am a bit stubborn once I have made up my mind."
+      ],
+      "ideal": "Charity. I always try to help those in need, no matter what the personal cost.",
+      "bond": "I swore never to let anyone suffer alone again.",
+      "flaw": "I am inflexible in my thinking."
+     },
+     "appearance": "A plain wooden amulet, once worn by the old temple healer who raised him, hangs at his chest."
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed"
+     },
+     {
+      "hp": "fixed"
+     }
+    ]
+   },
+   "last_long_rest": 1179006
+  },
+  "clock": {
+   "now": 72000,
+   "timers": {
+    "Brannoc's Guiding Bolt": -1664442
+   }
+  },
+  "fight": null
+ }
+]

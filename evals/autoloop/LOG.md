@@ -287,3 +287,14 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   flagged 14 of 60 (last try 61 and 20); flat 3+: 42 and 7 (last 47 and 14). The quote check itself drops little (23 of
   395; 2 of its 11 dropped at 2+ were real): the prompt does most of the work. Of the 10 clean rounds the fitted rule
   flags, I judge 8 or 9 real misses by the readers. One wasted run (~$5) before fixing the mode switch. quote_cutoffs.py.
+
+## Reply and bookkeeping in one model call (Jake, 2026-10-18)
+- Code: a model call whose tools are all bookkeeping (change_time, write_lore, change_pc, change_party,
+  change_creature), made with a full reply and with no error, ends the turn: in the API loop, and in Claude Code by a
+  PostToolUse hook that stops it. Prompt: rolls and lookups first, then the reply with the bookkeeping after it in the
+  same message (replaces "all tool calls first", Jake's call). Bookkeeping after the reply no longer gets the LATE
+  note. 288 tests pass; checked live that Claude Code stops and the next turn goes on.
+- Replay A/B, 6 ordinary rounds (none mid-fight) x 4 runs (ab6): model calls per round 2.75 old, 2.54 new; with the
+  order also in the per-turn reminder 2.63. The DM kept its old order (bookkeeping, then the reply in a call of its own)
+  in 19 to 22 of 24 runs, and never combined after a roll: these games have 180 rounds of the old habit behind them.
+  When it did put the reply first, the turn took 1 call. Quality not judged: too few runs changed. Untested on a new game.
