@@ -236,3 +236,11 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   31; worked out a sum wrong (days, distances, ages) 14; both sides in one reply 14; went back to a fact it had
   corrected 3; claimed a tool it lacks 1; other 17 (narration against its own dice or tracker, loose wording).
 - So it isn't memory loss: the fact was nearly always in front of it, mostly from the last few rounds.
+
+## Jev as a contradiction check (Jake, 2026-10-18)
+- evals/autoloop/jev_check.py: one yes/no question to Jev (TypeSafe, via Vercel AI Gateway) per round: the reply, the
+  turns before it word for word, and the notebook entries the reply names. 105 rounds with a contradiction finding
+  (not ruled out by the cause readers) against 150 rounds no reader flagged. Results in games/read/causes/jev*.json.
+- Near chance every time (AUC: 0.5 is a coin flip, 1.0 perfect): jev (1.13) 0.59, jev-1.14.0 0.60, jev-1.14.0 with
+  3 turns instead of 10 0.61. Best trade-off seen: 1.14 at 0.5 caught 16 of 105 and flagged 14 of 150 clean rounds.
+  About 6.7M input tokens in all, roughly $0.28. Not usable for this; not built into the game.

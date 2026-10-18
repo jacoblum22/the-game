@@ -1,0 +1,2696 @@
+[
+ {
+  "game": "barbarian2",
+  "round": 9,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   33
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7501
+ },
+ {
+  "game": "barbarian2",
+  "round": 10,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   34
+  ],
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7741
+ },
+ {
+  "game": "barbarian2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   35
+  ],
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8547
+ },
+ {
+  "game": "barbarian2",
+  "round": 25,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   36
+  ],
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9180
+ },
+ {
+  "game": "barbarian2",
+  "round": 37,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   37,
+   38
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8604
+ },
+ {
+  "game": "barbarian2",
+  "round": 46,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   39
+  ],
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9994
+ },
+ {
+  "game": "barbarian2",
+  "round": 48,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   40
+  ],
+  "p": 0.55,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10058
+ },
+ {
+  "game": "barbarian2",
+  "round": 51,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   41
+  ],
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10790
+ },
+ {
+  "game": "barbarian2",
+  "round": 55,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   42,
+   43
+  ],
+  "p": 0.57,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11531
+ },
+ {
+  "game": "barbarian2",
+  "round": 57,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   44
+  ],
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10870
+ },
+ {
+  "game": "barbarian2",
+  "round": 59,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   45
+  ],
+  "p": 0.38,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9033
+ },
+ {
+  "game": "barbarian2",
+  "round": 64,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   46
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8540
+ },
+ {
+  "game": "barbarian2",
+  "round": 80,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   47
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12439
+ },
+ {
+  "game": "barbarian2",
+  "round": 81,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   48,
+   49
+  ],
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13878
+ },
+ {
+  "game": "barbarian2",
+  "round": 83,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   50
+  ],
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15014
+ },
+ {
+  "game": "barbarian2",
+  "round": 84,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   51
+  ],
+  "p": 0.52,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14998
+ },
+ {
+  "game": "barbarian2",
+  "round": 85,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   52
+  ],
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17276
+ },
+ {
+  "game": "barbarian2",
+  "round": 87,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   53
+  ],
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16610
+ },
+ {
+  "game": "barbarian2",
+  "round": 88,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   54
+  ],
+  "p": 0.36,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14781
+ },
+ {
+  "game": "barbarian2",
+  "round": 90,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   55
+  ],
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16683
+ },
+ {
+  "game": "barbarian2",
+  "round": 97,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   56
+  ],
+  "p": 0.49,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 19804
+ },
+ {
+  "game": "barbarian2",
+  "round": 104,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   57
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13701
+ },
+ {
+  "game": "barbarian2",
+  "round": 107,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   58
+  ],
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13639
+ },
+ {
+  "game": "barbarian2",
+  "round": 112,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   59
+  ],
+  "p": 0.5,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9317
+ },
+ {
+  "game": "barbarian2",
+  "round": 114,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   60
+  ],
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9553
+ },
+ {
+  "game": "barbarian2",
+  "round": 115,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   61
+  ],
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10539
+ },
+ {
+  "game": "barbarian2",
+  "round": 116,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   62
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10735
+ },
+ {
+  "game": "barbarian2",
+  "round": 123,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   63
+  ],
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10639
+ },
+ {
+  "game": "barbarian2",
+  "round": 143,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   64,
+   65
+  ],
+  "p": 0.72,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17018
+ },
+ {
+  "game": "barbarian2",
+  "round": 145,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   66
+  ],
+  "p": 0.4,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 19806
+ },
+ {
+  "game": "barbarian2",
+  "round": 154,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   67
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8663
+ },
+ {
+  "game": "barbarian2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   68
+  ],
+  "p": 0.72,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9318
+ },
+ {
+  "game": "barbarian2",
+  "round": 163,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   69
+  ],
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9215
+ },
+ {
+  "game": "barbarian2",
+  "round": 165,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   70
+  ],
+  "p": 0.58,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11578
+ },
+ {
+  "game": "barbarian2",
+  "round": 166,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   71
+  ],
+  "p": 0.48,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11394
+ },
+ {
+  "game": "bard2",
+  "round": 4,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   72
+  ],
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 5769
+ },
+ {
+  "game": "bard2",
+  "round": 6,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   73
+  ],
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6380
+ },
+ {
+  "game": "bard2",
+  "round": 19,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   74
+  ],
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7535
+ },
+ {
+  "game": "bard2",
+  "round": 22,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   75
+  ],
+  "p": 0.12,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8045
+ },
+ {
+  "game": "bard2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   76
+  ],
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7977
+ },
+ {
+  "game": "bard2",
+  "round": 26,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   77
+  ],
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8417
+ },
+ {
+  "game": "bard2",
+  "round": 30,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   78
+  ],
+  "p": 0.16,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7138
+ },
+ {
+  "game": "bard2",
+  "round": 42,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   79
+  ],
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8559
+ },
+ {
+  "game": "bard2",
+  "round": 44,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   80
+  ],
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12135
+ },
+ {
+  "game": "bard2",
+  "round": 45,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   81,
+   82,
+   83
+  ],
+  "p": 0.51,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10768
+ },
+ {
+  "game": "bard2",
+  "round": 46,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   84
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11572
+ },
+ {
+  "game": "bard2",
+  "round": 66,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   85
+  ],
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6910
+ },
+ {
+  "game": "bard2",
+  "round": 69,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   86
+  ],
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8572
+ },
+ {
+  "game": "bard2",
+  "round": 76,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   87
+  ],
+  "p": 0.72,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9676
+ },
+ {
+  "game": "bard2",
+  "round": 92,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   88
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8890
+ },
+ {
+  "game": "bard2",
+  "round": 94,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   89
+  ],
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10446
+ },
+ {
+  "game": "bard2",
+  "round": 96,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   90
+  ],
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10866
+ },
+ {
+  "game": "bard2",
+  "round": 97,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   91
+  ],
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12560
+ },
+ {
+  "game": "bard2",
+  "round": 99,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   92
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10620
+ },
+ {
+  "game": "bard2",
+  "round": 105,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   93
+  ],
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9069
+ },
+ {
+  "game": "bard2",
+  "round": 110,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   94
+  ],
+  "p": 0.46,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9230
+ },
+ {
+  "game": "bard2",
+  "round": 116,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   95
+  ],
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14958
+ },
+ {
+  "game": "bard2",
+  "round": 120,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   96
+  ],
+  "p": 0.5,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13515
+ },
+ {
+  "game": "bard2",
+  "round": 121,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   97
+  ],
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15529
+ },
+ {
+  "game": "bard2",
+  "round": 127,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   98
+  ],
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9854
+ },
+ {
+  "game": "bard2",
+  "round": 132,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   99
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13784
+ },
+ {
+  "game": "bard2",
+  "round": 133,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   100
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14620
+ },
+ {
+  "game": "bard2",
+  "round": 134,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   101,
+   102
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16553
+ },
+ {
+  "game": "bard2",
+  "round": 135,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   103
+  ],
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 18873
+ },
+ {
+  "game": "bard2",
+  "round": 138,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   104
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17581
+ },
+ {
+  "game": "bard2",
+  "round": 139,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   105
+  ],
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 18189
+ },
+ {
+  "game": "bard2",
+  "round": 141,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   106,
+   107,
+   108
+  ],
+  "p": 0.83,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15266
+ },
+ {
+  "game": "bard2",
+  "round": 145,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   109
+  ],
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9113
+ },
+ {
+  "game": "bard2",
+  "round": 149,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   110
+  ],
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10287
+ },
+ {
+  "game": "bard2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   111
+  ],
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11524
+ },
+ {
+  "game": "bard2",
+  "round": 156,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   112
+  ],
+  "p": 0.42,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11979
+ },
+ {
+  "game": "bard2",
+  "round": 164,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   113
+  ],
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10344
+ },
+ {
+  "game": "bard2",
+  "round": 166,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   114
+  ],
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9769
+ },
+ {
+  "game": "bard2",
+  "round": 167,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   115
+  ],
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9573
+ },
+ {
+  "game": "bard2",
+  "round": 173,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   116
+  ],
+  "p": 0.49,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10733
+ },
+ {
+  "game": "bard2",
+  "round": 175,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   117
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10213
+ },
+ {
+  "game": "bard2",
+  "round": 180,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   118
+  ],
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10178
+ },
+ {
+  "game": "cleric2",
+  "round": 6,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   1
+  ],
+  "p": 0.14,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6798
+ },
+ {
+  "game": "cleric2",
+  "round": 8,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   2,
+   3
+  ],
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6800
+ },
+ {
+  "game": "cleric2",
+  "round": 10,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   4,
+   5
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7234
+ },
+ {
+  "game": "cleric2",
+  "round": 13,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   6
+  ],
+  "p": 0.46,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10615
+ },
+ {
+  "game": "cleric2",
+  "round": 14,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   7
+  ],
+  "p": 0.15,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10464
+ },
+ {
+  "game": "cleric2",
+  "round": 21,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   8
+  ],
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10316
+ },
+ {
+  "game": "cleric2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   9
+  ],
+  "p": 0.5,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8080
+ },
+ {
+  "game": "cleric2",
+  "round": 29,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   10
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9288
+ },
+ {
+  "game": "cleric2",
+  "round": 33,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   11
+  ],
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11651
+ },
+ {
+  "game": "cleric2",
+  "round": 34,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   12
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12080
+ },
+ {
+  "game": "cleric2",
+  "round": 39,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   13
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10793
+ },
+ {
+  "game": "cleric2",
+  "round": 40,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   14
+  ],
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8645
+ },
+ {
+  "game": "cleric2",
+  "round": 41,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   15
+  ],
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8092
+ },
+ {
+  "game": "cleric2",
+  "round": 47,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   16
+  ],
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7478
+ },
+ {
+  "game": "cleric2",
+  "round": 68,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   17
+  ],
+  "p": 0.7,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10731
+ },
+ {
+  "game": "cleric2",
+  "round": 75,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   18
+  ],
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10338
+ },
+ {
+  "game": "cleric2",
+  "round": 85,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   20
+  ],
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8799
+ },
+ {
+  "game": "cleric2",
+  "round": 98,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   21
+  ],
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10958
+ },
+ {
+  "game": "cleric2",
+  "round": 103,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   22
+  ],
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10028
+ },
+ {
+  "game": "cleric2",
+  "round": 129,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   23
+  ],
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10214
+ },
+ {
+  "game": "cleric2",
+  "round": 143,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   24
+  ],
+  "p": 0.4,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10901
+ },
+ {
+  "game": "cleric2",
+  "round": 147,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   25
+  ],
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10753
+ },
+ {
+  "game": "cleric2",
+  "round": 152,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   26
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10255
+ },
+ {
+  "game": "cleric2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   27
+  ],
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9607
+ },
+ {
+  "game": "cleric2",
+  "round": 156,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   28
+  ],
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9101
+ },
+ {
+  "game": "cleric2",
+  "round": 158,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   29,
+   30
+  ],
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8902
+ },
+ {
+  "game": "cleric2",
+  "round": 160,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   31
+  ],
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8988
+ },
+ {
+  "game": "cleric2",
+  "round": 176,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   32
+  ],
+  "p": 0.43,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12196
+ },
+ {
+  "game": "barbarian2",
+  "round": 34,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8390
+ },
+ {
+  "game": "cleric2",
+  "round": 105,
+  "label": 0,
+  "p": 0.5,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10627
+ },
+ {
+  "game": "barbarian2",
+  "round": 79,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17907
+ },
+ {
+  "game": "bard2",
+  "round": 74,
+  "label": 0,
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9220
+ },
+ {
+  "game": "cleric2",
+  "round": 45,
+  "label": 0,
+  "p": 0.16,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7223
+ },
+ {
+  "game": "cleric2",
+  "round": 59,
+  "label": 0,
+  "p": 0.43,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8787
+ },
+ {
+  "game": "barbarian2",
+  "round": 174,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14232
+ },
+ {
+  "game": "cleric2",
+  "round": 71,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10694
+ },
+ {
+  "game": "barbarian2",
+  "round": 63,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9584
+ },
+ {
+  "game": "bard2",
+  "round": 33,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7919
+ },
+ {
+  "game": "cleric2",
+  "round": 51,
+  "label": 0,
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8333
+ },
+ {
+  "game": "barbarian2",
+  "round": 156,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11695
+ },
+ {
+  "game": "cleric2",
+  "round": 138,
+  "label": 0,
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14535
+ },
+ {
+  "game": "cleric2",
+  "round": 37,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10431
+ },
+ {
+  "game": "cleric2",
+  "round": 66,
+  "label": 0,
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10187
+ },
+ {
+  "game": "barbarian2",
+  "round": 110,
+  "label": 0,
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9464
+ },
+ {
+  "game": "barbarian2",
+  "round": 100,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14537
+ },
+ {
+  "game": "cleric2",
+  "round": 57,
+  "label": 0,
+  "p": 0.17,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8660
+ },
+ {
+  "game": "cleric2",
+  "round": 157,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8449
+ },
+ {
+  "game": "cleric2",
+  "round": 69,
+  "label": 0,
+  "p": 0.39,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11422
+ },
+ {
+  "game": "bard2",
+  "round": 12,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6552
+ },
+ {
+  "game": "barbarian2",
+  "round": 103,
+  "label": 0,
+  "p": 0.15,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15633
+ },
+ {
+  "game": "cleric2",
+  "round": 52,
+  "label": 0,
+  "p": 0.15,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8174
+ },
+ {
+  "game": "bard2",
+  "round": 20,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7884
+ },
+ {
+  "game": "cleric2",
+  "round": 89,
+  "label": 0,
+  "p": 0.43,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10118
+ },
+ {
+  "game": "cleric2",
+  "round": 144,
+  "label": 0,
+  "p": 0.38,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10202
+ },
+ {
+  "game": "bard2",
+  "round": 61,
+  "label": 0,
+  "p": 0.52,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 4781
+ },
+ {
+  "game": "bard2",
+  "round": 60,
+  "label": 0,
+  "p": 0.16,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 4381
+ },
+ {
+  "game": "bard2",
+  "round": 168,
+  "label": 0,
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10006
+ },
+ {
+  "game": "cleric2",
+  "round": 53,
+  "label": 0,
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8992
+ },
+ {
+  "game": "bard2",
+  "round": 29,
+  "label": 0,
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7773
+ },
+ {
+  "game": "bard2",
+  "round": 34,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7707
+ },
+ {
+  "game": "barbarian2",
+  "round": 82,
+  "label": 0,
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15142
+ },
+ {
+  "game": "cleric2",
+  "round": 46,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7778
+ },
+ {
+  "game": "cleric2",
+  "round": 142,
+  "label": 0,
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9124
+ },
+ {
+  "game": "cleric2",
+  "round": 44,
+  "label": 0,
+  "p": 0.15,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7152
+ },
+ {
+  "game": "bard2",
+  "round": 15,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7040
+ },
+ {
+  "game": "cleric2",
+  "round": 94,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9078
+ },
+ {
+  "game": "barbarian2",
+  "round": 15,
+  "label": 0,
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8070
+ },
+ {
+  "game": "bard2",
+  "round": 158,
+  "label": 0,
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11707
+ },
+ {
+  "game": "cleric2",
+  "round": 100,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9003
+ },
+ {
+  "game": "barbarian2",
+  "round": 176,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8314
+ },
+ {
+  "game": "cleric2",
+  "round": 86,
+  "label": 0,
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8960
+ },
+ {
+  "game": "bard2",
+  "round": 25,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7870
+ },
+ {
+  "game": "barbarian2",
+  "round": 26,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9045
+ },
+ {
+  "game": "bard2",
+  "round": 16,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7944
+ },
+ {
+  "game": "bard2",
+  "round": 91,
+  "label": 0,
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9586
+ },
+ {
+  "game": "cleric2",
+  "round": 120,
+  "label": 0,
+  "p": 0.44,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8319
+ },
+ {
+  "game": "cleric2",
+  "round": 76,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9172
+ },
+ {
+  "game": "bard2",
+  "round": 32,
+  "label": 0,
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7455
+ },
+ {
+  "game": "bard2",
+  "round": 117,
+  "label": 0,
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13643
+ },
+ {
+  "game": "bard2",
+  "round": 67,
+  "label": 0,
+  "p": 0.55,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7174
+ },
+ {
+  "game": "cleric2",
+  "round": 124,
+  "label": 0,
+  "p": 0.75,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9065
+ },
+ {
+  "game": "barbarian2",
+  "round": 67,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7757
+ },
+ {
+  "game": "cleric2",
+  "round": 72,
+  "label": 0,
+  "p": 0.42,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11741
+ },
+ {
+  "game": "barbarian2",
+  "round": 180,
+  "label": 0,
+  "p": 0.37,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6914
+ },
+ {
+  "game": "cleric2",
+  "round": 54,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8748
+ },
+ {
+  "game": "bard2",
+  "round": 18,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6855
+ },
+ {
+  "game": "bard2",
+  "round": 150,
+  "label": 0,
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10850
+ },
+ {
+  "game": "bard2",
+  "round": 55,
+  "label": 0,
+  "p": 0.14,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6739
+ },
+ {
+  "game": "cleric2",
+  "round": 134,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9446
+ },
+ {
+  "game": "barbarian2",
+  "round": 149,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16884
+ },
+ {
+  "game": "bard2",
+  "round": 90,
+  "label": 0,
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9218
+ },
+ {
+  "game": "barbarian2",
+  "round": 172,
+  "label": 0,
+  "p": 0.4,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14255
+ },
+ {
+  "game": "barbarian2",
+  "round": 105,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15741
+ },
+ {
+  "game": "barbarian2",
+  "round": 29,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8498
+ },
+ {
+  "game": "barbarian2",
+  "round": 131,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11919
+ },
+ {
+  "game": "bard2",
+  "round": 136,
+  "label": 0,
+  "p": 0.62,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17879
+ },
+ {
+  "game": "barbarian2",
+  "round": 125,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13535
+ },
+ {
+  "game": "barbarian2",
+  "round": 61,
+  "label": 0,
+  "p": 0.46,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9839
+ },
+ {
+  "game": "barbarian2",
+  "round": 20,
+  "label": 0,
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7655
+ },
+ {
+  "game": "cleric2",
+  "round": 163,
+  "label": 0,
+  "p": 0.3,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12140
+ },
+ {
+  "game": "bard2",
+  "round": 112,
+  "label": 0,
+  "p": 0.48,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9897
+ },
+ {
+  "game": "cleric2",
+  "round": 159,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9721
+ },
+ {
+  "game": "cleric2",
+  "round": 63,
+  "label": 0,
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9161
+ },
+ {
+  "game": "bard2",
+  "round": 28,
+  "label": 0,
+  "p": 0.38,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7258
+ },
+ {
+  "game": "bard2",
+  "round": 82,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8269
+ },
+ {
+  "game": "barbarian2",
+  "round": 168,
+  "label": 0,
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14273
+ },
+ {
+  "game": "barbarian2",
+  "round": 148,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15771
+ },
+ {
+  "game": "barbarian2",
+  "round": 45,
+  "label": 0,
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10662
+ },
+ {
+  "game": "barbarian2",
+  "round": 121,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9565
+ },
+ {
+  "game": "barbarian2",
+  "round": 14,
+  "label": 0,
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8028
+ },
+ {
+  "game": "bard2",
+  "round": 50,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10622
+ },
+ {
+  "game": "bard2",
+  "round": 172,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9448
+ },
+ {
+  "game": "bard2",
+  "round": 118,
+  "label": 0,
+  "p": 0.18,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13826
+ },
+ {
+  "game": "barbarian2",
+  "round": 159,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11291
+ },
+ {
+  "game": "bard2",
+  "round": 123,
+  "label": 0,
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14784
+ },
+ {
+  "game": "cleric2",
+  "round": 112,
+  "label": 0,
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7341
+ },
+ {
+  "game": "bard2",
+  "round": 72,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10291
+ },
+ {
+  "game": "bard2",
+  "round": 178,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8673
+ },
+ {
+  "game": "barbarian2",
+  "round": 144,
+  "label": 0,
+  "p": 0.53,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 19481
+ },
+ {
+  "game": "barbarian2",
+  "round": 101,
+  "label": 0,
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 14512
+ },
+ {
+  "game": "cleric2",
+  "round": 38,
+  "label": 0,
+  "p": 0.55,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11343
+ },
+ {
+  "game": "cleric2",
+  "round": 61,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8580
+ },
+ {
+  "game": "bard2",
+  "round": 126,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9573
+ },
+ {
+  "game": "bard2",
+  "round": 27,
+  "label": 0,
+  "p": 0.2,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 6730
+ },
+ {
+  "game": "bard2",
+  "round": 87,
+  "label": 0,
+  "p": 0.45,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9031
+ },
+ {
+  "game": "barbarian2",
+  "round": 44,
+  "label": 0,
+  "p": 0.6,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8754
+ },
+ {
+  "game": "barbarian2",
+  "round": 52,
+  "label": 0,
+  "p": 0.42,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10784
+ },
+ {
+  "game": "bard2",
+  "round": 39,
+  "label": 0,
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8540
+ },
+ {
+  "game": "bard2",
+  "round": 113,
+  "label": 0,
+  "p": 0.48,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12949
+ },
+ {
+  "game": "bard2",
+  "round": 31,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7438
+ },
+ {
+  "game": "barbarian2",
+  "round": 126,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11257
+ },
+ {
+  "game": "bard2",
+  "round": 157,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13022
+ },
+ {
+  "game": "cleric2",
+  "round": 70,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11562
+ },
+ {
+  "game": "cleric2",
+  "round": 174,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10929
+ },
+ {
+  "game": "barbarian2",
+  "round": 135,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11288
+ },
+ {
+  "game": "cleric2",
+  "round": 55,
+  "label": 0,
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9263
+ },
+ {
+  "game": "bard2",
+  "round": 140,
+  "label": 0,
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 17542
+ },
+ {
+  "game": "barbarian2",
+  "round": 27,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9243
+ },
+ {
+  "game": "bard2",
+  "round": 137,
+  "label": 0,
+  "p": 0.47,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 18364
+ },
+ {
+  "game": "barbarian2",
+  "round": 120,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9602
+ },
+ {
+  "game": "barbarian2",
+  "round": 12,
+  "label": 0,
+  "p": 0.25,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7879
+ },
+ {
+  "game": "barbarian2",
+  "round": 74,
+  "label": 0,
+  "p": 0.37,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11948
+ },
+ {
+  "game": "barbarian2",
+  "round": 49,
+  "label": 0,
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10484
+ },
+ {
+  "game": "cleric2",
+  "round": 26,
+  "label": 0,
+  "p": 0.17,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7647
+ },
+ {
+  "game": "barbarian2",
+  "round": 129,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10581
+ },
+ {
+  "game": "barbarian2",
+  "round": 54,
+  "label": 0,
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11852
+ },
+ {
+  "game": "cleric2",
+  "round": 114,
+  "label": 0,
+  "p": 0.24,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7853
+ },
+ {
+  "game": "cleric2",
+  "round": 84,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9605
+ },
+ {
+  "game": "barbarian2",
+  "round": 147,
+  "label": 0,
+  "p": 0.19,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16758
+ },
+ {
+  "game": "bard2",
+  "round": 98,
+  "label": 0,
+  "p": 0.54,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11813
+ },
+ {
+  "game": "cleric2",
+  "round": 140,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10184
+ },
+ {
+  "game": "bard2",
+  "round": 70,
+  "label": 0,
+  "p": 0.34,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9856
+ },
+ {
+  "game": "cleric2",
+  "round": 92,
+  "label": 0,
+  "p": 0.62,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8979
+ },
+ {
+  "game": "cleric2",
+  "round": 162,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11167
+ },
+ {
+  "game": "bard2",
+  "round": 131,
+  "label": 0,
+  "p": 0.32,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 13124
+ },
+ {
+  "game": "barbarian2",
+  "round": 77,
+  "label": 0,
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16029
+ },
+ {
+  "game": "bard2",
+  "round": 49,
+  "label": 0,
+  "p": 0.35,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10676
+ },
+ {
+  "game": "bard2",
+  "round": 78,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8522
+ },
+ {
+  "game": "cleric2",
+  "round": 113,
+  "label": 0,
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8275
+ },
+ {
+  "game": "bard2",
+  "round": 71,
+  "label": 0,
+  "p": 0.6,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10185
+ },
+ {
+  "game": "barbarian2",
+  "round": 89,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16417
+ },
+ {
+  "game": "cleric2",
+  "round": 179,
+  "label": 0,
+  "p": 0.27,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9341
+ },
+ {
+  "game": "cleric2",
+  "round": 96,
+  "label": 0,
+  "p": 0.33,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8566
+ },
+ {
+  "game": "barbarian2",
+  "round": 108,
+  "label": 0,
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9957
+ },
+ {
+  "game": "barbarian2",
+  "round": 177,
+  "label": 0,
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7847
+ },
+ {
+  "game": "barbarian2",
+  "round": 98,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 16060
+ },
+ {
+  "game": "barbarian2",
+  "round": 58,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9992
+ },
+ {
+  "game": "barbarian2",
+  "round": 71,
+  "label": 0,
+  "p": 0.26,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 11867
+ },
+ {
+  "game": "cleric2",
+  "round": 149,
+  "label": 0,
+  "p": 0.23,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9229
+ },
+ {
+  "game": "bard2",
+  "round": 143,
+  "label": 0,
+  "p": 0.29,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12264
+ },
+ {
+  "game": "cleric2",
+  "round": 64,
+  "label": 0,
+  "p": 0.28,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9924
+ },
+ {
+  "game": "cleric2",
+  "round": 118,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 7744
+ },
+ {
+  "game": "barbarian2",
+  "round": 169,
+  "label": 0,
+  "p": 0.21,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12367
+ },
+ {
+  "game": "barbarian2",
+  "round": 170,
+  "label": 0,
+  "p": 0.52,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 12238
+ },
+ {
+  "game": "cleric2",
+  "round": 150,
+  "label": 0,
+  "p": 0.22,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 9494
+ },
+ {
+  "game": "cleric2",
+  "round": 19,
+  "label": 0,
+  "p": 0.17,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 10120
+ },
+ {
+  "game": "barbarian2",
+  "round": 141,
+  "label": 0,
+  "p": 0.41,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 15402
+ },
+ {
+  "game": "cleric2",
+  "round": 121,
+  "label": 0,
+  "p": 0.31,
+  "model": "typesafe-ai/jev-1.14.0",
+  "tokens": 8855
+ }
+]
