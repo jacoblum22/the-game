@@ -78,7 +78,8 @@ async def once(k: int, n: int) -> dict:
     g, line, fork, session = state(k)
     g.save = lambda: None
     g.system = play.system_prompt(g.sheet, g.companions)
-    c = sdk.Client(g.model, g.system, g.tools(), str(sdk.DM_HOME), session)
+    c = sdk.Client(g.model, g.system, g.tools(), str(sdk.DM_HOME), session,
+                   **({"done": g.one_step} if hasattr(g, "one_step") else {}))
     c.options.resume_session_at, c.options.fork_session = fork, True
     c.client = ClaudeSDKClient(options=c.options)
     g.sdk = c
@@ -89,7 +90,7 @@ async def once(k: int, n: int) -> dict:
         await play.turn(g, f"[The player]\n{line}")
     finally:
         await c.close()
-    return {"round": k, "run": n, "line": line, "entries": [{"kind": e["kind"], "text": e.get("text") or e.get("tool"),
+    return {"round": k, "run": n, "line": line, "session": c.session_id, "entries": [{"kind": e["kind"], "text": e.get("text") or e.get("tool"),
                                                              "input": e.get("input")} for e in g.transcript[start:]],
             "sheet": g.sheet, "clock": g.clock, "fight": g.fight}
 

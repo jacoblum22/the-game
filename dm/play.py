@@ -663,7 +663,8 @@ class Game:
     def after_reply(self, t: Tool) -> Tool:
         """A tool called after the DM has written a full reply (owner, 2026-10-14): the call still counts, but a roll
         is refused (nothing it decides can be told), and what the DM writes after it is held back (turn()). The DM
-        had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice."""
+        had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice.
+        Bookkeeping with the reply is how a turn should end (owner, 2026-10-18), so it gets no warning."""
         async def handler(a: dict[str, Any]) -> dict[str, Any]:
             if self.reply_len < FULL_REPLY:
                 return await t.handler(a)
@@ -672,8 +673,15 @@ class Game:
                 self.transcript.append({"kind": "refused", "text": f"dice: called after the reply: {a.get('reason', '')}"})
                 return {"content": [{"type": "text", "text": "REFUSED, nothing rolled: " + LATE}], "is_error": True}
             out = await t.handler(a)
+            if t.name in BOOKKEEPING:
+                return out
             return out | {"content": [*out["content"], {"type": "text", "text": LATE}]}
         return Tool(t.name, t.description, t.input_schema, handler)
+
+    def one_step(self, names: list[str]) -> bool:
+        """After one model call's tools ran without an error: the turn is over if the reply is written and they were
+        all bookkeeping (model.respond done, sdk.Client)."""
+        return self.reply_len >= FULL_REPLY and all(n in BOOKKEEPING for n in names)
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -729,8 +737,12 @@ RULES_REMINDER = (
 # never wrote it. The stub is replaced by asking once for the full reply. In 312 turns of play every reply with tool
 # calls under 300 characters was a stub, and the shortest good one was 389.
 FULL_REPLY = 300
-LATE = ("Your reply has already gone to the player as written; nothing you write after it will be shown. Make all "
-        "your tool calls before your reply.")
+LATE = ("Your reply has already gone to the player as written; nothing you write after it will be shown. Make rolls, "
+        "lookups and anything else whose result you need before your reply.")
+# Tools whose result the DM needn't read (owner, 2026-10-18): it makes them in the same call as its reply, and the turn
+# ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
+# of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
+BOOKKEEPING = {"change_time", "write_lore", "change_pc", "change_party", "change_creature"}
 STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing has been shown to the player yet. '
             "Write your full reply to their last message now; it replaces that line.")
 # A turn can stop before the reply is written (autoloop, 2026-10-16): a fight run on while the PC lay unconscious used
@@ -823,7 +835,7 @@ async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) 
         game.session_id, game.size = game.sdk.session_id, game.sdk.size
         return failed
     return await model.respond(game.model, game.system, game.tools(), game.messages, text, on_text, game.save,
-                               lambda n: setattr(game, "size", n))
+                               lambda n: setattr(game, "size", n), getattr(game, "one_step", lambda names: False))
 
 
 # Cutting the conversation short (owner, 2026-10-13): once it reaches CUT_AT tokens, the DM writes the story so far up
@@ -860,7 +872,8 @@ async def reconnect(game: Game) -> None:
     edited (Claude Code keeps the conversation in memory while it's open)."""
     from dm import sdk  # here: the browser has no Agent SDK
     await game.sdk.close()
-    game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, game.session_id, game.fork_at)
+    game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, game.session_id, game.fork_at,
+                          done=game.one_step)
     await game.sdk.open()
 
 
@@ -890,7 +903,7 @@ async def cut(game: Game) -> None:
         from dm import sdk  # here: the browser has no Agent SDK
         await game.sdk.close()
         game.session_id = None
-        game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, None)
+        game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, None, done=game.one_step)
         await game.sdk.open()
     else:
         game.messages = []
@@ -1024,7 +1037,7 @@ class Session:
         if isinstance(g, Game) and not g.session_id:
             g.cwd = str(sdk.DM_HOME)
         g.sdk = sdk.Client(g.model, g.system, g.tools(), g.cwd if isinstance(g, Game) else str(sdk.DM_HOME),
-                           g.session_id, getattr(g, "fork_at", None))
+                           g.session_id, getattr(g, "fork_at", None), done=getattr(g, "one_step", None))
         await g.sdk.open()
 
     async def close(self) -> None:
