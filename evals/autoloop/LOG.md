@@ -253,3 +253,14 @@ with the same analysis after each block and a detailed report in evals/autoloop/
 - Contradictions 9 of 24 with answers, 4 of 24 without; repeats of the original 2 vs 1; acting for the PC 8 vs 4.
   Small numbers, but no sign it helps. Some of the new ones repeat what the notebook itself said (Reedholm "half a
   day"; Hale "only ever the go-between"). Not given 8 runs. The change is committed, then reverted in the next commit.
+
+## A model as a contradiction check (Jake, 2026-10-18)
+- evals/autoloop/haiku_check.py: the same rounds and state as jev_check.py, one call each through the API key in the
+  repo's .env (given to the client only, never to the environment). Results in games/read/causes/{haiku,sonnet,sonnet-sev}.json.
+- Haiku 5.5 (yes/no + quote): caught 42 of 105 contradiction rounds, but its quote matched the readers' finding in
+  only 18; flagged 49 of 149 clean rounds. Too weak.
+- Sonnet 5.5 (yes/no): caught 104 of 105 and flagged 56 of 60 clean rounds; it flags any nitpick.
+- Sonnet 5.5 with a severity per problem, acting on 2+: caught 71 of 105, flagged 28 of 60 clean rounds. A sample of
+  those 28 looks about half real (misses by the readers: the Foreman's terms changing a turn later, a distance that
+  shrank) and half nitpicks or misreadings. Severity 3 alone: 4 of 105.
+- Cost about $11 in all (Haiku $0.50, the two Sonnet runs about $5 each). Nothing built into the game.

@@ -1,0 +1,3202 @@
+[
+ {
+  "game": "barbarian2",
+  "round": 9,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   33
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10201,
+  "out": 713
+ },
+ {
+  "game": "barbarian2",
+  "round": 10,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   34
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10490,
+  "out": 1017
+ },
+ {
+  "game": "barbarian2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   35
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11448,
+  "out": 1100
+ },
+ {
+  "game": "barbarian2",
+  "round": 25,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   36
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12308,
+  "out": 820
+ },
+ {
+  "game": "barbarian2",
+  "round": 37,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   37,
+   38
+  ],
+  "contradiction": true,
+  "quote": "I couldn't even climb to the cairn",
+  "clashes_with": "Notebook: Tessa left her horn goat at Dargan's cairn and scratched a reply there on Day 11, so she has reached the cairn.",
+  "tokens": 11761,
+  "out": 1001
+ },
+ {
+  "game": "barbarian2",
+  "round": 46,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   39
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13552,
+  "out": 683
+ },
+ {
+  "game": "barbarian2",
+  "round": 48,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   40
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13642,
+  "out": 577
+ },
+ {
+  "game": "barbarian2",
+  "round": 51,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   41
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14637,
+  "out": 674
+ },
+ {
+  "game": "barbarian2",
+  "round": 55,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   42,
+   43
+  ],
+  "contradiction": true,
+  "quote": "There's no oil flask on your belt, only your torches and tinderbox.",
+  "clashes_with": "Turn 49 DM text: \"Your belt is gone, and the pouch with it\"; no belt was recovered later",
+  "tokens": 15771,
+  "out": 1351
+ },
+ {
+  "game": "barbarian2",
+  "round": 57,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   44
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14877,
+  "out": 976
+ },
+ {
+  "game": "barbarian2",
+  "round": 59,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   45
+  ],
+  "contradiction": true,
+  "quote": "Your breath is back in your chest... The rest did bring your breath weapon back.",
+  "clashes_with": "Turn 63 DM says rest brought breath weapon back; not a contradiction itself. Real issue: DM says 'Out of game' answer and 'Vael will be here by dusk' consistent; instead flagged: 'you're at 5 of 14 hit points' after heal from 2 is 5, consistent. No contradiction found in reply itself.",
+  "tokens": 12214,
+  "out": 163
+ },
+ {
+  "game": "barbarian2",
+  "round": 64,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   46
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11601,
+  "out": 879
+ },
+ {
+  "game": "barbarian2",
+  "round": 80,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   47
+  ],
+  "contradiction": true,
+  "quote": "Tessa doesn't look at you. Her thumb presses once against the table leg, the clan's *yes*",
+  "clashes_with": "Notebook (t44): clan cloth signals and cloth-based signaling; not a direct clash. Real clash: earlier text says Tessa's wrists were bound in front of her and she was unconscious on the floor (turn 81), and in turn 83 her cords were cut and she sat against the table leg; the reply has her signaling with thumb against the table leg, which is consistent. Instead the clash is that the reply says the Foreman slid the lamp and the lean guard's spear rests by Tessa, while the Foreman earlier was told Tessa was not strong; no clash found there.",
+  "tokens": 16994,
+  "out": 246
+ },
+ {
+  "game": "barbarian2",
+  "round": 81,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   48,
+   49
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 18986,
+  "out": 1538
+ },
+ {
+  "game": "barbarian2",
+  "round": 83,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   50
+  ],
+  "contradiction": true,
+  "quote": "the figure he thinks he saw were not the Stones fine, charged to the captain when thirty-one of my hands walked out of my books",
+  "clashes_with": "Notebook (t86): Gorrak's debt was once a small figure, crossed out and re-inked much larger; the Foreman's claim of a fine for thirty-one hands is a new explanation, not a contradiction, but the reply also has Gorrak 'rolled his head' while earlier he was bound on the pallet, which is consistent. Main issue: the bell-pull and guardroom are new, not contradictory.",
+  "tokens": 20571,
+  "out": 200
+ },
+ {
+  "game": "barbarian2",
+  "round": 84,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   51
+  ],
+  "contradiction": true,
+  "quote": "The sixth hangs back with his sword half drawn, not choosing.",
+  "clashes_with": "Same reply's dice: Guard 6 made a longsword attack vs Guard Grey-eyes (rolled 7, missed), and Guard 4 attacked Guard Singed-beard, yet the narration has the fourth guard standing with his spear lowered.",
+  "tokens": 20474,
+  "out": 1641
+ },
+ {
+  "game": "barbarian2",
+  "round": 85,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   52
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 23674,
+  "out": 1650
+ },
+ {
+  "game": "barbarian2",
+  "round": 87,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   53
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 22695,
+  "out": 1118
+ },
+ {
+  "game": "barbarian2",
+  "round": 88,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   54
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 20074,
+  "out": 877
+ },
+ {
+  "game": "barbarian2",
+  "round": 90,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   55
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 22836,
+  "out": 747
+ },
+ {
+  "game": "barbarian2",
+  "round": 97,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   56
+  ],
+  "contradiction": true,
+  "quote": "Gorrak Vael sits at the Foreman's desk with the scorched ledger open before him. His burned face is bare",
+  "clashes_with": "Gorrak's mask was removed at t80 and burn scar already described; not a clash. Real issue: Dreg and Brun are said to hold the stair, but Tessa 'free of the ring' contradicts nothing",
+  "tokens": 27222,
+  "out": 134
+ },
+ {
+  "game": "barbarian2",
+  "round": 104,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   57
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 18656,
+  "out": 1233
+ },
+ {
+  "game": "barbarian2",
+  "round": 107,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   58
+  ],
+  "contradiction": true,
+  "quote": "Dreg's forty sit by their stacked spears in the dark, and Ushk's ten sit with them.",
+  "clashes_with": "Earlier the Tallies' spears were stacked at the Stones and the row was described as Tally road-guard, but the bigger issue: Ushk's ten spears had already taken the freed Tin Row children down the high road on Day 20 and are not known to be at the Stones; minor. Also Veshra's house details conflict none.",
+  "tokens": 18673,
+  "out": 163
+ },
+ {
+  "game": "barbarian2",
+  "round": 112,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   59
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12632,
+  "out": 1088
+ },
+ {
+  "game": "barbarian2",
+  "round": 114,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   60
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12916,
+  "out": 1008
+ },
+ {
+  "game": "barbarian2",
+  "round": 115,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   61
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14228,
+  "out": 1307
+ },
+ {
+  "game": "barbarian2",
+  "round": 116,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   62
+  ],
+  "contradiction": true,
+  "quote": "a stolen pony under you",
+  "clashes_with": "Hale agreed to lend four ponies and a mule for the ride, so the pony is not stolen",
+  "tokens": 14512,
+  "out": 785
+ },
+ {
+  "game": "barbarian2",
+  "round": 123,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   63
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14481,
+  "out": 815
+ },
+ {
+  "game": "barbarian2",
+  "round": 143,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   64,
+   65
+  ],
+  "contradiction": true,
+  "quote": "Six cloaks let their bows and swords fall, and the two who were burned back away with their hands up.",
+  "clashes_with": "Morale rolls show only 5 cloaks (1,2,4,6,7,11 removed earlier, plus 3 still active) and Cloak 1 and others were already removed; the reply says six surrendered yet the fight log shows 6 removed by morale, while the text then says two have not lowered bows, totaling more than the 11 cloaks; also Cloak 3 dropped to 0 and the notebook says three cloaks dropped bows earlier, not six",
+  "tokens": 22834,
+  "out": 205
+ },
+ {
+  "game": "barbarian2",
+  "round": 145,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   66
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 26773,
+  "out": 1252
+ },
+ {
+  "game": "barbarian2",
+  "round": 154,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   67
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11842,
+  "out": 599
+ },
+ {
+  "game": "barbarian2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   68
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12769,
+  "out": 937
+ },
+ {
+  "game": "barbarian2",
+  "round": 163,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   69
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12655,
+  "out": 446
+ },
+ {
+  "game": "barbarian2",
+  "round": 165,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   70
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15454,
+  "out": 1487
+ },
+ {
+  "game": "barbarian2",
+  "round": 166,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   71
+  ],
+  "contradiction": true,
+  "quote": "Tolk, the cloak who dropped his crossbow, is 'one step away'; the sword swing 'at your ribs' is Cloak 4's attack from its one action",
+  "clashes_with": "Turn 169 says Tolk dropped the crossbow and no mention of a sword; the reply has Tolk's attack roll list 'Tolk (Cloak 4) longsword' but Cloak 4 is listed as having used its action and the DM text says Tolk 'tears a short sword' while the dice say longsword",
+  "tokens": 15182,
+  "out": 183
+ },
+ {
+  "game": "bard2",
+  "round": 4,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   72
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 8207,
+  "out": 665
+ },
+ {
+  "game": "bard2",
+  "round": 6,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   73
+  ],
+  "contradiction": true,
+  "quote": "Tobin was told to hand the letter to the wagon driver and ride on to Thornhallow tonight to say it was done. He's lodging for the night at the Drowned Candle... and is meant to leave at dawn.",
+  "clashes_with": "Same reply: he is to ride to Thornhallow tonight, yet he is lodging for the night and leaving at dawn.",
+  "tokens": 9028,
+  "out": 920
+ },
+ {
+  "game": "bard2",
+  "round": 19,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   74
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10598,
+  "out": 598
+ },
+ {
+  "game": "bard2",
+  "round": 22,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   75
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11242,
+  "out": 25
+ },
+ {
+  "game": "bard2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   76
+  ],
+  "contradiction": true,
+  "quote": "Hale: \"I have been trying, for your sake, to take it from a thief and burn it\" / Lord Edric: \"Ask her if it's true that she took it\" (Turn 29 DM reply has Lord Edric asking whether Wren has the ledger)",
+  "clashes_with": "Turn 26-27 Hale and notebook: Hale already knew from Garrow that the psalter was in Wren's pack; but the new reply's Hale claim that Corvin's ledger 'would ruin Verrel' and that Wren 'stole it' is consistent with notebook. The clear clash: notebook says Lord Edric 'trusts only Corvin' and Hale is the steward, but the reply has Lord Edric say 'Hale' as if he were not steward; minor. Plain clash: the ledger is described as a record of forgeries sold to 'three houses', while notebook says Corvin sells forged tales to nobles and House Verrel is one client; no count was given before.",
+  "tokens": 11181,
+  "out": 331
+ },
+ {
+  "game": "bard2",
+  "round": 26,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   77
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11792,
+  "out": 882
+ },
+ {
+  "game": "bard2",
+  "round": 30,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   78
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10011,
+  "out": 939
+ },
+ {
+  "game": "bard2",
+  "round": 42,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   79
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11733,
+  "out": 1009
+ },
+ {
+  "game": "bard2",
+  "round": 44,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   80
+  ],
+  "contradiction": true,
+  "quote": "Your Intimidation check was a 3",
+  "clashes_with": "The dice line for the same check shows 1d20 [3] + 3 = 6, so the check total was 6, not 3.",
+  "tokens": 16661,
+  "out": 1121
+ },
+ {
+  "game": "bard2",
+  "round": 45,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   81,
+   82,
+   83
+  ],
+  "contradiction": true,
+  "quote": "The wagon stands by the tithe-barn, its painted lantern faded in the daylight",
+  "clashes_with": "NOTEBOOK (t50): wagon abandoned on the Ashby road bank by the ford; Hob was set to watch it there, and no move is described",
+  "tokens": 14746,
+  "out": 1318
+ },
+ {
+  "game": "bard2",
+  "round": 46,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   84
+  ],
+  "contradiction": true,
+  "quote": "Kit ... \"Aye,\" she says at last. \"I've never been past the weir.\"",
+  "clashes_with": "Turn 51 DM refers to Kit with \"he\" (\"Kit ... he comes back with a dead man's belt-pouch\")",
+  "tokens": 15872,
+  "out": 923
+ },
+ {
+  "game": "bard2",
+  "round": 66,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   85
+  ],
+  "contradiction": true,
+  "quote": "It is a quarter to eleven.",
+  "clashes_with": "Earlier the time was 10:52:36 AM (Day 9), and the reply says the hour is not yet noon; a quarter to eleven conflicts with the 10:52 timestamp.",
+  "tokens": 9598,
+  "out": 97
+ },
+ {
+  "game": "bard2",
+  "round": 69,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   86
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11933,
+  "out": 760
+ },
+ {
+  "game": "bard2",
+  "round": 76,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   87
+  ],
+  "contradiction": true,
+  "quote": "In the doorway of a net-loft across the lane, a lean man in a brown tradesman's coat leans on the post",
+  "clashes_with": "Notebook says the Smiling Follower (Garrow) died at the Ashby Weir ford on Day 5, speared by Kit (t49)",
+  "tokens": 13349,
+  "out": 628
+ },
+ {
+  "game": "bard2",
+  "round": 92,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   88
+  ],
+  "contradiction": true,
+  "quote": "the flask of oil at your belt (though Brann may still want it)",
+  "clashes_with": "Turn 96 and the sheet: Wren tossed the flask of lamp oil up to Brann and lost it from her inventory",
+  "tokens": 12298,
+  "out": 946
+ },
+ {
+  "game": "bard2",
+  "round": 94,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   89
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14487,
+  "out": 1134
+ },
+ {
+  "game": "bard2",
+  "round": 96,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   90
+  ],
+  "contradiction": true,
+  "quote": "Dunn's seamanship check is a 12 against a DC 12 ... you make the quay a little before ten",
+  "clashes_with": "Time is 9:57 AM at the end of the turn, but the reply says the squall arrived as the skiff pulled clear and they reached the quay; that is not a clash. Instead: the DM says Wren left the reliquary in the socket, but the notebook and player say Wren's lantern-foot stays seated, so the reliquary is with Brann, which matches. No contradiction found here beyond what is shown.",
+  "tokens": 15028,
+  "out": 189
+ },
+ {
+  "game": "bard2",
+  "round": 97,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   91
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 17481,
+  "out": 1120
+ },
+ {
+  "game": "bard2",
+  "round": 99,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   92
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14743,
+  "out": 1602
+ },
+ {
+  "game": "bard2",
+  "round": 105,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   93
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12410,
+  "out": 1727
+ },
+ {
+  "game": "bard2",
+  "round": 110,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   94
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12547,
+  "out": 714
+ },
+ {
+  "game": "bard2",
+  "round": 116,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   95
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 20512,
+  "out": 1026
+ },
+ {
+  "game": "bard2",
+  "round": 120,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   96
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 18638,
+  "out": 1196
+ },
+ {
+  "game": "bard2",
+  "round": 121,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   97
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 21483,
+  "out": 1135
+ },
+ {
+  "game": "bard2",
+  "round": 127,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   98
+  ],
+  "contradiction": true,
+  "quote": "You count five with pikes, and the lean figure in the brown coat is walking in front of them",
+  "clashes_with": "Marl's report: Sparrow plus four men with pikes, five visible men plus the tall man, six in all",
+  "tokens": 13609,
+  "out": 813
+ },
+ {
+  "game": "bard2",
+  "round": 132,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   99
+  ],
+  "contradiction": true,
+  "quote": "Three bandits still stand near you, two with scimitars and two behind with crossbows.",
+  "clashes_with": "The same reply's count of two scimitars plus two crossbows is four bandits, and the previous turn said four were left after Bandit 4 fell.",
+  "tokens": 18804,
+  "out": 1517
+ },
+ {
+  "game": "bard2",
+  "round": 133,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   100
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 19920,
+  "out": 942
+ },
+ {
+  "game": "bard2",
+  "round": 134,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   101,
+   102
+  ],
+  "contradiction": true,
+  "quote": "eight guards in front of him",
+  "clashes_with": "the same reply says Pell and six guards hold the line, and the guard group was added as six",
+  "tokens": 22552,
+  "out": 1149
+ },
+ {
+  "game": "bard2",
+  "round": 135,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   103
+  ],
+  "contradiction": true,
+  "quote": "Ansel Verrel, once, before the family paper decided I had never been born.",
+  "clashes_with": "Notebook (t126): the register leaf proves the only natural son of Aldous Verrel, Aldous the younger, died aged three; the Grey Cloak wears a dead child's name, so his name being Ansel Verrel and claiming to be a living son conflicts with the stated name and identity used by the notebook. Also the reply has him say 'The natural son was a story for hired men', which contradicts the notebook's record of his claim (t117) that he is the natural son of Aldous Verrel.",
+  "tokens": 25791,
+  "out": 207
+ },
+ {
+  "game": "bard2",
+  "round": 138,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   104
+  ],
+  "contradiction": true,
+  "quote": "It's ten past three.",
+  "clashes_with": "the time marker in the same reply: Day 15, 3:24:30 PM",
+  "tokens": 24012,
+  "out": 1029
+ },
+ {
+  "game": "bard2",
+  "round": 139,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   105
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 24934,
+  "out": 1070
+ },
+ {
+  "game": "bard2",
+  "round": 141,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   106,
+   107,
+   108
+  ],
+  "contradiction": true,
+  "quote": "Your Perception comes up an 11 only",
+  "clashes_with": "the roll shows Perception 12 (1d20 [10] + 2 = 12) in the same reply's dice log",
+  "tokens": 20894,
+  "out": 75
+ },
+ {
+  "game": "bard2",
+  "round": 145,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   109
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12466,
+  "out": 978
+ },
+ {
+  "game": "bard2",
+  "round": 149,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   110
+  ],
+  "contradiction": true,
+  "quote": "Sparrow takes one more shot from the hedge while he can. The bolt cracks past your shoulder into the wall",
+  "clashes_with": "Sparrow's attack roll this round was a 9 (miss) per the logged dice, so the DM's narration of a bolt cracking past the shoulder is consistent; however, the reply also says Sparrow 'has missed you four times running', which the earlier turns only show as three misses (turns 153, 154, and this one) — a count mismatch",
+  "tokens": 14202,
+  "out": 172
+ },
+ {
+  "game": "bard2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   111
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16013,
+  "out": 644
+ },
+ {
+  "game": "bard2",
+  "round": 156,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   112
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16614,
+  "out": 1737
+ },
+ {
+  "game": "bard2",
+  "round": 164,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   113
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14240,
+  "out": 618
+ },
+ {
+  "game": "bard2",
+  "round": 166,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   114
+  ],
+  "contradiction": true,
+  "quote": "The rider hasn't left yet, since she sets out at first light.",
+  "clashes_with": "Turn 170 said the rider would ride out at first light on Day 19, and the reply's own timestamp is 6:00 AM Day 19, so first light has already passed by 4:30 PM.",
+  "tokens": 13409,
+  "out": 1563
+ },
+ {
+  "game": "bard2",
+  "round": 167,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   115
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13089,
+  "out": 1006
+ },
+ {
+  "game": "bard2",
+  "round": 173,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   116
+  ],
+  "contradiction": true,
+  "quote": "Eleven years ago a man who signed himself Aldous wrote to him... He sent Hale.",
+  "clashes_with": "Notebook: Oake's house sent Hale to Thornhallow twelve years ago, and Hale's tallies and the letter span twelve years.",
+  "tokens": 14643,
+  "out": 1159
+ },
+ {
+  "game": "bard2",
+  "round": 175,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   117
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13899,
+  "out": 1182
+ },
+ {
+  "game": "bard2",
+  "round": 180,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   118
+  ],
+  "contradiction": true,
+  "quote": "Kit is forty feet or so up the hedge with her crossbow",
+  "clashes_with": "Kit was forty paces back at the gate (turn 185 and turn 183 both say forty paces, about 120 feet)",
+  "tokens": 13900,
+  "out": 945
+ },
+ {
+  "game": "cleric2",
+  "round": 6,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   1
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9651,
+  "out": 25
+ },
+ {
+  "game": "cleric2",
+  "round": 8,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   2,
+   3
+  ],
+  "contradiction": true,
+  "quote": "\"Four,\" he whispers. \"That's what we saw. Four shapes at the fence, last night.\"",
+  "clashes_with": "Turn 9 and earlier play describe a single figure at the paddock fence, and the bowman said 'a figure' had stood there since dusk both nights.",
+  "tokens": 9636,
+  "out": 804
+ },
+ {
+  "game": "cleric2",
+  "round": 10,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   4,
+   5
+  ],
+  "contradiction": true,
+  "quote": "You have no spells, but you have a mace and a shield, a crossbow, a bow beside you, a ready oil jar",
+  "clashes_with": "Earlier the DM listed Brannoc's gear as a mace, shield and light crossbow only; Cal carries the bow, and the oil jar was left tucked in Cal's pack",
+  "tokens": 10209,
+  "out": 122
+ },
+ {
+  "game": "cleric2",
+  "round": 13,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   6
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14808,
+  "out": 1839
+ },
+ {
+  "game": "cleric2",
+  "round": 14,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   7
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14557,
+  "out": 582
+ },
+ {
+  "game": "cleric2",
+  "round": 21,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   8
+  ],
+  "contradiction": true,
+  "quote": "Two natural 20s in a row from the ghouls",
+  "clashes_with": "Only one ghoul natural 20 hit Brannoc in turn 25 and earlier; the ghoul rolls in the log show one critical on Brannoc in turn 17 and one in turn 25, not consecutive, and the DM's own turn 25 text says the claws found him twice (the second being a crit on paralyzed Brannoc, also a natural 20 roll in turn 25 is not present; that second hit rolled 15 with advantage)",
+  "tokens": 14173,
+  "out": 186
+ },
+ {
+  "game": "cleric2",
+  "round": 23,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   9
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11271,
+  "out": 947
+ },
+ {
+  "game": "cleric2",
+  "round": 29,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   10
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12825,
+  "out": 1997
+ },
+ {
+  "game": "cleric2",
+  "round": 33,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   11
+  ],
+  "contradiction": true,
+  "quote": "Dobb, Hennet, Marl, and Wat are here, and Ned was taken below",
+  "clashes_with": "Turn 35 DM said five men died including Wat and Ned; Turn 37 cart carried four bodies with Ned missing, and the reply's count and names are consistent, so this is not a contradiction; however the DM reply states 'Hennet's boots' and 'five hearts' grief' with Ned's coat - no contradiction found",
+  "tokens": 16175,
+  "out": 162
+ },
+ {
+  "game": "cleric2",
+  "round": 34,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   12
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16737,
+  "out": 695
+ },
+ {
+  "game": "cleric2",
+  "round": 39,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   13
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15020,
+  "out": 746
+ },
+ {
+  "game": "cleric2",
+  "round": 40,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   14
+  ],
+  "contradiction": true,
+  "quote": "It is about half past eleven in the morning... and it's past noon",
+  "clashes_with": "The reply says the visit lasted most of two hours from about 11:30 AM, so leaving should be around 1:30 PM, but it says 'When you leave, it is past noon' while the time tag reads 11:30 AM; that is compatible, but the DM also says it is 'about half past eleven' after leaving past noon, which contradicts itself",
+  "tokens": 12074,
+  "out": 154
+ },
+ {
+  "game": "cleric2",
+  "round": 41,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   15
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11302,
+  "out": 919
+ },
+ {
+  "game": "cleric2",
+  "round": 47,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   16
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10327,
+  "out": 640
+ },
+ {
+  "game": "cleric2",
+  "round": 68,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   17
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14708,
+  "out": 884
+ },
+ {
+  "game": "cleric2",
+  "round": 75,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   18
+  ],
+  "contradiction": true,
+  "quote": "The road north goes back to Hollow Reach and the Lamp, a day and a half away.",
+  "clashes_with": "Turn 78 said Greywater is a day's walk north and the Reach is a day beyond that, so the Reach is about a day from Greywater, not a day and a half.",
+  "tokens": 14228,
+  "out": 827
+ },
+ {
+  "game": "cleric2",
+  "round": 85,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   20
+  ],
+  "contradiction": true,
+  "quote": "The Ford Chapel is two hours up the road, about a mile past the ford.",
+  "clashes_with": "Notebook and Day 8 play place the ruined chapel at the ford, about an hour short of Greywater, and Brannoc walked from the chapel to Greywater in roughly an hour.",
+  "tokens": 12128,
+  "out": 961
+ },
+ {
+  "game": "cleric2",
+  "round": 98,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   21
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15104,
+  "out": 837
+ },
+ {
+  "game": "cleric2",
+  "round": 103,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   22
+  ],
+  "contradiction": true,
+  "quote": "It's twenty-six minutes to eleven on Day 11.",
+  "clashes_with": "The same reply's sheet entry: '[time: 20 minutes later: Day 11, 10:36:06 PM]', which is 10:36, not 10:34.",
+  "tokens": 13762,
+  "out": 636
+ },
+ {
+  "game": "cleric2",
+  "round": 129,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   23
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13944,
+  "out": 963
+ },
+ {
+  "game": "cleric2",
+  "round": 143,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   24
+  ],
+  "contradiction": true,
+  "quote": "She came up from the south as a girl and she's been here longer than I've had this rope.",
+  "clashes_with": "Notebook: Wren is a dyer's daughter from Greywater (t54), not a southern arrival.",
+  "tokens": 15012,
+  "out": 1054
+ },
+ {
+  "game": "cleric2",
+  "round": 147,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   25
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14758,
+  "out": 1353
+ },
+ {
+  "game": "cleric2",
+  "round": 152,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   26
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13977,
+  "out": 591
+ },
+ {
+  "game": "cleric2",
+  "round": 155,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   27
+  ],
+  "contradiction": true,
+  "quote": "\"Dawn's about six and a half hours of sleep away,\" she adds.",
+  "clashes_with": "The same reply says dawn is about eight and three-quarter hours off, at a quarter to ten.",
+  "tokens": 13093,
+  "out": 820
+ },
+ {
+  "game": "cleric2",
+  "round": 156,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   28
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12431,
+  "out": 978
+ },
+ {
+  "game": "cleric2",
+  "round": 158,
+  "label": 1,
+  "valid": [
+   "yes",
+   "yes"
+  ],
+  "ids": [
+   29,
+   30
+  ],
+  "contradiction": true,
+  "quote": "The speech ends as you reach the north shore, at twenty to eight.",
+  "clashes_with": "Earlier play said Tar's speech lasts ten minutes, until half past seven, and the reply's own time jump was short.",
+  "tokens": 12143,
+  "out": 923
+ },
+ {
+  "game": "cleric2",
+  "round": 160,
+  "label": 1,
+  "valid": [
+   "doubtful"
+  ],
+  "ids": [
+   31
+  ],
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12305,
+  "out": 667
+ },
+ {
+  "game": "cleric2",
+  "round": 176,
+  "label": 1,
+  "valid": [
+   "yes"
+  ],
+  "ids": [
+   32
+  ],
+  "contradiction": true,
+  "quote": "I heard the horn go twice and stop.",
+  "clashes_with": "Turn 179 narration: 'You hear the horn on the landing once, short' when Ode saw the lights move.",
+  "tokens": 16954,
+  "out": 665
+ },
+ {
+  "game": "barbarian2",
+  "round": 34,
+  "label": 0,
+  "contradiction": true,
+  "quote": "the last two lines she left unfinished",
+  "clashes_with": "Turn 37 DM text: she sang the song 'all the way through' and then repeated the seventh-goat verse, so she did not leave lines unfinished",
+  "tokens": 11338,
+  "out": 829
+ },
+ {
+  "game": "cleric2",
+  "round": 105,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14706,
+  "out": 832
+ },
+ {
+  "game": "barbarian2",
+  "round": 79,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 24613,
+  "out": 25
+ },
+ {
+  "game": "bard2",
+  "round": 74,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The keeper sleeps till dawn bell. H. watches the east door.",
+  "clashes_with": "Notebook says the Wick-House keeper is not yet named and nothing established a watcher; more importantly the map circles the Wick near seaward end while Wick-House was described on the quay near the Salt Gull, and the Salt Gull is said to be across the landing; no clear clash found beyond this, so contradiction is weak",
+  "tokens": 12761,
+  "out": 152
+ },
+ {
+  "game": "cleric2",
+  "round": 45,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10095,
+  "out": 927
+ },
+ {
+  "game": "cleric2",
+  "round": 59,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12115,
+  "out": 833
+ },
+ {
+  "game": "barbarian2",
+  "round": 174,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 19152,
+  "out": 1187
+ },
+ {
+  "game": "cleric2",
+  "round": 71,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Healing Word is ready, with two 1st-level slots left.",
+  "clashes_with": "Turn 74 said Brannoc has two 1st-level slots after Cure Wounds (3 minus 1), so 'two left' is consistent; but earlier the Turn 73 long rest restored all three and Cure Wounds used one, leaving two. No clash. However Turn 76 DM text says the Medicine check was a 12 while the dice line shows 12; consistent. Clash: the Turn 75 notebook said Brannoc was a bonus-action Healing Word user only with slots; no clash found on slots.",
+  "tokens": 14681,
+  "out": 213
+ },
+ {
+  "game": "barbarian2",
+  "round": 63,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13045,
+  "out": 944
+ },
+ {
+  "game": "bard2",
+  "round": 33,
+  "label": 0,
+  "contradiction": true,
+  "quote": "She left the lamp over the door, and a curl of blessing in a little brass case",
+  "clashes_with": "Turn 34 DM: Marta says Corvin gave the lamp over the door ('He gave that lamp over my door'), and the notebook says Corvin received both items from the priest's estate.",
+  "tokens": 11145,
+  "out": 1101
+ },
+ {
+  "game": "cleric2",
+  "round": 51,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11388,
+  "out": 635
+ },
+ {
+  "game": "barbarian2",
+  "round": 156,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Veshra arrives at the Stones with Hale a little after three",
+  "clashes_with": "Turn 159 places Grunna at the Stones at two o'clock with Gorrak and Ushk, and Gorrak waiting outside; the reply's timeline is consistent, but the notebook shows Tessa in Veshra's household? Not a clash. Instead: the reply says the lantern 'is to be lit at dusk tomorrow, and again on Day 40', while Skarn said the signal was needed by dawn of Day 40 and the notebook lists Skarn holding the lantern on Day 36-37 only, so the reply's 'dusk tomorrow' lantern timing is new and clashes with nothing firm.",
+  "tokens": 16064,
+  "out": 248
+ },
+ {
+  "game": "cleric2",
+  "round": 138,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 20146,
+  "out": 947
+ },
+ {
+  "game": "cleric2",
+  "round": 37,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14384,
+  "out": 715
+ },
+ {
+  "game": "cleric2",
+  "round": 66,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13870,
+  "out": 804
+ },
+ {
+  "game": "barbarian2",
+  "round": 110,
+  "label": 0,
+  "contradiction": true,
+  "quote": "You stay another hour. ... It is half past three.",
+  "clashes_with": "The reply says Korvash stays another hour at the cairn, but the same passage places the time at half past three, one hour after the 2:30 PM start of the scene.",
+  "tokens": 12883,
+  "out": 697
+ },
+ {
+  "game": "barbarian2",
+  "round": 100,
+  "label": 0,
+  "contradiction": true,
+  "quote": "You have rested fully: 23 hit points, both rages, and your breath weapon are back.",
+  "clashes_with": "Korvash is a level 2 barbarian with Rage features; breath weapon is a dragonborn trait not established as used or lost, but more importantly, the long rest is reported as 8 hours starting 8:48 PM Day 21, while the DM says a little before five on Day 22, which is consistent; no clear clash. Main issue: the DM says 'Tessa's thin counting-song... got as far as the seventh goat' fine. Also 'rested fully' conflicts with nothing. (see note)",
+  "tokens": 19862,
+  "out": 215
+ },
+ {
+  "game": "cleric2",
+  "round": 57,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11836,
+  "out": 638
+ },
+ {
+  "game": "cleric2",
+  "round": 157,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11508,
+  "out": 1412
+ },
+ {
+  "game": "cleric2",
+  "round": 69,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15687,
+  "out": 891
+ },
+ {
+  "game": "bard2",
+  "round": 12,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9224,
+  "out": 690
+ },
+ {
+  "game": "barbarian2",
+  "round": 103,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Gorrak's mouth twists... A burned face at the table of a woman whose brother's pass I took.",
+  "clashes_with": "Notebook: Veshra is Korvash's aunt who raised him; no prior mention of Gorrak taking a brother's pass; also 'Tally-sworn' and burned face details are new, but the Veshra-brother link is unestablished. Weak; flagging the new claim as unsupported.",
+  "tokens": 21388,
+  "out": 153
+ },
+ {
+  "game": "cleric2",
+  "round": 52,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11118,
+  "out": 574
+ },
+ {
+  "game": "bard2",
+  "round": 20,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11018,
+  "out": 546
+ },
+ {
+  "game": "cleric2",
+  "round": 89,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14104,
+  "out": 1197
+ },
+ {
+  "game": "cleric2",
+  "round": 144,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Wren ... late twenties ... a small plain amulet of dark wood",
+  "clashes_with": "Notebook (t145) describes Wren as a grown healer and Tamsin's DM text said Wren came south as a girl; also Brannoc's Day 35 text said Wren was twelve on Day 4 and so would be mid-thirties years later, not late twenties",
+  "tokens": 13998,
+  "out": 134
+ },
+ {
+  "game": "bard2",
+  "round": 61,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 6604,
+  "out": 803
+ },
+ {
+  "game": "bard2",
+  "round": 60,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 6044,
+  "out": 25
+ },
+ {
+  "game": "bard2",
+  "round": 168,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13642,
+  "out": 952
+ },
+ {
+  "game": "cleric2",
+  "round": 53,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12243,
+  "out": 547
+ },
+ {
+  "game": "bard2",
+  "round": 29,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10980,
+  "out": 835
+ },
+ {
+  "game": "bard2",
+  "round": 34,
+  "label": 0,
+  "contradiction": true,
+  "quote": "It's ten past six, and dusk is an hour away.",
+  "clashes_with": "Turn 39 said dusk was over an hour away at 5:40 PM; 30 minutes later, dusk should be just under an hour away, not still an hour.",
+  "tokens": 10788,
+  "out": 882
+ },
+ {
+  "game": "barbarian2",
+  "round": 82,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your sister leaves at first light with a mule, three days' bread and my safe-conduct",
+  "clashes_with": "Turn 85 DM: the Foreman changed terms so Tessa remains as mender; Turn 84 had Tessa freed upon oath, but the new reply's line is consistent with that; actually contradiction is minor. Notebook Tessa: she was bound and captured, not established as departing; no direct clash found.",
+  "tokens": 20776,
+  "out": 154
+ },
+ {
+  "game": "cleric2",
+  "round": 46,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10875,
+  "out": 676
+ },
+ {
+  "game": "cleric2",
+  "round": 142,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12565,
+  "out": 916
+ },
+ {
+  "game": "cleric2",
+  "round": 44,
+  "label": 0,
+  "contradiction": true,
+  "quote": "his father, Garn the carter, left him here and went on to Greywater",
+  "clashes_with": "Earlier, Hesper said the carter's boy had been left in the back room; the new reply's words are not a clash on their own, so check: the new reply says Piper is about nine and a carter's boy; no explicit prior age given. Not a contradiction here.",
+  "tokens": 9981,
+  "out": 126
+ },
+ {
+  "game": "bard2",
+  "round": 15,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9928,
+  "out": 947
+ },
+ {
+  "game": "cleric2",
+  "round": 94,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12628,
+  "out": 792
+ },
+ {
+  "game": "barbarian2",
+  "round": 15,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10924,
+  "out": 392
+ },
+ {
+  "game": "bard2",
+  "round": 158,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Brother Osric has the chapel book",
+  "clashes_with": "NOTEBOOK t22: Osric gave Wren the register, so the register should be in Wren's possession, not Osric's",
+  "tokens": 16169,
+  "out": 998
+ },
+ {
+  "game": "cleric2",
+  "round": 100,
+  "label": 0,
+  "contradiction": true,
+  "quote": "with Reedholm about a day and a half on",
+  "clashes_with": "Notebook: the east branch from the Eel Fork goes to Reedholm along a causeway, two days on foot",
+  "tokens": 12418,
+  "out": 657
+ },
+ {
+  "game": "barbarian2",
+  "round": 176,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Brakk sits in a lean-to at the Stones, with an arm in a splint.",
+  "clashes_with": "Notebook says Brakk was in the lean-to at the Stones on Day 29; but NEW REPLY is a player message, not DM text, so no DM statement is contradicted here. Flagging only that the new reply is a player request, not a DM statement, so there is no contradiction.",
+  "tokens": 11396,
+  "out": 141
+ },
+ {
+  "game": "cleric2",
+  "round": 86,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12477,
+  "out": 1015
+ },
+ {
+  "game": "bard2",
+  "round": 25,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11034,
+  "out": 531
+ },
+ {
+  "game": "barbarian2",
+  "round": 26,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12102,
+  "out": 770
+ },
+ {
+  "game": "bard2",
+  "round": 16,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11195,
+  "out": 882
+ },
+ {
+  "game": "bard2",
+  "round": 91,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13245,
+  "out": 1182
+ },
+ {
+  "game": "cleric2",
+  "round": 120,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The ward holds, and the lights come at you.",
+  "clashes_with": "Sanctuary ran out at 7:23 (turn 123: 'The ward on you ran out while you walked'), so no ward is active. The new reply's 'curdles against the ward' repeats the error.",
+  "tokens": 11452,
+  "out": 1252
+ },
+ {
+  "game": "cleric2",
+  "round": 76,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12703,
+  "out": 958
+ },
+ {
+  "game": "bard2",
+  "round": 32,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10491,
+  "out": 893
+ },
+ {
+  "game": "bard2",
+  "round": 117,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The arbiter said a girl with a lamp-staff might pass.",
+  "clashes_with": "Earlier play: Hesk's note says arbiter; not clearly a contradiction. Instead: 'Your old man's still up there' — Brann is not Wren's father; Brann is a lamp-keeper (no kinship established) and Wren is an Ashgrove, so the claim is unsupported.",
+  "tokens": 18721,
+  "out": 143
+ },
+ {
+  "game": "bard2",
+  "round": 67,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9980,
+  "out": 633
+ },
+ {
+  "game": "cleric2",
+  "round": 124,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12334,
+  "out": 955
+ },
+ {
+  "game": "barbarian2",
+  "round": 67,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10491,
+  "out": 668
+ },
+ {
+  "game": "cleric2",
+  "round": 72,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16108,
+  "out": 826
+ },
+ {
+  "game": "barbarian2",
+  "round": 180,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your natural 20 on Insight showed you that he knows where the eleven held people were sent",
+  "clashes_with": "NOTEBOOK (t181): Grunna's natural 20 on Insight showed Brakk is ashamed of the Teyl matter, not what he knows about the held children",
+  "tokens": 9529,
+  "out": 615
+ },
+ {
+  "game": "cleric2",
+  "round": 54,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11903,
+  "out": 657
+ },
+ {
+  "game": "bard2",
+  "round": 18,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9616,
+  "out": 984
+ },
+ {
+  "game": "bard2",
+  "round": 150,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14908,
+  "out": 742
+ },
+ {
+  "game": "bard2",
+  "round": 55,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9361,
+  "out": 198
+ },
+ {
+  "game": "cleric2",
+  "round": 134,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12941,
+  "out": 481
+ },
+ {
+  "game": "barbarian2",
+  "round": 149,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 22728,
+  "out": 988
+ },
+ {
+  "game": "bard2",
+  "round": 90,
+  "label": 0,
+  "contradiction": true,
+  "quote": "hand Kit a fresh Bardic Inspiration die. You have one use of Inspiration left.",
+  "clashes_with": "Turn 95 said Wren had one use left before this give; giving one die should leave none, and the sheet's Bardic Inspiration 1/3 does not reflect the spent die.",
+  "tokens": 12714,
+  "out": 1105
+ },
+ {
+  "game": "barbarian2",
+  "round": 172,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 19264,
+  "out": 871
+ },
+ {
+  "game": "barbarian2",
+  "round": 105,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Gorrak walks out alone, past you, and stops at the middle stone with his hands open. ... He says the book that held them is ashes",
+  "clashes_with": "Notebook: Gorrak was told by Korvash the ledger burned; but notebook (t91/t99) says the Foreman moved scorched ledger to a chest on the third gate, so 'book is ashes' is not contradicted. Not a clash.",
+  "tokens": 21587,
+  "out": 148
+ },
+ {
+  "game": "barbarian2",
+  "round": 29,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11360,
+  "out": 540
+ },
+ {
+  "game": "barbarian2",
+  "round": 131,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Brakk says he was tired of being held up by a herder with one hand",
+  "clashes_with": "Brakk admits in the new reply he struck the old man from behind, but the NOTEBOOK's Brakk-entry shows he confessed this at the hearing; the DM also dropped Gorrak not being at the Stones... ; main clash: 'Nobody ordered it' contradicts notebook note that Brakk may claim Gorrak ordered it, which is an open choice, not a contradiction",
+  "tokens": 16452,
+  "out": 175
+ },
+ {
+  "game": "bard2",
+  "round": 136,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 24340,
+  "out": 908
+ },
+ {
+  "game": "barbarian2",
+  "round": 125,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Gorrak looks long at the litter... \"He is yours to hold, not the town's.\"",
+  "clashes_with": "Notebook t103/t107: Gorrak commands Greyshaft and agreed to decide at the Border Stones; the reply has Gorrak at the middle stone, which is consistent, but also the DM says Gorrak is 'on his feet at the middle stone' only at 5 PM while the reply is at 7 PM; minor. Stronger clash: the reply has Tessa 'running' toward Korvash at 5 PM previously but Gorrak at stone with Brakk noted 'awake now' while earlier turn said Brakk woke at dusk, fine. Clearest: reply says Gorrak refuses to touch barrel 'not tonight' yet notebook t107 has Gorrak committed to Harrowmere escort; no hard contradiction found beyond timing.",
+  "tokens": 18695,
+  "out": 307
+ },
+ {
+  "game": "barbarian2",
+  "round": 61,
+  "label": 0,
+  "contradiction": true,
+  "quote": "the copy burned",
+  "clashes_with": "Turn 59 says there was no oil flask and the door stayed as it was, so the ledger was not burned; turn 61 says the ledger still sits behind them in its chest.",
+  "tokens": 13317,
+  "out": 814
+ },
+ {
+  "game": "barbarian2",
+  "round": 20,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10301,
+  "out": 1155
+ },
+ {
+  "game": "cleric2",
+  "round": 163,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Wick and Gorm went back to the Isle once, years ago, after the burial of a man the village still speaks of: a young healer who died on the fen in a skiff.",
+  "clashes_with": "Notebook t142: Brannoc died on the Isle in the skiff with Wick, Gorm and Jory present, a recent event, not years ago.",
+  "tokens": 16872,
+  "out": 1379
+ },
+ {
+  "game": "bard2",
+  "round": 112,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13400,
+  "out": 762
+ },
+ {
+  "game": "cleric2",
+  "round": 159,
+  "label": 0,
+  "contradiction": true,
+  "quote": "That's the wisps, you're sure, sitting in the stone above you.",
+  "clashes_with": "Earlier play places the three wisps hanging over the Isle's west side, dozing, while the north crack is on the far side of the mound.",
+  "tokens": 13342,
+  "out": 902
+ },
+ {
+  "game": "cleric2",
+  "round": 63,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12561,
+  "out": 713
+ },
+ {
+  "game": "bard2",
+  "round": 28,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10183,
+  "out": 1232
+ },
+ {
+  "game": "bard2",
+  "round": 82,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11347,
+  "out": 810
+ },
+ {
+  "game": "barbarian2",
+  "round": 168,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 19255,
+  "out": 929
+ },
+ {
+  "game": "barbarian2",
+  "round": 148,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 21204,
+  "out": 661
+ },
+ {
+  "game": "barbarian2",
+  "round": 45,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14601,
+  "out": 523
+ },
+ {
+  "game": "barbarian2",
+  "round": 121,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12965,
+  "out": 751
+ },
+ {
+  "game": "barbarian2",
+  "round": 14,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10856,
+  "out": 940
+ },
+ {
+  "game": "bard2",
+  "round": 50,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your Persuasion check was an 8 with disadvantage from exhaustion.",
+  "clashes_with": "Dice log shows Persuasion 1d20+5 with disadvantage rolled [3, 15]→3 + 5 = 8; the reply's math is consistent, so no clash here. Actual clash: the reply says the innkeeper's eyes touched the stair, but no earlier issue; however 'order two bowls of chowder, which costs a silver piece' conflicts with the sheet line 'money -1 sp' only if priced differently, which it is not.",
+  "tokens": 14586,
+  "out": 198
+ },
+ {
+  "game": "bard2",
+  "round": 172,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12851,
+  "out": 954
+ },
+ {
+  "game": "bard2",
+  "round": 118,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The tide is climbing toward its morning high at about nine. You have three hours before the water reaches the stairs.",
+  "clashes_with": "Earlier play gave the time as about 5:52 AM on Day 13 in the cellar; a 9 AM high tide is plausible, but the notebook has no tide info, so this is new, not contradictory. (No clash.)",
+  "tokens": 19008,
+  "out": 132
+ },
+ {
+  "game": "barbarian2",
+  "round": 159,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15472,
+  "out": 841
+ },
+ {
+  "game": "bard2",
+  "round": 123,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 20577,
+  "out": 1066
+ },
+ {
+  "game": "cleric2",
+  "round": 112,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10273,
+  "out": 801
+ },
+ {
+  "game": "bard2",
+  "round": 72,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your spell slots are down to one of your three",
+  "clashes_with": "Turn 77 DM: 'Your slots are still empty until you rest properly.' Wren has had no long rest since.",
+  "tokens": 14317,
+  "out": 507
+ },
+ {
+  "game": "bard2",
+  "round": 178,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11839,
+  "out": 635
+ },
+ {
+  "game": "barbarian2",
+  "round": 144,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 26296,
+  "out": 550
+ },
+ {
+  "game": "barbarian2",
+  "round": 101,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 19768,
+  "out": 666
+ },
+ {
+  "game": "cleric2",
+  "round": 38,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The Reach is safe for now, though the barrow below still holds three ghouls, one nearly dead",
+  "clashes_with": "Earlier play: Ghoul 2 was at 3 HP and the other ghouls' count was never established; Ghoul 2 is the only ghoul named as wounded, and the notebook says the Long Cut has 'ghouls' beneath, not specifically three",
+  "tokens": 15805,
+  "out": 141
+ },
+ {
+  "game": "cleric2",
+  "round": 61,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Five guards and Hodd stand ready",
+  "clashes_with": "Bede, Corra, and the two guards Bede brought back make four guards, not five",
+  "tokens": 11830,
+  "out": 730
+ },
+ {
+  "game": "bard2",
+  "round": 126,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Eight guards are in reeds or at the road, with Pell.",
+  "clashes_with": "Same reply says Pell sends the six guards ahead into the reeds; notebook and earlier play say six guards ride with the wagon and two stay at the hall.",
+  "tokens": 13248,
+  "out": 732
+ },
+ {
+  "game": "bard2",
+  "round": 27,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 9409,
+  "out": 1040
+ },
+ {
+  "game": "bard2",
+  "round": 87,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12454,
+  "out": 1906
+ },
+ {
+  "game": "barbarian2",
+  "round": 44,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11873,
+  "out": 826
+ },
+ {
+  "game": "barbarian2",
+  "round": 52,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14632,
+  "out": 975
+ },
+ {
+  "game": "bard2",
+  "round": 39,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11854,
+  "out": 720
+ },
+ {
+  "game": "bard2",
+  "round": 113,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 17539,
+  "out": 1520
+ },
+ {
+  "game": "bard2",
+  "round": 31,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10487,
+  "out": 753
+ },
+ {
+  "game": "barbarian2",
+  "round": 126,
+  "label": 0,
+  "contradiction": true,
+  "quote": "so Dargan's sister is the one to put the question to him",
+  "clashes_with": "NOTEBOOK: Tessa is Korvash's younger sister, so she is Dargan's daughter, not his sister",
+  "tokens": 15487,
+  "out": 730
+ },
+ {
+  "game": "bard2",
+  "round": 157,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 18090,
+  "out": 443
+ },
+ {
+  "game": "cleric2",
+  "round": 70,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15862,
+  "out": 606
+ },
+ {
+  "game": "cleric2",
+  "round": 174,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15167,
+  "out": 627
+ },
+ {
+  "game": "barbarian2",
+  "round": 135,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 15539,
+  "out": 756
+ },
+ {
+  "game": "cleric2",
+  "round": 55,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12695,
+  "out": 693
+ },
+ {
+  "game": "bard2",
+  "round": 140,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 24032,
+  "out": 1462
+ },
+ {
+  "game": "barbarian2",
+  "round": 27,
+  "label": 0,
+  "contradiction": true,
+  "quote": "You have 14 of 14 hit points with Rage 2/2",
+  "clashes_with": "Rage was 1/2 used at turn 24 and the rage was removed after the fight; a long rest restored features on Day 10, so Rage 2/2 is consistent only if rest restored it, which it did. Not a clash on its own.",
+  "tokens": 12372,
+  "out": 120
+ },
+ {
+  "game": "bard2",
+  "round": 137,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The tide has been falling for hours and will hold the causeway open until the early evening",
+  "clashes_with": "Notebook Gannet Causeway: tides Day 15 high ~10:40 AM, low ~4:30 PM; causeway passable ~2.5 hours either side of low water, so it closes around 7 PM, and the Turn 142 text says it stays open about two more hours from 2 PM; 'early evening' is loosely consistent but 'falling for hours' contradicts the Day 15 high at 10:40 AM and the tide already turning (Turn 142).",
+  "tokens": 25068,
+  "out": 201
+ },
+ {
+  "game": "barbarian2",
+  "round": 120,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12988,
+  "out": 634
+ },
+ {
+  "game": "barbarian2",
+  "round": 12,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10680,
+  "out": 645
+ },
+ {
+  "game": "barbarian2",
+  "round": 74,
+  "label": 0,
+  "contradiction": true,
+  "quote": "the lock only groans",
+  "clashes_with": "Turn 78 dice: Korvash's Athletics bursting the cuff rolled 15 vs DC 17 ruling, and the DM narrated it holding; not a contradiction in itself, but the new reply claims Tessa's pick scraped and slipped while the tool log shows Tessa finishing the cuff with a roll of 9 vs DC 15 (failed) and the narration says Tessa had the pick in the lock; also Tessa's initiative and action were logged as used on a pick attempt the narration describes as her shaking fingers slipping, which is consistent",
+  "tokens": 16283,
+  "out": 216
+ },
+ {
+  "game": "barbarian2",
+  "round": 49,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14244,
+  "out": 860
+ },
+ {
+  "game": "cleric2",
+  "round": 26,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10637,
+  "out": 875
+ },
+ {
+  "game": "barbarian2",
+  "round": 129,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 14562,
+  "out": 508
+ },
+ {
+  "game": "barbarian2",
+  "round": 54,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16164,
+  "out": 609
+ },
+ {
+  "game": "cleric2",
+  "round": 114,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your Perception is a natural 1, a 4 in all.",
+  "clashes_with": "Dice log shows Perception 1d20 [1] + 3 = 4; the reply says natural 1 but the text is muddled, and the skiff was described as at the south tip though the notebook says Jory landed there, not a contradiction in itself",
+  "tokens": 11002,
+  "out": 122
+ },
+ {
+  "game": "cleric2",
+  "round": 84,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13305,
+  "out": 815
+ },
+ {
+  "game": "barbarian2",
+  "round": 147,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 22506,
+  "out": 561
+ },
+ {
+  "game": "bard2",
+  "round": 98,
+  "label": 0,
+  "contradiction": true,
+  "quote": "your Bardic Inspiration at 1 of 3",
+  "clashes_with": "Turn 99 DM: 'You have no spell slots and no Inspiration left,' after Kit spent the last Bardic Inspiration die",
+  "tokens": 16465,
+  "out": 1358
+ },
+ {
+  "game": "cleric2",
+  "round": 140,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13979,
+  "out": 497
+ },
+ {
+  "game": "bard2",
+  "round": 70,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13791,
+  "out": 1073
+ },
+ {
+  "game": "cleric2",
+  "round": 92,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12463,
+  "out": 765
+ },
+ {
+  "game": "cleric2",
+  "round": 162,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Wren holds out a new tallow candle, tied at the base in a small neat knot. \"I tied it myself,\" she says. \"I had it ready since dawn.\"",
+  "clashes_with": "Earlier play has Pim bring the new candle tied in Mina's knot (t158) and Wren kept Mina's candle burning on the sill; Wren was not shown preparing a candle at dawn. Minor, but a new candle for burial is plausible.",
+  "tokens": 15410,
+  "out": 162
+ },
+ {
+  "game": "bard2",
+  "round": 131,
+  "label": 0,
+  "error": "StopIteration: "
+ },
+ {
+  "game": "barbarian2",
+  "round": 77,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Ninety-four small hands, and Ushk's ten spears, and a soft-hearted sergeant leading them to your aunt's door. They are two days from the Border Stones",
+  "clashes_with": "Notebook/turn 25: the 31 children were freed to Harrowmere at the Border Stones on Day 3, so the column of 94 children does not match; also Border Stones is a ten-mile road marker, not a destination two days away",
+  "tokens": 22008,
+  "out": 155
+ },
+ {
+  "game": "bard2",
+  "round": 49,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Then we ride now... past Day 8's evening and dawn along the widening river... It's a quarter to ten on the morning of the ninth.",
+  "clashes_with": "Turn 53-54: the road to Saltmarsh is three days from Thornhallow, and at near midnight on Day 7 two days remained. About 34 hours of riding is not three days of road.",
+  "tokens": 14632,
+  "out": 1416
+ },
+ {
+  "game": "bard2",
+  "round": 78,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Her Stealth was a 12 against his passive 13",
+  "clashes_with": "Turn 82 set the watcher's passive Perception at 12, and nothing in play explains the change to 13",
+  "tokens": 11741,
+  "out": 1024
+ },
+ {
+  "game": "cleric2",
+  "round": 113,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11601,
+  "out": 701
+ },
+ {
+  "game": "bard2",
+  "round": 71,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Your slots are still empty until you rest properly.",
+  "clashes_with": "The level-up record in the same reply says Spell slots now: level 1: 1/3, which means one slot is available.",
+  "tokens": 14200,
+  "out": 782
+ },
+ {
+  "game": "barbarian2",
+  "round": 89,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Brun is not among the guards on the stair.",
+  "clashes_with": "Notebook (t92) and the player's exchange: Brun was one of the four Tally-sworn who came down and asked Gorrak his number; Brun's status in the deep shaft is not set, so this is a new detail, not a clash. Corrected: the earlier entry said Brun was a stair guard who dropped his sword; no contradiction in that line itself.",
+  "tokens": 22362,
+  "out": 153
+ },
+ {
+  "game": "cleric2",
+  "round": 179,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Wren fetches a copper from the Long House box",
+  "clashes_with": "Earlier, the player asked Wren for the copper; the DM's reply has Wren fetch it, consistent. However, the rushlight count: 'The second rushlight is lit' while the earlier turn said five rushlights remain and the first burned out; no clash. Flagging instead: 'In the west, the three pale lights lift and hum' is consistent with prior turns.",
+  "tokens": 12845,
+  "out": 158
+ },
+ {
+  "game": "cleric2",
+  "round": 96,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 11915,
+  "out": 582
+ },
+ {
+  "game": "barbarian2",
+  "round": 108,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13665,
+  "out": 714
+ },
+ {
+  "game": "barbarian2",
+  "round": 177,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Fourteen years ago a sergeant held a woman's scarf under a knife and took a goat-keeper's path to the Goat's Throat",
+  "clashes_with": "Hobb's account says the sergeant came with a knife and scarf; not a contradiction there. Real clash: Brakk's Insight roll was a natural 20 and the reply is the player's, so no DM statement contradicts.",
+  "tokens": 10760,
+  "out": 142
+ },
+ {
+  "game": "barbarian2",
+  "round": 98,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 21930,
+  "out": 705
+ },
+ {
+  "game": "barbarian2",
+  "round": 58,
+  "label": 0,
+  "contradiction": true,
+  "quote": "Vael will be on this road by dusk",
+  "clashes_with": "Notebook t29/t18 says Vael's warband is on the road; but Turn 61 says Vael will be on the road by dusk, and Harrowmere three days off; no clash found. Clash: DM says 'Harrowmere is nearly three days off' while notebook says Vael offers three days' road from Day 11, not a contradiction.",
+  "tokens": 13572,
+  "out": 146
+ },
+ {
+  "game": "barbarian2",
+  "round": 71,
+  "label": 0,
+  "contradiction": true,
+  "quote": "The Foreman went up first, holding his side",
+  "clashes_with": "Turn 74 DM: fight over; Foreman was at 2 HP after breath weapon, but that is fine. Actually check: Turn 74 notebook says Tessa is in the dark and 'no sign'; new reply says 'a girl on the wall with a red cloth... I saw her go over the parapet'; earlier play says Tessa has been hiding in ditch and was signaled grey; the red cloth was raised by Tessa at the gate and she is the one who hung it, which is consistent. No clear clash found on that point.",
+  "tokens": 16148,
+  "out": 208
+ },
+ {
+  "game": "cleric2",
+  "round": 149,
+  "label": 0,
+  "contradiction": true,
+  "quote": "You have one 1st-level slot and two 2nd-level slots left",
+  "clashes_with": "Turn 153 stated two 1st-level slots and two 2nd-level slots; Fog Cloud (1st-level) spent one, leaving one 1st-level slot, which is consistent. However, Turn 152 said three 1st-level slots, then Cure Wounds on Nell and Fen spent two, leaving two; Fog Cloud then leaves one. No contradiction there, so this is consistent.",
+  "tokens": 12597,
+  "out": 178
+ },
+ {
+  "game": "bard2",
+  "round": 143,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16767,
+  "out": 895
+ },
+ {
+  "game": "cleric2",
+  "round": 64,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13612,
+  "out": 569
+ },
+ {
+  "game": "cleric2",
+  "round": 118,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 10714,
+  "out": 643
+ },
+ {
+  "game": "barbarian2",
+  "round": 169,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 16594,
+  "out": 637
+ },
+ {
+  "game": "barbarian2",
+  "round": 170,
+  "label": 0,
+  "contradiction": true,
+  "quote": "You shoulder your pack and tell Dreg that two spears is too few... He takes four.",
+  "clashes_with": "Turn 174 player said Dreg should take four spears, but the DM reply says Dreg takes four when player asked; the actual contradiction is the DM says 'Dreg and two spears' were already there and 'Three or four cloaks, Tolk's rearguard' with 'Dreg holds up three fingers, then four' - no. Note: the DM's Veshra line 'She will have the tavern watched' is fine.",
+  "tokens": 16439,
+  "out": 187
+ },
+ {
+  "game": "cleric2",
+  "round": 150,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12983,
+  "out": 1120
+ },
+ {
+  "game": "cleric2",
+  "round": 19,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 13978,
+  "out": 550
+ },
+ {
+  "game": "barbarian2",
+  "round": 141,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 20831,
+  "out": 713
+ },
+ {
+  "game": "cleric2",
+  "round": 121,
+  "label": 0,
+  "contradiction": false,
+  "quote": "",
+  "clashes_with": "",
+  "tokens": 12152,
+  "out": 1016
+ }
+]
