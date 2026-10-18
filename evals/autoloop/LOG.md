@@ -274,3 +274,10 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   place and items are rarely flagged on clean rounds even at 2, while identity and deeds at 2 are as often wrong as right.
   Acting at 2+ but 3+ for time/identity/deeds: caught 79 of 105, flagged 23 of 60 (3+ alone: 47 and 14). Tuned on the
   same rounds, so it needs fresh rounds to confirm.
+- Hand labels replace the Haiku ones (topics-hand.txt; 101 of 458 problems have two topics; topic_cutoffs.py).
+  Share of problems that are a reader's finding, by score: at 1 almost none in any topic; at 2 items 53%, count 39%,
+  mechanics 37%, but deeds, place and identity 10-12%; at 3 most topics 40-60%, mechanics 0 of 7. Best per-topic
+  cutoffs (count, place, items, status, mechanics 2+; distance, deeds, identity 3+; time 4+) fit 74 of 105 and 17
+  of 60, but leave-one-round-out gives 61 of 105 and 20 of 60, against 47 and 14 for flat 3+ (also LOO). Counting
+  only catches on the readers' own line: 44 of 105 against 28. Under the rule, 66 of the 128 kept problems touch
+  time, items or mechanics and would go back to the DM; the checker itself said 'dm' for 6.
