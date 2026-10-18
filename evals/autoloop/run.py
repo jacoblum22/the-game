@@ -45,6 +45,10 @@ BRIEFS = {
     "bard2": ("a half-elf bard (College of Lore)",
               "You play as a curious trickster: you explore, poke at strange things, lie and bluff, try clever or odd "
               "uses of your spells and skills, and sometimes test the edges of the rules."),
+    # Short new game (Jake, 2026-10-18): the reply and its bookkeeping in one call, and the cut at 60k, from turn 1.
+    "bard3": ("a gnome bard (College of Lore)",
+              "You play as a curious trickster: you explore, poke at strange things, lie and bluff, try clever or odd "
+              "uses of your spells and skills, and sometimes test the edges of the rules."),
 }
 
 PLAYER = """You are a human player in a solo D&D 5e game (2014 rules) run by a DM. {style}

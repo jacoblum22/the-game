@@ -363,6 +363,7 @@ def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
             on_text("Summary." if "cut short" in text else "Reply.")
             self.session_id, self.size = self.session_id or f"sess-{len(opened)}", 300_000
 
+    monkeypatch.setattr(play, "KEEP", 20)
     monkeypatch.setattr(sdk, "Client", FakeClient)
     monkeypatch.setattr(play, "SAVES", tmp_path)
     monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
