@@ -1,0 +1,237 @@
+GAME barbarian2, ROUND 90
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 87 ==
+PLAYER: I turn on the fifth guard, the one with his sword on the floor, and bark in Goblin, "You heard the captain! Pick up that blade and cut this wire and chain, now, before the stair guards get here, or Greyshaft eats you like it ate his debt!"
+
+The moment my wrists are loose, I'll heave the table against the door to hold the stair, then go for the guard holding the scorched ledger.
+  [game] dice Korvash Intimidation (in Goblin): Guard 5 to cut the wire and chain, DC 13 (he's already dropped his sword, wavering): 1d20+3 = 1d20 [7] + 3 = 10 (Korvash Emberhide has used its action: no more actions this turn.)
+  [game] fight: Round 4, now: Guard Singed-beard. Guard Singed-beard (initiative 14): HP 1/1, AC 18 Guard Singed-beard's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.
+  [game] dice Guard Singed-beard vs Guard 3 (AC 18): 1d20+3 = 1d20 [16] + 3 = 19 (Guard Singed-beard has used its action: no more actions this turn.)
+  [game] dice Guard 3 vs Guard Singed-beard (AC 18): 1d20+3 = 1d20 [14] + 3 = 17
+  [game] dice Guard 4 vs Korvash (AC 13, shackled: advantage), to subdue: 1d20+3 (advantage) = 1d20 [19, 16]→19 + 3 = 22
+  [game] dice Singed-beard damage to Guard 3: 1d8+1 = 1d8 [7] + 1 = 8
+  [game] sheet: took 5 damage: HP 1 → 0; at 0 HP: unconscious; make death saving throws on each of their turns
+  [game] fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 20, 11:26:42 PM.
+  [game] dice Hours until knocked-out Korvash regains 1 HP: 1d4 = 1d4 [3] = 3
+  [game] sheet: healed 1: HP 0 → 1; conscious again; death saves reset
+  [game] time: 3 hours later: Day 21, 2:26:42 AM
+  [DM write_lore (hidden)] {"create": "Krell", "kind": "person", "description": "Tally-sworn guard of the Greyshaft ledger-house, the one with the singed beard (Korvash burned it Day 20). Turned against the Foreman when Gorrak read his debt line aloud; fought Guard 3 and was struck down. Held in the deep shaft with Korvash and Gorrak.", "relationships": ["served the [[The Greyshaft Foreman]]", "sided with [[Gorrak Vael]] ag
+  [game] notebook: created an entry for Krell; added 2 relationships to Krell
+  [DM write_lore (hidden)] {"entry": "Gorrak Vael", "add_to_description": "Day 21 ~2:30 AM: held chained in the deep shaft beside Korvash after the ledger-house fight. Told Korvash the Foreman moved the scorched ledger to a chest on the third gate under his own grey-cloaks, and that Tessa was taken up the stair as the Foreman's mender. Several Tally-sworn asked him the number of his debt."}
+  [game] notebook: updated Gorrak Vael
+DM: You bark it in Goblin, as loud and hard as your voice will go. The fifth guard looks at your wrists, then at the door, then at the Foreman, and the fear in his face is a mile deep. It is fear of the man behind the desk, and yours is no match for it. His hand stays empty.
+
+The singed guard cuts the big one across the arm, a clean hit, and the big one answers a heartbeat late. Another guard's sword comes down on the flat of your shoulder, and the world goes sideways.
+
+The last you hear is the stair door slamming open and a dozen boots pouring in. The last you see is Tessa on the floor, her face turned toward you in the lamp's flicker. Her chest is rising and falling.
+
+You come to in the dark with iron on your wrists, the smell of tin and wet rock around you, and a slow drip somewhere to your left. It is the deep shaft gallery again, two torches on the far wall and a heavy door at the end. The children you saw here before are gone from the row. The straw is trampled, and the rings on the wall hang empty. It is a little after two in the morning on the day after midwinter's eve, and you have 1 hit point.
+
+Gorrak Vael sits chained across the gallery with his back against the stone. His mask is gone. The long pale seam of burn runs jaw to ear, and a fresh bandage binds his ribs, new linen, neatly tied. He is awake and has been for some time. Beside him slumps the singed guard with a split head and a swollen arm, breathing shallowly. Two spearmen stand by the door and watch the gallery without talking.
+
+"Keep your voice down," Gorrak says, low, in Common, the way he spoke on the road. "I have eaten this wall for three hours. They have moved the book. The scorched thing sits in a new chest now, on the third gate, under the Foreman's own grey cloaks." His eye is fixed on you, and it is not the eye you remember. "Your sister is alive. They took her up the stair. The mender sews the Foreman's wounds tonight, and I think she is the only one in this mountain he is afraid to lose."
+
+He turns his head toward the door. "Four of the Tally-sworn came down while you slept. They asked me a number. I told them." He says it flatly. "None of them looked at me when they left."
+
+The drip counts out the seconds. The singed guard stirs and coughs. Dawn is a few hours off, and the Foreman has a week's worth of men to rebuild his mountain with. Your hands are in iron, and a captain who owes you nothing is looking at you as if you owed him an answer.
+
+What does Korvash do?
+
+== ROUND 88 ==
+PLAYER: I keep my voice just as low. "Then you've told four of your own men that their captain's debt was cooked, Gorrak, and men like that don't sleep easy on the same mountain as the man who cooked it. Tell me, who among them might open a door for you, and what will it take to make them choose?"
+
+I tip my chin at the singed guard. "And this one took a sword for Tessa and me tonight, so I'd like to know his name before he bleeds out."
+
+DM: Who is Krell in my notebook? I see the entry but I don't remember meeting him.
+  [game] time: 10 minutes later: Day 21, 2:36:42 AM
+  [DM write_lore (hidden)] {"create": "Brun", "kind": "person", "description": "Tally-sworn stair guard (the fifth guard, who dropped his sword when Gorrak read the ledger line). Young, frightened of the Foreman, but one of the four who asked Gorrak his number.", "relationships": ["served the [[The Greyshaft Foreman]]", "asked [[Gorrak Vael]] the number of his debt on Day 21"]}
+  [game] notebook: created an entry for Brun; added 2 relationships to Brun
+  [DM write_lore (hidden)] {"entry": "Krell", "add_to_description": "Day 21 ~2:35 AM: gave his name to Korvash; twelve years in Greyshaft, knows the stair guards' shifts. Wounded: split head, swollen arm."}
+  [game] notebook: updated Krell
+DM: Out of character: Krell is the name I gave the singed-beard guard in this scene. He's the same hobgoblin you've been fighting, and you hadn't heard his name before. It's in my notebook now because he turned on the Foreman and is chained beside you.
+
+You keep your voice to a breath, and Gorrak answers in kind.
+
+"Four came down. Two of them I would not trust with a sleeping dog." He says it without heat. "One is a boy called Brun, the stair guard who dropped his sword. He was born in the Foreman's mines, and he has never in his life seen a number that was not in the Foreman's hand. He asked me what mine was, and he cried when I told him. The fourth is a sergeant named Dreg."
+
+The name lands. Dreg walked the road beside you for three days. "My own," Gorrak says. "He is held in the barracks yard with twenty of my spears, under the Foreman's crossbows. He is loyal to the tin on my face more than to me, and I took the tin off tonight. I do not know what he'll do. But twenty Tallies are the only force inside these walls the Foreman cannot simply shout down."
+
+The man beside him lifts his head and says, thickly, "Krell." His eyes are on you, one swollen shut. "That's my name. Twelve years in this mountain, and the gate shift changes at the dawn bell. Three stair guards come off, three go on, and the new three are all his, grey-cloak friends, not Tally-sworn. If anything is going to move, it moves before the bell, while the stair is slack." He coughs. "You took a sword for her, and I took one for you. We're square. Do not tell me different."
+
+At the door, one of the two spearmen shifts his weight and glances your way. Gorrak and Krell stop talking. The dawn bell is about three hours off. Your wrists are in locked iron, the room has two guards at the door, and your sister is somewhere above you with a needle in her hand and the Foreman's life in her fingers.
+
+You are at 1 hit point. What does Korvash do?
+
+== ROUND 89 ==
+PLAYER: I let my head loll and croak in Goblin to the nearer spearman, "Water, for a dying man, friend. And if you're the boy they call Brun, the one who dropped his sword, Gorrak Vael's number is in your hand tonight too."
+
+If he answers to the name, I'll lower my voice another notch. "Dreg and twenty Tallies sit in the barracks yard waiting for someone to choose. Tell them the dawn bell is the moment, and bring the door key with the water."
+  [game] dice Is the nearer spearman Brun? (1-2 yes, 3-4 no): 1d4 = 1d4 [3] = 3
+  [game] dice Korvash Persuasion (Goblin): guard to bring water and carry word to Dreg, DC 15: 1d20+1 = 1d20 [5] + 1 = 6
+  [game] dice Korvash Stealth: keeping the whispering from the second spearman, vs passive Perception 10: 1d20+1 = 1d20 [7] + 1 = 8
+  [game] time: 20 minutes later: Day 21, 2:56:42 AM
+  [DM write_lore (hidden)] {"entry": "Brun", "add_to_description": "Day 21 ~2:40 AM: was the farther of the two spearmen at the deep-shaft door; flinched at his name but said nothing. The nearer spearman (a grey-cloak) overheard Korvash's whisper about Dreg and the dawn bell and reported it up the stair."}
+  [game] notebook: updated Brun
+DM: You let your head loll and croak it in Goblin: water for a dying man, and Gorrak Vael's number is in your guard's hand tonight too. You say Brun's name, and Dreg's, and the dawn bell.
+
+It is the wrong man. The nearer spearman is not Brun. He is a lean, flat-faced hobgoblin in a grey cloak, one of the Foreman's own, and he turns on you with the slow pleasure of a man who has been handed something. He hasn't heard everything. He's heard enough: Dreg, the bell, and a prisoner whispering. He looks at the water skin on his belt, then hooks it away from you with one finger and smiles.
+
+"Dying men don't plan," he says in Goblin. He doesn't shout. He raps the door twice with the butt of his spear, and the sound goes up the stair like a pebble down a well.
+
+The other spearman stands where he was, a few paces off, a young hobgoblin with a thin neck and a scraped jaw. He heard his name. His eyes flick to you once, wide, and then to the floor. He says nothing, but his knuckles are white on the spear.
+
+Gorrak has gone still as stone. Krell has shut his one good eye.
+
+It takes about twenty minutes. Then the heavy door grinds open, and six of the Foreman's grey cloaks come through it with the stair guard behind them. They do not hurry. The sergeant takes a ring of keys from his belt and unlocks the ring in the wall that holds you. Two men haul you up by the arms, and your legs, hobbled and weak, give under you. "The Foreman wants the big one in the ledger-house," the sergeant says. "Alone. The captain stays here, and the cripple. Seal the door." He looks at Gorrak. "Orders."
+
+They drag you through the door and up the stair, one flight, two, then out onto the gate-top walk under a sky of low cloud. The wind is cold and the torches are guttering. The ledger-house door stands ahead, with light under it. Behind you, in the dark, the deep shaft door closes on Gorrak and Krell, and you hear the bar fall. Brun is not among the guards on the stair. It is a little before three in the morning.
+
+You are at 1 hit point, with your wrists in iron and six grey cloaks around you. Ahead is the lit door, and somewhere past it the Foreman and your sister. What does Korvash do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 90, "category": "agency", "severity": 2, "quote": "For forty minutes nothing happens, and the stove ticks.", "why": "The player said he would stall the Foreman with questions until the dawn bell. The DM skips the stalling entirely, jumps the time, and gives him nothing to stall with."}
+{"round": 90, "category": "clock", "severity": 1, "quote": "It is a little before four in the morning.", "why": "The game clock says Day 21, 3:36:42 AM. The narration also claims 'forty minutes' of waiting on top of the earlier walk and talk."}
+{"round": 90, "category": "contradiction", "severity": 2, "quote": "my rider goes to the Border Stones", "why": "In round 82 the Foreman wrote and sealed an order for his rider to turn back from the Border Stones ('Done before you speak'). In round 90 the rider is again a threat still to be sent, with no explanation."}
+{"round": 90, "category": "pacing", "severity": 1, "quote": "You are at 1 hit point, with two hours and a roomful of grey cloaks.", "why": "Nearly every reply from round 61 to 101 ends by repeating the character's hit-point total ('You are at 5 hit points', 'at 1 hit point') as a closing line, usually followed by 'What does Korvash do?'. It is the same beat dozens of times."}
+
+THE PLAYER'S LINE THIS ROUND: I let them walk me up, dragging my feet, and read the terrain as I go: how many cloaks, where the windows are, which door the bar sits on. At the ledger-house door I plant my heels and say in a flat voice, loud enough to carry inside, "Tell your Foreman I'll hear his terms, but I see Tessa alive and whole with my own eyes before I say a word."
+
+Once inside, I keep my chin up and my eyes on my sister and the ledger, and I stall him with questions until the dawn bell.
+
+=== REPLY barbarian2-90-01 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:15 AM: received Korvash in the ledger-house with six grey-cloaks; Tessa alive (bandaged head, sewing his wounds), shown to Korvash. 
+You plant your heels at the ledger-house door and say it loud enough for the room to hear: you will hear his terms, but only after you see Tessa alive and whole.
+
+The walk up taught you what it could. There are six grey cloaks around you, all spears and no crossbows. The gate-top walk has two shuttered windows on the ledger-house's east face, and the door you came through is barred from the stair side only. A wash-house door stands at the far end of the roof, shut, with a thread of steam under it. The dawn shift will come up that same stair. Their sergeant keeps his key ring on his left hip.
+
+The door opens inward. The Foreman is at his desk with a fresh candle, his apron changed and his beads in his lap. The scorched ledger lies in a new iron-bound chest beside him with the lid propped open and a hand's width of black paper showing. He does not rise.
+
+"Reasonable," he says. "You wish to see her. See."
+
+Tessa sits on a stool by the stove with a basin and a needle, mending a long rent in the sleeve of a grey cloak. Her bound hands are set to the work, and a cord runs from her wrist to the stool leg. Her head is bandaged and her eyes are clear. She looks at you once, a long look. Her thumb moves against the cloth: *the wash-house, dawn.* Then she bends to the sewing again.
+
+"Whole and living," the Foreman says. "Now you may talk. My terms are what they were, with a third clause I must add." He does not say what it is yet. He raises his hand for a stool and a cup of water for you, and you drink with your wrists in iron while he begins, in his small, even voice, to read the old contract aloud again from the top.
+
+You ask questions as he reads, about the clauses, the count, the surety, who keeps the seal. He answers every one with patient pleasure. Minutes pass. The candle burns down a thumb's width, then another. Two of the grey cloaks shift their feet. A third yawns. Outside, the cloud thins, and a grey line shows under the east shutter. It is a little after three-thirty in the morning, and the dawn bell is not far off.
+
+You are at 1 hit point, in irons, and the Foreman has just reached the third clause. What does Korvash do?
+
+=== REPLY barbarian2-90-02 ===
+  [hidden call] write_lore: {"entry": "Tessa", "add_to_description": "Day 21 ~3:05 AM: shown to Korvash in the ledger-house, awake, sitting by the stove with a bandaged head, sewing the Foreman's side under guard; she is alive a
+You plant your heels at the ledger-house door, and you say it flat and loud enough to carry through the wood: you'll hear the Foreman's terms, but you see Tessa alive and whole first.
+
+You are not as sharp as you'd like. On the walk up you saw six grey cloaks, a bar on the outer door and a great deal of dark, and you came away with nothing you could use. You didn't mark the windows.
+
+The demand lands, though. The door opens on the lit room. It is the same long low chamber, shutters closed, stove ticking, the scorch on the floor and the oak table back in its place. The sergeant gives a short nod, and the Foreman's small gentle voice answers from inside. "Of course. I would not ask a man to bargain blind."
+
+Tessa sits on a stool by the stove with a bandage round her head, a needle in her hands and a spear across the knees of the guard beside her. She is sewing the long cut under the Foreman's ribs, where he sits half-stripped in his chair. She does not look up when you come in. The needle never stops. But her left hand, resting on his sleeve, makes the clan's sign against the cloth, thumb folded in: *I'm well.* Then it goes back to the thread.
+
+The ledger lies on the desk, scorched brown along two edges, with a clasp now locked across it and the chest beside it. The key chain hangs at his belt. Four grey cloaks remain in the room, and two more stand behind you.
+
+"You have seen her," the Foreman says. "She is whole. She is also useful, which is the reason she is whole. Sit him down." They put you on the floor against the table leg and fasten your chains again. The Foreman lifts a hand, and the brass beads click. "Your captain has been telling my men things tonight. It is unwise. Yet it is not you I mean to punish, Emberhide. I mean to buy you. Swear, and I will let you into the ledger yourself, once a season, to read your own count and his. I will even show you the page."
+
+The shutters rattle in the wind. The dawn bell is still hours off. You are at 1 hit point, chained, with your sister three paces away, the Foreman at ease, and a clever question on your tongue. What does Korvash do?
+
+=== REPLY barbarian2-90-03 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:05 AM: had Korvash brought alone to the ledger-house on the third gate; agreed to show Tessa alive before hearing him. Tessa sits st
+You drag your feet and keep your eyes open. You take in less than you wanted. The cloud is low and the torches gutter, and the wind steals half of what you might have seen. You count six grey cloaks around you and two more at the stair head. The ledger-house door is the only door on this side, and it is barred from inside. The windows are shuttered. You can't tell which shutter hides a latch.
+
+At the door you plant your heels and say it flat and loud: you'll hear his terms, but you see Tessa alive and whole with your own eyes before you say one word.
+
+A pause, then the bar scrapes back. The Foreman's small voice comes from within, mild as ever. "Bring him. A man who asks to see his sister is a man who means to bargain. I like that."
+
+The room is warm and smells of lamp-oil and boiled linen. The stove ticks. The scorched ledger lies open on the desk under a fresh lamp, with a guard at each end of it. The Foreman sits behind it, grey-faced, his apron changed and his side freshly bound. On a stool at his elbow sits Tessa, stripped of her pick and knife, with a bruise purpling along her jaw. She holds a curved needle and a length of gut, finishing a stitch in his sleeve. Her eyes find yours. She isn't broken, and she's furious.
+
+"There," the Foreman says. "Alive, whole, and useful. Ask what you like, Emberhide. I have until the dawn bell, and I am told you have a great many questions."
+
+He is right about that. Six cloaks stand at your back with your wrists in iron, one hit point in your chest, and the dawn bell is a long three hours off. What does Korvash ask?
+
+=== REPLY barbarian2-90-04 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3 AM: received Korvash in the ledger-house with six grey-cloaks. Showed Tessa alive, bandaged, seated at his side sewing; the scorched
+You plant your heels at the ledger-house door and say it flat and loud enough to carry through the wood: you will hear the Foreman's terms, but you will see Tessa alive and whole with your own eyes before you say a word.
+
+On the climb you took in what you could with your head hanging. Six grey cloaks, two with crossbows slung. The gate-top walk has one barred stair door behind you and a wash-house roof to the left, with a drain-stair cut into the wall beyond it, the way you came before. The ledger-house shutters are latched from inside. Nobody tied your hobbles tight, and the chain between your wrists is short. The sergeant hears you and grunts. Whatever the Foreman wanted from you, he wants it with the door closed.
+
+The door opens. Inside, the stove is lit and the long room smells of beeswax and scorched paper. The Foreman sits at the desk with the ledger open before him, its cover blackened and the edges brown. His side is stiffly bound under the apron. At his elbow, on a stool, sits Tessa with a needle and thread in her bandaged hands, mending a tear in his sleeve. Her left forearm is wrapped fresh. A knot shows at the back of her skull. She looks up at you and keeps sewing, but her eyes tell you that she is whole enough to bite.
+
+"You see, Emberhide," the Foreman says mildly. "Unharmed. I keep what is useful." He nods at the stool they set for you. "Sit. I did not expect to speak again before the dawn."
+
+You sit, and you talk. You ask what a year and a day is worth when the man who counts it has been caught altering the count. You ask who keeps the key. You ask whether a safe-conduct is worth anything on a road his scouts watch, and who guards the mule. You make him read each clause again, ask for the surety to be named in a second hand, ask which witnesses will sign. You are slow, plain and stubborn, a herder haggling over a goat, and he takes it as that. He answers with the weary patience of a man who has haggled with worse. Twice he glances at the sand-glass on the desk. Both times you hand him another question before he can close the page. Once Tessa's needle stops, and you see her listening to the walls instead of to you.
+
+The bell comes at last, a long cold note from the upper gate, then the answering clang below as the shift changes. The sergeant by the door straightens. The Foreman lifts his head, and for the first time all night, something in his face is not patient.
+
+"There," he says. "The dawn bell. You have kept me from my bed three hours, Emberhide, and you have not once said yes." The beads click. "Now say it."
+
+It is a quarter to six in the morning. You are at 1 hit point, in irons, with six grey cloaks in the room, your sister at the Foreman's elbow, and a bell that was supposed to mean something to somebody else. What does Korvash do?
+
+=== REPLY barbarian2-90-05 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:05 AM: received Korvash in the ledger-house again with six grey cloaks; agreed to show Tessa alive before terms. The scorched ledger
+You drag your feet and try to read the walk as you go, but the wind is in your eyes, the torches gutter, and the cold has got into your head. You count cloaks and lose the count. You couldn't say which door holds the bar, or whether the windows are shuttered. You have the sense of a narrow walk with a drop on one side and little else.
+
+At the ledger-house door you plant your heels. Your flat, carrying voice says you'll hear his terms, but you'll see Tessa alive and whole first. The sergeant starts to cuff you forward. Then a mild voice inside says, "Let him in. He is quite right to ask."
+
+The room has been tidied. The table is righted, the scorch scrubbed to a grey smear, and the dead guard is gone. The Foreman sits in his chair with his shirt open and a fresh seam of stitches across his ribs, neat as a clerk's hand. Tessa sits on a stool at his side, bandaged at the skull, with a needle and thread in her fingers and a grey cloak behind her. Her eyes find yours. She is pale, but she is whole. The new iron-bound chest stands beside the Foreman's chair, and the scorched ledger lies on the desk with the cover shut and his hand on it.
+
+"There," the Foreman says. "Alive, whole, and useful. She has a gentle hand, your sister. I should be sorry to lose it." The beads click. "Now we may talk like sensible people. Sit him down."
+
+They sit you on the floor with your back to the table leg, and your hands are wired to it once more. The sergeant stands at your shoulder with five cloaks along the wall. The bar is down on the door behind you. Out in the dark a bell tolls the half hour, and the dawn bell is still some hours away.
+
+"I will be brief," the Foreman says. "You have cost me a guard, a captain's loyalty, and a night's sleep. The terms stand as they were, with one addition. You will say the oath now, and you will say it of your own will, and your sister will mend the men you have hurt." He lifts the pen. "I have been patient. I have little left."
+
+Tessa's needle has stopped. She is watching you, and her left hand lies flat on her knee, palm down and steady, the clan's sign for *wait*.
+
+You are at 1 hit point, wired at the wrist, with the Foreman's eyes on you. What does Korvash say or do?
+
+=== REPLY barbarian2-90-06 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:00 AM: had Korvash brought alone to the ledger-house under six grey cloaks after a grey-cloak spearman reported his whisper about Dr
+You drag your feet and read the walk as you're hauled along it, but the cloud is low and the torches gutter, and the wind steals what you might have seen. You count six cloaks and a door, and little else. You lose the rest in the dark.
+
+At the ledger-house door you plant your heels and say it flat and loud: you will hear his terms, but you will see Tessa alive and whole before you say a word.
+
+It carries. A pause follows, and then the Foreman's small voice comes through the wood. "Open it. He's quite right."
+
+The door swings in on lamp-smoke and the smell of scorched paper. The long room has been tidied. The table stands where it should, and the black scorch is scrubbed pale on the flags. The guard Guard 3 stands against the far wall with a bandaged arm, and Guard 6 is at his shoulder. Nobody else is left of the six who stood here at midnight. A new iron-bound chest sits on the desk, its lid raised an inch.
+
+The Foreman sits behind it with his side freshly dressed and the beads in his fingers. He looks older, grey around the mouth, but his hands are as steady as ever. Beside him, on a stool, sits Tessa. Her hands are in her lap and unbound, and a needle and thread lie on a cloth at her knee. A bruise darkens one side of her face. She lifts her head, finds you, and holds your eyes. Her thumb presses once against her knee: *alive. Wait.*
+
+"There," the Foreman says gently. "Whole, as she promised. I keep my word more often than you have been told." He gestures to a chair set in the middle of the floor. "Sit, Emberhide. You have been very expensive tonight, and I would like to know what I am buying."
+
+The grey cloaks put you in the chair and stand behind it. Your wrists stay in iron. The dawn bell is a little under three hours away, and the Foreman has all the patience in the world. You have 1 hit point, a sister three paces off, and the floor.
+
+What does Korvash say or do?
+
+=== REPLY barbarian2-90-07 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:00 AM: had Korvash brought alone to the ledger-house under six grey cloaks. Refused to show Tessa on demand; she is behind the inner
+You go up slowly, dragging your feet, and your eyes work while your legs don't. Six grey cloaks: two ahead, two at your elbows, two behind with the sergeant. The walk along the gate-top is narrow, with a drop on the left to the yard and the wall on the right. The ledger-house has one barred door facing the walk and one shuttered window on its east side, over the sluice drop. Far along the roof to the west you can make out the low hump of the wash-house. All the grey cloaks carry short swords and crossbows. None of them watch the sky or the drop. They watch you.
+
+At the door you plant your heels and say it loud and flat. You'll hear his terms, but you'll see Tessa alive and whole first.
+
+The sergeant doesn't even answer. A hand shoves you through the door, and it closes behind you.
+
+The room is warmer than before and smells of tin, camphor and blood. The scorched floor has been scrubbed, the table righted, and the stove stoked. The Foreman sits behind the desk with a fresh bandage under his apron and a basin of reddened water at his elbow. The ledger lies before him in a new iron-bound chest with its lid propped open, its edges brown and brittle, and he has laid a clean cloth over it. The brass beads are in his hand.
+
+"Whole," he says mildly. "You'll forgive me if I don't parade her. She is behind that door, and she is sleeping, because I wished her to. My mender has been busy and has earned it." He nods at an inner door, shut, with a bar across it. "You may see her when you have sworn. I thought we had agreed about the order of things."
+
+Two grey cloaks stand behind you and the sergeant by the outer door. The Foreman's face shows exhaustion under the calm, and a little of the fastidious smile has gone. The beads click once.
+
+"Let us not repeat ourselves. You read the terms and you struck a clause. I have struck another, since you were so kind as to call the captain's line into question. The terms stand. Swear, Emberhide, and you walk out of here a hand, and your sister walks out with a mule. Refuse, and the mule stays in the stable and I write your sister's line in a very different column." He lifts the pen. "You have until the bell."
+
+It is a little after three in the morning, and the dawn bell is hours off. You are at 1 hit point, wired and ironed, with two guards at your back, the ledger a pace and a half beyond the desk, and a barred door between you and your sister. What does Korvash do?
+
+=== REPLY barbarian2-90-08 ===
+  [hidden call] write_lore: {"entry": "The Greyshaft Foreman", "add_to_description": "Day 21 ~3:05 AM: in the ledger-house, refuses to show Tessa before the oath; keeps her behind an inner door. Six grey-cloaks escort Korvash; t
+You let them drag you, heels scraping, and you count as you go. Six grey cloaks, the sergeant at your left elbow with the key ring on his belt. Two shuttered windows on the gate-top walk and a third, narrow and unbarred, above the wash-house roof. The ledger-house door has a drop-bar on the inside, and a second door stands at the back of the room, shut.
+
+At the threshold you plant your heels and say it loud and flat: you'll hear his terms, but first you see Tessa alive and whole.
+
+It comes out wrong. The words crack and slide, and the sergeant hears a prisoner's whine. His fist is already rising when a small voice from the desk stops it. "Leave him."
+
+The Foreman sits behind the desk with a new chest at his elbow and the scorched ledger open under the lamp, a clean cloth in one hand. His side is freshly bandaged and his face is grey with the night. He studies you without anger. "You may see her when you have sworn, Emberhide, and not before. A man who asks for proof before he has paid is a man who thinks he is the creditor." He nods at the closed back door. "She is behind it, sewing. You can hear her."
+
+You can. There is the click of a needle against a basin, and a thin hum, the third line of the counting song, broken off and begun again.
+
+The grey cloaks put you on a stool with your chained wrists on the desk's edge. The sergeant stands at your shoulder. The lamp burns low, and out beyond the shutters the wind has the sound of a long wait. It is a little after three in the morning, the dawn bell is hours off, and the Foreman has dipped his pen.
+
+You are at 1 hit point. What does Korvash say or do?

@@ -244,3 +244,12 @@ with the same analysis after each block and a detailed report in evals/autoloop/
 - Near chance every time (AUC: 0.5 is a coin flip, 1.0 perfect): jev (1.13) 0.59, jev-1.14.0 0.60, jev-1.14.0 with
   3 turns instead of 10 0.61. Best trade-off seen: 1.14 at 0.5 caught 16 of 105 and flagged 14 of 150 clean rounds.
   About 6.7M input tokens in all, roughly $0.28. Not usable for this; not built into the game.
+
+## #1, notebook writes that answer back (Jake, 2026-10-18): not kept
+- A notebook write returned, to the DM only, what the notebook said before the write about the entry written and the
+  names in its new text (up to 4 entries, 1500 characters each, once a turn, not the party's): dm/lore.py answer().
+- A/B, evals/autoloop/ab5: 6 rounds where the notebook had the right fact and the DM wrote to it before its reply
+  (cleric2 143, 152; barbarian2 81, 90; bard2 97, 127), 4 runs each, base with NO_ANSWER=1, blind Sonnet judges (JUDGE.md).
+- Contradictions 9 of 24 with answers, 4 of 24 without; repeats of the original 2 vs 1; acting for the PC 8 vs 4.
+  Small numbers, but no sign it helps. Some of the new ones repeat what the notebook itself said (Reedholm "half a
+  day"; Hale "only ever the go-between"). Not given 8 runs. The change is committed, then reverted in the next commit.

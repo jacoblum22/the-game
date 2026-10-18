@@ -1,0 +1,191 @@
+GAME cleric2, ROUND 152
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 149 ==
+PLAYER: "Then we put that candle out, gently, and we don't tell Dessa it's her fault." I ask Wren to bring Dessa to the back shutter so I can explain it to her myself, and I'll snuff the flame with my own fingers.
+
+Then I cast Fog Cloud at the window side of the hall, out over the water, to hide the Long House's lights from the drifting one. I'll keep a ferry-rope across the door sill as a line to trip anything small and wet, and sit up the night with my pole and lantern.
+
+DM: does the fourth light react when the candle goes out?
+  [DM lookup (hidden)] {"name": "Fog Cloud", "kind": "spell"}
+  [refused] sheet: Brannoc can't cast Fog Cloud with a spell slot (not among their spells: Sacred Flame, Guidance, Spare the Dying, Healing Word, Shield of Faith, Guiding Bolt, Sanctuary, Protection from Evil and Good, Command, Bless, Cure Wounds, Lesser Restoration, Spiritual Weapon). A spell from a scroll or item, or cast some other way: pass no_slot with what it's from
+  [game] dice How the fourth light reacts when Dessa's candle is snuffed (1-8 it dims and retreats; 9-16 it holds still; 17-20 it surges closer): 1d20 = 1d20 [8] = 8
+  [game] time: 20 minutes later: Day 1, 7:20 PM; timer Tamsin's Fog Cloud (concentration): 1 hour
+  [DM write_lore (hidden)] {"entry": "Tamsin Vale", "add_to_description": "Day 1, ~7:20 PM: spent slots: 3 of 4 first-level (Cure Wounds on Nell, Cure Wounds on Fen, Fog Cloud over the water by the Long House's back shutter), 2 second-level left. Fog Cloud timer 1 hour, concentration. The tool sheet is Brannoc's and refuses her spells, so the DM tracks her slots by hand. Dessa Quill snuffed her shutter candle after Tamsin e
+  [game] notebook: updated Tamsin Vale
+DM: Wren fetches Dessa Quill to the back shutter. She is a drawn, tired woman with her daughter's chin and eyes red from not sleeping. You don't make her feel guilty, and you don't dress it up. "The candle's a kindness, Dessa, and nobody's blaming you for it. But the lights are close to the village, and I think a lit window may be calling them. Let me put it out." She looks at Nell asleep, then at the flame, and nods without a word. You pinch the wick out with your own fingers, and the smell of hot tallow rises.
+
+Out over the water, the fourth light stirs at once. It shivers, as a candle flame does in a draught, then dims to a bruise of green and slides back, twenty paces, thirty, into the mist. It doesn't vanish, but it waits there, much farther out. I rolled for it. It could have held, or surged, and it chose to dim.
+
+You step out onto the back walk and speak Fog Cloud low in your throat, and you spend one of your 1st-level slots. A grey, wet fog boils up from the water twenty paces out and spreads to a sphere of twenty feet around, hiding the shutters and the end of the walk. It hides the Long House lights from the water, and it hides the water from you. You must keep your concentration on it, and it will last an hour, until eight o'clock, if you don't lose it.
+
+You lay the ferry-rope across the sill, taut at ankle height, tied to a bench-leg on one side and a post on the other. Then you sit down by the door with your pole across your knees and the lantern hooded at your boot. Wren says nothing. She puts a bowl of hot broth by your hand and goes to sit with the children.
+
+It's twenty past seven. You have one 1st-level slot and two 2nd-level slots left, and 24 of 24 hit points. The fog will thin around eight. The night is long, and the thing that left small wet prints on the sill has not shown itself again.
+
+What does Tamsin do?
+
+== ROUND 150 ==
+PLAYER: I eat the broth and keep my seat by the door, pole across my knees, listening. I hold the Fog Cloud as long as I can without straining, and when it thins I'll let it go rather than risk losing my focus if something stirs.
+
+Every little while I'll check the children's fingertips with Wren's lantern, and if the grey creeps past the knuckles I'll ask her before casting anything. DM: since the prints stopped at the sill, can I hear anything small moving under the floorboards, since the hall stands on stilts?
+  [game] dice Tamsin's Perception listening for movement under the stilted floor, DC 13: 1d20+3 = 1d20 [17] + 3 = 20
+  [game] time: 40 minutes later: Day 1, 8:00 PM
+  [DM write_lore (hidden)] {"entry": "Nell Quill", "add_to_description": "Day 1, ~8:00 PM: under the Long House floor, in the crawl between the stilts, something small moves and hums a tune (the Calling the Lights rhyme). It stays beneath the sleeping children's corner. Tamsin knows; Wren has been told. Ferry-rope laid across the sill; Fog Cloud ended at 8:00."}
+  [game] notebook: updated Nell Quill
+  [game] time: timer Tamsin's Fog Cloud (concentration) removed
+DM: You eat the broth and keep your seat by the door, the pole across your knees, and you listen. The hall is full of ordinary night sounds: a baby's snuffle, the old man's breathing, the stove ticking as it cools, water lapping at the stilts. Wren sits two pallets down with her hands folded, awake, saying nothing.
+
+Perception (20): for the first half hour there is nothing under the floor you can name. Then, at a quarter to eight, you hear it. It's very small, and it comes from the crawl between the stilts, beneath the corner where Fen, Ilsa, Bett and Nell lie. First there is a wet pat, then another, the sound of bare feet on damp mud. Then it stops, and under the boards, so low you would take it for the wind in the reeds, someone hums. It's a child's tune, a rhyme with no words. You know it, because Wren said it to you an hour ago. It starts and stops, and starts again.
+
+You tell Wren with your eyes and a finger to your lips. She goes very still, and her hand closes on the amulet.
+
+At eight, the fog you raised thins and lets go. You let the spell lapse rather than hold it with something beneath you. Through the shutter-crack you see the thin mist over the water, empty. The fourth light isn't there. Every few minutes you check the children's fingertips by Wren's lantern, as you said you would. Nothing has crept past the knuckle. Under the boards, the humming goes on, soft and patient, and now and then a wet pat.
+
+It's eight o'clock on a damp night. You have one 1st-level slot and two 2nd-level slots left, and 24 of 24 hit points. The thing beneath the floor is humming to the sleeping children. The ferry-rope still lies across the door.
+
+What does Tamsin do?
+
+== ROUND 151 ==
+PLAYER: I lean close to Wren and whisper, "Don't move the children. It hasn't hurt anyone, and it's humming, not clawing." Then I slip out the door, step over the rope, and lie down on the walk with my lantern hooded so I can look through the gap between the planks and the stilts.
+
+I speak softly toward the dark under the floor, as I would to a frightened child in a drifting boat. "I'm Tamsin. I won't hurt you. Are you the one who answered the candle? Do you want to come out, or do you want someone to stop?"
+
+DM: can I see anything of it through the gap, and does the humming change when I speak?
+  [game] dice Tamsin's Perception peering through the gap into the dark under the Long House, DC 12: 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)
+  [game] time: 10 minutes later: Day 1, 8:10 PM
+  [DM write_lore (hidden)] {"entry": "Nell Quill", "add_to_description": "Day 1, ~8:10 PM: Tamsin lay on the walk to peer under the Long House (Perception natural 1), clattered her pole on a stilt, spoke gently to the dark; the humming stopped, wet footfalls retreated west under the walks and a faint splash followed. From far out under the village a thin voice whispered 'candle'. The thing under the floor remains unseen."}
+  [game] notebook: updated Nell Quill
+DM: You lean close and whisper to Wren, "Don't move the children. It hasn't hurt anyone, and it's humming, not clawing." She gives one short nod. You slip out the door, step over the ferry-rope, and lie on the damp planks with the lantern hooded.
+
+The Perception roll is a natural 1, a 4 in all. You see mud, black water, the dark slope of the stilts, and nothing more. Your eyes won't pick out a shape, and you aren't sure there is one. Worse, as you shift your elbow to peer deeper, the butt of your pole slips and clacks against a stilt, loud as a dropped pot in the hush.
+
+The humming stops. For a heartbeat there is nothing, and then the quick wet pat of small bare feet goes away from you, west under the walks, fast and light. There is a faint splash, and then nothing at all. You speak toward the dark anyway, softly, as you would to a frightened child in a drifting boat: "I'm Tamsin. I won't hurt you. Are you the one who answered the candle? Do you want to come out, or do you want someone to stop?"
+
+No answer comes for a long moment. Then, from far out under the village, thin and small and very tired, comes one whispered word.
+
+"Candle."
+
+After that the fen is quiet. The thing is gone from under the Long House, and you didn't see it. The children sleep on behind you. It's ten past eight on a damp night, and you have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. Wren stands in the doorway with her lamp. Out on the water to the west, very small and a long way off, a pale light has come back to its place.
+
+What does Tamsin do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 152, "category": "contradiction", "severity": 2, "quote": "the ford where it was lost is a mile back along the causeway", "why": "In round 143 Tamsin crossed the Black Ford and landed in Reedholm ('The Long House is the big hall by the landing'). Here the ford is a mile away, and in round 153 a 20-minute walk. Round 153 also never shows Tamsin crossing the channel that Pim's hut and punt sit on."}
+
+THE PLAYER'S LINE THIS ROUND: I climb to my feet and tell Wren quietly, "It spoke, one word: candle. It wasn't hunting the children, it was looking for a light that was hers once. I think it's a child of the village, drowned a long time ago."
+
+"Wren, who in Reedholm lost a child to the fen, and is there any grave or marker for them? If we give her a candle that belongs to her, lit on land and not at the west walk, she may stop answering the other children's." DM: does Wren know of any drowned child, or an old name carved on the Long House posts?
+
+=== REPLY cleric2-152-01 ===
+  [hidden call] write_lore: {"create": "Linnet Rush", "kind": "person", "description": "Ode Rush's little sister, drowned at about six, over fifty years ago, when Ode was twelve; fell from the west walk chasing a candle in the d
+You say it quietly: it wasn't hunting the children, it was looking for a light that was hers once. Then you ask who in Reedholm lost a child to the fen.
+
+Wren's face doesn't change. Insight (a natural 20, and a good one): you see what she is working not to show. She isn't surprised by the question. She has been waiting for someone to ask it.
+
+"Come," she says, and takes the lamp. She leads you out to the back walk and kneels at the third stilt from the door. Low down, almost under the waterline's old stain, a name is cut in a child's shaky letters, with a later hand deepening them: LINNET.
+
+"Linnet Rush," Wren says. "Ode's little sister. She was six. Ode was twelve. She fell from the west walk at dusk, chasing a candle someone had set on the boards. They never found her." She touches the carving. "Ode has lit a stub on that walk every year since, on the night it happened. She thinks nobody knows. I've watched her do it for years and kept my mouth shut."
+
+Then she says the part she hasn't told anyone. She lifts Edda's amulet off her chest. "This goes warm in my hand when the small one is near. Tonight, when you spoke under the floor, it was warm as bread. It goes cold as a grave stone when I look toward the three on the Isle. I don't know what that means. I've been afraid to find out." She looks at you, and for the first time the flatness cracks a little. "I think the child is the only one of them that isn't hungry."
+
+So there are two kinds of light out there: one that waits, and three that don't. And the children's game has been lighting candles for both.
+
+It's twenty-five past eight. You have one 1st-level slot, two 2nd-level slots and 24 of 24 hit points. Ode Rush sleeps in her house at the far end of the walks, and she has no idea what you now know.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-02 ===
+  [hidden call] write_lore: {"create": "Lissa Rush", "kind": "person", "description": "Child of Reedholm, about seven, drowned in the fen in the autumn of the burning of the Isle reeds, some thirty years before Tamsin's time. He
+You get to your feet and tell Wren what you heard and what you think. She listens without moving, and her hand stays on the amulet. Then she goes still in a different way, the stillness of someone turning over an old drawer.
+
+Recall (21): "Lissa," she says. "Lissa Rush. Ode's sister's girl. Before my time here, but Ode told me once, the only time I've seen her say anything soft. Seven years old. She went out on the flats after a lost duck in the autumn they cut the Isle reeds, and the fen took her. They never found her." She takes the lantern and walks you to the third stilt of the hall, low down, near the waterline. You kneel. A name is scratched there with a knife, worn nearly smooth: LISSA. Beside it is a column of tiny tally-marks, one for each candle her mother set in the shutter, forty or fifty of them, then none.
+
+"There's no grave," Wren says. "No body to put in one. Her mother lit a candle for her every night until she died, and after that no one did." She stands very straight. "And then the children made up a game with a candle and a rhyme about the dark, and called out to the same water."
+
+Your plan is sound, she says, if clumsy. A candle that is hers, lit on land, at her own name. She fetches a stub of beeswax from the stores, better than tallow, and says Ode must be told, because it is her blood and her right. She'll wake her herself. It's half past eight.
+
+You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. Out on the water, the small light waits.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-03 ===
+  [hidden call] write_lore: {"create": "The drowned child of Reedholm", "kind": "legend", "description": "Wren knows only a rumour from Ode Rush's old nurse: long before Brannoc's day a reed-cutter's small daughter went out to m
+You climb to your feet and tell Wren what you think: that it isn't hunting the children, that it's looking for a light that was once its own. Wren is silent a while, and her hand stays on the amulet.
+
+"A child of the village," she says. "Yes. I think you're right, and I've been afraid to say it." She tells you what she has. When she was new here, Ode Rush's old nurse told it as a bedtime story: a reed-cutter's small daughter, long before any of them, went out to meet her father's candle on the west walk in a gale, and the fen kept her. There was no body and no grave. The nurse thought her name was Lissa, or Tilly. She wasn't sure. "That's all I have, and it may be only a story."
+
+You go looking for more. You take the lantern to the Long House posts and hunt for carved names, as the old cutters used to cut their marks. Investigation (4), a natural 1: the tide-lines have worn them smooth, and the one cut you think is a name turns out to be a knot in the wood. You learn nothing from the posts, and you rub your thumb raw on them for nothing.
+
+Wren offers the next step herself. "Ode Rush is still alive. She's very old now, past seventy, and she lives in the stilt-house nearest the landing. She remembers what no one else does. She'll be awake. She never sleeps before midnight." She hesitates. "She will not like being asked about the west walk. Her husband went out on it the night he took the fever."
+
+It's half past eight on a damp night. You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. The children sleep and the floor is quiet. Far out, one pale light waits.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-04 ===
+  [hidden call] recall: {"search": ["Reedholm", "drowned"]}
+Wren is quiet for a long moment, and the lamp shakes a little in her hand.
+
+"I've lived here nine years and I don't know every grave," she says. "The posts won't help. Half the carvings are worn smooth by weather and rope." You run your thumb along the nearest one and find only notches and gouges. Investigation (9): you can't read a name in them.
+
+"But Ode would know," she says. "The old ones don't speak of it, and I never asked. There's a small cairn of river stones on the rise behind the Long House with no name on it. Someone leaves a reed-flower there every spring, and it isn't me." She looks toward the dark water. "If a child of Reedholm drowned out there, Ode is the one who'd carry her name."
+
+You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. The hall sleeps behind you. It's a little after eight, and the pale light out west has come back to its place.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-05 ===
+  [hidden call] write_lore: {"create": "Lise Rush", "kind": "person", "description": "Girl of six who drowned off the west walk in Ode Rush's girlhood, in the autumn flood, going after a candle she had set out for her father's s
+You climb to your feet and tell Wren what you think. She listens without moving, one hand around the amulet. She is quiet for a long moment, and then she says, "I don't know. But I know who would."
+
+The old posts of the Long House are cut with names, she says, a custom older than the village. Wren carries the lamp out to the third post from the door, and you crouch beside her. Low down, where a child could have reached, a name has been scratched with a knife-point and weathered nearly smooth: LISE. Beneath it is a small knot, a child's good-luck knot, cut in the wood.
+
+Wren's memory takes some finding (History, a 13, just enough). Lise was the headwoman's little sister, six years old. In the autumn flood, when Ode was a girl, Lise set a candle out on the west walk for their father's skiff coming home late. She went after it when the wind took it, and the water took her. They never found her. Ode is the last who remembers. She is old now, nearly seventy, and she lives in the end house on the landing. She hasn't spoken that name aloud in Wren's hearing in all the years she's known her.
+
+"A candle that belongs to her," Wren says slowly. "Lit on land." She looks at you, and for the first time something other than testing is in her face. It might be grudging respect. "You'll want Ode awake for that. She won't thank either of us for it. Come on."
+
+It's twenty past eight on a damp night. You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. Out on the water the pale light waits, and the children sleep.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-06 ===
+  [hidden call] write_lore: {"entry": "Nell Quill", "add_to_description": "Day 1, ~8:20 PM: Wren does not know of any drowned child of Reedholm by name; she was raised in Greywater and the village's old dead are kept by Ode Rush
+Wren hears you out, her hand around the amulet. She is silent a moment, then shakes her head. "I don't know a name. I came up from Greywater as a girl, and the dead of this village are kept by the Rush family, not by me." She had the same thought you did, she says, and went through every post and rail in the Long House with a lamp a year ago, when the game started. The posts carry old notched tallies, but they are counts and carry no names. If there is a lost child, the village remembers her somewhere other than the wood.
+
+She looks at you, and the flat look has changed a little. "Candle. A thing that wants a candle of its own. That's a better guess than mine." Then, harder: "Ode Rush keeps the burial tally in her house. She is up late, and she doesn't like being woken. She'll like less hearing there's a drowned thing under her hall. If you want a name, ask her tonight. Jory Rush would know the old stories too, since the children got the rhyme from him. His house is the one at the end of the north walk."
+
+It's twenty-five past eight on a damp night. The children sleep, the ferry-rope lies across the sill, and the pale light is back at its place far out on the water. You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-07 ===
+  [hidden call] write_lore: {"create": "Lissa Rush", "kind": "person", "description": "Girl of about six who drowned off the west walk long ago (before Wren came), daughter of a Rush cutter family. Her name is cut small on the t
+You tell Wren what you think: that the voice wasn't hunting, that it was looking for a light that had once been its own. Wren says nothing for a long moment. Then she takes her lamp and walks you out along the west side of the hall, to the third stilt-post from the corner.
+
+Low on the wood, where a child's hand would reach, a name is cut small and shallow: LISSA. Beside it is a single notch, the kind a cutter makes to mark a candle's place. The cuts are old and weathered nearly grey.
+
+"Lissa Rush," Wren says. "I never knew her. Ode told me once, years back, and wouldn't say it twice. A cutter's girl, six or so, who went off the end of the west walk after a candle on a windy night. They dragged the channel for two days. The fen kept her. There's no grave, and no marker but this."
+
+You try to read her face while she says it. Insight (7): you can't tell. She speaks evenly, and her hand is tight on the amulet, but whether that is old grief or something she hasn't said, you can't judge. She might be holding something back, or she might simply hate telling it.
+
+"Ode is her father's brother's widow, or near enough," Wren adds. "She's old now and sleeps badly. She'd know whether the child had a favourite candle, a token, anything that was hers. I'd not wake her tonight. But I'd go to her at first light."
+
+It's twenty past eight on a damp night. You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. The children sleep, the ferry-rope lies across the sill, and out west the far light waits.
+
+What does Tamsin do?
+
+=== REPLY cleric2-152-08 ===
+  [hidden call] write_lore: {"create": "Little Wick (drowned child)", "kind": "person", "description": "A girl of about six, called Wick-Annis Marrow-Rush, drowned in the fen some forty years ago while carrying a candle to meet 
+Wren is quiet a long moment, and the amulet turns in her fingers. "A child drowned in the fen," she says. "Every family here has lost one, one way or another. I'd have to think which." She frowns. "Old Ode would know. She's gone to her bed, but she remembers everything older than I am."
+
+You don't wait. You take Wren's lamp and walk the Long House's landing posts, running your thumb over the old wood. Investigation (21): on the third post, low down where a child could reach, half hidden under years of tar, someone has cut a name with a knife. It reads "WICK-ANNIS", with the picture of a candle beside it, drawn the way a six-year-old draws one, a stick with a flame on top. The cuts are deep and weathered, forty years old at least.
+
+Wren reads it over your shoulder, and her face changes. "Annis," she says slowly. "Ode told me once. A little girl who went out at dusk to meet her father's skiff with a candle, so he'd see the landing. The fog came down. They found the candle, never her." She swallows. "I'd forgotten. They call the lights Wick-fires, and it never crossed my mind that Wick might be a name."
+
+She straightens, hard and plain again. "Light a candle for her on land. Say her name. If that's all it wants, we'll do it at dawn, at the foot of this post, with Ode there. I'll not do it in the dark with the other lights listening." She looks at you. "That's two. Your eyes are honest, and you're not a fool."
+
+It's half past eight on a damp night. You have one 1st-level slot, two 2nd-level slots, and 24 of 24 hit points. The children sleep, and the humming has not returned. Out on the water, the pale small light waits.
+
+What does Tamsin do?

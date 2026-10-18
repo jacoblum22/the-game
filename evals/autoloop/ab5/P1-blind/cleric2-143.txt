@@ -1,0 +1,190 @@
+GAME cleric2, ROUND 143
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 140 ==
+PLAYER: I'd like to try it. Let's make a new character: Tamsin Vale, a human druid in her thirties who is a former river-ferrier from the far south. She walks in along the old river road, drawn by a dream of green-white lights and a drowned stone she has never seen. She is dry-humored, careful with her word, and carries a ferryman's pole as her staff.
+
+I'd like Wren to be a hard teacher: fair, but with no patience for flattery, and she should test Tamsin before she trusts her. DM: if the notebook carries over, will Wren remember that Brannoc once promised to speak for her to Mother Aldith?
+  [DM write_lore (hidden)] {"create": "Tamsin Vale", "kind": "person", "description": "Planned new player character, years after Brannoc's death: a human druid in her thirties, former river-ferrier from the far south, dry-humored and careful with her word. Carries a ferryman's pole as her staff. Walks in along the old river road, drawn by a dream of green-white lights and a drowned stone she has never seen. Not yet built on
+  [game] notebook: created an entry for Tamsin Vale; added 2 relationships to Tamsin Vale
+  [DM write_lore (hidden)] {"entry": "Wren", "add_to_description": "Years after Day 35 (planned): grown healer, hard teacher: fair, no patience for flattery, tests newcomers before trusting them. Wears Edda's wooden amulet. Remembers Brannoc taught her to dress burns and watch a baby's breathing, and that his letter to Mother Aldith got her the apprenticeship."}
+  [game] notebook: updated Wren
+DM: Tamsin Vale is a good character, and I've recorded her in the notebook. A ferrier who dreams of a drowned stone and carries her pole as a staff gives me plenty to build the opening on.
+
+First, your question. Yes, Wren will remember. In the notebook, Brannoc taught her to dress a burn, tell fever from chill and watch a baby's breathing, and he wrote the letter to Mother Aldith that won her the apprenticeship. It isn't recorded that he promised to speak for her, only that he wrote the letter and her parents agreed to a month's trial. Wren will take it as the reason she has her trade at all. She'll never say so, and she'll bristle at anyone who thanks her for it. As you asked, she'll be a hard teacher, fair, with no use for flattery. She'll test Tamsin before trusting her, probably with something small and practical, like a sick child and a pot of water, to see what Tamsin does with her hands rather than her words.
+
+Now the problem. The tools I have here can't build a new player character. They can change Brannoc's sheet and the notebook, but I can't create a new druid with a spell list and HP and have the game track her. Brannoc's sheet is still the one on file, and it reads dead.
+
+You have two options. The first is for you to restart the game on your side with Tamsin as a new character. The notebook should carry over, and I can run the opening as soon as I'm given her sheet. The second is for me to run her as a lighter, story-first game here, with dice rolled and the rules followed from SRD text, but without a tracked sheet. That works, but I'd have to keep her HP and slots in my head and in my replies, and I'd say so whenever it mattered.
+
+Tell me which you prefer. If it's the second, give me Tamsin's ability scores and the druid spells you'd like her to know, or I can pick a standard array and a sensible starting kit for a 3rd-level druid, and you can change it.
+
+== ROUND 141 ==
+PLAYER: I'll take the second option: run Tamsin story-first here, with you keeping her numbers in your replies.
+
+Please pick the standard array and a sensible 3rd-level druid kit. I'd like the Circle of the Land (river or swamp), with Guidance, Shillelagh and Druidcraft as cantrips, and Cure Wounds, Entangle, Goodberry and Fog Cloud prepared. Her gear is her ferry pole, leather armor, a wooden shield, a sling, and a coil of ferry-rope.
+
+DM: how many hit points and spell slots does she start with, and what is her AC?
+  [DM lookup (hidden)] {"name": "Druid", "kind": "class"}
+  [DM lookup (hidden)] {"name": "Circle of the Land"}
+  [DM write_lore (hidden)] {"entry": "Tamsin Vale", "add_to_description": "Sheet (kept by the DM in replies, not on the tool sheet): human druid 3, Circle of the Land (Swamp). STR 13 DEX 14 CON 15 INT 11 WIS 16 CHA 9. HP 24, AC 15 (leather 11 + DEX 2 + wooden shield 2), prof +2, speed 30. Spell DC 13, attack +5. Slots 4 first, 2 second. Cantrips Guidance, Shillelagh, Druidcraft (circle bonus). Swamp circle spells always pre
+  [game] notebook: updated Tamsin Vale
+DM: Here is Tamsin Vale, built from the SRD druid and Circle of the Land rules as written. I'll keep her numbers in my replies, since the sheet tool can't hold her.
+
+**Tamsin Vale, human druid 3 (Circle of the Land, swamp)**
+- Abilities: STR 13, DEX 14, CON 15, INT 11, WIS 16, CHA 9. These are the standard array (15, 14, 13, 12, 10, 8) with human's +1 to each.
+- Hit points: 24. That's 10 at 1st level (8 + CON 2) and 7 each at 2nd and 3rd, taking the fixed 5 + 2, as we did for Brannoc. She has 3d8 Hit Dice.
+- AC: 15. Leather armor is 11, plus DEX 2, plus the wooden shield's 2. Druids won't wear metal, so wood fits. Speed 30.
+- Proficiency +2. Saving throws: INT and WIS, so INT +0, WIS +5. Skills: Nature +2 and Survival +5, from the druid list, plus Perception +3 by my ruling for a ferrier. By another ruling she's proficient with water vehicles.
+- Spells: save DC 13, spell attack +5. She has four 1st-level and two 2nd-level slots. Cantrips are Guidance, Shillelagh, and Druidcraft (the circle's bonus cantrip).
+- Always prepared from the swamp circle, and free: Acid Arrow and Darkness.
+- She can prepare WIS 3 + level 3 = 6 spells of your choice. You've named Cure Wounds, Entangle, Goodberry and Fog Cloud. You can choose two more. I'd suggest Healing Word (a ranged fix for a bleeding friend) and Thunderwave, or Speak with Animals, since it's a ritual. You can swap them after any long rest.
+- Wild Shape: twice per short rest, beasts of CR 1/4 or less with no flying or swimming. Natural Recovery: once a day on a short rest she can regain slots totalling up to 2 levels.
+- Weapons: ferry pole (quarterstaff), +3 to hit, 1d6+1 (1d8+1 two-handed). With Shillelagh she uses WIS: +5, 1d8+3 magical. Sling: +4, 1d4+2.
+- Gear: leather armor, wooden shield, ferry pole, sling and bullets, ferry-rope, explorer's pack, druidic focus, herbalism kit, 10 gp.
+
+Which two spells would you like, or shall I use my suggestions? When you've told me, I'll open the story. It's a damp grey dusk, years after Brannoc, and Tamsin is walking the old river road toward Reedholm, with a green-white light in a dream she can't shake.
+
+== ROUND 142 ==
+PLAYER: I'll take your suggestions: Healing Word and Thunderwave, along with Cure Wounds, Entangle, Goodberry and Fog Cloud. That makes six prepared, with the swamp circle spells free.
+
+Please open the story. Tamsin walks the river road at dusk, ferry pole in hand, and keeps her thoughts to herself until someone gives her a reason to speak.
+  [game] time: time set: Day 1, 5:40 PM
+  [DM write_lore (hidden)] {"entry": "Pim Tarr", "add_to_description": "Years after Brannoc's death: a grown man of about twenty-five, still keeps the ferry rope at the Black Ford, with a bigger punt, a proper hut and a dog. Wary of strangers; remembers Brannoc and the apple slices."}
+  [game] notebook: updated Pim Tarr
+DM: It has rained all afternoon, and now the rain has thinned to a cold drizzle that beads on your leather and your pole. The old river road is more track than road here, a raised bank of packed clay and cut reed running through flat, grey fenland. Water lies on both sides, black and still. The reeds hiss in the wind, and the light is going the colour of old pewter.
+
+You have walked three weeks from the far south, and you've said perhaps forty words to anyone since the last market. The dream that brought you hasn't changed. In it, pale green-white lights hang low over water, and under them is a drowned stone you have never seen. You woke sweating from it nine nights running, and on the tenth you took your pole and walked north.
+
+Ahead, a channel of slow black water cuts across the road, perhaps forty paces wide. A ferry-rope is strung from post to post. You notice, as a ferrier would, that the rope is well kept, newly tarred, and the posts are sunk deep. A flat punt, broad and clean, is moored on the near bank beside a low reed-and-timber hut with smoke rising from its chimney. A big grey dog lies on the doorstep with its head on its paws, and it lifts its eyes to you but not its body.
+
+A man of about twenty-five sits on the punt's edge, mending a net by the last of the light. He is lean and sun-browned, and he has seen you well before you were close. He sets the net down slowly and rises with one hand resting on the rope. "Road's wet," he says. "Ferry's a copper a head after dark, two if you want the lantern."
+
+Behind him on the far bank, small and low in the dusk, a few lights are lit among the reeds, yellow ones, the warm kind that come from windows. They are not green or white.
+
+You have a full complement of slots and 24 of 24 hit points. The pole is in your hand, and the dog is watching you.
+
+What does Tamsin do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 143, "category": "contradiction", "severity": 1, "quote": "She came up from the south as a girl", "why": "Pim says Wren came up from the south. Round 165 has the carters going north to Stonebridge, and round 138 had Wren a girl in Stonebridge. The DM's own note in round 144 says she came from the north."}
+
+THE PLAYER'S LINE THIS ROUND: I stop at the edge of the bank and look over the rope and the punt before I look at him. "Good rope. Whoever tars it knows the work." I dig two coppers out of my pouch and hold them out. "I'll take the lantern, and I'll pole if you want a second pair of hands. I was a ferrier myself, down south."
+
+I ask, dry and unhurried, "What's the village across the water called, and is there anyone there who'd know about a drowned stone and lights over the water?"
+
+=== REPLY cleric2-143-01 ===
+  [hidden call] write_lore: {"create": "Bracken", "kind": "creature", "description": "Big grey dog belonging to Pim Tarr at the Black Ford. Watchful, silent, doesn't rise for strangers.", "relationships": ["belongs to [[Pim Tarr
+The man looks at the coppers, then at your hands. They're a ferrier's hands, rope-scarred across the palms. Something in his face eases a little. "Pim," he says. "Pim Tarr. The rope's mine, and I tar it every spring. Nobody's said so in years." He takes one copper, not two, and waves off the pole. "Sit in the stern. You can tell me if I'm doing it wrong."
+
+He isn't. The punt crosses on the rope with an easy hand-over-hand haul, and the dog, Bracken, rises at last and settles at your feet as if you'd been vouched for. The black water slides under the hull, and the lantern throws a small yellow circle on the reeds.
+
+You ask your question, dry and unhurried. Pim goes quiet for three hauls of the rope. "Reedholm," he says. "Half a day on, along the bank. A landing town now, not a village. Eel-smokers, thatchers, a market on the fourth day." He doesn't look at you. "Drowned stone and lights. Who's been talking to you?"
+
+You tell him nobody has. It was a dream. He nods slowly, as if that were worse. "There's a Hollow Isle a mile out from the landing. It has a fallen stone at the west end, and it's low enough that the water takes half of it in spring. Nobody cuts reeds there. When I was a boy there were lights over it, and a healer came and a good many people lived who shouldn't have. He didn't." He says no more of that. "If you want someone who knows the Isle, ask for Wren at the healing house. She wears a wooden amulet, and she'll look at you like you owe her money. Ask for Jory Rush at the staithe too, if the mist hasn't got him."
+
+The punt grounds on the far bank with a soft knock. It is six in the evening, and the light is nearly gone. The track runs on into the reeds, and Reedholm is half a day away. Pim's hut on this side has a spare bench by the fire, if you wanted it.
+
+You have all your slots, 24 of 24 hit points, and 9 gp 9 sp of your 10 gp. What does Tamsin do?
+
+=== REPLY cleric2-143-02 ===
+Pim looks at the coppers, then at the pole in your hand, then at your hands. Ferriers look at hands first, and he sees yours are calloused where a pole's grip would wear them. Some of the wariness goes out of his shoulders, though not all of it.
+
+"One copper's plenty. Lantern's free to anyone who knows to keep their feet off the net." He takes one coin and pushes the other back. "Pole if you like. She pulls to the left past the middle. The current's sly here."
+
+You take the stern. He's right about the pull, and you correct for it before he can say so, which earns a short grunt that might be approval. The black water slides under the hull without a sound, and the dog pads aboard to sit between you like a passenger who has paid. The lights ahead aren't Reedholm itself, Pim says over his shoulder. They belong to the ford-end steading, six houses and a smokehouse. Reedholm is half a day on, along the raised bank, and bigger than it was. It's a landing now, with a market on the third day of the week.
+
+When you ask about the stone and the lights, he stops hauling the rope for a moment. "Where'd you hear of that?" You tell him you didn't hear it, you dreamed it. He says nothing for several strokes. Then, flatly: "The Hollow Isle's a mile out from Reedholm's landing. There's a grey stone fallen at the west end, and you'll find it drowned at high water. The lights were there when I was a boy. They're gone now, mostly." He glances at the dark. "Mostly. Folk go out on the Isle by day, with salt and in numbers. Nobody pushes off alone after dusk, and you won't hear them say why."
+
+On the far bank he ties off and nods at the road. "Ask for Wren at the Long House. She's the healer, and she'll want to know your business before she gives you a bed. She's good, and she's not kind about it." He pauses. "Brannoc's amulet hangs at her chest. Don't touch it, and don't ask her about it."
+
+It's about six o'clock. Rain is still falling lightly, and you have a full set of slots and 24 hit points. The steading's lamps are warm yellow, and the road to Reedholm runs on into the dark. The dog has decided to walk with you as far as the first house.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-03 ===
+Pim looks at the rope in your hand, and then at your hands, which are what a ferrier checks first. The wariness goes out of his shoulders by a notch. "My mother's knot," he says. "Well, nobody's mother. The boy who had this rope before me taught me, and he got it from a man who drowned." He takes the coppers, weighs them, and gives one back. "Ferrier rate. You pole, you ride free. The lantern's still the lantern."
+
+He unhooks the lamp from its peg and lights it from the hut fire, and the dog follows, silent and sure-footed, to its place in the bow. When you take the pole, he lets you. He watches how you set it and how you read the slack in the rope, and says nothing about it.
+
+Out on the black water he talks with his eyes on the far bank. The village is Reedholm. There's a bell at the landing, a Long House, and a headwoman called Ode's granddaughter these days, since old Ode is in the ground. Then you ask about the stone. His hands go still on the rope. "Drowned stone," he says. "There's a fallen one on the Hollow Isle, out west of the village, a mile or so across open water. Nobody lands there, and nobody asks me to take them." The lantern throws his shadow long and thin across the punt. "And the lights are why. I'd not call that a question for a stranger on a ferry." A moment later he adds, more quietly, "Ask for Wren at the Long House. She's the healer. She wears a wooden amulet, and she'll want to know what you are before you tell her anything. Don't flatter her."
+
+The far bank comes up out of the dusk, with a plank walk, stilted houses, and the yellow lamps. The rain has stopped. It's about ten past six. You have 24 of 24 hit points, all your slots, and 10 gp less the copper you paid.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-04 ===
+  [hidden call] write_lore: {"entry": "Pim Tarr", "add_to_description": "Day 1 of Tamsin's story: told Tamsin Vale his name was Pim, took two coppers for the lantern crossing, was impressed by her eye for rope. His dog is a big 
+The man looks at the coppers, then at your hands on the pole, and something in his face eases. "Pim," he says. "Most who cross here can't tell tarred rope from wet string. Keep your coppers for the lantern, and welcome to the pole. Mind the stern, it pulls to the left."
+
+The dog gets up on the doorstep, stretches, and trots down to the punt as if it had been invited. "That's Bran," Pim says. "He picks who rides."
+
+You take the stern pole. The punt does pull left, as he said, and you correct it without thinking. The black water slides under the hull and the lantern throws a small gold circle on the reeds. Halfway over, Pim watches you work and says, "You've done this before." You say nothing, and he laughs once, shortly.
+
+At the far bank he answers your question in pieces, tying off the rope with his eyes on the knot. The village is Reedholm, ten minutes along the bank. Everyone there knows about the Hollow Isle. They won't say much of it to strangers, because strangers come for the wrong reasons. A man came once to dig, and it did not end well for him. "The lights are in the old tales now," Pim says. "Nobody's seen them in years." He glances at you sidelong. "Funny you'd ask about a drowned stone. There is one, they say, on the Isle's west end, fallen over. But if you want the whole of it, don't ask me. Ask Wren, the healer. She keeps the village's memory, and she'll tell you what she thinks you've earned." He says the last part with a faint wince, like a man who has been tested himself.
+
+He takes his two coppers and hands one back. "Rope-hand's rate. Go on. Mind her tongue."
+
+It's five to six on Day 1 of your story. You're on the far bank with the ferry behind you. Ahead the yellow windows of Reedholm glow low among the reeds, twenty or so stilted houses joined by plank walks. A bell hangs at a post by the landing. Smoke rises from most of the chimneys, and a couple of children's voices carry across the water. You have full slots and 24 of 24 hit points.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-05 ===
+The man's eyes go to the rope in your hand, the way you looked at it, and then to your callused palms. Some of the wariness leaves his face. "Pim Tarr," he says. "I tar it every autumn, and nobody's said so in years." He takes one copper and turns the other back to you. "Ferrier's rate. You'll not pay twice for a thing you know how to do. Take the stern pole if you like. The punt pulls to the left in the middle, where the channel deepens."
+
+The dog finally gets up, walks over, and sniffs the hem of your cloak. It seems satisfied.
+
+Pim hauls the lantern up onto its hook on the bow, and then he stops with his hand on it. "The village is Reedholm," he says. "A drowned stone." He says it slowly, watching you. "There's a stone on the Hollow Isle, out west across the open water. It's fallen over and half sunk, and that's where the lights used to be. They haven't been seen in years, not since the Isle was salted and burned and the gap in its flank was sealed. Folk here don't talk about them to strangers." He looks at your face a moment longer. "But you've got the look of someone who dreamed it. Wren would want to hear that. She keeps the healing house at the landing, and she knew the man who saved this boy's life, and she'd have a few questions for you. She won't be gentle about them."
+
+He pushes the punt off and takes the rope. The black water slides under the hull, slow and silent, and the pull to the left is just where he said it would be. The yellow lights of Reedholm come closer through the reeds, a bell hanging silent at a post by a landing, and a long low hall on stilts with smoke at its roof. Somewhere beyond the village, far out in the dark, there is nothing at all. No green, no white. But you find you are looking for it.
+
+It's about a quarter past six. You are fully rested at 24 of 24 hit points, with all your slots, and the crossing takes a few minutes yet.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-06 ===
+  [hidden call] write_lore: {"entry": "Pim Tarr", "add_to_description": "Meeting Tamsin Vale: took her two coppers, let her pole the punt, approved of her hands. Told her the village is Reedholm; that the Wick-fires were quiet f
+You tell him what you see in his work, and the wariness goes out of his shoulders a little. "Hands that know rope," he says, taking the two coppers. "Pim Tarr." He nods at the stern pole. "Take her across, then. I'll walk the bank-line and watch how you read the water."
+
+You cast off. The punt is broad and honest and handles like a good one. The channel is slow and black, and the current moves under the hull with a cold, patient weight, the way deep water does when nothing is hurrying it. Pim stands in the bow with the lantern. He says nothing until you are past mid-channel, then grunts. "You'll do."
+
+You ask your question. He stays quiet long enough that the dog, which has followed along the bank, whines once.
+
+"Reedholm," he says. "That's the village. Fen-cutters and eel-trappers, a hundred souls now, where there were sixty." He doesn't look at you. "The Hollow Isle is a mile west of the landing. There's a grey stone fallen there, and the gap in its flank was sealed with stone and salt the year the old healer died. The lights went quiet after that and stayed quiet for years." He turns the lantern a little. "A month ago they came back. Pale green-white, low over the water. Nobody speaks of it much. If you want to hear it properly, ask Wren. She keeps the Long House and the healing. She wears an old wooden amulet from a man who died out there, and she has opinions about strangers, so mind your tongue."
+
+The far bank rises out of the dusk, a reed-wall with a plank landing, and the yellow window-lights are closer now. A bell on a post stands at the landing, silent. The drizzle has stopped, and a mist is coming up off the water, low and slow.
+
+It's six o'clock on Day 1 of this new tale. Tamsin has 24 of 24 hit points, AC 15, and all her slots. Pim is tying off the punt, and the path leads up to the village.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-07 ===
+  [hidden call] write_lore: {"entry": "Pim Tarr", "add_to_description": "Meeting with Tamsin: took her two coppers for the lantern crossing, let her pole the punt with him. Named Reedholm for her. Went quiet at \"drowned stone\"
+The man's eyes go to the pole in your hand, then to your boots, then to the coppers. He takes the coins the way a ferryman does, without counting them. "Tar's mine," he says. "I do it every spring. Most don't notice." He nods at the stern pole. "Take the stern, then. She pulls left on the ebb, so lean into it."
+
+The crossing is good work. The punt answers your pole well, and the rope hums under his hands. The water is black, slow and cold, and the reeds close in on both sides. He doesn't speak until the middle, where the channel is deepest.
+
+"Pim," he says. "Pim Tarr. That's Rope on the step. The village is Reedholm." He gives you a sidelong look. "You said drowned stone and lights."
+
+He lets the pole drag a moment.
+
+"I was ten when the lights came. I'm not saying anything about them. But folk don't come asking about a stone, not unless they've seen it, and nobody has seen it who didn't cross the water to the Isle." He starts poling again. "The lights haven't shown from the landing in years. The cutters still won't cut reed on the Isle. If you've dreamed it, you want Wren. She keeps the healer's house at the landing. She's the one folk go to when something's wrong in the night. Fair warning, she isn't kind. She's good, though."
+
+The far bank comes up out of the dusk, a plank landing and a stilted walk running into the reeds, with yellow windows glowing on pilings and a bell hanging silent from a post. It's a little past six. You're at full health with all your slots, and the drizzle is thickening to rain again.
+
+What does Tamsin do?
+
+=== REPLY cleric2-143-08 ===
+  [hidden call] write_lore: {"entry": "Pim Tarr", "add_to_description": "Tamsin's arrival (years later): took her two coppers, let her pole the punt, named Reedholm half a day beyond the ford, said Wren the healer would know abo
+The man looks at the coppers, then at your hands, and the wariness in his face eases a notch. "Tarr. Pim Tarr. I tar it myself, every spring." He takes one copper and pushes the other back. "Ferrier's rate is one. And yes, I'll take the second pair of hands. The current at the middle bites."
+
+You pole the punt across together, with him on the rope and you on the stern, and he watches how you set your feet and read the water. Halfway over the current does bite, a slow black pull from the north. You lean into it without being told, and he says nothing, but he nods once. The dog pads aboard and sits between you like a passenger. Its name is Eel.
+
+On the far bank he lights your lantern from his own, then stands looking at the dark reeds rather than at you. "That village is Reedholm, half a day on by the bank track. You'll not walk it tonight. The track floods at the low places after rain." He pauses. "Drowned stone. Lights. Who sent you?"
+
+You say no one, only a dream. Pim is quiet so long that Eel looks up at him. "They went away when I was a boy," he says at last. "Years of quiet. This autumn they're back, low over the Hollow Isle, a mile out from Reedholm. The cutters keep off it. If you want to know what they are, ask Wren. She keeps the healer's house at Reedholm. She's the one who knows the old story, and she'll not thank you for guessing. She's sharp." He glances at your pole. "There's a dry bench in my hut and stew in the pot, if you want it. I'll not charge for that."
+
+It's six past six on Day 1. You're at 24 of 24 hit points with all your slots, on the far bank of the Black Ford with a lit lantern, a grey dog at your knee, and the fen going dark around you.
+
+What does Tamsin do?

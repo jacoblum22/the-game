@@ -259,6 +259,27 @@ def test_game_tools_hidden(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -
     assert "[notebook: created an entry for Vessa]" in play.history(data)  # shown again when the game is continued
 
 
+def test_a_write_answers_with_what_was_already_there(tmp_path: Path) -> None:
+    """A write gives the DM what the notebook said before it about the entry and the names in it, once a turn, never
+    the party's own entries; the player sees none of it."""
+    sheet = json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))
+    g = play.Game({"sheet": sheet, "lore": book()}, tmp_path / "save.json")
+    g.lore, _ = nb.write(g.lore, {"create": sheet["name"], "kind": "person", "description": "The PC."}, 1)
+    g.transcript += [{"kind": "player", "text": "hello"}]
+    tools = {t.name: t.handler for t in g.tools()}
+
+    def write(**args: object) -> str:
+        return asyncio.run(tools["write_lore"](args))["content"][0]["text"]
+    said = write(entry="Vessa", add_relationships=[f"pays [[Captain Orm]] and owes [[{sheet['name']}]]"])
+    assert said.startswith("relationship [") and "What your notebook already said" in said
+    assert "Vessa (person" in said and "Half-elf, fifties." in said and "Captain Orm (person)" in said
+    assert "The PC." not in said  # the party's entries are in the instructions
+    assert "Copper Kettle (place)" not in said  # only the entry written and the names in what's written
+    assert "What your notebook" not in write(entry="Captain Orm", add_to_description="Greying.")  # shown this turn
+    assert g.transcript[-2]["result"] == "added to Captain Orm's description"  # the save keeps the plain result
+    assert nb.answer(nb.new(), {"create": "Nobody", "kind": "person", "description": "x"}, g.transcript, set()) == ("", [])
+
+
 def test_not_found_lists_entries_that_mention_the_name() -> None:
     """Someone entered before their name was known can still be found by it (owner, 2026-10-13)."""
     lore = nb.new()

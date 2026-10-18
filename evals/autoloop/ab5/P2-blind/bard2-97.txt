@@ -1,0 +1,175 @@
+GAME bard2, ROUND 97
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 94 ==
+PLAYER: I retrieve my dagger from the doorway, wipe it clean, then walk around to the north wall with Brann and kneel at Elowen's grave. I lay the lamp-staff beside it, press my thumb to my forehead in the Lantern-Bearer's blessing, and say quietly, "I found it, Mother. I found the light."
+
+After that I ask Brann to tell me everything Elowen said and did in her last days, and where the Grey Cloak fits into it.
+  [game] sheet: concentration on Faerie Fire ends (its timer, if it has one, is removed with change_time)
+  [game] time: 40 minutes later: Day 10, 8:12:12 AM
+  [DM write_lore (hidden)] {"entry": "Brann Tolliver", "add_to_description": "Day 10 ~8:10 AM: told Wren Elowen's last days. Elowen reached the spit alone sixteen years ago in autumn, already fevered; said her daughter was 'safe among people who will love her, far from the man who sells lanterns' and that she had hidden the child's inheritance in three places (coffer at Ashby Weir, staff at the Wick-House, lamp here). In he
+  [game] notebook: updated Brann Tolliver
+  [DM write_lore (hidden)] {"entry": "The Grey Cloak", "add_to_description": "Day 10: Elowen called him 'Aldous' in Brann's hearing on the spit, sixteen years ago. Relationship to her unknown (rival, family, or priest of her order). 'Aldous' is his first name or what Elowen called him; Wren has the name from Brann."}
+  [game] notebook: updated The Grey Cloak
+DM: You pick your dagger out of the doorway, wipe it on your sleeve and sheathe it. Kit and Dunn, who has finally tied up the skiff, begin to lay the three dead hands out decently on the shingle, side by side, faces covered with their own cloaks. Kit says nothing, but she's gentler about it than you expected.
+
+Brann leads you around the foot of the tower to the north wall. Out of the wind, a low mound of stones lies against the base of the stonework, with a flat slate at its head. A crooked-flame lantern is cut into it, and the letters *E.A.*. Her face looks straight up at the beacon. You lay the lamp-staff beside it, press your thumb to your forehead and say quietly, "I found it, Mother. I found the light." The wind is the only answer. Above you the lamp burns white, steady and warm as a hand.
+
+When you ask, Brann sits on a stone and tells it all. He's slow, but he doesn't leave out what he remembers.
+
+Elowen came to the spit alone in the autumn sixteen years ago, already fevered and thin as a lath. She said her daughter was "safe among people who will love her, far from the man who sells lanterns." She said she had hidden the child's inheritance in three places: a coffer upriver, a staff at the Wick-House, and the lamp here. In her third week a grey-sailed ship came. A hooded man landed and talked with her alone on the shingle, and Brann heard her call him "Aldous". She told him, "It is not yours to light." He left furious. She died that winter of the fever, and asked to be buried with her face to the lamp. Brann kept the light dark by her word and waited for the lantern-foot.
+
+"I thought him dead," he says, looking out across the water at the grey sail, now very small. "He had a way of looking at the lamp that I've never seen on a man since, as if it owed him money."
+
+You now have a name for the Grey Cloak. Aldous. It is a little past eight. The lamp is lit and cannot be put out while your lantern-foot stays seated. The cutter is a speck on the grey water, three dead men lie on the shingle, and Saltmarsh is across the estuary. You've no spell slots left, and a lot of unanswered questions.
+
+What does Wren do?
+
+== ROUND 95 ==
+PLAYER: "Aldous." I roll the name over my tongue. "Brann, did Elowen say anything else about him, a surname or a house, or where he sailed from?" Then I stand and tell Kit and Dunn, "We'll take the dead hands back to the arbiter as witnesses, and rest at the Salt Gull tonight."
+
+DM: Aldous was also the name of Lord Edric Verrel's grandsire in Brother Osric's register. Is that a coincidence I should chase, and does the lamp need the reliquary's foot to stay seated, or can I take it with me?
+  [DM recall (hidden)] {"search": ["Aldous"]}
+  [DM lore (hidden)] {"names": ["House Verrel"]}
+  [DM write_lore (hidden)] {"entry": "The Grey Cloak", "add_to_description": "Day 10 ~8:15 AM: Brann knows no surname or house; Elowen only called him 'Aldous'. DM note: the name coincides with Aldous Verrel (Lord Edric's long-dead grandsire, married Maud Fenn). Not planted on purpose; ruled an open possible link: the Grey Cloak may be using the name as an alias (Hale tried to see Osric's register), or it is plain coinciden
+  [game] notebook: updated The Grey Cloak
+  [DM write_lore (hidden)] {"entry": "The Gullspit Light", "add_to_description": "Ruling Day 10: the great lamp burns only while the reliquary's lantern-foot is seated in its socket. Take the foot and the lamp goes dark; reseat it and it lights again. Brann will keep the light if the foot stays."}
+  [game] notebook: updated The Gullspit Light
+DM: Out of the story first, on both your questions.
+
+On the name: I'll be straight with you. I picked "Aldous" for the Grey Cloak without checking it against Brother Osric's register, so it wasn't a planted clue. It does collide with Lord Edric's long-dead grandsire, and you're right to notice. I'll leave it open, as a possible lead and not a promise. Aldous Verrel would be far too old to be your Grey Cloak, so if there's a link, it's an alias or a family tie, and you'd find it by asking Lord Edric, Osric, or the Thornhallow records. It could also just be a common river-country name. Chase it if you like, and you'll learn whatever the world gives you.
+
+On the lamp, here's my ruling, which I'll apply the same way every time. The great lamp burns only while the reliquary's lantern-foot is seated in its socket. If you take the foot, the lamp goes dark. If you put it back, it lights again. You'd need the foot to open Elowen's other hiding places, and the paper says it is the proof of your claim.
+
+Now the story. Brann shakes his head slowly. "No surname, no house. Only 'Aldous', said the way she said it, like a thing she'd known a long time." He adds, with an effort, "The ship had a grey sail, much like that one. That's all."
+
+Kit has finished laying out the dead. She stands up, brushing shingle off her knees, and looks at the sky, which has begun to cloud over from the west. "Weather," she says. Brann's squall is on its way.
+
+So the lamp is lit and has to be a choice. You can leave the reliquary in the socket, so the light burns on and Brann keeps it, though you'd have no lantern-foot for any other doors. Or you can take the foot and let the lamp go dark again.
+
+Dunn is ready to take the dead and the living back to Saltmarsh, though he mutters about the weather. What does Wren do?
+
+== ROUND 96 ==
+PLAYER: "Elowen said to light it when the storm comes, and here comes the storm, so the foot stays where it is, Brann, and you keep the light through it." I squeeze his shoulder. "I'll be back for the reliquary in a day or two, once we've settled the arbiter and Corvin's statement. If the grey sail returns, ring the old bell and keep that door barred."
+
+Then I turn to Kit and Dunn. "Load the dead hands, let's go before the squall is on us, and Dunn, I'll add two silver if you take us home dry."
+  [game] dice Dunn Orrin's seamanship running before the squall with a heavy load (my ruling, DC 12): 1d20+3 = 1d20 [9] + 3 = 12
+  [game] sheet: lost 1 × Reliquary; money -2 sp: now 72 gp 3 sp 1 cp
+  [refused] time: nothing to change: pass set, advance, add_timer or remove_timer
+  [game] time: 1 hour 45 minutes later: Day 10, 9:57:12 AM
+  [DM write_lore (hidden)] {"entry": "The Gullspit Light", "add_to_description": "Day 10 ~8:20 AM: Wren left the reliquary's lantern-foot seated and the lamp lit, in Brann's keeping; told him to ring the old bell and bar the door if the grey sail returns. She plans to come back for it in a day or two. Squall arrived as the skiff crossed; Dunn Orrin made the quay by ~10 AM with the three dead hands."}
+  [game] notebook: updated The Gullspit Light
+DM: You squeeze Brann's shoulder and tell him the foot stays. He nods, wiping his eyes, and swears the lamp will burn through the storm. If the grey sail comes back, he will ring the old bell and bar the door. You press two silver pieces into Dunn's palm. Then, with Kit, you load the dead onto the skiff as gently as the squall allows.
+
+The squall arrives just as the skiff pulls clear. A wall of grey rain sweeps in off the estuary and the wind turns the water to choppy slate. Dunn's seamanship check is a 12 against a DC 12 that I set for the weather, so he scrapes through. Dunn grits his teeth, fights the tiller, and rides the lee of the mudflats instead of the open channel. You're soaked to the skin, Kit is grey in the face and holding the gunwale, and the three covered shapes slide against your boots. But you make the quay a little before ten, damp and shaken and still afloat.
+
+Behind you the Gullspit light burns through the storm like a white thread, so steady that the quay-gulls wheel toward it. The whole waterfront has stopped to look. Dockhands stare out across the estuary, and someone is ringing a bell. A knot of Vantry guards is running down the quay. At their head is Pell, the halberdier who stood at the Salt Gull door, and behind him the arbiter in a cloak, her stylus still behind her ear.
+
+You left your reliquary in the lamp's socket, so you don't carry it now. It is safe with Brann. The arbiter is looking at the dead men, then at you. Corvin's statement should be ready, and the lamp has told the whole town something has happened on the spit.
+
+It is nearly ten. You have no spell slots, a hearing to give, and a long day's weariness behind you. What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 97, "category": "contradiction", "severity": 2, "quote": "It names *H.* as a Master Hale, now held at Thornhallow.", "why": "Corvin's own hidden note (R74) says 'H. watches the east door' of the Wick-House. A man held in a Thornhallow cellar (R75) cannot be doing that."}
+{"round": 97, "category": "thread", "severity": 1, "quote": "Master Tallowmere says he never saw his face.", "why": "In R72 Corvin promised to name the smiling man who also wants the staff once the statement was signed. The statement as reported never names him."}
+
+THE PLAYER'S LINE THIS ROUND: I step onto the quay, wring out my cloak, and meet the arbiter's eyes. "Madam, three of the Heron's Tithe's hands lie dead in our skiff, killed when they attacked us at the Gullspit light, and their master is a hooded man called Aldous, who sailed off with a man named Sparrow. May I give you the full account, and read Corvin's statement, indoors and by a fire?"
+
+DM: also, is there any word yet on whether Corvin has signed his statement and named the man he called "H."?
+
+=== REPLY bard2-97-01 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:30 AM: the arbiter reports Corvin signed his statement at dusk Day 9: towns and dates of Elowen's last years (Ashby Weir, Lantern's Res
+Your Persuasion check was an 11 with disadvantage, enough against an easy DC. The arbiter looks at the three covered shapes, the rain running off your cloak, and Kit swaying beside you, and nods once. "Indoors. Fire. Pell, take the dead to the hall's cold-room and fetch a physician's boy for the Thistlewood woman." Kit bristles at that and then, quietly, accepts it.
+
+On your out-of-story question: yes. Corvin signed his statement at dusk yesterday. It names the towns and dates of your mother's last years: Ashby Weir, Lantern's Rest, the Wick-House. The "H." he spoke of turns out to be Hale's master-of-hand, not Hale himself, but he gave no further name. The arbiter reads you that much from the sealed copy, and says he told the clerk the rest was "for Wren's ears alone." She holds the full statement under seal for Dame Crowe.
+
+By the fire in the Vantry counting-room, you give your account in order: the Gullspit light, the grey-sailed Heron's Tithe, Sparrow, the hooded man Elowen called Aldous, the three dead hands. The arbiter writes it all down without comment. When you finish she says, "That makes two of Corvin's ledger's shadows in my town in two days. I'll send a rider to Dame Crowe." She also tells you Corvin is still in the cellar, and asks for you by name every hour.
+
+It's past half past ten. You're wet, tired, and out of spells. A long rest would restore them, and the cellar door is a staircase away. What does Wren do?
+
+=== REPLY bard2-97-02 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:30 AM: per the arbiter, Corvin signed a statement overnight, but it names no 'H.' and says only that Elowen was last seen at Ashby Weir
+Your Persuasion check was an 8 with disadvantage. It isn't enough to charm the arbiter, but it doesn't have to be. She is a practical woman and the dead men are plain evidence.
+
+She looks at the three covered shapes, then at the lamp still burning white across the water. "Indoors, then," she says. "Pell, have the dead taken to the hall's cold room and counted. Mistress Ashgrove, you will have a fire. You will not have the statement until your account is down, because I do not hand a witness another witness's words before she has given her own."
+
+In the Vantry hall's counting-room, with a fire, a blanket and hot cider, you give the whole account: the Wick-House, the staff, Sparrow, the cutter, the three hands, the grey-cloaked man called Aldous. Kit adds her dry corrections. The arbiter's stylus never stops. When you finish, she sets it down.
+
+On your question she is plain. "He signed in the night. It names no 'H.' He says only that Elowen was last seen at Ashby Weir, and that for years a grey-sailed patron paid him to watch for her heir." She raises an eyebrow. "He says it was a patron, not a master. I'd say that is a distinction without a difference, but he insists. I hold it sealed. You may read it when I have counted your dead and sent to the keep. Tomorrow morning." She pauses. "He asks for you again. He says he has the rest, and he'll give it to you alone."
+
+It is half past ten. You have no slots, and you are soaked and tired. The lamp is lit, and the town is talking about it.
+
+What does Wren do?
+
+=== REPLY bard2-97-03 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:30 AM: per the arbiter, Corvin dictated and signed his statement overnight. It names towns and dates for Elowen (Ashby Weir, the Wick-H
+The arbiter takes in the three covered shapes, your sodden cloak and Kit's grey face. Your Persuasion check was a 9 with disadvantage. It doesn't charm her, but you hardly need to. "Indoors, yes," she says shortly. "The dead are the guard's business now. Pell, the hall's cellar, and a priest for them." She puts a dry cloak around Kit herself.
+
+An hour later you sit by the Vantry hall's hearth with hot broth and give her everything: the three hands, the grey cutter, the hooded man Sparrow called master, the name "Aldous", and the lamp. She writes without interrupting. When you finish she sits quiet for a while.
+
+Then she answers your question. Corvin dictated and signed his statement in the night, and the cellar clerk witnessed it. It names the towns and dates he knows for Elowen: Ashby Weir, the Wick-House, the Gullspit light. On "H.", he named only "a grey-sailed man I knew as Aldous", and swore he never learned another name. She watches you as she says it. "Either he was truthful or he lied well. You know him better than I do."
+
+She will not hand you the full text until Dame Crowe's assize, but she has made you a sealed copy of the part that concerns your mother. It is half past ten. Your slots are empty and the squall still beats at the shutters.
+
+What does Wren do?
+
+=== REPLY bard2-97-04 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:30 AM: his signed statement, taken down by the cellar clerk, was read to Wren in the Vantry hall. It names Elowen's last known places (
+Your Persuasion check was a 15, even with disadvantage, and it's plenty. The arbiter looks at the three shrouded shapes, then at the white thread of light still burning across the estuary, and her stern face loosens a little. "Pell, take the dead to the hall's cold room and have the dead men's names asked on the quay. Mistress Ashgrove, with me."
+
+In the hall there's a fire, dry blankets and hot spiced cider. Kit gets a stool beside the hearth and doesn't move from it. You give your account in order, and the arbiter's clerk writes it down. You tell her about the hooded man Aldous, Sparrow, the Heron's Tithe, the three hands who attacked at the door, and what Elowen's grave told you. She listens without interrupting, and when you finish she says only, "A grey-sailed cutter has no right to be in my harbour without a Vantry mark. I'll have the harbour-master ask who let her moor."
+
+Then she answers your other question. Corvin's statement is signed. He put his name to it at dawn, and the cellar clerk's hand is neat. She reads you the relevant parts. It names the places he last knew Elowen to be: Ashby Weir, then upriver and downriver. He admits he sold her blessings. As for "H.", he names him only as "a hand of the man I owe", and he refused a surname. It doesn't mention the Gullspit light or anyone called Aldous. "He asked one thing," the arbiter adds, "through the guard. Whether the lamp burning across the estuary was hers."
+
+It's half past ten. You are warm and fed for the first time in hours, but you have no spell slots, and you have a signed statement, three dead men, and a man in the cellar who seems to have stopped lying about at least one thing.
+
+What does Wren do?
+
+=== REPLY bard2-97-05 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10 AM: per the arbiter, Corvin's dictated statement is finished and signed in his own hand, a clear account of Elowen (towns, dates: Ashby
+Out of the story first, on your question. Yes, there's word. The arbiter says Corvin's statement is finished and signed in his own hand. It's a clear account of Elowen, with towns and dates: Ashby Weir, Lantern's Rest and the Wick-House. He has not named "H." or the smiling man in it. He told the clerk he would give that name to you and no one else, and the arbiter doesn't like it.
+
+Now the story. You wring out your cloak, meet the arbiter's eyes, and give it plainly: three of the Heron's Tithe's hands dead in the skiff, killed when they attacked you at the Gullspit light, and their master a hooded man called Aldous, who sailed off with Sparrow. Your Persuasion check was a 16, even with exhaustion, and it lands. She doesn't question it. She looks at the covered shapes, then out at the white thread of the lamp, and her mouth tightens.
+
+"That light has not burned in fifteen years," she says. "Half the quay thinks it a portent." She gives Pell a short order to see the dead carried to the Vantry mortuary, and turns back. "Come in out of the wet, both of you. There is a fire in the counting-room, and I will hear all of it, sitting down."
+
+A little after ten you are dry-ish, with a bowl of broth, Kit asleep upright in her chair, and the arbiter's stylus scratching. She notes the name Aldous without comment, and Sparrow, and the grey cutter. When you finish, she reads Corvin's statement aloud. It is bleak and exact. Then she puts it down.
+
+"He asks for you again," she says. "He says it concerns the name he promised. The cellar is below, and the guard will be at the door. It is your choice, mistress. You have your slots empty and your wits tired, and I cannot order you."
+
+What does Wren do?
+
+=== REPLY bard2-97-06 ===
+  [hidden call] lore: {"names": ["Corvin Tallowmere"]}
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:45 AM: his statement is signed and sealed with the arbiter. It names towns and dates for Elowen (Ashby Weir, then Lantern's Rest, then 
+  [hidden call] write_lore: {"create": "Halloran Vey", "kind": "person", "description": "Saltmarsh shipping-factor named as 'H.' in Corvin's signed statement (Day 10). Said to own grey-sailed ships including possibly the Heron's
+Your Persuasion check was a 19, even with exhaustion, and it lands. The arbiter looks at the three covered shapes in the skiff and at your soaked cloak, and says only, "Indoors. Fire. Now." Pell and two guards carry the dead to the hall's cold room. Kit goes with them, grey with weariness, to have her cuts seen to.
+
+By the hall fire you give your account in full: the three hands who attacked at the Gullspit light, the hooded man called Aldous, Sparrow, the grey-sailed Heron's Tithe, and the lamp burning behind you. You ask for nothing and leave nothing out. The arbiter writes it all down. When you finish she sits back and says dryly, "Half of Saltmarsh watched that light come on, mistress. At least yours is an account that matches."
+
+Now to your question. Yes, Corvin has signed. The statement lies sealed on her table, and she lets you read it. It names Ashby Weir, then Lantern's Rest, then Saltmarsh as the road he followed Elowen along, and the dates run to sixteen years back. Of "H." it says only this: not Hale, but a Saltmarsh shipping-factor, Halloran Vey, who owns grey-sailed ships. Whether that's the truth, a lie, or a name chosen to send you the wrong way, you can't tell from the page. The arbiter adds that Corvin has asked to see you again, and that she'll allow it with a guard at the door. It is nearly eleven.
+
+You have no spell slots, Kit is hurt, and a squall is beating on the shutters. What does Wren do?
+
+=== REPLY bard2-97-07 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:30 AM: Corvin's signed statement is done, three sheets. It names Hale as 'H.' only in part: 'H.' is Master Hale's employer, a lord's st
+The quay is loud with rain, gulls and the bell, and the arbiter's eyes go from the covered shapes in the skiff to your soaked cloak. You give your account plainly: three hands attacked you at the Gullspit light, their master is a hooded man called Aldous, and he left with a man named Sparrow. Your Persuasion check was a 20, even with exhaustion, and it lands. She orders the dead carried to the guardhouse for the coroner. "A hall that has the lamp burning across its water," she says dryly, "had best hear the whole of it indoors." She takes you and Kit to the Vantry hall, where a fire is already lit in the counting-room, and has dry blankets brought.
+
+As for your question, yes. Corvin has signed. Pell brings the statement, three sheets in a clerk's hand, with Corvin's neat signature at the foot and the cellar guard's witness mark beside it. You read it by the fire.
+
+It says he sold forged pedigrees for years through a steward he calls "H." and that he now names: Hale, Lord Edric's own steward, who was only ever the go-between. Hale's employer is the man called Aldous. Corvin writes that Aldous never cared about the ledger. What he wanted, from the very first, was Elowen's lamp. Corvin swears he doesn't know who Aldous really is or where he lives, and that he last met him on the grey cutter. That is as far as the page goes, and it reads like a man telling the truth with a lie or two folded in, which is how Corvin always told it.
+
+A note in a different hand is pinned to the last sheet. Corvin asks to speak with you again before the assize, in the cellar, when you are rested.
+
+It's half past ten. You are damp, warmed by the fire, without spell slots, and with a hearing and a night's sleep still ahead. What does Wren do?
+
+=== REPLY bard2-97-08 ===
+  [hidden call] write_lore: {"entry": "Corvin Tallowmere", "add_to_description": "Day 10 ~10:15 AM: his written statement is signed (per arbiter). It names 'H.' as 'Hale's elder brother, a river-factor called Hollis Hale', and s
+The arbiter takes it in at a glance: the dead men, the wet girl, the lamp burning white through the rain. Your Persuasion was a 7 with disadvantage, but you hardly needed it. "Not on the quay," she says. "Inside. Pell, carry them to the hall and have the physician look at them." She turns and walks.
+
+In the hall's side room there's a fire, and you give your full account, steaming, with Kit adding a dry word where it counts. The arbiter writes without comment until you reach the name. "Aldous," she repeats. "Not a name I know on this coast. I'll have the harbour-reeve ask after a grey-sailed cutter called the Heron's Tithe."
+
+Now your out-of-story question: yes, there is word. Corvin signed his statement last night. The arbiter says it names the "H." he spoke of: Hollis Hale, an elder brother of the Hale now held for Dame Crowe, a river-factor who trades up and down the Marrow. Corvin also says he was paid twenty years ago by a man he calls only "the Lamp-Warden" to find Elowen. He does not name Aldous, and the arbiter notes that this may mean he doesn't know the name or won't give it. She will let you read a copy.
+
+It's a little after ten. You've no spell slots and your reliquary is at the light. What does Wren do?

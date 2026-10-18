@@ -108,6 +108,7 @@ class Game:
         self.new_rolled: list[int] | None = data.get("new_rolled")  # a new PC's rolled scores, until it's made
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
+        self.answered: set[str] = set()  # this turn: the entries notebook writes have answered with (notebook.answer)
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
@@ -625,12 +626,20 @@ class Game:
                   "merge": {"type": "string", "description": "an entry that turns out to be the same as into"},
                   "into": {"type": "string"}}})
         async def write_lore(a: dict[str, Any]) -> dict[str, Any]:
+            before = self.lore
+
             def go() -> str:
                 self.lore, text = notebook.write(self.lore, a, notebook.now(self.transcript))
                 return text
             res = self.run("write_lore", go, hidden=True, inp=a)
             if not res.get("is_error"):  # the player sees that it happened, not what was written (owner, 2026-10-13)
                 self.log("tool", notebook.shown(self.lore, a))
+                party = {e for p in (self.sheet["name"], *(c["name"] for c in self.companions))
+                         for e in (notebook.find(before, p), notebook.find(before, p.split()[0])) if e}
+                said, names = notebook.answer(before, a, self.transcript, party | self.answered)
+                self.answered |= set(names)
+                if said:  # to the DM only
+                    res["content"][0]["text"] += "\n\n" + said
                 self.save()
             return res
 
@@ -760,7 +769,7 @@ async def turn(game: Game | Creation, text: str) -> None:
             game.reply_len += len(t)
             mark[0] = len(game.transcript)
     if isinstance(game, Game):
-        game.reply_len, game.late = 0, False
+        game.reply_len, game.late, game.answered = 0, False, set()
         # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
         # again (owner, 2026-10-13), and the owner's version reconnects to carry them. The whole conversation is then
         # read at full price once.

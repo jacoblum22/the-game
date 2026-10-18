@@ -1,0 +1,151 @@
+GAME bard2, ROUND 127
+
+THE THREE ROUNDS BEFORE (the original game):
+== ROUND 124 ==
+PLAYER: "A half day out, tides both sides, and he thinks the place is his." I thank Corvin dryly and tell Pell, "We'll scout the Gannet Causeway ourselves before we trust a word of that." After a proper supper and sleep, Kit and I ride out at first light on Day 14, with Pell's best tracker, to walk the causeway at both tides, noting where the road narrows, where a boat could hide, and where the guards can lie in reeds on the landward bank.
+
+DM: how long is the causeway, and what time is the next turn of the tide on Day 15?
+  [game] dice Wren's Investigation reading the causeway for ambush sites, hiding places and approach lines, DC 12: 1d20+2 = 1d20 [16] + 2 = 18
+  [game] dice Pell's tracker's Survival reading fresh sign on the causeway banks, DC 12: 1d20+4 = 1d20 [7] + 4 = 11
+  [game] time: 1 day 6 hours later: Day 14, 5:38:48 PM
+  [DM write_lore (hidden)] {"create": "Gannet Causeway", "kind": "place", "description": "Tidal causeway on the Marrowford road about half a day out of Saltmarsh. About 900 paces long, a raised gravel-and-timber road a cart's width plus a little, crossing salt flats cut by a tidal channel; passable roughly 2.5 hours either side of low water, and awash at high. Tides (my ruling, ~12h25m cycle; high ~9 AM Day 13): Day 14 high
+  [game] notebook: created an entry for Gannet Causeway; added 2 relationships to Gannet Causeway
+DM: Out of the story first, on your two questions. These are my rulings, and I'll keep to them. The Gannet Causeway is about nine hundred paces long. It is passable for about two and a half hours either side of low water and awash at high. The tide turns on a cycle of roughly twelve and a half hours. The next high water after Day 13's nine o'clock peak falls near ten at night on Day 14, and on Day 15 it falls at about twenty to eleven in the morning, with low water near half past four in the afternoon. A crossing on Day 15 would therefore be on the afternoon ebb, with the causeway opening around two.
+
+Now the story. You sleep well, ride out at first light with Kit and Pell's tracker, a wiry, silent woman called Marl Sedge, and reach the flats a little before eleven. You walk the causeway at both tides: first with the sea lapping at its edge near high water, then again as it uncovers through the afternoon.
+
+Your Investigation check is an 18. The causeway is a raised gravel road with timber edging, just wider than a cart, running over salt flats cut by a tidal channel. The landward bank, your side, has a belt of tall reeds and a drainage ditch where eight guards could lie hidden. At the very middle a stone culvert squeezes the road to a single cart-width with water on both sides. A wagon stopped there cannot turn, and it can be blocked from both ends. On the far bank is a drowned boat-shed and a creek mouth where a skiff could lie unseen.
+
+Marl's tracking roll is an 11, which isn't enough to read the banks with confidence. You find what she missed. At the boat-shed there is a freshly cut mooring-stake and trampled reed, perhaps a day old. Someone has been there, and not for fishing.
+
+It's twenty to six in the evening on Day 14, with the flats pink and the water coming back. The wagon leaves Saltmarsh at dawn tomorrow, and the causeway opens on the afternoon ebb. You've three slots, all your Inspiration, Kit, and a tracker. What does Wren do?
+
+== ROUND 125 ==
+PLAYER: "That fresh stake means someone's already scouting the same ground we are." I tell Marl and Kit, "Marl, you stay hidden in the reeds near the boat-shed tonight with two of Pell's quietest guards, just to watch and count who comes and goes, and don't touch anything. Kit and I ride back to Saltmarsh for supper and sleep, and tomorrow we bring the bait wagon out at dawn with the other six."
+
+Before I leave I place a few bits of dry reed across the mooring stake's path as a tell, so tomorrow I'll know if anyone has used it.
+  [game] time: 12 hours 20 minutes later: Day 15, 5:58:48 AM
+  [DM write_lore (hidden)] {"entry": "Gannet Causeway", "add_to_description": "Day 14 ~5:50 PM: Wren laid a few dry reeds across the path to the far-bank mooring stake as a tell. The tracker Marl Sedge stayed hidden in the reeds near the boat-shed alone (Pell's guards were back at Saltmarsh), told only to watch and count. Wren and Kit rode back to Saltmarsh, arrived about midnight, and briefed Pell and the arbiter. Wagon le
+  [game] notebook: updated Gannet Causeway
+  [DM write_lore (hidden)] {"create": "Marl Sedge", "kind": "person", "description": "Pell's tracker: wiry, silent woman in Vantry grey, Survival +4. Watches the Gannet Causeway boat-shed alone on the night of Day 14.", "relationships": ["serves the arbiter of [[Vantry Hall]]", "watches [[Gannet Causeway]]"]}
+  [game] notebook: created an entry for Marl Sedge; added 2 relationships to Marl Sedge
+DM: You scatter a few dry reeds across the path to the mooring-stake, the sort of thing nobody sees unless they are looking. Marl takes the plan with a single nod. I should say plainly that the guards you mentioned are back at Saltmarsh with Pell, since you rode out with only Marl and Kit. So Marl will do this alone. She melts into the reeds near the boat-shed without a sound. "Count them," she says. "Don't touch." She has the dry, flat manner of someone who doesn't need telling twice.
+
+You and Kit ride back through the dusk and reach Saltmarsh near midnight, saddle-sore and starving. Bess has stew warm. The arbiter is still awake, and Pell is awake with her. You give them the causeway in plain terms: the culvert at the middle, the reeds on the landward bank, the boat-shed on the far side, the mooring-stake. The arbiter agrees on the placing of the guards. They'll go ahead of the wagon at first light and lie in the landward reeds, while the wagon waits behind them at the causeway mouth until the water drops.
+
+You get five hours of sleep, which is not a long rest but is enough. By six o'clock on Day 15 the Vantry yard is grey with dawn. A covered wagon with a good axle stands ready with a pair of heavy horses. Pell sits his own horse beside it. Six guards in grey cloaks check their crossbows and short swords, and two more stay behind with the hall. Corvin comes up the cellar stair between two guards with his hands unlocked and his feet shackled. He climbs into the wagon without a word and settles on the bench, and when he sees you looking he spreads his empty hands. "Nothing up my sleeves," he says. "I've been searched twice."
+
+You have 17 of 17 hit points, three slots, three Inspirations, the bait tube in your saddlebag, and Kit at your side. The causeway opens around two in the afternoon, which means a slow ride and a wait at the landward end. Marl's report is waiting out there. What does Wren do?
+
+== ROUND 126 ==
+PLAYER: I mount Ember, check the bait tube in my saddlebag one last time, and ride up beside the wagon to murmur to Corvin, "If you say a single word to anyone on the road that isn't in the plan, Pell will gag you." Then I give the order to move out, keep Kit beside me, and lead the little column toward the causeway, humming the road song quietly to calm the guards.
+
+On arriving at the landward end, I'll find Marl first and get her count from the boat-shed.
+  [game] dice Marl Sedge's Stealth staying hidden in the reeds while the skiff lands, vs Sparrow's passive Perception 16: 1d20+6 = 1d20 [15] + 6 = 21
+  [game] dice Wren's Perception on the road, watching for riders or signals behind the column, DC 14: 1d20+2 = 1d20 [9] + 2 = 11
+  [game] time: 5 hours 30 minutes later: Day 15, 11:28:48 AM
+  [DM write_lore (hidden)] {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~11:30 AM, Marl Sedge's report (Stealth 21, unseen): about 3 AM a skiff landed at the far-bank boat-shed; Sparrow (brown coat, a limp?) and four men with pikes and two crossbows; they used the mooring-stake (Wren's reed tell is crossed and trampled). Before dawn they hid a second, larger boat (a longboat) in the creek mouth behind the boat
+  [game] notebook: updated Gannet Causeway
+DM: You lean from Ember's saddle toward the wagon and murmur your warning. Corvin doesn't turn his head. "Pell has a very good gag, I hear," he says mildly. "I won't need it." Then you give the order, and the little column rolls out of the Vantry yard in the grey light, with you and Kit at its head. You hum the road song under your breath, and by the second mile the guards are humming it back.
+
+It is a slow morning's ride. You check the road behind you and find nothing: your Perception is only an 11, but no rider shows against the long flat country. The wind comes off the sea, and gulls follow the plough-land. A little before half past eleven the road drops to the salt flats, and the Gannet Causeway lies ahead: a long gravel line running across wet silver mud, with the tide still lapping its timber edge, and the drowned boat-shed a dark smudge on the far bank.
+
+Pell sends the six guards ahead into the landward reeds in twos, as agreed. The wagon waits behind them at the causeway mouth, in plain view. Marl Sedge slips out of the reeds like a heron stepping from a pool and reports in a low flat voice.
+
+Your reed tell was crossed and trampled. About three in the morning a skiff landed at the boat-shed, with a lean man in a brown coat, and four men with pikes and two crossbows among them. Before dawn they hid a second, larger boat in the creek mouth behind the shed, a longboat that could carry twice their number. At first light a tall man in grey stood on the shed roof for a while, looking toward Saltmarsh, and then went below. She never saw his face. "Six men I can count," she says, "and the longboat could carry a dozen. They haven't crossed." Marl was not seen, she says, and you believe her.
+
+So the master is there, and the water will keep him there until about two. It is half past eleven, and you've plenty of time to set your trap. The wagon, Corvin, and the bait tube are in plain view. Eight guards are in reeds or at the road, with Pell. You have three slots, all your Inspirations, and Kit. The causeway is 900 paces of road with a culvert at its middle. What does Wren do?
+
+
+WHAT READERS FOUND WRONG IN THE ORIGINAL REPLY TO THIS ROUND (the established facts it broke):
+{"round": 127, "category": "contradiction", "severity": 2, "quote": "eight guards in the reeds behind you", "why": "R125 says 'Six guards in grey cloaks' go and 'two more stay behind with the hall'; R127's own hidden note says Pell and six guards. R126 also says 'Eight guards are in reeds or at the road, with Pell.'"}
+
+THE PLAYER'S LINE THIS ROUND: "Marl, can you reach the longboat unseen and drag its oars up the bank, or pull its bung, so they can't flee by water?" When she gives her flat nod and slips off, I turn to Pell. "The wagon starts across at two, when the road opens, with Kit and me beside it in plain sight, and Corvin visible on the bench. Your six stay in the reeds until I raise my lantern-staff, and then they close both ends of the culvert."
+
+I tuck the bait tube into my cloak where it will show when I move, and I keep Faerie Fire ready for the first man who steps out of the shed.
+
+=== REPLY bard2-127-01 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~11:40 AM-2 PM: Marl Sedge tried to disable the longboat (Stealth 9 vs a lookout's passive 13) and was spotted in the creek mouth; she fled b
+  [hidden call] write_lore: {"entry": "Marl Sedge", "add_to_description": "Day 15 ~12:30 PM: wounded in the thigh by a crossbow bolt while trying to disable the longboat; bound up and resting in the reeds. Not fit to fight."}
+Marl gives her flat nod and goes. She is good, but the die isn't kind: her Stealth check is a 9 against a lookout's passive 13. A shout goes up from the creek mouth, a crossbow cracks, and a little later she crawls back into the landward reeds with a bolt through her thigh and her teeth set. Pell's guards bind it. She will live, but she can't fight, and she mutters, "They know the bank's watched."
+
+So the longboat is untouched, and the shed is awake. You decide the plan still stands, since the master wants the tube and has more men than he needs for show. Pell lays out the last details in a low voice. His six stay in the reeds until you raise the lamp-staff, and then they close both ends of the culvert. You tuck the bait tube into your cloak where its wax shows when you move. You keep Faerie Fire ready, with three slots and three Inspirations in hand.
+
+The water drains slowly off the gravel, and the timber edging dries from black to grey. A little before two the first dry stretch shows at the landward end, and by two the whole causeway lies bare, a long pale line across the silver flats. On the far bank, in the doorway of the drowned boat-shed, a lean figure in a brown coat steps into the light and stands there, hands empty, plainly visible. He tips his hat.
+
+Corvin sits upright on the wagon bench, hands in his lap and his shackled feet on the boards. He doesn't look at the shed. "Now," he says quietly, "they will wait for the middle. He always does."
+
+It is two in the afternoon on Day 15. The wagon, Kit, Pell, and you stand at the causeway mouth, with six guards hidden in the reeds. What does Wren do?
+
+=== REPLY bard2-127-02 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~12:15 PM: Marl Sedge went to disable the longboat in the creek mouth; Stealth 9 vs passive 16, she was noticed by a lookout before she reach
+Marl gives her flat nod and slides back into the reeds, and you lose sight of her within a dozen paces. You tell Pell the rest. The wagon crosses at two, with you and Kit beside it and Corvin plain on the bench. His six stay down until you raise the lantern-staff. Pell grunts agreement. You tuck the bait tube into your cloak where it will show when you move.
+
+The wait is long. The tide sucks back from the flats and the gravel steams in the sun. Then, a little after midday, a gull-cry carries thinly across the water that isn't a gull. It's cut off, and nothing follows it. Marl does not come back. Pell looks at you without speaking. Her check was a 9, and the men at the shed were looking.
+
+Whatever happened to her, the master now knows there are eyes in the reeds. He may call off the ambush, or he may spring it sooner than you planned. It is a quarter past twelve. The causeway shows dry gravel at the near end, but the middle is still awash for another hour and more.
+
+You have three slots, three Inspirations, Kit, and eight guards, six of them hidden. Corvin sits on the wagon bench with his chained feet, watching you with an expression you can't read. What does Wren do?
+
+=== REPLY bard2-127-03 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~12:30 PM: Marl Sedge (Stealth 18, unseen) waded the creek at low-water mud, pulled the longboat's bung and hauled its oars into the reeds, t
+Marl gives her flat nod and is gone. She crosses the creek mouth on the mud at low water, a grey shape among grey reeds. Her Stealth is an 18, and the lookout at the boat-shed never turns his head. She is back inside the hour with wet knees and a dry face. "Bung's out," she says. "Oars are in the reeds. They'd need a quarter hour to make her float, and the tide won't wait for them." She takes her place among the guards without another word.
+
+You settle the rest with Pell. The wagon will start across when the road opens, with you and Kit beside it and Corvin plain on the bench. His six stay in the landward reeds until you raise the lantern-staff, then close both ends of the culvert. You tuck the bait tube into your cloak where it shows when you move.
+
+At two minus a breath, the water has slid off the gravel and the causeway lies bare and shining. Corvin sits with his shackled feet crossed and his hands in his lap. "Do try to look afraid," he murmurs. "It sells the tale."
+
+It is just before two. You have three slots, all three Inspirations, Kit beside you, and the lantern-staff in your hand. Across 900 paces of wet road, the boat-shed waits, silent, with at least six men and one tall man in grey inside it. What does Wren do?
+
+=== REPLY bard2-127-04 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~1 PM: Marl crossed the flats unseen (Stealth 19) and reached the longboat, but her check to pull the bung and haul the oars was only 10 (DC 
+Marl nods once and is gone into the reeds. She is back in the best part of an hour, mud to the thighs, and she reports it in her flat voice. Nobody saw her go. At the longboat she got the oars off one side and dragged them up the bank, but the bung was swollen tight and would not come, and she dared not hammer at it. Her check was a 10, short of the 12 it needed. The longboat still floats, with only half its oars. If the master runs, he can still row, slowly and lopsided.
+
+You tell Pell the order: the wagon crosses when the road opens, and his six stay in the reeds until you raise the lamp-staff. Then they close both ends of the culvert. Pell grunts and sends them down. You tuck the bait tube into your cloak where the sealed wax shows when you move.
+
+Around two, the water pulls back off the timber edging and the causeway shines wet and open. The wagon creaks onto it with Corvin visible on the bench, shackled feet and open hands, and gulls scatter ahead of the horses. You walk Ember on one side, Kit on the other, lamp-staff upright in your hand. The far bank and its drowned shed come closer, grey and silent. It is nearly two in the afternoon, and you are a third of the way out.
+
+You've three slots, three Inspirations, and Faerie Fire ready. Nothing has stirred at the shed. Ahead is the culvert, where the road narrows to one cart-width. What does Wren do?
+
+=== REPLY bard2-127-05 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~2:05 PM: Marl (Stealth 19) slipped the longboat's oars and pulled its bung unseen, and returned to the reeds. The wagon (Corvin on the bench
+Marl gives her flat nod and is gone. She crosses the creek mud on her belly, a grey shape among grey reeds. Some time later she is back at your elbow, wet to the thighs. "Oars up the bank," she says. "Bung out. It'll sit on the mud till the tide comes, and then it'll sink." Nobody on the far bank gave a shout.
+
+You settle the rest with Pell. The six guards stay in the reeds until your lantern-staff goes up, and then they close both ends of the culvert. You tuck the bait tube into your cloak where it shows when you move. By two the last of the water has slid off the gravel and the causeway lies bare and shining, nine hundred paces to the drowned boat-shed.
+
+The wagon rolls onto it at four minutes past two. Corvin sits upright on the bench with his hands visible, looking like a man being driven to a feast. Kit walks at the near wheel with her shield on her arm, and you ride Ember at the other, with the staff held upright and the brass lantern catching the sun. Gulls lift and settle on the flats. The wheels grind on gravel. Your Perception check as you start is a 6, and you see nothing but the boat-shed, which sits still and dark ahead.
+
+The culvert is a few hundred paces on. You've three slots, all your Inspirations, Faerie Fire ready, and the whole trap behind you in the reeds. What does Wren do?
+
+=== REPLY bard2-127-06 ===
+  [hidden call] write_lore: {"entry": "Gannet Causeway", "add_to_description": "Day 15 ~12 noon: Marl Sedge went to disable the longboat (Stealth 11 vs a lone boat-guard's passive 11: a tie, so she was not clearly unseen). She h
+"Pull its bung and take its oars, and don't be seen doing it," you tell Marl. She gives her flat nod and slips into the reeds, and Pell takes your orders for the wagon without comment. Two o'clock, the road open, you and Kit beside the wheels, Corvin on the bench in plain sight. His six wait in the reeds for the lamp-staff to rise. You tuck the bait tube into your cloak where it shows when you move.
+
+Marl does not come back, and she sends no signal. Her roll was a bare 11 against the boat-guard's watchfulness, which is not clearly unseen. You can't tell if she did it, was caught, or is only still working.
+
+At three minutes past two the last of the water slides off the timber edging and the road lies bare. The wagon rolls out onto the Gannet Causeway at a walking pace, with the horses' hooves ringing on gravel and mud steaming on both sides. Gulls lift and settle. Corvin sits with his hands loose on his knees, humming something tuneless. Kit's shield is on her arm. You hold the lamp-staff upright, the way a road-priest would, and the brass lantern catches the sun.
+
+Four hundred paces out, at the middle, the stone culvert squeezes the road to one cart-width with the channel running low on both sides. The wagon's front wheels are on it when the drowned boat-shed's door swings open and a lean figure in a brown coat steps out into the light, smiling, with a hand crossbow held low. Behind him, two pikemen spread along the far end of the causeway, and in the shed's shadow a tall shape in grey waits and does not come out.
+
+You have three slots, three Inspirations, Kit beside you, and six guards in the reeds behind. Sparrow is about two hundred paces ahead and the wagon cannot turn. What does Wren do?
+
+=== REPLY bard2-127-07 ===
+  [hidden call] write_lore: {"entry": "Marl Sedge", "add_to_description": "Day 15 ~12:15 PM: sent to sabotage the longboat; rolled a natural 1 Stealth (7 vs Sparrow's passive 16). Spotted at the creek mouth; she was not caught b
+Marl gives her flat nod and slides back into the reeds, working along the ditch toward the creek mouth. You and Pell settle the rest: the wagon starts across at two when the road opens, with you and Kit beside it, Corvin on the bench in plain view, and the six guards holding in the reeds until you raise the lamp-staff. You tuck the bait tube into your cloak so it shows when you move.
+
+The wait is long and quiet, and the sun climbs. A little after noon Marl is back, low and fast through the ditch, breathing hard. She reports in her flat voice that she was seen. A brown sleeve and a pale face rose over the boat-shed's sill when she was thirty paces from the creek mouth, and a crossbow bolt thudded into the reed beside her. She got away unhurt, and she holds up the bolt: fletched in grey, same as the Heron's Tithe's gear. She never touched the longboat.
+
+So they know the far bank is watched, or at least that someone is out here. They may stay put, abandon the plan, or strike harder. The tide is still falling, and the causeway will open in under two hours. Pell looks at you and says nothing, leaving it to you.
+
+You have three slots, all your Inspirations, Kit, and eight guards in the reeds. Faerie Fire is ready if the trap springs. What does Wren do?
+
+=== REPLY bard2-127-08 ===
+Marl gives her flat nod and is gone into the reeds. Your Persuasion isn't needed. She works her way up the channel to where it narrows and wades it, and the far-bank lookout's passive Perception is 13. Her Stealth check is exactly 13, which is just enough. She is across, unseen by a hair.
+
+Over the next hour you wait with the wagon at the causeway mouth while the water draws back off the gravel. You set the plan with Pell. The wagon starts across at two with you and Kit beside it, and Corvin sits visible on the bench. His feet are shackled, his hands are free, and he is humming the road song. The six guards stay in the landward reeds until you raise the lamp-staff, and then they close both ends of the culvert. You tuck the bait tube into your cloak so it shows when you move.
+
+A little before two, Marl slides back out of the reeds, wet to the thighs. She says the two oars are in the mud of the bank. She pulled the bung from the longboat, and it is settling at its mooring with a hand's depth of water in her. "They won't row that anywhere soon," she says, and then adds, "I think the lookout saw a ripple. He looked a long time at the creek, then went in."
+
+The causeway is bare now, a wet gravel line nine hundred paces long under a hard white sky. At the far end the boat-shed door stands shut. The tide has just turned, and the bank is clear. It is two o'clock. You have three slots, all your Inspirations, Faerie Fire ready, and the lamp-staff in your hand. Kit stands at the lead horse's head. Corvin looks at you from the bench and lifts one eyebrow.
+
+What does Wren do?
