@@ -269,3 +269,8 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   caught 47 of 105, flagged 14 of 60 clean (2+: 92 and 41; 4+: 4 and 2; nothing got 5). 71 of 73 quotes at 3+ are the
   reply's exact words, so code could swap them. It chose 'text' for 68 of 73 and 'dm' for 5; sampled replacements
   read well, but some 'text' fixes paper over a time or count problem instead of sending it to the DM. About $5.6.
+- By topic (Haiku labelled each reader finding and each checker problem; games/read/causes/topics.json): time is the
+  biggest real group (29 of 105) and the biggest false-flag source (8 of the 14 clean flags at 3+). Count, distance,
+  place and items are rarely flagged on clean rounds even at 2, while identity and deeds at 2 are as often wrong as right.
+  Acting at 2+ but 3+ for time/identity/deeds: caught 79 of 105, flagged 23 of 60 (3+ alone: 47 and 14). Tuned on the
+  same rounds, so it needs fresh rounds to confirm.
