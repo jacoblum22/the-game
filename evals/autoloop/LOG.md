@@ -298,3 +298,7 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   order also in the per-turn reminder 2.63. The DM kept its old order (bookkeeping, then the reply in a call of its own)
   in 19 to 22 of 24 runs, and never combined after a roll: these games have 180 rounds of the old habit behind them.
   When it did put the reply first, the turn took 1 call. Quality not judged: too few runs changed. Untested on a new game.
+- Checker with a 5-turn window (JEV_WINDOW=5, `quote`; sonnet-quote-w5.json): input 1.64M against 2.53M for 10 turns
+  (35% less; the notebook entries and the reply stay). Leave-one-out per topic: caught 71 of 105, flagged 19 of 60
+  (10 turns: 62 and 14); flat 3+: 44 and 5 (10 turns: 42 and 7). No worse, so 5 turns. About $0.025 a check.
+- Cut at 60k keeping 5 turns (was 200k and 20; b049d52). New 15-round test game bard3 to see both changes from turn 1.
