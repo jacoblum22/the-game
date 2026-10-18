@@ -22,7 +22,6 @@ PAGE = 10  # lines a lookup shows at once
 PATHS = 5  # two-step connections shown
 NOTES = 10  # lines of notes each turn
 SKIP = 3  # an entry shown in the last 3 turns isn't shown again
-ANSWER, ANSWER_CHARS = 4, 1500  # entries a write answers with, and the characters of each
 SNIP = 160  # characters either side of a match in recall
 TASKS = ("quest", "lead")  # kinds shown every turn while open (owner, 2026-10-13)
 STATUSES = ("open", "done", "dropped")
@@ -295,30 +294,6 @@ def write(lore: dict[str, Any], a: dict[str, Any], turn: int) -> tuple[dict[str,
     if missing:
         out.append("no entry yet for " + ", ".join(missing) + " (create one if it matters)")
     return lore, "; ".join(out)
-
-
-def answer(before: dict[str, Any], a: dict[str, Any], transcript: list[dict[str, Any]], skip: set[str]) -> tuple[str, list[str]]:
-    """What the notebook already said, before this write, about the entry written and the entries its new text names:
-    the DM writes its notes before its reply, so this puts what's established in front of it as it's about to narrate
-    the new thing (owner, 2026-10-18; 108 of 118 contradictions in set 2 had the fact in the conversation and were
-    missed anyway). `skip`: entries not to show (the party's, and those already shown this turn). Returns (the text,
-    the entries shown)."""
-    new_text = " ".join(str(v) for k in ("description", "add_to_description", "text") for v in [a.get(k)] if v)
-    new_text += " " + " ".join(str(x) for k in ("relationships", "add_relationships") for x in a.get(k) or [])
-    names = [a.get("entry"), a.get("into"), a.get("merge"), *LINK.findall(new_text)]
-    found = [n for x in names if x and (n := find(before, x))]
-    found += mentioned(before, new_text)
-    out, shown_ = [], []
-    for n in dict.fromkeys(found):
-        if n in skip or len(shown_) == ANSWER:
-            continue
-        text = look(before, [n], transcript)
-        out.append(text if len(text) <= ANSWER_CHARS else text[:ANSWER_CHARS].rsplit("\n", 1)[0] + "\n…")
-        shown_.append(n)
-    if not out:
-        return "", []
-    return ("[What your notebook already said about these, before this write: make what you write and narrate fit "
-            "it, or say plainly what changed and why]\n" + "\n\n".join(out)), shown_
 
 
 def shown(lore: dict[str, Any], a: dict[str, Any]) -> str:

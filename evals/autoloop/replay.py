@@ -35,8 +35,6 @@ if os.environ.get("PROMPT_MD"):
 async def no_cut(game: play.Game) -> None:
     return None
 play.cut = no_cut
-if os.environ.get("NO_ANSWER"):  # the A/B's base: notebook writes as before 2026-10-18, without what was already there
-    notebook.answer = lambda *a, **k: ("", [])
 
 
 def player_lines() -> list[tuple[int, str]]:
