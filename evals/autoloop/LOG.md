@@ -281,3 +281,9 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   of 60, but leave-one-round-out gives 61 of 105 and 20 of 60, against 47 and 14 for flat 3+ (also LOO). Counting
   only catches on the readers' own line: 44 of 105 against 28. Under the rule, 66 of the 128 kept problems touch
   time, items or mechanics and would go back to the DM; the checker itself said 'dm' for 6.
+- Fourth try (`quote`): the earlier line copied word for word (code checks it is in the context), a checklist (dice,
+  HP and spell lines; counts and times in one reply; deals and orders), score 3+ for anything that changes the
+  player's choices or makes a plan impossible, and the checker's own topics. Leave-one-out per topic: caught 62 of 105,
+  flagged 14 of 60 (last try 61 and 20); flat 3+: 42 and 7 (last 47 and 14). The quote check itself drops little (23 of
+  395; 2 of its 11 dropped at 2+ were real): the prompt does most of the work. Of the 10 clean rounds the fitted rule
+  flags, I judge 8 or 9 real misses by the readers. One wasted run (~$5) before fixing the mode switch. quote_cutoffs.py.

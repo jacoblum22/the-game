@@ -38,7 +38,7 @@ SCHEMA2 = {"type": "object", "additionalProperties": False, "required": ["proble
                "type": "object", "additionalProperties": False, "required": ["quote", "clashes_with", "severity"],
                "properties": {"quote": {"type": "string"}, "clashes_with": {"type": "string"},
                               "severity": {"type": "integer", "enum": [1, 2, 3]}}}}}}
-MODE2 = len(sys.argv) > 4 and sys.argv[4] in ("severity", "five")
+MODE2 = len(sys.argv) > 4 and sys.argv[4] in ("severity", "five", "quote")
 
 # Third try (Jake): a 1-5 scale with an example per level, and the checker says how to fix each problem: a
 # replacement sentence when words alone fix it, or "dm" when the fix touches the sheet, fight, clock or notebook.
@@ -60,19 +60,58 @@ SCHEMA5 = {"type": "object", "additionalProperties": False, "required": ["proble
                               "severity": {"type": "integer", "enum": [1, 2, 3, 4, 5]},
                               "fix": {"type": "string", "enum": ["text", "dm"]},
                               "replacement": {"type": "string"}}}}}}
-FIVE = len(sys.argv) > 4 and sys.argv[4] == "five"
+FIVE = len(sys.argv) > 4 and sys.argv[4] in ("five", "quote")
 if FIVE:
     SYSTEM2, SCHEMA2 = SYSTEM5, SCHEMA5
+
+# Fourth try (Jake): the clashing earlier line quoted word for word, so code can check it is really there; a checklist
+# of what gets missed; the score set by what it does to the player; and the problem's topics.
+TOPICS = ["count", "time", "distance", "place", "deeds", "items", "identity", "status", "mechanics"]
+QUOTE = len(sys.argv) > 4 and sys.argv[4] == "quote"
+if QUOTE:
+    SYSTEM2 = SYSTEM5 + (
+        " For every problem, copy the earlier line it clashes with into earlier_quote, word for word from the "
+        "NOTEBOOK, EARLIER PLAY or the NEW REPLY itself, and say in earlier_where which (notebook, earlier play, or same "
+        "reply). If you can't point to such a line, it is not a contradiction: something not mentioned before, or a "
+        "character guessing or lying, is not a clash. Check in particular: dice, hit point and spell lines against what "
+        "the narration says happened; counts and times within the same reply; deals, orders and plans already made or "
+        "cancelled. Score by what it does to the player: anything that would change what the player decides, or makes "
+        "a plan impossible (a travel time, a deadline, a count of enemies), is at least 3. Give the problem's topics: "
+        "count (how many people or things), time (clock, dates, days passed, ages, how long ago), distance (how far, "
+        "travel time), place (where things are, directions), deeds (who did or said what), items (who has what, money, "
+        "gear, deals), identity (names, roles, relationships, backstory, looks), status (alive, wounded, bound, where "
+        "someone is now), mechanics (hit points, dice, spells, rules); one or two.")
+    SCHEMA2 = json.loads(json.dumps(SCHEMA5))
+    item = SCHEMA2["properties"]["problems"]["items"]
+    item["properties"] |= {"earlier_quote": {"type": "string"},
+                           "earlier_where": {"type": "string", "enum": ["notebook", "earlier play", "same reply"]},
+                           "topics": {"type": "array", "items": {"type": "string", "enum": TOPICS}}}
+    item["required"] += ["earlier_quote", "earlier_where", "topics"]
+
+
+def norm(s: str) -> str:
+    return " ".join(s.replace("’", "'").replace("‘", "'").replace("“", '"').replace("”", '"')
+                    .replace("*", "").split()).lower()
+
+
+def found(p: dict, text: str) -> bool:
+    """The earlier line is really there: in the reply for 'same reply', otherwise before it."""
+    before, _, reply = text.rpartition("\nNEW REPLY\n")
+    return norm(p["earlier_quote"]) in norm(reply if p["earlier_where"] == "same reply" else before)
 
 
 def ask(case: dict) -> dict:
     try:
+        st = base.state(case["game"], case["round"])
         r = client.messages.create(
-            model=MODEL, max_tokens=4000, system=SYSTEM2 if MODE2 else SYSTEM,
+            model=MODEL, max_tokens=6000, system=SYSTEM2 if MODE2 else SYSTEM,
             output_config={"effort": "low", "format": {"type": "json_schema", "schema": SCHEMA2 if MODE2 else SCHEMA}},
-            messages=[{"role": "user", "content": base.state(case["game"], case["round"])}])
+            messages=[{"role": "user", "content": st}])
         text = next(b.text for b in r.content if b.type == "text")
         got = json.loads(text)
+        if QUOTE:
+            for p in got["problems"]:
+                p["found"] = found(p, st)
         if MODE2:
             got["severity"] = max((x["severity"] for x in got["problems"]), default=0)
             got["contradiction"] = got["severity"] >= 2
