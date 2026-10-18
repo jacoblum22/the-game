@@ -302,3 +302,8 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   (35% less; the notebook entries and the reply stay). Leave-one-out per topic: caught 71 of 105, flagged 19 of 60
   (10 turns: 62 and 14); flat 3+: 44 and 5 (10 turns: 42 and 7). No worse, so 5 turns. About $0.025 a check.
 - Cut at 60k keeping 5 turns (was 200k and 20; b049d52). New 15-round test game bard3 to see both changes from turn 1.
+- bard3, a new 15-round game with both changes: the reply first and its bookkeeping in the same call in 5 of 15
+  rounds (1 call each). In 10 of 15 the DM made the bookkeeping first and then wrote only a closing line ("What does
+  Pip do?"), a stub, so the game asked for the full reply: one more query each. The order cost more, not less, when
+  the DM got it wrong. After a roll it never wrote the reply first. No cut: the conversation grew about 3k a round
+  (19k to 58k), so 60k is reached near round 16; the cut is untested.

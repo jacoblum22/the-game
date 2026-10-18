@@ -844,8 +844,8 @@ async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) 
 # and recall are unchanged; what was looked up before the cut is looked up again when it's needed.
 # Cut at 60k (Jake, 2026-10-18; was 200k and 20 turns): every model call reads the whole conversation again, and
 # contradictions did not grow with its length (0.20 a round in rounds 1-20, 0.21 in 61-180). A conversation starts at
-# about 14k (instructions and sheets), the summary is about 9k and a turn adds about 9k, so 5 turns kept word for word
-# start the next one near 30k, and it is cut every 3 or 4 turns.
+# about 14k (instructions and sheets) and the summary is about 9k; outside fights a round adds about 3k (19k to 58k in
+# the 15 rounds of bard3), so 5 turns kept word for word start the next one near 30k, cut again some 10 rounds later.
 CUT_AT = 60_000
 KEEP = 5
 
