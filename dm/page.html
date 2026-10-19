@@ -449,7 +449,7 @@ function sheetCard(raw) {
     return m ? `<details class="feat"><summary>${esc(m[1])}</summary><div>${esc(m[2])}</div></details>` : `<div class="item">${esc(f)}</div>`;
   }).join("");
   const gear = (kv.Money ? row("Money", esc(take("Money"))) : "") + (kv.Items ? `<div class="item">${esc(take("Items"))}</div>` : "");
-  const about = ["Alignment", "Personality", "Traits", "Ideal", "Bond", "Flaw", "Appearance"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
+  const about = ["Alignment", "Personality", "Traits", "Ideal", "Bond", "Flaw", "Appearance", "Backstory"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
   const prof2 = ["Languages", "Proficiencies"].filter(k => kv[k]).map(k => row(k, esc(take(k)))).join("");
   const more = Object.entries(kv).map(([k, x]) => row(k, esc(x))).join("") + loose.map(l => `<div class="item">${esc(l)}</div>`).join("");
   const fightOn = fight.length && fight[0] !== "No fight is on.";

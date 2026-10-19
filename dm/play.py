@@ -1403,7 +1403,8 @@ class Session:
 
 def sheet_report(game: Game) -> str:
     """What /sheet shows: the PC's part as before (the web page lays it out as one card); companions after it."""
-    return (sheet_text(game.sheet) + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
+    past = " ".join(str(game.sheet.get("backstory") or "").split())  # one line: the sheet card reads "Name: text" lines
+    return (sheet_text(game.sheet) + (f"\nBackstory: {past}" if past else "") + "\n" + m.clock_text(game.clock) + "\n" + m.status(game.sheet) + "\n"
             + m.fight_text(game.fight, game.sheet, game.companions)
             + "".join(f"\n\nCompanion {sheet_text(c)}\n{m.status(c)}" for c in game.companions))
 

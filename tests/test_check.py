@@ -209,3 +209,12 @@ def test_character_creation_opens_with_fixed_words_and_no_model_call(monkeypatch
     first = first if isinstance(first, str) else first[0]["text"]
     assert play.GREETING in first and first.endswith("[The player]\nA human paladin")
     assert len(fake.calls) == 1 and s.creation.greeting is None
+
+
+def test_sheet_shows_the_backstory(tmp_path: Path) -> None:
+    g = new_game(tmp_path)
+    assert "Backstory" not in play.sheet_report(g)
+    g.sheet = g.sheet | {"backstory": "Born in Karrowmere.\n\nRaised by monks."}
+    r = play.sheet_report(g)
+    assert "\nBackstory: Born in Karrowmere. Raised by monks.\n" in r
+    assert "Backstory" not in play.sheet_text(g.sheet)  # the DM's instructions show the past once, in its own section
