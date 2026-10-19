@@ -428,3 +428,8 @@ with the same analysis after each block and a detailed report in evals/autoloop/
 - replay.py: a round that opens a new conversation (the first after a cut) has nothing before it to branch from,
   and crashed (arena2 round 23). It now starts a new conversation with the summaries written before that round, as
   the game did; checked on arena2 round 23: the opening it builds matches the game's first message word for word.
+- The DM's context after a cut (arena2 round 23, counted with count_tokens; the parts sum to 33.4k, the session file
+  says 33.7k): tools 9.8k (creature_turns 2.8k, change_pc 2.3k, write_lore 1.2k), prompt.md 5.2k, the three sheets
+  7.3k (mostly full feature text, some of it boilerplate: Sacred Oath, Oath Spells, Fighting Style's preamble, the
+  background feature), opening 0.7k, the summary 3.0k, the 5 turns word for word 5.8k, status and notes 1.4k.
+  Cost per call in arena2 ($0.029): cache reads 47% (46k tokens), cache writes 28% (2.2k), output 24% (470 tokens).
