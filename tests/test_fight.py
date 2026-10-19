@@ -386,3 +386,17 @@ def test_conditions_give_advantage(tmp_path: Path, monkeypatch: Any) -> None:
     g.sheet["conditions"] = ["prone"]
     out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": g.sheet["name"]}]}]})
     assert "disadvantage: Goblin 1 poisoned" in out and "advantage: Brakka Ironvein prone" in out and "a miss" in out
+
+
+def test_relentless_endurance_at_once(tmp_path: Path, monkeypatch: Any) -> None:
+    """A half-orc dropped to 0 goes to 1 HP at once, so the next attack still finds them up; healing that wakes a
+    character also takes the 'unconscious' the same change removes."""
+    g = game(tmp_path, monkeypatch, "fighter", [19, 6, 19, 1], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12)])
+    pc = g.sheet["name"]
+    g.sheet["hp"]["current"] = 5
+    g.sheet["resources"]["Relentless Endurance"] = {"max": 1, "left": 1, "recharge": "long"}
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": pc}]},
+                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": pc}]}]})
+    assert "Relentless Endurance: at 1 HP instead of 0" in out and g.sheet["hp"]["current"] == 0
+    assert "unconscious" in g.sheet["conditions"]  # the second hit (3) drops them again, with no use left
+    assert "conscious again" in g.change_party_member({"heal": 2, "conditions_removed": ["unconscious"]})

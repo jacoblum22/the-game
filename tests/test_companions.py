@@ -172,9 +172,7 @@ def test_uses_marks_and_reminds(tmp_path) -> None:
     before = len(g.transcript)
     assert "no combatant named" in call(t, "roll", dice="1d20", reason="x", uses="reaction", by="Goblin")[0]
     assert len(g.transcript) == before + 1 and g.transcript[-1]["kind"] == "refused"  # nothing rolled
-    text, err = call(t, "change_pc", damage=2, uses="reaction", by="pc")
-    assert "no combatant named" in text  # by: the name as in the tracker
-    text, err = call(t, "change_pc", damage=2, uses="reaction", by=g.sheet["name"])
+    text, err = call(t, "change_pc", damage=2, uses="reaction", by="pc")  # "pc" for the PC, as in creature_turns
     assert not err and "until the start of its next turn" in text and "AC" in g.status()
     call(t, "next_turn")
     assert "reaction used" not in g.status() and "action used" in g.status()  # the PC's turn: its reaction is back

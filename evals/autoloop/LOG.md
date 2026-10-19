@@ -401,3 +401,11 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   disadvantage from conditions (SRD): the attacker blinded, poisoned, prone or restrained (disadvantage), invisible
   (advantage); the target blinded, paralyzed, petrified, restrained, stunned or unconscious (advantage), prone
   (advantage in melee within 5 feet, else disadvantage), invisible (disadvantage). Opportunity attacks too. 315 tests.
+- Arena test game (Jake: more combat, a higher level, companions, an arena): 35 rounds, 26 in fights, about $2.55.
+  The character-creation DM refused the level 5 and companions ("only level 1") and its opening told the DM so: the
+  PC fought alone at level 1. Fight starts 4.4 calls ($0.12), other fight rounds 4.1 calls ($0.07), other rounds
+  1.9 ($0.05). Seven refusals in 26 fight rounds, no stops.
+- Fixes from it: Relentless Endurance taken at once when a half-orc drops to 0 (the DM had applied it after the
+  turns, so the next attacks were skipped as "no longer up"); conditions_removed of unconscious or stable with the
+  healing that ended them is no longer refused; `by: "pc"` in uses, as in creature_turns. arena2 brief: the player
+  asks for the level and companions once play starts. 316 tests.

@@ -336,6 +336,8 @@ class Game:
         nothing."""
         a = dict(a)
         what, by = a.pop("uses", None), a.pop("by", None)
+        if by and by.strip().casefold() == "pc":  # as add_combatants and creature_turns take it
+            by = self.sheet["name"]
 
         def go() -> str:
             if not what:

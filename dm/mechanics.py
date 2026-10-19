@@ -176,11 +176,18 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
                 if over >= hp["max"]:
                     _add(s, "dead")
                     out.append(f"massive damage: {over} left over ≥ max HP {hp['max']}: the character dies")
+                elif ((s.get("resources") or {}).get("Relentless Endurance") or {}).get("left", 0) > 0:
+                    # SRD half-orc: reduced to 0 HP but not killed outright, drop to 1 instead, once per long rest.
+                    # Taken at once (there's no reason to decline it), so the attacks that follow still see them up.
+                    s["resources"]["Relentless Endurance"]["left"] -= 1
+                    hp["current"] = 1
+                    out.append(f"Relentless Endurance: at 1 HP instead of 0 "
+                               f"({s['resources']['Relentless Endurance']['left']} use left until a long rest)")
                 else:
                     _add(s, "unconscious")
                     out.append("at 0 HP: unconscious; make death saving throws on each of their turns")
 
-    heal = _int("heal")
+    heal, woke = _int("heal"), False
     if heal:
         if "dead" in s["conditions"]:
             raise Refused("the character is dead; ordinary healing doesn't work. A spell or effect that returns the dead to life "
@@ -192,6 +199,7 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             s["death_saves"] = {"successes": 0, "failures": 0}
             _remove(s, "unconscious")
             _remove(s, "stable")
+            woke = True
             out.append("conscious again; death saves reset")
 
     for kind in ("successes", "failures"):
@@ -275,6 +283,8 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             s["death_saves"] = {"successes": 0, "failures": 0}
     for c in map(_cond, ch.get("conditions_removed") or []):
         if not _cond_in(s["conditions"], c):
+            if c in ("unconscious", "stable") and woke:
+                continue  # the healing in this same change already ended it
             raise Refused(f"condition {c!r} is not on the sheet; conditions now: {', '.join(s['conditions']) or 'none'}")
         _remove(s, c)
         if c == "dead":  # a revival starts fresh, so 3 old failures don't kill the character again on the next change

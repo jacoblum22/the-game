@@ -53,6 +53,21 @@ BRIEFS = {
     "fighter3": ("a human fighter who hunts monsters for coin",
                  "You play boldly: you take monster-hunting jobs, look for trouble, fight when it comes, and like to "
                  "travel with a companion or two, but you think about tactics in a fight and use your features."),
+    # Combat test (Jake, 2026-10-19): a higher level, companions, and an arena with fight after fight.
+    # arena2: the same, asked once play starts (in arena the character-creation DM said no, and told the DM so).
+    "arena2": ("a half-orc paladin",
+               "This game is a combat test. Don't bring it up while making your character. In your first line once "
+               "play starts, ask the DM out of character to give you the XP for level 5 and level you up, to give you "
+               "two companions (a rogue and a wizard) built to your level, and to put you in an arena where you fight "
+               "one battle after another, with short rests between. In fights you play boldly but smartly: you use "
+               "your spells, features and positioning, and direct your companions. Between fights keep it brief and "
+               "ask for the next one."),
+    "arena": ("a half-orc paladin",
+              "This game is a combat test. Once your character is made, ask the DM out of character to give you the XP "
+              "for level 5 and level you up, to give you two companions (a rogue and a wizard) built to your level, "
+              "and to put you in an arena where you fight one battle after another, with short rests between. In "
+              "fights you play boldly but smartly: you use your spells, features and positioning, and direct your "
+              "companions. Between fights keep it brief and ask for the next one."),
 }
 
 PLAYER = """You are a human player in a solo D&D 5e game (2014 rules) run by a DM. {style}
