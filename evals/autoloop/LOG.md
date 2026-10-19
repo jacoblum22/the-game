@@ -383,3 +383,5 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   use). 311 tests pass.
 - Replay with attack-level reactions (ab7 peratk-bard2, 2 fight starts x 2): no refusals, no stops; three bandits'
   attacks at Kit not made once Kit dropped (no or_targets given). Calls per round 6.5.
+- The barbarian2 game's DM spent Rage with use_resource every time in play and added a "Raging" condition; the
+  replay that only added a timer was a slip in one run. A "Raging" condition now counts as raging too.

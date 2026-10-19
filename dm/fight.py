@@ -100,7 +100,11 @@ def raging(s: dict[str, Any], clock: dict[str, Any]) -> bool:
     """A barbarian whose Rage timer is running (started when a Rage use is spent, or one the DM named for their rage,
     'Rage (Korvash)' in a replay), and who is conscious."""
     first = s["name"].split()[0].casefold()
-    if clock.get("now") is None or s["hp"]["current"] <= 0 or not any(f.startswith("Rage:") for f in s.get("features", [])):
+    if s["hp"]["current"] <= 0 or not any(f.startswith("Rage:") for f in s.get("features", [])):
+        return False
+    if "raging" in {c.casefold() for c in s.get("conditions", [])}:
+        return True  # the condition the barbarian2 game's DM added each time it spent Rage
+    if clock.get("now") is None:
         return False
     return any(end > clock["now"] for n, end in (clock.get("timers") or {}).items()
                if re.search(r"\brage\b", n, re.I) and first in n.casefold())
