@@ -111,6 +111,10 @@ def replace_text(content: Any, old: str, new: str) -> tuple[Any, bool]:
             b = {**b, "text": b["text"].replace(old, new)}
             if not b["text"].strip():
                 continue
+        elif (isinstance(b, dict) and b.get("type") == "tool_use" and str(b.get("name", "")).endswith("reply")
+              and old in str((b.get("input") or {}).get("text", ""))):  # the reply tool (dm/play.py)
+            hit = True
+            b = {**b, "input": {**b["input"], "text": b["input"]["text"].replace(old, new) or "(no reply)"}}
         elif isinstance(b, dict) and b.get("type") == "tool_result" and isinstance(b.get("content"), list):
             inner, h = replace_text(b["content"], old, new)
             if h:

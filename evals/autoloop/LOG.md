@@ -311,3 +311,13 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   too; a reply drafted in thinking isn't written) and the per-turn reminder to match. Replay of 6 bard3 rounds x 2:
   still 8 of 12 stubs (record calls first, then a closing line, then the game's ask for the full reply); 1 of 12 did it
   in one call. The prompt alone doesn't move the habit.
+- Cause found (order_bench.py; a minimal API bench of four tools and four lines of instructions): with nothing to roll,
+  Sonnet sent the reply and its record in one message 5 of 5; after a roll result, 0 of 5, with thinking on or off,
+  step-by-step instructions, or a note in the roll's result. Opus the same; Haiku 4 of 5. Its thinking shows it
+  drafting the reply, making the record calls, then writing the closing text alone: once working through tool
+  results, the text that ends its turn comes last, in its own message. Not the prompt's length, history or Claude Code.
+- Fix: the reply is a tool (`reply`), sent with the record calls as calls together; text outside it is never shown, a
+  second reply is refused, and a reply by the tool is whole however short (no stub ask). Prompt and reminder say so.
+  Minimal bench 10 of 10 in one message; full prompt on the API from a fresh conversation 13 of 14 (was 0 of 8);
+  Claude Code replay of 6 bard3 rounds x 2, mid-game with the old habit behind it: 12 of 12, all after a roll, no stubs,
+  replies 1,026 to 1,503 characters. 290 tests pass. The reply now comes whole, not word by word.

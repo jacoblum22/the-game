@@ -456,6 +456,34 @@ def test_bookkeeping_with_the_reply_ends_the_turn(monkeypatch: Any, tmp_path: Pa
     assert g.messages[2]["content"][-1]["text"].endswith("I look around")  # joins the tool results
 
 
+def test_reply_tool_with_its_record_ends_the_turn(monkeypatch: Any, tmp_path: Path) -> None:
+    """After a roll: the reply as a call, with the record, in one message; text outside it is never shown, and even
+    a short reply is the reply."""
+    g = new_game(tmp_path)
+    g.clock, _ = play.m.change_time(g.clock, {"set": {"day": 1, "time": "17:50"}})
+    fake, said = run(monkeypatch, [
+        reply(use("t0", "roll", dice="1d20+5", reason="Athletics"), stop="tool_use"),
+        reply(text("Here it is:"), use("t1", "change_time", advance={"minutes": 7}),
+              use("t2", "reply", text="You make it. What now?"), stop="tool_use"),
+    ], g, "I climb")
+    assert len(fake.calls) == 2
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["You make it. What now?"]
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Here it is:"]
+    assert any("You make it." in s for s in said)
+
+
+def test_second_reply_refused(monkeypatch: Any, tmp_path: Path) -> None:
+    """A reply after the reply is refused, and the first one stands."""
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [
+        reply(use("t1", "reply", text="First."), use("t2", "lore", names=["Nobody"]), stop="tool_use"),
+        reply(use("t3", "reply", text="Second."), stop="tool_use"),
+        reply(text("ok")),
+    ], g, "I go on")
+    assert g.messages[4]["content"][0].get("is_error")
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["First."]
+
+
 def test_bookkeeping_error_goes_back(monkeypatch: Any, tmp_path: Path) -> None:
     """A bookkeeping call that fails goes back to the DM; its words after that are not shown."""
     g = new_game(tmp_path)

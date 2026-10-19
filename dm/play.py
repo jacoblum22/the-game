@@ -108,6 +108,8 @@ class Game:
         self.new_rolled: list[int] | None = data.get("new_rolled")  # a new PC's rolled scores, until it's made
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
+        self.replied = False  # this turn: the reply came through the reply tool
+        self.on_reply: Callable[[str], None] = lambda t: None  # turn(): the reply tool's text, as the DM's reply
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
@@ -656,9 +658,26 @@ class Game:
             return self.run("recall", lambda: notebook.recall(self.lore, self.transcript, a.get("search"), a.get("turn"),
                                                               a.get("page") or 1), hidden=True, inp=a)
 
+        @tool("reply", "Your reply to the player: the whole of it, written out in full. The player sees only what you "
+              "send here, never text you write outside it, and never your thinking. Send it once a turn, in your last "
+              "message, together with the calls that record it.",
+              {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]})
+        async def reply(a: dict[str, Any]) -> dict[str, Any]:
+            t = (a.get("text") or "").strip()
+            if not t:
+                return {"content": [{"type": "text", "text": "REFUSED, nothing shown: the reply is empty."}], "is_error": True}
+            if self.replied or self.reply_len >= FULL_REPLY:
+                return {"content": [{"type": "text", "text": "REFUSED, nothing shown: " + LATE}], "is_error": True}
+            self.on_reply(t)
+            return {"content": [{"type": "text", "text": "shown to the player"}]}
+
         return [self.after_reply(t) for t in (
             roll, change_pc, change_party, new_pc, roll_ability_scores, srd_options, level_up_options, level_up, add_combatants, change_creature,
-            next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)]
+            next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
+
+    def written(self) -> bool:
+        """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
+        return self.replied or self.reply_len >= FULL_REPLY
 
     def after_reply(self, t: Tool) -> Tool:
         """A tool called after the DM has written a full reply (owner, 2026-10-14): the call still counts, but a roll
@@ -666,7 +685,7 @@ class Game:
         had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice.
         Bookkeeping with the reply is how a turn should end (owner, 2026-10-18), so it gets no warning."""
         async def handler(a: dict[str, Any]) -> dict[str, Any]:
-            if self.reply_len < FULL_REPLY:
+            if not self.written():
                 return await t.handler(a)
             self.late = True
             if t.name == "roll":
@@ -680,8 +699,8 @@ class Game:
 
     def one_step(self, names: list[str]) -> bool:
         """After one model call's tools ran without an error: the turn is over if the reply is written and they were
-        all bookkeeping (model.respond done, sdk.Client)."""
-        return self.reply_len >= FULL_REPLY and all(n in BOOKKEEPING for n in names)
+        all bookkeeping or the reply itself (model.respond done, sdk.Client)."""
+        return self.written() and all(n in BOOKKEEPING or n == "reply" for n in names)
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -730,8 +749,8 @@ RULES_REMINDER = (
     "[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a "
     "spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD "
     "text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups "
-    "first; then one last message: your whole reply, written out, then the clock, notebook and sheet calls after it in "
-    "that same message, never before it.")
+    "first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet "
+    "calls that record it.")
 
 
 # The DM's reply is held until its turn is over (owner, 2026-10-14). A reply under FULL_REPLY characters after tool
@@ -745,13 +764,18 @@ LATE = ("Your reply has already gone to the player as written; nothing you write
 # ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
 # of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
 BOOKKEEPING = {"change_time", "write_lore", "change_pc", "change_party", "change_creature"}
+# The reply is a tool (Jake, 2026-10-18). After a tool result (a roll), Sonnet and Opus sent the record calls first and
+# the reply after them in a call of its own, whatever the instructions said: in a bench of four tools and four lines
+# of instructions on the API, 0 of 5 with thinking on or off, and with a note in the roll's result; Haiku 4 of 5.
+# Once they are working through tool results, the text that ends their turn comes last, alone. Several calls in one
+# message they send reliably: with the reply as a call, 10 of 10 sent it with its record in one message.
 STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing has been shown to the player yet. '
-            "Write your full reply to their last message now; it replaces that line.")
+            "Send your full reply to their last message now with `reply`; it replaces that line.")
 # A turn can stop before the reply is written (autoloop, 2026-10-16): a fight run on while the PC lay unconscious used
 # up the 40 model calls of a reply, and the player saw only dice and tracker lines (2 of 180 rounds). The DM is asked
 # once for the reply.
 CUT_SHORT_ASK = ("[Not from the player] Your turn stopped before you wrote your reply ({}). The player has seen only "
-                 "the game's lines since their last message. Write your full reply to it now.")
+                 "the game's lines since their last message. Send your full reply to it now with `reply`.")
 
 
 async def turn(game: Game | Creation, text: str) -> None:
@@ -773,8 +797,16 @@ async def turn(game: Game | Creation, text: str) -> None:
             held.append(t)
             game.reply_len += len(t)
             mark[0] = len(game.transcript)
+
+    def replied(t: str) -> None:  # the reply tool: the whole reply; text written outside it is never shown
+        if held:
+            game.log("stub", "\n\n".join(held))
+            held.clear()
+        held.append(t)
+        game.replied, game.late = True, True
+        mark[0] = len(game.transcript)
     if isinstance(game, Game):
-        game.reply_len, game.late = 0, False
+        game.reply_len, game.late, game.replied, game.on_reply = 0, False, False, replied
         # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
         # again (owner, 2026-10-13), and the owner's version reconnects to carry them. The whole conversation is then
         # read at full price once.
@@ -795,14 +827,14 @@ async def turn(game: Game | Creation, text: str) -> None:
         tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
         if failed:
             game.log("failed", failed)  # kept in the save, never shown
-        if failed and tools and game.reply_len < FULL_REPLY:
+        if failed and tools and not game.written():
             if held:
                 game.log("stub", "\n\n".join(held))
             held[:], game.reply_len = [], 0
             failed = await ask(game, CUT_SHORT_ASK.format(failed), said)
             if failed:
                 game.log("failed", failed)
-        elif not failed and tools and game.reply_len < FULL_REPLY:
+        elif not failed and tools and not game.written():
             stub = "\n\n".join(held)
             game.log("stub", stub)  # kept in the save, never shown
             held[:], game.reply_len = [], 0
@@ -898,6 +930,8 @@ async def cut(game: Game) -> None:
     if end < 0:
         return
     parts: list[str] = []
+    game.reply_len, game.late, game.replied = 0, False, False
+    game.on_reply = lambda t: (parts.append(t), setattr(game, "replied", True))  # the summary may come as a reply
     failed = await ask(game, SUMMARY_ASK.format(first=end + 1, last=last, end=end), parts.append)
     summary = "\n\n".join(parts).strip()
     if failed or not summary:
