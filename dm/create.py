@@ -464,7 +464,7 @@ def build(ch: dict[str, Any], rolled: list[int] | None = None, levels: list[dict
                             f"(costs: {POINT_COST})")
         elif method == "rolled":
             if not rolled:
-                errs.append("base_scores: no scores have been rolled yet; use roll_ability_scores")
+                errs.append("base_scores: no scores have been rolled yet; roll them first (roll_ability_scores; for a new PC in play, new_pc with roll_scores)")
             elif sorted(vals) != sorted(rolled):
                 errs.append(f"base_scores: must use the rolled scores {sorted(rolled, reverse=True)}, one each")
         elif method not in ("standard_array", "point_buy", "rolled"):
@@ -1412,7 +1412,7 @@ def _grant_name(g: dict[str, Any]) -> str:
 
 METHODS = (f"Ability scores, three ways (from the Player's Handbook; the SRD has no method): "
            f"standard_array = {STANDARD_ARRAY}, one each; point_buy = scores 8-15 bought with {POINTS} points, "
-           f"costs {POINT_COST}; rolled = 4d6 drop the lowest, six times (roll_ability_scores, once). "
+           f"costs {POINT_COST}; rolled = 4d6 drop the lowest, six times (roll_ability_scores, or new_pc roll_scores for a new PC in play; once). "
            "Racial increases come on top.")
 
 

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import functools
 import json
 import os
 import re
@@ -367,29 +368,25 @@ class Game:
             return self.run("dice", self.using(a, lambda a: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"),
                                                                                   a["reason"])))
 
-        @tool("change_pc", "Record a change to the sheet of the player character, or of a companion (who). Pass only the "
-              "fields that change. A rest is the whole party's: pass it without who; it rests every companion too and "
-              "moves the clock once. "
-              "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned. "
-              "A long rest needs the PC at 1 HP or more and only one long rest counts per 24 hours (the tool checks both, "
-              "the second by the clock); hit dice are spent at the end of a short rest, one per call.",
+        @tool("change_pc", "Change the PC's sheet, or a companion's (who): only the fields that change; all or nothing. "
+              "A rest is the whole party's (no who) and moves the clock; a long rest needs the PC at 1 HP or more, once "
+              "per 24 hours. Hit dice are spent after a short rest, one per call.",
               {"type": "object", "properties": {
                   "who": _WHO,
                   "damage": _INT, "heal": _INT, "temp_hp": _INT,
-                  "critical_hit": {"type": "boolean", "description": "the damage is from a critical hit (any hit on an unconscious "
-                                   "PC from within 5 feet is one): at 0 HP that is two death save failures instead of one"},
+                  "critical_hit": {"type": "boolean", "description": "damage from a critical hit (at 0 HP: two death "
+                                   "save failures)"},
                   "hit_dice_spent": {"type": "integer", "minimum": 0,
-                                     "description": "1 = spend one hit die at the end of a short rest; the result says what to roll, "
-                                     "then pass the total as heal. The player decides after each roll whether to spend another"},
+                                     "description": "1 after a short rest: the result says what to roll; pass the "
+                                     "total as heal. The player decides on each further die"},
                   # how many to add (owner, 2026-10-14): the DM had passed the new total, and a second failure made three
                   "death_save_successes": {**_INT, "description": "how many to add, not the new total: 1 for a successful "
                                            "death saving throw"},
                   "death_save_failures": {**_INT, "description": "how many to add, not the new total: 1 for a failed death "
                                           "saving throw, 2 for a natural 1. Damage at 0 HP adds its own failures"},
-                  "cast": {"type": "string", "description": "a spell the character casts, e.g. Bless. One call does it all: "
-                           "it spends the slot (level), moves the clock on by a casting time of minutes or hours, starts a "
-                           "timer for the spell's duration at that level (the clock must be set), and starts concentration "
-                           "if the spell needs it. Can go with other fields, not a rest"},
+                  "cast": {"type": "string", "description": "a spell cast, e.g. Bless: spends the slot (level), moves "
+                           "the clock by a casting time of minutes or more, starts its duration timer and any "
+                           "concentration. Not with a rest"},
                   "level": {"type": "integer", "minimum": 1, "maximum": 9, "description": "with cast: the spell slot "
                             "level used (the spell's level or higher); leave out for a cantrip or a ritual"},
                   "ritual": {"type": "boolean", "description": "with cast: cast as a ritual (no slot; 10 minutes "
@@ -447,21 +444,25 @@ class Game:
 
         @tool("new_pc", "Only after the PC has died, if the player wants to go on in this world with a new character: "
               "the world, notebook, clock and companions carry on. Make it with the player as character creation does: "
-              "race, class, ability scores (standard_array, point_buy, or rolled with roll_ability_scores), the class's "
+              "race, class, ability scores (standard_array, point_buy, or rolled: roll_scores true, alone, once), the class's "
               "and race's choices, equipment, spells, then name, personality and their past; srd_options gives the "
               "ids. character: the full set of level-1 choices, in the form change_party's add takes. Without "
               "confirm, the sheet is built and shown to you, and nothing changes: show it to the player and ask for a "
               "yes. Then call again with the same character, confirm true, and opening: a paragraph on where they "
               "are, why, and how they come into the story. They start at level 1.",
               {"type": "object", "properties": {"character": {"type": "object"}, "confirm": {"type": "boolean"},
-                                                "opening": {"type": "string"}}, "required": ["character"]})
+                                                "opening": {"type": "string"},
+                                                "roll_scores": {"type": "boolean", "description": "4d6 drop the "
+                                                                "lowest, six times, for the player to place"}}})
         async def new_pc(a: dict[str, Any]) -> dict[str, Any]:
+            if a.get("roll_scores"):  # was its own tool (roll_ability_scores) until 2026-10-19: fewer tool descriptions
+                if set(a) - {"roll_scores"}:
+                    return self.run("new character", lambda: (_ for _ in ()).throw(m.Refused(
+                        "roll_scores goes alone: roll first, then send the character")))
+                return self.run("dice", self.roll_new_scores)
+            if not a.get("character"):
+                return self.run("new character", lambda: (_ for _ in ()).throw(m.Refused("character: the full set of choices")))
             return self.run("new character", lambda: self.new_pc(a), hidden=not a.get("confirm"), inp=a)
-
-        @tool("roll_ability_scores", "Only for a new PC after a death (new_pc), if the player wants to roll: 4d6, drop "
-              "the lowest, six times. Once per character; the player sees every die.", {"type": "object", "properties": {}})
-        async def roll_ability_scores(a: dict[str, Any]) -> dict[str, Any]:
-            return self.run("dice", self.roll_new_scores)
 
         @tool("srd_options", "What the SRD offers, for building a companion or a new PC. No arguments: every race, class and the "
               "background. race only: that race in full. class only: that class in full. race and class: every choice "
@@ -606,32 +607,20 @@ class Game:
                     f"{self.fight['pending']['name']}'s turn is stopped: finish it with creature_turns resume")))
             return self.run("fight", self.advance_turn)  # (logged as "fight: ...")
 
-        @tool("creature_turns", "Run creatures' and companions' turns: you decide what each one does, and the code "
-              "rolls each attack against the target's AC and, on a hit, its damage (doubled dice on a critical hit, and "
-              "on a melee hit on a paralyzed or unconscious target), from the creature's stat block or the companion's "
-              "sheet, applies the target's resistances, immunities and vulnerabilities (stat block; sheet features; "
-              "Rage while its timer runs, with rage damage), and applies the damage. Send every turn from the next one "
-              "up to the PC's, in initiative order; the code starts each of those turns (no next_turn); start the "
-              "PC's with next_turn. On the PC's turn, once the player has said what they do, send it first (name "
-              "pc: the attacks they said, with smite where they smite), then the turns after it up to the PC's "
-              "next; resolve anything else they do (a spell that isn't an attack roll, a check) with the other tools "
-              "first and send their turn with a note. Write the creatures' and companions' reactions where they happen: an opportunity "
-              "attack on the move that provokes it (leaves_reach_of), a companion's Shield, Uncanny Dodge and the like "
-              "on the attack they answer (reactions); none is taken that you don't write. The code takes Parry itself "
-              "when it turns a hit into a miss. It "
-              "rolls a party member's concentration save when they're damaged. What a hit does beyond the damage, "
-              "when its stat block spells out a save (prone, poisoned for a minute, half poison damage) or a grapple, "
-              "the code resolves too: the save rolled from the sheet, the condition and its timer applied. A target that has dropped by its "
-              "attack goes to the next of or_targets still up; with none, the attack isn't made; a creature at 0 HP "
-              "has no turn. It STOPS only where the PC can take a reaction (opportunity attack, Shield, Uncanny Dodge, "
-              "Cutting Words, Protection, Deflect Missiles, Hellish Rebuke: ask the player), where a hit does more "
-              "than damage in a way it can't resolve (a curse, a disease, an exception), where a creature has a reaction other than Parry, where a companion "
-              "at 0 HP has a turn (a death save), and where the order changed: resolve that, then call again with "
-              "resume, and the turns you sent go on from there. A creature needs its monster in the tracker "
-              "(add_combatants). Anything else a creature or companion does (a spell that isn't an attack roll, a "
-              "check, a special action) you resolve with next_turn and the other tools on its turn instead; so too "
-              "every turn while a party member has a readied action. The code doesn't know a creature's "
-              "concentration: roll its save when it's damaged.",
+        @tool("creature_turns", "Run turns in one call: you decide what each one does; the code rolls the attacks "
+              "(from the stat block or sheet; crits, and melee hits on the paralyzed or unconscious, double the dice), "
+              "applies resistances (stat block, sheet, Rage) and damage, concentration saves, and riders whose save the "
+              "stat block spells out (prone, poisoned, half poison damage, grapples). Send every turn from the next "
+              "one up to the PC's, in initiative order; the code starts them (no next_turn). On the PC's turn, once "
+              "the player has said it, send theirs first (pc: their attacks, smite where they smite; anything else "
+              "they do resolved with the other tools first), then the rest. Write reactions where they happen: an "
+              "opportunity attack on the move (leaves_reach_of), a companion's on the attack it answers (reactions); "
+              "none is taken unwritten, but Parry when it turns a hit into a miss. A dropped target goes to the next "
+              "of or_targets, else the attack isn't made. It STOPS for the PC's reactions (ask the player), a rider "
+              "it can't resolve, a creature's reaction other than Parry, a companion's death save and a changed "
+              "order: resolve it, then call with resume and the turns go on. Spells without an attack roll, checks, "
+              "special actions and readied actions: next_turn and the other tools. Roll a creature's own "
+              "concentration saves.",
               {"type": "object", "properties": {
                   "turns": {"type": "array", "items": {"type": "object", "properties": {
                       "name": {"type": "string", "description": "the creature or companion, exactly as in the tracker (pc for the PC, first, on their turn)"},
@@ -810,7 +799,7 @@ class Game:
             return {"content": [{"type": "text", "text": "shown to the player"}]}
 
         return [self.after_reply(t) for t in (
-            roll, change_pc, change_party, new_pc, roll_ability_scores, srd_options, level_up_options, level_up, add_combatants, change_creature,
+            roll, change_pc, change_party, new_pc, srd_options, level_up_options, level_up, add_combatants, change_creature,
             next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
 
     def written(self) -> bool:
@@ -871,8 +860,33 @@ def sheet_text(s: dict[str, Any]) -> str:
             lines.append("Mystic Arcanum: " + ", ".join(f"level {lv}: {name}" for lv, name in sp["arcanum"].items()))
     if sp.get("racial_cantrips"):
         lines.append("Racial cantrips: " + ", ".join(sp["racial_cantrips"]))
-    lines += ["Features:", *(f"- {x}" for x in s["features"])]
+    lines += ["Features:", *(f"- {short_feature(x, s['features'])}" for x in s["features"])]
     return "\n".join(lines)
+
+
+@functools.cache
+def _boilerplate() -> tuple[frozenset[str], frozenset[str]]:
+    """Feature names whose SRD text only introduces a choice shown elsewhere on the sheet (a subclass; its spell list,
+    shown as always prepared), and the background features."""
+    choice = set()
+    for f in srd.table("Features").values():
+        d = " ".join(f.get("desc") or []) if isinstance(f.get("desc"), list) else str(f.get("desc") or "")
+        if re.search(r"Your choice grants you|^Each (oath|domain) has a list", d):
+            choice.add(f["name"].removesuffix(" feature"))
+    return frozenset(choice), frozenset((b.get("feature") or {}).get("name", "") for b in srd.table("Backgrounds").values()) - {""}
+
+
+def short_feature(text: str, features: list[str]) -> str:
+    """A sheet feature as the DM's instructions show it (Jake, 2026-10-19: a shorter opening, which is written again at
+    every cut): a choice's preamble and the background feature by name only, the rest in full."""
+    name = text.split(":")[0].strip()
+    choice, background = _boilerplate()
+    if re.sub(r"\s*\([^)]*\)$", "", name) in background:
+        return f"{name} (background feature: look it up before using it)"
+    if name in choice or ("Choose one of the following options" in text
+                          and any(x.startswith(f"{name}: ") for x in features if x != text)):
+        return f"{name} (the choice made is on the sheet)"
+    return text
 
 
 def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> str:
@@ -1017,7 +1031,10 @@ async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) 
 # contradictions did not grow with its length (0.20 a round in rounds 1-20, 0.21 in 61-180). A conversation starts at
 # about 14k (instructions and sheets) and the summary is about 9k; outside fights a round adds about 3k (19k to 58k in
 # the 15 rounds of bard3), so 5 turns kept word for word start the next one near 30k, cut again some 10 rounds later.
-CUT_AT = 60_000
+# Cut at 80k (Jake, 2026-10-19): with the fight tools a new conversation starts near 34k and a round adds about 4k,
+# so 60k cut every 6 rounds (arena2), and each cut costs about $0.19 (the summary, and the opening written to the
+# cache again). A rough model of reads against cuts puts the cheapest point near 80k.
+CUT_AT = 80_000
 KEEP = 5
 
 SUMMARY_ASK = (

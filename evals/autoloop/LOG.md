@@ -433,3 +433,8 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   7.3k (mostly full feature text, some of it boilerplate: Sacred Oath, Oath Spells, Fighting Style's preamble, the
   background feature), opening 0.7k, the summary 3.0k, the 5 turns word for word 5.8k, status and notes 1.4k.
   Cost per call in arena2 ($0.029): cache reads 47% (46k tokens), cache writes 28% (2.2k), output 24% (470 tokens).
+- Cut at 80k (Jake, no test needed) and the low-risk trims: a shorter creature_turns description, change_pc's
+  shortened, roll_ability_scores in play folded into new_pc (roll_scores), and on the sheets a subclass's preamble
+  (text with "Your choice grants you", Oath/Domain Spells), a fighting style's preamble and the background feature
+  by name only. Opening after a cut (arena2 round 23): 33.4k -> 31.7k (tools 9.8k -> 9.2k, sheets 7.3k -> 6.2k);
+  less than the 4-5k I'd estimated: most of the tools' size is their schemas. 319 tests.
