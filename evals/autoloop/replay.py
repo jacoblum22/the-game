@@ -43,14 +43,15 @@ def player_lines() -> list[tuple[int, str]]:
     return [(i, e["text"]) for i, e in enumerate(t) if e["kind"] == "player" and i >= META["play_starts"]]
 
 
-def fork_point(turn: int, line: str) -> tuple[str, str, str]:
-    """The Claude Code session holding this round's prompt, the entry to branch after, and the prompt."""
+def fork_point(turn: int, line: str) -> tuple[str, str | None, str]:
+    """The Claude Code session holding this round's prompt, the entry to branch after, and the prompt. The entry is
+    None when the prompt opens its session (the first round after a cut): there's nothing before it to branch."""
     for f in sorted(PROJECTS.glob("*.jsonl"), key=lambda p: p.stat().st_mtime, reverse=True)[:400]:
         entries = [json.loads(x) for x in open(f, encoding="utf-8")]
         for i, e in enumerate(entries):
             c = e.get("message", {}).get("content") if isinstance(e.get("message"), dict) else None
             if e.get("type") == "user" and isinstance(c, str) and f"[The player]\n{line}" in c:
-                return f.stem, next(x["uuid"] for x in reversed(entries[:i]) if x.get("uuid")), c
+                return f.stem, next((x["uuid"] for x in reversed(entries[:i]) if x.get("uuid")), None), c
     raise LookupError(f"no session has the line of turn {turn}")
 
 
@@ -70,6 +71,9 @@ def state(k: int) -> tuple[play.Game, str, str, str]:
                 g.lore, _ = notebook.write(g.lore, e["input"], notebook.now(g.transcript[:i]))
         day, hh, mm, ap = re.search(r"Time: Day (\d+), (\d+):(\d+)(?::\d+)? (AM|PM)", prompt).groups()
         g.clock, _ = m.change_time(m.new_clock(), {"set": {"day": int(day), "time": f"{int(hh) % 12 + (12 if ap == 'PM' else 0):02d}:{mm}"}})
+    if fork is None:  # a new conversation, as after the cut: it opens with the summaries written before this round
+        g.story = [s for s in g.story if s["turn"] + play.KEEP < turn]
+        session = None
     g.session_id = session
     return g, line, fork, session
 
@@ -80,7 +84,8 @@ async def once(k: int, n: int) -> dict:
     g.system = play.system_prompt(g.sheet, g.companions)
     c = sdk.Client(g.model, g.system, g.tools(), str(sdk.DM_HOME), session,
                    **({"done": g.one_step} if hasattr(g, "one_step") else {}))
-    c.options.resume_session_at, c.options.fork_session = fork, True
+    if fork:
+        c.options.resume_session_at, c.options.fork_session = fork, True
     c.client = ClaudeSDKClient(options=c.options)
     g.sdk = c
     g.log("player", line)

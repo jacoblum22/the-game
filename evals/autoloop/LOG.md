@@ -425,3 +425,6 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   (one run each). The DM sent the PC's turn first in 8 of 14 runs; at fight starts it still looked things up first
   (the habit is in the conversation it replays). Refusals: Channel Divinity's option as a resource name (2), a
   timer already there, a Fire Bolt not on the sheet, two attacks without Multiattack, the PC sent when not first.
+- replay.py: a round that opens a new conversation (the first after a cut) has nothing before it to branch from,
+  and crashed (arena2 round 23). It now starts a new conversation with the summaries written before that round, as
+  the game did; checked on arena2 round 23: the opening it builds matches the game's first message word for word.
