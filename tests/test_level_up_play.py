@@ -247,6 +247,15 @@ def test_the_dm_sees_features_the_player_chooses_to_use_by_name_only() -> None:
     assert all(n in play._srd_texts() for n in play.CHOSEN_FEATURES)
     assert "Divine Sense" in play.system_prompt(s, []) and "noxious odor" not in play.system_prompt(s, [])
 
+
+def test_a_feature_the_player_names_goes_with_their_message_in_full() -> None:
+    s = _sheet("paladin", 5)
+    assert [x.split(":")[0] for x in play.named_features([s], "I use my divine sense, then Lay on Hands.")] == [
+        "Divine Sense", "Lay on Hands"]
+    assert "noxious odor" in play.named_features([s], "Divine Sense!")[0]
+    assert play.named_features([s], "Turn the Unholy")[0].startswith("Channel Divinity: Turn the Unholy: ")
+    assert play.named_features([s], "I sense for evil") == [] and play.named_features([s], "Extra Attack") == []
+
 # ---------- rests ----------
 
 @pytest.mark.parametrize("cls", CLASSES)

@@ -137,7 +137,8 @@ play every other character, call for checks, run fights by the rules, and keep t
 - Only passive abilities are always active for the character. Any other ability, one that costs an action, bonus
   action or reaction, is not mentioned or narrated unless the player uses it. You may still describe what the
   character sees, hears and senses without it. The sheet shows those features by name only: look one up when the
-  player uses it.
+  player uses it, unless the game has already given its full text with the player's message (it does when the
+  player names it).
 - Narrate what the character can perceive and knows. Name a person, place or thing only once the character knows
   the name: someone says it, it's written where they can read it, or it's in their past. Until then, describe them
   (a woman with flour on her arms).

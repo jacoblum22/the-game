@@ -939,6 +939,23 @@ def short_feature(text: str, features: list[str], dm: bool = False) -> str:
     return text
 
 
+def named_features(sheets: list[dict[str, Any]], line: str) -> list[str]:
+    """The full sheet lines of the features shown to the DM by name only that the player's line names (Jake,
+    2026-10-19): sent with that turn, so the DM needn't spend a call looking one up. A name is the feature's, without
+    its stage ("Bardic Inspiration (d8)": Bardic Inspiration), or an option's own ("Channel Divinity: Turn Undead":
+    Turn Undead too); any case."""
+    out = []
+    for s in sheets:
+        for text in s.get("features", []):
+            for full in CHOSEN_FEATURES:
+                if not (text.startswith(f"{full}: ") and any(text.startswith(f"{full}: {d}") for d in _srd_texts().get(full, ()))):
+                    continue
+                base = re.sub(r"\s*\([^)]*\)$", "", full)
+                if any(re.search(rf"(?<!\w){re.escape(n)}(?!\w)", line, re.I) for n in {base, base.split(": ")[-1]}):
+                    out.append(f"{s['name']}'s {text}" if len(sheets) > 1 else text)
+    return out
+
+
 def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> str:
     return ((HERE / "prompt.md").read_text(encoding="utf-8")
             + "\n\n## The player's character\n" + sheet_text(sheet, dm=True)
@@ -1021,7 +1038,10 @@ async def turn(game: Game | Creation, text: str) -> None:
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         lore_before = copy.deepcopy(game.lore)  # what the continuity checker reads (dm/check.py)
-        text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
+        named = named_features([game.sheet, *game.companions], text)
+        features = ("[Features the player named, in full from the sheet]\n" + "\n".join(f"- {x}" for x in named)
+                    + "\n\n") if named else ""
+        text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{features}{text}"
         if (game.story or game.rebuild) and not (game.session_id if game.sdk else game.messages):
             text = so_far(game) + "\n\n" + text  # a new conversation after a cut, or a fork from before one
     start = len(game.transcript)
