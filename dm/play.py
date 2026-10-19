@@ -1132,6 +1132,16 @@ async def cut(game: Game) -> None:
     game.save()
 
 
+CREATION_GREETING = (
+    "Welcome, adventurer! Let's build your character.\n\n"
+    "First choice: race. The SRD offers Dwarf (Hill), Elf (High), Halfling (Lightfoot), Human, Dragonborn, Gnome (Rock), "
+    "Half-Elf, Half-Orc and Tiefling.\n\n"
+    "Then comes class: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or "
+    "Wizard.\n\n"
+    "Tell me what kind of hero you picture, such as a sturdy front-liner, a sneaky trickster or a spellcaster. Or name a "
+    "race and class you like. If you'd rather I make everything for you, say \"just make me something\".")
+
+
 class Creation:
     """The DM talks the player through making a level-1 character; create.py checks the choices and does the math."""
 
@@ -1281,7 +1291,9 @@ class Session:
             self.creation.model, self.creation.backend = self.model, self.backend
             await self.connect(self.creation)
             print("Character creation. Talk to the DM; /quit exits.")
-            await turn(self.creation, "[Start] Greet the player and begin making their character.")
+            print("\n" + CREATION_GREETING)  # the same words every time, so no model call (Jake, 2026-10-19)
+            self.creation.log("dm", CREATION_GREETING)
+            self.creation.save()
             return
         sheet = json.loads((HERE / "characters" / f"{character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
@@ -1316,7 +1328,10 @@ class Session:
             if line == "/quit":
                 await self.close()
                 return False
+            first = not any(e["kind"] == "player" for e in c.transcript)
             c.log("player", line)
+            if first:  # the DM's conversation starts with the greeting it never wrote
+                line = f"[You greeted the player with these words]\n{CREATION_GREETING}\n\n[The player's reply]\n{line}"
             await turn(c, line)
             if c.done:
                 assert c.draft
