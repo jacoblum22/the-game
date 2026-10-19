@@ -61,10 +61,58 @@ def inspiration_die(s: dict[str, Any]) -> int:
 def rider(desc: str) -> str:
     """What an attack does on a hit beyond the damage in its data, as the stat block says it ("" if nothing)."""
     hit = desc.split("Hit:", 1)[1] if "Hit:" in desc else ""
-    t = re.sub(r"\d+ \([^)]*\)( \w+)? damage", "", hit)
-    t = re.sub(r",? or [^.]*?(two hands|two-handed|at range)[^.]*\.?", "", t)
+    t = re.sub(r"\d+ \([^)]*\)( \w+)? damage|\b\d+ \w+ damage", "", hit)
+    # a choice the code makes by default (one-handed, not enlarged) or by itself (a swarm at half HP)
+    t = re.sub(r",? or [^.]*?(two hands|two-handed|at range|while enlarged|with shillelagh|if the swarm has half of its "
+               r"hit points or fewer)[^.]*\.?", "", t)
     t = re.sub(r"\b(plus|and|damage|in melee)\b", "", t)
     return hit.strip() if re.search(r"[A-Za-z]{3,}", t) else ""
+
+
+SIZES = ("Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan")
+_EFFECT = r"knocked prone|poisoned|frightened|blinded|deafened|paralyzed|stunned|charmed|restrained|incapacitated"
+
+
+def rider_plan(text: str) -> dict[str, Any] | None:
+    """A stat-block rider the code can resolve by itself (Jake, 2026-10-19), from its exact SRD wording: a save or a
+    condition (knocked prone; poisoned for 1 minute, repeating the save), a save for half of more damage (the poison
+    bites), a push or pull, or a grapple (escape DC, restrained). None for anything else (a curse, a disease, a
+    lowered maximum, an attachment): the DM rules on it."""
+    at = re.search(r"If the target|[Tt]he target (?:must|is)|[Ii]t must", text)
+    if not at or rider("Hit: " + text[:at.start()]):
+        return None
+    rest, plan = text[at.start():].strip(), {}
+    # what happens if the hit drops the target (the spiders' paralysis, the mouther's absorbing): for the DM, then
+    z = re.search(r" If the (?:\w+ damage reduces the target to 0 hit points|target is killed by this damage), [^.]+"
+                  r"(?:\.|$)", rest)
+    if z and z.end() >= len(rest) - 1:
+        plan["at_zero"], rest = z[0].strip(), rest[:z.start()]
+    x = re.match(r"If the target is (?:a creature(?: other than an undead or a construct)?|a (\w+) or smaller "
+                 r"creature|(\w+) or smaller), (?:it|the target) ", rest)
+    if x:
+        plan["size"], rest = x[1] or x[2], "it " + rest[x.end():]
+    elif rest.startswith("If"):
+        return None
+    x = re.fullmatch(rf"(?:it|[Tt]he target) must succeed on a DC (\d+) (\w+) saving throw or (?:be |become )?"
+                     rf"({_EFFECT}|pushed up to \d+ feet away from [^.]+|pulled up to \d+ feet toward [^.]+)"
+                     r"(?: for (\d+) (minute|hour)s?)?\.?( The target can repeat the saving throw at the end of each of "
+                     r"its turns, ending the effect on itself on a success\.?)?", rest)
+    if x:
+        effect = "prone" if x[3] == "knocked prone" else x[3]
+        return plan | {"kind": "save", "dc": int(x[1]), "ability": x[2], "effect": effect,
+                       "seconds": int(x[4]) * (60 if x[5] == "minute" else 3600) if x[4] else 0, "repeat": bool(x[6])}
+    x = (re.fullmatch(r"(?:it|[Tt]he target) must make a DC (\d+) (\w+) saving throw, taking \d+ \(([^)]+)\) (\w+) "
+                      r"damage on a failed save, or (half) as much damage on a successful one\.?", rest)
+         or re.fullmatch(r"(?:it|[Tt]he target) must succeed on a DC (\d+) (\w+) saving throw or take \d+ \(([^)]+)\) "
+                         r"(\w+) damage()\.?", rest))
+    if x and x[4].lower() in DAMAGE_TYPES:
+        return plan | {"kind": "half", "dc": int(x[1]), "ability": x[2], "dice": x[3].replace(" ", ""),
+                       "type": x[4].lower(), "on_save": "half" if x[5] else "none"}
+    x = re.fullmatch(r"(?:it|[Tt]he target) is grappled \(escape DC (\d+)\)\.?(?: Until this grapple ends, the "
+                     r"(?:target|creature) is restrained(?:, and ([^.]+))?\.?)?", rest)
+    if x:
+        return plan | {"kind": "grapple", "escape": int(x[1]), "restrained": "restrained" in rest, "note": x[2] or ""}
+    return None
 
 
 def crit_dice(expr: str) -> str:
@@ -210,7 +258,10 @@ def block_attack(block: dict[str, Any], who: str, name: str) -> dict[str, Any]:
         else:
             choice += [o["damage_dice"] + (f" ({o['notes']})" if o.get("notes") else
                                            f" {(o.get('damage_type') or {}).get('name', '')}") for o in opts]
+    half = re.search(r"or \d+ \((\d+d\d+(?: ?[+-] ?\d+)?)\) \w+ damage if the swarm has half of its hit points or fewer",
+                     atk["desc"])
     return {"name": atk["name"], "bonus": atk["attack_bonus"], "dmg": dmg, "choice": choice, "types": types,
+            "half_hp_dice": half[1].replace(" ", "") if half else None,
             "ranged": atk["desc"].startswith("Ranged"), "weapon": "Weapon Attack" in atk["desc"],
             "spell": "Spell Attack" in atk["desc"], "rider": rider(atk["desc"]),
             "fixed": [x for x, _ in dmg]}
@@ -699,7 +750,10 @@ class Turns:
                          "change_pc cast Hellish Rebuke, roll its save and damage, and change_creature")
         if p["stage"] == "rider":
             p["stage"] = "done"
-            if w["rider"]:
+            plan = rider_plan(w["rider"]) if w["rider"] else None
+            if plan and tm:
+                self.ride(c, w, target, plan, label)
+            elif w["rider"]:
                 p["why"] = f"{label}: what its hit does beyond the damage"
                 raise Stop(f"STOPPED: {c['name']}'s {w['name']} hit {target}, and on a hit its stat block says: "
                            f"\"{w['rider']}\" Only the damage was applied. Resolve the rest by the rules (roll any save "
@@ -797,6 +851,83 @@ class Turns:
                        "Then call creature_turns with resume (roll_change, halve_damage or damage_reduction if it "
                        "changes this attack): the turns you sent go on from here.")
 
+    # ---- riders ----
+    def ride(self, c: dict[str, Any], w: dict[str, Any], target: str, plan: dict[str, Any], label: str) -> None:
+        """Resolve a rider (rider_plan) on a party member: the save rolled from the sheet, the effect applied."""
+        s = self.member(target)
+        first, who = s["name"].split()[0], ({} if s is self.g.sheet else {"who": target})
+        if plan.get("size") and SIZES.index(s.get("size", "Medium")) > SIZES.index(plan["size"].capitalize()):
+            self.log(f"fight: {label}: {first} is too big for what follows ({plan['size']} or smaller only)")
+            return
+        if plan["kind"] == "grapple":
+            got = ["grappled"] + (["restrained"] if plan["restrained"] else [])
+            text = self.g.change_party_member({"conditions_added": got} | who)
+            self.log(f"sheet: {text}: grappled by {c['name']} (escape DC {plan['escape']})"
+                     + (f"; {plan['note']}" if plan["note"] else "") + f". Remove {'both' if plan['restrained'] else 'it'} when the grapple ends")
+            return
+        self.effect(c, w, target, s, plan, label)
+        if plan.get("at_zero") and self.hp(target) <= 0:
+            self.p["why"] = f"{label}: {first} dropped to 0 HP"
+            raise Stop(f"STOPPED: {label} dropped {target} to 0 HP, and its stat block says: \"{plan['at_zero']}\" "
+                       "Apply that, then call creature_turns with resume: the turns you sent go on from here.")
+
+    def effect(self, c: dict[str, Any], w: dict[str, Any], target: str, s: dict[str, Any], plan: dict[str, Any],
+               label: str) -> None:
+        first, who = s["name"].split()[0], ({} if s is self.g.sheet else {"who": target})
+        saved = self.save(s, plan["ability"], plan["dc"], label, about=plan.get("effect", "") + plan.get("type", ""))
+        if plan["kind"] == "half":
+            if saved and plan["on_save"] == "none":
+                return
+            r = m.roll(plan["dice"])
+            v = r["total"] // 2 if saved else r["total"]
+            self.log("dice " + m.roll_text(r, f"{label}: {plan['type']} damage" + (", halved" if saved else "")))
+            total = self.resist(target, w, {}, {plan["type"]: v})
+            text = self.g.change_party_member({"damage": total} | who)
+            self.log(f"sheet: {text}")
+            self.concentration(target, total)
+            return
+        if saved:
+            return
+        effect = plan["effect"]
+        if effect.startswith(("pushed", "pulled")):
+            self.log(f"fight: {first} is {effect}")
+            return
+        text = self.g.change_party_member({"conditions_added": [effect]} | who)
+        self.log(f"sheet: {text}")
+        self.concentration(target, 0)  # paralyzed or stunned (incapacitated) ends it
+        if plan["seconds"]:
+            timer = f"{first} {effect} ({c['name']}'s {w['name']})"
+            if self.g.clock["now"] is not None and timer not in self.g.clock["timers"]:
+                self.log("clock: " + self.g.change_time({"add_timer": {"name": timer, "seconds": plan["seconds"]}}))
+            if plan["repeat"]:
+                self.log(f"fight: {first} repeats the {plan['ability']} save (DC {plan['dc']}) at the end of each of "
+                         f"their turns: roll it then, and on a success remove {effect} and its timer")
+
+    def save(self, s: dict[str, Any], ability: str, dc: int, label: str, about: str = "") -> bool:
+        """A party member's saving throw, from the sheet: automatic failures (Strength and Dexterity while paralyzed,
+        stunned, unconscious or petrified), advantage from Rage (Strength), Danger Sense (Dexterity), Dwarven
+        Resilience (poison) and Brave (frightened), and Lucky's reroll of a 1."""
+        ab, first = ability[:3].upper(), s["name"].split()[0]
+        conds = {x.casefold() for x in s.get("conditions", [])}
+        names = {f.split(":")[0].strip() for f in s.get("features", [])}
+        if ab in ("STR", "DEX") and conds & {"paralyzed", "stunned", "unconscious", "petrified"}:
+            self.log(f"fight: {first} fails the {ability} save automatically ({', '.join(sorted(conds & {'paralyzed', 'stunned', 'unconscious', 'petrified'}))})")
+            return False
+        why = [n for n, ok in (("Rage", ab == "STR" and raging(s, self.g.clock)),
+                               ("Danger Sense", ab == "DEX" and "Danger Sense" in names and not conds & {"blinded", "deafened", "incapacitated"}),
+                               ("Dwarven Resilience", "poison" in about and "Dwarven Resilience" in names),
+                               ("Brave", "frightened" in about and "Brave" in names)) if ok]
+        mode = "advantage" if why else "normal"
+        r = m.roll(f"1d20{save_bonus(s, ab):+d}", mode)
+        if r["natural"] == 1 and "Lucky" in names:
+            self.log("dice " + m.roll_text(r, f"{first}'s {ability} save: a 1, rerolled (Lucky)"))
+            r = m.roll(f"1d20{save_bonus(s, ab):+d}", mode)
+        ok = r["total"] >= dc
+        self.log("dice " + m.roll_text(r, f"{first}'s {ability} save against {label} (DC {dc}"
+                                       + (f"; advantage: {', '.join(why)}" if why else "") + ")")
+                 + (": saved" if ok else ": failed"))
+        return ok
+
     # ---- damage ----
     def deal(self, c: dict[str, Any], w: dict[str, Any], x: dict[str, Any], target: str, crit: bool, ranged: bool,
              label: str, halve: bool, reduce: int, dodge: dict[str, Any] | None = None) -> tuple[int, str]:
@@ -810,6 +941,9 @@ class Turns:
             parts = [(expr, typ or (next(iter(w["types"])) if len(w["types"]) == 1 else None))]
         else:
             parts = list(w["dmg"])
+            e = self.entry(c["name"])
+            if w.get("half_hp_dice") and not attacker and e["hp"] * 2 <= (e.get("max_hp") or e["hp"]):
+                parts[0] = (w["half_hp_dice"], parts[0][1])  # SRD swarms: less damage at half its HP or fewer
         if x.get("extra_damage"):
             expr, typ = self.typed(x["extra_damage"])
             parts.append((expr, typ or parts[0][1]))
@@ -845,10 +979,11 @@ class Turns:
         (unconscious) or incapacitated it ends. The code rolls it, as the DM would."""
         s = self.member(who)
         on = s.get("concentration")
-        if not on or dmg <= 0:
+        down = s["hp"]["current"] <= 0 or bool(set(s.get("conditions", [])) & (m.incapacitating() | {"dead"}))
+        if not on or (dmg <= 0 and not down):
             return
         first = s["name"].split()[0]
-        if s["hp"]["current"] > 0 and not set(s.get("conditions", [])) & (m.incapacitating() | {"dead"}):
+        if not down:
             dc = max(10, dmg // 2)
             r = m.roll(f"1d20{save_bonus(s, 'CON'):+d}")
             held = r["total"] >= dc

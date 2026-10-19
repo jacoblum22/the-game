@@ -385,3 +385,11 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   attacks at Kit not made once Kit dropped (no or_targets given). Calls per round 6.5.
 - The barbarian2 game's DM spent Rage with use_resource every time in play and added a "Raging" condition; the
   replay that only added a timer was a slip in one run. A "Raging" condition now counts as raging too.
+- Riders resolved by the code (Jake approved): when a hit's extra effect is spelled out in the stat block's usual
+  wording, the code rolls the target's save from the sheet and applies it: knocked prone; a condition for a time
+  (a timer, and a note to repeat the save); a save for half (or no) extra poison damage, then resistances; a
+  grapple (grappled, restrained, the escape DC); "Medium or smaller" checked against the sheet's size. Saves count
+  automatic failures (STR/DEX while paralyzed, stunned, unconscious, petrified), advantage from Rage, Danger Sense,
+  Dwarven Resilience and Brave, and Lucky's reroll. "If the poison damage reduces the target to 0 hit points ..."
+  stops for the DM only if it does. Anything else (curses, diseases, exceptions like "other than an elf") still
+  stops. 45 of the SRD's 124 attack riders now resolve in code (was 0). Swarms roll their half-HP dice. 314 tests.

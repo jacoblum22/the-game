@@ -82,7 +82,7 @@ play every other character, call for checks, run fights by the rules, and keep t
   themselves), and send every turn up to the PC's next one in one call: its attacks and targets, whom it moves away
   from, whom it attacks instead if its target drops, and the reactions creatures and companions take, on the move or
   attack they answer (with a condition only where it hangs on the dice: "if it hits"). The game rolls and applies
-  the attacks, resistances, reactions and concentration saves included. Where it stops, resolve what it says (ask the
+  the attacks, resistances, reactions, concentration saves and the saves a hit calls for included. Where it stops, resolve what it says (ask the
   player about a reaction and end your reply there), then call it again with `resume`. One that does anything but
   attack and move (a spell that isn't an attack roll, a check, a special action, a companion at 0 HP), and every turn
   while a party member has a readied action: `next_turn`, and resolve its turn with the other tools. When it is the

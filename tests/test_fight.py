@@ -95,14 +95,6 @@ def test_no_stop_when_shield_cant_matter(tmp_path: Path, monkeypatch: Any) -> No
     assert "STOPPED" not in out and "critical hit" in out and g.sheet["hp"]["current"] == 8 - 7  # 2d6+2 = 2+3+2
 
 
-def test_rider_stops_after_the_damage(tmp_path: Path, monkeypatch: Any) -> None:
-    g = game(tmp_path, monkeypatch, "fighter", [19, 2, 2], [("Wolf", "Wolf", 15)])
-    out = turns(g, {"turns": [{"name": "Wolf", "attacks": [{"attack": "Bite", "target": g.sheet["name"]}]}]})
-    assert "STOPPED: Wolf's Bite hit" in out and "prone" in out and g.sheet["hp"]["current"] == 14 - 6
-    out = turns(g, {"resume": {}})
-    assert "pending" not in g.fight and "start it with next_turn" in out
-
-
 def test_opportunity_attack_stop(tmp_path: Path, monkeypatch: Any) -> None:
     g = game(tmp_path, monkeypatch, "fighter", [], [("Goblin 1", "Goblin", 15)])
     pc = g.sheet["name"]
@@ -328,3 +320,54 @@ def test_feature_timers(tmp_path: Path, monkeypatch: Any) -> None:
     assert fight.raging(g.sheet, g.clock) and g.sheet["resources"]["Rage"]["left"] == 1
     assert fight.feature_timer({"name": "Oak", "level": 5}, "Wild Shape") == ("Oak's Wild Shape", 2 * 3600)
     assert "torch" in g.change_time({"add_timer": {"name": "torch", "minutes": 60}})
+
+
+def test_rider_saves_rolled_by_the_code(tmp_path: Path, monkeypatch: Any) -> None:
+    """A rider with a save the stat block spells out is resolved by the code: the wolf's prone (a failed STR save), the
+    spider's poison (a dwarf saves with advantage, takes half, and resists it), a grapple and restrained."""
+    g = game(tmp_path, monkeypatch, "fighter", [19, 2, 2, 3], [("Wolf", "Wolf", 15)])
+    out = turns(g, {"turns": [{"name": "Wolf", "attacks": [{"attack": "Bite", "target": g.sheet["name"]}]}]})
+    assert "STOPPED" not in out and not g.dice.rolls and "prone" in g.sheet["conditions"] and ": failed" in out
+    g = game(tmp_path, monkeypatch, "fighter", [15, 4, 3, 12, 5, 5], [("Spider", "Giant Spider", 15)])
+    out = turns(g, {"turns": [{"name": "Spider", "attacks": [{"attack": "Bite", "target": g.sheet["name"]}]}]})
+    assert "STOPPED" not in out and not g.dice.rolls and "advantage: Dwarven Resilience" in out and ": saved" in out
+    assert g.sheet["hp"]["current"] == 14 - 7 - 2  # 10 poison, halved by the save, halved by resistance
+    g = game(tmp_path, monkeypatch, "fighter", [15, 3], [("Croc", "Crocodile", 15)])
+    out = turns(g, {"turns": [{"name": "Croc", "attacks": [{"attack": "Bite", "target": g.sheet["name"]}]}]})
+    assert "STOPPED" not in out and {"grappled", "restrained"} <= set(g.sheet["conditions"]) and "escape DC 12" in out
+
+
+def test_rider_condition_with_a_timer_and_a_size_limit(tmp_path: Path, monkeypatch: Any) -> None:
+    """Poisoned for 1 minute gets a timer and a note to repeat the save; a creature too big for a grapple isn't
+    grappled."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 2, 5], [("Gnome", "Deep Gnome (Svirfneblin)", 15)],
+             mates=[("wizard", 12)])
+    g.clock, _ = m.change_time(g.clock, {"set": {"day": 1, "time": "12:00"}})
+    out = turns(g, {"turns": [{"name": "Gnome", "attacks": [{"attack": "Poisoned Dart", "target": "Wren Fennimore"}]}]})
+    wiz = g.companions[0]
+    assert "STOPPED" not in out and "poisoned" in wiz["conditions"] and wiz["hp"]["current"] == 8 - 4
+    assert "Wren poisoned (Gnome's Poisoned Dart)" in g.clock["timers"] and "repeats the Constitution save" in out
+    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1, 1, 1], [("Rex", "Tyrannosaurus Rex", 15)])
+    g.sheet["size"] = "Large"
+    out = turns(g, {"turns": [{"name": "Rex", "attacks": [{"attack": "Bite", "target": g.sheet["name"]}]}]})
+    assert "too big" in out and "grappled" not in g.sheet["conditions"] and g.sheet["hp"]["current"] == 14 - 11
+
+
+def test_rider_the_code_cant_resolve_stops(tmp_path: Path, monkeypatch: Any) -> None:
+    """The ghoul's paralysis (not for elves) is the DM's; so is what the spider's poison does to a target it drops."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1], [("Ghoul", "Ghoul", 15)])
+    out = turns(g, {"turns": [{"name": "Ghoul", "attacks": [{"attack": "Claws", "target": g.sheet["name"]}]}]})
+    assert "STOPPED: Ghoul's Claws hit" in out and g.sheet["hp"]["current"] == 14 - 4
+    g = game(tmp_path, monkeypatch, "fighter", [15, 5, 2, 1, 1], [("Spider", "Giant Spider", 15)],
+             mates=[("wizard", 12)])
+    wiz = g.companions[0]
+    out = turns(g, {"turns": [{"name": "Spider", "attacks": [{"attack": "Bite", "target": wiz["name"]}]}]})
+    assert "dropped Wren Fennimore to 0 HP" in out and "stable but poisoned" in out
+    assert fight.rider("Melee Weapon Attack: +5 to hit. Hit: 1 piercing damage.") == ""
+
+
+def test_swarm_at_half_hp(tmp_path: Path, monkeypatch: Any) -> None:
+    g = game(tmp_path, monkeypatch, "fighter", [17, 4], [("Rats", "Swarm of Rats", 15)])
+    m._find(g.fight, "Rats")["hp"] = 3
+    out = turns(g, {"turns": [{"name": "Rats", "attacks": [{"attack": "Bites", "target": g.sheet["name"]}]}]})
+    assert "STOPPED" not in out and not g.dice.rolls and g.sheet["hp"]["current"] == 14 - 4
