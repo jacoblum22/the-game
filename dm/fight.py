@@ -106,8 +106,16 @@ def raging(s: dict[str, Any], clock: dict[str, Any]) -> bool:
                if re.search(r"\brage\b", n, re.I) and first in n.casefold())
 
 
-def rage_timer(s: dict[str, Any]) -> str:
-    return f"{s['name'].split()[0]}'s Rage"
+# Features whose use lasts a set time (SRD): spending the use (change_pc use_resource) starts its timer, as casting a
+# spell does, so the timer is never missed or misnamed (Jake, 2026-10-19: a replay's DM added "Rage (Korvash)" by hand
+# and never spent the use).
+FEATURE_TIMERS = {"Rage": lambda s: 60, "Wild Shape": lambda s: max(1, s.get("level", 1) // 2) * 3600}
+
+
+def feature_timer(s: dict[str, Any], resource: str) -> tuple[str, int] | None:
+    """The timer a feature's use starts: (name, seconds), or None."""
+    f = FEATURE_TIMERS.get(resource)
+    return (f"{s['name'].split()[0]}'s {resource}", f(s)) if f else None
 
 
 def rage_damage(s: dict[str, Any]) -> int:
@@ -224,10 +232,13 @@ class Stop(Exception):
     """The turns stop here: the player can take a reaction, or something needs the DM. The message says what to do."""
 
 
-# The reactions a companion takes by itself when they're triggered, if the DM's call says it does (Jake, 2026-10-19:
-# the call already decides what everyone but the player does, so it decides their reactions too). Hellish Rebuke
-# (a save and damage of its own) isn't among them: a companion doesn't take it here.
+# The reactions a companion can take during these turns, written by the DM on the attack that triggers them (Jake,
+# 2026-10-19: the call already decides what everyone but the player does, attack by attack, so it decides their
+# reactions there too, with a condition only where it hangs on a roll the DM can't see yet). Hellish Rebuke (a save
+# and damage of its own) isn't among them. An opportunity attack is written on the move (leaves_reach_of).
 TAKE = ("Shield", "Uncanny Dodge", "Deflect Missiles", "Protection", "Cutting Words")
+_OWN = ("Shield", "Uncanny Dodge", "Deflect Missiles")  # taken by the one attacked
+_AFTER_DAMAGE = ("Uncanny Dodge", "Deflect Missiles")  # may wait for the damage: min_damage
 
 
 def save_bonus(s: dict[str, Any], ability: str) -> int:
@@ -250,7 +261,6 @@ class Turns:
         self.p: dict[str, Any] | None = None  # the turn being played; kept in the tracker if it stops
         self.queue: list[dict[str, Any]] = []  # the turns sent after it, played on after a stop
         self.down: list[str] = []  # party members already at 0 HP when the turns were sent
-        self.react: dict[str, dict[str, Any]] = {}  # the reactions the DM said creatures and companions take
 
     # ---- who's who ----
     def party(self) -> dict[str, dict[str, Any]]:
@@ -298,9 +308,10 @@ class Turns:
             return False
         return not self.conditions(who) & (m.incapacitating() | {"dead", "unconscious"})
 
-    def takes(self, who: str, reaction: str) -> bool:
-        """A companion the DM's call says takes `reaction`, and who can now."""
-        return who != self.pc() and reaction in self.react.get(who, {}).get("take", []) and self.can(who, reaction)
+    def declared(self, x: dict[str, Any], who: str, reaction: str) -> dict[str, Any] | None:
+        """The reaction the call wrote on attack x for companion `who`, if they can take it now."""
+        r = next((r for r in x.get("reactions") or [] if r["by"] == who and r["reaction"] == reaction), None)
+        return r if r and who != self.pc() and self.can(who, reaction) else None
 
     def used_reaction(self, who: str) -> None:
         self.g.fight, _ = m.use(self.g.fight, "reaction", who)
@@ -325,23 +336,39 @@ class Turns:
         s = self.member(c["name"])
         return sheet_attack(s, name) if s else block_attack(self.stat_block(c), c["name"], name)
 
-    def check_reactions(self, r: dict[str, Any] | None) -> dict[str, dict[str, Any]]:
-        out = {}
-        for name, v in (r or {}).items():
-            c = self.entry(self.name_of(name))
-            if c["pc"]:
-                raise m.Refused("reactions: the PC's reactions are the player's: leave the PC out (the turns stop to "
-                                "ask the player)")
-            v = dict(v or {})
-            if v.get("take") and not self.member(c["name"]):
-                raise m.Refused(f"reactions: take is for companions ({c['name']} is a creature: give its "
-                                "opportunity_attack; Parry the code takes itself)")
-            if (bad := [x for x in v.get("take") or [] if x not in TAKE]):
-                raise m.Refused(f"reactions {c['name']}: take is some of {', '.join(TAKE)}, not {', '.join(bad)}")
-            if v.get("opportunity_attack"):
-                v["opportunity_attack"] = self.weapon(c, v["opportunity_attack"])["name"]
-            out[c["name"]] = v
-        return out
+    def check_reactions(self, x: dict[str, Any]) -> None:
+        """The companions' reactions written on attack x: who, which, and min_damage where it waits for the damage."""
+        out = []
+        for r in x.get("reactions") or []:
+            by, what = self.name_of(r.get("by")), r.get("reaction")
+            if by == self.pc():
+                raise m.Refused("reactions: the PC's are the player's: leave them out (the turns stop to ask)")
+            if not self.member(by):
+                raise m.Refused(f"reactions: {by} isn't a companion (a creature's Parry the code takes itself)")
+            if what not in TAKE:
+                raise m.Refused(f"reactions: reaction is one of {', '.join(TAKE)}")
+            if what in _OWN and by != x["target"]:
+                raise m.Refused(f"reactions: {what} is taken by the one attacked ({x['target']}), not {by}")
+            if what == "Protection" and by == x["target"]:
+                raise m.Refused("reactions: Protection is for someone else being attacked")
+            md = r.get("min_damage")
+            if md is not None and (what not in _AFTER_DAMAGE or not isinstance(md, int) or md < 1):
+                raise m.Refused("reactions: min_damage (a whole number) is only for " + " and ".join(_AFTER_DAMAGE))
+            out.append({"by": by, "reaction": what} | ({"min_damage": md} if md else {}))
+        x["reactions"] = out
+
+    def check_leaves(self, t: dict[str, Any]) -> None:
+        """leaves_reach_of: a name, or {name, opportunity_attack} for one who makes an opportunity attack."""
+        out = []
+        for w in t.get("leaves_reach_of") or []:
+            name, oa = (self.name_of(w.get("name")), w.get("opportunity_attack")) if isinstance(w, dict) else \
+                (self.name_of(w), None)
+            e = self.entry(name)
+            if oa and e["pc"]:
+                raise m.Refused("leaves_reach_of: the PC's opportunity attack is the player's: leave out "
+                                "opportunity_attack (the turns stop to ask)")
+            out.append({"name": name, "opportunity_attack": self.weapon(e, oa)["name"] if oa else None})
+        t["leaves_reach_of"] = out
 
     def check(self, t: dict[str, Any]) -> None:
         """A turn as sent, before anything is rolled: refused whole if any part is impossible."""
@@ -364,7 +391,7 @@ class Turns:
             raise m.Refused(f"{c['name']} is at 0 HP: it has no turn (remove it with change_creature if it's out)")
         elif len(attacks) > 1 and not any(x["name"] == "Multiattack" for x in self.stat_block(c).get("actions", [])):
             raise m.Refused(f"{c['name']} has no Multiattack: one attack with its action")
-        t["leaves_reach_of"] = [self.name_of(w) for w in t.get("leaves_reach_of") or []]
+        self.check_leaves(t)
         for x in attacks:
             w = self.weapon(c, x.get("attack", ""))
             if s and w["spell"] and len(attacks) > 1:
@@ -373,6 +400,7 @@ class Turns:
             x["or_targets"] = [self.name_of(v) for v in x.get("or_targets") or []]
             for v in [x["target"], *x["or_targets"]]:
                 self.entry(v)
+            self.check_reactions(x)
             if x.get("mode", "normal") not in ("normal", "advantage", "disadvantage"):
                 raise m.Refused("mode: normal, advantage or disadvantage")
             if x.get("target_resists") and x["target_resists"] not in RESIST_KINDS:
@@ -387,8 +415,6 @@ class Turns:
             for k in ("damage", "extra_damage"):
                 if x.get(k):
                     m.roll(self.typed(x[k])[0], rng=_Low())  # readable (no real dice spent)
-        for w in t.get("leaves_reach_of") or []:
-            self.entry(w)
 
     @staticmethod
     def typed(expr: str) -> tuple[str, str | None]:
@@ -429,15 +455,12 @@ class Turns:
         try:
             if pend:
                 self.p = self.g.fight.pop("pending")
-                kept = self.p.pop("reactions", {})
-                self.react = self.check_reactions(self.a["reactions"]) if "reactions" in self.a else kept
                 self.queue, self.down = turns or self.p.pop("queue", []), self.p.pop("down", [])
                 if turns:
                     self.down = [w for w, s in self.party().items() if s["hp"]["current"] <= 0]
                 if self.p.get("turn"):
                     self.go(self.a.get("resume") or {})
             else:
-                self.react = self.check_reactions(self.a.get("reactions"))
                 self.queue = list(turns)
                 self.down = [w for w, s in self.party().items() if s["hp"]["current"] <= 0]
             k = 0
@@ -475,7 +498,7 @@ class Turns:
                 if nxt["pc"] or nxt.get("companion"):
                     self.lines.append(f"Next is {nxt['name']}'s turn: start it with next_turn.")
         except Stop as e:
-            self.g.fight["pending"] = self.p | {"queue": self.queue, "down": self.down, "reactions": self.react}
+            self.g.fight["pending"] = self.p | {"queue": self.queue, "down": self.down}
             self.lines.append(str(e))
         except (m.Refused, srd.Bad):
             self.g.sheet, self.g.companions, self.g.fight, self.g.clock = before
@@ -536,7 +559,7 @@ class Turns:
                 x["target"] = tgt
             self.attack(c, x, resume)
             resume = {}
-            p.update(attack=p["attack"] + 1, stage="start", roll=None, halve=False, reduce=0, mode=None)
+            p.update(attack=p["attack"] + 1, stage="start", roll=None, halve=False, reduce=0, mode=None, dodge=None)
             if not self.in_fight(c["name"]):
                 return  # it's out of the fight
         used = self.entry(c["name"]).get("used", [])
@@ -553,9 +576,10 @@ class Turns:
 
     def leave(self, t: dict[str, Any]) -> None:
         """Opportunity attacks as the mover leaves others' reach: the player's is asked; a companion's or a creature's
-        is made if the call's reactions give its opportunity_attack."""
+        is made where the call gives its opportunity_attack."""
         p = self.p
-        for w in t.get("leaves_reach_of") or []:
+        for item in t.get("leaves_reach_of") or []:
+            w, oa = item["name"], item.get("opportunity_attack")
             if w in p["left"]:
                 continue
             p["left"].append(w)
@@ -567,12 +591,11 @@ class Turns:
                     self.ask(w, "Opportunity Attack", f"{t['name']} leaves {w}'s reach.",
                              "roll the attack and its damage, and change_creature")
                 continue
-            oa = self.react.get(w, {}).get("opportunity_attack")
             if oa and self.can_react(w):
                 self.strike(w, oa, t["name"])
 
     def strike(self, by: str, attack: str, target: str) -> None:
-        """An opportunity attack, whole: roll, the target's reactions the call gives (or Parry), damage."""
+        """An opportunity attack, whole: roll, Parry for a creature, damage."""
         c, tm = self.entry(by), self.member(target)
         w = self.weapon(c, attack)
         label = f"{by}'s {w['name']} at {target} (an opportunity attack)"
@@ -589,16 +612,12 @@ class Turns:
         self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)})"))
         crit = roll["natural"] == 20
         hit = crit or (roll["natural"] != 1 and roll["total"] >= self.ac(target))
-        got: dict[str, Any] = {}
-        if hit and tm:
-            got = self.defend(target, roll, crit, w["ranged"], label)
-            hit = crit or roll["total"] >= self.ac(target)
-        elif hit and self.parry(target, w["ranged"], crit, roll, label):
+        if hit and not tm and self.parry(target, w["ranged"], crit, roll, label):
             hit = False
         if not hit:
             self.log(f"fight: {label}: a miss")
             return
-        self.deal(c, w, {}, target, crit, w["ranged"], label, got.get("halve", False), got.get("reduce", 0))
+        self.deal(c, w, {}, target, crit, w["ranged"], label, False, 0)
 
     def attack(self, c: dict[str, Any], x: dict[str, Any], resume: dict[str, Any]) -> None:
         """One attack, from the stage it stopped at: start, roll (after Protection), rolled (after Cutting Words), hit
@@ -613,7 +632,7 @@ class Turns:
         if p["stage"] == "start":
             p["stage"] = "roll"
             if tm and not by_party:
-                guard = next((v for v in self.party() if v != target and self.takes(v, "Protection")), None)
+                guard = next((v for v in self.party() if v != target and self.declared(x, v, "Protection")), None)
                 if guard:
                     self.used_reaction(guard)
                     p["mode"] = "disadvantage"
@@ -628,7 +647,7 @@ class Turns:
             self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)})"))
             resume = {}
             if not by_party:
-                self.cutting_words(c, target, label)
+                self.cutting_words(c, x, target, label)
         roll = p["roll"]
         if p["stage"] in ("rolled", "hit") and resume.get("roll_change"):  # Cutting Words, or a creature's reaction
             roll["total"] += int(resume["roll_change"])
@@ -643,7 +662,7 @@ class Turns:
                 return
             p["stage"] = "hit"
             if tm and target != self.pc():
-                p.update(self.defend(target, roll, crit, ranged, label))
+                p.update(self.defend(x, target, roll, crit, ranged, label))
             elif tm:
                 ask = {"Shield": (not crit and roll["total"] < self.ac(target) + 5,
                                   "change_pc cast Shield, with ac_set to the new AC"),
@@ -665,7 +684,7 @@ class Turns:
                 return
             total, text = self.deal(c, w, x, target, crit, ranged, label,
                                     bool(resume.get("halve_damage") or p.get("halve")),
-                                    int(resume.get("damage_reduction") or p.get("reduce") or 0))
+                                    int(resume.get("damage_reduction") or p.get("reduce") or 0), p.get("dodge"))
             p.update(stage="rebuke", dealt=total)
             resume = {}
         if p["stage"] == "rebuke":
@@ -683,11 +702,13 @@ class Turns:
                            "with roll), then call creature_turns with resume: the turns you sent go on from here.")
 
     # ---- reactions taken by the code ----
-    def defend(self, target: str, roll: dict[str, Any], crit: bool, ranged: bool, label: str) -> dict[str, Any]:
-        """A companion hit by an attack takes the reaction the call gives it: Shield if it turns the hit into a miss,
-        else Uncanny Dodge, else Deflect Missiles against a ranged attack. Returns halve / reduce for the damage."""
+    def defend(self, x: dict[str, Any], target: str, roll: dict[str, Any], crit: bool, ranged: bool,
+               label: str) -> dict[str, Any]:
+        """A companion hit by an attack takes the reaction the call wrote on it: Shield if it turns the hit into a miss,
+        else Uncanny Dodge, else Deflect Missiles against a ranged attack. Returns halve / reduce for the damage, or
+        dodge: the reaction to take once the damage is rolled, if it reaches min_damage."""
         ac = self.ac(target)
-        if not crit and roll["total"] < ac + 5 and self.takes(target, "Shield"):
+        if not crit and roll["total"] < ac + 5 and self.declared(x, target, "Shield"):
             s = self.member(target)
             lvl = min(int(k) for k, v in s["spell_slots"].items() if v.get("left", 0) > 0)
             try:
@@ -699,20 +720,25 @@ class Turns:
                 self.used_reaction(target)
                 self.log(f"sheet: {text} (their reaction; ac_reset at the start of their next turn)")
                 return {}
-        if self.takes(target, "Uncanny Dodge"):
-            self.used_reaction(target)
-            self.log(f"fight: {target} uses Uncanny Dodge (their reaction): the damage is halved")
-            return {"halve": True}
-        if ranged and self.takes(target, "Deflect Missiles"):
-            s = self.member(target)
-            dex = (s["scores"]["DEX"] - 10) // 2
-            r = m.roll(f"1d10{dex + s['level']:+d}")
-            self.used_reaction(target)
-            self.log("dice " + m.roll_text(r, f"{target}'s Deflect Missiles (their reaction): damage reduced by"))
-            return {"reduce": r["total"]}
+        for what in _AFTER_DAMAGE:
+            if (d := self.declared(x, target, what)) and (ranged or what == "Uncanny Dodge"):
+                if d.get("min_damage"):
+                    return {"dodge": d}
+                return self.dodge(target, what)
         return {}
 
-    def cutting_words(self, c: dict[str, Any], target: str, label: str) -> None:
+    def dodge(self, target: str, what: str) -> dict[str, Any]:
+        """Uncanny Dodge (the damage halved) or Deflect Missiles (reduced by 1d10 + DEX modifier + monk level)."""
+        self.used_reaction(target)
+        if what == "Uncanny Dodge":
+            self.log(f"fight: {target} uses Uncanny Dodge (their reaction): the damage is halved")
+            return {"halve": True}
+        s = self.member(target)
+        r = m.roll(f"1d10{(s['scores']['DEX'] - 10) // 2 + s['level']:+d}")
+        self.log("dice " + m.roll_text(r, f"{target}'s Deflect Missiles (their reaction): damage reduced by"))
+        return {"reduce": r["total"]}
+
+    def cutting_words(self, c: dict[str, Any], x: dict[str, Any], target: str, label: str) -> None:
         """A bard whose Cutting Words could turn this hit into a miss: a companion the call says takes it does; the
         player is asked."""
         p, roll, ac = self.p, self.p["roll"], self.ac(target)
@@ -726,7 +752,7 @@ class Turns:
                 self.ask(w, "Cutting Words", f"{c['name']}'s attack roll against {target} is {roll['total']}, a hit "
                          f"against AC {ac}.", "change_pc spending a Bardic Inspiration use; roll the die, and pass "
                          "resume {roll_change: minus the roll}")
-            if self.takes(w, "Cutting Words"):
+            if self.declared(x, w, "Cutting Words"):
                 text = self.g.change_party_member({"who": w, "use_resource": "Bardic Inspiration"})
                 r = m.roll(f"1d{inspiration_die(s)}")
                 self.used_reaction(w)
@@ -769,8 +795,9 @@ class Turns:
 
     # ---- damage ----
     def deal(self, c: dict[str, Any], w: dict[str, Any], x: dict[str, Any], target: str, crit: bool, ranged: bool,
-             label: str, halve: bool, reduce: int) -> tuple[int, str]:
-        """Roll a hit's damage, apply resistances, and apply it; a concentrating party member saves."""
+             label: str, halve: bool, reduce: int, dodge: dict[str, Any] | None = None) -> tuple[int, str]:
+        """Roll a hit's damage, apply resistances, and apply it; a concentrating party member saves. dodge: a
+        companion's Uncanny Dodge or Deflect Missiles, taken if the damage rolled reaches its min_damage."""
         tm, attacker = self.member(target), self.member(c["name"])
         if not ranged and not x.get("beyond_5ft") and self.conditions(target) & {"paralyzed", "unconscious"}:
             crit = True  # SRD: a hit on a paralyzed or unconscious creature from within 5 feet is a critical hit
@@ -790,6 +817,9 @@ class Turns:
             by_type[typ] = by_type.get(typ, 0) + max(0, r["total"])
             self.log("dice " + m.roll_text(r, f"{label}: damage" + (f" ({typ})" if typ else "")
                                            + (" (critical hit)" if crit else "")))
+        if dodge and sum(by_type.values()) >= dodge["min_damage"] and self.can(target, dodge["reaction"]):
+            got = self.dodge(target, dodge["reaction"])
+            halve, reduce = halve or got.get("halve", False), reduce + got.get("reduce", 0)
         if halve:
             by_type = {k: v // 2 for k, v in by_type.items()}
         for k in by_type:

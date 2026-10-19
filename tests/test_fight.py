@@ -258,35 +258,73 @@ def test_resistances_from_sheets_and_stat_blocks() -> None:
     assert fight.resisted(7, {"resistant", "vulnerable"}) == 6 and fight.resisted(7, {"immune"}) == 0
 
 
-def test_opportunity_attacks_the_call_gives(tmp_path: Path, monkeypatch: Any) -> None:
-    """The call says Goblin 1 takes opportunity attacks with its scimitar, and the companion with her rapier: the code
-    makes them as the other leaves its reach. Goblin 2, given none, makes none."""
+
+
+def test_opportunity_attacks_written_on_the_move(tmp_path: Path, monkeypatch: Any) -> None:
+    """The call writes Goblin 1's opportunity attack on the companion's move, and hers on Goblin 2's: the code makes
+    them. Goblin 2, given none on her move, makes none."""
     g = game(tmp_path, monkeypatch, "fighter", [15, 2, 17, 6], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 11)],
              mates=[("rogue", 12)])
     mate = g.companions[0]["name"]
-    out = turns(g, {"reactions": {"Goblin 1": {"opportunity_attack": "Scimitar"},
-                                  mate: {"opportunity_attack": "Rapier"}},
-                    "turns": [{"name": "Goblin 1", "note": "waits"},
-                              {"name": mate, "leaves_reach_of": ["Goblin 1", "Goblin 2"], "note": "runs"},
-                              {"name": "Goblin 2", "leaves_reach_of": [mate], "note": "chases"}]})
+    out = turns(g, {"turns": [
+        {"name": "Goblin 1", "note": "waits"},
+        {"name": mate, "leaves_reach_of": [{"name": "Goblin 1", "opportunity_attack": "Scimitar"}, "Goblin 2"],
+         "note": "runs"},
+        {"name": "Goblin 2", "leaves_reach_of": [{"name": mate, "opportunity_attack": "Rapier"}], "note": "chases"}]})
     assert "STOPPED" not in out and not g.dice.rolls
-    assert g.companions[0]["hp"]["current"] == 10 - 4 and m._find(g.fight, "Goblin 2")["hp"] == 7 - 9 + 2  # 0
+    assert g.companions[0]["hp"]["current"] == 10 - 4 and m._find(g.fight, "Goblin 2")["hp"] == 0
     assert "reaction" in m._find(g.fight, "Goblin 1")["used"] and "reaction" in m._find(g.fight, mate)["used"]
+    with pytest.raises(m.Refused, match="the PC's opportunity attack is the player's"):
+        turns(g, {"turns": [{"name": "Goblin 1", "leaves_reach_of": [{"name": "pc", "opportunity_attack": "Longsword"}]}]})
 
 
-def test_companion_reactions_and_concentration(tmp_path: Path, monkeypatch: Any) -> None:
-    """The companion wizard casts Shield when it turns a hit into a miss (the call says she does); hit later, she
-    saves for her concentration, rolled by the code."""
+def test_shield_written_on_an_attack_and_concentration(tmp_path: Path, monkeypatch: Any) -> None:
+    """The companion wizard casts Shield against Goblin 1's attack, where the call wrote it; Goblin 2's hit, with no
+    reaction written, lands, and the code rolls her concentration save."""
     g = game(tmp_path, monkeypatch, "fighter", [10, 18, 3, 4], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 14)],
              mates=[("wizard", 12)])
     wiz = g.companions[0]["name"]
     g.clock, _ = m.change_time(g.clock, {"set": {"day": 1, "time": "12:00"}})
     g.companions[0]["concentration"] = "Sleep"
-    out = turns(g, {"reactions": {wiz: {"take": ["Shield"]}},
-                    "turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": wiz}]},
-                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": wiz}]}]})
+    out = turns(g, {"turns": [
+        {"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": wiz,
+                                          "reactions": [{"by": wiz, "reaction": "Shield"}]}]},
+        {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": wiz}]}]})
     assert "STOPPED" not in out and g.companions[0]["ac_now"]["value"] == 16 and "now a miss against AC 16" in out
     assert g.companions[0]["spell_slots"]["1"]["left"] == 1 and g.companions[0]["hp"]["current"] == 8 - 5
     assert "concentration on Sleep (CON save, DC 10)" in out and "it's lost" in out and not g.companions[0].get("concentration")
-    with pytest.raises(m.Refused, match="the PC's reactions are the player's"):
-        turns(g, {"reactions": {"pc": {"take": ["Shield"]}}, "turns": [{"name": wiz, "note": "x"}]})
+    with pytest.raises(m.Refused, match="the PC's are the player's"):
+        turns(g, {"turns": [{"name": wiz, "note": "x"}, {"name": "Goblin 1", "attacks": [
+            {"attack": "Scimitar", "target": wiz, "reactions": [{"by": "pc", "reaction": "Protection"}]}]}]})
+    with pytest.raises(m.Refused, match="taken by the one attacked"):
+        turns(g, {"turns": [{"name": wiz, "note": "x"}, {"name": "Goblin 1", "attacks": [
+            {"attack": "Scimitar", "target": "pc", "reactions": [{"by": wiz, "reaction": "Shield"}]}]}]})
+
+
+def test_uncanny_dodge_only_on_a_big_hit(tmp_path: Path, monkeypatch: Any) -> None:
+    """Written on both goblins' attacks with min_damage 6: the first hit (3) lands whole, the second (8) is halved."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 15, 6], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 14)],
+             mates=[("rogue", 12)])
+    mate = g.companions[0]["name"]
+    g.companions[0]["features"].append("Uncanny Dodge: When an attacker that you can see hits you with an attack, you "
+                                       "can use your reaction to halve the attack's damage against you.")
+    dodge = [{"by": mate, "reaction": "Uncanny Dodge", "min_damage": 6}]
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": mate, "reactions": dodge}]},
+                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": mate, "reactions": dodge}]}]})
+    assert "STOPPED" not in out and not g.dice.rolls and out.count("Uncanny Dodge") == 1
+    assert g.companions[0]["hp"]["current"] == 10 - 3 - 4
+
+
+def test_feature_timers(tmp_path: Path, monkeypatch: Any) -> None:
+    """Spending Rage starts its timer; a timer added by hand for it is refused, so the use can't go unspent."""
+    g = game(tmp_path, monkeypatch, "fighter", [], [("Goblin 1", "Goblin", 15)])
+    g.sheet["features"].append("Rage: In battle, you fight with primal ferocity.")
+    g.sheet["resources"]["Rage"] = {"max": 2, "left": 2, "recharge": "long"}
+    g.clock, _ = m.change_time(g.clock, {"set": {"day": 1, "time": "12:00"}})
+    first = g.sheet["name"].split()[0]
+    with pytest.raises(m.Refused, match="use_resource 'Rage'"):
+        g.change_time({"add_timer": {"name": f"Rage ({first})", "minutes": 1}})
+    assert "1 minute" in g.change_party_member({"use_resource": "Rage"}) and f"{first}'s Rage" in g.clock["timers"]
+    assert fight.raging(g.sheet, g.clock) and g.sheet["resources"]["Rage"]["left"] == 1
+    assert fight.feature_timer({"name": "Oak", "level": 5}, "Wild Shape") == ("Oak's Wild Shape", 2 * 3600)
+    assert "torch" in g.change_time({"add_timer": {"name": "torch", "minutes": 60}})

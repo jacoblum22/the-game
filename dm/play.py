@@ -16,6 +16,7 @@ import argparse
 import asyncio
 import json
 import os
+import re
 import sys
 import time
 from collections.abc import Callable
@@ -165,13 +166,27 @@ class Game:
         if spell:  # a cast comes without a rest, so the clock is only the cast's
             self.clock = clock
         s = self.sheet if i is None else self.companions[i]
-        if a.get("use_resource") == "Rage" and self.clock["now"] is not None:
-            # Rage lasts 1 minute (SRD): its timer is how creature_turns knows the barbarian resists bludgeoning,
-            # piercing and slashing damage and adds rage damage (Jake, 2026-10-19)
-            timer = fight.rage_timer(s)
-            self.clock = {**self.clock, "timers": {**self.clock["timers"], timer: self.clock["now"] + 60}}
-            lines.append(f"timer {timer}: 1 minute (remove it with change_time if the rage ends early)")
+        if a.get("use_resource") and (ft := fight.feature_timer(s, a["use_resource"])) and self.clock["now"] is not None:
+            # Rage's timer is also how creature_turns knows the barbarian resists bludgeoning, piercing and slashing
+            # damage and adds rage damage (Jake, 2026-10-19)
+            timer, sec = ft
+            self.clock = {**self.clock, "timers": {**self.clock["timers"], timer: self.clock["now"] + sec}}
+            lines.append(f"timer {timer}: {m.span(sec)} (remove it with change_time if it ends early)")
         return "; ".join(lines)
+
+    def change_time(self, a: dict[str, Any]) -> str:
+        """change_time. A timer for a feature whose use starts its own (Rage, Wild Shape) is refused: spending the use
+        starts it, so the use is never left unspent (a replay, 2026-10-19)."""
+        name = str((a.get("add_timer") or {}).get("name", ""))
+        for s in [self.sheet, *self.companions]:
+            for res in s.get("resources", {}):
+                if fight.feature_timer(s, res) and re.search(rf"\b{re.escape(res)}\b", name, re.I) \
+                        and s["name"].split()[0].casefold() in name.casefold():
+                    raise m.Refused(f"{res}'s timer starts when its use is spent: change_pc use_resource {res!r}"
+                                    + ("" if s is self.sheet else f", who {s['name']!r}")
+                                    + " (it spends the use and starts the timer)")
+        self.clock, text = m.change_time(self.clock, a)
+        return text
 
     def _change_member(self, i: int | None, a: dict[str, Any]) -> str:
         rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
@@ -580,8 +595,10 @@ class Game:
               "sheet, applies the target's resistances, immunities and vulnerabilities (stat block; sheet features; "
               "Rage while its timer runs, with rage damage), and applies the damage. Send every turn from the next one "
               "up to the PC's, in initiative order; the code starts each of those turns (no next_turn); start the "
-              "PC's with next_turn. Decide the creatures' and companions' reactions in the same call (reactions): the "
-              "code takes them when they're triggered, and takes Parry itself when it turns a hit into a miss. It "
+              "PC's with next_turn. Write the creatures' and companions' reactions where they happen: an opportunity "
+              "attack on the move that provokes it (leaves_reach_of), a companion's Shield, Uncanny Dodge and the like "
+              "on the attack they answer (reactions); none is taken that you don't write. The code takes Parry itself "
+              "when it turns a hit into a miss. It "
               "rolls a party member's concentration save when they're damaged. A target that has dropped by its "
               "attack goes to the next of or_targets still up; with none, the attack isn't made; a creature at 0 HP "
               "has no turn. It STOPS only where the PC can take a reaction (opportunity attack, Shield, Uncanny Dodge, "
@@ -618,24 +635,30 @@ class Game:
                                              "description": "only to override the code, for the whole attack, when "
                                              "something it can't see changes the target's resistance: a spell or item "
                                              "(Protection from Energy), or normal for a magic or silvered weapon "
-                                             "against 'nonmagical' resistance"}},
+                                             "against 'nonmagical' resistance"},
+                          "reactions": {"type": "array", "description": "companions' reactions to this attack (not "
+                                        "the PC's: the player is asked): Shield (by the target, taken if it turns the "
+                                        "hit into a miss), Uncanny Dodge (by the target, on a hit), Deflect Missiles "
+                                        "(by the target, a ranged hit), Protection (by another, before the roll), "
+                                        "Cutting Words (taken if it turns the hit into a miss). min_damage, for Uncanny "
+                                        "Dodge or Deflect Missiles: only if the damage rolled is at least that",
+                                        "items": {"type": "object", "properties": {
+                                            "by": {"type": "string"},
+                                            "reaction": {"type": "string", "enum": list(fight.TAKE)},
+                                            "min_damage": _INT},
+                                            "required": ["by", "reaction"]}}},
                           "required": ["attack", "target"]}},
-                      "leaves_reach_of": {**_NAMES, "description": "those whose reach it leaves without Disengage, "
-                                          "before its attacks (after them with after_attacks)"},
+                      "leaves_reach_of": {"type": "array", "description": "those whose reach it leaves without "
+                                          "Disengage, before its attacks (after them with after_attacks): a name, or "
+                                          "{name, opportunity_attack: the attack they make at it} for a creature or "
+                                          "companion who takes the opportunity attack (the PC's is asked)",
+                                          "items": {"anyOf": [{"type": "string"}, {"type": "object", "properties": {
+                                              "name": {"type": "string"}, "opportunity_attack": {"type": "string"}},
+                                              "required": ["name"]}]}},
                       "after_attacks": {"type": "boolean"},
                       "note": {"type": "string", "description": "what else it does, for your notes (it moves to the "
                                "door, it Dodges)"}},
                       "required": ["name"]}},
-                  "reactions": {"type": "object", "description": "the reactions creatures and companions take during "
-                                "these turns, by name (not the PC's: the player is asked): {\"Goblin 1\": "
-                                "{\"opportunity_attack\": \"Scimitar\"}, \"Kit\": {\"opportunity_attack\": "
-                                "\"Longsword\", \"take\": [\"Shield\"]}}. opportunity_attack: the attack it makes when "
-                                "someone leaves its reach; take (companions): " + ", ".join(fight.TAKE) + ", each "
-                                "taken when triggered (Shield and Cutting Words only when they turn a hit into a "
-                                "miss). Without it, none is taken. Kept until the turns end.",
-                                "additionalProperties": {"type": "object", "properties": {
-                                    "opportunity_attack": {"type": "string"},
-                                    "take": {"type": "array", "items": {"type": "string", "enum": list(fight.TAKE)}}}}},
                   "resume": {"type": "object", "description": "after a STOP, once it's resolved: {} if nothing changes; "
                              "mode (Protection), roll_change (Cutting Words, minus the roll), halve_damage (Uncanny "
                              "Dodge), damage_reduction (Deflect Missiles), skip_rest (drop the rest of its attacks)",
@@ -676,10 +699,7 @@ class Game:
                                                                  **_span}, "required": ["name"]},
                   "remove_timer": {"type": "string", "description": "a timer's name, exactly as in the status"}}})
         async def change_time(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
-                self.clock, text = m.change_time(self.clock, a)
-                return text
-            return self.run("time", go)
+            return self.run("time", lambda: self.change_time(a))
 
         def record(a: dict[str, Any], text: str) -> None:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})

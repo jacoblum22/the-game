@@ -372,3 +372,14 @@ with the same analysis after each block and a detailed report in evals/autoloop/
 - Replay with the reactions change (ab7 react-bard2, bard2's 2 fight starts x 2): no refusals, no stops; a party
   member's concentration save rolled by the code and lost. Calls per round 6.8 (comp 9.3, turns2 7.8 on the same
   rounds; few rounds, noisy).
+- Reactions written where they happen, not as standing choices (Jake: the DM knows every move and attack it sends,
+  so it can write each reaction there; a condition only where it hangs on the dice). An opportunity attack goes on
+  the move (leaves_reach_of: {name, opportunity_attack}); a companion's Shield, Uncanny Dodge, Deflect Missiles,
+  Protection or Cutting Words on the attack it answers (attack.reactions: {by, reaction, min_damage}). Shield and
+  Cutting Words are taken only when they turn the hit into a miss; Uncanny Dodge and Deflect Missiles with
+  min_damage only when the damage rolled reaches it. The per-combatant `reactions` of the step before is gone.
+- Feature timers: spending a use of Rage or Wild Shape (change_pc use_resource) starts its timer, as a spell does;
+  change_time refuses a timer added by hand for one (the replay's DM had added "Rage (Korvash)" and never spent the
+  use). 311 tests pass.
+- Replay with attack-level reactions (ab7 peratk-bard2, 2 fight starts x 2): no refusals, no stops; three bandits'
+  attacks at Kit not made once Kit dropped (no or_targets given). Calls per round 6.5.
