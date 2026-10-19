@@ -416,3 +416,12 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   a fight round is now the PC's own turn: with Extra Attack the DM rolls attack, damage, attack, damage and applies
   them in 4-5 calls in a row, and rules lookups (3-4 at each fight start). Companions' spells that aren't attack
   rolls go through next_turn by hand.
+- The PC's turn in creature_turns (Jake: the player's turn in one call, and rules in one call; 64c27b3): on the PC's
+  turn, once the player has said it, the DM sends the PC's attacks first (smite: the slot level, spent and rolled
+  on a hit, +1d8 against undead and fiends), then the turns after it. add_combatants rolls initiative for anyone
+  without one (DEX; Jack of All Trades, Feral Instinct), takes HP (average) and AC from the stat block, and returns
+  Combat Step by Step and each new kind's stat block, so a fight starts without a lookup call. 319 tests.
+- Replay of 7 arena2 fight rounds x 2 (ab9; round 23 didn't replay): 5.7 calls a round, against 8.6 in the game
+  (one run each). The DM sent the PC's turn first in 8 of 14 runs; at fight starts it still looked things up first
+  (the habit is in the conversation it replays). Refusals: Channel Divinity's option as a resource name (2), a
+  timer already there, a Fire Bolt not on the sheet, two attacks without Multiattack, the PC sent when not first.
