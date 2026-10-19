@@ -1,0 +1,2231 @@
+[
+ {
+  "round": 87,
+  "run": 0,
+  "line": "\"Brann, keep working that brass ring with whatever oil you have, I'll come back for it.\" I leave the reliquary seated in the socket, drop down the trapdoor, and take the third step above the doorway just as the crate gives.\n\nAs the first pikemen crowd Kit's shield, I cast Faerie Fire at the doorway and the shingle beyond, outlining all of them in light so Kit's attacks have advantage, and call, \"Hit the lit ones, Kit, and tell me when you need Healing Word.\"",
+  "session": "b029d229-1d2a-4617-a5a4-004a88022821",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Combat Step by Step",
+     "kind": "rule"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Faerie Fire",
+     "kind": "spell"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Guard",
+     "kind": "monster"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Spy",
+     "kind": "monster"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's initiative (DEX +2, Jack of All Trades +1, exhaustion 1 disadvantage): 1d20+3 (disadvantage) = 1d20 [14, 5]→5 + 3 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's initiative (exhaustion 1 disadvantage): 1d20+2 (disadvantage) = 1d20 [12, 10]→10 + 2 = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guards' initiative (three pikemen, group roll): 1d20+1 = 1d20 [16] + 1 = 17",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's initiative: 1d20+2 = 1d20 [6] + 2 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Guard 1 (17), Guard 2 (17), Guard 3 (17), Kit (12), Wren Ashgrove (8), Sparrow (8). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 1. Guard 1 (initiative 17): HP 11/11, AC 16 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 1's Spear at Kit (AC 19): 1d20+3 = 1d20 [16] + 3 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 1's Spear at Kit: damage (piercing): 1d6+1 = 1d6 [6] + 1 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Kit: took 7 damage: HP 20 → 13",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Guard 1",
+     "note": "in the broken doorway"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 2. Guard 2 (initiative 17): HP 11/11, AC 16 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 2's Spear at Kit (AC 19): 1d20+3 = 1d20 [20] + 3 = 23 (natural 20)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 2's Spear at Kit: damage (piercing) (critical hit): 2d6+1 = 2d6 [5, 4] + 1 = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Kit: took 10 damage: HP 13 → 3",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Guard 2",
+     "note": "thrusts past Guard 1's shoulder"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 3. Guard 3 (initiative 17): HP 11/11, AC 16 Guard 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Guard 3",
+     "note": "waits behind them on the shingle"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Longsword at Guard 1 (AC 16): 1d20+5 = 1d20 [20] + 5 = 25 (natural 20)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Longsword at Guard 1: damage (slashing) (critical hit): 2d8+3 = 2d8 [6, 7] + 3 = 16",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 1 took 16: HP 11 → 0 (0 HP)",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Kit",
+     "note": "no Faerie Fire yet, Wren acts later"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 1 removed from the fight. Order: Guard 2 (17), Guard 3 (17), Kit (12), Wren Ashgrove (8), Sparrow (8)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "The Grey Cloak",
+     "add_to_description": "Day 10 ~7:30 AM: his party broke the north door of the Gullspit light. Fight began. Three hired pikemen (statted as Guards) plus Sparrow (statted as a Spy); the Grey Cloak himself stands back on the shingle and has not acted. One pikeman already dead to Kit."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated The Grey Cloak",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You drop down the trapdoor and take the third step above the doorway just as the salt-crate gives. Brann is left muttering at the brass ring above you, and the reliquary stays seated in the lamp's socket. The door bursts inward, and the fight begins before you can speak.\n\nCombat order: the pikemen, then Kit, then you, then Sparrow.\n\nThe first pikeman thrusts through the doorway and his spear finds Kit's shoulder for 7. The second drives his spear past his friend's shoulder with a natural 20, and the crit takes Kit down to 3 hit points. Kit grunts and answers with her own natural 20. The longsword takes the first pikeman through the chest and he drops across the threshold. She stands in the doorway with blood down her tabard, shield up, still on her feet.\n\nTwo pikemen are left, one in the doorway with his spear still out and one behind him on the shingle. Sparrow stands a few paces back, hands empty and smiling. The tall grey cloak hasn't moved at all, and watches from beside the longboat's prow.\n\nIt's your turn, on the third step above the door. You've two 1st-level slots and two Bardic Inspirations (Kit still holds the d6 you gave her). Kit is at 3 hit points. What does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 2,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Exhaustion 1"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 300,
+   "coins_cp": 7251,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 2,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Reliquary": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 2,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 791856
+  },
+  "clock": {
+   "now": 804516,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": {
+   "round": 1,
+   "turn": 3,
+   "order": [
+    {
+     "name": "Guard 2",
+     "initiative": 17,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 16,
+     "conditions": [],
+     "monster": "Guard",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Guard 3",
+     "initiative": 17,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 16,
+     "conditions": [],
+     "monster": "Guard",
+     "used": []
+    },
+    {
+     "name": "Kit",
+     "initiative": 12,
+     "pc": false,
+     "companion": true,
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Wren Ashgrove",
+     "initiative": 8,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Sparrow",
+     "initiative": 8,
+     "pc": false,
+     "hp": 27,
+     "max_hp": 27,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Spy"
+    }
+   ]
+  }
+ },
+ {
+  "round": 87,
+  "run": 1,
+  "line": "\"Brann, keep working that brass ring with whatever oil you have, I'll come back for it.\" I leave the reliquary seated in the socket, drop down the trapdoor, and take the third step above the doorway just as the crate gives.\n\nAs the first pikemen crowd Kit's shield, I cast Faerie Fire at the doorway and the shingle beyond, outlining all of them in light so Kit's attacks have advantage, and call, \"Hit the lit ones, Kit, and tell me when you need Healing Word.\"",
+  "session": "e6127d28-1020-4747-b2e3-22d8189f0092",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Combat Step by Step",
+     "kind": "rule"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Faerie Fire",
+     "kind": "spell"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Guard",
+     "kind": "monster"
+    }
+   },
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Spy",
+     "kind": "monster"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's initiative (Dex +2, Jack of All Trades +1; exhaustion 1 disadvantage): 1d20+3 (disadvantage) = 1d20 [11, 10]→10 + 3 = 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's initiative (exhaustion 1 disadvantage): 1d20+2 (disadvantage) = 1d20 [19, 9]→9 + 2 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Three guards' initiative (group roll): 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's initiative: 1d20+2 = 1d20 [15] + 2 = 17",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Sparrow (17), Wren Ashgrove (13), Kit (11), Guard 1 (11), Guard 2 (11), Guard 3 (11). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Sparrow. Sparrow (initiative 17): HP 27/27, AC 12 Sparrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Sparrow",
+     "note": "Stays behind the guards on the shingle, moves up to the broken door but cannot reach Kit past the crowding pikes; waits and watches the stair."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Wren casts Faerie Fire at level 1; timer Wren's Faerie Fire: 1 minute; level-1 spell slots: 1/3; concentrating on Faerie Fire (Wren Ashgrove has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 1 Dex save vs Faerie Fire DC 13: 1d20+1 = 1d20 [18] + 1 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 2 Dex save vs Faerie Fire DC 13: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 3 Dex save vs Faerie Fire DC 13: 1d20+1 = 1d20 [14] + 1 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow Dex save vs Faerie Fire DC 13: 1d20+2 = 1d20 [13] + 2 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Longsword at Guard 2 (AC 16): 1d20+5 (advantage) = 1d20 [2, 19]→19 + 5 = 24",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Longsword at Guard 2: damage (slashing): 1d8+3 = 1d8 [2] + 3 = 5",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 2 took 5: HP 11 → 6",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Kit",
+     "note": "Holds the doorway, attacks the lit guard with advantage."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 2 took 5: HP 6 → 1",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 2 healed 5: HP 1 → 6",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 1. Guard 1 (initiative 11): HP 11/11, AC 16 Guard 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 1's Spear at Kit (AC 19): 1d20+3 = 1d20 [8] + 3 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 1's Spear at Kit: a miss",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 2. Guard 2 (initiative 11): HP 6/11, AC 16 Guard 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Guard 2's Spear at Kit (AC 19): 1d20+3 = 1d20 [1] + 3 = 4 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Guard 2's Spear at Kit: a miss",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Guard 3. Guard 3 (initiative 11): HP 11/11, AC 16 Guard 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Guard 3",
+     "note": "Cannot reach past the crowded doorway; shoves forward and waits."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Sparrow. Sparrow (initiative 17): HP 27/27, AC 12 Sparrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's Hand Crossbow at Kit (AC 19): 1d20+4 = 1d20 [7] + 4 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Sparrow's Hand Crossbow at Kit: a miss",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Sparrow",
+     "note": "Fires over the guards' shoulders at the doorway."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "The Gullspit Light",
+     "add_to_description": "Day 10 ~7:30 AM: fight at the north door. Wren (on stair) cast Faerie Fire; only Guard 2 was lit. Kit holds the doorway with Bardic Inspiration (d6) unused. Grey Cloak stays back on the shingle; Sparrow fires a hand crossbow over the guards."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated The Gullspit Light",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "The crate gives with a crack of splintering wood, and you drop to the third step and fling out your hand. Faerie Fire blooms over the doorway and the shingle beyond. The luck is thin, though. Only one of the pikemen fails to dodge, a stocky man in a salt-stained jerkin. Blue light clings to him like paint, and the others and Sparrow slip free of it. You're concentrating on the spell now, and it has cost you a slot. You have one left.\n\nInitiative went Sparrow, you, Kit, then the guards. Sparrow hung back on the shingle and did nothing. Kit stepped into the broken doorway with her shield up and her sword out, and you called the target. She swung at the lit man with advantage and opened his arm to the bone. She still holds your Bardic Inspiration die, unspent. The guards' spear-thrusts rattled off her shield and chain, one spearman so clumsy he nearly speared his own boot. A third guard is jammed behind them and can't reach her. Sparrow lifted a hand crossbow over their shoulders and put a bolt into the doorframe a hand from her ear.\n\nBehind them, a few paces off on the shingle, the tall grey-cloaked figure stands quite still. He hasn't drawn anything, and he's watching the stair, and you.\n\nIt's round 2 and your turn. You're on the third step with 17 hit points, one spell slot left, Bardic Inspiration at two uses, and the lamp-staff in your hand. Kit is unhurt. The lit guard is badly hurt and every attack on him has advantage.\n\nWhat does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 17,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 2
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 2,
+     "recharge": "long"
+    }
+   },
+   "conditions": [
+    "Exhaustion 1"
+   ],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 300,
+   "coins_cp": 7251,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 2,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Reliquary": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 1,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 791856,
+   "concentration": "Faerie Fire"
+  },
+  "clock": {
+   "now": 804522,
+   "timers": {
+    "Wren's Disguise Self": 799056,
+    "Wren's Faerie Fire": 804576
+   }
+  },
+  "fight": {
+   "round": 2,
+   "turn": 1,
+   "order": [
+    {
+     "name": "Sparrow",
+     "initiative": 17,
+     "pc": false,
+     "hp": 27,
+     "max_hp": 27,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Spy",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Wren Ashgrove",
+     "initiative": 13,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Kit",
+     "initiative": 11,
+     "pc": false,
+     "companion": true,
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Guard 1",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 16,
+     "conditions": [],
+     "monster": "Guard",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Guard 2",
+     "initiative": 11,
+     "pc": false,
+     "hp": 6,
+     "max_hp": 11,
+     "ac": 16,
+     "conditions": [],
+     "monster": "Guard",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Guard 3",
+     "initiative": 11,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 16,
+     "conditions": [],
+     "monster": "Guard",
+     "used": []
+    }
+   ]
+  }
+ },
+ {
+  "round": 128,
+  "run": 0,
+  "line": "\"A word, Sparrow? Gladly.\" I keep Ember still and the staff upright, and call to the grey figure, clear enough to carry down the causeway and into the reeds. \"Sir, your man says you'd like a word, so take off your hood, let's use your own name, and tell me what you want with a girl and her mother's lamp.\"\n\nI let that sit a breath, then add, \"Because I've been to Thornhallow's register, sir, and Aldous Verrel the younger was baptised a servant's child and buried at three, and his grave doesn't open for a man in a grey cloak.\" As I finish I swing the lamp-staff up and high, the signal, and cast Faerie Fire at the whole line of them on the road.",
+  "session": "dc99ed88-f875-47af-bccd-eeda5ebc427a",
+  "entries": [
+   {
+    "kind": "tool",
+    "text": "dice Wren's initiative: 1d20+3 = 1d20 [17] + 3 = 20",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's initiative: 1d20+2 = 1d20 [13] + 2 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's initiative: 1d20+2 = 1d20 [9] + 2 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikemen's initiative (group of five): 1d20+1 = 1d20 [11] + 1 = 12",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Wren Ashgrove (20), Kit (15), Pikeman 1 (12), Pikeman 2 (12), Pikeman 3 (12), Pikeman 4 (12), Pikeman 5 (12), Sparrow (11). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Wren casts Faerie Fire at level 1; timer Wren's Faerie Fire: 1 minute; level-1 spell slots: 2/3; concentrating on Faerie Fire (Wren Ashgrove has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 1 DEX save vs Faerie Fire DC 13: 1d20+1 = 1d20 [10] + 1 = 11",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 2 DEX save: 1d20+1 = 1d20 [13] + 1 = 14",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 3 DEX save: 1d20+1 = 1d20 [14] + 1 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 4 DEX save: 1d20+1 = 1d20 [2] + 1 = 3",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 5 DEX save: 1d20+1 = 1d20 [18] + 1 = 19",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow DEX save: 1d20+2 = 1d20 [7] + 2 = 9",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Crossbow, light at Sparrow (AC 12): 1d20+4 (advantage) = 1d20 [2, 10]→10 + 4 = 14",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Crossbow, light at Sparrow: damage (piercing): 1d8+2 = 1d8 [8] + 2 = 10",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Sparrow took 10: HP 27 → 17",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Kit",
+     "note": "shoots Sparrow, lit by Faerie Fire"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Pikeman 1. Pikeman 1 (initiative 12): HP 11/11, AC 12 Pikeman 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 1's Light Crossbow at Wren Ashgrove (AC 13): 1d20+3 = 1d20 [17] + 3 = 20",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 1's Light Crossbow at Wren Ashgrove: damage (piercing): 1d8+1 = 1d8 [1] + 1 = 2",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: took 2 damage: HP 17 → 15; Wren is concentrating on Faerie Fire: Constitution saving throw, DC 10 (10 or half the damage, whichever is higher); on a failure, end it with concentration_end (and remove the spell's timer)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's concentration save, DC 10: 1d20+2 = 1d20 [6] + 2 = 8",
+    "input": null
+   },
+   {
+    "kind": "stub",
+    "text": "Wren goes first, so her cast lands before any of them move. Saves next.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: concentration on Faerie Fire ends (its timer, if it has one, is removed with change_time)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "time: timer Wren's Faerie Fire removed",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Pikeman 2. Pikeman 2 (initiative 12): HP 11/11, AC 12 Pikeman 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 2's Light Crossbow at Kit (AC 19): 1d20+3 = 1d20 [18] + 3 = 21",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Pikeman 2's Light Crossbow at Kit: damage (piercing): 1d8+1 = 1d8 [6] + 1 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Kit: took 7 damage: HP 20 → 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Pikeman 3. Pikeman 3 (initiative 12): HP 11/11, AC 12 Pikeman 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Pikeman 3",
+     "note": "advances along the road"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Pikeman 4. Pikeman 4 (initiative 12): HP 11/11, AC 12 Pikeman 4's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Pikeman 4",
+     "note": "advances along the road"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Pikeman 5. Pikeman 5 (initiative 12): HP 11/11, AC 12 Pikeman 5's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Pikeman 5",
+     "note": "advances along the road"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Sparrow. Sparrow (initiative 11): HP 17/27, AC 12 Sparrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's Hand Crossbow at Wren Ashgrove (AC 13): 1d20+4 (disadvantage) = 1d20 [1, 13]→1 + 4 = 5 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Sparrow's Hand Crossbow at Wren Ashgrove: a miss",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Sparrow",
+     "note": "long range, disadvantage"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 2, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "write_lore",
+    "input": {
+     "entry": "Gannet Causeway",
+     "add_to_description": "Day 15 ~2:06 PM: fight begun at the culvert. Wren signalled and cast Faerie Fire (lit Pikeman 1, Pikeman 4, Sparrow; she lost concentration after a crossbow bolt). Kit hit Sparrow for 10. Pell's six guards are running up the causeway. The Grey Cloak stands back and has not drawn a weapon; Wren's challenge about the register was heard by all."
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "notebook: updated Gannet Causeway",
+    "input": null
+   },
+   {
+    "kind": "stub",
+    "text": "Failed. Faerie Fire ends.",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You call your challenge down the causeway, loud enough for the reeds to hear: the register, the baptism, the burial at three. The tall man in grey doesn't move, and the hood doesn't turn. Then you swing the lamp-staff high and say the word of Faerie Fire.\n\nSparrow's line is caught in the light. Pikeman 1, Pikeman 4 and Sparrow fail their saves and stand outlined in cold blue. The other three pikemen shrug it off, and the Grey Cloak, back at the edge of the road, is clear of it. Pell's guards burst from the reeds at the staff and start running the long road toward you.\n\nKit's crossbow takes Sparrow in the thigh for 10, and he hisses. Pikeman 1's bolt grazes you for 2 (you're at 15 of 17), and that costs you the spell: your concentration save is an 8, so the blue light dies. Pikeman 2 puts a bolt in Kit for 7, and she's at 13 of 20. The other three pikemen close up the road. Sparrow, bleeding, fires at you across the distance and misses by a mile.\n\nIt's round 2, your turn. The pikemen are strung out on the narrow road, the nearest about twenty feet off, and the guards are still a long run behind. Sparrow is hurt and the Grey Cloak still stands, hooded, behind his men. You have two 1st-level slots, three Bardic Inspirations, and 15 hit points. What does Wren do?",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 15,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 1
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 2,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1051368
+  },
+  "clock": {
+   "now": 1260234,
+   "timers": {
+    "Wren's Disguise Self": 799056
+   }
+  },
+  "fight": {
+   "round": 2,
+   "turn": 0,
+   "order": [
+    {
+     "name": "Wren Ashgrove",
+     "initiative": 20,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": []
+    },
+    {
+     "name": "Kit",
+     "initiative": 15,
+     "pc": false,
+     "companion": true,
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Pikeman 1",
+     "initiative": 12,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Pikeman 2",
+     "initiative": 12,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Pikeman 3",
+     "initiative": 12,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Pikeman 4",
+     "initiative": 12,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Pikeman 5",
+     "initiative": 12,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Sparrow",
+     "initiative": 11,
+     "pc": false,
+     "hp": 17,
+     "max_hp": 27,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Spy",
+     "used": [
+      "action"
+     ]
+    }
+   ]
+  }
+ },
+ {
+  "round": 128,
+  "run": 1,
+  "line": "\"A word, Sparrow? Gladly.\" I keep Ember still and the staff upright, and call to the grey figure, clear enough to carry down the causeway and into the reeds. \"Sir, your man says you'd like a word, so take off your hood, let's use your own name, and tell me what you want with a girl and her mother's lamp.\"\n\nI let that sit a breath, then add, \"Because I've been to Thornhallow's register, sir, and Aldous Verrel the younger was baptised a servant's child and buried at three, and his grave doesn't open for a man in a grey cloak.\" As I finish I swing the lamp-staff up and high, the signal, and cast Faerie Fire at the whole line of them on the road.",
+  "session": "4dfff205-7bf0-4cc5-82f6-172aa84b47db",
+  "entries": [
+   {
+    "kind": "call",
+    "text": "lookup",
+    "input": {
+     "name": "Veteran",
+     "kind": "monster"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "dice Wren's initiative: 1d20+3 = 1d20 [4] + 3 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's initiative: 1d20+2 = 1d20 [6] + 2 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's initiative: 1d20+2 = 1d20 [19] + 2 = 21",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandits' initiative (group): 1d20+1 = 1d20 [7] + 1 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Fight started. Order: Sparrow (21), Kit (8), Bandit 1 (8), Bandit 2 (8), Bandit 3 (8), Bandit 4 (8), Bandit 5 (8), Wren Ashgrove (7). Nobody has had a turn yet: next_turn starts the first one.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Sparrow. Sparrow (initiative 21): HP 27/27, AC 12 Sparrow's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's hand crossbow at Wren (AC 13): 1d20+4 = 1d20 [13] + 4 = 17 (Sparrow has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow's crossbow damage on Wren: 1d6+2 = 1d6 [6] + 2 = 8",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: took 8 damage: HP 17 → 9",
+    "input": null
+   },
+   {
+    "kind": "refused",
+    "text": "fight: Sparrow's turn is stopped: finish it with creature_turns resume",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's crossbow at Sparrow (AC 12): 1d20+4 = 1d20 [17] + 4 = 21 (Sparrow had already used its action: a second one needs a feature that allows it.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Kit. Kit's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Crossbow, light at Sparrow (AC 12): 1d20+4 = 1d20 [9] + 4 = 13",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Kit's Crossbow, light at Sparrow: damage (piercing): 1d8+2 = 1d8 [5] + 2 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Sparrow took 7: HP 27 → 20",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Kit",
+     "note": "shoots Sparrow"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Bandit 1. Bandit 1 (initiative 8): HP 11/11, AC 12 Bandit 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 1's Scimitar at Kit (AC 19): 1d20+3 = 1d20 [4] + 3 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Bandit 1's Scimitar at Kit: a miss",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Bandit 1",
+     "note": "advances along road"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Bandit 2. Bandit 2 (initiative 8): HP 11/11, AC 12 Bandit 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 2's Scimitar at Kit (AC 19): 1d20+3 = 1d20 [12] + 3 = 15",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Bandit 2's Scimitar at Kit: a miss",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Bandit 2",
+     "note": "advances beside"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Bandit 3. Bandit 3 (initiative 8): HP 11/11, AC 12 Bandit 3's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Bandit 3",
+     "note": "crowds behind, no room"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Bandit 4. Bandit 4 (initiative 8): HP 11/11, AC 12 Bandit 4's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Bandit 4",
+     "note": "crowds behind, no room"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Bandit 5. Bandit 5 (initiative 8): HP 11/11, AC 12 Bandit 5's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "call",
+    "text": "creature_turns",
+    "input": {
+     "name": "Bandit 5",
+     "note": "crowds behind, no room"
+    }
+   },
+   {
+    "kind": "tool",
+    "text": "fight: Round 1, now: Wren Ashgrove. Wren Ashgrove's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "sheet: Wren casts Faerie Fire at level 1; timer Wren's Faerie Fire: 1 minute; level-1 spell slots: 2/3; concentrating on Faerie Fire (Wren Ashgrove has used its action: no more actions this turn.)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Sparrow DEX save vs Faerie Fire DC 13: 1d20+2 = 1d20 [4] + 2 = 6",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 1 DEX save: 1d20+1 = 1d20 [6] + 1 = 7",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 2 DEX save: 1d20+1 = 1d20 [17] + 1 = 18",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 3 DEX save: 1d20+1 = 1d20 [1] + 1 = 2 (natural 1)",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 4 DEX save: 1d20+1 = 1d20 [15] + 1 = 16",
+    "input": null
+   },
+   {
+    "kind": "tool",
+    "text": "dice Bandit 5 DEX save: 1d20+1 = 1d20 [8] + 1 = 9",
+    "input": null
+   },
+   {
+    "kind": "dm",
+    "text": "You speak plainly, loud enough to carry down the causeway and into the reeds: take off the hood, use your own name, and know that Aldous Verrel the younger was a servant's child, baptised and buried at three, and that his grave doesn't open for a man in a grey cloak.\n\nThe tall figure doesn't answer. He doesn't move. That silence is the answer, and Sparrow's smile thins.\n\nSparrow doesn't wait for your staff to fall. He won initiative, and his hand crossbow is up before you finish the last word. The bolt takes you in the ribs for 8, so you're at 9 of 17. Kit, at the wheel, snaps a bolt back at him for 7, and he's hurt. Two pikemen charge into her shield and both swings glance off it.\n\nThen your turn. You swing the lamp-staff high, the signal, and cast Faerie Fire at the whole crowded line on the road (one slot spent, two left). Sparrow fails his save with a 6. Bandits 1, 3 and 5 fail theirs too (a 7, a natural 1, and a 9). Bandits 2 and 4 make theirs and stay in shadow. Four of them now stand outlined in blue light, and anything that attacks them has advantage. You are concentrating on the spell and have been hit once since, but the save isn't needed yet.\n\nThe grey-cloaked man still hasn't moved, still hooded, still unlit, ten paces behind his men with his left hand resting at his belt and the green ring sparking in the sun. In the reeds behind you, you hear Pell's low shout and the rustle of eight boots coming out of the mud toward both ends of the culvert. They're a round away.\n\nCorvin sits very still on the wagon bench, and the tide is running out on both sides. It is round 2 next, and Sparrow acts first. What does Wren do with the rest of her turn?",
+    "input": null
+   },
+   {
+    "kind": "trimmed",
+    "text": "You have 9 of 17 hit points, two 1st-level slots, three Bardic Inspirations, and your bonus action still open.",
+    "input": null
+   }
+  ],
+  "sheet": {
+   "name": "Wren Ashgrove",
+   "summary": "Half-Elf bard 2, acolyte background",
+   "opening": "Wren Ashgrove, a half-elf bard of about nineteen with a quick grin and a sharper tongue, arrives at dusk in the river-market town of Marrowford, a few weeks after fleeing the caravan of her mentor Corvin Tallowmere. She was raised by him as a storyteller's apprentice, and she left in the night at a river crossing with his ledger of forged tales sold to nobles (its pages now hidden in the binding of her road-psalter), a few of his best forgeries, and a head start. She carries a brass lantern-shaped reliquary of the Lantern-Bearer, a gentle road-god of travelers and tale-tellers whom Corvin worshipped only as cover; it holds a curl of yellowed parchment in an unknown hand that may be a true blessing or another forgery. She does not know if Corvin has sent anyone after her. Her ideal: stories should be free, and truth is whatever people can be made to believe. Her bond: find the nobles Corvin cheated and decide whether to expose him or quietly fix what he did. Her flaw: she can't resist a secret, and she lies even when the truth would serve her better. She has 15 gp, a rapier, a dagger, leather armor, a lute, a diplomat's pack with blank paper and sealing wax, and was raised with no memory of her birth family. The hook: as she reaches the market square, she spots a caravan wagon with Corvin's painted shrine-lantern sigil parked at the edge of town, but no sign of Corvin. A frightened young page in a minor noble's livery is pressing a sealed letter into the hands of the wagon's driver, and the seal looks like one Wren has seen in the ledger. Something is happening that links her stolen ledger to a noble house, and it needs a quick-witted liar to either sort it out or be caught in it. Open on Wren in the square, with the choice of how to approach the wagon and the page, and a locked iron-bound strongbox on the wagon's tailboard that she itches to poke at.",
+   "level": 2,
+   "race": "Half-Elf",
+   "class": "Bard",
+   "subclass": null,
+   "background": "Acolyte",
+   "alignment": "",
+   "personality": {
+    "traits": [
+     "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+     "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+    ]
+   },
+   "appearance": "",
+   "ac": 13,
+   "ac_note": "Leather Armor 11 + DEX 2",
+   "ac_now": null,
+   "speed": "30 ft",
+   "size": "Medium",
+   "scores": {
+    "STR": 8,
+    "DEX": 15,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 17
+   },
+   "abilities": {
+    "STR": "8 (-1)",
+    "DEX": "15 (+2)",
+    "CON": "14 (+2)",
+    "INT": "10 (+0)",
+    "WIS": "12 (+1)",
+    "CHA": "17 (+3)"
+   },
+   "proficiency_bonus": 2,
+   "saving_throws": "STR -1, DEX +4*, CON +2, INT +0, WIS +1, CHA +5* (* proficient)",
+   "skills": "Acrobatics +3, Animal Handling +2, Arcana +1, Athletics +0, Deception +5*, History +1, Insight +3*, Intimidation +4, Investigation +2*, Medicine +2, Nature +1, Perception +2, Performance +5*, Persuasion +5*, Religion +2*, Sleight of Hand +4*, Stealth +3, Survival +2 (* proficient, ** expertise) Jack of All Trades: +1 (half your proficiency bonus, rounded down) is included in every skill you aren't proficient in; add it to any other ability check that doesn't use your proficiency bonus (initiative, a plain ability check).",
+   "passive_perception": 12,
+   "senses": "darkvision 60 ft",
+   "languages": "Common, Elvish, Halfling, Undercommon, Infernal",
+   "proficiencies": "Flute, Hand crossbows, Light Armor, Longswords, Lute, Rapiers, Shortswords, Simple Weapons, Viol",
+   "attacks": [
+    "Dagger: +4 to hit, 1d4+2 piercing; range 20/60 (finesse, light, thrown)",
+    "Rapier: +4 to hit, 1d8+2 piercing (finesse)",
+    "Unarmed strike: +1 to hit, 0 bludgeoning",
+    "Vicious Mockery (cantrip): WIS save DC 13, 1d4 psychic, range 60 feet"
+   ],
+   "features": [
+    "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+    "Fey Ancestry: You have advantage on saving throws against being charmed, and magic cannot put you to sleep.",
+    "Skill Versatility: You gain proficiency in two skills of your choice.",
+    "Bardic Inspiration (d6): You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the GM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time. You can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.  Your Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level. At level 2: Bardic Inspiration die d6.",
+    "Jack of All Trades: Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+    "Song of Rest (d6): Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points at the end of the short rest by spending one or more Hit Dice, each of those creatures regains an extra 1d6 hit points.  The extra hit points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level. At level 2: extra 1d6 hit points.",
+    "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+   ],
+   "hp": {
+    "max": 17,
+    "current": 9,
+    "temp": 0
+   },
+   "hit_dice": {
+    "die": "d8",
+    "max": 2,
+    "left": 1
+   },
+   "resources": {
+    "Bardic Inspiration": {
+     "max": 3,
+     "left": 3,
+     "recharge": "long"
+    }
+   },
+   "conditions": [],
+   "death_saves": {
+    "successes": 0,
+    "failures": 0
+   },
+   "xp": 525,
+   "coins_cp": 7061,
+   "items": {
+    "Leather Armor": 1,
+    "Dagger": 1,
+    "Clothes, common": 1,
+    "Pouch": 1,
+    "Rapier": 1,
+    "Chest": 1,
+    "Case, map or scroll": 2,
+    "Clothes, fine": 1,
+    "Ink (1 ounce bottle)": 1,
+    "Ink pen": 1,
+    "Lamp": 1,
+    "Oil (flask)": 1,
+    "Paper (one sheet)": 1,
+    "Perfume (vial)": 1,
+    "Sealing wax": 1,
+    "Soap": 1,
+    "Lute": 1,
+    "Vestments": 1,
+    "Stick of incense": 5,
+    "Prayer book": 1,
+    "Tin of wax seal impressions": 1,
+    "Copy of Corvin's draft letter": 1,
+    "Scrap of green velvet ribbon (sewn in cloak hem)": 1,
+    "Cheese, hunk": 1,
+    "Notes: names and dates of the Verrel charter's third descent": 1,
+    "Copy of Brother Osric's register entry (Verrel–Fenn marriage)": 1,
+    "Letter under Lord Edric Verrel's seal, vouching for Wren": 1,
+    "Corvin's note to Wren (opened)": 1,
+    "Sketch of the E.A. lantern mark": 1,
+    "Elowen's letter to her daughter": 1,
+    "Silver lantern pendant": 1,
+    "Sealed commission-paper naming Wren Elowen's heir": 1,
+    "Thieves' Tools": 1,
+    "Forgery Kit": 1,
+    "Corvin's note: 'The Salt Gull, Saltmarsh, the ninth'": 1,
+    "Riding horse (lent by Lady Maren Thistlewood)": 1,
+    "Letter under Lady Maren Thistlewood's seal naming Wren her friend and Elowen Ashgrove's daughter": 1,
+    "Elowen's Lamp-Staff": 1,
+    "Strip of paper from the lamp-staff: 'I go to the Gullspit light...'": 1,
+    "Tin lantern toy (Elowen's, from Annis Marl) with a slip: 'She is Wren...'": 1,
+    "Reliquary": 1,
+    "Elowen's second letter to Wren (opened)": 1,
+    "Honest copy of the cut register leaf (margin notes its origin)": 1,
+    "Bait copy of the register leaf, sealed in a tube (a lure, no margin note)": 1
+   },
+   "spellcasting": {
+    "ability": "CHA",
+    "save_dc": 13,
+    "attack_bonus": 5,
+    "cantrips": [
+     "Vicious Mockery",
+     "Mage Hand"
+    ],
+    "class": "bard",
+    "max_level": 1,
+    "known": [
+     "Charm Person",
+     "Disguise Self",
+     "Healing Word",
+     "Detect Magic",
+     "Faerie Fire"
+    ],
+    "notes": "Spells known are fixed until a level-up."
+   },
+   "spell_slots": {
+    "1": {
+     "max": 3,
+     "left": 2,
+     "recharge": "long"
+    }
+   },
+   "build": {
+    "choices": {
+     "name": "Wren Ashgrove",
+     "race": "Half-Elf",
+     "class": "Bard",
+     "ability_method": "standard_array",
+     "base_scores": {
+      "STR": 8,
+      "DEX": 14,
+      "CON": 13,
+      "INT": 10,
+      "WIS": 12,
+      "CHA": 15
+     },
+     "choices": {
+      "race.ability_bonuses": [
+       "DEX +1",
+       "CON +1"
+      ],
+      "race.languages": [
+       "Halfling"
+      ],
+      "trait.skill-versatility": [
+       "Skill: Investigation",
+       "Skill: Performance"
+      ],
+      "class.proficiencies.1": [
+       "Skill: Deception",
+       "Skill: Persuasion",
+       "Skill: Sleight of Hand"
+      ],
+      "class.proficiencies.2": [
+       "Lute",
+       "Flute",
+       "Viol"
+      ],
+      "class.equipment.1": [
+       "Rapier"
+      ],
+      "class.equipment.2": [
+       "Diplomat's Pack"
+      ],
+      "class.equipment.3": [
+       "Lute"
+      ],
+      "background.languages": [
+       "Undercommon",
+       "Infernal"
+      ],
+      "background.equipment.1": [
+       "Reliquary"
+      ],
+      "background.equipment.prayer": [
+       "Prayer book"
+      ]
+     },
+     "cantrips": [
+      "Vicious Mockery",
+      "Mage Hand"
+     ],
+     "spells": [
+      "Charm Person",
+      "Disguise Self",
+      "Healing Word",
+      "Detect Magic"
+     ],
+     "personality": {
+      "traits": [
+       "Playful, nosy, and can't resist poking at locked doors or odd-looking relics",
+       "A charming liar with a sharp tongue who will bluff through almost anything with a grin"
+      ]
+     }
+    },
+    "rolled": null,
+    "levels": [
+     {
+      "hp": "fixed",
+      "spells": [
+       "Faerie Fire"
+      ]
+     }
+    ]
+   },
+   "last_long_rest": 1051368,
+   "concentration": "Faerie Fire"
+  },
+  "clock": {
+   "now": 1260228,
+   "timers": {
+    "Wren's Disguise Self": 799056,
+    "Wren's Faerie Fire": 1260288
+   }
+  },
+  "fight": {
+   "round": 1,
+   "turn": 7,
+   "order": [
+    {
+     "name": "Sparrow",
+     "initiative": 21,
+     "pc": false,
+     "hp": 20,
+     "max_hp": 27,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Spy",
+     "used": [
+      "action",
+      "action"
+     ]
+    },
+    {
+     "name": "Kit",
+     "initiative": 8,
+     "pc": false,
+     "companion": true,
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Bandit 1",
+     "initiative": 8,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Bandit 2",
+     "initiative": 8,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": [
+      "action"
+     ]
+    },
+    {
+     "name": "Bandit 3",
+     "initiative": 8,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Bandit 4",
+     "initiative": 8,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Bandit 5",
+     "initiative": 8,
+     "pc": false,
+     "hp": 11,
+     "max_hp": 11,
+     "ac": 12,
+     "conditions": [],
+     "monster": "Bandit",
+     "used": []
+    },
+    {
+     "name": "Wren Ashgrove",
+     "initiative": 7,
+     "pc": true,
+     "hp": null,
+     "max_hp": null,
+     "ac": null,
+     "conditions": [],
+     "used": [
+      "action"
+     ]
+    }
+   ]
+  }
+ }
+]

@@ -77,14 +77,17 @@ play every other character, call for checks, run fights by the rules, and keep t
   and use its numbers. Once initiative is rolled, call `add_combatants` with every combatant, the PC as `pc`, each
   companion by their name, and each creature's HP, AC and `monster` (its stat block's name) from its stat block. Give
   each creature a distinct name (for example "Goblin 1", "Goblin 2").
-- Run the fight strictly in initiative order. Creatures' turns go through `creature_turns`: when the creatures' turns
-  come, look at the tracker as it is now, decide each creature's action from its situation, and send every
-  creature's turn up to the next party member's in one call: its attacks and targets, whom it moves away from. The
-  game rolls and applies the attacks. Where it stops, resolve what it says (ask the player about a reaction and end
-  your reply there), then call it again with `resume`. A creature that does anything but attack and move (a spell,
-  a check, a special action), and every creature while a party member has a readied action: `next_turn`, and resolve
-  its turn with the other tools. When it is the PC's turn, describe the situation and stop to ask the player what
-  they do.
+- Run the fight strictly in initiative order. Creatures' and companions' turns go through `creature_turns`: after the
+  PC's turn, look at the tracker as it is now, decide each one's action from its situation (a companion's as
+  themselves), and send every turn up to the PC's next one in one call: its attacks and targets, whom it moves away
+  from, whom it attacks instead if its target drops, and the reactions each will take. The game rolls and applies
+  the attacks, resistances, reactions and concentration saves included. Where it stops, resolve what it says (ask the
+  player about a reaction and end your reply there), then call it again with `resume`. One that does anything but
+  attack and move (a spell that isn't an attack roll, a check, a special action, a companion at 0 HP), and every turn
+  while a party member has a readied action: `next_turn`, and resolve its turn with the other tools. When it is the
+  PC's turn, describe the situation and stop to ask the player what they do.
+- A barbarian's rage: `change_pc` `use_resource` Rage starts its 1-minute timer; when the rage ends early, remove the
+  timer with `change_time`.
 - When a combatant spends its action, bonus action or reaction, pass `uses` with the roll or change that spends it (and
   `by` when it isn't their turn). The tracker marks it until their next turn: check it before they act again.
 - Roll an attack's damage only after its attack roll has hit, never together with the attack roll: on a miss there is

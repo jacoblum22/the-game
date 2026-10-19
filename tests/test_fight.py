@@ -25,13 +25,22 @@ class Dice:
         return v
 
 
-def game(tmp_path: Path, monkeypatch: Any, who: str, rolls: list[int], foes: list[tuple[str, str, int]]) -> play.Game:
-    """A game with `who` (a sample character) as the PC, in a fight with foes (name, monster, initiative) after it."""
-    g = play.Game({"sheet": json.loads((CHAR / f"{who}.json").read_text(encoding="utf-8"))}, tmp_path / "save.json")
+def sheet(who: str) -> dict[str, Any]:
+    return json.loads((CHAR / f"{who}.json").read_text(encoding="utf-8"))
+
+
+def game(tmp_path: Path, monkeypatch: Any, who: str, rolls: list[int], foes: list[tuple[str, str, int]],
+         mates: list[tuple[str, int]] = ()) -> play.Game:  # type: ignore[assignment]
+    """A game with `who` (a sample character) as the PC, in a fight with foes (name, monster, initiative) and
+    companions (a sample character, initiative) after it."""
+    g = play.Game({"sheet": sheet(who), "companions": [sheet(w) | {"companion": True} for w, _ in mates]},
+                  tmp_path / "save.json")
     dice = Dice(rolls)
     monkeypatch.setattr(random, "Random", lambda: dice)
     g.fight, _ = m.add_combatants(None, g.sheet["name"], [{"name": "pc", "initiative": 20}] + [
-        {"name": n, "monster": mon, "initiative": i, "hp": 7, "ac": 15} for n, mon, i in foes])
+        {"name": n, "monster": mon, "initiative": i, "hp": 7, "ac": 15} for n, mon, i in foes] + [
+        {"name": c["name"], "initiative": i} for c, (_, i) in zip(g.companions, mates)],
+        companions=tuple(c["name"] for c in g.companions))
     g.fight, _ = m.next_turn(g.fight)  # the PC's turn, now over
     g.dice = dice
     return g
@@ -116,20 +125,20 @@ def test_melee_hit_on_an_unconscious_pc_is_a_critical(tmp_path: Path, monkeypatc
     assert "2d6+2" in out and g.sheet["death_saves"]["failures"] == 2
 
 
-def test_dropping_the_pc_goes_on_unless_a_turn_aims_at_them(tmp_path: Path, monkeypatch: Any) -> None:
-    """Goblin 1 drops the PC; Goblin 2 was sent at the PC, so the code stops before its turn for the DM to decide it
-    again. A turn aimed elsewhere would have gone on."""
-    g = game(tmp_path, monkeypatch, "wizard", [19, 1], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12)])
-    pc = g.sheet["name"]
+def test_a_dropped_target_falls_to_the_next(tmp_path: Path, monkeypatch: Any) -> None:
+    """Goblin 1 drops the PC. Goblin 2 was sent at the PC, or else the companion: it attacks the companion. Goblin 3,
+    with no one else named, doesn't attack. No stop."""
+    g = game(tmp_path, monkeypatch, "wizard", [19, 1, 2], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12),
+                                                          ("Goblin 3", "Goblin", 11)], mates=[("rogue", 2)])
+    pc, mate = g.sheet["name"], g.companions[0]["name"]
     g.sheet["hp"]["current"] = 3
     g.sheet["spell_slots"]["1"]["left"] = 0  # no Shield
     out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": pc}]},
-                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": pc}]}]})
-    assert "STOPPED before Goblin 2's turn" in out and "dropped to 0 HP" in out and g.sheet["hp"]["current"] == 0
-    assert g.fight["order"][g.fight["turn"]]["name"] == "Goblin 1"
-    assert "STOPPED before" in turns(g, {"resume": {}})  # still the same
-    out = turns(g, {"resume": {}, "turns": [{"name": "Goblin 2", "note": "loots the body"}]})
-    assert "pending" not in g.fight and g.fight["order"][g.fight["turn"]]["name"] != pc
+                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": pc, "or_targets": [mate]}]},
+                              {"name": "Goblin 3", "attacks": [{"attack": "Scimitar", "target": pc}]}]})
+    assert "STOPPED" not in out and g.sheet["hp"]["current"] == 0 and not g.dice.rolls
+    assert f"Goblin 2's Scimitar at {mate}" in out and "Goblin 3's Scimitar isn't made" in out
+    assert g.fight["order"][g.fight["turn"]]["name"] == "Goblin 3"
 
 
 def test_an_already_downed_target_is_no_change(tmp_path: Path, monkeypatch: Any) -> None:
@@ -166,3 +175,118 @@ def test_target_names_and_a_choice_of_damage(tmp_path: Path, monkeypatch: Any) -
     assert g.sheet["hp"]["current"] == 14 - 8  # 1d8+3
     with pytest.raises(m.Refused, match="choice of damage"):
         turns(g, {"turns": [{"name": "Djinni", "attacks": [{"attack": "Scimitar", "target": "pc"}]}]})
+
+
+def test_a_companions_turn_in_the_batch(tmp_path: Path, monkeypatch: Any) -> None:
+    """Goblin 1, the companion (her rapier and Sneak Attack, from her sheet), Goblin 2 at her: one call, up to the PC."""
+    g = game(tmp_path, monkeypatch, "fighter", [2, 15, 1, 1, 10, 3], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 10)],
+             mates=[("rogue", 12)])
+    pc, mate = g.sheet["name"], g.companions[0]["name"]
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": "pc"}]},
+                              {"name": mate.split()[0], "attacks": [{"attack": "Rapier", "target": "Goblin 2",
+                                                                    "extra_damage": "1d6"}]},
+                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": mate}]}]})
+    assert "STOPPED" not in out and not g.dice.rolls
+    assert m._find(g.fight, "Goblin 2")["hp"] == 7 - 5 and g.companions[0]["hp"]["current"] == 10 - 5
+    assert g.sheet["hp"]["current"] == 14 and f"Next is {pc}'s turn" in out
+    assert "action" in m._find(g.fight, mate)["used"]
+
+
+def test_companion_turn_refusals(tmp_path: Path, monkeypatch: Any) -> None:
+    g = game(tmp_path, monkeypatch, "fighter", [], [("Goblin 1", "Goblin", 15)], mates=[("rogue", 16)])
+    mate = g.companions[0]["name"]
+    two = [{"attack": "Rapier", "target": "Goblin 1"}] * 2
+    with pytest.raises(m.Refused, match="makes 1 attack with the Attack action"):
+        turns(g, {"turns": [{"name": mate, "attacks": two}]})
+    with pytest.raises(m.Refused, match="no attack 'Greatsword' on their sheet"):
+        turns(g, {"turns": [{"name": mate, "attacks": [{"attack": "Greatsword", "target": "Goblin 1"}]}]})
+    g.companions[0]["hp"]["current"] = 0
+    with pytest.raises(m.Refused, match="death save"):
+        turns(g, {"turns": [{"name": mate, "attacks": [{"attack": "Rapier", "target": "Goblin 1"}]}]})
+    g.companions[0]["hp"]["current"] = 10
+    turns(g, {"turns": [{"name": mate, "note": "hides"}, {"name": "Goblin 1", "note": "waits"}]})
+    with pytest.raises(m.Refused, match="is the PC"):
+        turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": "Longsword", "target": "Goblin 1"}]}]})
+
+
+def test_rage_halves_and_adds(tmp_path: Path, monkeypatch: Any) -> None:
+    """Spending a Rage use starts its timer; while it runs, slashing is halved and the barbarian's melee hits add 2."""
+    g = game(tmp_path, monkeypatch, "fighter", [19, 5, 15, 1], [("Goblin 1", "Goblin", 15)], mates=[("rogue", 12)])
+    for s in (g.sheet, g.companions[0]):
+        s["features"].append("Rage: In battle, you fight with primal ferocity. ... You have resistance to "
+                             "bludgeoning, piercing, and slashing damage.")
+        s["resources"]["Rage"] = {"max": 2, "left": 2, "recharge": "long"}
+    g.clock, _ = m.change_time(g.clock, {"set": {"day": 1, "time": "12:00"}})
+    assert "Rage: 1 minute" in g.change_party_member({"use_resource": "Rage"})
+    g.change_party_member({"use_resource": "Rage", "who": g.companions[0]["name"]})
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": "pc"}]},
+                              {"name": g.companions[0]["name"], "attacks": [{"attack": "Rapier", "target": "Goblin 1"}]}]})
+    assert g.sheet["hp"]["current"] == 14 - 3 and "resistant (Rage) to slashing: 7 -> 3" in out  # (5+2)//2
+    assert m._find(g.fight, "Goblin 1")["hp"] == 7 - 6  # 1d8+3 = 1+3, +2 rage damage
+    assert not fight.raging(g.sheet, m.advance(g.clock, 60))
+
+
+def test_creature_resistances_and_parry(tmp_path: Path, monkeypatch: Any) -> None:
+    """A skeleton is vulnerable to the quarterstaff's bludgeoning; a knight parries a hit that 2 more AC turns away."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 4, 14], [("Skeleton", "Skeleton", 15), ("Knight", "Knight", 14)],
+             mates=[("wizard", 12)])
+    wiz = g.companions[0]["name"]
+    g.fight, _ = m.next_turn(g.fight)  # the skeleton's turn
+    g.fight, _ = m.next_turn(g.fight)  # the knight's
+    out = turns(g, {"turns": [{"name": wiz, "attacks": [{"attack": "Quarterstaff", "target": "Skeleton"}]}]})
+    assert m._find(g.fight, "Skeleton")["hp"] == 7 - 6 and "vulnerable to bludgeoning: 3 -> 6" in out
+    g.fight, _ = m.next_turn(g.fight)
+    g.fight, _ = m.next_turn(g.fight)
+    g.fight, _ = m.next_turn(g.fight)  # the knight's again; the wizard's next
+    out = turns(g, {"turns": [{"name": wiz, "attacks": [{"attack": "Quarterstaff", "target": "Knight"}]}]})
+    assert "Knight uses Parry" in out and m._find(g.fight, "Knight")["hp"] == 7
+    assert "reaction" in m._find(g.fight, "Knight")["used"]
+
+
+def test_resistances_from_sheets_and_stat_blocks() -> None:
+    assert fight.member_resists(sheet("fighter"), m.new_clock()) == {"poison": {"resistant": "Dwarven Resilience"}}
+    s = sheet("wizard") | {"features": [
+        "Hellish Resistance: You have resistance to fire damage.",
+        "Damage Resistance: You have resistance to the damage type associated with your draconic ancestry.",
+        "Draconic Ancestry (Blue): breath weapon 5 by 30 ft line, DEX save DC 12, 2d6 Lightning damage (half on a "
+        "success); resistance to that damage type"]}
+    assert set(fight.member_resists(s, m.new_clock())) == {"fire", "lightning"}
+    from dm import srd
+    wolf = srd.find("Monsters", "Werewolf, Hybrid Form")
+    assert fight.creature_resists(wolf, weapon=True)[0]["slashing"] == {"immune"}
+    assert fight.creature_resists(wolf, weapon=False)[0] == {}
+    assert fight.resisted(7, {"resistant", "vulnerable"}) == 6 and fight.resisted(7, {"immune"}) == 0
+
+
+def test_opportunity_attacks_the_call_gives(tmp_path: Path, monkeypatch: Any) -> None:
+    """The call says Goblin 1 takes opportunity attacks with its scimitar, and the companion with her rapier: the code
+    makes them as the other leaves its reach. Goblin 2, given none, makes none."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 2, 17, 6], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 11)],
+             mates=[("rogue", 12)])
+    mate = g.companions[0]["name"]
+    out = turns(g, {"reactions": {"Goblin 1": {"opportunity_attack": "Scimitar"},
+                                  mate: {"opportunity_attack": "Rapier"}},
+                    "turns": [{"name": "Goblin 1", "note": "waits"},
+                              {"name": mate, "leaves_reach_of": ["Goblin 1", "Goblin 2"], "note": "runs"},
+                              {"name": "Goblin 2", "leaves_reach_of": [mate], "note": "chases"}]})
+    assert "STOPPED" not in out and not g.dice.rolls
+    assert g.companions[0]["hp"]["current"] == 10 - 4 and m._find(g.fight, "Goblin 2")["hp"] == 7 - 9 + 2  # 0
+    assert "reaction" in m._find(g.fight, "Goblin 1")["used"] and "reaction" in m._find(g.fight, mate)["used"]
+
+
+def test_companion_reactions_and_concentration(tmp_path: Path, monkeypatch: Any) -> None:
+    """The companion wizard casts Shield when it turns a hit into a miss (the call says she does); hit later, she
+    saves for her concentration, rolled by the code."""
+    g = game(tmp_path, monkeypatch, "fighter", [10, 18, 3, 4], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 14)],
+             mates=[("wizard", 12)])
+    wiz = g.companions[0]["name"]
+    g.clock, _ = m.change_time(g.clock, {"set": {"day": 1, "time": "12:00"}})
+    g.companions[0]["concentration"] = "Sleep"
+    out = turns(g, {"reactions": {wiz: {"take": ["Shield"]}},
+                    "turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": wiz}]},
+                              {"name": "Goblin 2", "attacks": [{"attack": "Scimitar", "target": wiz}]}]})
+    assert "STOPPED" not in out and g.companions[0]["ac_now"]["value"] == 16 and "now a miss against AC 16" in out
+    assert g.companions[0]["spell_slots"]["1"]["left"] == 1 and g.companions[0]["hp"]["current"] == 8 - 5
+    assert "concentration on Sleep (CON save, DC 10)" in out and "it's lost" in out and not g.companions[0].get("concentration")
+    with pytest.raises(m.Refused, match="the PC's reactions are the player's"):
+        turns(g, {"reactions": {"pc": {"take": ["Shield"]}}, "turns": [{"name": wiz, "note": "x"}]})

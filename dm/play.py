@@ -164,6 +164,13 @@ class Game:
             lines.append(self._change_member(i, a))
         if spell:  # a cast comes without a rest, so the clock is only the cast's
             self.clock = clock
+        s = self.sheet if i is None else self.companions[i]
+        if a.get("use_resource") == "Rage" and self.clock["now"] is not None:
+            # Rage lasts 1 minute (SRD): its timer is how creature_turns knows the barbarian resists bludgeoning,
+            # piercing and slashing damage and adds rage damage (Jake, 2026-10-19)
+            timer = fight.rage_timer(s)
+            self.clock = {**self.clock, "timers": {**self.clock["timers"], timer: self.clock["now"] + 60}}
+            lines.append(f"timer {timer}: 1 minute (remove it with change_time if the rage ends early)")
         return "; ".join(lines)
 
     def _change_member(self, i: int | None, a: dict[str, Any]) -> str:
@@ -567,42 +574,68 @@ class Game:
                     f"{self.fight['pending']['name']}'s turn is stopped: finish it with creature_turns resume")))
             return self.run("fight", self.advance_turn)  # (logged as "fight: ...")
 
-        @tool("creature_turns", "Run creatures' turns: you decide what each creature does, and the code rolls each "
-              "attack against the target's AC and, on a hit, its damage (doubled dice on a critical hit, and on a melee "
-              "hit on a paralyzed or unconscious target), from the creature's stat block, and applies it. Send every "
-              "creature's turn from the next one up to the next party member's turn, in initiative order; the code "
-              "starts each creature's turn (no next_turn); start the party member's with next_turn. It STOPS where a "
-              "party member can take a "
-              "reaction (opportunity attack, Shield, Uncanny Dodge, Cutting Words, Protection, Deflect Missiles, "
-              "Hellish Rebuke), where a hit does more than damage (a save, a grapple), where a party member must save "
-              "for concentration, and where a turn sent can no longer happen as sent (its target dropped or left): "
-              "resolve that, then call again with resume, and the turns you sent go on from there. A creature needs "
-              "its monster in the tracker (add_combatants). Anything else a creature does (a spell, a check, a "
-              "special action) you resolve with the other tools on its turn instead; so too every turn while a party "
-              "member has a readied action.",
+        @tool("creature_turns", "Run creatures' and companions' turns: you decide what each one does, and the code "
+              "rolls each attack against the target's AC and, on a hit, its damage (doubled dice on a critical hit, and "
+              "on a melee hit on a paralyzed or unconscious target), from the creature's stat block or the companion's "
+              "sheet, applies the target's resistances, immunities and vulnerabilities (stat block; sheet features; "
+              "Rage while its timer runs, with rage damage), and applies the damage. Send every turn from the next one "
+              "up to the PC's, in initiative order; the code starts each of those turns (no next_turn); start the "
+              "PC's with next_turn. Decide the creatures' and companions' reactions in the same call (reactions): the "
+              "code takes them when they're triggered, and takes Parry itself when it turns a hit into a miss. It "
+              "rolls a party member's concentration save when they're damaged. A target that has dropped by its "
+              "attack goes to the next of or_targets still up; with none, the attack isn't made; a creature at 0 HP "
+              "has no turn. It STOPS only where the PC can take a reaction (opportunity attack, Shield, Uncanny Dodge, "
+              "Cutting Words, Protection, Deflect Missiles, Hellish Rebuke: ask the player), where a hit does more "
+              "than damage (a save, a grapple), where a creature has a reaction other than Parry, where a companion "
+              "at 0 HP has a turn (a death save), and where the order changed: resolve that, then call again with "
+              "resume, and the turns you sent go on from there. A creature needs its monster in the tracker "
+              "(add_combatants). Anything else a creature or companion does (a spell that isn't an attack roll, a "
+              "check, a special action) you resolve with next_turn and the other tools on its turn instead; so too "
+              "every turn while a party member has a readied action. The code doesn't know a creature's "
+              "concentration: roll its save when it's damaged.",
               {"type": "object", "properties": {
                   "turns": {"type": "array", "items": {"type": "object", "properties": {
-                      "name": {"type": "string", "description": "the creature, exactly as in the tracker"},
-                      "attacks": {"type": "array", "description": "in order; more than one only with Multiattack",
+                      "name": {"type": "string", "description": "the creature or companion, exactly as in the tracker"},
+                      "attacks": {"type": "array", "description": "in order; a creature makes more than one only with "
+                                  "Multiattack, a companion only with Extra Attack (or bonus_action ones)",
                                   "items": {"type": "object", "properties": {
-                          "attack": {"type": "string", "description": "the attack's name in its stat block"},
+                          "attack": {"type": "string", "description": "the attack's name in its stat block, or on the "
+                                     "companion's sheet (Longsword, Fire Bolt)"},
                           "target": {"type": "string", "description": "exactly as in the tracker"},
+                          "or_targets": {**_NAMES, "description": "whom it attacks instead, in order, if the target "
+                                         "has dropped or left by this attack"},
                           "mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]},
                           "ranged": {"type": "boolean", "description": "a melee-or-ranged weapon thrown or shot"},
                           "beyond_5ft": {"type": "boolean", "description": "a melee attack from more than 5 feet (reach)"},
-                          "damage": {"type": "string", "description": "only when the stat block offers a choice of "
-                                     "damage (two-handed, for example): the dice"},
+                          "damage": {"type": "string", "description": "only for a choice of damage (two-handed, for "
+                                     "example): the dice, with a type if it differs, e.g. 1d10+3"},
+                          "extra_damage": {"type": "string", "description": "dice a party member adds on a hit (Sneak "
+                                           "Attack 1d6, Divine Smite '2d8 radiant'): rolled only on a hit, doubled on "
+                                           "a critical; record what it spends yourself"},
+                          "bonus_action": {"type": "boolean", "description": "a companion's attack with its bonus action "
+                                           "(two-weapon fighting, for example)"},
                           "target_resists": {"type": "string", "enum": list(fight.RESIST_KINDS),
-                                             "description": "the code doesn't know resistances: pass it whenever the "
-                                             "target resists, is vulnerable or immune to this damage (a raging "
-                                             "barbarian and slashing, for example)"}},
+                                             "description": "only to override the code, for the whole attack, when "
+                                             "something it can't see changes the target's resistance: a spell or item "
+                                             "(Protection from Energy), or normal for a magic or silvered weapon "
+                                             "against 'nonmagical' resistance"}},
                           "required": ["attack", "target"]}},
-                      "leaves_reach_of": {**_NAMES, "description": "party members whose reach it leaves without "
-                                          "Disengage, before its attacks (after them with after_attacks)"},
+                      "leaves_reach_of": {**_NAMES, "description": "those whose reach it leaves without Disengage, "
+                                          "before its attacks (after them with after_attacks)"},
                       "after_attacks": {"type": "boolean"},
                       "note": {"type": "string", "description": "what else it does, for your notes (it moves to the "
                                "door, it Dodges)"}},
                       "required": ["name"]}},
+                  "reactions": {"type": "object", "description": "the reactions creatures and companions take during "
+                                "these turns, by name (not the PC's: the player is asked): {\"Goblin 1\": "
+                                "{\"opportunity_attack\": \"Scimitar\"}, \"Kit\": {\"opportunity_attack\": "
+                                "\"Longsword\", \"take\": [\"Shield\"]}}. opportunity_attack: the attack it makes when "
+                                "someone leaves its reach; take (companions): " + ", ".join(fight.TAKE) + ", each "
+                                "taken when triggered (Shield and Cutting Words only when they turn a hit into a "
+                                "miss). Without it, none is taken. Kept until the turns end.",
+                                "additionalProperties": {"type": "object", "properties": {
+                                    "opportunity_attack": {"type": "string"},
+                                    "take": {"type": "array", "items": {"type": "string", "enum": list(fight.TAKE)}}}}},
                   "resume": {"type": "object", "description": "after a STOP, once it's resolved: {} if nothing changes; "
                              "mode (Protection), roll_change (Cutting Words, minus the roll), halve_damage (Uncanny "
                              "Dodge), damage_reduction (Deflect Missiles), skip_rest (drop the rest of its attacks)",

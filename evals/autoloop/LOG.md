@@ -342,3 +342,33 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   crits and damage right; a raging barbarian's resistance was not passed once (the tool now says to). Not measured:
   mid-fight rounds (their trackers have no monster).
 - run.py: the test player gets strict_mcp_config: it had passed on a claude.ai connector sign-in notice in its line.
+
+## Companions' turns and resistances in code (Jake, 2026-10-19)
+- creature_turns now takes companions' turns too, so one call runs every turn from after the PC's to the PC's next.
+  A companion's attacks come from its sheet's attack lines (bonus, dice, type; a weapon attack or a spell attack
+  roll), up to 1 + Extra Attack with the action, plus bonus_action ones; extra_damage for Sneak Attack or a smite. A
+  companion at 0 HP or incapacitated, or doing anything but attack and move, goes through next_turn as before.
+- Resistances, immunities and vulnerabilities by code, per damage type: a stat block's lists ("from nonmagical
+  weapons" applies to weapon attacks; conditions the code can't judge are named for the DM), a party member's sheet
+  features that name a type (Hellish Resistance, Dwarven Resilience, a dragonborn's ancestry), petrified, and Rage.
+  target_resists stays as the DM's override (a spell, a magic weapon: normal).
+- Rage: change_pc use_resource Rage starts a 1-minute timer "<first name>'s Rage"; while it runs and the barbarian is
+  above 0 HP, bludgeoning, piercing and slashing are halved and its melee weapon hits add rage damage. The DM removes
+  the timer when the rage ends early.
+- Creatures' reactions to companions: Parry is taken by the code when it turns a hit into a miss; another reaction
+  about attacks or damage, and an opportunity attack on a companion leaving a creature's reach, stop for the DM.
+- Reactions decided in the call (Jake: the call already says what everyone but the player does). `reactions` gives
+  each creature's and companion's: opportunity_attack (the attack it makes when someone leaves its reach) and, for
+  companions, take (Shield and Cutting Words when they turn a hit into a miss, Uncanny Dodge, Deflect Missiles,
+  Protection). The code makes those attacks and takes those reactions; none is taken that the call doesn't give. A
+  party member's concentration save is rolled by the code (CON save from the sheet; on a failure, concentration and
+  its timer end). A target that has dropped by its attack goes to the next of or_targets still up, or the attack
+  isn't made; a creature at 0 HP or anyone incapacitated has no turn. Left as stops: the PC's reactions, a hit that
+  does more than damage, a creature's reaction other than Parry, a companion's death save, a change in the order.
+- A Rage timer the DM named itself ('Rage (Korvash)', in a replay) counts as well as the one use_resource starts.
+- Replays (ab7 comp-*, 5 fight starts x 2, before the reactions change): Kit's turns ran in the guards' batch (one
+  call for guards, Kit, guards), with no refusals for damage choices. Calls per round 8.5 vs 7.4 for the turns2 arm,
+  within the noise of these rounds (two of them weren't the same scene: a fight in one arm, none in the other).
+- Replay with the reactions change (ab7 react-bard2, bard2's 2 fight starts x 2): no refusals, no stops; a party
+  member's concentration save rolled by the code and lost. Calls per round 6.8 (comp 9.3, turns2 7.8 on the same
+  rounds; few rounds, noisy).
