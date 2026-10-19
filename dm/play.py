@@ -301,7 +301,7 @@ class Game:
             raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
         if not a.get("confirm"):
             return ("BUILT, nothing changed yet. Show the player this sheet and ask for a yes, then call again with the "
-                    "same character, confirm true and the opening:\n" + sheet_text(sheet) + "\n" + m.status(sheet))
+                    "same character, confirm true and the opening:\n" + sheet_text(sheet, dm=True) + "\n" + m.status(sheet))
         opening = str(a.get("opening") or "").strip()
         if not opening:
             raise m.Refused("the opening is empty: where the new character is, why, and how they come into the story")
@@ -440,7 +440,7 @@ class Game:
                         f"they joined. Build them up to it now with level_up_options and level_up, who {c['name']!r}, making "
                         "every choice yourself (hit points too), without asking the player. The player sees them join "
                         "when the last level is taken.")
-                res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c)
+                res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c, dm=True)
             return res
 
         @tool("new_pc", "Only after the PC has died, if the player wants to go on in this world with a new character: "
@@ -552,7 +552,7 @@ class Game:
                 self.log("tool", f"party: {done[0]['name']} joined the party, {done[0]['summary']}")
                 self.save()
             if done:  # the sheet in the DM's instructions was written at the old level
-                res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0]))
+                res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0], dm=True))
             return res
 
         @tool("add_combatants", "Start a fight, or add arrivals to the current one. The PC is the combatant named 'pc' and "
@@ -831,7 +831,8 @@ class Game:
         return self.written() and all(n in BOOKKEEPING or n == "reply" for n in names)
 
 
-def sheet_text(s: dict[str, Any]) -> str:
+def sheet_text(s: dict[str, Any], dm: bool = False) -> str:
+    """The sheet as text. dm: as the play DM sees it, with the features the player chooses to use by name only."""
     p = s.get("personality")
     about = ([f"Traits: {' '.join(p['traits'])}"] if p.get("traits") else []) + [
         f"{k.capitalize()}: {p[k]}" for k in ("ideal", "bond", "flaw") if p.get(k)] if isinstance(p, dict) else (
@@ -861,7 +862,7 @@ def sheet_text(s: dict[str, Any]) -> str:
             lines.append("Mystic Arcanum: " + ", ".join(f"level {lv}: {name}" for lv, name in sp["arcanum"].items()))
     if sp.get("racial_cantrips"):
         lines.append("Racial cantrips: " + ", ".join(sp["racial_cantrips"]))
-    lines += ["Features:", *(f"- {short_feature(x, s['features'])}" for x in s["features"])]
+    lines += ["Features:", *(f"- {short_feature(x, s['features'], dm)}" for x in s["features"])]
     return "\n".join(lines)
 
 
@@ -877,9 +878,52 @@ def _boilerplate() -> tuple[frozenset[str], frozenset[str]]:
     return frozenset(choice), frozenset((b.get("feature") or {}).get("name", "") for b in srd.table("Backgrounds").values()) - {""}
 
 
-def short_feature(text: str, features: list[str]) -> str:
+# Features the player chooses to use: an action, a bonus action or a reaction, or a use spent by choice (Jake,
+# 2026-10-19). The play DM sees them by name only and looks one up when the player uses it: shown in full, Divine
+# Sense's first sentence ("evil registers on your senses like a noxious odor") read as always on, and the DM narrated
+# the smell in the opening though the player never used it. Every other feature is shown in full, as are features that
+# are mostly always on with a choice inside (Martial Arts, Sneak Attack).
+CHOSEN_FEATURES = frozenset({
+    "Rage", "Reckless Attack", "Frenzy", "Intimidating Presence", "Retaliation",
+    "Bardic Inspiration (d6)", "Bardic Inspiration (d8)", "Bardic Inspiration (d10)", "Bardic Inspiration (d12)",
+    "Cutting Words", "Countercharm", "Peerless Skill",
+    "Channel Divinity: Turn Undead", "Channel Divinity: Preserve Life", "Divine Intervention",
+    "Wild Shape (CR 1/4 or below, no flying or swim speed)", "Wild Shape (CR 1/2 or below, no flying speed)",
+    "Wild Shape (CR 1 or below)", "Natural Recovery",
+    "Fighting Style: Protection", "Second Wind", "Action Surge (1 use)", "Action Surge (2 uses)",
+    "Indomitable (1 use)", "Indomitable (2 uses)", "Indomitable (3 uses)",
+    "Flurry of Blows", "Patient Defense", "Step of the Wind", "Deflect Missiles", "Slow Fall",
+    "Stunning Strike", "Wholeness of Body", "Stillness of Mind", "Quivering Palm", "Empty Body",
+    "Divine Sense", "Lay on Hands", "Divine Smite", "Channel Divinity: Sacred Weapon",
+    "Channel Divinity: Turn the Unholy", "Cleansing Touch", "Holy Nimbus",
+    "Hunter's Prey: Giant Killer", "Primeval Awareness", "Hide in Plain Sight", "Multiattack: Volley",
+    "Multiattack: Whirlwind Attack", "Vanish", "Superior Hunter's Defense: Stand Against the Tide",
+    "Superior Hunter's Defense: Uncanny Dodge", "Foe Slayer",
+    "Cunning Action", "Fast Hands", "Uncanny Dodge", "Stroke of Luck",
+    "Flexible Casting: Creating Spell Slots", "Flexible Casting: Converting Spell Slot", "Metamagic: Careful Spell",
+    "Metamagic: Distant Spell", "Metamagic: Empowered Spell", "Metamagic: Extended Spell",
+    "Metamagic: Heightened Spell", "Metamagic: Quickened Spell", "Metamagic: Subtle Spell",
+    "Metamagic: Twinned Spell", "Dragon Wings", "Draconic Presence",
+    "Eldritch Invocation: Gaze of Two Minds", "Eldritch Invocation: One with Shadows", "Pact of the Blade",
+    "Dark One's Own Luck", "Hurl Through Hell", "Eldritch Master",
+    "Arcane Recovery", "Overchannel",
+    "Breath Weapon", "Tinker", "Relentless Endurance"})
+
+
+@functools.cache
+def _srd_texts() -> dict[str, frozenset[str]]:
+    """Each feature and racial trait name: its SRD text(s), as a sheet line starts after the name."""
+    out: dict[str, set[str]] = {}
+    for t in ("Features", "Traits"):
+        for f in srd.table(t).values():
+            out.setdefault(f["name"], set()).add(" ".join(f.get("desc") or []))
+    return {k: frozenset(v) for k, v in out.items()}
+
+
+def short_feature(text: str, features: list[str], dm: bool = False) -> str:
     """A sheet feature as the DM's instructions show it (Jake, 2026-10-19: a shorter opening, which is written again at
-    every cut): a choice's preamble and the background feature by name only, the rest in full."""
+    every cut): a choice's preamble and the background feature by name only, the rest in full. dm: a feature the
+    player chooses to use by name only too, with anything the sheet adds after its SRD text (choices, numbers)."""
     name = text.split(":")[0].strip()
     choice, background = _boilerplate()
     if re.sub(r"\s*\([^)]*\)$", "", name) in background:
@@ -887,13 +931,18 @@ def short_feature(text: str, features: list[str]) -> str:
     if name in choice or ("Choose one of the following options" in text
                           and any(x.startswith(f"{name}: ") for x in features if x != text)):
         return f"{name} (the choice made is on the sheet)"
+    if dm:
+        for full in CHOSEN_FEATURES:
+            for desc in _srd_texts().get(full, ()):
+                if text.startswith(head := f"{full}: {desc}"):
+                    return f"{full} (the player chooses when to use it: look it up when they do){text[len(head):]}"
     return text
 
 
 def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> str:
     return ((HERE / "prompt.md").read_text(encoding="utf-8")
-            + "\n\n## The player's character\n" + sheet_text(sheet)
-            + "".join(f"\n\n## Companion: {c['name']}\n" + sheet_text(c) for c in companions)
+            + "\n\n## The player's character\n" + sheet_text(sheet, dm=True)
+            + "".join(f"\n\n## Companion: {c['name']}\n" + sheet_text(c, dm=True) for c in companions)
             + "\n\n## The opening\n" + sheet["opening"]
             + (f"\n\n## The character's past (settled with the player)\n{sheet['backstory']}" if sheet.get("backstory") else ""))
 
@@ -1322,7 +1371,9 @@ class Session:
                     "in it, and link them, as your rules for the notebook say. " if game.sheet.get("backstory") else "")
             await turn(game, "[Start] Begin the session. " + past + "Begin with a short introduction before the first "
                              "scene: a few sentences on the world and region, who the character is and how they came to "
-                             "be here. Then open the scene and ask what "
+                             "be here. Keep the past exactly as it was settled. Introduce anything new to the player as new, saying "
+                             "what it is before treating it as known, so it can't be taken for something from the past. "
+                             "Then open the scene and ask what "
                              f"{game.sheet['name'].split()[0]} does.")
 
     async def line(self, line: str) -> bool:

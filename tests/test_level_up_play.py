@@ -236,6 +236,17 @@ def test_sheet_text_shows_what_the_later_levels_add() -> None:
     assert "Devil's Sight" in play.sheet_text(built(LOCK, [rec(spells=["Comprehend Languages"], invocations=["Devil's Sight", "Beast Speech"])]))
 
 
+
+def test_the_dm_sees_features_the_player_chooses_to_use_by_name_only() -> None:
+    s = _sheet("paladin", 5)
+    dm, full = play.sheet_text(s, dm=True), play.sheet_text(s)
+    assert "noxious odor" in full and "noxious odor" not in dm  # Divine Sense's first sentence read as always on
+    assert "- Divine Sense (the player chooses when to use it: look it up when they do)\n" in dm
+    assert "- Lay on Hands (the player chooses when to use it: look it up when they do) At level 5: a pool of 25 hit points." in dm
+    assert "- Extra Attack: Beginning at 5th level" in dm and "- Divine Health: By 3rd level" in dm  # passive: in full
+    assert all(n in play._srd_texts() for n in play.CHOSEN_FEATURES)
+    assert "Divine Sense" in play.system_prompt(s, []) and "noxious odor" not in play.system_prompt(s, [])
+
 # ---------- rests ----------
 
 @pytest.mark.parametrize("cls", CLASSES)
