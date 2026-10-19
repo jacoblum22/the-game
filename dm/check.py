@@ -41,7 +41,9 @@ SYSTEM = (
     "3: a player paying attention would notice (a named NPC's title or terms change; a distance or travel time shrinks). "
     "4: it changes something the player relied on (a promised payment, an item they hold, how many enemies remain). "
     "5: it breaks the story (a dead character acting, a place in two directions, a count that can't be). Quote the NEW "
-    "REPLY's exact words, and in clashes_with name the earlier line it clashes with. Then say how to fix it: fix 'text' "
+    "REPLY's exact words: in quote, the whole sentence (or sentences) that has to change, from its first word to its "
+    "final punctuation, never a part of a sentence, and replacement is the whole sentence written again to take its "
+    "place; and in clashes_with name the earlier line it clashes with. Then say how to fix it: fix 'text' "
     "with a replacement for the quoted words when changing the words alone fixes it, or fix 'dm' with an empty "
     "replacement when the fix also needs a change to the character sheet, fight, clock or notebook (hit points, "
     "items, gold, enemy numbers, time passing). Return an empty list if none."
@@ -115,25 +117,14 @@ def acts(p: dict[str, Any]) -> bool:
     return bool(topics) and p["severity"] >= min(CUTOFF[t] for t in topics)
 
 
-def whole_sentence(quote: str, reply: str) -> bool:
-    """The quoted words are one or more whole sentences of the reply (so a replacement can take their place): they
-    start the reply, a paragraph or a sentence, and end with a full stop, ! or ? (a closing quote mark may follow)."""
-    i = reply.find(quote)
-    if i < 0 or not quote.strip() or quote.rstrip()[-1] not in ".!?\"'”’*":
-        return False
-    head = reply[:i].rstrip(" *\"'“‘")
-    return not head or head[-1] in ".!?\n" or (reply[:i].endswith("\n"))
-
-
 def sort(problems: list[dict[str, Any]], reply: str, in_fight: bool) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """(problems for the DM, problems fixed in the text). A text fix needs a replacement and quoted words that are whole sentences of the reply
-    (the checker writes its replacement for a sentence, and a phrase swapped for one was spliced into the middle of a
-    sentence in the first live test); anything else that was kept goes back to the DM."""
+    """(problems for the DM, problems fixed in the text). A text fix needs the quoted words to be in the reply, and a
+    replacement; anything else that was kept goes back to the DM."""
     back, text = [], []
     for p in problems:
         topics = set(p["topics"])
         if (topics & BACK_TO_DM or (in_fight and "count" in topics) or p["fix"] == "dm"
-                or not p["replacement"].strip() or not whole_sentence(p["quote"], reply)):
+                or not p["replacement"].strip() or p["quote"] not in reply):
             back.append(p)
         else:
             text.append(p)

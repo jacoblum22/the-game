@@ -42,22 +42,14 @@ def test_a_problem_whose_earlier_line_is_not_there_is_dropped() -> None:
 
 
 def test_what_goes_back_to_the_dm() -> None:
-    reply_ = "The foreman nods. It leaves at noon."
-    whole = problem(quote="It leaves at noon.", replacement="It leaves at dawn.")
+    reply_ = "It leaves at noon."
+    whole = problem()
     assert check.sort([whole], reply_, False) == ([], [whole])
-    assert check.sort([problem()], reply_, False) == ([problem()], [])  # a phrase, not a sentence: the DM writes it again
     for p in (problem(topics=["time"]), problem(topics=["items"]), problem(topics=["mechanics"]), problem(fix="dm"),
-              problem(replacement="", quote="It leaves at noon."), problem(quote="words that are not in the reply.")):
+              problem(replacement=""), problem(quote="words that are not in the reply")):
         assert check.sort([p], reply_, False) == ([p], [])
     assert check.sort([whole | {"topics": ["count"]}], reply_, False)[1] != []
     assert check.sort([whole | {"topics": ["count"]}], reply_, True)[0] != []  # enemies in a fight
-
-
-def test_a_phrase_is_not_spliced_into_a_sentence(monkeypatch: Any, tmp_path: Path) -> None:
-    ps = answer(problem(quote="leaves at noon", replacement="The barge leaves at dawn, friend.",
-                        earlier_quote="The foreman says the barge"))
-    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG), say(LONG.replace("noon", "dawn"))], ps)
-    assert len(fake.calls) == 2 and ".," not in said[-1]  # sent back to the DM, never patched
 
 
 def test_the_opening_is_not_checked(monkeypatch: Any, tmp_path: Path) -> None:
