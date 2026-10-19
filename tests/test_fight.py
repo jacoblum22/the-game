@@ -110,7 +110,7 @@ def test_opportunity_attack_stop(tmp_path: Path, monkeypatch: Any) -> None:
 
 
 def test_melee_hit_on_an_unconscious_pc_is_a_critical(tmp_path: Path, monkeypatch: Any) -> None:
-    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1], [("Goblin 1", "Goblin", 15)])
+    g = game(tmp_path, monkeypatch, "fighter", [2, 15, 1, 1], [("Goblin 1", "Goblin", 15)])
     g.sheet["hp"]["current"] = 0
     g.sheet["conditions"] = ["unconscious"]
     out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": g.sheet["name"]}]}]})
@@ -134,7 +134,7 @@ def test_a_dropped_target_falls_to_the_next(tmp_path: Path, monkeypatch: Any) ->
 
 
 def test_an_already_downed_target_is_no_change(tmp_path: Path, monkeypatch: Any) -> None:
-    g = game(tmp_path, monkeypatch, "fighter", [2, 2], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12)])
+    g = game(tmp_path, monkeypatch, "fighter", [2, 2, 2, 2], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12)])
     pc = g.sheet["name"]
     g.sheet["hp"]["current"], g.sheet["conditions"] = 0, ["unconscious"]
     out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": pc}]},
@@ -371,3 +371,18 @@ def test_swarm_at_half_hp(tmp_path: Path, monkeypatch: Any) -> None:
     m._find(g.fight, "Rats")["hp"] = 3
     out = turns(g, {"turns": [{"name": "Rats", "attacks": [{"attack": "Bites", "target": g.sheet["name"]}]}]})
     assert "STOPPED" not in out and not g.dice.rolls and g.sheet["hp"]["current"] == 14 - 4
+
+
+def test_conditions_give_advantage(tmp_path: Path, monkeypatch: Any) -> None:
+    """An attack on an unconscious PC has advantage (and a melee hit is a critical); a poisoned attacker's against a
+    prone target in melee cancels out to a plain roll."""
+    g = game(tmp_path, monkeypatch, "fighter", [3, 17, 1, 1], [("Goblin 1", "Goblin", 15)])
+    g.sheet["hp"]["current"] = 0
+    g.sheet["conditions"] = ["unconscious"]
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": g.sheet["name"]}]}]})
+    assert "advantage: Brakka Ironvein unconscious" in out and "critical" in out
+    g = game(tmp_path, monkeypatch, "fighter", [13], [("Goblin 1", "Goblin", 15)])
+    m._find(g.fight, "Goblin 1")["conditions"] = ["poisoned"]
+    g.sheet["conditions"] = ["prone"]
+    out = turns(g, {"turns": [{"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": g.sheet["name"]}]}]})
+    assert "disadvantage: Goblin 1 poisoned" in out and "advantage: Brakka Ironvein prone" in out and "a miss" in out

@@ -393,3 +393,11 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   Dwarven Resilience and Brave, and Lucky's reroll. "If the poison damage reduces the target to 0 hit points ..."
   stops for the DM only if it does. Anything else (curses, diseases, exceptions like "other than an elf") still
   stops. 45 of the SRD's 124 attack riders now resolve in code (was 0). Swarms roll their half-HP dice. 314 tests.
+- New test game fighter3 (human fighter, monster hunter; 25 rounds, run.py brief added). One fight (rounds 9-10, a
+  griffon the DM set at 30 HP): 5 and 6 calls; creature_turns ran each griffon turn with no refusals or stops. Other
+  rounds 1.57 calls, about $0.06 each; whole game about $1.60 at API prices. The level-1 PC died in round 3 of the
+  fight to a crit on the downed PC; the player made a new PC (one new_pc refused for missing base_scores, then built).
+- Found in that fight: attacks at the unconscious PC were rolled without advantage. Attacks now take advantage and
+  disadvantage from conditions (SRD): the attacker blinded, poisoned, prone or restrained (disadvantage), invisible
+  (advantage); the target blinded, paralyzed, petrified, restrained, stunned or unconscious (advantage), prone
+  (advantage in melee within 5 feet, else disadvantage), invisible (disadvantage). Opportunity attacks too. 315 tests.

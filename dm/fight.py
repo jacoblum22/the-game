@@ -336,7 +336,7 @@ class Turns:
 
     def conditions(self, name: str) -> set[str]:
         s = self.member(name)
-        return set((s if s else self.entry(name)).get("conditions", []))
+        return {x.casefold() for x in (s if s else self.entry(name)).get("conditions", [])}
 
     def pc(self) -> str:
         return self.g.sheet["name"]
@@ -662,9 +662,11 @@ class Turns:
                            "the player first and end your reply there; then resolve the attack yourself (roll it and "
                            f"its damage, record them; uses reaction, by {by}), and call creature_turns with resume.")
         self.used_reaction(by)
-        r = m.roll(f"1d20{w['bonus']:+d}")
+        why = self.condition_modes(by, target, w["ranged"])
+        r = m.roll(f"1d20{w['bonus']:+d}", _mode(*why.values()))
         roll = {"total": r["total"], "natural": r["natural"]}
-        self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)})"))
+        self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)}"
+                                       + "".join(f"; {v}: {k}" for k, v in why.items()) + ")"))
         crit = roll["natural"] == 20
         hit = crit or (roll["natural"] != 1 and roll["total"] >= self.ac(target))
         if hit and not tm and self.parry(target, w["ranged"], crit, roll, label):
@@ -697,9 +699,12 @@ class Turns:
                     self.ask(self.pc(), "Protection", f"{c['name']} is about to attack {target} with its {w['name']}.",
                              "it imposes disadvantage: pass resume {mode: 'disadvantage'}")
         if p["stage"] == "roll":
-            r = m.roll(f"1d20{w['bonus']:+d}", _mode(resume.get("mode") or x.get("mode"), p.get("mode")))
+            why = self.condition_modes(c["name"], target, ranged or bool(x.get("beyond_5ft")))
+            modes = [resume.get("mode") or x.get("mode"), p.get("mode"), *why.values()]
+            r = m.roll(f"1d20{w['bonus']:+d}", _mode(*modes))
             p.update(stage="rolled", roll={"total": r["total"], "natural": r["natural"]})
-            self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)})"))
+            self.log("dice " + m.roll_text(r, f"{label} (AC {self.ac(target)}"
+                                           + "".join(f"; {v}: {k}" for k, v in why.items()) + ")"))
             resume = {}
             if not by_party:
                 self.cutting_words(c, x, target, label)
@@ -758,6 +763,23 @@ class Turns:
                 raise Stop(f"STOPPED: {c['name']}'s {w['name']} hit {target}, and on a hit its stat block says: "
                            f"\"{w['rider']}\" Only the damage was applied. Resolve the rest by the rules (roll any save "
                            "with roll), then call creature_turns with resume: the turns you sent go on from here.")
+
+    def condition_modes(self, attacker: str, target: str, far: bool) -> dict[str, str]:
+        """Advantage and disadvantage on an attack from conditions (SRD Appendix: Conditions): {why: mode}. far: a
+        ranged attack, or a melee one from more than 5 feet (prone's advantage is only from within 5 feet)."""
+        out: dict[str, str] = {}
+        mine, theirs = self.conditions(attacker), self.conditions(target)
+        for cond in sorted(mine & {"blinded", "poisoned", "prone", "restrained"}):
+            out[f"{attacker} {cond}"] = "disadvantage"
+        if "invisible" in mine:
+            out[f"{attacker} invisible"] = "advantage"
+        for cond in sorted(theirs & {"blinded", "paralyzed", "petrified", "restrained", "stunned", "unconscious"}):
+            out[f"{target} {cond}"] = "advantage"
+        if "prone" in theirs:
+            out[f"{target} prone"] = "disadvantage" if far else "advantage"
+        if "invisible" in theirs:
+            out[f"{target} invisible"] = "disadvantage"
+        return out
 
     # ---- reactions taken by the code ----
     def defend(self, x: dict[str, Any], target: str, roll: dict[str, Any], crit: bool, ranged: bool,

@@ -49,6 +49,10 @@ BRIEFS = {
     "bard3": ("a gnome bard (College of Lore)",
               "You play as a curious trickster: you explore, poke at strange things, lie and bluff, try clever or odd "
               "uses of your spells and skills, and sometimes test the edges of the rules."),
+    # Short new game with fights (Jake, 2026-10-19): creature_turns, companions and riders in code, from turn 1.
+    "fighter3": ("a human fighter who hunts monsters for coin",
+                 "You play boldly: you take monster-hunting jobs, look for trouble, fight when it comes, and like to "
+                 "travel with a companion or two, but you think about tactics in a fight and use your features."),
 }
 
 PLAYER = """You are a human player in a solo D&D 5e game (2014 rules) run by a DM. {style}
