@@ -894,7 +894,8 @@ def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> st
     return ((HERE / "prompt.md").read_text(encoding="utf-8")
             + "\n\n## The player's character\n" + sheet_text(sheet)
             + "".join(f"\n\n## Companion: {c['name']}\n" + sheet_text(c) for c in companions)
-            + "\n\n## The opening\n" + sheet["opening"])
+            + "\n\n## The opening\n" + sheet["opening"]
+            + (f"\n\n## The character's past (settled with the player)\n{sheet['backstory']}" if sheet.get("backstory") else ""))
 
 
 # sent with every play turn, after the status (owner, 2026-10-11): the DM went from memory despite the prompt
@@ -1204,14 +1205,20 @@ class Creation:
                           show=f"built {sheet['name']}, {sheet['summary']}")
 
         @tool("finish_character", "After the player has said yes to the built sheet: write the one-paragraph "
-              "opening that starts their adventure. Play begins with it.",
-              {"type": "object", "properties": {"opening": {"type": "string"}}, "required": ["opening"]})
+              "opening that starts their adventure. Play begins with it. backstory: the character's past as the player "
+              "settled it, in full: every person, place, group, god and event in it, with what is true of each.",
+              {"type": "object", "properties": {"opening": {"type": "string"}, "backstory": {"type": "string"}},
+               "required": ["opening", "backstory"]})
         async def finish_character(a: dict[str, Any]) -> dict[str, Any]:
             if not self.draft:
                 return answer("finish_character", a, "no character built yet: use build_character", True)
             if not str(a.get("opening") or "").strip():
                 return answer("finish_character", a, "the opening is empty", True)
+            if not str(a.get("backstory") or "").strip():
+                return answer("finish_character", a, "the backstory is empty: write the character's past as the player "
+                              "settled it, in full", True)
             self.draft["opening"] = a["opening"].strip()
+            self.draft["backstory"] = a["backstory"].strip()
             self.done = True
             # asking for silence after a tool call made the model repeat the call (8 of 16 replays); one exact line: 0 of 16
             return answer("finish_character", a, 'Done. Now reply with exactly this line and nothing else: '

@@ -160,3 +160,16 @@ def test_the_checker_is_called_with_the_api_request(monkeypatch: Any) -> None:
     monkeypatch.setattr(model, "send", send)
     assert asyncio.run(check.ask_model("api", "sys", "state")) == {"problems": []}
     assert sent[0]["model"] == "claude-sonnet-5-5" and sent[0]["output_config"]["format"]["type"] == "json_schema"
+
+
+def test_finish_character_needs_the_backstory_and_the_dm_gets_it(tmp_path: Path) -> None:
+    c = play.Creation(tmp_path / "new.json")
+    tools = {t.name: t for t in c.tools()}
+    c.draft = json.loads((play.HERE / "characters" / "fighter.json").read_text(encoding="utf-8"))
+    r = asyncio.run(tools["finish_character"].handler({"opening": "At the gate.", "backstory": "  "}))
+    assert r.get("is_error") and not c.done
+    r = asyncio.run(tools["finish_character"].handler({"opening": "At the gate.", "backstory": "Born in Karrowmere."}))
+    assert not r.get("is_error") and c.done and c.draft["backstory"] == "Born in Karrowmere."
+    system = play.system_prompt(c.draft, [])
+    assert "Born in Karrowmere." in system and "## The character's past" in system
+    assert "## The character's past" not in play.system_prompt(c.draft | {"backstory": ""}, [])
