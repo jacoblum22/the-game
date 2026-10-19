@@ -627,10 +627,18 @@ def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[
             raise Refused(f"{name} needs an initiative total (roll it first)")
         if not is_pc and not mate and not (isinstance(c.get("hp"), int) and c["hp"] > 0 and isinstance(c.get("ac"), int)):
             raise Refused(f"{name} needs hp (above 0) and ac from its stat block")
+        monster = None
+        if c.get("monster") and not is_pc and not mate:
+            try:
+                monster = srd.find("Monsters", c["monster"])["name"]
+            except srd.Bad:
+                raise Refused(f"{name}: no SRD monster {c['monster']!r} (monster is its stat block's name, e.g. "
+                              "Goblin; leave it out for a creature that has none)") from None
         names.add(name)
         new.append({"name": name, "initiative": c["initiative"], "pc": is_pc}
                    | ({"companion": True} if mate else {"hp": c.get("hp"), "max_hp": c.get("hp"), "ac": c.get("ac"),
-                                                         "conditions": []}))
+                                                         "conditions": []})
+                   | ({"monster": monster} if monster else {}))
     current = f["order"][f["turn"]]["name"] if f["turn"] >= 0 else None
     f["order"] = sorted(f["order"] + new, key=lambda c: -c["initiative"])  # stable: ties keep the given order
     if current:
@@ -731,6 +739,9 @@ def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any], companions: l
             lines.append(f"{mark} {c['name']} (companion, initiative {c['initiative']}): {_member_text(mate)}{used}")
         else:
             lines.append(f"{mark} {_creature_text(c)}{used}")
+    if f.get("pending"):
+        lines.append(f"STOPPED: {f['pending']['name']}'s turn ({f['pending']['why']}); once it's resolved, go on with "
+                     "creature_turns resume")
     return "\n".join(lines)
 
 

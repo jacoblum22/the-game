@@ -93,7 +93,9 @@ async def main(name: str, rounds: int) -> None:
     meta = json.loads(meta_path.read_text(encoding="utf-8")) if meta_path.exists() else {}
     what, style = BRIEFS[name]
     p = ClaudeSDKClient(ClaudeAgentOptions(
-        tools=[], setting_sources=[], model=PLAYER_MODEL, cwd=str(GAMES), resume=meta.get("player_session"),
+        # strict_mcp_config: no claude.ai connectors; the player passed on their sign-in notice in its line (barbarian2)
+        tools=[], setting_sources=[], strict_mcp_config=True, model=PLAYER_MODEL, cwd=str(GAMES),
+        resume=meta.get("player_session"),
         system_prompt=PLAYER.format(style=style),
         env={"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1"}))
     s = play.Session(play.MODEL, "sdk")

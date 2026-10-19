@@ -321,3 +321,24 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   Minimal bench 10 of 10 in one message; full prompt on the API from a fresh conversation 13 of 14 (was 0 of 8);
   Claude Code replay of 6 bard3 rounds x 2, mid-game with the old habit behind it: 12 of 12, all after a roll, no stubs,
   replies 1,026 to 1,503 characters. 290 tests pass. The reply now comes whole, not word by word.
+
+## Creatures' turns run by code (Jake, 2026-10-19)
+- Where fight calls went (Claude Code session files of the autoloop games): 1,527 of 5,225 model calls were in fights,
+  median 16 a fight; 497 were a single roll (an attack roll read before its damage roll). Of ~500 creature turns, ~40%
+  a plain attack, ~10% a spell or special action, ~45% no roll (moving, fleeing, talking, down).
+- `creature_turns` (dm/fight.py): the DM sends every creature's turn up to the next party member's in one call
+  (attacks and targets, whom it moves away from); the code rolls each attack from the SRD stat block (`monster`, now
+  given in add_combatants), damage only on a hit, doubled dice on a crit and on a melee hit on a paralyzed or
+  unconscious target, and applies it. It stops where a party member can react (opportunity attack, Protection, Cutting
+  Words, Shield and Cutting Words only when they could turn a hit into a miss, Uncanny Dodge, Deflect Missiles,
+  Hellish Rebuke), where a hit does more than damage, and for a concentration save. After a stop, resume plays on the
+  turns sent; before each turn and attack it checks they can still happen (creature in, up, not incapacitated, next;
+  target in and not dropped since the turns were sent), else hands just that turn back. No standing orders (Jake: skip
+  for now). A versatile weapon is one-handed unless damage is passed; resistances are the DM's to pass. The DM starts
+  party members' turns with next_turn (when the code did, a replay skipped a companion's turn).
+- Replay A/B of fight-start rounds (ab7; base c28d3ff): 10 rounds x 2 runs each arm (rounds before ~80 have no session
+  to branch from). Model calls per round 10.2 old, 6.0 new (-41%). Refusals in the new arm were mostly a choice of
+  damage (versatile weapons, since defaulted) and 'pc' as a target name (since accepted). Read through: attacks,
+  crits and damage right; a raging barbarian's resistance was not passed once (the tool now says to). Not measured:
+  mid-fight rounds (their trackers have no monster).
+- run.py: the test player gets strict_mcp_config: it had passed on a claude.ai connector sign-in notice in its line.

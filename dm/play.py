@@ -22,7 +22,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import branch, create, lookup, model
+from dm import branch, create, fight, lookup, model, srd
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -52,6 +52,7 @@ def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
 
 
 _INT = {"type": "integer", "minimum": 0}
+_INT_ANY = {"type": "integer"}
 _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"type": "string"},
                                                                       "qty": {"type": "integer", "minimum": 1}},
                                      "required": ["item"]}}
@@ -300,6 +301,14 @@ class Game:
         self.save()
         return {"content": [{"type": "text", "text": text}]}
 
+    def advance_turn(self) -> str:
+        """next_turn: the next combatant's turn, and the clock 6 seconds on with each new round."""
+        was = self.fight["round"] if self.fight else 0
+        self.fight, text = m.next_turn(self.fight)
+        if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
+            self.clock = m.advance(self.clock, 6)
+        return text
+
     def using(self, a: dict[str, Any], fn: Callable[[dict[str, Any]], str]) -> Callable[[], str]:
         """A roll or change that may spend an action (`uses`, `by`): the fight's mark and note go with it, all or
         nothing."""
@@ -525,7 +534,9 @@ class Game:
               "creature needs a distinct name, hp and ac.",
               {"type": "object", "properties": {"combatants": {"type": "array", "items": {
                   "type": "object", "properties": {"name": {"type": "string"}, "initiative": {"type": "integer"},
-                                                   "hp": {"type": "integer"}, "ac": {"type": "integer"}},
+                                                   "hp": {"type": "integer"}, "ac": {"type": "integer"},
+                                                   "monster": {"type": "string", "description": "a creature's SRD "
+                                                               "stat block, e.g. Goblin: creature_turns attacks from it"}},
                   "required": ["name", "initiative"]}}}, "required": ["combatants"]})
         async def add_combatants(a: dict[str, Any]) -> dict[str, Any]:
             def go() -> str:
@@ -551,13 +562,61 @@ class Game:
               "combatant's) and show whose turn it is.",
               {"type": "object", "properties": {}})
         async def next_turn(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
-                was = self.fight["round"] if self.fight else 0
-                self.fight, text = m.next_turn(self.fight)
-                if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
-                    self.clock = m.advance(self.clock, 6)
-                return text
-            return self.run("fight", go)
+            if self.fight and self.fight.get("pending"):
+                return self.run("fight", lambda: (_ for _ in ()).throw(m.Refused(
+                    f"{self.fight['pending']['name']}'s turn is stopped: finish it with creature_turns resume")))
+            return self.run("fight", self.advance_turn)  # (logged as "fight: ...")
+
+        @tool("creature_turns", "Run creatures' turns: you decide what each creature does, and the code rolls each "
+              "attack against the target's AC and, on a hit, its damage (doubled dice on a critical hit, and on a melee "
+              "hit on a paralyzed or unconscious target), from the creature's stat block, and applies it. Send every "
+              "creature's turn from the next one up to the next party member's turn, in initiative order; the code "
+              "starts each creature's turn (no next_turn); start the party member's with next_turn. It STOPS where a "
+              "party member can take a "
+              "reaction (opportunity attack, Shield, Uncanny Dodge, Cutting Words, Protection, Deflect Missiles, "
+              "Hellish Rebuke), where a hit does more than damage (a save, a grapple), where a party member must save "
+              "for concentration, and where a turn sent can no longer happen as sent (its target dropped or left): "
+              "resolve that, then call again with resume, and the turns you sent go on from there. A creature needs "
+              "its monster in the tracker (add_combatants). Anything else a creature does (a spell, a check, a "
+              "special action) you resolve with the other tools on its turn instead; so too every turn while a party "
+              "member has a readied action.",
+              {"type": "object", "properties": {
+                  "turns": {"type": "array", "items": {"type": "object", "properties": {
+                      "name": {"type": "string", "description": "the creature, exactly as in the tracker"},
+                      "attacks": {"type": "array", "description": "in order; more than one only with Multiattack",
+                                  "items": {"type": "object", "properties": {
+                          "attack": {"type": "string", "description": "the attack's name in its stat block"},
+                          "target": {"type": "string", "description": "exactly as in the tracker"},
+                          "mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]},
+                          "ranged": {"type": "boolean", "description": "a melee-or-ranged weapon thrown or shot"},
+                          "beyond_5ft": {"type": "boolean", "description": "a melee attack from more than 5 feet (reach)"},
+                          "damage": {"type": "string", "description": "only when the stat block offers a choice of "
+                                     "damage (two-handed, for example): the dice"},
+                          "target_resists": {"type": "string", "enum": list(fight.RESIST_KINDS),
+                                             "description": "the code doesn't know resistances: pass it whenever the "
+                                             "target resists, is vulnerable or immune to this damage (a raging "
+                                             "barbarian and slashing, for example)"}},
+                          "required": ["attack", "target"]}},
+                      "leaves_reach_of": {**_NAMES, "description": "party members whose reach it leaves without "
+                                          "Disengage, before its attacks (after them with after_attacks)"},
+                      "after_attacks": {"type": "boolean"},
+                      "note": {"type": "string", "description": "what else it does, for your notes (it moves to the "
+                               "door, it Dodges)"}},
+                      "required": ["name"]}},
+                  "resume": {"type": "object", "description": "after a STOP, once it's resolved: {} if nothing changes; "
+                             "mode (Protection), roll_change (Cutting Words, minus the roll), halve_damage (Uncanny "
+                             "Dodge), damage_reduction (Deflect Missiles), skip_rest (drop the rest of its attacks)",
+                             "properties": {"mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]},
+                                            "roll_change": _INT_ANY, "halve_damage": {"type": "boolean"},
+                                            "damage_reduction": _INT, "skip_rest": {"type": "boolean"}}}}})
+        async def creature_turns(a: dict[str, Any]) -> dict[str, Any]:
+            try:
+                text = fight.Turns(self, a).run()
+            except (m.Refused, srd.Bad) as e:
+                self.transcript.append({"kind": "refused", "text": f"creature turns: {e}"})
+                return {"content": [{"type": "text", "text": f"REFUSED, nothing changed: {e}"}], "is_error": True}
+            self.save()
+            return {"content": [{"type": "text", "text": text}]}
 
         @tool("end_fight", "End the current fight.", {"type": "object", "properties": {}})
         async def end_fight(a: dict[str, Any]) -> dict[str, Any]:
@@ -673,7 +732,7 @@ class Game:
 
         return [self.after_reply(t) for t in (
             roll, change_pc, change_party, new_pc, roll_ability_scores, srd_options, level_up_options, level_up, add_combatants, change_creature,
-            next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
+            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
 
     def written(self) -> bool:
         """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
