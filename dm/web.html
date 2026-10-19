@@ -25,6 +25,14 @@
   #out ul, #out ol { margin: 0 0 14px; padding-left: 22px; } #out li { margin: 2px 0; }
   .you { margin: 18px 0 18px auto; max-width: 85%; width: fit-content; background: var(--you); padding: 8px 12px;
          border-radius: 14px 14px 4px 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  button.redo { font-size: 13px; padding: 2px 8px; margin-left: 8px; background: transparent; color: var(--dim);
+                border-color: var(--line); vertical-align: baseline; }
+  .editrow { text-align: right; margin: -6px 0 12px; }
+  .editor { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: flex; flex-direction: column;
+            gap: 8px; padding: 16px; }
+  .editor textarea { flex: 1; font: inherit; font-size: 16px; color: var(--text); background: var(--panel);
+                     border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+  .editor .hint { margin: 0; color: var(--dim); font-size: 13px; }
   .card { margin: 10px 0; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line);
           border-radius: 10px; font-size: 14px; line-height: 1.45; }
   .card .what { color: var(--dim); }
@@ -351,10 +359,15 @@ function md(lines) {
 }
 
 // ---- the whole output, line by line ----
-const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet, \/quit exits\.$/;
-function render(text) {
+const HEADER = /^(.+?), (.+?)\. Saving to .*\/sheet shows your sheet,.* \/quit exits\.$/;
+// going back (dm/branch.py): the game's own lines about it, shown as notices
+const BACK = /^\[(going back to turn|the DM reads your version|there's no |which turn|the edited reply)/;
+function render(text, idle = true) {
   const lines = text.replace(/\r/g, "").split("\n");
   let html = "", para = [], sheet = null, who = null, cards = "", count = 0;
+  // each of the player's lines starts a turn (as dm/lore.py counts them); the DM's reply since the last one can be
+  // edited, and any line sent again (/redo)
+  let turn = 0, starts = [], replyAt = -1, reply = [], m0;
   pc = ((text.match(/^(.+?), .+?\. Saving to .*\/sheet shows your sheet/m) || [])[1] || "").split(" ")[0];
   party = [...text.matchAll(/\[party: (\S+)[^\n]*? joined the party/g)].map(m => m[1]);
   const flush = () => { if (para.length) html += md(para); para = []; };
@@ -374,7 +387,25 @@ function render(text) {
       flush(); endSheet();
       const said = l.slice(1).trim();
       if (said === "/sheet") sheet = [];
-      else if (said && said !== "/quit") html += `<div class="you ui">${esc(said)}</div>`;
+      else if (said && !said.startsWith("/")) {
+        starts[++turn] = html.length;
+        replyAt = -1; reply = [];
+        html += `<div class="you ui" data-turn="${turn}" data-said="${esc(said)}">${esc(said)}` +
+          (idle ? `<button class="redo" title="Send this again, or change it: the game goes back to here" onclick="redo(this.parentElement)">↺</button>` : "") + `</div>`;
+      }
+      continue;
+    }
+    if ((m0 = l.match(/^\[going back to turn (\d+);/)) && starts[+m0[1]] !== undefined) {
+      flush();
+      html = html.slice(0, starts[+m0[1]]);
+      turn = +m0[1] - 1; starts.length = turn + 1; replyAt = -1; reply = [];
+      html += `<div class="notice">Went back to turn ${m0[1]}. The game before it is kept as its own save.</div>`;
+      continue;
+    }
+    if (l === "[the DM's reply, as you edited it:]") {
+      flush();
+      if (replyAt >= 0) html = html.slice(0, replyAt);
+      replyAt = -1; reply = [];
       continue;
     }
     if (sheet) { sheet.push(l); continue; }
@@ -394,11 +425,37 @@ function render(text) {
       if (m[1] !== "0") html += `<div class="notice bad">The game stopped unexpectedly (code ${m[1]}).</div>`;
     }
     else if ((m = l.match(/^\[the DM call failed: (.*)\]$/))) { flush(); html += `<div class="notice bad">The DM call failed: ${esc(m[1])}</div>`; }
-    else if (!l.trim()) flush();
-    else para.push(l);
+    else if (BACK.test(l)) { flush(); html += `<div class="notice">${esc(l.slice(1, -1))}</div>`; }
+    else if (!l.trim()) { flush(); if (reply.length) reply.push(""); }
+    else {
+      if (!para.length && replyAt < 0 && turn) replyAt = html.length;
+      if (turn) reply.push(l);
+      para.push(l);
+    }
   }
   flush();
+  lastReply = reply.join("\n").trim();
+  if (idle && lastReply && who && who[0] !== "New character")
+    html += `<div class="ui editrow"><button class="redo" onclick="editReply()">Edit the DM's reply</button></div>`;
   return {html, who, cards, count};
+}
+
+// ---- going back: send a line again (changed or not), or edit the DM's latest reply ----
+let lastReply = "";
+function redo(div) {
+  const t = prompt(`Send your line of turn ${div.dataset.turn} again. Change it if you like. The game goes back to just before it; the game as it is now stays as its own save.`, div.dataset.said);
+  if (t && t.trim()) send(`/redo ${div.dataset.turn} ${t.trim()}`);
+}
+function editReply() {
+  const box = document.createElement("div");
+  box.className = "editor";
+  box.innerHTML = `<textarea></textarea><p class="hint">The DM reads your version from now on. What the reply already did to the sheet, the clock and the notebook stays.</p><div><button>Save</button> <button>Cancel</button></div>`;
+  const [ta] = box.getElementsByTagName("textarea"), [save, cancel] = box.getElementsByTagName("button");
+  ta.value = lastReply;
+  save.onclick = () => { const t = ta.value.trim(); box.remove(); if (t && t !== lastReply) send("/edit " + t.replace(/\n/g, "\\n")); };
+  cancel.onclick = () => box.remove();
+  document.body.appendChild(box);
+  ta.focus();
 }
 
 async function poll() {
@@ -409,7 +466,7 @@ async function poll() {
   if (key !== shown) {
     shown = key;
     const atEnd = out.scrollHeight - out.scrollTop - out.clientHeight < 120;
-    const {html, who, cards, count} = render(r.text);
+    const {html, who, cards, count} = render(r.text, r.running && !thinking);
     sheets = count;
     if (wanted && count >= wanted) $("panelBody").innerHTML = cards;
     out.innerHTML = html + (thinking ? `<div class="thinking ui">The DM is thinking</div>` : "");

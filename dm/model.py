@@ -81,10 +81,13 @@ def add_user(messages: list[dict[str, Any]], content: list[dict[str, Any]]) -> N
 
 async def respond(model: str, system: str, tools: list[Tool], messages: list[dict[str, Any]], text: str,
                   on_text: Callable[[str], None], on_change: Callable[[], None] = lambda: None,
-                  on_size: Callable[[int], None] = lambda n: None) -> str | None:
+                  on_size: Callable[[int], None] = lambda n: None,
+                  done: Callable[[list[str]], bool] = lambda names: False) -> str | None:
     """Send `text` as the next user turn and run the DM until it finishes its reply: each tool it asks for runs, and
     its result goes back. `messages` grows in place; `on_text` gets each piece of the DM's text and `on_change`
-    is called whenever `messages` has grown (to save); `on_size` gets the conversation's length after each call. Returns None, or why the call failed."""
+    is called whenever `messages` has grown (to save); `on_size` gets the conversation's length after each call.
+    `done(names)`: after the tools of one call ran without an error, whether the reply is over (the DM is not called
+    again just to read their results; dm/play.py BOOKKEEPING). Returns None, or why the call failed."""
     add_user(messages, [{"type": "text", "text": text}])
     by_name = {t.name: t for t in tools}
     specs = [{"name": t.name, "description": t.description, "input_schema": t.input_schema} for t in tools]
@@ -118,4 +121,6 @@ async def respond(model: str, system: str, tools: list[Tool], messages: list[dic
                             **({"is_error": True} if res.get("is_error") else {})})
         add_user(messages, results)
         on_change()
+        if done([b["name"] for b in uses]) and not any(r.get("is_error") for r in results):
+            return None
     return f"the reply took more than {MAX_ROUNDS} model calls"

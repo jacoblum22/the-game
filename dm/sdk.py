@@ -4,17 +4,21 @@ The DM's memory is Claude Code's session file, and the save keeps its id. The br
 
 from __future__ import annotations
 
+import asyncio
 import os
 import tempfile
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 from claude_agent_sdk import (
     AssistantMessage,
     ClaudeAgentOptions,
     ClaudeSDKClient,
+    HookMatcher,
     ResultMessage,
     TextBlock,
+    ToolUseBlock,
     create_sdk_mcp_server,
 )
 from claude_agent_sdk import tool as sdk_tool
@@ -35,7 +39,14 @@ DM_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1", "CLAUDE_CODE_DISABLE_CLAUDE_MD
 class Client:
     """One DM conversation in Claude Code. `tools` are ours (dm/model.py Tool), handed to the SDK as they are."""
 
-    def __init__(self, model: str, system: str, tools: list[Tool], cwd: str, session_id: str | None) -> None:
+    def __init__(self, model: str, system: str, tools: list[Tool], cwd: str, session_id: str | None,
+                 fork_at: str | None = None, done: Callable[[list[str]], bool] | None = None) -> None:
+        """fork_at: an entry of session_id's file; the conversation goes on from there as a new session (a fork, the
+        source left as it was: dm/branch.py). done: as model.respond's; Claude Code is stopped after the last tool
+        of a model call when it says the reply is over."""
+        self.done = done
+        self.step: dict[str, str] = {}  # the latest model call's tool uses: id -> our tool's name
+        self.ran: dict[str, bool] = {}  # of those, the ones that have run: id -> without an error
         Path(cwd).mkdir(parents=True, exist_ok=True)
         server = create_sdk_mcp_server("dm", tools=[sdk_tool(t.name, t.description, t.input_schema)(t.handler)
                                                      for t in tools])
@@ -48,7 +59,11 @@ class Client:
             tools=[], setting_sources=[], strict_mcp_config=True, max_turns=MAX_ROUNDS, cwd=cwd, env=DM_ENV,
             system_prompt={"type": "file", "path": self.system_file}, extra_args={"system-prompt-snapshot": "off"},
             model=model, mcp_servers={"dm": server}, allowed_tools=[f"mcp__dm__{t.name}" for t in tools],
-            resume=session_id)
+            resume=session_id,
+            hooks={"PostToolUse": [HookMatcher(matcher="mcp__dm__.*", hooks=[self.after_tool])],
+                   "PostToolUseFailure": [HookMatcher(matcher="mcp__dm__.*", hooks=[self.after_tool])]})
+        if fork_at and session_id:
+            self.options.resume_session_at, self.options.fork_session = fork_at, True
         self.client = ClaudeSDKClient(options=self.options)
         self.session_id = session_id
         self.size = 0  # the conversation's length after the last model call, in tokens
@@ -60,19 +75,45 @@ class Client:
         await self.client.disconnect()
         Path(self.system_file).unlink(missing_ok=True)
 
+    async def after_tool(self, data: Any, tool_use_id: str | None, context: Any) -> dict[str, Any]:
+        """Claude Code's hook after each of our tools: once every tool of the model call has run, none with an error,
+        and done() says the reply is over, Claude Code stops instead of calling the model to read the results."""
+        if not self.done or not tool_use_id:
+            return {}
+        for _ in range(500):  # the call's message can reach respond() a moment after its tools start
+            if tool_use_id in self.step:
+                break
+            await asyncio.sleep(0.01)
+        else:
+            return {}
+        r = data.get("tool_response")
+        self.ran[tool_use_id] = data.get("hook_event_name") == "PostToolUse" and not (
+            isinstance(r, dict) and (r.get("is_error") or r.get("isError")))
+        if set(self.ran) >= set(self.step) and all(self.ran.values()) and self.done(list(self.step.values())):
+            return {"continue_": False, "stopReason": "the reply is written"}
+        return {}
+
     async def respond(self, text: str, on_text: Callable[[str], None]) -> str | None:
         """As model.respond: the DM's reply to `text`, tools and all. Returns None, or why the call failed."""
         failed = None
         await self.client.query(text)
         async for msg in self.client.receive_response():
             if isinstance(msg, AssistantMessage):
+                # An API error comes as Claude Code's own message ("API Error: ... safeguards flagged this message"):
+                # a failure, never the DM's words (it was shown as the reply in 7 rounds running; autoloop, 2026-10-16)
+                if msg.error or msg.model == "<synthetic>":
+                    failed = " ".join(b.text for b in msg.content if isinstance(b, TextBlock)).strip() or str(msg.error)
+                    continue
                 if msg.usage:
                     self.size = context_size(msg.usage)
                 for b in msg.content:
                     if isinstance(b, TextBlock) and b.text.strip():
                         on_text(b.text.strip())
+                uses = {b.id: b.name.removeprefix("mcp__dm__") for b in msg.content if isinstance(b, ToolUseBlock)}
+                if uses:  # text first: done() reads how much of the reply is written
+                    self.ran, self.step = {}, uses
             elif isinstance(msg, ResultMessage):
                 self.session_id = msg.session_id
-                if msg.is_error:
+                if msg.is_error and not failed:
                     failed = str(msg.result or getattr(msg, "errors", "") or "the SDK reported an error")
         return failed

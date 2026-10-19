@@ -71,6 +71,7 @@ def test_party_rests(tmp_path) -> None:
     assert w["spellcasting"]["prepared"] == ["Sleep", "Shield"]
     # a companion at 0 HP doesn't block the party's long rest
     call(t, "change_pc", who="Wren", damage=99)
+    call(t, "change_time", advance={"hours": 16})  # one long rest in 24 hours
     text, err = call(t, "change_pc", long_rest=True)
     assert not err and "Wren: no benefit" in text and g.companions[0]["hp"]["current"] == 0
     # a bad companion choice refuses the whole rest
@@ -171,11 +172,11 @@ def test_uses_marks_and_reminds(tmp_path) -> None:
     before = len(g.transcript)
     assert "no combatant named" in call(t, "roll", dice="1d20", reason="x", uses="reaction", by="Goblin")[0]
     assert len(g.transcript) == before + 1 and g.transcript[-1]["kind"] == "refused"  # nothing rolled
-    text, err = call(t, "change_pc", damage=2, uses="reaction", by="pc")
-    assert "no combatant named" in text  # by: the name as in the tracker
-    text, err = call(t, "change_pc", damage=2, uses="reaction", by=g.sheet["name"])
+    text, err = call(t, "change_pc", damage=2, uses="reaction", by="pc")  # "pc" for the PC, as in creature_turns
     assert not err and "until the start of its next turn" in text and "AC" in g.status()
     call(t, "next_turn")
     assert "reaction used" not in g.status() and "action used" in g.status()  # the PC's turn: its reaction is back
     call(t, "next_turn")
     assert "used" not in g.status()
+    text, err = call(t, "change_pc", uses="action", conditions_added=[])  # a Dodge or Ready: only the action is spent
+    assert not err and text.endswith("has used its action: no more actions this turn.") and "action used" in g.status()

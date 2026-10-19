@@ -5,3 +5,5 @@ archived under the git tags `archive/pre-reset/*`. Don't restore or build from t
 
 - Agree with the owner on what we're making before building anything.
 - The rules are the spec. Never skip or simplify a rule without asking the owner first.
+
+- On another machine, or picking up the autoloop work: read `HANDOFF.md`.

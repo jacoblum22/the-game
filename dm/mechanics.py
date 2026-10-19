@@ -106,7 +106,7 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
 
     if ch.get("long_rest"):
         # SRD Long Rest: "a character must have at least 1 hit point at the start of the rest to gain its benefits".
-        # The code can't know the "no more than one long rest in a 24-hour period" limit; the DM checks that.
+        # The "no more than one long rest in a 24-hour period" limit is checked against the clock (play.py).
         if "dead" in s["conditions"] or hp["current"] < 1:
             raise Refused("a long rest gives no benefit to a character with 0 hit points (or dead): "
                           "they need at least 1 hit point at the start of the rest. Heal them first")
@@ -176,11 +176,18 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
                 if over >= hp["max"]:
                     _add(s, "dead")
                     out.append(f"massive damage: {over} left over ≥ max HP {hp['max']}: the character dies")
+                elif ((s.get("resources") or {}).get("Relentless Endurance") or {}).get("left", 0) > 0:
+                    # SRD half-orc: reduced to 0 HP but not killed outright, drop to 1 instead, once per long rest.
+                    # Taken at once (there's no reason to decline it), so the attacks that follow still see them up.
+                    s["resources"]["Relentless Endurance"]["left"] -= 1
+                    hp["current"] = 1
+                    out.append(f"Relentless Endurance: at 1 HP instead of 0 "
+                               f"({s['resources']['Relentless Endurance']['left']} use left until a long rest)")
                 else:
                     _add(s, "unconscious")
                     out.append("at 0 HP: unconscious; make death saving throws on each of their turns")
 
-    heal = _int("heal")
+    heal, woke = _int("heal"), False
     if heal:
         if "dead" in s["conditions"]:
             raise Refused("the character is dead; ordinary healing doesn't work. A spell or effect that returns the dead to life "
@@ -192,6 +199,7 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
             s["death_saves"] = {"successes": 0, "failures": 0}
             _remove(s, "unconscious")
             _remove(s, "stable")
+            woke = True
             out.append("conscious again; death saves reset")
 
     for kind in ("successes", "failures"):
@@ -268,13 +276,15 @@ def change_pc(sheet: dict[str, Any], ch: dict[str, Any]) -> tuple[dict[str, Any]
         s["coins_cp"] += cp
         out.append(f"money {'+' if cp > 0 else '-'}{coins_text(abs(cp))}: now {coins_text(s['coins_cp'])}")
 
-    for c in ch.get("conditions_added") or []:
+    for c in map(_cond, ch.get("conditions_added") or []):
         _add(s, c)
         out.append(f"condition added: {c}")
         if c == "stable":  # e.g. first aid (DC 10 Wisdom (Medicine)): SRD resets both counts on becoming stable
             s["death_saves"] = {"successes": 0, "failures": 0}
-    for c in ch.get("conditions_removed") or []:
-        if c not in s["conditions"]:
+    for c in map(_cond, ch.get("conditions_removed") or []):
+        if not _cond_in(s["conditions"], c):
+            if c in ("unconscious", "stable") and woke:
+                continue  # the healing in this same change already ended it
             raise Refused(f"condition {c!r} is not on the sheet; conditions now: {', '.join(s['conditions']) or 'none'}")
         _remove(s, c)
         if c == "dead":  # a revival starts fresh, so 3 old failures don't kill the character again on the next change
@@ -397,14 +407,26 @@ def _spellbook_add(s: dict[str, Any], name: str) -> str:
     return f"{sp['name']} copied into the spellbook (record the cost: 50 gp and 2 hours per spell level)"
 
 
+def _cond(c: str) -> str:
+    """An SRD condition (or stable, dead) in the game's own spelling, whatever its case: the DM had added
+    "Unconscious", which healing never cleared and "unconscious" couldn't remove (autoloop, 2026-10-14)."""
+    low = c.strip().lower()
+    return low if low in srd.table("Conditions") or low in ("stable", "dead") else c
+
+
+def _cond_in(conds: list[str], c: str) -> str | None:
+    """The condition as recorded, matched without regard to case."""
+    return next((x for x in conds if x.lower() == c.strip().lower()), None)
+
+
 def _add(s: dict[str, Any], c: str) -> None:
-    if c not in s["conditions"]:
-        s["conditions"].append(c)
+    if not _cond_in(s["conditions"], c):
+        s["conditions"].append(_cond(c))
 
 
 def _remove(s: dict[str, Any], c: str) -> None:
-    if c in s["conditions"]:
-        s["conditions"].remove(c)
+    if x := _cond_in(s["conditions"], c):
+        s["conditions"].remove(x)
 
 
 def status(s: dict[str, Any]) -> str:
@@ -615,10 +637,18 @@ def add_combatants(fight: dict[str, Any] | None, pc_name: str, combatants: list[
             raise Refused(f"{name} needs an initiative total (roll it first)")
         if not is_pc and not mate and not (isinstance(c.get("hp"), int) and c["hp"] > 0 and isinstance(c.get("ac"), int)):
             raise Refused(f"{name} needs hp (above 0) and ac from its stat block")
+        monster = None
+        if c.get("monster") and not is_pc and not mate:
+            try:
+                monster = srd.find("Monsters", c["monster"])["name"]
+            except srd.Bad:
+                raise Refused(f"{name}: no SRD monster {c['monster']!r} (monster is its stat block's name, e.g. "
+                              "Goblin; leave it out for a creature that has none)") from None
         names.add(name)
         new.append({"name": name, "initiative": c["initiative"], "pc": is_pc}
                    | ({"companion": True} if mate else {"hp": c.get("hp"), "max_hp": c.get("hp"), "ac": c.get("ac"),
-                                                         "conditions": []}))
+                                                         "conditions": []})
+                   | ({"monster": monster} if monster else {}))
     current = f["order"][f["turn"]]["name"] if f["turn"] >= 0 else None
     f["order"] = sorted(f["order"] + new, key=lambda c: -c["initiative"])  # stable: ties keep the given order
     if current:
@@ -655,14 +685,14 @@ def change_creature(fight: dict[str, Any] | None, ch: dict[str, Any]) -> tuple[d
         was = c["hp"]
         c["hp"] = min(c["max_hp"], was + ch["heal"])
         out.append(f"{c['name']} healed {ch['heal']}: HP {was} → {c['hp']}")
-    for cond in ch.get("conditions_added") or []:
-        if cond not in c["conditions"]:
+    for cond in map(_cond, ch.get("conditions_added") or []):
+        if not _cond_in(c["conditions"], cond):
             c["conditions"].append(cond)
         out.append(f"{c['name']}: {cond}")
-    for cond in ch.get("conditions_removed") or []:
-        if cond not in c["conditions"]:
+    for cond in map(_cond, ch.get("conditions_removed") or []):
+        if not (had := _cond_in(c["conditions"], cond)):
             raise Refused(f"{c['name']} doesn't have {cond!r}; it has: {', '.join(c['conditions']) or 'none'}")
-        c["conditions"].remove(cond)
+        c["conditions"].remove(had)
         out.append(f"{c['name']}: no longer {cond}")
     if not out:
         raise Refused("nothing to change: pass damage, heal, conditions or remove")
@@ -719,6 +749,9 @@ def fight_text(f: dict[str, Any] | None, pc_sheet: dict[str, Any], companions: l
             lines.append(f"{mark} {c['name']} (companion, initiative {c['initiative']}): {_member_text(mate)}{used}")
         else:
             lines.append(f"{mark} {_creature_text(c)}{used}")
+    if f.get("pending"):
+        lines.append(f"STOPPED: {f['pending']['name']}'s turn ({f['pending']['why']}); once it's resolved, go on with "
+                     "creature_turns resume")
     return "\n".join(lines)
 
 

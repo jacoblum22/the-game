@@ -4,7 +4,9 @@
     py -3.12 -m dm.play new                # make a character with the DM first
     py -3.12 -m dm.play --resume saves/<file>.json
 
-In play: type what your character does. /sheet shows your sheet, /quit saves and exits.
+In play: type what your character does. /sheet shows your sheet, /quit saves and exits. /back lists your lines;
+/redo <turn> [line] goes back to just before one (sent again, or changed) in a new save; /edit <text> rewrites the
+DM's latest reply (dm/branch.py).
 The DM runs on the Anthropic API, with the key in the ANTHROPIC_API_KEY environment variable.
 """
 
@@ -12,14 +14,17 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import functools
 import json
+import os
+import re
 import sys
 import time
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import create, lookup, model
+from dm import branch, create, fight, lookup, model, srd
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -49,6 +54,7 @@ def lookup_tool(record: Callable[[dict[str, Any], str], None]) -> Any:
 
 
 _INT = {"type": "integer", "minimum": 0}
+_INT_ANY = {"type": "integer"}
 _ITEMS = {"type": "array", "items": {"type": "object", "properties": {"item": {"type": "string"},
                                                                       "qty": {"type": "integer", "minimum": 1}},
                                      "required": ["item"]}}
@@ -59,6 +65,15 @@ _USES = {"uses": {"type": "string", "enum": list(m.USES), "description": "in a f
                   "attack roll of an Attack action is the action; the tracker marks it until that combatant's next turn"},
          "by": {"type": "string", "description": "with uses: the combatant, exactly as in the tracker, when it isn't "
                 "the one whose turn it is (a reaction, for example)"}}
+
+
+
+def home_relative(path: str) -> str:
+    """A path under the home folder as ~/..., so a save names no user."""
+    try:
+        return "~/" + Path(path).relative_to(Path.home()).as_posix()
+    except ValueError:
+        return path
 
 
 class Game:
@@ -82,17 +97,31 @@ class Game:
         self.backend: str = data.get("backend") or ("sdk" if data.get("session_id") else "api")
         self.messages: list[dict[str, Any]] = data.get("messages", [])
         self.session_id: str | None = data.get("session_id")
-        self.cwd: str = data.get("cwd", str(SAVES))  # an SDK save's session folder; saves from before 2026-10-11 used saves/
+        # an SDK save's session folder; saves from before 2026-10-11 used saves/. Kept as ~/... in the save so it carries
+        # no username and works on another machine.
+        self.cwd: str = str(Path(os.path.expanduser(data.get("cwd", str(SAVES)))))
         self.sdk: Any = None  # the open SDK client while an SDK game is played
+        # Going back (dm/branch.py, owner 2026-10-17): a snapshot before each of the player's lines. A fork's SDK
+        # conversation starts from its source's session at fork_at; an API fork from after a cut opens a new
+        # conversation with the turns so far (rebuild).
+        self.snapshots: list[dict[str, Any]] = data.get("snapshots", [])
+        self.fork_at: str | None = data.get("fork_at")
+        self.rebuild: bool = bool(data.get("rebuild"))
+        self.past_pcs: list[dict[str, Any]] = data.get("past_pcs", [])  # earlier PCs, after a death (new_pc)
+        self.new_rolled: list[int] | None = data.get("new_rolled")  # a new PC's rolled scores, until it's made
         self.reply_len = 0  # this turn: how much of the DM's reply is written, and whether a tool was called after it
         self.late = False
+        self.replied = False  # this turn: the reply came through the reply tool
+        self.on_reply: Callable[[str], None] = lambda t: None  # turn(): the reply tool's text, as the DM's reply
 
     def save(self) -> None:
         self.path.parent.mkdir(exist_ok=True)
         data = {"sheet": self.sheet, "companions": self.companions, "fight": self.fight, "clock": self.clock, "model": self.model,
                 "transcript": self.transcript, "lore": self.lore, "backend": self.backend,
-                "story": self.story}
-        data |= ({"session_id": self.session_id, "cwd": self.cwd} if self.backend == "sdk" else {"messages": self.messages})
+                "story": self.story, "snapshots": self.snapshots, "past_pcs": self.past_pcs}
+        data |= {"new_rolled": self.new_rolled} if self.new_rolled else {}
+        data |= ({"session_id": self.session_id, "cwd": home_relative(self.cwd)} if self.backend == "sdk" else {"messages": self.messages})
+        data |= ({"fork_at": self.fork_at} if self.fork_at else {}) | ({"rebuild": True} if self.rebuild else {})
         text = json.dumps(data, indent=1, ensure_ascii=False)
         self.path.write_text(text, encoding="utf-8")
         on_save(self.path, text)
@@ -137,7 +166,28 @@ class Game:
             lines.append(self._change_member(i, a))
         if spell:  # a cast comes without a rest, so the clock is only the cast's
             self.clock = clock
+        s = self.sheet if i is None else self.companions[i]
+        if a.get("use_resource") and (ft := fight.feature_timer(s, a["use_resource"])) and self.clock["now"] is not None:
+            # Rage's timer is also how creature_turns knows the barbarian resists bludgeoning, piercing and slashing
+            # damage and adds rage damage (Jake, 2026-10-19)
+            timer, sec = ft
+            self.clock = {**self.clock, "timers": {**self.clock["timers"], timer: self.clock["now"] + sec}}
+            lines.append(f"timer {timer}: {m.span(sec)} (remove it with change_time if it ends early)")
         return "; ".join(lines)
+
+    def change_time(self, a: dict[str, Any]) -> str:
+        """change_time. A timer for a feature whose use starts its own (Rage, Wild Shape) is refused: spending the use
+        starts it, so the use is never left unspent (a replay, 2026-10-19)."""
+        name = str((a.get("add_timer") or {}).get("name", ""))
+        for s in [self.sheet, *self.companions]:
+            for res in s.get("resources", {}):
+                if fight.feature_timer(s, res) and re.search(rf"\b{re.escape(res)}\b", name, re.I) \
+                        and s["name"].split()[0].casefold() in name.casefold():
+                    raise m.Refused(f"{res}'s timer starts when its use is spent: change_pc use_resource {res!r}"
+                                    + ("" if s is self.sheet else f", who {s['name']!r}")
+                                    + " (it spends the use and starts the timer)")
+        self.clock, text = m.change_time(self.clock, a)
+        return text
 
     def _change_member(self, i: int | None, a: dict[str, Any]) -> str:
         rest = 8 * 3600 if a.get("long_rest") else 3600 if a.get("short_rest") else 0
@@ -149,6 +199,11 @@ class Game:
                 raise m.Refused("companions have no XP: they are at the PC's level and level up when the PC does")
             self.companions[i], lines = m.change_pc(self.companions[i], a)
             return f"{self.companions[i]['name']}: " + "; ".join(lines)
+        last, now = self.sheet.get("last_long_rest"), self.clock["now"]
+        if a.get("long_rest") and now is not None and last is not None and now + rest - last < m.DAY:
+            # SRD: "A character can't benefit from more than one long rest in a 24-hour period" (autoloop, 2026-10-14)
+            raise m.Refused(f"one long rest in 24 hours: the last finished {m.when(last)}, so the next can finish "
+                            f"{m.when(last + m.DAY)} at the earliest. A short rest is allowed")
         choices = a.pop("companions", None) or {}
         if choices and not rest:
             raise m.Refused("companions: end-of-rest choices, only together with short_rest or long_rest")
@@ -168,6 +223,8 @@ class Game:
                 lines.append(f"{c['name']}: " + "; ".join(more))
         self.sheet, self.companions = sheet, party
         self.clock = m.advance(self.clock, rest)
+        if a.get("long_rest") and self.clock["now"] is not None:
+            self.sheet["last_long_rest"] = self.clock["now"]
         if rest and self.clock["now"] is not None:
             lines.append(f"{m.span(rest)} later: {m.when(self.clock['now'])}")
         return "; ".join(lines)
@@ -212,6 +269,46 @@ class Game:
             return f"{sheet['name']} is being built: {sheet['summary']} so far"
         return f"{sheet['name']} joined the party, {sheet['summary']}"
 
+    # A new PC after the old one dies (owner, 2026-10-17): the game goes on in the same world, with its notebook, clock
+    # and companions. Two autoloop PCs died in 60 rounds; with no way to make a new sheet the DM played one on the dead
+    # PC's sheet, and the other on none.
+    def _dead(self) -> None:
+        if "dead" not in self.sheet["conditions"]:
+            raise m.Refused(f"only when the PC is dead: {self.sheet['name']} isn't")
+        if self.fight:
+            raise m.Refused("end the fight first (end_fight)")
+
+    def roll_new_scores(self) -> str:
+        self._dead()
+        if self.new_rolled:
+            raise m.Refused(f"already rolled: {self.new_rolled}; scores are rolled once")
+        lines, rolled = [], []
+        for _ in range(6):
+            dice = sorted(m.roll("4d6")["parts"][0]["rolls"], reverse=True)
+            rolled.append(sum(dice[:3]))
+            lines.append(f"4d6 {dice} drop {dice[3]} = {rolled[-1]}")
+        self.new_rolled = rolled
+        return "ability scores rolled: " + "; ".join(lines) + f". Scores: {rolled}"
+
+    def new_pc(self, a: dict[str, Any]) -> str:
+        self._dead()
+        ch = a.get("character")
+        if not isinstance(ch, dict):
+            raise m.Refused("pass character: the new PC's full set of level-1 choices")
+        sheet, errs = create.build(ch, self.new_rolled)
+        if not sheet:
+            raise m.Refused("NOT BUILT, nothing changed. Problems:\n- " + "\n- ".join(errs))
+        if not a.get("confirm"):
+            return ("BUILT, nothing changed yet. Show the player this sheet and ask for a yes, then call again with the "
+                    "same character, confirm true and the opening:\n" + sheet_text(sheet) + "\n" + m.status(sheet))
+        opening = str(a.get("opening") or "").strip()
+        if not opening:
+            raise m.Refused("the opening is empty: where the new character is, why, and how they come into the story")
+        sheet["opening"] = opening
+        self.past_pcs.append({**self.sheet, "turn_ended": notebook.now(self.transcript)})
+        old, self.sheet, self.new_rolled = self.sheet["name"], sheet, None
+        return f"{sheet['name']}, {sheet['summary']}, is the player's character now, in {old}'s place"
+
     # ---- tools: each runs a mechanics function, records the result, and tells the DM what happened ----
 
     def run(self, label: str, fn: Callable[[], str], hidden: bool = False, inp: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -227,16 +324,29 @@ class Game:
         self.save()
         return {"content": [{"type": "text", "text": text}]}
 
+    def advance_turn(self) -> str:
+        """next_turn: the next combatant's turn, and the clock 6 seconds on with each new round."""
+        was = self.fight["round"] if self.fight else 0
+        self.fight, text = m.next_turn(self.fight)
+        if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
+            self.clock = m.advance(self.clock, 6)
+        return text
+
     def using(self, a: dict[str, Any], fn: Callable[[dict[str, Any]], str]) -> Callable[[], str]:
         """A roll or change that may spend an action (`uses`, `by`): the fight's mark and note go with it, all or
         nothing."""
         a = dict(a)
         what, by = a.pop("uses", None), a.pop("by", None)
+        if by and by.strip().casefold() == "pc":  # as add_combatants and creature_turns take it
+            by = self.sheet["name"]
 
         def go() -> str:
             if not what:
                 return fn(a)
-            _, note = m.use(self.fight, what, by)  # a wrong uses refuses before anything is rolled or changed
+            f, note = m.use(self.fight, what, by)  # a wrong uses refuses before anything is rolled or changed
+            if not any(v for k, v in a.items() if k not in ("who", "name")):  # only the use: a Dodge, Dash or Ready
+                self.fight = f
+                return note.strip(" ()")
             text = fn(a)
             try:
                 self.fight, note = m.use(self.fight, what, by)
@@ -258,29 +368,25 @@ class Game:
             return self.run("dice", self.using(a, lambda a: "dice " + m.roll_text(m.roll(a["dice"], a.get("mode") or "normal"),
                                                                                   a["reason"])))
 
-        @tool("change_pc", "Record a change to the sheet of the player character, or of a companion (who). Pass only the "
-              "fields that change. A rest is the whole party's: pass it without who; it rests every companion too and "
-              "moves the clock once. "
-              "All-or-nothing: if any part is impossible, nothing is applied and the reason is returned. "
-              "Rules you must apply yourself: a long rest needs the PC at 1 HP or more and only one long rest counts per "
-              "24 hours (check the time; the tool can't); hit dice are spent at the end of a short rest, one per call.",
+        @tool("change_pc", "Change the PC's sheet, or a companion's (who): only the fields that change; all or nothing. "
+              "A rest is the whole party's (no who) and moves the clock; a long rest needs the PC at 1 HP or more, once "
+              "per 24 hours. Hit dice are spent after a short rest, one per call.",
               {"type": "object", "properties": {
                   "who": _WHO,
                   "damage": _INT, "heal": _INT, "temp_hp": _INT,
-                  "critical_hit": {"type": "boolean", "description": "the damage is from a critical hit (any hit on an unconscious "
-                                   "PC from within 5 feet is one): at 0 HP that is two death save failures instead of one"},
+                  "critical_hit": {"type": "boolean", "description": "damage from a critical hit (at 0 HP: two death "
+                                   "save failures)"},
                   "hit_dice_spent": {"type": "integer", "minimum": 0,
-                                     "description": "1 = spend one hit die at the end of a short rest; the result says what to roll, "
-                                     "then pass the total as heal. The player decides after each roll whether to spend another"},
+                                     "description": "1 after a short rest: the result says what to roll; pass the "
+                                     "total as heal. The player decides on each further die"},
                   # how many to add (owner, 2026-10-14): the DM had passed the new total, and a second failure made three
                   "death_save_successes": {**_INT, "description": "how many to add, not the new total: 1 for a successful "
                                            "death saving throw"},
                   "death_save_failures": {**_INT, "description": "how many to add, not the new total: 1 for a failed death "
                                           "saving throw, 2 for a natural 1. Damage at 0 HP adds its own failures"},
-                  "cast": {"type": "string", "description": "a spell the character casts, e.g. Bless. One call does it all: "
-                           "it spends the slot (level), moves the clock on by a casting time of minutes or hours, starts a "
-                           "timer for the spell's duration at that level (the clock must be set), and starts concentration "
-                           "if the spell needs it. Can go with other fields, not a rest"},
+                  "cast": {"type": "string", "description": "a spell cast, e.g. Bless: spends the slot (level), moves "
+                           "the clock by a casting time of minutes or more, starts its duration timer and any "
+                           "concentration. Not with a rest"},
                   "level": {"type": "integer", "minimum": 1, "maximum": 9, "description": "with cast: the spell slot "
                             "level used (the spell's level or higher); leave out for a cantrip or a ritual"},
                   "ritual": {"type": "boolean", "description": "with cast: cast as a ritual (no slot; 10 minutes "
@@ -318,7 +424,9 @@ class Game:
         @tool("change_party", "A companion joins or leaves the party (the PC and at most 2 companions). add: the "
               "companion's full set of level-1 choices, in the form build_character takes (name, race, class, "
               "ability_method standard_array, base_scores, choices, cantrips, spells, prepared, alignment, personality, "
-              "appearance); srd_options gives the ids. Then level_up them (who) to the PC's level. remove: a companion's "
+              "appearance); srd_options gives the ids. choices is {id: [entries]}, each entry an option letter or "
+              "exact name, or {option, picks} for an option with a further choice ({\"option\": \"a\", \"picks\": "
+              "[\"Longsword\"]}). Then level_up them (who) to the PC's level. remove: a companion's "
               "name, when they leave or die.",
               {"type": "object", "properties": {"add": {"type": "object"}, "remove": {"type": "string"}}})
         async def change_party(a: dict[str, Any]) -> dict[str, Any]:
@@ -334,7 +442,29 @@ class Game:
                 res["content"][0]["text"] += "\n\nTheir sheet:\n" + sheet_text(c)
             return res
 
-        @tool("srd_options", "What the SRD offers, for building a companion. No arguments: every race, class and the "
+        @tool("new_pc", "Only after the PC has died, if the player wants to go on in this world with a new character: "
+              "the world, notebook, clock and companions carry on. Make it with the player as character creation does: "
+              "race, class, ability scores (standard_array, point_buy, or rolled: roll_scores true, alone, once), the class's "
+              "and race's choices, equipment, spells, then name, personality and their past; srd_options gives the "
+              "ids. character: the full set of level-1 choices, in the form change_party's add takes. Without "
+              "confirm, the sheet is built and shown to you, and nothing changes: show it to the player and ask for a "
+              "yes. Then call again with the same character, confirm true, and opening: a paragraph on where they "
+              "are, why, and how they come into the story. They start at level 1.",
+              {"type": "object", "properties": {"character": {"type": "object"}, "confirm": {"type": "boolean"},
+                                                "opening": {"type": "string"},
+                                                "roll_scores": {"type": "boolean", "description": "4d6 drop the "
+                                                                "lowest, six times, for the player to place"}}})
+        async def new_pc(a: dict[str, Any]) -> dict[str, Any]:
+            if a.get("roll_scores"):  # was its own tool (roll_ability_scores) until 2026-10-19: fewer tool descriptions
+                if set(a) - {"roll_scores"}:
+                    return self.run("new character", lambda: (_ for _ in ()).throw(m.Refused(
+                        "roll_scores goes alone: roll first, then send the character")))
+                return self.run("dice", self.roll_new_scores)
+            if not a.get("character"):
+                return self.run("new character", lambda: (_ for _ in ()).throw(m.Refused("character: the full set of choices")))
+            return self.run("new character", lambda: self.new_pc(a), hidden=not a.get("confirm"), inp=a)
+
+        @tool("srd_options", "What the SRD offers, for building a companion or a new PC. No arguments: every race, class and the "
               "background. race only: that race in full. class only: that class in full. race and class: every choice "
               "that character needs, with ids, options and spell lists.",
               {"type": "object", "properties": {"race": {"type": "string"}, "class": {"type": "string"}}})
@@ -424,19 +554,36 @@ class Game:
                 res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0]))
             return res
 
-        @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
-              "the combatant named 'pc' and a companion the combatant with their name (their HP lives on their sheets); every "
-              "creature needs a distinct name, hp and ac.",
+        @tool("add_combatants", "Start a fight, or add arrivals to the current one. The PC is the combatant named 'pc' and "
+              "a companion the combatant with their name (their HP lives on their sheets); every creature needs a "
+              "distinct name. Initiative is rolled for anyone you don't give one (DEX, from the sheet or stat block); "
+              "a creature with `monster` takes its HP (the average) and AC from its stat block unless you give them. "
+              "Starting a fight returns the SRD's Combat Step by Step, and each new kind of creature's stat block.",
               {"type": "object", "properties": {"combatants": {"type": "array", "items": {
                   "type": "object", "properties": {"name": {"type": "string"}, "initiative": {"type": "integer"},
-                                                   "hp": {"type": "integer"}, "ac": {"type": "integer"}},
-                  "required": ["name", "initiative"]}}}, "required": ["combatants"]})
+                                                   "hp": {"type": "integer"}, "ac": {"type": "integer"},
+                                                   "monster": {"type": "string", "description": "a creature's SRD "
+                                                               "stat block, e.g. Goblin: creature_turns attacks from it"}},
+                  "required": ["name"]}}}, "required": ["combatants"]})
         async def add_combatants(a: dict[str, Any]) -> dict[str, Any]:
+            rules: list[tuple[str, str]] = []
+
             def go() -> str:
-                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], a["combatants"],
+                new = not self.fight
+                cs, rolled, kinds = fight.fill_combatants(self, a["combatants"])
+                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], cs,
                                                      tuple(c["name"] for c in self.companions))
+                # the rules a fight start needs, so the DM decides the first turns without a lookup call first
+                rules.extend(([("Combat Step by Step", "rule")] if new else []) + [(k, "monster") for k in kinds])
+                for line in rolled:
+                    self.log("tool", line)
                 return text
-            return self.run("fight", go)
+            out = self.run("fight", go)
+            for name, kind in rules:
+                text = lookup.lookup(name, kind)
+                record({"name": name, "kind": kind}, text)
+                out["content"].append({"type": "text", "text": text})
+            return out
 
         @tool("change_creature", "Damage, heal, add or remove conditions on a creature in the fight, or remove it.",
               {"type": "object", "properties": {
@@ -455,13 +602,92 @@ class Game:
               "combatant's) and show whose turn it is.",
               {"type": "object", "properties": {}})
         async def next_turn(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
-                was = self.fight["round"] if self.fight else 0
-                self.fight, text = m.next_turn(self.fight)
-                if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
-                    self.clock = m.advance(self.clock, 6)
-                return text
-            return self.run("fight", go)
+            if self.fight and self.fight.get("pending"):
+                return self.run("fight", lambda: (_ for _ in ()).throw(m.Refused(
+                    f"{self.fight['pending']['name']}'s turn is stopped: finish it with creature_turns resume")))
+            return self.run("fight", self.advance_turn)  # (logged as "fight: ...")
+
+        @tool("creature_turns", "Run turns in one call: you decide what each one does; the code rolls the attacks "
+              "(from the stat block or sheet; crits, and melee hits on the paralyzed or unconscious, double the dice), "
+              "applies resistances (stat block, sheet, Rage) and damage, concentration saves, and riders whose save the "
+              "stat block spells out (prone, poisoned, half poison damage, grapples). Send every turn from the next "
+              "one up to the PC's, in initiative order; the code starts them (no next_turn). On the PC's turn, once "
+              "the player has said it, send theirs first (pc: their attacks, smite where they smite; anything else "
+              "they do resolved with the other tools first), then the rest. Write reactions where they happen: an "
+              "opportunity attack on the move (leaves_reach_of), a companion's on the attack it answers (reactions); "
+              "none is taken unwritten, but Parry when it turns a hit into a miss. A dropped target goes to the next "
+              "of or_targets, else the attack isn't made. It STOPS for the PC's reactions (ask the player), a rider "
+              "it can't resolve, a creature's reaction other than Parry, a companion's death save and a changed "
+              "order: resolve it, then call with resume and the turns go on. Spells without an attack roll, checks, "
+              "special actions and readied actions: next_turn and the other tools. Roll a creature's own "
+              "concentration saves.",
+              {"type": "object", "properties": {
+                  "turns": {"type": "array", "items": {"type": "object", "properties": {
+                      "name": {"type": "string", "description": "the creature or companion, exactly as in the tracker (pc for the PC, first, on their turn)"},
+                      "attacks": {"type": "array", "description": "in order; a creature makes more than one only with "
+                                  "Multiattack, a companion only with Extra Attack (or bonus_action ones)",
+                                  "items": {"type": "object", "properties": {
+                          "attack": {"type": "string", "description": "the attack's name in its stat block, or on the "
+                                     "companion's sheet (Longsword, Fire Bolt)"},
+                          "target": {"type": "string", "description": "exactly as in the tracker"},
+                          "or_targets": {**_NAMES, "description": "whom it attacks instead, in order, if the target "
+                                         "has dropped or left by this attack"},
+                          "mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]},
+                          "ranged": {"type": "boolean", "description": "a melee-or-ranged weapon thrown or shot"},
+                          "beyond_5ft": {"type": "boolean", "description": "a melee attack from more than 5 feet (reach)"},
+                          "damage": {"type": "string", "description": "only for a choice of damage (two-handed, for "
+                                     "example): the dice, with a type if it differs, e.g. 1d10+3"},
+                          "extra_damage": {"type": "string", "description": "dice a party member adds on a hit (Sneak "
+                                           "Attack 1d6, Hunter's Mark 1d6): rolled only on a hit, doubled on a "
+                                           "critical; record what it spends yourself"},
+                          "smite": {"type": "integer", "minimum": 1, "maximum": 5, "description": "Divine Smite on a "
+                                    "hit with this slot level: the code spends the slot and rolls the dice (2d8 + 1d8 "
+                                    "a level above 1st, + 1d8 against undead or fiends)"},
+                          "smite_crit_only": {"type": "boolean", "description": "with smite: only on a critical hit"},
+                          "bonus_action": {"type": "boolean", "description": "a companion's attack with its bonus action "
+                                           "(two-weapon fighting, for example)"},
+                          "target_resists": {"type": "string", "enum": list(fight.RESIST_KINDS),
+                                             "description": "only to override the code, for the whole attack, when "
+                                             "something it can't see changes the target's resistance: a spell or item "
+                                             "(Protection from Energy), or normal for a magic or silvered weapon "
+                                             "against 'nonmagical' resistance"},
+                          "reactions": {"type": "array", "description": "companions' reactions to this attack (not "
+                                        "the PC's: the player is asked): Shield (by the target, taken if it turns the "
+                                        "hit into a miss), Uncanny Dodge (by the target, on a hit), Deflect Missiles "
+                                        "(by the target, a ranged hit), Protection (by another, before the roll), "
+                                        "Cutting Words (taken if it turns the hit into a miss). min_damage, for Uncanny "
+                                        "Dodge or Deflect Missiles: only if the damage rolled is at least that",
+                                        "items": {"type": "object", "properties": {
+                                            "by": {"type": "string"},
+                                            "reaction": {"type": "string", "enum": list(fight.TAKE)},
+                                            "min_damage": _INT},
+                                            "required": ["by", "reaction"]}}},
+                          "required": ["attack", "target"]}},
+                      "leaves_reach_of": {"type": "array", "description": "those whose reach it leaves without "
+                                          "Disengage, before its attacks (after them with after_attacks): a name, or "
+                                          "{name, opportunity_attack: the attack they make at it} for a creature or "
+                                          "companion who takes the opportunity attack (the PC's is asked)",
+                                          "items": {"anyOf": [{"type": "string"}, {"type": "object", "properties": {
+                                              "name": {"type": "string"}, "opportunity_attack": {"type": "string"}},
+                                              "required": ["name"]}]}},
+                      "after_attacks": {"type": "boolean"},
+                      "note": {"type": "string", "description": "what else it does, for your notes (it moves to the "
+                               "door, it Dodges)"}},
+                      "required": ["name"]}},
+                  "resume": {"type": "object", "description": "after a STOP, once it's resolved: {} if nothing changes; "
+                             "mode (Protection), roll_change (Cutting Words, minus the roll), halve_damage (Uncanny "
+                             "Dodge), damage_reduction (Deflect Missiles), skip_rest (drop the rest of its attacks)",
+                             "properties": {"mode": {"type": "string", "enum": ["normal", "advantage", "disadvantage"]},
+                                            "roll_change": _INT_ANY, "halve_damage": {"type": "boolean"},
+                                            "damage_reduction": _INT, "skip_rest": {"type": "boolean"}}}}})
+        async def creature_turns(a: dict[str, Any]) -> dict[str, Any]:
+            try:
+                text = fight.Turns(self, a).run()
+            except (m.Refused, srd.Bad) as e:
+                self.transcript.append({"kind": "refused", "text": f"creature turns: {e}"})
+                return {"content": [{"type": "text", "text": f"REFUSED, nothing changed: {e}"}], "is_error": True}
+            self.save()
+            return {"content": [{"type": "text", "text": text}]}
 
         @tool("end_fight", "End the current fight.", {"type": "object", "properties": {}})
         async def end_fight(a: dict[str, Any]) -> dict[str, Any]:
@@ -488,10 +714,7 @@ class Game:
                                                                  **_span}, "required": ["name"]},
                   "remove_timer": {"type": "string", "description": "a timer's name, exactly as in the status"}}})
         async def change_time(a: dict[str, Any]) -> dict[str, Any]:
-            def go() -> str:
-                self.clock, text = m.change_time(self.clock, a)
-                return text
-            return self.run("time", go)
+            return self.run("time", lambda: self.change_time(a))
 
         def record(a: dict[str, Any], text: str) -> None:
             self.transcript.append({"kind": "call", "tool": "lookup", "input": a, "result": text})
@@ -562,24 +785,49 @@ class Game:
             return self.run("recall", lambda: notebook.recall(self.lore, self.transcript, a.get("search"), a.get("turn"),
                                                               a.get("page") or 1), hidden=True, inp=a)
 
+        @tool("reply", "Your reply to the player: the whole of it, written out in full. The player sees only what you "
+              "send here, never text you write outside it, and never your thinking. Send it once a turn, in your last "
+              "message, together with the calls that record it.",
+              {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]})
+        async def reply(a: dict[str, Any]) -> dict[str, Any]:
+            t = (a.get("text") or "").strip()
+            if not t:
+                return {"content": [{"type": "text", "text": "REFUSED, nothing shown: the reply is empty."}], "is_error": True}
+            if self.replied or self.reply_len >= FULL_REPLY:
+                return {"content": [{"type": "text", "text": "REFUSED, nothing shown: " + LATE}], "is_error": True}
+            self.on_reply(t)
+            return {"content": [{"type": "text", "text": "shown to the player"}]}
+
         return [self.after_reply(t) for t in (
-            roll, change_pc, change_party, srd_options, level_up_options, level_up, add_combatants, change_creature,
-            next_turn, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)]
+            roll, change_pc, change_party, new_pc, srd_options, level_up_options, level_up, add_combatants, change_creature,
+            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
+
+    def written(self) -> bool:
+        """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
+        return self.replied or self.reply_len >= FULL_REPLY
 
     def after_reply(self, t: Tool) -> Tool:
         """A tool called after the DM has written a full reply (owner, 2026-10-14): the call still counts, but a roll
         is refused (nothing it decides can be told), and what the DM writes after it is held back (turn()). The DM
-        had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice."""
+        had been adding notes about the late call ("The clock now reads 5:57 PM") or writing its reply twice.
+        Bookkeeping with the reply is how a turn should end (owner, 2026-10-18), so it gets no warning."""
         async def handler(a: dict[str, Any]) -> dict[str, Any]:
-            if self.reply_len < FULL_REPLY:
+            if not self.written():
                 return await t.handler(a)
             self.late = True
             if t.name == "roll":
                 self.transcript.append({"kind": "refused", "text": f"dice: called after the reply: {a.get('reason', '')}"})
                 return {"content": [{"type": "text", "text": "REFUSED, nothing rolled: " + LATE}], "is_error": True}
             out = await t.handler(a)
+            if t.name in BOOKKEEPING:
+                return out
             return out | {"content": [*out["content"], {"type": "text", "text": LATE}]}
         return Tool(t.name, t.description, t.input_schema, handler)
+
+    def one_step(self, names: list[str]) -> bool:
+        """After one model call's tools ran without an error: the turn is over if the reply is written and they were
+        all bookkeeping or the reply itself (model.respond done, sdk.Client)."""
+        return self.written() and all(n in BOOKKEEPING or n == "reply" for n in names)
 
 
 def sheet_text(s: dict[str, Any]) -> str:
@@ -612,8 +860,33 @@ def sheet_text(s: dict[str, Any]) -> str:
             lines.append("Mystic Arcanum: " + ", ".join(f"level {lv}: {name}" for lv, name in sp["arcanum"].items()))
     if sp.get("racial_cantrips"):
         lines.append("Racial cantrips: " + ", ".join(sp["racial_cantrips"]))
-    lines += ["Features:", *(f"- {x}" for x in s["features"])]
+    lines += ["Features:", *(f"- {short_feature(x, s['features'])}" for x in s["features"])]
     return "\n".join(lines)
+
+
+@functools.cache
+def _boilerplate() -> tuple[frozenset[str], frozenset[str]]:
+    """Feature names whose SRD text only introduces a choice shown elsewhere on the sheet (a subclass; its spell list,
+    shown as always prepared), and the background features."""
+    choice = set()
+    for f in srd.table("Features").values():
+        d = " ".join(f.get("desc") or []) if isinstance(f.get("desc"), list) else str(f.get("desc") or "")
+        if re.search(r"Your choice grants you|^Each (oath|domain) has a list", d):
+            choice.add(f["name"].removesuffix(" feature"))
+    return frozenset(choice), frozenset((b.get("feature") or {}).get("name", "") for b in srd.table("Backgrounds").values()) - {""}
+
+
+def short_feature(text: str, features: list[str]) -> str:
+    """A sheet feature as the DM's instructions show it (Jake, 2026-10-19: a shorter opening, which is written again at
+    every cut): a choice's preamble and the background feature by name only, the rest in full."""
+    name = text.split(":")[0].strip()
+    choice, background = _boilerplate()
+    if re.sub(r"\s*\([^)]*\)$", "", name) in background:
+        return f"{name} (background feature: look it up before using it)"
+    if name in choice or ("Choose one of the following options" in text
+                          and any(x.startswith(f"{name}: ") for x in features if x != text)):
+        return f"{name} (the choice made is on the sheet)"
+    return text
 
 
 def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> str:
@@ -627,7 +900,9 @@ def system_prompt(sheet: dict[str, Any], companions: list[dict[str, Any]]) -> st
 RULES_REMINDER = (
     "[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a "
     "spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD "
-    "text must already be in this conversation from a lookup. If it isn't, look it up first.")
+    "text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups "
+    "first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet "
+    "calls that record it.")
 
 
 # The DM's reply is held until its turn is over (owner, 2026-10-14). A reply under FULL_REPLY characters after tool
@@ -635,14 +910,29 @@ RULES_REMINDER = (
 # never wrote it. The stub is replaced by asking once for the full reply. In 312 turns of play every reply with tool
 # calls under 300 characters was a stub, and the shortest good one was 389.
 FULL_REPLY = 300
-LATE = ("Your reply has already gone to the player as written; nothing you write after it will be shown. Make all "
-        "your tool calls before your reply.")
+LATE = ("Your reply has already gone to the player as written; nothing you write after it will be shown. Make rolls, "
+        "lookups and anything else whose result you need before your reply.")
+# Tools whose result the DM needn't read (owner, 2026-10-18): it makes them in the same call as its reply, and the turn
+# ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
+# of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
+BOOKKEEPING = {"change_time", "write_lore", "change_pc", "change_party", "change_creature"}
+# The reply is a tool (Jake, 2026-10-18). After a tool result (a roll), Sonnet and Opus sent the record calls first and
+# the reply after them in a call of its own, whatever the instructions said: in a bench of four tools and four lines
+# of instructions on the API, 0 of 5 with thinking on or off, and with a note in the roll's result; Haiku 4 of 5.
+# Once they are working through tool results, the text that ends their turn comes last, alone. Several calls in one
+# message they send reliably: with the reply as a call, 10 of 10 sent it with its record in one message.
 STUB_ASK = ('[Not from the player] Your reply this turn was only: "{}". Nothing has been shown to the player yet. '
-            "Write your full reply to their last message now; it replaces that line.")
+            "Send your full reply to their last message now with `reply`; it replaces that line.")
+# A turn can stop before the reply is written (autoloop, 2026-10-16): a fight run on while the PC lay unconscious used
+# up the 40 model calls of a reply, and the player saw only dice and tracker lines (2 of 180 rounds). The DM is asked
+# once for the reply.
+CUT_SHORT_ASK = ("[Not from the player] Your turn stopped before you wrote your reply ({}). The player has seen only "
+                 "the game's lines since their last message. Send your full reply to it now with `reply`.")
 
 
 async def turn(game: Game | Creation, text: str) -> None:
     held: list[str] = []
+    mark = [0]  # the transcript's length when text was last held
 
     def said(t: str) -> None:
         if isinstance(game, Creation):
@@ -651,10 +941,24 @@ async def turn(game: Game | Creation, text: str) -> None:
         elif game.late:  # written after a late tool call: kept in the save, never shown
             game.log("hidden", t)
         else:
+            # Short text followed by tool calls was a note to itself, not the reply ("Miss. Next."; 2 in 180 rounds)
+            if held and any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[mark[0]:]):
+                game.log("stub", "\n\n".join(held))  # kept in the save, never shown
+                held.clear()
+                game.reply_len = 0
             held.append(t)
             game.reply_len += len(t)
+            mark[0] = len(game.transcript)
+
+    def replied(t: str) -> None:  # the reply tool: the whole reply; text written outside it is never shown
+        if held:
+            game.log("stub", "\n\n".join(held))
+            held.clear()
+        held.append(t)
+        game.replied, game.late = True, True
+        mark[0] = len(game.transcript)
     if isinstance(game, Game):
-        game.reply_len, game.late = 0, False
+        game.reply_len, game.late, game.replied, game.on_reply = 0, False, False, replied
         # The instructions hold the full sheets: after a level-up, or a companion joining or leaving, they are built
         # again (owner, 2026-10-13), and the owner's version reconnects to carry them. The whole conversation is then
         # read at full price once.
@@ -662,29 +966,47 @@ async def turn(game: Game | Creation, text: str) -> None:
         if system != game.system:
             game.system = system
             if game.sdk:
-                from dm import sdk  # here: the browser has no Agent SDK
-                await game.sdk.close()
-                game.sdk = sdk.Client(game.model, system, game.tools(), game.cwd, game.session_id)
-                await game.sdk.open()
+                await reconnect(game)
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
-        if game.story and not (game.session_id if game.sdk else game.messages):  # a new conversation after a cut
-            text = so_far(game) + "\n\n" + text
+        if (game.story or game.rebuild) and not (game.session_id if game.sdk else game.messages):
+            text = so_far(game) + "\n\n" + text  # a new conversation after a cut, or a fork from before one
     start = len(game.transcript)
+    edits: list[tuple[str, str]] = []  # (old, new) text the DM's conversation takes back: a trimmed status line
     failed = await ask(game, text, said)
     if isinstance(game, Game):
         tools = any(e["kind"] in ("tool", "call", "refused") for e in game.transcript[start:])
-        if not failed and tools and game.reply_len < FULL_REPLY:
+        if failed:
+            game.log("failed", failed)  # kept in the save, never shown
+        if failed and tools and not game.written():
+            if held:
+                game.log("stub", "\n\n".join(held))
+            held[:], game.reply_len = [], 0
+            failed = await ask(game, CUT_SHORT_ASK.format(failed), said)
+            if failed:
+                game.log("failed", failed)
+        elif not failed and tools and not game.written():
             stub = "\n\n".join(held)
             game.log("stub", stub)  # kept in the save, never shown
             held[:], game.reply_len = [], 0
             failed = await ask(game, STUB_ASK.format(stub), said)
+        player = next((e["text"] for e in reversed(game.transcript) if e["kind"] == "player"), "")
+        trimmed = ""
+        if held:
+            new, trimmed = branch.without_stat_line(held[-1], player)
+            if trimmed:
+                edits.append((held[-1], new))
+                held[-1] = new
         for t in held:
             print("\n" + t)
             game.log("dm", t)
+        if trimmed:
+            game.log("trimmed", trimmed)  # kept in the save, never shown
     if failed:
         print(f"\n[the DM call failed: {failed}]")
+    if edits and isinstance(game, Game):
+        await edit_conversation(game, edits)
     game.save()
     if isinstance(game, Game) and not failed and game.size >= CUT_AT:
         await cut(game)
@@ -694,17 +1016,26 @@ async def ask(game: Game | Creation, text: str, on_text: Callable[[str], None]) 
     """One message to the DM, and its whole reply. Returns None, or why the call failed."""
     if game.sdk:  # the owner's own version, on their Claude login (dm/sdk.py)
         failed = await game.sdk.respond(text, on_text)
+        if getattr(game, "fork_at", None) and game.sdk.session_id != game.session_id:
+            game.fork_at = None  # the fork is made: from now on it's a conversation of its own
         game.session_id, game.size = game.sdk.session_id, game.sdk.size
         return failed
     return await model.respond(game.model, game.system, game.tools(), game.messages, text, on_text, game.save,
-                               lambda n: setattr(game, "size", n))
+                               lambda n: setattr(game, "size", n), getattr(game, "one_step", lambda names: False))
 
 
 # Cutting the conversation short (owner, 2026-10-13): once it reaches CUT_AT tokens, the DM writes the story so far up
 # to the last KEEP turns, and a new conversation starts with that summary and those turns word for word. The notebook
 # and recall are unchanged; what was looked up before the cut is looked up again when it's needed.
-CUT_AT = 200_000
-KEEP = 20
+# Cut at 60k (Jake, 2026-10-18; was 200k and 20 turns): every model call reads the whole conversation again, and
+# contradictions did not grow with its length (0.20 a round in rounds 1-20, 0.21 in 61-180). A conversation starts at
+# about 14k (instructions and sheets) and the summary is about 9k; outside fights a round adds about 3k (19k to 58k in
+# the 15 rounds of bard3), so 5 turns kept word for word start the next one near 30k, cut again some 10 rounds later.
+# Cut at 80k (Jake, 2026-10-19): with the fight tools a new conversation starts near 34k and a round adds about 4k,
+# so 60k cut every 6 rounds (arena2), and each cut costs about $0.19 (the summary, and the opening written to the
+# cache again). A rough model of reads against cuts puts the cheapest point near 80k.
+CUT_AT = 80_000
+KEEP = 5
 
 SUMMARY_ASK = (
     "[Not from the player: your notes, which the player never sees] This conversation is about to be cut short. The "
@@ -719,11 +1050,31 @@ SUMMARY_ASK = (
 
 def so_far(game: Game) -> str:
     """The opening of a conversation after a cut: the DM's summary, and the turns after it word for word, up to the
-    player's line now being sent."""
-    end, now = game.story[-1]["turn"], notebook.now(game.transcript)
+    player's line now being sent. With no summary yet (a fork from before the first cut), every turn word for word."""
+    now = notebook.now(game.transcript)
+    end = game.story[-1]["turn"] if game.story else -1
     turns = "\n\n".join(t for n in range(end + 1, now) if (t := notebook.turn_text(game.transcript, n)))
+    if not game.story:
+        return f"[The game so far, word for word: turns 0 to {now - 1}]\n{turns}"
     return (f"[The story so far: your own summary of turns 0 to {end}, written when the conversation was cut short]\n"
             f"{game.story[-1]['text']}\n\n[Turns {end + 1} to {now - 1}, word for word]\n{turns}")
+
+
+async def reconnect(game: Game) -> None:
+    """An SDK game's Claude Code conversation, opened again: after its instructions changed or its session file was
+    edited (Claude Code keeps the conversation in memory while it's open)."""
+    from dm import sdk  # here: the browser has no Agent SDK
+    await game.sdk.close()
+    game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, game.session_id, game.fork_at,
+                          done=game.one_step)
+    await game.sdk.open()
+
+
+async def edit_conversation(game: Game, pairs: list[tuple[str, str]]) -> None:
+    """The DM's conversation takes each old text back for its new one (dm/branch.py)."""
+    branch.edit_conversation(game, pairs)
+    if game.sdk:
+        await reconnect(game)
 
 
 async def cut(game: Game) -> None:
@@ -734,6 +1085,8 @@ async def cut(game: Game) -> None:
     if end < 0:
         return
     parts: list[str] = []
+    game.reply_len, game.late, game.replied = 0, False, False
+    game.on_reply = lambda t: (parts.append(t), setattr(game, "replied", True))  # the summary may come as a reply
     failed = await ask(game, SUMMARY_ASK.format(first=end + 1, last=last, end=end), parts.append)
     summary = "\n\n".join(parts).strip()
     if failed or not summary:
@@ -745,7 +1098,7 @@ async def cut(game: Game) -> None:
         from dm import sdk  # here: the browser has no Agent SDK
         await game.sdk.close()
         game.session_id = None
-        game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, None)
+        game.sdk = sdk.Client(game.model, game.system, game.tools(), game.cwd, None, done=game.one_step)
         await game.sdk.open()
     else:
         game.messages = []
@@ -879,7 +1232,7 @@ class Session:
         if isinstance(g, Game) and not g.session_id:
             g.cwd = str(sdk.DM_HOME)
         g.sdk = sdk.Client(g.model, g.system, g.tools(), g.cwd if isinstance(g, Game) else str(sdk.DM_HOME),
-                           g.session_id)
+                           g.session_id, getattr(g, "fork_at", None), done=getattr(g, "one_step", None))
         await g.sdk.open()
 
     async def close(self) -> None:
@@ -902,15 +1255,17 @@ class Session:
         name = sheet["name"].split()[0].lower()
         await self.play(Game({"sheet": sheet, "model": self.model, "backend": self.backend}, new_save(f"{name}-{stamp}")))
 
-    async def play(self, game: Game) -> None:
+    async def play(self, game: Game, show_last: bool = True) -> None:
         await self.close()
         self.game, self.creation = game, None
         game.system = system_prompt(game.sheet, game.companions)
         await self.connect(game)
-        print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, /quit exits.")
-        if game.messages or game.session_id or game.story:
+        print(f"{game.sheet['name']}, {game.sheet['summary']}. Saving to {game.path}. /sheet shows your sheet, "
+              "/back lets you go back, /quit exits.")
+        if game.messages or game.session_id or game.story or game.rebuild:
             last = next((t["text"] for t in reversed(game.transcript) if t["kind"] == "dm"), "")
-            print("\n" + last)
+            if show_last:
+                print("\n" + last)
         else:
             await turn(game, "[Start] Begin the session. Begin with a short introduction before the first scene: a few "
                              "sentences on the world and region, who the character is and how they came to be here. "
@@ -943,9 +1298,53 @@ class Session:
         if line == "/sheet":
             print(sheet_report(game))
             return True
+        if line == "/back" or line.startswith(("/redo", "/edit")):
+            await self.back(game, line)
+            return True
+        game.snapshots.append(branch.snapshot(game))
         game.log("player", line)
         await turn(game, f"[The player]\n{line}")
         return True
+
+    async def back(self, game: Game, line: str) -> None:
+        """Going back (dm/branch.py). /back lists the lines you can send again. /redo <turn> [line]: the game as it
+        was just before your line of that turn, in a new save, and that line sent again (or the one given instead).
+        /edit <text>: the DM's latest reply becomes text (\\n for a new paragraph), and the DM reads it from now on;
+        what the reply did to the sheet, clock and notebook stays."""
+        cmd, _, rest = line.partition(" ")
+        if cmd == "/back":
+            found = branch.lines(game)
+            print("\n".join(f"  {t}: {x}" for t, x in found[-20:]) or "  nothing yet")
+            print("/redo <turn> sends that line again (/redo <turn> <new line> sends a different one), in a new save; "
+                  "/edit <text> rewrites the DM's latest reply.")
+            return
+        if cmd == "/edit":
+            try:
+                pairs = branch.edit_transcript(game, rest.replace("\\n", "\n"))
+            except LookupError as e:
+                print(f"[{e}]")
+                return
+            await edit_conversation(game, pairs)
+            game.save()
+            # the web pages redraw the reply from the first line on (dm/web.html, page.html)
+            print("[the DM's reply, as you edited it:]")
+            print("\n" + pairs[0][1])
+            print("\n[the DM reads your version from now on; the sheet, clock and notebook stay as they are]")
+            return
+        num, _, new = rest.strip().partition(" ")
+        try:
+            data = branch.fork_data(game, int(num))
+        except (LookupError, ValueError) as e:
+            print(f"[{e if isinstance(e, LookupError) else 'which turn? /back lists them'}]")
+            return
+        again = new.strip() or next(x for t, x in branch.lines(game) if t == int(num))
+        game.save()
+        fork = Game(data, new_save(f"{game.path.stem.split('-fork')[0]}-fork"))
+        print(f"[going back to turn {num}; {game.path.name} stays as it was]")
+        await self.play(fork, show_last=False)
+        print("\n> " + again)  # as if typed: the web pages show it as the player's line
+        await self.line(again)
+
 
 def sheet_report(game: Game) -> str:
     """What /sheet shows: the PC's part as before (the web page lays it out as one card); companions after it."""

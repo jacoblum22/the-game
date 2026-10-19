@@ -75,7 +75,8 @@ def test_tools_run_and_answer(monkeypatch: Any, tmp_path: Path) -> None:
     assert results[0]["content"][0]["text"].startswith("dice ") and "is_error" not in results[0]
     assert g.messages[1]["content"][0] == {"type": "thinking", "thinking": "", "signature": "sig"}  # sent back as it came
     assert any(WHOLE in s for s in said)
-    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Roll for it.", WHOLE]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]  # words before the calls: a note
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Roll for it."]
     # what went to the API
     first = fake.calls[0]
     assert first["system"] == play.system_prompt(g.sheet, g.companions) and first["cache_control"] == {"type": "ephemeral", "ttl": "1h"}
@@ -113,9 +114,11 @@ def test_failed_call_can_go_on(monkeypatch: Any, tmp_path: Path) -> None:
 
 def test_too_many_rounds(monkeypatch: Any, tmp_path: Path) -> None:
     g = new_game(tmp_path)
-    _, said = run(monkeypatch, [reply(use(f"t{i}", "next_turn"), stop="tool_use") for i in range(model.MAX_ROUNDS)],
+    # the reply is asked for once (CUT_SHORT_ASK), and that runs out of calls too
+    _, said = run(monkeypatch, [reply(use(f"t{i}", "next_turn"), stop="tool_use") for i in range(2 * model.MAX_ROUNDS)],
                   g, "go")
     assert any(f"more than {model.MAX_ROUNDS}" in s for s in said)
+    assert len([t for t in g.transcript if t["kind"] == "failed"]) == 2
     assert g.messages[-1]["role"] == "user"  # the results are kept; the next line joins them
 
 
@@ -169,7 +172,8 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None, done: Any = None) -> None:
             self.tools, self.cwd, self.session_id, self.closed, self.size = {t.name: t for t in tools}, cwd, session_id, False, 0
             opened.append(self)
 
@@ -196,12 +200,13 @@ def test_sdk_session(monkeypatch: Any, tmp_path: Path) -> None:
     asyncio.run(go())
     data = json.loads(s.game.path.read_text(encoding="utf-8"))  # type: ignore[union-attr]
     assert data["backend"] == "sdk" and data["session_id"] == "sess-1" and "messages" not in data
-    assert data["cwd"] == str(sdk.DM_HOME) and opened[0].closed
+    assert data["cwd"] == play.home_relative(str(sdk.DM_HOME)) and opened[0].closed
     assert sum(t["kind"] == "tool" and t["text"].startswith("dice ") for t in data["transcript"]) == 2
     # resumed: the same Claude Code conversation
     s2 = play.Session(backend="api")  # a save carries on the way it was started
     asyncio.run(s2.play(play.Game(data, s.game.path)))  # type: ignore[union-attr]
     assert opened[-1].session_id == "sess-1" and s2.game.backend == "sdk"  # type: ignore[union-attr]
+    assert s2.game.cwd == str(sdk.DM_HOME)  # type: ignore[union-attr]
 
 
 def test_instructions_follow_the_sheets(monkeypatch: Any, tmp_path: Path) -> None:
@@ -221,7 +226,8 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None, done: Any = None) -> None:
             self.system, self.session_id, self.closed, self.size = system, session_id, False, 0
             opened.append(self)
 
@@ -247,6 +253,27 @@ def test_sdk_reconnects_for_new_instructions(monkeypatch: Any, tmp_path: Path) -
     asyncio.run(go())
     assert len(opened) == 2 and opened[0].closed and not opened[1].closed
     assert opened[1].session_id == "sess-1" and "Tough as Old Boots" in opened[1].system  # the same conversation
+
+
+def test_sdk_api_error_is_a_failure(tmp_path: Path) -> None:
+    """Claude Code's own error message ("API Error: ... safeguards flagged this message") isn't the DM's reply."""
+    from claude_agent_sdk import AssistantMessage, ResultMessage, TextBlock
+
+    from dm import sdk
+    g = play.Game({"sheet": json.loads((CHAR / "fighter.json").read_text(encoding="utf-8"))}, Path("unused.json"))
+    c = sdk.Client("m", "system", g.tools(), str(tmp_path), None)
+    flagged = "API Error: Sonnet 5.5's safeguards flagged this message."
+
+    class Stub:
+        async def query(self, text: str) -> None:
+            pass
+
+        async def receive_response(self) -> Any:
+            yield AssistantMessage([TextBlock(flagged)], "<synthetic>", error="invalid_request")
+            yield ResultMessage("success", 1, 1, False, 1, "sess-1")
+    c.client = Stub()  # type: ignore[assignment]
+    said: list[str] = []
+    assert asyncio.run(c.respond("I slip in", said.append)) == flagged and said == []
 
 
 def test_sdk_bridge(tmp_path: Path) -> None:
@@ -320,7 +347,8 @@ def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
     opened: list[Any] = []
 
     class FakeClient:
-        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None) -> None:
+        def __init__(self, model_name: str, system: str, tools: list[Any], cwd: str, session_id: str | None,
+                     fork_at: str | None = None, done: Any = None) -> None:
             self.session_id, self.closed, self.size, self.got = session_id, False, 0, []
             opened.append(self)
 
@@ -335,6 +363,7 @@ def test_sdk_cut(monkeypatch: Any, tmp_path: Path) -> None:
             on_text("Summary." if "cut short" in text else "Reply.")
             self.session_id, self.size = self.session_id or f"sess-{len(opened)}", 300_000
 
+    monkeypatch.setattr(play, "KEEP", 20)
     monkeypatch.setattr(sdk, "Client", FakeClient)
     monkeypatch.setattr(play, "SAVES", tmp_path)
     monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
@@ -370,10 +399,110 @@ def test_stub_is_asked_for_again(monkeypatch: Any, tmp_path: Path) -> None:
     assert play.STUB_ASK.format("Both are recorded on your sheet.") in json.loads(json.dumps(asked))[-1]["text"]
 
 
+def test_reply_cut_short_is_asked_for(monkeypatch: Any, tmp_path: Path) -> None:
+    """A turn that runs out of model calls after tool calls, with no reply written: the DM is asked once for it."""
+    g = new_game(tmp_path)
+    monkeypatch.setattr(model, "MAX_ROUNDS", 2)
+    fake, said = run(monkeypatch, [
+        reply(use("t1", "roll", dice="1d20", reason="claw"), stop="tool_use"),
+        reply(use("t2", "roll", dice="1d20", reason="claw"), stop="tool_use"),
+        reply(text(WHOLE)),
+    ], g, "I hold my ground")
+    assert [t["text"] for t in g.transcript if t["kind"] == "failed"] == ["the reply took more than 2 model calls"]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE] and any(WHOLE in s for s in said)
+    asked = json.dumps(fake.calls[2]["messages"][-1]["content"])
+    assert "Your turn stopped before you wrote your reply (the reply took more than 2 model calls)" in asked
+    assert "t2" in asked  # the last tool results and the ask go in the same user turn
+
+
+def test_failure_without_tools_is_not_asked_again(monkeypatch: Any, tmp_path: Path) -> None:
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [reply(text("Half a"), stop="max_tokens")], g, "I look")
+    assert len(fake.calls) == 1
+    assert [t["text"] for t in g.transcript if t["kind"] == "failed"] == ["the reply stopped: max_tokens"]
+
+
+def test_note_before_tool_calls_is_not_shown(monkeypatch: Any, tmp_path: Path) -> None:
+    """A few words, then tool calls, then the reply: the words were a note, not part of the reply."""
+    g = new_game(tmp_path)
+    _, said = run(monkeypatch, [
+        reply(text("Miss. Next."), use("t1", "roll", dice="1d20", reason="bite"), stop="tool_use"),
+        reply(text(WHOLE)),
+    ], g, "I attack")
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Miss. Next."]
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
+    assert not any("Miss. Next." in s for s in said)
+
+
 def test_short_reply_without_tools_stands(monkeypatch: Any, tmp_path: Path) -> None:
     g = new_game(tmp_path)
     fake, _ = run(monkeypatch, [reply(text("Yes, you can."))], g, "DM: can I?")
     assert len(fake.calls) == 1 and [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["Yes, you can."]
+
+
+def test_bookkeeping_with_the_reply_ends_the_turn(monkeypatch: Any, tmp_path: Path) -> None:
+    """The reply and the record of it in one model call: the tools run and the DM isn't called again to read them."""
+    g = new_game(tmp_path)
+    g.clock, _ = play.m.change_time(g.clock, {"set": {"day": 1, "time": "17:50"}})
+    fake, said = run(monkeypatch, [
+        reply(text(WHOLE), use("t1", "change_time", advance={"minutes": 7}),
+              use("t2", "write_lore", create="The Ledge", kind="place", description="A ledge above the wall."), stop="tool_use"),
+    ], g, "I climb")
+    assert len(fake.calls) == 1 and "Day 1, 5:57 PM" in play.m.clock_text(g.clock)
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE] and any(WHOLE in s for s in said)
+    assert [mm["role"] for mm in g.messages] == ["user", "assistant", "user"]
+    fake2, _ = run(monkeypatch, [reply(text(WHOLE))], g, "I look around")
+    assert [mm["role"] for mm in g.messages] == ["user", "assistant", "user", "assistant"]
+    assert g.messages[2]["content"][-1]["text"].endswith("I look around")  # joins the tool results
+
+
+def test_reply_tool_with_its_record_ends_the_turn(monkeypatch: Any, tmp_path: Path) -> None:
+    """After a roll: the reply as a call, with the record, in one message; text outside it is never shown, and even
+    a short reply is the reply."""
+    g = new_game(tmp_path)
+    g.clock, _ = play.m.change_time(g.clock, {"set": {"day": 1, "time": "17:50"}})
+    fake, said = run(monkeypatch, [
+        reply(use("t0", "roll", dice="1d20+5", reason="Athletics"), stop="tool_use"),
+        reply(text("Here it is:"), use("t1", "change_time", advance={"minutes": 7}),
+              use("t2", "reply", text="You make it. What now?"), stop="tool_use"),
+    ], g, "I climb")
+    assert len(fake.calls) == 2
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["You make it. What now?"]
+    assert [t["text"] for t in g.transcript if t["kind"] == "stub"] == ["Here it is:"]
+    assert any("You make it." in s for s in said)
+
+
+def test_second_reply_refused(monkeypatch: Any, tmp_path: Path) -> None:
+    """A reply after the reply is refused, and the first one stands."""
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [
+        reply(use("t1", "reply", text="First."), use("t2", "lore", names=["Nobody"]), stop="tool_use"),
+        reply(use("t3", "reply", text="Second."), stop="tool_use"),
+        reply(text("ok")),
+    ], g, "I go on")
+    assert g.messages[4]["content"][0].get("is_error")
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == ["First."]
+
+
+def test_bookkeeping_error_goes_back(monkeypatch: Any, tmp_path: Path) -> None:
+    """A bookkeeping call that fails goes back to the DM; its words after that are not shown."""
+    g = new_game(tmp_path)
+    fake, said = run(monkeypatch, [
+        reply(text(WHOLE), use("t1", "change_pc", items_lost=[{"item": "Nothing Such"}]), stop="tool_use"),
+        reply(text("Fixed.")),
+    ], g, "I go on")
+    assert len(fake.calls) == 2 and g.messages[2]["content"][0].get("is_error")
+    assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
+
+
+def test_a_reply_needing_a_result_goes_on(monkeypatch: Any, tmp_path: Path) -> None:
+    """A lookup with the reply is not bookkeeping: the DM is called again, as before."""
+    g = new_game(tmp_path)
+    fake, _ = run(monkeypatch, [
+        reply(text(WHOLE), use("t1", "lore", names=["Nobody"]), stop="tool_use"),
+        reply(text("ok")),
+    ], g, "I go on")
+    assert len(fake.calls) == 2
 
 
 def test_call_after_the_reply(monkeypatch: Any, tmp_path: Path) -> None:
@@ -386,7 +515,7 @@ def test_call_after_the_reply(monkeypatch: Any, tmp_path: Path) -> None:
         reply(text("The clock now reads 5:57 PM.")),
     ], g, "I go on")
     r1, r2 = g.messages[2]["content"]
-    assert "Day 1, 5:57 PM" in play.m.clock_text(g.clock) and play.LATE in json.dumps(r1)
+    assert "Day 1, 5:57 PM" in play.m.clock_text(g.clock) and play.LATE not in json.dumps(r1)
     assert r2["is_error"] and r2["content"][0]["text"].startswith("REFUSED, nothing rolled")
     assert not any(t["kind"] == "tool" and t["text"].startswith("dice ") for t in g.transcript)
     assert [t["text"] for t in g.transcript if t["kind"] == "dm"] == [WHOLE]
