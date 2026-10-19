@@ -998,7 +998,7 @@ async def turn(game: Game | Creation, text: str) -> None:
         trimmed = ""
         if held:
             held[-1], trimmed = branch.without_stat_line(held[-1], player)
-        if held and not failed and check.ENABLED and game.written():
+        if held and not failed and check.ENABLED and game.written() and any(e["kind"] == "player" for e in game.transcript):  # not the opening
             try:
                 problems, _ = await check.check(game.backend, lore_before, game.transcript, held[-1])
             except (model.Failed, ValueError, KeyError, StopIteration) as e:

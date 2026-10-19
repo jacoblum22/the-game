@@ -90,7 +90,7 @@ def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str) 
     """What the checker reads: the notebook entries the reply names (as the notebook was before this turn), the last
     CHECK_WINDOW turns word for word, and the reply. `transcript` ends with the player's line of this turn."""
     turn = notebook.now(transcript)
-    before = transcript[:max(i for i, e in enumerate(transcript) if e["kind"] == "player")]
+    before = transcript[:max((i for i, e in enumerate(transcript) if e["kind"] == "player"), default=0)]
     earlier = "\n\n".join(x for n in range(max(turn - CHECK_WINDOW, 0), turn) if (x := notebook.turn_text(transcript, n)))
     entries = []
     for n in notebook.mentioned(lore, reply)[:MAX_ENTRIES]:
@@ -115,14 +115,25 @@ def acts(p: dict[str, Any]) -> bool:
     return bool(topics) and p["severity"] >= min(CUTOFF[t] for t in topics)
 
 
+def whole_sentence(quote: str, reply: str) -> bool:
+    """The quoted words are one or more whole sentences of the reply (so a replacement can take their place): they
+    start the reply, a paragraph or a sentence, and end with a full stop, ! or ? (a closing quote mark may follow)."""
+    i = reply.find(quote)
+    if i < 0 or not quote.strip() or quote.rstrip()[-1] not in ".!?\"'”’*":
+        return False
+    head = reply[:i].rstrip(" *\"'“‘")
+    return not head or head[-1] in ".!?\n" or (reply[:i].endswith("\n"))
+
+
 def sort(problems: list[dict[str, Any]], reply: str, in_fight: bool) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    """(problems for the DM, problems fixed in the text). A text fix needs the quoted words to be in the reply, and a
-    replacement; anything else that was kept goes back to the DM."""
+    """(problems for the DM, problems fixed in the text). A text fix needs a replacement and quoted words that are whole sentences of the reply
+    (the checker writes its replacement for a sentence, and a phrase swapped for one was spliced into the middle of a
+    sentence in the first live test); anything else that was kept goes back to the DM."""
     back, text = [], []
     for p in problems:
         topics = set(p["topics"])
         if (topics & BACK_TO_DM or (in_fight and "count" in topics) or p["fix"] == "dm"
-                or not p["replacement"].strip() or p["quote"] not in reply):
+                or not p["replacement"].strip() or not whole_sentence(p["quote"], reply)):
             back.append(p)
         else:
             text.append(p)
