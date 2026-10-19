@@ -400,3 +400,57 @@ def test_relentless_endurance_at_once(tmp_path: Path, monkeypatch: Any) -> None:
     assert "Relentless Endurance: at 1 HP instead of 0" in out and g.sheet["hp"]["current"] == 0
     assert "unconscious" in g.sheet["conditions"]  # the second hit (3) drops them again, with no use left
     assert "conscious again" in g.change_party_member({"heal": 2, "conditions_removed": ["unconscious"]})
+
+
+def test_the_pc_turn_goes_first(tmp_path: Path, monkeypatch: Any) -> None:
+    """On the PC's turn, what the player said goes first in the call: the fighter's longsword, then the goblin's
+    turn. Before it's the PC's turn, the PC's is refused."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 4, 10], [("Goblin 1", "Goblin", 15)])
+    g.fight["turn"] = -1
+    g.fight, _ = m.next_turn(g.fight)  # the PC's turn, started
+    m._find(g.fight, "Goblin 1")["hp"] = 30
+    with pytest.raises(m.Refused, match="no attack 'Greataxe'"):
+        turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": "Greataxe", "target": "Goblin 1"}]}]})
+    w = fight.sheet_attack(g.sheet, g.sheet["attacks"][0].split(":")[0])["name"]
+    out = turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": w, "target": "Goblin 1"}]},
+                              {"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": "pc"}]}]})
+    assert "STOPPED" not in out and m._find(g.fight, "Goblin 1")["hp"] < 30 and "a miss" in out
+    with pytest.raises(m.Refused, match="their turn goes first"):
+        turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": w, "target": "Goblin 1"}]}]})
+
+
+def test_divine_smite_on_a_hit(tmp_path: Path, monkeypatch: Any) -> None:
+    """A companion's smite: the slot spent on the hit, 3d8 radiant from a 2nd-level slot; with no slot left, refused."""
+    g = game(tmp_path, monkeypatch, "fighter", [15, 3, 1, 1, 1], [("Goblin 1", "Goblin", 15)], mates=[("rogue", 12)])
+    mate = g.companions[0]
+    mate["features"].append("Divine Smite: Starting at 2nd level, when you hit a creature with a melee weapon attack...")
+    mate["spell_slots"] = {"1": {"max": 2, "left": 2}, "2": {"max": 1, "left": 1}}
+    m._find(g.fight, "Goblin 1")["hp"] = 30
+    out = turns(g, {"turns": [{"name": "Goblin 1", "note": "waits"}, {"name": mate["name"], "attacks": [
+        {"attack": "Rapier", "target": "Goblin 1", "smite": 2}]}]})
+    assert "Divine Smite" in out and "3d8" in out and g.companions[0]["spell_slots"]["2"]["left"] == 0
+    assert m._find(g.fight, "Goblin 1")["hp"] == 30 - 6 - 3
+    g.fight["turn"] = 0  # back to the PC's turn, done
+    with pytest.raises(m.Refused, match="no level 2 spell slot left"):
+        turns(g, {"turns": [{"name": "Goblin 1", "note": "waits"}, {"name": mate["name"], "attacks": [
+            {"attack": "Rapier", "target": "Goblin 1", "smite": 2}]}]})
+    with pytest.raises(m.Refused, match="melee weapon attack"):
+        turns(g, {"turns": [{"name": "Goblin 1", "note": "waits"}, {"name": mate["name"], "attacks": [
+            {"attack": "Shortbow", "target": "Goblin 1", "smite": 1}]}]})
+
+
+def test_fight_start_fills_in(tmp_path: Path, monkeypatch: Any) -> None:
+    """add_combatants with only names and monsters: initiative rolled, HP and AC from the stat block, and the combat
+    steps and stat block returned to the DM."""
+    g = play.Game({"sheet": sheet("fighter"), "companions": []}, tmp_path / "save.json")
+    dice = Dice([12, 9, 4])
+    monkeypatch.setattr(random, "Random", lambda: dice)
+    tools = {t.name: t for t in g.tools()}
+    import asyncio
+    r = asyncio.run(tools["add_combatants"].handler({"combatants": [
+        {"name": "pc"}, {"name": "Goblin 1", "monster": "Goblin"}, {"name": "Goblin 2", "monster": "Goblin"}]}))
+    text = "\n".join(c["text"] for c in r["content"])
+    assert not r.get("is_error") and "Combat Step by Step" in text and text.count("MONSTER Goblin") == 1
+    gob = m._find(g.fight, "Goblin 1")
+    assert gob["hp"] == 7 and gob["ac"] == 15 and gob["initiative"] == 9 + 2
+    assert any(e["text"].startswith("dice Brakka's initiative") for e in g.transcript if e["kind"] == "tool")

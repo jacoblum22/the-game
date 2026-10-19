@@ -302,6 +302,44 @@ def save_bonus(s: dict[str, Any], ability: str) -> int:
     return int(x[1]) if x else 0
 
 
+def fill_combatants(g: Any, combatants: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[str], list[str]]:
+    """add_combatants' entries with what the DM left out filled in (Jake, 2026-10-19: a fight starts in one call): a
+    creature's HP and AC from its stat block (the average HP), and initiative rolled for anyone without one (a DEX
+    check: the sheet's or stat block's DEX modifier; Jack of All Trades adds half the proficiency bonus, Feral
+    Instinct gives advantage). Returns the entries, the dice lines, and the stat block kinds new to the fight."""
+    party = {s["name"]: s for s in [g.sheet, *g.companions]}
+    have = {c.get("monster") for c in (g.fight or {}).get("order", [])}
+    out, rolled, kinds = [], [], []
+    for c in combatants:
+        c = dict(c)
+        name = str(c.get("name", "")).strip()
+        s = g.sheet if name.casefold() == "pc" else next(
+            (v for k, v in party.items() if name.casefold() in (k.casefold(), k.split()[0].casefold())), None)
+        block = None
+        if c.get("monster") and not s:
+            try:
+                block = srd.find("Monsters", c["monster"])
+            except srd.Bad:
+                block = None  # add_combatants refuses it, naming the problem
+        if block:
+            c.setdefault("hp", block.get("hit_points"))
+            if "ac" not in c and block.get("armor_class"):
+                c["ac"] = block["armor_class"][0]["value"]
+            if block["name"] not in have and block["name"] not in kinds:
+                kinds.append(block["name"])
+        if not isinstance(c.get("initiative"), int) and (s or block):
+            dex = (s["scores"]["DEX"] if s else block["dexterity"])
+            bonus = (dex - 10) // 2
+            names = {f.split(":")[0].strip() for f in (s or {}).get("features", [])}
+            if "Jack of All Trades" in names:
+                bonus += s["proficiency_bonus"] // 2
+            r = m.roll(f"1d20{bonus:+d}", "advantage" if "Feral Instinct" in names else "normal")
+            c["initiative"] = r["total"]
+            rolled.append("dice " + m.roll_text(r, f"{s['name'].split()[0] if s else name}'s initiative"))
+        out.append(c)
+    return out, rolled, kinds
+
+
 def _mode(*modes: str | None) -> str:
     """Advantage and disadvantage together cancel (SRD)."""
     got = {x for x in modes if x and x != "normal"}
@@ -425,14 +463,16 @@ class Turns:
             out.append({"name": name, "opportunity_attack": self.weapon(e, oa)["name"] if oa else None})
         t["leaves_reach_of"] = out
 
-    def check(self, t: dict[str, Any]) -> None:
-        """A turn as sent, before anything is rolled: refused whole if any part is impossible."""
+    def check(self, t: dict[str, Any], pc_now: bool = False) -> None:
+        """A turn as sent, before anything is rolled: refused whole if any part is impossible. pc_now: it's the
+        first turn sent and the PC's turn now, started with next_turn (what the player said they do)."""
         c = self.entry(self.name_of(t.get("name", "")))
         t["name"] = c["name"]
         s = self.member(c["name"])
         attacks = t.get("attacks") or []
-        if c["pc"]:
-            raise m.Refused(f"{c['name']} is the PC: on the PC's turn, stop and ask the player what they do")
+        if c["pc"] and not pc_now:
+            raise m.Refused(f"{c['name']} is the PC: their turn goes first, and only once it's their turn and the "
+                            "player has said what they do; otherwise stop at it and ask the player")
         if s:
             if s["hp"]["current"] <= 0:
                 raise m.Refused(f"{c['name']} is at 0 HP: their turn is a death save; start it with next_turn and roll it")
@@ -449,6 +489,8 @@ class Turns:
         self.check_leaves(t)
         for x in attacks:
             w = self.weapon(c, x.get("attack", ""))
+            if x.get("smite"):
+                self.check_smite(s, w, x)
             if s and w["spell"] and len(attacks) > 1:
                 raise m.Refused(f"{c['name']}'s {w['name']} is a spell, cast with their action: no other attacks with it")
             x["target"] = self.name_of(x.get("target"))
@@ -470,6 +512,34 @@ class Turns:
             for k in ("damage", "extra_damage"):
                 if x.get(k):
                     m.roll(self.typed(x[k])[0], rng=_Low())  # readable (no real dice spent)
+
+    @staticmethod
+    def check_smite(s: dict[str, Any] | None, w: dict[str, Any], x: dict[str, Any]) -> None:
+        """Divine Smite written on an attack (smite: the slot level), taken on a hit (or only on a critical hit)."""
+        if not s or "Divine Smite" not in {f.split(":")[0].strip() for f in s.get("features", [])}:
+            raise m.Refused("smite: only a party member with Divine Smite")
+        if not w["weapon"] or w["ranged"] or x.get("ranged"):
+            raise m.Refused("smite: Divine Smite is for a melee weapon attack")
+        lvl = x["smite"]
+        if not isinstance(lvl, int) or ((s.get("spell_slots") or {}).get(str(lvl)) or {}).get("left", 0) <= 0:
+            raise m.Refused(f"smite: {s['name']} has no level {lvl} spell slot left; slots: "
+                            + (", ".join(f"level {k}: {v.get('left', 0)} left" for k, v in (s.get("spell_slots") or {}).items()) or "none"))
+
+    def smite(self, s: dict[str, Any], x: dict[str, Any], target: str, crit: bool, label: str) -> str | None:
+        """SRD Divine Smite on a hit: the slot spent, 2d8 radiant plus 1d8 for each slot level above 1st (5d8 at
+        most), plus 1d8 against an undead or a fiend. The dice, or None if it isn't taken."""
+        lvl = x["smite"]
+        if x.get("smite_crit_only") and not crit:
+            return None
+        if ((s.get("spell_slots") or {}).get(str(lvl)) or {}).get("left", 0) <= 0:
+            self.log(f"fight: {label}: no level {lvl} slot left for Divine Smite")
+            return None
+        text = self.g.change_party_member({"spend_slot": lvl} | ({} if s is self.g.sheet else {"who": s["name"]}))
+        self.log(f"sheet: {text} (Divine Smite)")
+        e = self.entry(target)
+        kind = self.stat_block(e).get("type", "") if e.get("monster") else ""
+        n = min(5, 1 + lvl) + (1 if kind in ("undead", "fiend") else 0)
+        return f"{n}d8"
 
     @staticmethod
     def typed(expr: str) -> tuple[str, str | None]:
@@ -497,9 +567,9 @@ class Turns:
         for t in turns:
             t["name"] = self.name_of(t.get("name", ""))
         started = bool(turns) and not pend and i >= 0 and order[i]["name"] == turns[0].get("name") \
-            and not order[i].get("used")  # its turn was started with next_turn
+            and (order[i]["pc"] or not order[i].get("used"))  # its turn was started with next_turn
         for k, t in enumerate(turns):
-            self.check(t)
+            self.check(t, pc_now=k == 0 and started and order[i]["pc"])
             if k == 0 and started:
                 continue
             i = (i + 1) % len(order)
@@ -969,6 +1039,8 @@ class Turns:
         if x.get("extra_damage"):
             expr, typ = self.typed(x["extra_damage"])
             parts.append((expr, typ or parts[0][1]))
+        if x.get("smite") and attacker and (dice := self.smite(attacker, x, target, crit, label)):
+            parts.append((dice, "radiant"))
         if attacker and raging(attacker, self.g.clock) and w["weapon"] and not ranged:
             parts[0] = (f"{parts[0][0]}+{rage_damage(attacker)}", parts[0][1])  # SRD Rage: melee weapon, Strength
         by_type: dict[str | None, int] = {}

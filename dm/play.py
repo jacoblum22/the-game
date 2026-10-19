@@ -553,21 +553,36 @@ class Game:
                 res["content"][0]["text"] += ("\n\nThe sheet now (it replaces the one in your instructions):\n" + sheet_text(done[0]))
             return res
 
-        @tool("add_combatants", "Start a fight, or add arrivals to the current one, once their initiative is rolled. The PC is "
-              "the combatant named 'pc' and a companion the combatant with their name (their HP lives on their sheets); every "
-              "creature needs a distinct name, hp and ac.",
+        @tool("add_combatants", "Start a fight, or add arrivals to the current one. The PC is the combatant named 'pc' and "
+              "a companion the combatant with their name (their HP lives on their sheets); every creature needs a "
+              "distinct name. Initiative is rolled for anyone you don't give one (DEX, from the sheet or stat block); "
+              "a creature with `monster` takes its HP (the average) and AC from its stat block unless you give them. "
+              "Starting a fight returns the SRD's Combat Step by Step, and each new kind of creature's stat block.",
               {"type": "object", "properties": {"combatants": {"type": "array", "items": {
                   "type": "object", "properties": {"name": {"type": "string"}, "initiative": {"type": "integer"},
                                                    "hp": {"type": "integer"}, "ac": {"type": "integer"},
                                                    "monster": {"type": "string", "description": "a creature's SRD "
                                                                "stat block, e.g. Goblin: creature_turns attacks from it"}},
-                  "required": ["name", "initiative"]}}}, "required": ["combatants"]})
+                  "required": ["name"]}}}, "required": ["combatants"]})
         async def add_combatants(a: dict[str, Any]) -> dict[str, Any]:
+            rules: list[tuple[str, str]] = []
+
             def go() -> str:
-                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], a["combatants"],
+                new = not self.fight
+                cs, rolled, kinds = fight.fill_combatants(self, a["combatants"])
+                self.fight, text = m.add_combatants(self.fight, self.sheet["name"], cs,
                                                      tuple(c["name"] for c in self.companions))
+                # the rules a fight start needs, so the DM decides the first turns without a lookup call first
+                rules.extend(([("Combat Step by Step", "rule")] if new else []) + [(k, "monster") for k in kinds])
+                for line in rolled:
+                    self.log("tool", line)
                 return text
-            return self.run("fight", go)
+            out = self.run("fight", go)
+            for name, kind in rules:
+                text = lookup.lookup(name, kind)
+                record({"name": name, "kind": kind}, text)
+                out["content"].append({"type": "text", "text": text})
+            return out
 
         @tool("change_creature", "Damage, heal, add or remove conditions on a creature in the fight, or remove it.",
               {"type": "object", "properties": {
@@ -597,7 +612,10 @@ class Game:
               "sheet, applies the target's resistances, immunities and vulnerabilities (stat block; sheet features; "
               "Rage while its timer runs, with rage damage), and applies the damage. Send every turn from the next one "
               "up to the PC's, in initiative order; the code starts each of those turns (no next_turn); start the "
-              "PC's with next_turn. Write the creatures' and companions' reactions where they happen: an opportunity "
+              "PC's with next_turn. On the PC's turn, once the player has said what they do, send it first (name "
+              "pc: the attacks they said, with smite where they smite), then the turns after it up to the PC's "
+              "next; resolve anything else they do (a spell that isn't an attack roll, a check) with the other tools "
+              "first and send their turn with a note. Write the creatures' and companions' reactions where they happen: an opportunity "
               "attack on the move that provokes it (leaves_reach_of), a companion's Shield, Uncanny Dodge and the like "
               "on the attack they answer (reactions); none is taken that you don't write. The code takes Parry itself "
               "when it turns a hit into a miss. It "
@@ -616,7 +634,7 @@ class Game:
               "concentration: roll its save when it's damaged.",
               {"type": "object", "properties": {
                   "turns": {"type": "array", "items": {"type": "object", "properties": {
-                      "name": {"type": "string", "description": "the creature or companion, exactly as in the tracker"},
+                      "name": {"type": "string", "description": "the creature or companion, exactly as in the tracker (pc for the PC, first, on their turn)"},
                       "attacks": {"type": "array", "description": "in order; a creature makes more than one only with "
                                   "Multiattack, a companion only with Extra Attack (or bonus_action ones)",
                                   "items": {"type": "object", "properties": {
@@ -631,8 +649,12 @@ class Game:
                           "damage": {"type": "string", "description": "only for a choice of damage (two-handed, for "
                                      "example): the dice, with a type if it differs, e.g. 1d10+3"},
                           "extra_damage": {"type": "string", "description": "dice a party member adds on a hit (Sneak "
-                                           "Attack 1d6, Divine Smite '2d8 radiant'): rolled only on a hit, doubled on "
-                                           "a critical; record what it spends yourself"},
+                                           "Attack 1d6, Hunter's Mark 1d6): rolled only on a hit, doubled on a "
+                                           "critical; record what it spends yourself"},
+                          "smite": {"type": "integer", "minimum": 1, "maximum": 5, "description": "Divine Smite on a "
+                                    "hit with this slot level: the code spends the slot and rolls the dice (2d8 + 1d8 "
+                                    "a level above 1st, + 1d8 against undead or fiends)"},
+                          "smite_crit_only": {"type": "boolean", "description": "with smite: only on a critical hit"},
                           "bonus_action": {"type": "boolean", "description": "a companion's attack with its bonus action "
                                            "(two-weapon fighting, for example)"},
                           "target_resists": {"type": "string", "enum": list(fight.RESIST_KINDS),
