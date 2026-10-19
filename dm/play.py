@@ -1132,6 +1132,21 @@ async def cut(game: Game) -> None:
     game.save()
 
 
+# The first thing the player reads when making a character (Jake, 2026-10-19): the same words every time, shown by the
+# game with no model call. The DM is given them with the player's first line.
+GREETING = (
+    "Welcome, adventurer! Let's build your character.\n\n"
+    "First choice: race. The SRD offers Dwarf (Hill), Elf (High), Halfling (Lightfoot), Human, Dragonborn, Gnome (Rock), "
+    "Half-Elf, Half-Orc and Tiefling.\n\n"
+    "Then comes class: Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock or "
+    "Wizard.\n\n"
+    "Tell me what kind of hero you picture, such as a sturdy front-liner, a sneaky trickster or a spellcaster. Or name a "
+    "race and class you like. If you'd rather I make everything for you, say \"just make me something\".")
+GREETED = ("[Start] The game has already greeted the player with the words below, so don't greet them again: answer "
+           "their first line and go on making their character.\n\n[The game said to the player]\n{greeting}\n\n"
+           "[The player]\n{line}")
+
+
 class Creation:
     """The DM talks the player through making a level-1 character; create.py checks the choices and does the math."""
 
@@ -1147,6 +1162,7 @@ class Creation:
         self.backend = "api"
         self.session_id: str | None = None
         self.sdk: Any = None
+        self.greeting: str | None = None  # the greeting shown and not yet given to the DM
 
     def log(self, kind: str, text: str) -> None:
         self.transcript.append({"kind": kind, "text": text})
@@ -1281,7 +1297,9 @@ class Session:
             self.creation.model, self.creation.backend = self.model, self.backend
             await self.connect(self.creation)
             print("Character creation. Talk to the DM; /quit exits.")
-            await turn(self.creation, "[Start] Greet the player and begin making their character.")
+            print("\n" + GREETING)
+            self.creation.log("dm", GREETING)
+            self.creation.greeting = GREETING
             return
         sheet = json.loads((HERE / "characters" / f"{character}.json").read_text(encoding="utf-8"))
         name = sheet["name"].split()[0].lower()
@@ -1317,6 +1335,8 @@ class Session:
                 await self.close()
                 return False
             c.log("player", line)
+            if c.greeting:
+                line, c.greeting = GREETED.format(greeting=c.greeting, line=line), None
             await turn(c, line)
             if c.done:
                 assert c.draft

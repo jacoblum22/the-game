@@ -192,3 +192,20 @@ def test_start_message_asks_for_the_past_in_the_notebook(monkeypatch: Any, tmp_p
         monkeypatch.setattr(s, "connect", connect)
         asyncio.run(s.play(g))
     assert "the notebook" in sent[0] and "past" in sent[0] and "the notebook" not in sent[1]
+
+
+def test_character_creation_opens_with_fixed_words_and_no_model_call(monkeypatch: Any, tmp_path: Path) -> None:
+    fake = Fake([reply(text("Human paladin, good choice. Do you want to roll your scores?"))])
+    monkeypatch.setattr(model, "client", lambda: fake)
+    monkeypatch.setattr(play, "SAVES", tmp_path)
+    said: list[str] = []
+    monkeypatch.setattr(play, "print", lambda *a, **k: said.append(" ".join(map(str, a))), raising=False)
+    s = play.Session(backend="api")
+    asyncio.run(s.new("new"))
+    assert fake.calls == [] and play.GREETING in "\n".join(said)  # nothing asked of the model yet
+    assert s.creation and s.creation.transcript[0] == {"kind": "dm", "text": play.GREETING}
+    asyncio.run(s.line("A human paladin"))
+    first = fake.calls[0]["messages"][0]["content"]
+    first = first if isinstance(first, str) else first[0]["text"]
+    assert play.GREETING in first and first.endswith("[The player]\nA human paladin")
+    assert len(fake.calls) == 1 and s.creation.greeting is None
