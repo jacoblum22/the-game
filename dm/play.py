@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import copy
 import functools
 import json
 import os
@@ -24,7 +25,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import branch, create, fight, lookup, model, srd
+from dm import branch, check, create, fight, lookup, model, srd
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -969,6 +970,7 @@ async def turn(game: Game | Creation, text: str) -> None:
                 await reconnect(game)
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
+        lore_before = copy.deepcopy(game.lore)  # what the continuity checker reads (dm/check.py)
         text = f"[Status now]\n{game.status()}\n\n{notes}\n\n{RULES_REMINDER}\n\n{text}"
         if (game.story or game.rebuild) and not (game.session_id if game.sdk else game.messages):
             text = so_far(game) + "\n\n" + text  # a new conversation after a cut, or a fork from before one
@@ -992,12 +994,35 @@ async def turn(game: Game | Creation, text: str) -> None:
             held[:], game.reply_len = [], 0
             failed = await ask(game, STUB_ASK.format(stub), said)
         player = next((e["text"] for e in reversed(game.transcript) if e["kind"] == "player"), "")
+        sent = held[-1] if held else ""  # the reply as the DM's conversation has it
         trimmed = ""
         if held:
-            new, trimmed = branch.without_stat_line(held[-1], player)
-            if trimmed:
-                edits.append((held[-1], new))
-                held[-1] = new
+            held[-1], trimmed = branch.without_stat_line(held[-1], player)
+        if held and not failed and check.ENABLED and game.written():
+            try:
+                problems, _ = await check.check(game.backend, lore_before, game.transcript, held[-1])
+            except (model.Failed, ValueError, KeyError, StopIteration) as e:
+                problems = []
+                game.log("check", f"the continuity check failed: {e}")  # kept in the save, never shown
+            back, texts = check.sort(problems, held[-1], bool(game.fight))
+            for p in texts:
+                held[-1] = held[-1].replace(p["quote"], p["replacement"], 1)
+            if problems:
+                game.log("check", json.dumps({"problems": problems, "to the DM": len(back)}, ensure_ascii=False))
+            if back:
+                before = list(held)
+                game.reply_len, game.late, game.replied = 0, False, False
+                again = await ask(game, check.HAND_BACK.format(
+                    what="a clash" if len(back) == 1 else "clashes", problems=check.describe(problems)), said)
+                if again or not game.written():  # no new reply: the one we have goes out
+                    if again:
+                        game.log("failed", again)
+                    held[:] = before
+                else:
+                    sent = held[-1]
+                    held[-1], trimmed = branch.without_stat_line(held[-1], player)
+        if held and held[-1] != sent:
+            edits.append((sent, held[-1]))
         for t in held:
             print("\n" + t)
             game.log("dm", t)
@@ -1388,10 +1413,12 @@ async def main() -> None:
     ap.add_argument("character", nargs="?", choices=("fighter", "rogue", "wizard", "new"))
     ap.add_argument("--resume", type=Path, help="a save file to continue")
     ap.add_argument("--model", default=MODEL)
+    ap.add_argument("--no-check", action="store_true", help="don't run the continuity checker on each reply (dm/check.py)")
     ap.add_argument("--api", action="store_true", help="a new game on the API (ANTHROPIC_API_KEY) instead of your "
                                                        "Claude login; a save carries on the way it was started")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
+    check.ENABLED = not args.no_check
     session = Session(args.model, "api" if args.api else "sdk")
     if args.resume:
         data = json.loads(args.resume.read_text(encoding="utf-8"))

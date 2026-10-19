@@ -1,0 +1,149 @@
+"""The continuity checker (dm/check.py): what it reads, which of its problems the game acts on, and what the game does
+with them: a text fix in the reply and in the DM's conversation, or the reply sent back to the DM to write again."""
+import asyncio
+import json
+from pathlib import Path
+from typing import Any
+
+import pytest
+from test_model import WHOLE, Fake, new_game, reply, text, use
+
+from dm import check, model, play
+
+EARLIER = "The foreman says the barge leaves at dawn, and the toll is twelve silver."
+NOW = "The foreman nods. 'The barge leaves at noon, friend, and the toll is twelve silver.'"
+
+
+def problem(**kw: Any) -> dict[str, Any]:
+    return {"quote": "leaves at noon", "clashes_with": "the barge leaves at dawn", "severity": 3, "fix": "text",
+            "replacement": "leaves at dawn", "earlier_quote": "the barge leaves at dawn",
+            "earlier_where": "earlier play", "topics": ["place"]} | kw
+
+
+STATE = f"NOTEBOOK\n\nEARLIER PLAY\n{EARLIER}\n\nNEW REPLY\n{NOW}"
+
+
+def test_cutoffs_are_by_topic() -> None:
+    assert check.acts(problem(severity=2, topics=["items"]))
+    assert not check.acts(problem(severity=2, topics=["deeds"]))
+    assert check.acts(problem(severity=3, topics=["deeds"]))
+    assert not check.acts(problem(severity=3, topics=["time"]))
+    assert check.acts(problem(severity=4, topics=["time"]))
+    assert check.acts(problem(severity=2, topics=["time", "items"]))  # the lowest of its topics
+    assert not check.acts(problem(severity=1, topics=["count"]))
+
+
+def test_a_problem_whose_earlier_line_is_not_there_is_dropped() -> None:
+    ok = problem(earlier_quote="the barge leaves at DAWN")  # case and spacing don't matter
+    assert [p["quote"] for p in check.kept({"problems": [ok]}, STATE)] == ["leaves at noon"]
+    assert check.kept({"problems": [problem(earlier_quote="the barge never leaves")]}, STATE) == []
+    # 'same reply' looks only in the reply, other places only before it
+    assert check.kept({"problems": [problem(earlier_where="same reply")]}, STATE) == []
+
+
+def test_what_goes_back_to_the_dm() -> None:
+    reply_ = "It leaves at noon."
+    assert check.sort([problem()], reply_, False) == ([], [problem()])
+    for p in (problem(topics=["time"]), problem(topics=["items"]), problem(topics=["mechanics"]), problem(fix="dm"),
+              problem(replacement=""), problem(quote="words that are not in the reply")):
+        assert check.sort([p], reply_, False) == ([p], [])
+    assert check.sort([problem(topics=["count"])], reply_, False)[1] != []
+    assert check.sort([problem(topics=["count"])], reply_, True)[0] != []  # enemies in a fight
+
+
+def test_the_checker_reads_notes_turns_and_reply() -> None:
+    from dm import lore as notebook
+    lore, _ = notebook.write(notebook.new(), {"create": "Hale", "kind": "person", "description": "the foreman"}, 1)
+    t = [{"kind": "player", "text": "I ask about the barge"}, {"kind": "dm", "text": EARLIER},
+         {"kind": "player", "text": "I ask again"}]
+    s = check.context(lore, t, "Hale nods.")
+    assert "the foreman" in s and EARLIER in s and s.endswith("NEW REPLY\nHale nods.")
+    assert s.index("Hale") < s.index("EARLIER PLAY") < s.index("NEW REPLY")
+
+
+def play_turn(monkeypatch: Any, tmp_path: Path, script: list[Any], answer: Any, fight: bool = False) -> tuple[Fake, list[str], play.Game]:
+    monkeypatch.setattr(check, "ENABLED", True)
+    seen: list[str] = []
+
+    async def fake_check(backend: str, system: str, state: str) -> dict[str, Any]:
+        seen.append(state)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+    monkeypatch.setattr(check, "ask_model", fake_check)
+    g = new_game(tmp_path)
+    g.backend, g.fight = "api", ({"order": []} if fight else None)
+    g.log("dm", EARLIER)
+    g.log("player", "I ask again")
+    fake = Fake(script)
+    monkeypatch.setattr(model, "client", lambda: fake)
+    said: list[str] = []
+    monkeypatch.setattr(play, "print", lambda *a, **k: said.append(" ".join(map(str, a))), raising=False)
+    asyncio.run(play.turn(g, "[The player]\nI ask again"))
+    return fake, said, g
+
+
+def say(t: str) -> Any:
+    return reply(use("r", "reply", text=t), stop="tool_use")
+
+
+def answer(*ps: dict[str, Any]) -> dict[str, Any]:
+    return {"problems": [p | {"earlier_quote": EARLIER[:40]} for p in ps]}
+
+
+LONG = ("The foreman leans on the rail. " * 4) + "The barge leaves at noon, friend. What do you do?"
+
+
+def test_a_text_fix_is_in_the_reply_and_the_conversation(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(quote="leaves at noon", replacement="leaves at dawn", earlier_quote="The foreman says the barge"))
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG), reply(text("ok"))], ps)
+    shown = [e["text"] for e in g.transcript if e["kind"] == "dm"][-1]
+    assert "leaves at dawn" in shown and "noon" not in shown and "leaves at dawn" in said[-1]
+    assert len(fake.calls) == 1  # no second DM call
+    assert "noon" not in json.dumps(g.messages) and "leaves at dawn" in json.dumps(g.messages)
+    assert any(e["kind"] == "check" for e in g.transcript)
+
+
+def test_a_clash_over_time_goes_back_to_the_dm(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(topics=["time"], severity=4, quote="leaves at noon", earlier_quote="The foreman says the barge"))
+    fixed = LONG.replace("noon", "dawn")
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG), say(fixed)], ps)
+    assert len(fake.calls) == 2
+    assert "NOT shown" in json.dumps(fake.calls[1]["messages"][-1]) and "leaves at noon" in json.dumps(fake.calls[1]["messages"][-1])
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][-1] == fixed
+    assert sum("barge leaves" in x for x in said) == 1  # the first reply was never shown
+    assert "leaves at dawn" in json.dumps(g.messages[-2:])  # the conversation goes on from the second reply
+
+
+def test_a_failed_hand_back_shows_the_first_reply(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(topics=["time"], severity=4, quote="leaves at noon", earlier_quote="The foreman says the barge"))
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG), model.Failed("down")], ps)
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][-1] == LONG
+
+
+def test_a_checker_that_fails_changes_nothing(monkeypatch: Any, tmp_path: Path) -> None:
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG)], model.Failed("overloaded"))
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][-1] == LONG and len(fake.calls) == 1
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG)], {"problems": [{"quote": "x"}]})  # a bad answer
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][-1] == LONG
+
+
+def test_no_problems_no_change(monkeypatch: Any, tmp_path: Path) -> None:
+    fake, said, g = play_turn(monkeypatch, tmp_path, [say(LONG)], {"problems": []})
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][-1] == LONG and len(fake.calls) == 1
+    assert "EARLIER PLAY" in check_state(g)
+
+
+def check_state(g: play.Game) -> str:
+    return check.context(g.lore, g.transcript, "x")
+
+
+def test_the_checker_is_called_with_the_api_request(monkeypatch: Any) -> None:
+    sent: list[dict[str, Any]] = []
+
+    async def send(req: dict[str, Any]) -> dict[str, Any]:
+        sent.append(req)
+        return {"content": [{"type": "text", "text": json.dumps({"problems": []})}]}
+    monkeypatch.setattr(model, "send", send)
+    assert asyncio.run(check.ask_model("api", "sys", "state")) == {"problems": []}
+    assert sent[0]["model"] == "claude-sonnet-5-5" and sent[0]["output_config"]["format"]["type"] == "json_schema"

@@ -117,3 +117,23 @@ class Client:
                 if msg.is_error and not failed:
                     failed = str(msg.result or getattr(msg, "errors", "") or "the SDK reported an error")
         return failed
+
+
+async def structured(model: str, system: str, text: str, schema: dict[str, Any]) -> dict[str, Any]:
+    """One call on the owner's Claude login that answers with JSON in `schema` (the continuity checker, dm/check.py):
+    no tools, no memory, one turn. Raises model.Failed if there is no answer."""
+    from claude_agent_sdk import query
+    from dm.model import Failed
+    DM_HOME.mkdir(parents=True, exist_ok=True)
+    options = ClaudeAgentOptions(
+        tools=[], setting_sources=[], strict_mcp_config=True, max_turns=1, cwd=str(DM_HOME), env=DM_ENV, model=model,
+        system_prompt=system, output_format={"type": "json_schema", "schema": schema}, effort="low")
+    out: dict[str, Any] | None = None
+    async for msg in query(prompt=text, options=options):
+        if isinstance(msg, ResultMessage):
+            if msg.is_error:
+                raise Failed(str(msg.result or getattr(msg, "errors", "") or "the SDK reported an error"))
+            out = msg.structured_output
+    if not isinstance(out, dict):
+        raise Failed("the checker gave no structured answer")
+    return out
