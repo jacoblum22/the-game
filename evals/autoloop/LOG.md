@@ -409,3 +409,10 @@ with the same analysis after each block and a detailed report in evals/autoloop/
   turns, so the next attacks were skipped as "no longer up"); conditions_removed of unconscious or stable with the
   healing that ended them is no longer refused; `by: "pc"` in uses, as in creature_turns. arena2 brief: the player
   asks for the level and companions once play starts. 316 tests.
+- arena2 (35 rounds, about $5.35): asked once play started, the DM gave the XP, levelled the paladin to 5 and built
+  a rogue and a wizard companion to 5 (rounds 1-5, about $1.07; two change_party refused for "Lightfoot Halfling"
+  and "High Elf" as race names). Then 5 fights: starts 7.4 calls ($0.27), other fight rounds 6.4 ($0.15), other
+  rounds 3.1 ($0.12; about $0.08 leaving out the set-up). No stops; 6 refusals in 18 fight rounds. Per call, most of
+  a fight round is now the PC's own turn: with Extra Attack the DM rolls attack, damage, attack, damage and applies
+  them in 4-5 calls in a row, and rules lookups (3-4 at each fight start). Companions' spells that aren't attack
+  rolls go through next_turn by hand.
