@@ -1299,9 +1299,12 @@ class Session:
             if show_last:
                 print("\n" + last)
         else:
-            await turn(game, "[Start] Begin the session. Begin with a short introduction before the first scene: a few "
-                             "sentences on the world and region, who the character is and how they came to be here. "
-                             "Then open the scene and ask what "
+            past = ("First, the notebook: the character's past in your instructions is settled and must be in it. With "
+                    "your reply, create an entry for each person, place, group, god, legend, item and past event "
+                    "in it, and link them, as your rules for the notebook say. " if game.sheet.get("backstory") else "")
+            await turn(game, "[Start] Begin the session. " + past + "Begin with a short introduction before the first "
+                             "scene: a few sentences on the world and region, who the character is and how they came to "
+                             "be here. Then open the scene and ask what "
                              f"{game.sheet['name'].split()[0]} does.")
 
     async def line(self, line: str) -> bool:

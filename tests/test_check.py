@@ -173,3 +173,22 @@ def test_finish_character_needs_the_backstory_and_the_dm_gets_it(tmp_path: Path)
     system = play.system_prompt(c.draft, [])
     assert "Born in Karrowmere." in system and "## The character's past" in system
     assert "## The character's past" not in play.system_prompt(c.draft | {"backstory": ""}, [])
+
+
+def test_start_message_asks_for_the_past_in_the_notebook(monkeypatch: Any, tmp_path: Path) -> None:
+    sent: list[str] = []
+
+    async def fake_turn(game: Any, text: str) -> None:
+        sent.append(text)
+    monkeypatch.setattr(play, "turn", fake_turn)
+    monkeypatch.setattr(play, "print", lambda *a, **k: None, raising=False)
+    for backstory in ("Born in Karrowmere.", ""):
+        g = new_game(tmp_path)
+        g.sheet = g.sheet | {"backstory": backstory}
+        s = play.Session(backend="api")
+
+        async def connect(x: Any) -> None:
+            return None
+        monkeypatch.setattr(s, "connect", connect)
+        asyncio.run(s.play(g))
+    assert "the notebook" in sent[0] and "past" in sent[0] and "the notebook" not in sent[1]
