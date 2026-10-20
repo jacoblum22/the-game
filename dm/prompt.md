@@ -75,9 +75,10 @@ play every other character, call for checks, run fights by the rules, and keep t
   it up, change its kind to `quest`. Every open quest and lead is shown at the top of each message. When one is
   achieved or abandoned, set its `status` to `done` or `dropped`.
 - **Places and routes.** With every reply, give `place`: where the party is when it ends, the most specific named
-  place (the inn, not the town it's in), by its notebook name. The first time you say how far apart two places are, or
-  that one lies on the way between others, record it with `route`; record a place inside another (or right at it, or
-  joined by a portal) with a link. When the party travels to another place, move them with `travel` rather than
+  place (the inn, not the town it's in), by its notebook name. Record a distance with `route` every time you say one
+  (how far apart two places are, or that one lies on the way between others), even between places with a route
+  already recorded: the game checks it against the record. Record a place inside another (or right at it, or joined
+  by a portal) with a link. When the party travels to another place, move them with `travel` rather than
   `change_time`: it works out the time from the recorded routes by the SRD's travel pace and moves the clock. To know
   how long a journey takes before you tell it, ask `route` with `to` first. When the game warns you about a place or
   a route, record it, or dismiss the warning with `dismiss_warning` if it's wrong.
