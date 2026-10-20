@@ -6,7 +6,10 @@ had made without one (the old caretaker, Odo Fenwick) went only into the descrip
 
 A name here is a run of capitalised words that doesn't start a sentence, a line or a quotation, with SRD names
 (spells, features, monsters...), titles (Lord, Mother...), single letters and words in capitals left out. It is
-unknown while one of its words is in no entry's name or other name and isn't the party's. The code only flags: each
+known when it's an entry's whole name or other name (a leading "the" aside), part of a person's name (Wil of Wil
+Harrow, but not a word of a label like "The Greyshaft Foreman"), or X of Y with both known (Jake, 2026-10-20: "the
+Greyshaft foreman sounds like a person"; with every word counted, Greyshaft and Ford Chapel were never flagged, and
+in the dry run whole names flagged about a third more, the party's own names aside). The code only flags: each
 turn the DM is told which names from its replies so far are still unknown, until it puts each in an entry or dismisses
 it (dismiss_name) as not a name. Nothing is stored: the list is worked out again from the transcript, so going back
 to an earlier line needs nothing more. In the dry run about 1 flag in 10 was not a name (Dodge, House, Keep)."""
@@ -98,12 +101,20 @@ def phrases(text: str) -> list[str]:
     return out
 
 
-def known_words(lore: dict[str, Any], party: tuple[str, ...] = ()) -> set[str]:
-    out = {_word(w) for n in party for w in n.split()}
-    for n, e in lore["entries"].items():
-        for x in [n, *e["other_names"]]:
-            out |= {_word(w) for w in re.findall(r"[A-Za-z][A-Za-z'’\-]*", x)}
-    return out
+def _whole(x: str) -> str:
+    return re.sub(r"['’]s?$", "", re.sub(r"^the\s+", "", " ".join(x.split()), flags=re.I)).casefold()
+
+
+def known(lore: dict[str, Any], party: tuple[str, ...] = ()) -> tuple[set[str], set[str]]:
+    """Whole names (every entry's names and the party's), and the parts of people's names."""
+    whole = {_whole(x) for n, e in lore["entries"].items() for x in [n, *e["other_names"]]} | {_whole(p) for p in party}
+    parts: set[str] = set()
+    people = [x for n, e in lore["entries"].items() if e["kind"].strip().casefold() == "person"
+              for x in [n, *e["other_names"]] if not x.lower().startswith("the ")]  # "The Foreman" is a label
+    for x in [*people, *party]:
+        w = [t for t in x.split() if t.lower() not in TITLES]
+        parts |= {_whole(" ".join(w[i:j])) for i in range(len(w)) for j in range(i + 1, len(w) + 1)}
+    return whole, parts
 
 
 def dismissed(transcript: list[dict[str, Any]]) -> set[str]:
@@ -114,16 +125,18 @@ def dismissed(transcript: list[dict[str, Any]]) -> set[str]:
 
 def unknown(lore: dict[str, Any], transcript: list[dict[str, Any]], party: tuple[str, ...] = ()) -> list[str]:
     """The names in the DM's replies so far that are in no entry and weren't dismissed, oldest first."""
-    known, gone, srd_names = known_words(lore, party), dismissed(transcript), _srd()[0]
+    (whole, parts), gone, srd_names = known(lore, party), dismissed(transcript), _srd()[0]
+    ok = lambda y: _whole(y) in whole or _whole(y) in parts  # noqa: E731
     made = [i for i, e in enumerate(transcript) if e["kind"] == "call" and e.get("tool") == "finish_character"]
     out: list[str] = []
     for e in transcript[made[-1] + 1 if made else 0:]:  # play only: character creation's talk is not the world
         if e["kind"] != "dm":
             continue
         for p in phrases(e["text"]):
-            if p in out or p.casefold() in gone or p.lower() in srd_names:
+            core = " ".join(w for w in p.split() if _word(w) not in TITLES and _word(w) not in GAME_WORDS)
+            if p in out or p.casefold() in gone or p.lower() in srd_names or not core:
                 continue
-            if all(w in known or w in TITLES or w in GAME_WORDS for w in map(_word, p.split()) if w not in CONNECT):
+            if ok(p) or ok(core) or (" of " in core and all(ok(y) for y in core.split(" of "))):
                 continue
             out.append(p)
     return out
