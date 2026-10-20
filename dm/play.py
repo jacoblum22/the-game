@@ -25,7 +25,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import branch, check, create, fight, lookup, model, names, srd
+from dm import branch, check, create, fight, lookup, model, names, routes, srd
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -802,22 +802,98 @@ class Game:
                 self.save()
             return res
 
+        # ---- places and routes (dm/routes.py): hidden from the player, recorded in the transcript as calls ----
+        _leg = {"type": "object", "properties": {"miles": {"type": "number", "minimum": 0},
+                                                 "hours": {"type": "number", "minimum": 0},
+                                                 "days": {"type": "number", "minimum": 0}},
+                "description": "one of miles, hours or days, as you said it; {} if you didn't say"}
+        _way = {"by": {"type": "string", "enum": list(routes.BY), "description": "foot unless given"},
+                "pace": {"type": "string", "enum": [*routes.PACE_MPH, "gallop"], "description": "only when the story "
+                         "says it (a forced march is fast, children walk slow); otherwise normal. Not by boat"},
+                "vessel": {"type": "string", "enum": sorted(routes.vessels()), "description": "by boat: rowboat unless given"},
+                "downstream": {"type": "boolean", "description": "a rowboat or keelboat going downstream (adds the current)"},
+                "difficult": {"type": "boolean", "description": "over difficult terrain (half the distance in the same time)"},
+                "hours_a_day": {"type": "number", "description": "by boat: a crewed ship's hours of travel a day, up to 24 (8 unless given)"}}
+
+        @tool("route", "Record how places lie, hidden from the player, the first time you say it: how far apart they "
+              "are, or that one is on the way between others. A road: stops (the places in the order the road runs, by "
+              "their notebook names) and legs (one per gap: miles, or the time as you said it, which the game turns "
+              "into miles by the SRD's travel pace; {} for a gap you didn't give), with the way it was travelled. A "
+              "plain distance is a road of two stops. Also links: a place inside another, right at it (adjoining), or "
+              "joined by a permanent portal, which count as no distance. The game checks each road against the ones "
+              "recorded before. Without stops or links: how far it is from (where the party is, unless given) to `to`, "
+              "and how long at each pace, without moving anyone.",
+              {"type": "object", "properties": {
+                  "stops": {**_texts, "description": "e.g. ['Greywater', 'Millstone Inn', 'Ford Chapel']"},
+                  "legs": {"type": "array", "items": _leg},
+                  "total": {**_leg, "description": "first stop to last, if you said it"},
+                  "direction": {"type": "string", "description": "compass, first stop to last, if you said it, e.g. north-east"},
+                  **_way,
+                  "links": {"type": "array", "items": {"type": "object", "properties": {
+                      "a": {"type": "string"}, "b": {"type": "string"},
+                      "how": {"type": "string", "enum": ["inside", "adjoining", "portal"], "description": "inside: a inside b"}},
+                      "required": ["a", "b", "how"]}},
+                  "from": {"type": "string"}, "to": {"type": "string"}}})
+        async def route(a: dict[str, Any]) -> dict[str, Any]:
+            return self.run("route", lambda: routes.recorded_text(self.lore, self.transcript, a), hidden=True, inp=a)
+
+        @tool("travel", "The party travels to a place, by the SRD's travel pace: the game works out how long it takes "
+              "from the recorded routes (or from the miles, hours or days you give, when none is recorded, and records "
+              "that route), moves the clock (8 hours on the road a day, then the night until the same hour next "
+              "morning) and puts the party there. forced_march: on without stopping past 8 hours (Forced March).",
+              {"type": "object", "properties": {
+                  "to": {"type": "string"}, "from": {"type": "string", "description": "where the party is, unless given"},
+                  **_way, "forced_march": {"type": "boolean"},
+                  "miles": {"type": "number", "minimum": 0}, "hours": {"type": "number", "minimum": 0},
+                  "days": {"type": "number", "minimum": 0}},
+               "required": ["to"]})
+        async def travel(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                if self.clock["now"] is None:
+                    raise m.Refused("the clock isn't set: set it with change_time first")
+                inp, sec, text = routes.journey(self.lore, self.transcript, a)
+                a.clear()
+                a.update(inp)  # recorded with where it started
+                self.clock = m.advance(self.clock, round(sec))
+                return text + f"; now {m.when(self.clock['now'])}"
+            res = self.run("travel", go, hidden=True, inp=a)
+            if not res.get("is_error"):  # the player sees the journey, as they see the clock
+                self.log("tool", "travel: " + res["content"][0]["text"])
+                self.save()
+            return res
+
+        @tool("dismiss_warning", "Take items off the game's warnings about places and routes, when they're wrong (not "
+              "a clash, not a distance, not inside it). A real one is settled by recording it instead.",
+              {"type": "object", "properties": {"items": {**_texts, "description": "as the warning shows them, in quotes"}},
+               "required": ["items"]})
+        async def dismiss_warning(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                if not a.get("items"):
+                    raise m.Refused("items: none given")
+                return "dismissed: " + ", ".join(a["items"])
+            return self.run("dismiss_warning", go, hidden=True, inp=a)
+
         @tool("reply", "Your reply to the player: the whole of it, written out in full. The player sees only what you "
               "send here, never text you write outside it, and never your thinking. Send it once a turn, in your last "
-              "message, together with the calls that record it.",
-              {"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]})
+              "message, together with the calls that record it. place: where the party is as the reply ends, the most "
+              "specific named place (the inn, not the town it's in), by its notebook name.",
+              {"type": "object", "properties": {"text": {"type": "string"}, "place": {"type": "string"}},
+               "required": ["text", "place"]})
         async def reply(a: dict[str, Any]) -> dict[str, Any]:
             t = (a.get("text") or "").strip()
             if not t:
                 return {"content": [{"type": "text", "text": "REFUSED, nothing shown: the reply is empty."}], "is_error": True}
             if self.replied or self.reply_len >= FULL_REPLY:
                 return {"content": [{"type": "text", "text": "REFUSED, nothing shown: " + LATE}], "is_error": True}
+            if place := " ".join(str(a.get("place") or "").split()):
+                self.transcript.append({"kind": "call", "tool": "place", "input": {"place": place}, "result": "", "error": False})
             self.on_reply(t)
             return {"content": [{"type": "text", "text": "shown to the player"}]}
 
         return [self.after_reply(t) for t in (
             roll, change_pc, change_party, new_pc, srd_options, level_up_options, level_up, add_combatants, change_creature,
-            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, dismiss_name, lore, recall)] + [reply]
+            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, dismiss_name, lore, recall, route, travel,
+            dismiss_warning)] + [reply]
 
     def written(self) -> bool:
         """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
@@ -999,7 +1075,8 @@ LATE = ("Your reply has already gone to the player as written; nothing you write
 # Tools whose result the DM needn't read (owner, 2026-10-18): it makes them in the same call as its reply, and the turn
 # ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
 # of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
-BOOKKEEPING = {"change_time", "write_lore", "dismiss_name", "change_pc", "change_party", "change_creature"}
+BOOKKEEPING = {"change_time", "write_lore", "dismiss_name", "change_pc", "change_party", "change_creature", "route",
+               "travel", "dismiss_warning"}
 # The reply is a tool (Jake, 2026-10-18). After a tool result (a roll), Sonnet and Opus sent the record calls first and
 # the reply after them in a call of its own, whatever the instructions said: in a bench of four tools and four lines
 # of instructions on the API, 0 of 5 with thinking on or off, and with a note in the roll's result; Haiku 4 of 5.
@@ -1055,6 +1132,8 @@ async def turn(game: Game | Creation, text: str) -> None:
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
         if unnamed := names.warning(game.lore, game.transcript, party):
             notes += "\n" + unnamed
+        if places := routes.warning(game.lore, game.transcript):
+            notes += "\n" + places
         lore_before = copy.deepcopy(game.lore)  # what the continuity checker reads (dm/check.py)
         named = named_features([game.sheet, *game.companions], text)
         features = ("[Features the player named, in full from the sheet]\n" + "\n".join(f"- {x}" for x in named)
