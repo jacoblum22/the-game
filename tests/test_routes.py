@@ -170,3 +170,25 @@ def test_names_count_only_whole_names_or_parts_of_peoples_names() -> None:
     lore, _ = notebook.write(lore, {"create": "Ford Chapel", "kind": "place", "description": "x"}, 0)
     t = [dm("They ride for Greyshaft. Later, Wil Harrow and Wil reach the Ford Chapel, past the Ford.")]
     assert names.unknown(lore, t) == ["Greyshaft", "Ford"]
+
+
+def test_a_correction_replaces_the_record_and_its_clash() -> None:
+    lore = places("Greywater", "Ford Chapel")
+    t = [call("route", stops=["Greywater", "Ford Chapel"], legs=[{"hours": 3}]), player(),
+         call("route", stops=["Greywater", "Ford Chapel"], legs=[{"hours": 1}]), player()]
+    assert routes.Atlas(lore, t).flags
+    at = routes.Atlas(lore, t + [call("route", stops=["Greywater", "Ford Chapel"], legs=[{"hours": 1}], correct=True)])
+    assert at.flags == [] and at.path("Greywater", "Ford Chapel")[0] == 3
+
+
+def test_warning_a_distance_off_the_record_in_the_last_reply() -> None:
+    lore = places("Greywater", "Millstone Inn")
+    t = [call("route", stops=["Greywater", "Millstone Inn"], legs=[{"hours": 2}]), call("place", place="Greywater"),
+         player(), dm("The Millstone Inn is a day and a half down the road."), player()]
+    w = routes.warning(lore, t)
+    assert ('if that is Millstone Inn to Greywater, the recorded route is 6 miles (2 hours on foot), and "a day and a '
+            'half down" is about 36 miles at a normal pace') in w
+    assert "Distances off the records" not in routes.warning(lore, t + [player()])  # asked once
+    t[3] = dm("The Millstone Inn is two hours down the road.")
+    assert routes.warning(lore, t) == ""
+    assert routes.stated_miles("three days' march") == 72 and routes.stated_miles("a hard night's march") == 24

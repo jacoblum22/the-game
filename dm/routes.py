@@ -118,6 +118,10 @@ def num(x: float) -> str:
     return f"{x:.1f}".rstrip("0").rstrip(".") if x < 10 else f"{x:.0f}"
 
 
+def mi(x: float) -> str:
+    return f"{num(x)} mile" + ("" if num(x) == "1" else "s")
+
+
 # ---------- the records ----------
 
 def norm(x: Any) -> str:
@@ -183,6 +187,7 @@ class Atlas:
         self.vecs: dict[tuple[str, str], tuple[float, float]] = {}
         self.dirs: dict[tuple[str, str], tuple[str, int]] = {}
         self.flags: list[tuple[str, str]] = []  # (key to dismiss it by, text)
+        self.involves: list[set[frozenset[str]]] = []  # each flag's pairs of places
         self.links: list[tuple[str, str]] = []
         self.stops: list[str] = []  # every place a record names, as written
         for t, e in records(transcript or []):
@@ -267,16 +272,23 @@ class Atlas:
         if tot is not None and st[0] != st[-1]:
             new.setdefault(frozenset([st[0], st[-1]]), tot)
         found: list[str] = []
+        said = {k: entry(self.lore, x) or x for k, x in zip(st, stops)}  # names as this record gives them
         for pair, d in new.items():
             a_, b_ = sorted(pair)
-            na, nb = self.name(a_), self.name(b_)
+            na, nb = said.get(a_, self.name(a_)), said.get(b_, self.name(b_))
             k = (cls, pair)
             fkey = f"turn {turn}: {na} - {nb}"
+            if a.get("correct"):  # the DM's correction: it replaces the record, and the clashes over it go
+                self.facts[k] = (d, turn)
+                keep = [i for i, inv in enumerate(self.involves) if pair not in inv]
+                self.flags, self.involves = [self.flags[i] for i in keep], [self.involves[i] for i in keep]
+                continue
             if k in self.facts:
                 f, ft = self.facts[k]
                 if abs(d - f) > .25 * max(d, f) and abs(d - f) > .5:
-                    found.append(f"{na} to {nb}: {num(d)} miles (turn {turn}), but {num(f)} miles on turn {ft}.")
+                    found.append(f"{na} to {nb}: {mi(d)} (turn {turn}), but {mi(f)} on turn {ft}.")
                     self.flags.append((fkey, found[-1]))
+                    self.involves.append({pair})
                 continue
             for c in sorted({p for (cl, kk) in self.facts if cl == cls for p in kk} - {a_, b_}):
                 ac, cb = self.facts.get((cls, frozenset([a_, c]))), self.facts.get((cls, frozenset([c, b_])))
@@ -288,11 +300,12 @@ class Atlas:
                         lo = .7 * hi
                     if d > 1.25 * hi + .5 or d < .75 * lo - .5:
                         nc = self.name(c)
-                        found.append(f"{na} to {nb}: {num(d)} miles (turn {turn}), but {na} to {nc} is {num(ac[0])} "
-                                     f"miles (turn {ac[1]}) and {nc} to {nb} {num(cb[0])} (turn {cb[1]})"
+                        found.append(f"{na} to {nb}: {mi(d)} (turn {turn}), but {na} to {nc} is {mi(ac[0])} "
+                                     f"(turn {ac[1]}) and {nc} to {nb} {num(cb[0])} (turn {cb[1]})"
                                      + (f", and the compass puts {nc} on the way" if between else "")
-                                     + f", so it should be {num(lo)} to {num(hi)} miles.")
+                                     + f", so it should be {num(lo)} to {mi(hi)}.")
                         self.flags.append((fkey, found[-1]))
+                        self.involves.append({pair, frozenset([a_, c]), frozenset([c, b_])})
             self.facts[k] = (d, turn)
         if a.get("direction") and st[0] != st[-1]:
             if v := vec(a["direction"]):
@@ -301,9 +314,10 @@ class Atlas:
             fw, bw = (st[0], st[-1]), (st[-1], st[0])
             old = self.dirs.get(fw) or self.dirs.get(bw)
             if (bw in self.dirs and self.dirs[bw][0] == dw) or (fw in self.dirs and OPP.get(self.dirs[fw][0]) == dw):
-                found.append(f"{self.name(st[0])} to {self.name(st[-1])}: {dw} (turn {turn}), but the other way on "
+                found.append(f"{said[st[0]]} to {said[st[-1]]}: {dw} (turn {turn}), but the other way on "
                              f"turn {old[1]}.")  # type: ignore[index]
-                self.flags.append((f"turn {turn}: {self.name(st[0])} - {self.name(st[-1])} direction", found[-1]))
+                self.flags.append((f"turn {turn}: {said[st[0]]} - {said[st[-1]]} direction", found[-1]))
+                self.involves.append({frozenset([st[0], st[-1]])})
             self.dirs.setdefault(fw, (dw, turn))
         return found
 
@@ -366,7 +380,7 @@ def ask(lore: dict[str, Any], transcript: list[dict[str, Any]], a: dict[str, Any
         if d == 0:
             out.append(f"{to} is at {frm} (linked): no travel")
             continue
-        line = f"{num(d)} miles {how}" + (f" by way of {', '.join(via)}" if via else "")
+        line = f"{mi(d)} {how}" + (f" by way of {', '.join(via)}" if via else "")
         if how == "by land":
             line += ": on foot or riding, " + ", ".join(f"{p} pace {hm(d / mph)}" for p, mph in PACE_MPH.items())
         else:
@@ -403,7 +417,7 @@ def journey(lore: dict[str, Any], transcript: list[dict[str, Any]], a: dict[str,
         clock_hours = hours + (24 - per_day) * (math.ceil(hours / per_day) - 1)
     how = {"foot": "on foot", "horse": "riding", "cart": "by cart", "boat": f"by {a.get('vessel') or 'rowboat'}"}[a.get("by") or "foot"]
     pace = "" if a.get("by") == "boat" else f" at a {a.get('pace') or 'normal'} pace"
-    text = (f"{frm} to {to}: {num(d)} miles" + (f" by way of {', '.join(via)}" if via else "") + f", {how}{pace}"
+    text = (f"{frm} to {to}: {mi(d)}" + (f" by way of {', '.join(via)}" if via else "") + f", {how}{pace}"
             + (" over difficult terrain" if a.get("difficult") else "") + f": {hm(hours)} of travel")
     if not a.get("forced_march") and hours > per_day:
         days = math.ceil(hours / per_day)
@@ -487,12 +501,12 @@ def _places(lore: dict[str, Any]) -> dict[str, str]:
             for x in [n, *e["other_names"]]}
 
 
-def distances(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atlas) -> list[tuple[str, str]]:
-    """A distance or travel time in a reply (or one of the two sentences before it) next to a noted place, with no
-    route recorded from that place to where the party was or to the other place named: (key, text)."""
+def _mentions(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atlas) -> Any:
+    """Each distance or travel time in a reply next to a noted place (in its sentence or one of the two before it):
+    (turn, sentence, the distance's words, the places named, where the party was, its key)."""
     noted = _places(lore)
     if not noted:
-        return []
+        return
     made = [i for i, e in enumerate(transcript) if e["kind"] == "call" and e.get("tool") == "finish_character"]
     start = made[-1] + 1 if made else 0
     names_re = re.compile(r"\b(" + "|".join(re.escape(x) for x in sorted(noted, key=len, reverse=True) if len(x) > 2)
@@ -501,7 +515,6 @@ def distances(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atl
     by_word = {w: {n for x, n in noted.items() if re.search(r"\b" + w + r"\b", x)} for w in PLACE_WORDS}
     last_named: dict[str, int] = {}
     where: str | None = None
-    out: dict[str, str] = {}
     for i_, (t, e) in enumerate(notebook.turns(transcript)):
         if i_ < start:
             continue
@@ -539,14 +552,75 @@ def distances(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atl
                     ps = {p for p in found[i - back] if atlas.key(p) != hk}
                     if ps:
                         break
-            if not ps:
-                continue
-            ends = ps | ({where} if where else set())
-            if all(any(atlas.recorded(p, q) for q in ends if q != p) for p in ps):
-                continue
-            k = f"turn {t}: " + ", ".join(sorted(ps))
-            out.setdefault(k, f'"{s.strip()[:160]}"' + (f" (the party was at {atlas.name(hk)})" if hk else ""))
+            if ps:
+                yield t, s.strip(), m_.group(), ps, where, hk
+
+
+def distances(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atlas) -> list[tuple[str, str]]:
+    """A distance next to a noted place with no route recorded from that place to where the party was or to the
+    other place named: (key, text)."""
+    out: dict[str, str] = {}
+    for t, s, _, ps, where, hk in _mentions(lore, transcript, atlas):
+        ends = ps | ({where} if where else set())
+        if all(any(atlas.recorded(p, q) for q in ends if q != p) for p in ps):
+            continue
+        k = f"turn {t}: " + ", ".join(sorted(ps))
+        out.setdefault(k, f'"{s[:160]}"' + (f" (the party was at {where})" if where else ""))
     return list(out.items())
+
+
+# reading an amount: a few phrases the patterns miss (the dry run's reader), in hours on foot
+SPECIAL = [(r"hard night|night.s (hard )?(march|climb)", 8), (r"day and a half", 12), (r"two days? and a half", 20),
+           (r"few hundred yards|short walk|four streets", .1), (r"long day", 10), (r"morning", 4), (r"day and more", 10),
+           (r"half a day", 4), (r"a few hours", 3)]
+NUM = {"a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8,
+       "nine": 9, "ten": 10, "eleven": 11, "twelve": 12, "fifteen": 15, "twenty": 20, "thirty": 30, "forty": 40,
+       "half a": .5, "half an": .5, "quarter of a": .25, "a quarter": .25, "a quarter of a": .25, "quarter of an": .25,
+       "a quarter of an": .25, "a couple of": 2, "a few": 3, "several": 3}
+_N = (r"(?P<n>\d+(?:\.\d+)?|half an?|a quarter(?: of an?)?|quarter of an?|a couple of|a few|several|an?|one|two|three|"
+      r"four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty)(?P<h>\s+and\s+a\s+half)?")
+_MILES = re.compile(rf"\b{_N}[\s-]+(?P<u>miles?|leagues?)\b", re.I)
+_TIME = re.compile(rf"\b{_N}[\s-]+(?P<u>hours?|minutes?|days?|nights?)\b", re.I)
+
+
+def stated_miles(words: str) -> float | None:
+    """The miles a distance's words give ("two hours" at a normal pace: 6), or None if they can't be read."""
+    def n(m_: re.Match[str]) -> float:
+        v = m_.group("n").lower()
+        return (float(v) if v[0].isdigit() else NUM.get(v, 1)) + (.5 if m_.group("h") else 0)
+    if m_ := _MILES.search(words):
+        return n(m_) * (3 if m_.group("u").lower().startswith("league") else 1)
+    for pat, h in SPECIAL:
+        if re.search(pat, words, re.I):
+            return h * PACE_MPH["normal"]
+    if m_ := _TIME.search(words):
+        u = m_.group("u").lower()
+        return n(m_) * (DAY_HOURS if u[0] in "dn" else 1 / 60 if u.startswith("min") else 1) * PACE_MPH["normal"]
+    return None
+
+
+def restated(lore: dict[str, Any], transcript: list[dict[str, Any]], atlas: Atlas) -> list[str]:
+    """In the last reply, a distance next to a place with a route recorded that's more than 25% off it (as the
+    ALONG check). Asked once: the reply has gone to the player, so the DM can only correct the record or the story
+    from here."""
+    out: list[str] = []
+    last = notebook.now(transcript) - 1
+    for t, s, words, ps, where, hk in _mentions(lore, transcript, atlas):
+        said = stated_miles(words)
+        if t != last or said is None:
+            continue
+        for p in sorted(ps):
+            for q in sorted(ps | ({where} if where else set())):
+                if q == p or not atlas.recorded(p, q):
+                    continue
+                got = atlas.path(p, q) or atlas.path(p, q, WATER)
+                if got and abs(said - got[0]) > .25 * max(said, got[0]) and abs(said - got[0]) > .5:
+                    line = (f'"{s[:160]}": if that is {p} to {entry(lore, q) or q}, '
+                            f"the recorded route is {mi(got[0])} ({hm(got[0] / PACE_MPH['normal'])} on foot), "
+                            f"and \"{words}\" is about {mi(said)} at a normal pace")
+                    if line not in out:
+                        out.append(line)
+    return out
 
 
 def moves(atlas: Atlas, transcript: list[dict[str, Any]]) -> list[tuple[str, str]]:
@@ -556,7 +630,7 @@ def moves(atlas: Atlas, transcript: list[dict[str, Any]]) -> list[tuple[str, str
     for (_, _, x, _), (_, t, y, by_travel) in zip(pos, pos[1:]):
         if by_travel or atlas.key(x) == atlas.key(y) or atlas.connected(x, y):
             continue
-        nx, ny = atlas.name(atlas.key(x)), atlas.name(atlas.key(y))
+        nx, ny = entry(atlas.lore, x) or x, entry(atlas.lore, y) or y
         out.setdefault(f"{nx} -> {ny}", f"turn {t}")
     return list(out.items())
 
@@ -615,8 +689,8 @@ def warning(lore: dict[str, Any], transcript: list[dict[str, Any]]) -> str:
 
     section("Routes that don't fit", [f'"{k}": {v}' for k, v in atlas.flags if keep(k)],
             "These routes you recorded don't fit the ones recorded before them. Correct the record that's wrong "
-            "(record that road again with the right distance), or dismiss one with `dismiss_warning`, by the name in "
-            "quotes, if it isn't a clash.")
+            "(record that road again with the right distance and `correct`), or dismiss one with `dismiss_warning`, "
+            "by the name in quotes, if it isn't a clash.")
     section("Places not in your notebook", [f'"{x}"' for x in unnoted(lore, transcript, atlas) if keep(x)],
             "The party's place or a route names these, which are no entry's name or other name. Add each as a place, "
             "or give its notebook name (`add_other_names` if it's another name for an entry).")
@@ -629,6 +703,10 @@ def warning(lore: dict[str, Any], transcript: list[dict[str, Any]]) -> str:
     section("Places inside places?", [f'"{a} / {b}"' for a, b in contained(lore, transcript, atlas) if keep(f"{a} / {b}")],
             "One's name is inside the other's. If the first is inside, or right at, the second, link them with "
             "`route` (inside or adjoining); if not, dismiss it.")
+    section("Distances off the records", restated(lore, transcript, atlas),
+            "Your last reply gave these distances, which are more than a quarter off the routes recorded. If the "
+            "reply was wrong, keep to the record from now on; if the record was wrong, record that road again with "
+            "the right distance and `correct`. If the number wasn't about those two places, leave it.")
     if fresh := new_places(lore, transcript, atlas):
         parts.append("[New places] Is any of these inside, or right at, a place already in your notebook (an inn in a "
                      "town, a cairn in a pass)? If so, link them with `route`: " + ", ".join(fresh) + ".")

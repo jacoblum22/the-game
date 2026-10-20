@@ -828,6 +828,8 @@ class Game:
                   "legs": {"type": "array", "items": _leg},
                   "total": {**_leg, "description": "first stop to last, if you said it"},
                   "direction": {"type": "string", "description": "compass, first stop to last, if you said it, e.g. north-east"},
+                  "correct": {"type": "boolean", "description": "this road replaces what was recorded for these places "
+                              "(a correction, when the game says a route doesn't fit)"},
                   **_way,
                   "links": {"type": "array", "items": {"type": "object", "properties": {
                       "a": {"type": "string"}, "b": {"type": "string"},
