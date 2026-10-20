@@ -25,7 +25,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import branch, check, create, fight, lookup, model, srd
+from dm import branch, check, create, fight, lookup, model, names, srd
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -786,6 +786,22 @@ class Game:
             return self.run("recall", lambda: notebook.recall(self.lore, self.transcript, a.get("search"), a.get("turn"),
                                                               a.get("page") or 1), hidden=True, inp=a)
 
+        @tool("dismiss_name", "Take names off the list of names not in your notebook, when they aren't names (a word "
+              "that was only capitalised, such as House or Dodge). A real name goes in the notebook instead.",
+              {"type": "object", "properties": {"names": {**_texts, "description": "as the list shows them"}},
+               "required": ["names"]})
+        async def dismiss_name(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                if not a.get("names"):
+                    raise m.Refused("names: none given")
+                return "dismissed: " + ", ".join(a["names"])
+            res = self.run("dismiss_name", go, hidden=True, inp=a)
+            if not res.get("is_error"):
+                n = len(a["names"])
+                self.log("tool", f"notebook: dismissed {n} name{'s' if n > 1 else ''}")
+                self.save()
+            return res
+
         @tool("reply", "Your reply to the player: the whole of it, written out in full. The player sees only what you "
               "send here, never text you write outside it, and never your thinking. Send it once a turn, in your last "
               "message, together with the calls that record it.",
@@ -801,7 +817,7 @@ class Game:
 
         return [self.after_reply(t) for t in (
             roll, change_pc, change_party, new_pc, srd_options, level_up_options, level_up, add_combatants, change_creature,
-            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, lore, recall)] + [reply]
+            next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, dismiss_name, lore, recall)] + [reply]
 
     def written(self) -> bool:
         """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
@@ -983,7 +999,7 @@ LATE = ("Your reply has already gone to the player as written; nothing you write
 # Tools whose result the DM needn't read (owner, 2026-10-18): it makes them in the same call as its reply, and the turn
 # ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
 # of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
-BOOKKEEPING = {"change_time", "write_lore", "change_pc", "change_party", "change_creature"}
+BOOKKEEPING = {"change_time", "write_lore", "dismiss_name", "change_pc", "change_party", "change_creature"}
 # The reply is a tool (Jake, 2026-10-18). After a tool result (a roll), Sonnet and Opus sent the record calls first and
 # the reply after them in a call of its own, whatever the instructions said: in a bench of four tools and four lines
 # of instructions on the API, 0 of 5 with thinking on or off, and with a note in the roll's result; Haiku 4 of 5.
@@ -1037,6 +1053,8 @@ async def turn(game: Game | Creation, text: str) -> None:
                 await reconnect(game)
         party = (game.sheet["name"], *(c["name"] for c in game.companions))
         game.lore, notes = notebook.notes(game.lore, game.transcript, party)
+        if unnamed := names.warning(game.lore, game.transcript, party):
+            notes += "\n" + unnamed
         lore_before = copy.deepcopy(game.lore)  # what the continuity checker reads (dm/check.py)
         named = named_features([game.sheet, *game.companions], text)
         features = ("[Features the player named, in full from the sheet]\n" + "\n".join(f"- {x}" for x in named)
