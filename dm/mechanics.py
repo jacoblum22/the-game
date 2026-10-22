@@ -793,15 +793,43 @@ def new_clock() -> dict[str, Any]:
     return {"now": None, "timers": {}}
 
 
-def clock_text(c: dict[str, Any]) -> str:
+def clock_text(c: dict[str, Any], since: list[dict[str, Any]] | None = None) -> str:
+    """The time and timers; with `since` (the clock's moves since the DM's last reply, clock_moves), what moved it."""
     if c["now"] is None:
         return "Time: not set (set it with change_time)"
-    lines = [f"Time: {when(c['now'])}"]
+    lines = [f"Time: {when(c['now'])}" + ("" if since is None else " (" + moves_text(since) + ")")]
     if c["timers"]:
         lines.append("Timers: " + "; ".join(f"{n}: " + (f"{span(end - c['now'])} left" if end > c["now"] else
                                                         "ends now" if end == c["now"] else f"ran out {span(c['now'] - end)} ago")
                                             for n, end in c["timers"].items()))
     return "\n".join(lines)
+
+
+def clock_moves(transcript: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """What moved the clock since the DM's last reply (Jake, 2026-10-22): the "clock" entries the game wrote between
+    the player's line before last and their newest one, in order, with the same reason running on summed (the rounds
+    of a fight)."""
+    players = [i for i, e in enumerate(transcript) if e["kind"] == "player"]
+    start = players[-2] if len(players) > 1 else 0
+    out: list[dict[str, Any]] = []
+    for e in transcript[start:]:
+        if e["kind"] != "clock":
+            continue
+        if out and e.get("how") != "set" and (out[-1].get("how"), out[-1]["why"]) == (e.get("how"), e["why"]):
+            out[-1] = {**out[-1], "seconds": out[-1]["seconds"] + e["seconds"]}
+        else:
+            out.append(dict(e))
+    return out
+
+
+def moves_text(moves: list[dict[str, Any]]) -> str:
+    """"since your last reply: casting Detect Magic as a ritual, 10 minutes", or that nothing moved the clock."""
+    if not moves:
+        return "unchanged since your last reply: you didn't move the clock"
+    return "since your last reply: " + "; ".join(
+        f"you set the clock to {when(e['at'])}" if e.get("how") == "set"
+        else f"you moved the clock on {span(e['seconds'])}" if e.get("how") == "advance"
+        else f"{e['why']}, {span(e['seconds'])}" for e in moves)
 
 
 def when(t: int) -> str:

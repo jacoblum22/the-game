@@ -577,6 +577,7 @@ class Turns:
                 raise m.Refused(f"{order[i]['name']}'s turn comes next, not {t['name']}'s: send the turns in initiative "
                                 "order, up to the PC's")
         before = copy.deepcopy((self.g.sheet, self.g.companions, self.g.fight, self.g.clock))
+        logged = len(self.g.transcript)
         try:
             if pend:
                 self.p = self.g.fight.pop("pending")
@@ -627,6 +628,7 @@ class Turns:
             self.lines.append(str(e))
         except (m.Refused, srd.Bad):
             self.g.sheet, self.g.companions, self.g.fight, self.g.clock = before
+            self.g.transcript[logged:] = [e for e in self.g.transcript[logged:] if e["kind"] != "clock"]  # the clock's moves go too
             raise
         return "\n".join(self.lines)
 

@@ -133,9 +133,16 @@ class Game:
             print(f"  [{text}]")
 
     def status(self) -> str:
-        return (m.clock_text(self.clock) + "\n" + m.status(self.sheet)
+        return (m.clock_text(self.clock, m.clock_moves(self.transcript)) + "\n" + m.status(self.sheet)
                 + "".join(f"\n\nCompanion {c['name']}, {c['summary']}:\n" + m.status(c) for c in self.companions)
                 + "\n" + m.fight_text(self.fight, self.sheet, self.companions))
+
+    def moved(self, before: int | None, why: str, how: str = "") -> None:
+        """A hidden note that the clock moved and why (Jake, 2026-10-22): the next message's time line says what moved
+        it since the DM's last reply (mechanics.clock_moves). how: "set" or "advance" for the DM's own change_time."""
+        now = self.clock["now"]
+        if now is not None and (how == "set" or (before is not None and now != before)):
+            self.transcript.append({"kind": "clock", "why": why, "how": how, "seconds": now - (before or now), "at": now})
 
     def member(self, who: Any) -> int | None:
         """The companion `who` names (index), or None for the PC (no `who`, or the PC's name). Raises Refused."""
@@ -166,7 +173,9 @@ class Game:
         if not spell or any(a.values()):
             lines.append(self._change_member(i, a))
         if spell:  # a cast comes without a rest, so the clock is only the cast's
-            self.clock = clock
+            before, self.clock = self.clock["now"], clock
+            caster = (self.sheet if i is None else self.companions[i])["name"].split()[0]
+            self.moved(before, f"{caster} casting {spell['cast']}" + (" as a ritual" if spell.get("ritual") else ""))
         s = self.sheet if i is None else self.companions[i]
         if a.get("use_resource") and (ft := fight.feature_timer(s, a["use_resource"])) and self.clock["now"] is not None:
             # Rage's timer is also how creature_turns knows the barbarian resists bludgeoning, piercing and slashing
@@ -187,7 +196,18 @@ class Game:
                     raise m.Refused(f"{res}'s timer starts when its use is spent: change_pc use_resource {res!r}"
                                     + ("" if s is self.sheet else f", who {s['name']!r}")
                                     + " (it spends the use and starts the timer)")
+        before = self.clock["now"]
+        if a.get("set"):  # set comes first, then advance (mechanics.change_time)
+            self.clock, text = m.change_time(self.clock, {k: v for k, v in a.items() if k != "advance"})
+            self.moved(before, "", "set")
+            if a.get("advance"):
+                before = self.clock["now"]
+                self.clock, more = m.change_time(self.clock, {"advance": a["advance"]})
+                self.moved(before, "", "advance")
+                text += "; " + more
+            return text
         self.clock, text = m.change_time(self.clock, a)
+        self.moved(before, "", "advance")
         return text
 
     def _change_member(self, i: int | None, a: dict[str, Any]) -> str:
@@ -224,6 +244,7 @@ class Game:
                 lines.append(f"{c['name']}: " + "; ".join(more))
         self.sheet, self.companions = sheet, party
         self.clock = m.advance(self.clock, rest)
+        self.moved(now, "a long rest" if a.get("long_rest") else "a short rest")
         if a.get("long_rest") and self.clock["now"] is not None:
             self.sheet["last_long_rest"] = self.clock["now"]
         if rest and self.clock["now"] is not None:
@@ -330,7 +351,8 @@ class Game:
         was = self.fight["round"] if self.fight else 0
         self.fight, text = m.next_turn(self.fight)
         if self.fight["round"] > was > 0:  # a round is 6 seconds; end_fight counts the last one
-            self.clock = m.advance(self.clock, 6)
+            before, self.clock = self.clock["now"], m.advance(self.clock, 6)
+            self.moved(before, "fighting")
         return text
 
     def using(self, a: dict[str, Any], fn: Callable[[dict[str, Any]], str]) -> Callable[[], str]:
@@ -695,7 +717,8 @@ class Game:
             def go() -> str:
                 rounds = self.fight["round"] if self.fight else 0
                 self.fight, text = m.end_fight(self.fight)
-                self.clock = m.advance(self.clock, 6)
+                before, self.clock = self.clock["now"], m.advance(self.clock, 6)
+                self.moved(before, "fighting")
                 if self.clock["now"] is not None:
                     text += f" {m.span(rounds * 6)} of fighting; now {m.when(self.clock['now'])}."
                 return text
@@ -856,7 +879,8 @@ class Game:
                 inp, sec, text = routes.journey(self.lore, self.transcript, a)
                 a.clear()
                 a.update(inp)  # recorded with where it started
-                self.clock = m.advance(self.clock, round(sec))
+                before, self.clock = self.clock["now"], m.advance(self.clock, round(sec))
+                self.moved(before, f"the journey to {inp['to']}")
                 return text + f"; now {m.when(self.clock['now'])}"
             res = self.run("travel", go, hidden=True, inp=a)
             if not res.get("is_error"):  # the player sees the journey, as they see the clock

@@ -39,7 +39,7 @@ def test_change_time(tmp_path: Path) -> None:
     assert call("change_time", advance={"minutes": 75})[0] == "1 hour 15 minutes later: Day 1, 5:45 PM"
     assert "Timers: Torch: ran out 15 minutes ago" in g.status()  # stays until the DM removes it
     call("change_time", set={"time": "17:00"})  # a correction keeps the timer's time left
-    assert "Time: Day 1, 5:00 PM\nTimers: Torch: ran out 15 minutes ago" in g.status()
+    assert g.status().startswith("Time: Day 1, 5:00 PM (") and "\nTimers: Torch: ran out 15 minutes ago" in g.status()
     assert call("change_time", remove_timer="Torch")[0] == "timer Torch removed"
     assert "Timers" not in g.status()
     assert call("change_time", set={"time": "25:00"})[1]
@@ -69,3 +69,44 @@ def test_unset_clock_stays_unset(tmp_path: Path) -> None:
     g, call = game(tmp_path)
     call("change_pc", short_rest=True)
     assert g.clock["now"] is None
+
+
+def test_time_line_says_what_moved_it(tmp_path: Path) -> None:
+    """The status's time line says what moved the clock since the DM's last reply (Jake, 2026-10-22)."""
+    g, call = game(tmp_path)
+
+    def line() -> str:
+        return g.status().splitlines()[0]
+    call("change_time", set={"day": 3, "time": "20:40"})
+    g.log("player", "I wait.")
+    assert line() == "Time: Day 3, 8:40 PM (since your last reply: you set the clock to Day 3, 8:40 PM)"
+    g.log("dm", "You wait.")
+    g.log("player", "I look around.")
+    assert line() == "Time: Day 3, 8:40 PM (unchanged since your last reply: you didn't move the clock)"
+    call("add_combatants", combatants=[{"name": "pc", "initiative": 10}, {"name": "Zombie", "initiative": 5, "hp": 22, "ac": 8}])
+    for _ in range(4):
+        call("next_turn")
+    call("end_fight")
+    call("change_time", advance={"hours": 3})
+    g.sheet["hp"]["current"] = 1
+    call("change_pc", short_rest=True)
+    g.log("player", "Onward.")
+    assert line() == ("Time: Day 4, 12:40:12 AM (since your last reply: fighting, 12 seconds; you moved the clock on "
+                      "3 hours; a short rest, 1 hour)")
+
+
+def test_ritual_and_travel_say_why(tmp_path: Path) -> None:
+    g, _ = game(tmp_path)
+    g.sheet = json.loads((CHAR / "wizard.json").read_text(encoding="utf-8"))  # Wren
+    tools = {t.name: t.handler for t in g.tools()}
+
+    def run(name: str, **a: object) -> str:
+        return asyncio.run(tools[name](a))["content"][0]["text"]
+    run("change_time", set={"time": "20:40"})
+    g.log("player", "Cast it.")
+    run("change_pc", cast="Detect Magic", ritual=True)
+    run("travel", to="Greywater", **{"from": "Oakhollow"}, miles=24)
+    g.log("player", "Go on.")
+    assert g.status().splitlines()[0] == ("Time: Day 2, 4:50 AM (since your last reply: Wren casting Detect Magic as a "
+                                          "ritual, 10 minutes; the journey to Greywater, 8 hours)")
+
