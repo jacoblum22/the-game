@@ -1,6 +1,6 @@
 """The continuity checker (Jake, 2026-10-18; built into the game 2026-10-19). After the DM's reply is written and before
-the player sees it, a second Sonnet call reads the reply, the last CHECK_WINDOW turns word for word and the notebook
-entries the reply names, and lists what clashes (the offline tests: evals/autoloop on the autoloop branch,
+the player sees it, a second Sonnet call reads the reply, the last CHECK_WINDOW turns word for word, the notebook
+entries the reply names and the routes recorded between the places it names, and lists what clashes (the offline tests: evals/autoloop on the autoloop branch,
 haiku_check.py `quote` and quote_cutoffs.py). Each problem has a score from 1 to 5, topics, the reply's words, the
 earlier line it clashes with (copied word for word, and code checks the line is really there), and a fix.
 
@@ -16,7 +16,7 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from dm import lore as notebook
-from dm import model
+from dm import model, routes
 
 ENABLED = True
 CHECK_MODEL = "claude-sonnet-5-5"
@@ -58,6 +58,10 @@ SYSTEM = (
     "travel time), place (where things are, directions), deeds (who did or said what), items (who has what, money, "
     "gear, deals), identity (names, roles, relationships, backstory, looks), status (alive, wounded, bound, where "
     "someone is now), mechanics (hit points, dice, spells, rules); one or two.")
+# Added when the reply names places with recorded routes between them (dm/routes.py for_checker)
+ROUTES_NOTE = (" ROUTES lists the distances the DM recorded between places the new reply names (times are on foot at "
+               "a normal pace: 3 miles an hour, 8 hours of walking a day); treat them like the notebook "
+               "(earlier_where: notebook).")
 SCHEMA: dict[str, Any] = {
     "type": "object", "additionalProperties": False, "required": ["problems"],
     "properties": {"problems": {"type": "array", "items": {
@@ -89,8 +93,9 @@ def norm(s: str) -> str:
 
 
 def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str) -> str:
-    """What the checker reads: the notebook entries the reply names (as the notebook was before this turn), the last
-    CHECK_WINDOW turns word for word, and the reply. `transcript` ends with the player's line of this turn."""
+    """What the checker reads: the notebook entries the reply names (as the notebook was before this turn), the routes
+    recorded before this turn between the places it names (dm/routes.py for_checker), the last CHECK_WINDOW turns
+    word for word, and the reply. `transcript` ends with the player's line of this turn."""
     turn = notebook.now(transcript)
     before = transcript[:max((i for i, e in enumerate(transcript) if e["kind"] == "player"), default=0)]
     earlier = "\n\n".join(x for n in range(max(turn - CHECK_WINDOW, 0), turn) if (x := notebook.turn_text(transcript, n)))
@@ -100,7 +105,10 @@ def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str) 
             entries.append(notebook.look(lore, [n], before))
         except Exception:  # noqa: BLE001 - an entry that can't be shown is left out
             pass
+    lines = routes.for_checker(lore, before, reply)
     s = ("NOTEBOOK (the DM's notes, as they were before the new reply)\n" + "\n\n".join(entries)
+         + ("\n\nROUTES (the DM's recorded routes between places the new reply names)\n" + "\n".join(lines)
+            if lines else "")
          + f"\n\nEARLIER PLAY (the last {CHECK_WINDOW} turns, word for word)\n{earlier}\n\nNEW REPLY\n{reply}")
     return s if len(s) <= MAX_CHARS else s[:MAX_CHARS // 3] + "\n[...]\n" + s[-2 * MAX_CHARS // 3:]
 
@@ -157,5 +165,6 @@ async def check(backend: str, lore: dict[str, Any], transcript: list[dict[str, A
     """The problems to act on in `reply`, and the state the checker read. Raises model.Failed or ValueError if the
     call or its answer is no good (the caller shows the reply as it is)."""
     state = context(lore, transcript, reply)
-    answer = await (ask or ask_model)(backend, SYSTEM, state)
+    system = SYSTEM + (ROUTES_NOTE if "\n\nROUTES (" in state else "")
+    answer = await (ask or ask_model)(backend, system, state)
     return kept(answer, state), state

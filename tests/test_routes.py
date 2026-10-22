@@ -192,3 +192,24 @@ def test_warning_a_distance_off_the_record_in_the_last_reply() -> None:
     t[3] = dm("The Millstone Inn is two hours down the road.")
     assert routes.warning(lore, t) == ""
     assert routes.stated_miles("three days' march") == 72 and routes.stated_miles("a hard night's march") == 24
+
+
+def test_routes_for_the_checker() -> None:
+    lore = places("Harrowmere", "the Throat", "Greyshaft", "Saltmarsh", "Cinder Ford")
+    t = [call("route", stops=["Harrowmere", "the Throat"], legs=[{"miles": 30}], direction="north"),
+         call("route", stops=["the Throat", "Greyshaft"], legs=[{"miles": 70}], direction="north-east"),
+         call("route", stops=["Harrowmere", "Saltmarsh"], legs=[{"miles": 20}]),
+         call("place", place="Harrowmere")]
+    assert routes.for_checker(lore, t, "Greyshaft and the Throat lie north.") == [
+        "- Greyshaft to Harrowmere: 100 miles by land (33 hours 20 minutes)",  # on the way, by the compass
+        "- Greyshaft to the Throat: 70 miles by land (23 hours 20 minutes)",
+        "- Harrowmere to the Throat: 30 miles by land (10 hours)"]
+    assert routes.for_checker(lore, t, "Saltmarsh and the Throat.") == [
+        "- Harrowmere to Saltmarsh: 20 miles by land (6 hours 40 minutes)",
+        "- Harrowmere to the Throat: 30 miles by land (10 hours)",
+        "- Saltmarsh to the Throat: no route recorded between these two, but the routes recorded put them between 10 "
+        "and 50 miles apart by land"]
+    # a route with an open clash over it is left out
+    t.append(call("route", stops=["Harrowmere", "Saltmarsh"], legs=[{"miles": 60}]))
+    assert routes.for_checker(lore, t, "Saltmarsh.") == []
+    assert routes.for_checker(lore, t, "Cinder Ford.") == []

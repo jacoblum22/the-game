@@ -218,3 +218,22 @@ def test_sheet_shows_the_backstory(tmp_path: Path) -> None:
     r = play.sheet_report(g)
     assert "\nBackstory: Born in Karrowmere. Raised by monks.\n" in r
     assert "Backstory" not in play.sheet_text(g.sheet)  # the DM's instructions show the past once, in its own section
+
+
+def test_the_checker_reads_the_routes_between_places_the_reply_names() -> None:
+    from dm import lore as notebook
+    lore = notebook.new()
+    for n in ("Greywater", "Ford Chapel"):
+        lore, _ = notebook.write(lore, {"create": n, "kind": "place", "description": "x"}, 0)
+    t = [{"kind": "call", "tool": "route", "input": {"stops": ["Greywater", "Ford Chapel"], "legs": [{"hours": 1}]},
+          "result": "", "error": False}, {"kind": "player", "text": "Where now?"}]
+    state = check.context(lore, t, "The Ford Chapel is two hours up the road from Greywater.")
+    assert "ROUTES (the DM's recorded routes between places the new reply names)\n- Ford Chapel to Greywater: 3 miles by land (1 hour)" in state
+    seen: list[str] = []
+
+    async def ask(backend: str, system: str, text: str) -> dict:
+        seen.append(system)
+        return {"problems": []}
+    asyncio.run(check.check("api", lore, t, "The Ford Chapel is two hours up the road from Greywater.", ask))
+    assert seen[0].endswith(check.ROUTES_NOTE)
+    assert "ROUTES" not in check.context(lore, t, "Nothing here.")
