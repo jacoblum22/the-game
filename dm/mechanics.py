@@ -789,6 +789,50 @@ def _find(f: dict[str, Any], name: str) -> dict[str, Any]:
 DAY = 24 * 3600
 
 
+# The calendar (Jake, 2026-10-31): fixed, 12 months of 30 days. The clock's "start" is the calendar day of Day 1,
+# once the DM has said which date a day is (change_time set with date); dm/timeline.py uses it for dated facts.
+MONTHS = ["Deepwinter", "Thaw", "Sowing", "Rains", "Blossom", "Highsun", "Midsummer", "Haying", "Harvest", "Leaffall",
+          "Frost", "Yearsend"]
+MONTH_DAYS = 30
+YEAR_DAYS = MONTH_DAYS * len(MONTHS)
+
+
+def ordinal(n: int) -> str:
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def month(name: Any) -> int:
+    """A month's number from 0, by name (any case). Raises Refused."""
+    for i, x in enumerate(MONTHS):
+        if str(name).strip().casefold() == x.casefold():
+            return i
+    raise Refused(f"month: one of {', '.join(MONTHS)}")
+
+
+def calendar_day(d: dict[str, Any]) -> int:
+    """{day, month, year} -> days since the 1st of Deepwinter, year 0. Raises Refused."""
+    day, year = d.get("day"), d.get("year")
+    if not isinstance(day, int) or not 1 <= day <= MONTH_DAYS:
+        raise Refused(f"date day: 1 to {MONTH_DAYS} (months are {MONTH_DAYS} days)")
+    if not isinstance(year, int):
+        raise Refused("date year: a whole number")
+    return year * YEAR_DAYS + month(d.get("month")) * MONTH_DAYS + day - 1
+
+
+def set_date(c: dict[str, Any], d: dict[str, Any]) -> dict[str, Any]:
+    """The clock with today's game day named by the date d {day, month, year}."""
+    return {**c, "start": calendar_day(d) - c["now"] // DAY}
+
+
+def date_text(c: dict[str, Any], game_day: int) -> str:
+    """'the 3rd of Harvest, 1492' for a game day (Day 1 is 1), or '' when no date is set."""
+    if c.get("start") is None:
+        return ""
+    y, rest = divmod(c["start"] + game_day - 1, YEAR_DAYS)
+    mo, d = divmod(rest, MONTH_DAYS)
+    return f"the {ordinal(d + 1)} of {MONTHS[mo]}, {y}"
+
+
 def new_clock() -> dict[str, Any]:
     return {"now": None, "timers": {}}
 
@@ -797,7 +841,10 @@ def clock_text(c: dict[str, Any], since: list[dict[str, Any]] | None = None) -> 
     """The time and timers; with `since` (the clock's moves since the DM's last reply, clock_moves), what moved it."""
     if c["now"] is None:
         return "Time: not set (set it with change_time)"
-    lines = [f"Time: {when(c['now'])}" + ("" if since is None else " (" + moves_text(since) + ")")]
+    now = when(c["now"])
+    if date := date_text(c, c["now"] // DAY + 1):
+        now = now.replace(",", f" ({date}),", 1)
+    lines = [f"Time: {now}" + ("" if since is None else " (" + moves_text(since) + ")")]
     if c["timers"]:
         lines.append("Timers: " + "; ".join(f"{n}: " + (f"{span(end - c['now'])} left" if end > c["now"] else
                                                         "ends now" if end == c["now"] else f"ran out {span(c['now'] - end)} ago")
@@ -854,7 +901,8 @@ def _secs(a: dict[str, Any]) -> int:
 
 
 def change_time(c: dict[str, Any], a: dict[str, Any]) -> tuple[dict[str, Any], str]:
-    """set {day, time "17:40"}, advance {days, hours, minutes, seconds}, add_timer {name, + the same}, remove_timer."""
+    """set {day, time "17:40"}, date {day, month, year} (today's), advance {days, hours, minutes, seconds}, add_timer
+    {name, + the same}, remove_timer."""
     c = copy.deepcopy(c)
     out = []
     if st := a.get("set"):
@@ -867,8 +915,11 @@ def change_time(c: dict[str, Any], a: dict[str, Any]) -> tuple[dict[str, Any], s
         if was is not None and c["timers"]:  # the timers keep their time left
             c["timers"] = {n: end - was + c["now"] for n, end in c["timers"].items()}
         out.append(f"time set: {when(c['now'])}")
-    if c["now"] is None and any(a.get(k) for k in ("advance", "add_timer", "remove_timer")):
+    if c["now"] is None and any(a.get(k) for k in ("advance", "add_timer", "remove_timer", "date")):
         raise Refused("the time isn't set yet: set it first")
+    if d := a.get("date"):  # today's date: names every day of the clock
+        c = set_date(c, d if isinstance(d, dict) else {})
+        out.append(f"today is {date_text(c, c['now'] // DAY + 1)}")
     if adv := a.get("advance"):
         sec = _secs(adv)
         if sec <= 0:
@@ -889,7 +940,7 @@ def change_time(c: dict[str, Any], a: dict[str, Any]) -> tuple[dict[str, Any], s
         del c["timers"][rm]
         out.append(f"timer {rm} removed")
     if not out:
-        raise Refused("nothing to change: pass set, advance, add_timer or remove_timer")
+        raise Refused("nothing to change: pass set, date, advance, add_timer or remove_timer")
     return c, "; ".join(out)
 
 

@@ -1,6 +1,7 @@
 """The continuity checker (Jake, 2026-10-18; built into the game 2026-10-19). After the DM's reply is written and before
 the player sees it, a second Sonnet call reads the reply, the last CHECK_WINDOW turns word for word, the notebook
-entries the reply names and the routes recorded between the places it names, and lists what clashes (the offline tests: evals/autoloop on the autoloop branch,
+entries the reply names, the routes recorded between the places it names, and the clock and the time facts recorded
+(dm/timeline.py), and lists what clashes (the offline tests: evals/autoloop on the autoloop branch,
 haiku_check.py `quote` and quote_cutoffs.py). Each problem has a score from 1 to 5, topics, the reply's words, the
 earlier line it clashes with (copied word for word, and code checks the line is really there), and a fix.
 
@@ -16,16 +17,17 @@ from collections.abc import Awaitable, Callable
 from typing import Any
 
 from dm import lore as notebook
-from dm import model, routes
+from dm import model, routes, timeline
 
 ENABLED = True
 CHECK_MODEL = "claude-sonnet-5-5"
 CHECK_WINDOW = 5  # turns before the reply, word for word (10 caught fewer and cost 40% more)
 MAX_ENTRIES, MAX_CHARS = 12, 100_000
 # Act at this score or higher, by topic (leave-one-out on 165 rounds: 71 of 105 contradictions caught, 19 of 60 clean
-# rounds flagged). A problem with several topics is acted on at the lowest of its topics' cutoffs.
+# rounds flagged). A problem with several topics is acted on at the lowest of its topics' cutoffs. Time went from 4 to 3
+# with the clock and the timeline (Jake, 2026-10-31): the date clashes the checker found it scored 3 (calendar-dry-run.md).
 CUTOFF = {"count": 2, "place": 2, "items": 2, "status": 2, "mechanics": 2,
-          "distance": 3, "deeds": 3, "identity": 3, "time": 4}
+          "distance": 3, "deeds": 3, "identity": 3, "time": 3}
 TOPICS = list(CUTOFF)
 BACK_TO_DM = {"time", "items", "mechanics"}  # the fix also touches the clock, sheet or notebook: the DM writes again
 
@@ -62,6 +64,10 @@ SYSTEM = (
 ROUTES_NOTE = (" ROUTES lists the distances the DM recorded between places the new reply names (times are on foot at "
                "a normal pace: 3 miles an hour, 8 hours of walking a day); treat them like the notebook "
                "(earlier_where: notebook).")
+# Added when the checker gets the clock or the timeline (dm/timeline.py)
+TIME_NOTE = (" TIME gives the game clock at the end of each earlier turn and when the new reply is written. TIMELINE "
+             "lists time facts the DM recorded earlier about things the new reply names, with the day counts worked "
+             "out from the clock. Treat both like the notebook (earlier_where: notebook).")
 SCHEMA: dict[str, Any] = {
     "type": "object", "additionalProperties": False, "required": ["problems"],
     "properties": {"problems": {"type": "array", "items": {
@@ -92,10 +98,13 @@ def norm(s: str) -> str:
                     .replace("*", "").split()).lower()
 
 
-def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str) -> str:
+def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str, party: tuple[str, ...] = (),
+            clock: dict[str, Any] | None = None) -> str:
     """What the checker reads: the notebook entries the reply names (as the notebook was before this turn), the routes
-    recorded before this turn between the places it names (dm/routes.py for_checker), the last CHECK_WINDOW turns
-    word for word, and the reply. `transcript` ends with the player's line of this turn."""
+    recorded before this turn between the places it names (dm/routes.py for_checker), the clock at the end of each
+    turn it reads and at the reply, the time facts recorded before this turn about the names the reply uses
+    (dm/timeline.py), the last CHECK_WINDOW turns word for word, and the reply. `transcript` ends with the player's
+    line of this turn, and has this turn's calls; `clock` is the game's (for the date)."""
     turn = notebook.now(transcript)
     before = transcript[:max((i for i, e in enumerate(transcript) if e["kind"] == "player"), default=0)]
     earlier = "\n\n".join(x for n in range(max(turn - CHECK_WINDOW, 0), turn) if (x := notebook.turn_text(transcript, n)))
@@ -106,9 +115,17 @@ def context(lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str) 
         except Exception:  # noqa: BLE001 - an entry that can't be shown is left out
             pass
     lines = routes.for_checker(lore, before, reply)
+    at = timeline.clock_at(transcript)
+    clock = clock or {"now": at[-1][1] if at else None, "timers": {}}
+    time = timeline.time_lines(transcript, max(turn - CHECK_WINDOW, 0), turn)
+    facts = timeline.for_checker(clock, before, reply, clock["now"], party)
     s = ("NOTEBOOK (the DM's notes, as they were before the new reply)\n" + "\n\n".join(entries)
          + ("\n\nROUTES (the DM's recorded routes between places the new reply names)\n" + "\n".join(lines)
             if lines else "")
+         + ("\n\nTIME (the game clock when each earlier turn ended, and when the new reply is written)\n" + time
+            if time else "")
+         + ("\n\nTIMELINE (the DM's recorded time facts about things the new reply names)\n" + "\n".join(facts)
+            if facts else "")
          + f"\n\nEARLIER PLAY (the last {CHECK_WINDOW} turns, word for word)\n{earlier}\n\nNEW REPLY\n{reply}")
     return s if len(s) <= MAX_CHARS else s[:MAX_CHARS // 3] + "\n[...]\n" + s[-2 * MAX_CHARS // 3:]
 
@@ -161,10 +178,12 @@ async def ask_model(backend: str, system: str, text: str) -> dict[str, Any]:
 
 
 async def check(backend: str, lore: dict[str, Any], transcript: list[dict[str, Any]], reply: str,
-                ask: Ask | None = None) -> tuple[list[dict[str, Any]], str]:
+                ask: Ask | None = None, party: tuple[str, ...] = (),
+                clock: dict[str, Any] | None = None) -> tuple[list[dict[str, Any]], str]:
     """The problems to act on in `reply`, and the state the checker read. Raises model.Failed or ValueError if the
     call or its answer is no good (the caller shows the reply as it is)."""
-    state = context(lore, transcript, reply)
-    system = SYSTEM + (ROUTES_NOTE if "\n\nROUTES (" in state else "")
+    state = context(lore, transcript, reply, party, clock)
+    system = (SYSTEM + (ROUTES_NOTE if "\n\nROUTES (" in state else "")
+              + (TIME_NOTE if "\n\nTIME (" in state or "\n\nTIMELINE (" in state else ""))
     answer = await (ask or ask_model)(backend, system, state)
     return kept(answer, state), state

@@ -25,7 +25,7 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-from dm import branch, check, create, fight, lookup, model, names, routes, srd
+from dm import branch, check, create, fight, lookup, model, names, routes, srd, timeline
 from dm import lore as notebook
 from dm import mechanics as m
 from dm.model import Tool, tool
@@ -733,6 +733,11 @@ class Game:
                   "set": {"type": "object", "properties": {"day": {"type": "integer", "minimum": 1},
                                                            "time": {"type": "string", "description": "24-hour, e.g. 17:40"}},
                           "required": ["time"]},
+                  "date": {"type": "object", "description": "today's date on the calendar (12 months of 30 days: "
+                           + ", ".join(m.MONTHS) + "), once at the start: it names every day after it",
+                           "properties": {"day": {"type": "integer", "minimum": 1, "maximum": m.MONTH_DAYS},
+                                          "month": {"type": "string", "enum": m.MONTHS}, "year": {"type": "integer"}},
+                           "required": ["day", "month", "year"]},
                   "advance": {"type": "object", "properties": _span},
                   "add_timer": {"type": "object", "properties": {"name": {"type": "string", "description": "e.g. Torch (Brakka's)"},
                                                                  **_span}, "required": ["name"]},
@@ -888,8 +893,35 @@ class Game:
                 self.save()
             return res
 
-        @tool("dismiss_warning", "Take items off the game's warnings about places and routes, when they're wrong (not "
-              "a clash, not a distance, not inside it). A real one is settled by recording it instead.",
+        # ---- the timeline (dm/timeline.py): hidden from the player, recorded in the transcript as calls ----
+        @tool("timeline", "Record a time fact, hidden from the player, the first time you say it: something that "
+              "happened or will happen on a day (an oath sworn, a deadline, a meeting), how long ago something was, or "
+              "a person's age. what: the fact; names: the people, places and things it's about, by their notebook "
+              "names; and one of day (the game day), date (a calendar date; this month and year unless given), "
+              "days_from_today (below 0 for days ago), years_ago, or age (the person's age now; names first). The game "
+              "turns it into a day and does the sums when it shows it (\"the oath (Day 2; 14 days ago)\"). With find "
+              "instead: every fact recorded about those names.",
+              {"type": "object", "properties": {
+                  "what": {"type": "string", "description": "e.g. Korvash swore his oath to the Tallies"},
+                  "names": {**_texts, "description": "e.g. ['Korvash', 'the Iron Tallies']"},
+                  "day": {"type": "integer"}, "days_from_today": {"type": "integer"},
+                  "date": {"type": "object", "properties": {"day": {"type": "integer", "minimum": 1, "maximum": m.MONTH_DAYS},
+                                                            "month": {"type": "string", "enum": m.MONTHS},
+                                                            "year": {"type": "integer"}}, "required": ["day"]},
+                  "years_ago": {"type": "number", "minimum": 0}, "age": {"type": "number", "minimum": 0},
+                  "time": {"type": "string", "description": "the time of day, if you said it (e.g. dusk, 17:30)"},
+                  "find": {**_texts, "description": "names to look up instead of recording"}}})
+        async def timeline_(a: dict[str, Any]) -> dict[str, Any]:
+            def go() -> str:
+                inp, text = timeline.recorded_text(self.clock, self.transcript, a)
+                a.clear()
+                a.update(inp)  # recorded as a day, with the sums done when shown
+                return text
+            return self.run("timeline", go, hidden=True, inp=a)
+
+        @tool("dismiss_warning", "Take items off the game's warnings about places, routes and time facts, when they're "
+              "wrong (not a clash, not a distance, not inside it, nothing to record). A real one is settled by "
+              "recording it instead.",
               {"type": "object", "properties": {"items": {**_texts, "description": "as the warning shows them, in quotes"}},
                "required": ["items"]})
         async def dismiss_warning(a: dict[str, Any]) -> dict[str, Any]:
@@ -919,7 +951,7 @@ class Game:
         return [self.after_reply(t) for t in (
             roll, change_pc, change_party, new_pc, srd_options, level_up_options, level_up, add_combatants, change_creature,
             next_turn, creature_turns, end_fight, change_time, lookup_tool(record), write_lore, dismiss_name, lore, recall, route, travel,
-            dismiss_warning)] + [reply]
+            timeline_, dismiss_warning)] + [reply]
 
     def written(self) -> bool:
         """This turn's reply is written: sent with the reply tool, or as text of FULL_REPLY characters or more."""
@@ -1102,7 +1134,7 @@ LATE = ("Your reply has already gone to the player as written; nothing you write
 # ends there. Each model call reads the whole conversation again, and a call only to read "recorded" was about a third
 # of an ordinary turn's cost (3 calls: roll | clock, notes | reply).
 BOOKKEEPING = {"change_time", "write_lore", "dismiss_name", "change_pc", "change_party", "change_creature", "route",
-               "travel", "dismiss_warning"}
+               "travel", "timeline", "dismiss_warning"}
 # The reply is a tool (Jake, 2026-10-18). After a tool result (a roll), Sonnet and Opus sent the record calls first and
 # the reply after them in a call of its own, whatever the instructions said: in a bench of four tools and four lines
 # of instructions on the API, 0 of 5 with thinking on or off, and with a note in the roll's result; Haiku 4 of 5.
@@ -1160,6 +1192,8 @@ async def turn(game: Game | Creation, text: str) -> None:
             notes += "\n" + unnamed
         if places := routes.warning(game.lore, game.transcript):
             notes += "\n" + places
+        if times := timeline.warning(game.transcript, routes.dismissed(game.transcript)):
+            notes += "\n" + times
         lore_before = copy.deepcopy(game.lore)  # what the continuity checker reads (dm/check.py)
         named = named_features([game.sheet, *game.companions], text)
         features = ("[Features the player named, in full from the sheet]\n" + "\n".join(f"- {x}" for x in named)
@@ -1193,7 +1227,8 @@ async def turn(game: Game | Creation, text: str) -> None:
             held[-1], trimmed = branch.without_stat_line(held[-1], player)
         if held and not failed and check.ENABLED and game.written() and any(e["kind"] == "player" for e in game.transcript):  # not the opening
             try:
-                problems, _ = await check.check(game.backend, lore_before, game.transcript, held[-1])
+                problems, _ = await check.check(game.backend, lore_before, game.transcript, held[-1], party=party,
+                                                clock=game.clock)
             except (model.Failed, ValueError, KeyError, StopIteration) as e:
                 problems = []
                 game.log("check", f"the continuity check failed: {e}")  # kept in the save, never shown

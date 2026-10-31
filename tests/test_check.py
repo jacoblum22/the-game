@@ -27,8 +27,8 @@ def test_cutoffs_are_by_topic() -> None:
     assert check.acts(problem(severity=2, topics=["items"]))
     assert not check.acts(problem(severity=2, topics=["deeds"]))
     assert check.acts(problem(severity=3, topics=["deeds"]))
-    assert not check.acts(problem(severity=3, topics=["time"]))
-    assert check.acts(problem(severity=4, topics=["time"]))
+    assert not check.acts(problem(severity=2, topics=["time"]))
+    assert check.acts(problem(severity=3, topics=["time"]))
     assert check.acts(problem(severity=2, topics=["time", "items"]))  # the lowest of its topics
     assert not check.acts(problem(severity=1, topics=["count"]))
 
