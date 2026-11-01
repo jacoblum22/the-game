@@ -85,7 +85,7 @@ async def play_game(tag: str, dm_model: str, rounds: int, out: Path = OUT) -> di
 
     async def logged(request: dict[str, Any]) -> dict[str, Any]:
         sys_ = str(request.get("system", ""))
-        role = "player" if sys_.startswith("You are a human player") else "check" if sys_ == check.SYSTEM else "dm"
+        role = "player" if sys_.startswith("You are a human player") else "check" if sys_.startswith(check.SYSTEM) else "dm"
         t0 = time.time()
         reply = await real_send(request)
         calls.write(json.dumps({"role": role, "model": request["model"], "seconds": round(time.time() - t0, 1),
