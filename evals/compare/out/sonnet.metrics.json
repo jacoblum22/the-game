@@ -1,0 +1,318 @@
+{
+ "summary": {
+  "tag": "sonnet",
+  "model": "claude-sonnet-5-5",
+  "rounds": 20,
+  "totals": {
+   "dm": {
+    "calls": 95,
+    "input": 113546,
+    "cache_read": 3969267,
+    "cache_write": 82446,
+    "output": 31384,
+    "usd": 1.2676427000000003
+   },
+   "player": {
+    "calls": 20,
+    "input": 80,
+    "cache_read": 140638,
+    "cache_write": 16285,
+    "output": 1499,
+    "usd": 0.0943538
+   }
+  },
+  "dm_calls_per_round_median": 4.0,
+  "refused": 0,
+  "failed": 0,
+  "stubs": 10,
+  "dm_usd_per_round": 0.0634,
+  "all_usd_per_round": 0.0681
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 12.5,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 977,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 2,
+   "seconds": 12.7,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1212,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 3,
+   "seconds": 13.0,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1018,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 4,
+   "seconds": 14.0,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 654,
+   "tools": [
+    "lookup",
+    "lookup",
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 5,
+   "seconds": 11.9,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 456,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 6,
+   "seconds": 9.1,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 491,
+   "tools": [
+    "creature_turns",
+    "place"
+   ]
+  },
+  {
+   "round": 7,
+   "seconds": 16.4,
+   "dm_calls": 8,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 592,
+   "tools": [
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 8,
+   "seconds": 9.9,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 759,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 9,
+   "seconds": 16.4,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 1417,
+   "tools": [
+    "write_lore",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 10,
+   "seconds": 16.7,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1416,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "timeline",
+    "place"
+   ]
+  },
+  {
+   "round": 11,
+   "seconds": 12.2,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1256,
+   "tools": [
+    "route",
+    "place"
+   ]
+  },
+  {
+   "round": 12,
+   "seconds": 22.1,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 763,
+   "tools": [
+    "lookup",
+    "lookup",
+    "lookup",
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 13,
+   "seconds": 12.3,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 505,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 14,
+   "seconds": 7.7,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 388,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "place"
+   ]
+  },
+  {
+   "round": 15,
+   "seconds": 13.1,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 571,
+   "tools": [
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 16,
+   "seconds": 7.2,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 347,
+   "tools": [
+    "creature_turns",
+    "place"
+   ]
+  },
+  {
+   "round": 17,
+   "seconds": 13.5,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 433,
+   "tools": [
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 18,
+   "seconds": 14.3,
+   "dm_calls": 6,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 502,
+   "tools": [
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 19,
+   "seconds": 33.6,
+   "dm_calls": 11,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 1070,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 20,
+   "seconds": 29.1,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1052,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  }
+ ]
+}

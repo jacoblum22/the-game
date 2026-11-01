@@ -1,0 +1,29 @@
+{
+ "tag": "sonnet",
+ "model": "claude-sonnet-5-5",
+ "rounds": 20,
+ "totals": {
+  "dm": {
+   "calls": 95,
+   "input": 113546,
+   "cache_read": 3969267,
+   "cache_write": 82446,
+   "output": 31384,
+   "usd": 1.2676427000000003
+  },
+  "player": {
+   "calls": 20,
+   "input": 80,
+   "cache_read": 140638,
+   "cache_write": 16285,
+   "output": 1499,
+   "usd": 0.0943538
+  }
+ },
+ "dm_calls_per_round_median": 4.0,
+ "refused": 0,
+ "failed": 0,
+ "stubs": 10,
+ "dm_usd_per_round": 0.0634,
+ "all_usd_per_round": 0.0681
+}

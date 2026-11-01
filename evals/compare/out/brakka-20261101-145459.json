@@ -1,0 +1,2503 @@
+{
+ "sheet": {
+  "name": "Brakka Ironvein",
+  "summary": "Hill Dwarf fighter 1, acolyte background",
+  "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+  "level": 1,
+  "race": "Hill Dwarf",
+  "class": "Fighter",
+  "subclass": null,
+  "background": "Acolyte",
+  "alignment": "",
+  "personality": "",
+  "appearance": "",
+  "ac": 18,
+  "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+  "ac_now": null,
+  "speed": "25 ft",
+  "size": "Medium",
+  "scores": {
+   "STR": 15,
+   "DEX": 10,
+   "CON": 16,
+   "INT": 8,
+   "WIS": 14,
+   "CHA": 12
+  },
+  "abilities": {
+   "STR": "15 (+2)",
+   "DEX": "10 (+0)",
+   "CON": "16 (+3)",
+   "INT": "8 (-1)",
+   "WIS": "14 (+2)",
+   "CHA": "12 (+1)"
+  },
+  "proficiency_bonus": 2,
+  "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+  "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+  "passive_perception": 14,
+  "senses": "darkvision 60 ft",
+  "languages": "Common, Dwarvish, Giant, Goblin",
+  "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+  "attacks": [
+   "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+   "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+   "Unarmed strike: +4 to hit, 3 bludgeoning"
+  ],
+  "features": [
+   "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+   "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+   "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+   "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+   "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+   "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+   "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+   "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+   "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+   "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+  ],
+  "hp": {
+   "max": 14,
+   "current": 14,
+   "temp": 0
+  },
+  "hit_dice": {
+   "die": "d10",
+   "max": 1,
+   "left": 1
+  },
+  "resources": {
+   "Second Wind": {
+    "max": 1,
+    "left": 1,
+    "recharge": "short"
+   }
+  },
+  "conditions": [],
+  "death_saves": {
+   "successes": 0,
+   "failures": 0
+  },
+  "xp": 0,
+  "coins_cp": 1500,
+  "items": {
+   "Chain Mail": 1,
+   "Longsword": 1,
+   "Shield": 1,
+   "Crossbow, light": 1,
+   "Crossbow bolts": 20,
+   "Backpack": 1,
+   "Bedroll": 1,
+   "Mess kit": 1,
+   "Tinderbox": 1,
+   "Torch": 10,
+   "Rations (1 day)": 10,
+   "Waterskin": 1,
+   "Hempen rope (50 ft)": 1,
+   "Holy symbol of the Anvil Father": 1,
+   "Prayer book": 1,
+   "Stick of incense": 5,
+   "Vestments": 1,
+   "Common clothes": 1,
+   "Belt pouch": 1,
+   "Hooded lantern (borrowed)": 1
+  },
+  "build": {
+   "choices": {
+    "name": "Brakka Ironvein",
+    "race": "dwarf",
+    "class": "fighter",
+    "ability_method": "standard_array",
+    "base_scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 14,
+     "INT": 8,
+     "WIS": 13,
+     "CHA": 12
+    },
+    "choices": {
+     "trait.tool-proficiency": [
+      "Smith's Tools"
+     ],
+     "class.proficiencies.1": [
+      "Athletics",
+      "Perception"
+     ],
+     "feature.fighter-fighting-style": [
+      "Dueling"
+     ],
+     "class.equipment.1": [
+      "a"
+     ],
+     "class.equipment.2": [
+      {
+       "option": "a",
+       "picks": [
+        "Longsword"
+       ]
+      }
+     ],
+     "class.equipment.3": [
+      "a"
+     ],
+     "class.equipment.4": [
+      "b"
+     ],
+     "background.languages": [
+      "Giant",
+      "Goblin"
+     ],
+     "background.equipment.1": [
+      "Amulet"
+     ],
+     "background.equipment.prayer": [
+      "Prayer book"
+     ]
+    }
+   },
+   "rolled": null,
+   "levels": []
+  }
+ },
+ "companions": [],
+ "fight": null,
+ "clock": {
+  "now": 60300,
+  "timers": {
+   "Hooded lantern (borrowed)": 81000
+  },
+  "start": 449229
+ },
+ "model": "ali/qwen3.7-plus",
+ "transcript": [
+  {
+   "kind": "failed",
+   "text": "504: [504]: Direct response did not start within 30000ms — retrying on a fresh socket"
+  },
+  {
+   "kind": "player",
+   "text": "DM: Sorry, it looks like your last message didn't come through on my end. Could you resend it? In the meantime, I'll stay where I am, one hand on my sword hilt, watching the room."
+  },
+  {
+   "kind": "failed",
+   "text": "504: [504]: Direct response did not start within 30000ms — retrying on a fresh socket"
+  },
+  {
+   "kind": "player",
+   "text": "DM: Your reply didn't come through on my end either, so I'm not sure where we left off. Could you give me a quick recap of the current scene and what's happening around my fighter? Until then, I'll hold position and keep watch for anything unusual."
+  },
+  {
+   "kind": "clock",
+   "why": "",
+   "how": "set",
+   "seconds": 0,
+   "at": 59400
+  },
+  {
+   "kind": "tool",
+   "text": "time: time set: Day 1, 4:30 PM; today is the 10th of Frost, 1247"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Brakka Ironvein",
+    "kind": "person",
+    "description": "Hill dwarf fighter, served six years as a guard at the Temple of the Anvil Father in Greyhollow. Acolyte background.",
+    "relationships": [
+     "guard at the [[Temple of the Anvil Father]] for six years",
+     "asked by [[Prior Hessa]] to enter the [[North Works]] to find the missing miners"
+    ]
+   },
+   "result": "entry Brakka Ironvein (person) created; relationship [1] added to Brakka Ironvein; relationship [2] added to Brakka Ironvein; no entry yet for North Works, Prior Hessa, Temple of the Anvil Father (create one if it matters)",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Brakka Ironvein; added 2 relationships to Brakka Ironvein"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Temple of the Anvil Father",
+    "kind": "place",
+    "description": "A temple in Greyhollow dedicated to the Anvil Father. Brakka served as a guard here for six years.",
+    "relationships": [
+     "located in [[Greyhollow]]",
+     "[[Prior Hessa]] is the prior",
+     "[[Brakka Ironvein]] served as guard for six years"
+    ]
+   },
+   "result": "entry Temple of the Anvil Father (place) created; relationship [3] added to Temple of the Anvil Father; relationship [4] added to Temple of the Anvil Father; relationship [5] added to Temple of the Anvil Father; no entry yet for Greyhollow, Prior Hessa (create one if it matters)",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Temple of the Anvil Father; added 3 relationships to Temple of the Anvil Father"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Greyhollow",
+    "kind": "place",
+    "description": "A mining town cut into a cold mountainside.",
+    "relationships": [
+     "home to the [[Temple of the Anvil Father]]",
+     "the [[North Works]] mine is nearby",
+     "town council plans to seal the mine at sunrise"
+    ]
+   },
+   "result": "entry Greyhollow (place) created; relationship [6] added to Greyhollow; relationship [7] added to Greyhollow; relationship [8] added to Greyhollow; no entry yet for North Works (create one if it matters)",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Greyhollow; added 3 relationships to Greyhollow"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "North Works",
+    "kind": "place",
+    "description": "The old workings of the Greyhollow mine, sealed a generation ago. Three miners went down three days ago and didn't return. A fourth came back babbling about walking lights, then died.",
+    "relationships": [
+     "part of the [[Greyhollow]] mine",
+     "sealed a generation ago",
+     "three miners entered three days ago and vanished",
+     "a fourth miner returned mad and died",
+     "town council will seal it at sunrise tomorrow"
+    ]
+   },
+   "result": "entry North Works (place) created; relationship [9] added to North Works; relationship [10] added to North Works; relationship [11] added to North Works; relationship [12] added to North Works; relationship [13] added to North Works",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for North Works; added 5 relationships to North Works"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Prior Hessa",
+    "kind": "person",
+    "description": "An old dwarf, prior of the Temple of the Anvil Father in Greyhollow. Asked Brakka to enter the North Works to find the missing miners.",
+    "relationships": [
+     "prior of the [[Temple of the Anvil Father]]",
+     "asked [[Brakka Ironvein]] to rescue the missing miners"
+    ]
+   },
+   "result": "entry Prior Hessa (person) created; relationship [14] added to Prior Hessa; relationship [15] added to Prior Hessa",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Prior Hessa; added 2 relationships to Prior Hessa"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "The Missing Miners",
+    "kind": "person",
+    "description": "Three miners who went into the North Works three days ago and never returned. A fourth man came back babbling about walking lights, then died before dawn.",
+    "relationships": [
+     "entered the [[North Works]] three days ago",
+     "one returned mad and died",
+     "town council will seal the mine at sunrise tomorrow"
+    ]
+   },
+   "result": "entry The Missing Miners (person) created; relationship [16] added to The Missing Miners; relationship [17] added to The Missing Miners; relationship [18] added to The Missing Miners",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for The Missing Miners; added 3 relationships to The Missing Miners"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Anvil Father",
+    "kind": "god",
+    "description": "The god worshipped at the Temple of the Anvil Father in Greyhollow.",
+    "relationships": [
+     "worshipped at the [[Temple of the Anvil Father]]"
+    ]
+   },
+   "result": "entry Anvil Father (god) created; relationship [19] added to Anvil Father",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Anvil Father; added 1 relationship to Anvil Father"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Greyhollow Town Council",
+    "kind": "group",
+    "description": "The governing body of Greyhollow. Plans to brick up the North Works mine entrance at sunrise tomorrow, missing miners or not.",
+    "relationships": [
+     "governs [[Greyhollow]]",
+     "will seal the [[North Works]] at sunrise tomorrow"
+    ]
+   },
+   "result": "entry Greyhollow Town Council (group) created; relationship [20] added to Greyhollow Town Council; relationship [21] added to Greyhollow Town Council",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Greyhollow Town Council; added 2 relationships to Greyhollow Town Council"
+  },
+  {
+   "kind": "call",
+   "tool": "place",
+   "input": {
+    "place": "North Works"
+   },
+   "result": "",
+   "error": false
+  },
+  {
+   "kind": "dm",
+   "text": "Apologies for the confusion! Let me set the scene properly from the start.\n\nThe world is one of deep stone and cold iron, where the old gods are honoured in mountain temples and the mineshafts run dark and long beneath the peaks. Greyhollow is a mining town carved into a frost-bitten mountainside, and its people know the mountain's moods better than most. Brakka Ironvein, a hill dwarf fighter, has spent the last six years as a guard at the Temple of the Anvil Father there, keeping watch over the faithful and the forge-fires alike.\n\nThree days ago, three miners descended into the North Works, the old galleries sealed off a generation ago. None returned. Last night a fourth man stumbled out of the dark alone, raving about lights that walk, and died before dawn. The town council has decided to brick up the mine entrance at sunrise tomorrow, missing miners or not. But Prior Hessa, the old dwarf who leads the temple, asked Brakka to go down before then and bring back whoever can still be brought back.\n\nIt is late afternoon on the tenth of Frost. Brakka stands at the mine mouth, a hooded lantern borrowed from the temple in one hand. The opening is a rough-cut arch in the mountainside, old timber framing blackened with age. A cold draft breathes out from the darkness beyond, carrying the faint smell of wet stone and something else, something stale and old. The tracks of the mine cart rails vanish into the black. Behind Brakka, the grey light of a fading autumn day.\n\nWhat does Brakka do?"
+  },
+  {
+   "kind": "player",
+   "text": "I check the ground at the mine mouth for fresh tracks and any sign of where the three miners went in, then light the hooded lantern and keep my shield up as I step onto the cart rails. Prior Hessa's trust is riding on this, so I'll move slowly and watch for that stale smell getting stronger."
+  },
+  {
+   "kind": "tool",
+   "text": "dice Brakka's Survival check to find tracks at the mine mouth: 1d20+2 = 1d20 [7] + 2 = 9"
+  },
+  {
+   "kind": "call",
+   "tool": "dismiss_name",
+   "input": {
+    "names": [
+     "Frost"
+    ]
+   },
+   "result": "dismissed: Frost",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: dismissed 1 name"
+  },
+  {
+   "kind": "call",
+   "tool": "timeline",
+   "input": {
+    "what": "Brakka Ironvein began serving as a guard at the Temple of the Anvil Father",
+    "names": [
+     "Brakka Ironvein",
+     "Temple of the Anvil Father"
+    ],
+    "day": -2159,
+    "exact": false
+   },
+   "result": "recorded: Brakka Ironvein began serving as a guard at the Temple of the Anvil Father (about 6 years ago)",
+   "error": false
+  },
+  {
+   "kind": "call",
+   "tool": "timeline",
+   "input": {
+    "what": "Three miners entered the North Works and vanished",
+    "names": [
+     "The Missing Miners",
+     "North Works"
+    ],
+    "day": -2,
+    "exact": true
+   },
+   "result": "recorded: Three miners entered the North Works and vanished (Day -2, the 7th of Frost, 1247; 3 days ago)",
+   "error": false
+  },
+  {
+   "kind": "call",
+   "tool": "timeline",
+   "input": {
+    "what": "Town council will seal the North Works mine entrance at sunrise",
+    "names": [
+     "Greyhollow Town Council",
+     "North Works"
+    ],
+    "day": 2,
+    "exact": true,
+    "time": "sunrise"
+   },
+   "result": "recorded: Town council will seal the North Works mine entrance at sunrise (Day 2, the 11th of Frost, 1247, sunrise; tomorrow)",
+   "error": false
+  },
+  {
+   "kind": "call",
+   "tool": "route",
+   "input": {
+    "links": [
+     {
+      "a": "Temple of the Anvil Father",
+      "b": "Greyhollow",
+      "how": "inside"
+     }
+    ]
+   },
+   "result": "recorded: Temple of the Anvil Father inside Greyhollow",
+   "error": false
+  },
+  {
+   "kind": "call",
+   "tool": "route",
+   "input": {
+    "links": [
+     {
+      "a": "North Works",
+      "b": "Greyhollow",
+      "how": "adjoining"
+     }
+    ]
+   },
+   "result": "recorded: North Works adjoining Greyhollow",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "time: timer Hooded lantern (borrowed): 6 hours"
+  },
+  {
+   "kind": "call",
+   "tool": "place",
+   "input": {
+    "place": "North Works"
+   },
+   "result": "",
+   "error": false
+  },
+  {
+   "kind": "check",
+   "text": "the continuity check failed: 504: [504]: Direct response did not start within 30000ms — retrying on a fresh socket"
+  },
+  {
+   "kind": "dm",
+   "text": "You kneel at the mine mouth, lantern set down for a moment, and study the ground. The stone dust and gravel show signs of passage, but the tracks are muddled. You can make out the parallel grooves of the mine cart rails, and there are boot prints, but they overlap and smear where several people have walked back and forth. You can tell that multiple people entered recently, heading in, but the exact number and whether any came back out is hard to say from here.\n\nYou light the hooded lantern. Its warm glow pushes back the shadows, the shuttered beam casting a cone of amber light ahead. Shield raised, you step onto the cart rails and begin to walk into the mountain.\n\nThe air cools immediately. The smell is stronger now, that stale, old scent like a sealed room left for decades. Your boots crunch on the gravel between the rails. The timber supports pass overhead in a rhythm, some newer and some so old the wood has turned grey and soft. The walls are rough-cut stone, glistening with moisture in the lantern light. The tunnel slopes gently downward, curving slightly to the left.\n\nAfter about fifty feet, the tunnel opens into a small chamber where two passages branch off. To the left, the tunnel continues, and you can see old timber doors hanging open, marked with a faded sign. To the right, a narrower passage descends more steeply, and from it comes a faint, cold draft carrying that stale smell more strongly.\n\nThe lantern light flickers in the draft. What do you do?"
+  },
+  {
+   "kind": "player",
+   "text": "I'll step over to the left passage first and look at the faded sign on the timber doors, holding the lantern up to read it. Then I'll check the floor near the branch for any fresh boot prints or cart marks leading toward the steeper right passage, since that's where the stale smell is strongest."
+  },
+  {
+   "kind": "tool",
+   "text": "dice Brakka's Investigation check to find tracks near the branch: 1d20-1 = 1d20 [12] - 1 = 11"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Old Gallery",
+    "kind": "place",
+    "description": "A worked-out section of the North Works, reached through a left branch about fifty feet from the mine mouth. Has old timber doors with a faded sign.",
+    "relationships": [
+     "part of the [[North Works]]",
+     "left branch from the first chamber"
+    ]
+   },
+   "result": "entry Old Gallery (place) created; relationship [22] added to Old Gallery; relationship [23] added to Old Gallery",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Old Gallery; added 2 relationships to Old Gallery"
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "Deep Shaft",
+    "kind": "place",
+    "description": "A narrow, steeply descending passage in the North Works, reached through a right branch about fifty feet from the mine mouth. Cold draft, strong stale smell. This is where the stale smell is strongest.",
+    "relationships": [
+     "part of the [[North Works]]",
+     "right branch from the first chamber, descends steeply"
+    ]
+   },
+   "result": "entry Deep Shaft (place) created; relationship [24] added to Deep Shaft; relationship [25] added to Deep Shaft",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for Deep Shaft; added 2 relationships to Deep Shaft"
+  },
+  {
+   "kind": "call",
+   "tool": "place",
+   "input": {
+    "place": "North Works"
+   },
+   "result": "",
+   "error": false
+  },
+  {
+   "kind": "check",
+   "text": "the continuity check failed: 504: [504]: Direct response did not start within 30000ms — retrying on a fresh socket"
+  },
+  {
+   "kind": "dm",
+   "text": "You step to the left passage and hold the lantern up to the timber doors. The wood is old and warped, hanging crooked on rusted hinges. Above them, a wooden sign is nailed to the frame. The paint has mostly peeled away, but you can make out the letters, carved into the wood rather than painted: OLD GALLERY 4. Below it, someone has scratched a second line in charcoal, newer but still faded: PLAYED OUT.\n\nBeyond the doors, your light catches the edge of a wide chamber. You can see the remains of old timber supports and what looks like collapsed rubble blocking most of the passage further in. It's been abandoned for a long time.\n\nYou move back to the branch and crouch, holding the lantern low to the ground. The stone floor is coated in a fine layer of dust and stone powder. You can see boot prints leading into the right-hand passage. They're not perfectly clear, the dust having shifted somewhat, but you can make out at least two different sets of prints heading down the steep passage, going in. The prints are concentrated near the walls, as if the walkers were keeping close to the stone for support on the steep descent. You don't see any prints coming back out.\n\nThe cold draft from the right passage tugs at your beard, carrying that stale, old smell.\n\nWhat do you do?"
+  },
+  {
+   "kind": "player",
+   "text": "I follow the prints down the right passage, keeping close to the wall like the miners did, shield up and lantern held low so I can keep watching the tracks. I'll go slowly on the steep slope and stop at once if the prints change or I see any of those walking lights."
+  },
+  {
+   "kind": "call",
+   "tool": "route",
+   "input": {
+    "links": [
+     {
+      "a": "Old Gallery",
+      "b": "North Works",
+      "how": "inside"
+     },
+     {
+      "a": "Deep Shaft",
+      "b": "North Works",
+      "how": "inside"
+     }
+    ]
+   },
+   "result": "recorded: Old Gallery inside North Works; Deep Shaft inside North Works",
+   "error": false
+  },
+  {
+   "kind": "call",
+   "tool": "write_lore",
+   "input": {
+    "create": "The Cavern",
+    "kind": "place",
+    "description": "A natural cavern at the bottom of the Deep Shaft, where the passage levels out. The air is very still and cold.",
+    "relationships": [
+     "at the bottom of the [[Deep Shaft]]",
+     "part of the [[North Works]]"
+    ]
+   },
+   "result": "entry The Cavern (place) created; relationship [26] added to The Cavern; relationship [27] added to The Cavern",
+   "error": false
+  },
+  {
+   "kind": "tool",
+   "text": "notebook: created an entry for The Cavern; added 2 relationships to The Cavern"
+  },
+  {
+   "kind": "clock",
+   "why": "",
+   "how": "advance",
+   "seconds": 900,
+   "at": 60300
+  },
+  {
+   "kind": "tool",
+   "text": "time: 15 minutes later: Day 1, 4:45 PM"
+  }
+ ],
+ "lore": {
+  "entries": {
+   "Brakka Ironvein": {
+    "kind": "person",
+    "other_names": [],
+    "description": [
+     {
+      "text": "Hill dwarf fighter, served six years as a guard at the Temple of the Anvil Father in Greyhollow. Acolyte background.",
+      "turn": 2
+     }
+    ]
+   },
+   "Temple of the Anvil Father": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "A temple in Greyhollow dedicated to the Anvil Father. Brakka served as a guard here for six years.",
+      "turn": 2
+     }
+    ]
+   },
+   "Greyhollow": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "A mining town cut into a cold mountainside.",
+      "turn": 2
+     }
+    ]
+   },
+   "North Works": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "The old workings of the Greyhollow mine, sealed a generation ago. Three miners went down three days ago and didn't return. A fourth came back babbling about walking lights, then died.",
+      "turn": 2
+     }
+    ]
+   },
+   "Prior Hessa": {
+    "kind": "person",
+    "other_names": [],
+    "description": [
+     {
+      "text": "An old dwarf, prior of the Temple of the Anvil Father in Greyhollow. Asked Brakka to enter the North Works to find the missing miners.",
+      "turn": 2
+     }
+    ]
+   },
+   "The Missing Miners": {
+    "kind": "person",
+    "other_names": [],
+    "description": [
+     {
+      "text": "Three miners who went into the North Works three days ago and never returned. A fourth man came back babbling about walking lights, then died before dawn.",
+      "turn": 2
+     }
+    ]
+   },
+   "Anvil Father": {
+    "kind": "god",
+    "other_names": [],
+    "description": [
+     {
+      "text": "The god worshipped at the Temple of the Anvil Father in Greyhollow.",
+      "turn": 2
+     }
+    ]
+   },
+   "Greyhollow Town Council": {
+    "kind": "group",
+    "other_names": [],
+    "description": [
+     {
+      "text": "The governing body of Greyhollow. Plans to brick up the North Works mine entrance at sunrise tomorrow, missing miners or not.",
+      "turn": 2
+     }
+    ]
+   },
+   "Old Gallery": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "A worked-out section of the North Works, reached through a left branch about fifty feet from the mine mouth. Has old timber doors with a faded sign.",
+      "turn": 4
+     }
+    ]
+   },
+   "Deep Shaft": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "A narrow, steeply descending passage in the North Works, reached through a right branch about fifty feet from the mine mouth. Cold draft, strong stale smell. This is where the stale smell is strongest.",
+      "turn": 4
+     }
+    ]
+   },
+   "The Cavern": {
+    "kind": "place",
+    "other_names": [],
+    "description": [
+     {
+      "text": "A natural cavern at the bottom of the Deep Shaft, where the passage levels out. The air is very still and cold.",
+      "turn": 5
+     }
+    ]
+   }
+  },
+  "relationships": [
+   {
+    "id": 1,
+    "from": "Brakka Ironvein",
+    "text": "guard at the [[Temple of the Anvil Father]] for six years",
+    "turn": 2
+   },
+   {
+    "id": 2,
+    "from": "Brakka Ironvein",
+    "text": "asked by [[Prior Hessa]] to enter the [[North Works]] to find the missing miners",
+    "turn": 2
+   },
+   {
+    "id": 3,
+    "from": "Temple of the Anvil Father",
+    "text": "located in [[Greyhollow]]",
+    "turn": 2
+   },
+   {
+    "id": 4,
+    "from": "Temple of the Anvil Father",
+    "text": "[[Prior Hessa]] is the prior",
+    "turn": 2
+   },
+   {
+    "id": 5,
+    "from": "Temple of the Anvil Father",
+    "text": "[[Brakka Ironvein]] served as guard for six years",
+    "turn": 2
+   },
+   {
+    "id": 6,
+    "from": "Greyhollow",
+    "text": "home to the [[Temple of the Anvil Father]]",
+    "turn": 2
+   },
+   {
+    "id": 7,
+    "from": "Greyhollow",
+    "text": "the [[North Works]] mine is nearby",
+    "turn": 2
+   },
+   {
+    "id": 8,
+    "from": "Greyhollow",
+    "text": "town council plans to seal the mine at sunrise",
+    "turn": 2
+   },
+   {
+    "id": 9,
+    "from": "North Works",
+    "text": "part of the [[Greyhollow]] mine",
+    "turn": 2
+   },
+   {
+    "id": 10,
+    "from": "North Works",
+    "text": "sealed a generation ago",
+    "turn": 2
+   },
+   {
+    "id": 11,
+    "from": "North Works",
+    "text": "three miners entered three days ago and vanished",
+    "turn": 2
+   },
+   {
+    "id": 12,
+    "from": "North Works",
+    "text": "a fourth miner returned mad and died",
+    "turn": 2
+   },
+   {
+    "id": 13,
+    "from": "North Works",
+    "text": "town council will seal it at sunrise tomorrow",
+    "turn": 2
+   },
+   {
+    "id": 14,
+    "from": "Prior Hessa",
+    "text": "prior of the [[Temple of the Anvil Father]]",
+    "turn": 2
+   },
+   {
+    "id": 15,
+    "from": "Prior Hessa",
+    "text": "asked [[Brakka Ironvein]] to rescue the missing miners",
+    "turn": 2
+   },
+   {
+    "id": 16,
+    "from": "The Missing Miners",
+    "text": "entered the [[North Works]] three days ago",
+    "turn": 2
+   },
+   {
+    "id": 17,
+    "from": "The Missing Miners",
+    "text": "one returned mad and died",
+    "turn": 2
+   },
+   {
+    "id": 18,
+    "from": "The Missing Miners",
+    "text": "town council will seal the mine at sunrise tomorrow",
+    "turn": 2
+   },
+   {
+    "id": 19,
+    "from": "Anvil Father",
+    "text": "worshipped at the [[Temple of the Anvil Father]]",
+    "turn": 2
+   },
+   {
+    "id": 20,
+    "from": "Greyhollow Town Council",
+    "text": "governs [[Greyhollow]]",
+    "turn": 2
+   },
+   {
+    "id": 21,
+    "from": "Greyhollow Town Council",
+    "text": "will seal the [[North Works]] at sunrise tomorrow",
+    "turn": 2
+   },
+   {
+    "id": 22,
+    "from": "Old Gallery",
+    "text": "part of the [[North Works]]",
+    "turn": 4
+   },
+   {
+    "id": 23,
+    "from": "Old Gallery",
+    "text": "left branch from the first chamber",
+    "turn": 4
+   },
+   {
+    "id": 24,
+    "from": "Deep Shaft",
+    "text": "part of the [[North Works]]",
+    "turn": 4
+   },
+   {
+    "id": 25,
+    "from": "Deep Shaft",
+    "text": "right branch from the first chamber, descends steeply",
+    "turn": 4
+   },
+   {
+    "id": 26,
+    "from": "The Cavern",
+    "text": "at the bottom of the [[Deep Shaft]]",
+    "turn": 5
+   },
+   {
+    "id": 27,
+    "from": "The Cavern",
+    "text": "part of the [[North Works]]",
+    "turn": 5
+   }
+  ],
+  "next_id": 28,
+  "shown": {
+   "Temple of the Anvil Father": 3,
+   "Greyhollow": 3,
+   "North Works": 3,
+   "Prior Hessa": 3,
+   "Greyhollow Town Council": 3,
+   "Anvil Father": 3,
+   "The Missing Miners": 3,
+   "Old Gallery": 5
+  }
+ },
+ "backend": "api",
+ "story": [],
+ "snapshots": [
+  {
+   "turn": 1,
+   "t": 1,
+   "story": 0,
+   "sheet": {
+    "name": "Brakka Ironvein",
+    "summary": "Hill Dwarf fighter 1, acolyte background",
+    "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+    "level": 1,
+    "race": "Hill Dwarf",
+    "class": "Fighter",
+    "subclass": null,
+    "background": "Acolyte",
+    "alignment": "",
+    "personality": "",
+    "appearance": "",
+    "ac": 18,
+    "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+    "ac_now": null,
+    "speed": "25 ft",
+    "size": "Medium",
+    "scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 16,
+     "INT": 8,
+     "WIS": 14,
+     "CHA": 12
+    },
+    "abilities": {
+     "STR": "15 (+2)",
+     "DEX": "10 (+0)",
+     "CON": "16 (+3)",
+     "INT": "8 (-1)",
+     "WIS": "14 (+2)",
+     "CHA": "12 (+1)"
+    },
+    "proficiency_bonus": 2,
+    "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+    "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+    "passive_perception": 14,
+    "senses": "darkvision 60 ft",
+    "languages": "Common, Dwarvish, Giant, Goblin",
+    "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+    "attacks": [
+     "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+     "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+     "Unarmed strike: +4 to hit, 3 bludgeoning"
+    ],
+    "features": [
+     "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+     "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+     "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+     "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+     "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+     "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+     "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+     "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+     "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+     "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+    ],
+    "hp": {
+     "max": 14,
+     "current": 14,
+     "temp": 0
+    },
+    "hit_dice": {
+     "die": "d10",
+     "max": 1,
+     "left": 1
+    },
+    "resources": {
+     "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+     }
+    },
+    "conditions": [],
+    "death_saves": {
+     "successes": 0,
+     "failures": 0
+    },
+    "xp": 0,
+    "coins_cp": 1500,
+    "items": {
+     "Chain Mail": 1,
+     "Longsword": 1,
+     "Shield": 1,
+     "Crossbow, light": 1,
+     "Crossbow bolts": 20,
+     "Backpack": 1,
+     "Bedroll": 1,
+     "Mess kit": 1,
+     "Tinderbox": 1,
+     "Torch": 10,
+     "Rations (1 day)": 10,
+     "Waterskin": 1,
+     "Hempen rope (50 ft)": 1,
+     "Holy symbol of the Anvil Father": 1,
+     "Prayer book": 1,
+     "Stick of incense": 5,
+     "Vestments": 1,
+     "Common clothes": 1,
+     "Belt pouch": 1,
+     "Hooded lantern (borrowed)": 1
+    },
+    "build": {
+     "choices": {
+      "name": "Brakka Ironvein",
+      "race": "dwarf",
+      "class": "fighter",
+      "ability_method": "standard_array",
+      "base_scores": {
+       "STR": 15,
+       "DEX": 10,
+       "CON": 14,
+       "INT": 8,
+       "WIS": 13,
+       "CHA": 12
+      },
+      "choices": {
+       "trait.tool-proficiency": [
+        "Smith's Tools"
+       ],
+       "class.proficiencies.1": [
+        "Athletics",
+        "Perception"
+       ],
+       "feature.fighter-fighting-style": [
+        "Dueling"
+       ],
+       "class.equipment.1": [
+        "a"
+       ],
+       "class.equipment.2": [
+        {
+         "option": "a",
+         "picks": [
+          "Longsword"
+         ]
+        }
+       ],
+       "class.equipment.3": [
+        "a"
+       ],
+       "class.equipment.4": [
+        "b"
+       ],
+       "background.languages": [
+        "Giant",
+        "Goblin"
+       ],
+       "background.equipment.1": [
+        "Amulet"
+       ],
+       "background.equipment.prayer": [
+        "Prayer book"
+       ]
+      }
+     },
+     "rolled": null,
+     "levels": []
+    }
+   },
+   "companions": [],
+   "fight": null,
+   "clock": {
+    "now": null,
+    "timers": {}
+   },
+   "messages": 1,
+   "session_id": null,
+   "at": null
+  },
+  {
+   "turn": 2,
+   "t": 3,
+   "story": 0,
+   "sheet": {
+    "name": "Brakka Ironvein",
+    "summary": "Hill Dwarf fighter 1, acolyte background",
+    "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+    "level": 1,
+    "race": "Hill Dwarf",
+    "class": "Fighter",
+    "subclass": null,
+    "background": "Acolyte",
+    "alignment": "",
+    "personality": "",
+    "appearance": "",
+    "ac": 18,
+    "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+    "ac_now": null,
+    "speed": "25 ft",
+    "size": "Medium",
+    "scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 16,
+     "INT": 8,
+     "WIS": 14,
+     "CHA": 12
+    },
+    "abilities": {
+     "STR": "15 (+2)",
+     "DEX": "10 (+0)",
+     "CON": "16 (+3)",
+     "INT": "8 (-1)",
+     "WIS": "14 (+2)",
+     "CHA": "12 (+1)"
+    },
+    "proficiency_bonus": 2,
+    "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+    "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+    "passive_perception": 14,
+    "senses": "darkvision 60 ft",
+    "languages": "Common, Dwarvish, Giant, Goblin",
+    "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+    "attacks": [
+     "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+     "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+     "Unarmed strike: +4 to hit, 3 bludgeoning"
+    ],
+    "features": [
+     "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+     "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+     "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+     "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+     "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+     "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+     "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+     "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+     "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+     "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+    ],
+    "hp": {
+     "max": 14,
+     "current": 14,
+     "temp": 0
+    },
+    "hit_dice": {
+     "die": "d10",
+     "max": 1,
+     "left": 1
+    },
+    "resources": {
+     "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+     }
+    },
+    "conditions": [],
+    "death_saves": {
+     "successes": 0,
+     "failures": 0
+    },
+    "xp": 0,
+    "coins_cp": 1500,
+    "items": {
+     "Chain Mail": 1,
+     "Longsword": 1,
+     "Shield": 1,
+     "Crossbow, light": 1,
+     "Crossbow bolts": 20,
+     "Backpack": 1,
+     "Bedroll": 1,
+     "Mess kit": 1,
+     "Tinderbox": 1,
+     "Torch": 10,
+     "Rations (1 day)": 10,
+     "Waterskin": 1,
+     "Hempen rope (50 ft)": 1,
+     "Holy symbol of the Anvil Father": 1,
+     "Prayer book": 1,
+     "Stick of incense": 5,
+     "Vestments": 1,
+     "Common clothes": 1,
+     "Belt pouch": 1,
+     "Hooded lantern (borrowed)": 1
+    },
+    "build": {
+     "choices": {
+      "name": "Brakka Ironvein",
+      "race": "dwarf",
+      "class": "fighter",
+      "ability_method": "standard_array",
+      "base_scores": {
+       "STR": 15,
+       "DEX": 10,
+       "CON": 14,
+       "INT": 8,
+       "WIS": 13,
+       "CHA": 12
+      },
+      "choices": {
+       "trait.tool-proficiency": [
+        "Smith's Tools"
+       ],
+       "class.proficiencies.1": [
+        "Athletics",
+        "Perception"
+       ],
+       "feature.fighter-fighting-style": [
+        "Dueling"
+       ],
+       "class.equipment.1": [
+        "a"
+       ],
+       "class.equipment.2": [
+        {
+         "option": "a",
+         "picks": [
+          "Longsword"
+         ]
+        }
+       ],
+       "class.equipment.3": [
+        "a"
+       ],
+       "class.equipment.4": [
+        "b"
+       ],
+       "background.languages": [
+        "Giant",
+        "Goblin"
+       ],
+       "background.equipment.1": [
+        "Amulet"
+       ],
+       "background.equipment.prayer": [
+        "Prayer book"
+       ]
+      }
+     },
+     "rolled": null,
+     "levels": []
+    }
+   },
+   "companions": [],
+   "fight": null,
+   "clock": {
+    "now": null,
+    "timers": {}
+   },
+   "messages": 1,
+   "session_id": null,
+   "at": null
+  },
+  {
+   "turn": 3,
+   "t": 24,
+   "story": 0,
+   "sheet": {
+    "name": "Brakka Ironvein",
+    "summary": "Hill Dwarf fighter 1, acolyte background",
+    "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+    "level": 1,
+    "race": "Hill Dwarf",
+    "class": "Fighter",
+    "subclass": null,
+    "background": "Acolyte",
+    "alignment": "",
+    "personality": "",
+    "appearance": "",
+    "ac": 18,
+    "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+    "ac_now": null,
+    "speed": "25 ft",
+    "size": "Medium",
+    "scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 16,
+     "INT": 8,
+     "WIS": 14,
+     "CHA": 12
+    },
+    "abilities": {
+     "STR": "15 (+2)",
+     "DEX": "10 (+0)",
+     "CON": "16 (+3)",
+     "INT": "8 (-1)",
+     "WIS": "14 (+2)",
+     "CHA": "12 (+1)"
+    },
+    "proficiency_bonus": 2,
+    "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+    "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+    "passive_perception": 14,
+    "senses": "darkvision 60 ft",
+    "languages": "Common, Dwarvish, Giant, Goblin",
+    "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+    "attacks": [
+     "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+     "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+     "Unarmed strike: +4 to hit, 3 bludgeoning"
+    ],
+    "features": [
+     "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+     "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+     "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+     "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+     "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+     "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+     "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+     "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+     "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+     "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+    ],
+    "hp": {
+     "max": 14,
+     "current": 14,
+     "temp": 0
+    },
+    "hit_dice": {
+     "die": "d10",
+     "max": 1,
+     "left": 1
+    },
+    "resources": {
+     "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+     }
+    },
+    "conditions": [],
+    "death_saves": {
+     "successes": 0,
+     "failures": 0
+    },
+    "xp": 0,
+    "coins_cp": 1500,
+    "items": {
+     "Chain Mail": 1,
+     "Longsword": 1,
+     "Shield": 1,
+     "Crossbow, light": 1,
+     "Crossbow bolts": 20,
+     "Backpack": 1,
+     "Bedroll": 1,
+     "Mess kit": 1,
+     "Tinderbox": 1,
+     "Torch": 10,
+     "Rations (1 day)": 10,
+     "Waterskin": 1,
+     "Hempen rope (50 ft)": 1,
+     "Holy symbol of the Anvil Father": 1,
+     "Prayer book": 1,
+     "Stick of incense": 5,
+     "Vestments": 1,
+     "Common clothes": 1,
+     "Belt pouch": 1,
+     "Hooded lantern (borrowed)": 1
+    },
+    "build": {
+     "choices": {
+      "name": "Brakka Ironvein",
+      "race": "dwarf",
+      "class": "fighter",
+      "ability_method": "standard_array",
+      "base_scores": {
+       "STR": 15,
+       "DEX": 10,
+       "CON": 14,
+       "INT": 8,
+       "WIS": 13,
+       "CHA": 12
+      },
+      "choices": {
+       "trait.tool-proficiency": [
+        "Smith's Tools"
+       ],
+       "class.proficiencies.1": [
+        "Athletics",
+        "Perception"
+       ],
+       "feature.fighter-fighting-style": [
+        "Dueling"
+       ],
+       "class.equipment.1": [
+        "a"
+       ],
+       "class.equipment.2": [
+        {
+         "option": "a",
+         "picks": [
+          "Longsword"
+         ]
+        }
+       ],
+       "class.equipment.3": [
+        "a"
+       ],
+       "class.equipment.4": [
+        "b"
+       ],
+       "background.languages": [
+        "Giant",
+        "Goblin"
+       ],
+       "background.equipment.1": [
+        "Amulet"
+       ],
+       "background.equipment.prayer": [
+        "Prayer book"
+       ]
+      }
+     },
+     "rolled": null,
+     "levels": []
+    }
+   },
+   "companions": [],
+   "fight": null,
+   "clock": {
+    "now": 59400,
+    "timers": {},
+    "start": 449229
+   },
+   "messages": 5,
+   "session_id": null,
+   "at": null
+  },
+  {
+   "turn": 4,
+   "t": 37,
+   "story": 0,
+   "sheet": {
+    "name": "Brakka Ironvein",
+    "summary": "Hill Dwarf fighter 1, acolyte background",
+    "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+    "level": 1,
+    "race": "Hill Dwarf",
+    "class": "Fighter",
+    "subclass": null,
+    "background": "Acolyte",
+    "alignment": "",
+    "personality": "",
+    "appearance": "",
+    "ac": 18,
+    "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+    "ac_now": null,
+    "speed": "25 ft",
+    "size": "Medium",
+    "scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 16,
+     "INT": 8,
+     "WIS": 14,
+     "CHA": 12
+    },
+    "abilities": {
+     "STR": "15 (+2)",
+     "DEX": "10 (+0)",
+     "CON": "16 (+3)",
+     "INT": "8 (-1)",
+     "WIS": "14 (+2)",
+     "CHA": "12 (+1)"
+    },
+    "proficiency_bonus": 2,
+    "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+    "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+    "passive_perception": 14,
+    "senses": "darkvision 60 ft",
+    "languages": "Common, Dwarvish, Giant, Goblin",
+    "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+    "attacks": [
+     "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+     "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+     "Unarmed strike: +4 to hit, 3 bludgeoning"
+    ],
+    "features": [
+     "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+     "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+     "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+     "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+     "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+     "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+     "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+     "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+     "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+     "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+    ],
+    "hp": {
+     "max": 14,
+     "current": 14,
+     "temp": 0
+    },
+    "hit_dice": {
+     "die": "d10",
+     "max": 1,
+     "left": 1
+    },
+    "resources": {
+     "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+     }
+    },
+    "conditions": [],
+    "death_saves": {
+     "successes": 0,
+     "failures": 0
+    },
+    "xp": 0,
+    "coins_cp": 1500,
+    "items": {
+     "Chain Mail": 1,
+     "Longsword": 1,
+     "Shield": 1,
+     "Crossbow, light": 1,
+     "Crossbow bolts": 20,
+     "Backpack": 1,
+     "Bedroll": 1,
+     "Mess kit": 1,
+     "Tinderbox": 1,
+     "Torch": 10,
+     "Rations (1 day)": 10,
+     "Waterskin": 1,
+     "Hempen rope (50 ft)": 1,
+     "Holy symbol of the Anvil Father": 1,
+     "Prayer book": 1,
+     "Stick of incense": 5,
+     "Vestments": 1,
+     "Common clothes": 1,
+     "Belt pouch": 1,
+     "Hooded lantern (borrowed)": 1
+    },
+    "build": {
+     "choices": {
+      "name": "Brakka Ironvein",
+      "race": "dwarf",
+      "class": "fighter",
+      "ability_method": "standard_array",
+      "base_scores": {
+       "STR": 15,
+       "DEX": 10,
+       "CON": 14,
+       "INT": 8,
+       "WIS": 13,
+       "CHA": 12
+      },
+      "choices": {
+       "trait.tool-proficiency": [
+        "Smith's Tools"
+       ],
+       "class.proficiencies.1": [
+        "Athletics",
+        "Perception"
+       ],
+       "feature.fighter-fighting-style": [
+        "Dueling"
+       ],
+       "class.equipment.1": [
+        "a"
+       ],
+       "class.equipment.2": [
+        {
+         "option": "a",
+         "picks": [
+          "Longsword"
+         ]
+        }
+       ],
+       "class.equipment.3": [
+        "a"
+       ],
+       "class.equipment.4": [
+        "b"
+       ],
+       "background.languages": [
+        "Giant",
+        "Goblin"
+       ],
+       "background.equipment.1": [
+        "Amulet"
+       ],
+       "background.equipment.prayer": [
+        "Prayer book"
+       ]
+      }
+     },
+     "rolled": null,
+     "levels": []
+    }
+   },
+   "companions": [],
+   "fight": null,
+   "clock": {
+    "now": 59400,
+    "timers": {
+     "Hooded lantern (borrowed)": 81000
+    },
+    "start": 449229
+   },
+   "messages": 13,
+   "session_id": null,
+   "at": null
+  },
+  {
+   "turn": 5,
+   "t": 46,
+   "story": 0,
+   "sheet": {
+    "name": "Brakka Ironvein",
+    "summary": "Hill Dwarf fighter 1, acolyte background",
+    "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+    "level": 1,
+    "race": "Hill Dwarf",
+    "class": "Fighter",
+    "subclass": null,
+    "background": "Acolyte",
+    "alignment": "",
+    "personality": "",
+    "appearance": "",
+    "ac": 18,
+    "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+    "ac_now": null,
+    "speed": "25 ft",
+    "size": "Medium",
+    "scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 16,
+     "INT": 8,
+     "WIS": 14,
+     "CHA": 12
+    },
+    "abilities": {
+     "STR": "15 (+2)",
+     "DEX": "10 (+0)",
+     "CON": "16 (+3)",
+     "INT": "8 (-1)",
+     "WIS": "14 (+2)",
+     "CHA": "12 (+1)"
+    },
+    "proficiency_bonus": 2,
+    "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+    "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+    "passive_perception": 14,
+    "senses": "darkvision 60 ft",
+    "languages": "Common, Dwarvish, Giant, Goblin",
+    "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+    "attacks": [
+     "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+     "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+     "Unarmed strike: +4 to hit, 3 bludgeoning"
+    ],
+    "features": [
+     "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+     "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+     "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+     "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+     "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+     "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+     "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+     "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+     "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+     "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+    ],
+    "hp": {
+     "max": 14,
+     "current": 14,
+     "temp": 0
+    },
+    "hit_dice": {
+     "die": "d10",
+     "max": 1,
+     "left": 1
+    },
+    "resources": {
+     "Second Wind": {
+      "max": 1,
+      "left": 1,
+      "recharge": "short"
+     }
+    },
+    "conditions": [],
+    "death_saves": {
+     "successes": 0,
+     "failures": 0
+    },
+    "xp": 0,
+    "coins_cp": 1500,
+    "items": {
+     "Chain Mail": 1,
+     "Longsword": 1,
+     "Shield": 1,
+     "Crossbow, light": 1,
+     "Crossbow bolts": 20,
+     "Backpack": 1,
+     "Bedroll": 1,
+     "Mess kit": 1,
+     "Tinderbox": 1,
+     "Torch": 10,
+     "Rations (1 day)": 10,
+     "Waterskin": 1,
+     "Hempen rope (50 ft)": 1,
+     "Holy symbol of the Anvil Father": 1,
+     "Prayer book": 1,
+     "Stick of incense": 5,
+     "Vestments": 1,
+     "Common clothes": 1,
+     "Belt pouch": 1,
+     "Hooded lantern (borrowed)": 1
+    },
+    "build": {
+     "choices": {
+      "name": "Brakka Ironvein",
+      "race": "dwarf",
+      "class": "fighter",
+      "ability_method": "standard_array",
+      "base_scores": {
+       "STR": 15,
+       "DEX": 10,
+       "CON": 14,
+       "INT": 8,
+       "WIS": 13,
+       "CHA": 12
+      },
+      "choices": {
+       "trait.tool-proficiency": [
+        "Smith's Tools"
+       ],
+       "class.proficiencies.1": [
+        "Athletics",
+        "Perception"
+       ],
+       "feature.fighter-fighting-style": [
+        "Dueling"
+       ],
+       "class.equipment.1": [
+        "a"
+       ],
+       "class.equipment.2": [
+        {
+         "option": "a",
+         "picks": [
+          "Longsword"
+         ]
+        }
+       ],
+       "class.equipment.3": [
+        "a"
+       ],
+       "class.equipment.4": [
+        "b"
+       ],
+       "background.languages": [
+        "Giant",
+        "Goblin"
+       ],
+       "background.equipment.1": [
+        "Amulet"
+       ],
+       "background.equipment.prayer": [
+        "Prayer book"
+       ]
+      }
+     },
+     "rolled": null,
+     "levels": []
+    }
+   },
+   "companions": [],
+   "fight": null,
+   "clock": {
+    "now": 59400,
+    "timers": {
+     "Hooded lantern (borrowed)": 81000
+    },
+    "start": 449229
+   },
+   "messages": 17,
+   "session_id": null,
+   "at": null
+  }
+ ],
+ "past_pcs": [],
+ "messages": [
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: not set (set it with change_time)\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 0]\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[Start] Begin the session. Begin with a short introduction before the first scene: a few sentences on the world and region, who the character is and how they came to be here. Keep the past exactly as it was settled. Introduce anything new to the player as new, saying what it is before treating it as known, so it can't be taken for something from the past. Then open the scene and ask what Brakka does."
+    },
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: not set (set it with change_time)\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 1]\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[The player]\nDM: Sorry, it looks like your last message didn't come through on my end. Could you resend it? In the meantime, I'll stay where I am, one hand on my sword hilt, watching the room."
+    },
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: not set (set it with change_time)\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 2]\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[The player]\nDM: Your reply didn't come through on my end either, so I'm not sure where we left off. Could you give me a quick recap of the current scene and what's happening around my fighter? Until then, I'll hold position and keep watch for anything unusual."
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_ede3cfd412c845318b38730b",
+     "name": "change_time",
+     "input": {
+      "set": {
+       "time": "16:30"
+      },
+      "date": {
+       "day": 10,
+       "month": "Frost",
+       "year": 1247
+      }
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_f6eb7163ad1946529127376b",
+     "name": "write_lore",
+     "input": {
+      "create": "Brakka Ironvein",
+      "kind": "person",
+      "description": "Hill dwarf fighter, served six years as a guard at the Temple of the Anvil Father in Greyhollow. Acolyte background.",
+      "relationships": [
+       "guard at the [[Temple of the Anvil Father]] for six years",
+       "asked by [[Prior Hessa]] to enter the [[North Works]] to find the missing miners"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_f2e609f352a64cc59abc1cad",
+     "name": "write_lore",
+     "input": {
+      "create": "Temple of the Anvil Father",
+      "kind": "place",
+      "description": "A temple in Greyhollow dedicated to the Anvil Father. Brakka served as a guard here for six years.",
+      "relationships": [
+       "located in [[Greyhollow]]",
+       "[[Prior Hessa]] is the prior",
+       "[[Brakka Ironvein]] served as guard for six years"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_297136793bb84ceca332112b",
+     "name": "write_lore",
+     "input": {
+      "create": "Greyhollow",
+      "kind": "place",
+      "description": "A mining town cut into a cold mountainside.",
+      "relationships": [
+       "home to the [[Temple of the Anvil Father]]",
+       "the [[North Works]] mine is nearby",
+       "town council plans to seal the mine at sunrise"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_02febdbddd5c4acb8984990e",
+     "name": "write_lore",
+     "input": {
+      "create": "North Works",
+      "kind": "place",
+      "description": "The old workings of the Greyhollow mine, sealed a generation ago. Three miners went down three days ago and didn't return. A fourth came back babbling about walking lights, then died.",
+      "relationships": [
+       "part of the [[Greyhollow]] mine",
+       "sealed a generation ago",
+       "three miners entered three days ago and vanished",
+       "a fourth miner returned mad and died",
+       "town council will seal it at sunrise tomorrow"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_36ee73817b2b4fe48c41bfb5",
+     "name": "write_lore",
+     "input": {
+      "create": "Prior Hessa",
+      "kind": "person",
+      "description": "An old dwarf, prior of the Temple of the Anvil Father in Greyhollow. Asked Brakka to enter the North Works to find the missing miners.",
+      "relationships": [
+       "prior of the [[Temple of the Anvil Father]]",
+       "asked [[Brakka Ironvein]] to rescue the missing miners"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_c7d5113501b446f39ab0d68c",
+     "name": "write_lore",
+     "input": {
+      "create": "The Missing Miners",
+      "kind": "person",
+      "description": "Three miners who went into the North Works three days ago and never returned. A fourth man came back babbling about walking lights, then died before dawn.",
+      "relationships": [
+       "entered the [[North Works]] three days ago",
+       "one returned mad and died",
+       "town council will seal the mine at sunrise tomorrow"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_2f38e107069842b9be19e9ad",
+     "name": "write_lore",
+     "input": {
+      "create": "Anvil Father",
+      "kind": "god",
+      "description": "The god worshipped at the Temple of the Anvil Father in Greyhollow.",
+      "relationships": [
+       "worshipped at the [[Temple of the Anvil Father]]"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_2c7e473ceabe4095ace81076",
+     "name": "write_lore",
+     "input": {
+      "create": "Greyhollow Town Council",
+      "kind": "group",
+      "description": "The governing body of Greyhollow. Plans to brick up the North Works mine entrance at sunrise tomorrow, missing miners or not.",
+      "relationships": [
+       "governs [[Greyhollow]]",
+       "will seal the [[North Works]] at sunrise tomorrow"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_ede3cfd412c845318b38730b",
+     "content": [
+      {
+       "type": "text",
+       "text": "time set: Day 1, 4:30 PM; today is the 10th of Frost, 1247"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_f6eb7163ad1946529127376b",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Brakka Ironvein (person) created; relationship [1] added to Brakka Ironvein; relationship [2] added to Brakka Ironvein; no entry yet for North Works, Prior Hessa, Temple of the Anvil Father (create one if it matters)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_f2e609f352a64cc59abc1cad",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Temple of the Anvil Father (place) created; relationship [3] added to Temple of the Anvil Father; relationship [4] added to Temple of the Anvil Father; relationship [5] added to Temple of the Anvil Father; no entry yet for Greyhollow, Prior Hessa (create one if it matters)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_297136793bb84ceca332112b",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Greyhollow (place) created; relationship [6] added to Greyhollow; relationship [7] added to Greyhollow; relationship [8] added to Greyhollow; no entry yet for North Works (create one if it matters)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_02febdbddd5c4acb8984990e",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry North Works (place) created; relationship [9] added to North Works; relationship [10] added to North Works; relationship [11] added to North Works; relationship [12] added to North Works; relationship [13] added to North Works"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_36ee73817b2b4fe48c41bfb5",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Prior Hessa (person) created; relationship [14] added to Prior Hessa; relationship [15] added to Prior Hessa"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_c7d5113501b446f39ab0d68c",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry The Missing Miners (person) created; relationship [16] added to The Missing Miners; relationship [17] added to The Missing Miners; relationship [18] added to The Missing Miners"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_2f38e107069842b9be19e9ad",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Anvil Father (god) created; relationship [19] added to Anvil Father"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_2c7e473ceabe4095ace81076",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Greyhollow Town Council (group) created; relationship [20] added to Greyhollow Town Council; relationship [21] added to Greyhollow Town Council"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_eba257cc4b1249d09d40fe06",
+     "name": "reply",
+     "input": {
+      "text": "Apologies for the confusion! Let me set the scene properly from the start.\n\nThe world is one of deep stone and cold iron, where the old gods are honoured in mountain temples and the mineshafts run dark and long beneath the peaks. Greyhollow is a mining town carved into a frost-bitten mountainside, and its people know the mountain's moods better than most. Brakka Ironvein, a hill dwarf fighter, has spent the last six years as a guard at the Temple of the Anvil Father there, keeping watch over the faithful and the forge-fires alike.\n\nThree days ago, three miners descended into the North Works, the old galleries sealed off a generation ago. None returned. Last night a fourth man stumbled out of the dark alone, raving about lights that walk, and died before dawn. The town council has decided to brick up the mine entrance at sunrise tomorrow, missing miners or not. But Prior Hessa, the old dwarf who leads the temple, asked Brakka to go down before then and bring back whoever can still be brought back.\n\nIt is late afternoon on the tenth of Frost. Brakka stands at the mine mouth, a hooded lantern borrowed from the temple in one hand. The opening is a rough-cut arch in the mountainside, old timber framing blackened with age. A cold draft breathes out from the darkness beyond, carrying the faint smell of wet stone and something else, something stale and old. The tracks of the mine cart rails vanish into the black. Behind Brakka, the grey light of a fading autumn day.\n\nWhat does Brakka do?",
+      "place": "North Works"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_eba257cc4b1249d09d40fe06",
+     "content": [
+      {
+       "type": "text",
+       "text": "shown to the player"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: Day 1 (the 10th of Frost, 1247), 4:30 PM (since your last reply: you set the clock to Day 1, 4:30 PM)\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 3]\n[Notebook: names from the last turns]\nTemple of the Anvil Father (place): A temple in Greyhollow dedicated to the Anvil Father. Brakka served as a guard here for six years.\nGreyhollow (place): A mining town cut into a cold mountainside.\nNorth Works (place): The old workings of the Greyhollow mine, sealed a generation ago. Three miners went down three days ago and didn't return. A fourth came back babbling about…\nPrior Hessa (person): An old dwarf, prior of the Temple of the Anvil Father in Greyhollow. Asked Brakka to enter the North Works to find the missing miners.\nGreyhollow Town Council (group): The governing body of Greyhollow. Plans to brick up the North Works mine entrance at sunrise tomorrow, missing miners or not. ← linked from North Works\nAnvil Father (god): The god worshipped at the Temple of the Anvil Father in Greyhollow. ← linked from Temple of the Anvil Father\nThe Missing Miners (person): Three miners who went into the North Works three days ago and never returned. A fourth man came back babbling about walking lights, then died before dawn. ← linked from North Works\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n[Names not in your notebook] Your replies have used these, which are no entry's name or other name: Frost. Put each in the notebook: its own entry, or an existing entry's name (`rename`) or other name (`add_other_names`). If one isn't a name, dismiss it with `dismiss_name`.\n[New places] Is any of these inside, or right at, a place already in your notebook (an inn in a town, a cairn in a pass)? If so, link them with `route`: Temple of the Anvil Father, Greyhollow, North Works.\n[Time facts not on the timeline] Your last reply said these, and you recorded nothing with `timeline`. Record each one later replies could contradict (a date, a day count, how long ago, an age), or dismiss the rest with `dismiss_warning`, by the sentence in quotes:\n- the last six years: \"Brakka Ironvein, a hill dwarf fighter, has spent the last six years as a guard at the Temple of the Anvil Father there, keeping watch over the faithful and the\"\n- Three days ago: \"Three days ago, three miners descended into the North Works, the old galleries sealed off a generation ago.\"\n- tomorrow: \"The town council has decided to brick up the mine entrance at sunrise tomorrow, missing miners or not.\"\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[The player]\nI check the ground at the mine mouth for fresh tracks and any sign of where the three miners went in, then light the hooded lantern and keep my shield up as I step onto the cart rails. Prior Hessa's trust is riding on this, so I'll move slowly and watch for that stale smell getting stronger."
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_978ff76126c04ac5888c988e",
+     "name": "roll",
+     "input": {
+      "dice": "1d20+2",
+      "reason": "Brakka's Survival check to find tracks at the mine mouth"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_978ff76126c04ac5888c988e",
+     "content": [
+      {
+       "type": "text",
+       "text": "dice Brakka's Survival check to find tracks at the mine mouth: 1d20+2 = 1d20 [7] + 2 = 9"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_f653b1a5282f4b24ade347fb",
+     "name": "dismiss_name",
+     "input": {
+      "names": [
+       "Frost"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_00f6a8009fe648f0b1e1f287",
+     "name": "timeline",
+     "input": {
+      "what": "Brakka Ironvein began serving as a guard at the Temple of the Anvil Father",
+      "names": [
+       "Brakka Ironvein",
+       "Temple of the Anvil Father"
+      ],
+      "years_ago": 6
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_4645719c558b4fdc8320c29b",
+     "name": "timeline",
+     "input": {
+      "what": "Three miners entered the North Works and vanished",
+      "names": [
+       "The Missing Miners",
+       "North Works"
+      ],
+      "days_from_today": -3
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_7fb19be1b653403a8a2eae9f",
+     "name": "timeline",
+     "input": {
+      "what": "Town council will seal the North Works mine entrance at sunrise",
+      "names": [
+       "Greyhollow Town Council",
+       "North Works"
+      ],
+      "day": 2,
+      "time": "sunrise"
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_8173e7c553f5451982597335",
+     "name": "route",
+     "input": {
+      "links": [
+       {
+        "a": "Temple of the Anvil Father",
+        "b": "Greyhollow",
+        "how": "inside"
+       }
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_37d480588587444e8dbb8139",
+     "name": "route",
+     "input": {
+      "links": [
+       {
+        "a": "North Works",
+        "b": "Greyhollow",
+        "how": "adjoining"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_f653b1a5282f4b24ade347fb",
+     "content": [
+      {
+       "type": "text",
+       "text": "dismissed: Frost"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_00f6a8009fe648f0b1e1f287",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: Brakka Ironvein began serving as a guard at the Temple of the Anvil Father (about 6 years ago)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_4645719c558b4fdc8320c29b",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: Three miners entered the North Works and vanished (Day -2, the 7th of Frost, 1247; 3 days ago)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_7fb19be1b653403a8a2eae9f",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: Town council will seal the North Works mine entrance at sunrise (Day 2, the 11th of Frost, 1247, sunrise; tomorrow)"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_8173e7c553f5451982597335",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: Temple of the Anvil Father inside Greyhollow"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_37d480588587444e8dbb8139",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: North Works adjoining Greyhollow"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_a83d6ce6058b420dae842ea7",
+     "name": "change_time",
+     "input": {
+      "add_timer": {
+       "name": "Hooded lantern (borrowed)",
+       "hours": 6
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_a83d6ce6058b420dae842ea7",
+     "content": [
+      {
+       "type": "text",
+       "text": "timer Hooded lantern (borrowed): 6 hours"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_d1b88493c5714f10997e527e",
+     "name": "reply",
+     "input": {
+      "text": "You kneel at the mine mouth, lantern set down for a moment, and study the ground. The stone dust and gravel show signs of passage, but the tracks are muddled. You can make out the parallel grooves of the mine cart rails, and there are boot prints, but they overlap and smear where several people have walked back and forth. You can tell that multiple people entered recently, heading in, but the exact number and whether any came back out is hard to say from here.\n\nYou light the hooded lantern. Its warm glow pushes back the shadows, the shuttered beam casting a cone of amber light ahead. Shield raised, you step onto the cart rails and begin to walk into the mountain.\n\nThe air cools immediately. The smell is stronger now, that stale, old scent like a sealed room left for decades. Your boots crunch on the gravel between the rails. The timber supports pass overhead in a rhythm, some newer and some so old the wood has turned grey and soft. The walls are rough-cut stone, glistening with moisture in the lantern light. The tunnel slopes gently downward, curving slightly to the left.\n\nAfter about fifty feet, the tunnel opens into a small chamber where two passages branch off. To the left, the tunnel continues, and you can see old timber doors hanging open, marked with a faded sign. To the right, a narrower passage descends more steeply, and from it comes a faint, cold draft carrying that stale smell more strongly.\n\nThe lantern light flickers in the draft. What do you do?",
+      "place": "North Works"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_d1b88493c5714f10997e527e",
+     "content": [
+      {
+       "type": "text",
+       "text": "shown to the player"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: Day 1 (the 10th of Frost, 1247), 4:30 PM (unchanged since your last reply: you didn't move the clock)\nTimers: Hooded lantern (borrowed): 6 hours left\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 4]\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[The player]\nI'll step over to the left passage first and look at the faded sign on the timber doors, holding the lantern up to read it. Then I'll check the floor near the branch for any fresh boot prints or cart marks leading toward the steeper right passage, since that's where the stale smell is strongest."
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_66a8640d201e4b4f877bffbb",
+     "name": "roll",
+     "input": {
+      "dice": "1d20-1",
+      "reason": "Brakka's Investigation check to find tracks near the branch"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_66a8640d201e4b4f877bffbb",
+     "content": [
+      {
+       "type": "text",
+       "text": "dice Brakka's Investigation check to find tracks near the branch: 1d20-1 = 1d20 [12] - 1 = 11"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_a44e750959b14eed99328a27",
+     "name": "write_lore",
+     "input": {
+      "create": "Old Gallery",
+      "kind": "place",
+      "description": "A worked-out section of the North Works, reached through a left branch about fifty feet from the mine mouth. Has old timber doors with a faded sign.",
+      "relationships": [
+       "part of the [[North Works]]",
+       "left branch from the first chamber"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_ec89f19860e4459b8f4e89e2",
+     "name": "write_lore",
+     "input": {
+      "create": "Deep Shaft",
+      "kind": "place",
+      "description": "A narrow, steeply descending passage in the North Works, reached through a right branch about fifty feet from the mine mouth. Cold draft, strong stale smell. This is where the stale smell is strongest.",
+      "relationships": [
+       "part of the [[North Works]]",
+       "right branch from the first chamber, descends steeply"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_8ca87b6c22fd4467b167f0d6",
+     "name": "reply",
+     "input": {
+      "text": "You step to the left passage and hold the lantern up to the timber doors. The wood is old and warped, hanging crooked on rusted hinges. Above them, a wooden sign is nailed to the frame. The paint has mostly peeled away, but you can make out the letters, carved into the wood rather than painted: OLD GALLERY 4. Below it, someone has scratched a second line in charcoal, newer but still faded: PLAYED OUT.\n\nBeyond the doors, your light catches the edge of a wide chamber. You can see the remains of old timber supports and what looks like collapsed rubble blocking most of the passage further in. It's been abandoned for a long time.\n\nYou move back to the branch and crouch, holding the lantern low to the ground. The stone floor is coated in a fine layer of dust and stone powder. You can see boot prints leading into the right-hand passage. They're not perfectly clear, the dust having shifted somewhat, but you can make out at least two different sets of prints heading down the steep passage, going in. The prints are concentrated near the walls, as if the walkers were keeping close to the stone for support on the steep descent. You don't see any prints coming back out.\n\nThe cold draft from the right passage tugs at your beard, carrying that stale, old smell.\n\nWhat do you do?",
+      "place": "North Works"
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_a44e750959b14eed99328a27",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Old Gallery (place) created; relationship [22] added to Old Gallery; relationship [23] added to Old Gallery"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_ec89f19860e4459b8f4e89e2",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry Deep Shaft (place) created; relationship [24] added to Deep Shaft; relationship [25] added to Deep Shaft"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_8ca87b6c22fd4467b167f0d6",
+     "content": [
+      {
+       "type": "text",
+       "text": "shown to the player"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: Day 1 (the 10th of Frost, 1247), 4:30 PM (unchanged since your last reply: you didn't move the clock)\nTimers: Hooded lantern (borrowed): 6 hours left\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 5]\n[Notebook: names from the last turns]\nOld Gallery (place): A worked-out section of the North Works, reached through a left branch about fifty feet from the mine mouth. Has old timber doors with a faded sign.\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n[New places] Is any of these inside, or right at, a place already in your notebook (an inn in a town, a cairn in a pass)? If so, link them with `route`: Old Gallery, Deep Shaft.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[The player]\nI follow the prints down the right passage, keeping close to the wall like the miners did, shield up and lantern held low so I can keep watching the tracks. I'll go slowly on the steep slope and stop at once if the prints change or I see any of those walking lights."
+    }
+   ]
+  },
+  {
+   "role": "assistant",
+   "content": [
+    {
+     "type": "tool_use",
+     "id": "call_7b02a89b81a9487fba83fca4",
+     "name": "route",
+     "input": {
+      "links": [
+       {
+        "a": "Old Gallery",
+        "b": "North Works",
+        "how": "inside"
+       },
+       {
+        "a": "Deep Shaft",
+        "b": "North Works",
+        "how": "inside"
+       }
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_a01d3efd03654809822f121d",
+     "name": "write_lore",
+     "input": {
+      "create": "The Cavern",
+      "kind": "place",
+      "description": "A natural cavern at the bottom of the Deep Shaft, where the passage levels out. The air is very still and cold.",
+      "relationships": [
+       "at the bottom of the [[Deep Shaft]]",
+       "part of the [[North Works]]"
+      ]
+     }
+    },
+    {
+     "type": "tool_use",
+     "id": "call_b19c166192b64a9398e991fd",
+     "name": "change_time",
+     "input": {
+      "advance": {
+       "minutes": 15
+      }
+     }
+    }
+   ]
+  },
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_7b02a89b81a9487fba83fca4",
+     "content": [
+      {
+       "type": "text",
+       "text": "recorded: Old Gallery inside North Works; Deep Shaft inside North Works"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_a01d3efd03654809822f121d",
+     "content": [
+      {
+       "type": "text",
+       "text": "entry The Cavern (place) created; relationship [26] added to The Cavern; relationship [27] added to The Cavern"
+      }
+     ]
+    },
+    {
+     "type": "tool_result",
+     "tool_use_id": "call_b19c166192b64a9398e991fd",
+     "content": [
+      {
+       "type": "text",
+       "text": "15 minutes later: Day 1, 4:45 PM"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

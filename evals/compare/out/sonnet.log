@@ -1,0 +1,391 @@
+Brakka Ironvein, Hill Dwarf fighter 1, acolyte background. Saving to C:\Users\Nelly\Documents\the-game\evals\compare\out\brakka-20261101-145459-2.json. /sheet shows your sheet, /back lets you go back, /quit exits.
+  [time: time set: Day 1, 5:00 PM; today is the 12th of Leaffall, 1]
+  [notebook: created an entry for Brakka Ironvein; added 2 relationships to Brakka Ironvein]
+  [notebook: created an entry for Greyhollow; added 2 relationships to Greyhollow]
+  [notebook: created an entry for Temple of the Anvil Father; added 1 relationship to Temple of the Anvil Father]
+  [notebook: created an entry for Prior Hessa; added 1 relationship to Prior Hessa]
+  [notebook: created an entry for North Workings; added 1 relationship to North Workings]
+  [notebook: created an entry for Missing miners]
+
+Greyhollow is a mining town of slate roofs and smoking chimneys, cut into the side of a cold mountain where the wind never quite stops. Its people live by iron and stone, and they trust both more than they trust anything that comes out of the deep.
+
+You are Brakka Ironvein, a hill dwarf and for six years a guard at the Temple of the Anvil Father. You know these streets and most of the faces in them. Three days ago, three miners went down into the old north workings, tunnels sealed a generation ago. None came back. Last night a fourth man staggered out of the dark alone, babbling about lights that walk, and was dead before dawn. The town council will brick up the entrance at sunrise, missing men or not. Old Prior Hessa has asked you to go down first and bring back whoever can still be brought back.
+
+It is late afternoon. The sun is low behind the peaks and the shadows run long. You stand at the mine mouth in chain mail, shield on your arm, longsword at your hip, the temple's hooded lantern in your hand. Before you, the old timber frame leans over a black opening. The planks that once sealed it lie pulled aside, and cold air breathes out of the dark, smelling of wet stone. Something pale glints faintly on the floor a few paces in.
+
+What does Brakka do?
+
+
+>>>>>> round 1, the player: I raise the hooded lantern and open the shutter a little. Then I step carefully toward the pale glint, shield up and one hand near my sword hilt, watching the floor and the walls as I go.
+
+  [dice Brakka's Perception check, searching floor and walls, DC 12: 1d20+4 = 1d20 [16] + 4 = 20]
+  [time: 5 minutes later: Day 1, 5:05 PM]
+  [notebook: created an entry for Chalk-marked pick; added 1 relationship to Chalk-marked pick]
+
+You ease the shutter open a hand's width. A narrow wedge of amber light slides across the rock, and you step in with your shield high.
+
+The pale glint is a miner's pick lying on the floor, its iron head dusted white. Beside it, the dust is scuffed by boots: three sets going in, deep and hurried, and one set coming back out, shorter and stumbling, with a smear where a hand dragged along the wall. Your sharp eyes also catch something the miners' tracks overlie. A fine pale powder, like crushed chalk, lies in a thin trail down the passage. It looks as though something has passed this way, and it did not leave bootprints.
+
+The tunnel slopes down and bends north, its timber props black with age and sweating cold water. Somewhere far ahead, very faintly, you hear a slow drip. Beneath it there is something else, a soft rhythmic tick, like a pick on stone, but too regular for any man.
+
+Behind you the sunlight is already thinning to gold at the mouth. What does Brakka do?
+
+
+>>>>>> round 2, the player: I crouch and look closer at the chalk-marked pick and the pale powder trail, touching the powder carefully with a gloved finger and sniffing it. Then I pick up the pick if it seems safe, and start following the trail down the tunnel, keeping my light low and my ears tuned to that ticking.
+
+  [dice Brakka's Investigation check examining the powder, DC 12: 1d20-1 = 1d20 [17] - 1 = 16]
+  [time: 10 minutes later: Day 1, 5:15 PM]
+  [sheet: gained 1 × Miner's pick]
+  [notebook: updated Chalk-marked pick]
+
+You crouch and rub a pinch of the powder between glove and thumb. It is gritty, and finer than chalk. Held to the lantern, tiny white flecks glitter in it, and the smell is faint and dry and wrong. Ground bone, you judge, mixed with stone dust, and ground long ago, not freshly. Whatever walked here did not sweat or bleed. It shed.
+
+The pick is sound and cold, a miner's tool with a worn ash handle, and nothing about it seems dangerous. You take it. It may tell the town's families something, if no one comes home to say it themselves.
+
+You follow the trail with the lantern low. The tunnel descends in a long slope, props leaning, the air growing colder and still. After a short while the ticking grows clearer: tock, tock, tock, slow and patient, from somewhere ahead and to the right.
+
+At last the passage opens on a cross-cut where two galleries meet. The left gallery is half buried by an old rockfall. The right runs on, and the powder trail bends into it. In the dust at the junction lies a boot, a man's, with the laces still tied. The ticking comes from the right gallery, near now, perhaps forty paces off. Past the bend, you can just see a faint, cold, bluish glow on the wall.
+
+What does Brakka do?
+
+
+>>>>>> round 3, the player: I check the boot quickly for anything useful, then close the lantern shutter down to a thin slit so my light doesn't announce me. I move up the right gallery slowly, shield forward, to the bend and peek around it toward the bluish glow.
+
+  [dice Brakka's Stealth moving up the gallery (chain mail, disadvantage), vs passive Perception 9: 1d20+0 (disadvantage) = 1d20 [16, 6]→6 + 0 = 6]
+  [time: 3 minutes later: Day 1, 5:18 PM]
+  [notebook: created an entry for Bone miners; added 1 relationship to Bone miners]
+
+The boot holds nothing but a wad of rag and a few cold crumbs of rye bread. A miner's last meal, abandoned in a hurry. You close the shutter to a thin slit, so the light is a single golden thread, and move up the right gallery.
+
+It is not easy. Chain mail does not creep. Each step brings a small chink of rings, and in the hush of the tunnel it sounds as loud as a dropped pan. At the bend, the ticking stops.
+
+You edge your head around the corner. The gallery ends in a wider chamber, lit by a cold blue glow that seems to seep from the rock itself, in veins of pale light. Three figures occupy it. Two are skeletons in the rotted leathers of miners, picks in their bony hands, and they have turned their empty skulls toward you. Between them, a third form lies slumped against the wall, a living man, by the rise and fall of his chest. His arms are bound with old rope, and his face is grey with dust.
+
+The skeletons take a stiff step toward the bend. Blue light flickers in their eye sockets.
+
+What does Brakka do?
+
+
+>>>>>> round 4, the player: I step back into the gallery mouth so only one can reach me at a time, shield up, and open the lantern fully to see clearly. I'll meet the first skeleton with my longsword, and if the second slips past I'll use Second Wind when I need it.
+
+  [dice Brakka's initiative: 1d20+0 = 1d20 [10] + 0 = 10]
+  [dice Skeleton 1's initiative: 1d20+2 = 1d20 [20] + 2 = 22 (natural 20)]
+  [dice Skeleton 2's initiative: 1d20+2 = 1d20 [15] + 2 = 17]
+  [fight: Fight started. Order: Skeleton 1 (22), Skeleton 2 (17), Brakka Ironvein (10). Nobody has had a turn yet: next_turn starts the first one.]
+  [fight: Round 1, now: Skeleton 1. Skeleton 1 (initiative 22): HP 13/13, AC 13 Skeleton 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Skeleton 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [19] + 4 = 23]
+  [dice Skeleton 1's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [4] + 2 = 6]
+  [sheet: took 6 damage: HP 14 → 8]
+  [fight: Round 1, now: Skeleton 2. Skeleton 2 (initiative 17): HP 13/13, AC 13 Skeleton 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [sheet: took 6 damage: HP 8 → 2]
+  [sheet: healed 6: HP 2 → 8]
+
+You throw the shutter wide. Lantern light floods the gallery and shows you the pale glimmer in the skulls' sockets. You plant your feet in the narrow mouth where only one can come at you at a time.
+
+The first skeleton comes up the tunnel faster than you expected, rags flapping, and its rusted pick rings off your guard and slips past it. It bites into your side for 6 points of damage. You are down to 8 of your 14 hit points. The second skeleton shuffles behind it, blocked by its fellow in the narrow passage, its empty gaze fixed on you.
+
+The first stands within your reach, close enough to smell the grave-dust. It is your turn. What does Brakka do?
+
+
+>>>>>> round 5, the player: I attack the first skeleton with my longsword, aiming to crush through the rotted ribs. If I'm still hurting after this swing, I'll use Second Wind next.
+
+  [fight: Round 1, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Skeleton 1 (AC 13): 1d20+4 = 1d20 [10] + 4 = 14]
+  [dice Brakka Ironvein's Longsword at Skeleton 1: damage (slashing): 1d8+4 = 1d8 [8] + 4 = 12]
+  [fight: Skeleton 1 took 12: HP 13 → 1]
+  [fight: Round 2, now: Skeleton 1. Skeleton 1 (initiative 22): HP 1/13, AC 13 Skeleton 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Skeleton 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [5] + 4 = 9]
+  [fight: Skeleton 1's Shortsword at Brakka Ironvein: a miss]
+  [fight: Round 2, now: Skeleton 2. Skeleton 2 (initiative 17): HP 13/13, AC 13 Skeleton 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+
+Your longsword cracks into the skeleton's ribs and sends brittle bone flying. It reels, barely holding together, with one ragged strand of bone still moving. The next heartbeat of the fight comes round, and it lunges back and swings, but its pick glances off your shield. The second skeleton still cannot get past its fellow in the narrow gallery, and it lurches against its back.
+
+You are at 8 of 14 hit points. It is your turn again. What does Brakka do?
+
+
+>>>>>> round 6, the player: I finish off the first skeleton with another longsword swing. With my 8 HP, I'll hold Second Wind for the moment and use it if the second skeleton gets a hit on me.
+
+  [fight: Round 2, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Skeleton 1 (AC 13): 1d20+4 = 1d20 [14] + 4 = 18]
+  [dice Brakka Ironvein's Longsword at Skeleton 1: damage (slashing): 1d8+4 = 1d8 [3] + 4 = 7]
+  [fight: Skeleton 1 took 7: HP 1 → 0 (0 HP)]
+  [fight: Skeleton 1 removed from the fight. Order: Skeleton 2 (17), Brakka Ironvein (10)]
+  [fight: Round 3, now: Skeleton 2. Skeleton 2 (initiative 17): HP 13/13, AC 13 Skeleton 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Skeleton 2's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [18] + 4 = 22]
+  [dice Skeleton 2's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [4] + 2 = 6]
+  [sheet: took 6 damage: HP 8 → 2]
+
+Your second swing takes the first skeleton full across the spine. It collapses in a clatter of bone, its pick skidding across the floor, and the blue light dies in its sockets.
+
+But the second is already stepping over the wreckage. Its pick comes in low and fast, finds the gap beneath your shield, and bites for 6 points of damage. Your side burns, and you are down to 2 of your 14 hit points. It stands before you, blue light flickering in its skull.
+
+It is your turn. What does Brakka do?
+
+
+>>>>>> round 7, the player: I'm at 2 HP, so I use Second Wind first as my bonus action to heal. Then I attack the second skeleton with my longsword.
+
+  [fight: Round 3, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [sheet: dice Brakka's Second Wind healing: 1d10+1 = 1d10 [2] + 1 = 3; healed 3: HP 2 → 5; Second Wind: 0/1 (Brakka Ironvein has used its bonus action: no more bonus actions this turn.)]
+  [dice Brakka's longsword attack vs Skeleton 2 (AC 13): 1d20+4 = 1d20 [12] + 4 = 16 (Brakka Ironvein has used its action: no more actions this turn.)]
+  [dice Longsword damage vs Skeleton 2: 1d8+4 = 1d8 [5] + 4 = 9]
+  [fight: Skeleton 2 took 9: HP 13 → 4]
+  [fight: Round 4, now: Skeleton 2. Skeleton 2 (initiative 17): HP 4/13, AC 13 Skeleton 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Skeleton 2's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [18] + 4 = 22]
+  [dice Skeleton 2's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [1] + 2 = 3]
+  [sheet: took 3 damage: HP 5 → 2]
+
+You drag in a breath and call on the Anvil Father's stubbornness. Warmth floods your limbs: Second Wind rolls 1d10+1 for 3, and you rise to 5 hit points. Your longsword comes round and hits the skeleton for 9 damage, shattering its arm to the elbow. It sags, cracked through the chest, though it still stands.
+
+Its turn comes round, and the same relentless thrust finds you for 3 damage. You are at 2 of 14 hit points, and Second Wind is spent. The skeleton is badly broken. One more good blow should finish it, but one more hit on you could finish you.
+
+It is your turn. What does Brakka do?
+
+
+>>>>>> round 8, the player: I swing my longsword at the skeleton's cracked chest to finish it before it can strike again.
+
+  [fight: Round 4, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Skeleton 2 (AC 13): 1d20+4 = 1d20 [13] + 4 = 17]
+  [dice Brakka Ironvein's Longsword at Skeleton 2: damage (slashing): 1d8+4 = 1d8 [6] + 4 = 10]
+  [fight: Skeleton 2 took 10: HP 4 → 0 (0 HP)]
+  [fight: Skeleton 2 removed from the fight. Order: Brakka Ironvein (10)]
+  [fight: Fight over after 4 round(s). 24 seconds of fighting; now Day 1, 5:18:24 PM.]
+  [sheet: XP +100: 100]
+  [notebook: created an entry for Anvil Father; added 1 relationship to Anvil Father]
+  [notebook: created an entry for Bound miner; added 1 relationship to Bound miner]
+
+You step in and drive your blade through the skeleton's cracked chest. The spine parts and the whole frame falls apart with a hollow rattle. The blue light gutters out of its skull, and the gallery is silent except for your own ragged breathing and the drip of water.
+
+You lean on the wall a moment. Your side is a bright knot of pain, and you have 2 hit points left. The blue glow from the chamber ahead is still there, steady and cold. You have earned 100 experience points.
+
+Beyond the bones, the bound man has not stirred. His chest still rises and falls. Two other miners went down with him, and you have not yet seen them. The chamber looks wider than the tunnel, with the veins of pale light running into the dark at its far side.
+
+What does Brakka do?
+
+
+>>>>>> round 9, the player: I check the bound miner first, kneeling beside him to cut the ropes with my dagger and see if he can be woken. Then, since I'm at 2 HP, I'll keep my shield up and watch the far side of the chamber while I tend to him.
+
+  [dice Brakka's Medicine check to rouse the bound miner, DC 10: 1d20+2 = 1d20 [19] + 2 = 21]
+  [time: 5 minutes later: Day 1, 5:23:24 PM]
+  [notebook: updated Bound miner; added 1 relationship to Bound miner]
+
+You have no dagger, so you kneel and saw at the old rope with the edge of your longsword, careful of the man's wrists. The strands part. His skin is cold and clammy, but his pulse is steady under your fingers. You tilt his head, dribble water from your waterskin between his lips, and chafe his hands. He gasps and chokes and his eyes open wide.
+
+He is a lean, sandy-haired man of perhaps thirty, caked in grey dust. He flinches from your light, then sees the dwarven holy symbol on your chest and sags with a sob. "Temple," he rasps. "Anvil's mercy. I'm Dorrin. Dorrin Pell." His eyes dart past you to the broken bones. "Did you get them both? There'll be more. The lights bring them up out of the floor."
+
+You make him sip again. He tells you in broken gasps that he and two mates, Tamsin Vey and old Orrick, broke into a sealed hall and the lights came, small blue flames that walk on legs of bone, and herded them. He was left tied here as a spare. Tamsin and Orrick were taken down through a stair at the back of the chamber, to where the lights gather. That was a day and a night ago, and he has heard no cries since.
+
+All this while you keep your shield up and your eyes on the far side of the chamber. A low stair, cut into the rock, leads down into the pale light at the back. Nothing has moved there yet. You have 2 hit points, and the sunrise bricking-up of the mine is your deadline.
+
+What does Brakka do?
+
+
+>>>>>> round 10, the player: I ask Dorrin quietly if he can walk, and what exactly waits down that stair, how many of the walking lights he saw and whether anything bigger gives the orders. Since I'm at 2 HP and Second Wind is spent, I'd like to take a short rest here with him if the chamber stays quiet, so I'll keep watch on the stair while I bind my wounds and catch my breath.
+
+  [sheet: short rest: Second Wind restored; 1 hour later: Day 1, 6:23:24 PM]
+  [dice Brakka spends a hit die after the short rest (1d10 + CON): 1d10+3 = 1d10 [8] + 3 = 11]
+  [sheet: spent 1 hit die (0/1 left): roll 1d10 and add the CON modifier (CON 16 (+3)), then pass the total as heal; the player decides whether to spend another after the roll; healed 11: HP 2 → 13]
+  [notebook: created an entry for Tamsin Vey; added 2 relationships to Tamsin Vey]
+  [notebook: created an entry for Orrick; added 2 relationships to Orrick]
+  [notebook: created an entry for Lamp Hall; added 1 relationship to Lamp Hall]
+
+You keep your voice low. Dorrin works his jaw, grips your forearm, and tries his legs. They hold, though he wobbles. "I can walk," he says. "Slowly. Won't run."
+
+He answers what he can. The walking lights are small things, no higher than a dog, blue flames in cages of bone, perhaps six or seven of them. They gutter and bob about the walls and call the dead diggers up out of the floor. There is something taller, he says, in a foreman's coat gone green with rot, with a blue lamp where its head should be. It never speaks, but the lights go quiet when it turns. At the foot of the stair is a wide hall, which he calls the Lamp Hall. Tamsin and old Orrick were laid on stone slabs there, still breathing when he last saw them.
+
+The chamber stays quiet. No tick of picks, no scrape of bone. You wedge a fallen prop across the gallery mouth, keep your shield on your arm and your eyes on the stair, and sit with Dorrin. You bind your side with strips of your own spare cloth, say the Anvil Father's short prayers, and eat a ration. An hour passes with only the drip of water. You rise rested, and the pain in your side is a dull ache. You have spent a hit die and regained 11 hit points, and your Second Wind has returned. You are at 13 of 14 hit points. It is a little after six in the evening.
+
+Dorrin sits propped against the wall, grey-faced but alert. The stair waits, glowing faintly blue.
+
+What does Brakka do?
+
+
+>>>>>> round 11, the player: I tell Dorrin to stay put behind the prop in the gallery, and hand him the miner's pick we found so he's not defenseless. "If I'm not back before the sun's down, you crawl out and tell Prior Hessa what's below." Then I take the stair down quietly, shield up and lantern shuttered to a slit, ready to peek into the Lamp Hall.
+
+  [dice Brakka's Stealth descending the stair (chain mail, disadvantage), vs passive Perception of the hall's dead: 1d20+0 (disadvantage) = 1d20 [4, 16]→4 + 0 = 4]
+  [sheet: lost 1 × Miner's pick]
+  [time: 4 minutes later: Day 1, 6:27:24 PM]
+
+You press the miner's pick into Dorrin's hands and give him your instructions. He nods, swallows, and settles behind the prop. "Anvil keep you," he whispers.
+
+You take the stair down, step by step, shutter at a thread. The stone steps are worn hollow in the middle, cut by hands long dead, and the blue light grows with every turn. Your chain mail will not be quiet. Each step brings a soft chink of rings, and halfway down you hear the gentle bobbing and whispering of small things in the hall below fall silent all at once.
+
+The stair opens into the Lamp Hall: a long, low chamber with pillars of living rock and a floor of smooth black stone. Along the walls, in iron brackets, burn cold blue flames with no oil or wick. Two stone slabs stand at the far end, and on them lie a woman and a grey-bearded old man, still, but breathing, their wrists chained to iron rings. Six small blue flames, each caged in a little ribcage and scuttling on bone legs, have turned toward you from among the pillars. Behind them, between you and the slabs, stands the taller figure Dorrin described: a hunched thing in a green rotted foreman's coat, with a blue lamp where its head should be. It lifts a rusted miner's hammer.
+
+They know you are here. What does Brakka do?
+
+
+>>>>>> round 12, the player: I stay on the bottom steps so the stair mouth limits how many can come at me at once, shield up and lantern fully open. "Anvil Father, hold my arm," I mutter, and I wait for the first of them to come into reach so I can cut it down, with Second Wind ready if I get hurt.
+
+  [dice Brakka's initiative: 1d20+0 = 1d20 [2] + 0 = 2]
+  [dice Flame-cage 1's initiative: 1d20+2 = 1d20 [4] + 2 = 6]
+  [dice Flame-cage 2's initiative: 1d20+2 = 1d20 [18] + 2 = 20]
+  [dice Lamp Foreman's initiative: 1d20-2 = 1d20 [1] - 2 = -1 (natural 1)]
+  [fight: Fight started. Order: Flame-cage 2 (20), Flame-cage 1 (6), Brakka Ironvein (2), Lamp Foreman (-1). Nobody has had a turn yet: next_turn starts the first one.]
+  [fight: Round 1, now: Flame-cage 2. Flame-cage 2 (initiative 20): HP 13/13, AC 13 Flame-cage 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 2's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [3] + 4 = 7]
+  [fight: Flame-cage 2's Shortsword at Brakka Ironvein: a miss]
+  [fight: Round 1, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 13/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+
+You hold the bottom steps, throw the lantern shutter fully open, shield high, and murmur your prayer. The little blue flames boil across the black floor in a rattle of tiny bone legs. Three of them, each caged in its own ribcage, come at the stair mouth. The rest bob back behind the pillars and gutter as if waiting.
+
+The first flame-cage scrambles up at you and rakes with its bone claws. The blow skitters off your shield and misses. The second jostles behind it, with no room to reach you. Beyond them, the Lamp Foreman drags itself forward, its rusted hammer swinging low, its blue lamp-head turning slowly to follow you.
+
+You are at 13 of 14 hit points, with Second Wind ready. The first flame-cage is within reach, and it is your turn. What does Brakka do?
+
+
+>>>>>> round 13, the player: I swing my longsword at the nearest flame-cage, trying to smash its little ribcage and snuff the flame. I'll keep to the stair mouth so only one or two can reach me at a time.
+
+  [fight: Round 1, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2 (AC 13): 1d20+4 = 1d20 [9] + 4 = 13]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2: damage (slashing): 1d8+4 = 1d8 [1] + 4 = 5]
+  [fight: Flame-cage 2 took 5: HP 13 → 8]
+  [fight: Round 1, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 2, now: Flame-cage 2. Flame-cage 2 (initiative 20): HP 8/13, AC 13 Flame-cage 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 2's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [9] + 4 = 13]
+  [fight: Flame-cage 2's Shortsword at Brakka Ironvein: a miss]
+  [fight: Round 2, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 13/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+
+Your blade crashes into the nearest flame-cage and splits two of its little ribs. The blue flame inside gutters and spits, but it holds. The cage claws back at you, and the blow slides off your shield. The second cage scrabbles at its fellow's back, still shut out by the narrow stair mouth, and the Lamp Foreman hauls itself closer, its hammer scraping the stone, unable to reach past them.
+
+You are at 13 of 14 hit points. The wounded flame-cage is in front of you. It is your turn. What does Brakka do?
+
+
+>>>>>> round 14, the player: I swing my longsword again at the wounded flame-cage, aiming to finish it off. Anvil Father, steady my arm.
+
+  [fight: Round 2, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2 (AC 13): 1d20+4 = 1d20 [9] + 4 = 13]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2: damage (slashing): 1d8+4 = 1d8 [2] + 4 = 6]
+  [fight: Flame-cage 2 took 6: HP 8 → 2]
+  [fight: Round 2, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 3, now: Flame-cage 2. Flame-cage 2 (initiative 20): HP 2/13, AC 13 Flame-cage 2's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 2's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [12] + 4 = 16]
+  [fight: Flame-cage 2's Shortsword at Brakka Ironvein: a miss]
+  [fight: Round 3, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 13/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+
+Your sword bites again, snapping more of the little cage's ribs. The flame inside shrinks to a sputtering bead, barely alive. It claws at you once more and falls short of your guard. Behind it the second cage still jostles uselessly, and the Foreman's dead lamp-head is only a few paces back now, its hammer dragging.
+
+You are at 13 of 14 hit points. It is your turn. What does Brakka do?
+
+
+>>>>>> round 15, the player: I swing at the nearly snuffed flame-cage once more to put out that last bead of blue fire. I'm holding the stair mouth, so nothing gets past me to Tamsin and Orrick.
+
+  [fight: Round 3, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2 (AC 13): 1d20+4 = 1d20 [16] + 4 = 20]
+  [dice Brakka Ironvein's Longsword at Flame-cage 2: damage (slashing): 1d8+4 = 1d8 [7] + 4 = 11]
+  [fight: Flame-cage 2 took 11: HP 2 → 0 (0 HP)]
+  [fight: Flame-cage 2 removed from the fight. Order: Flame-cage 1 (6), Brakka Ironvein (2), Lamp Foreman (-1)]
+  [fight: Round 3, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 4, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 13/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [18] + 4 = 22]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [2] + 2 = 4]
+  [sheet: took 4 damage: HP 13 → 9]
+
+Your longsword smashes through the last ribs of the wounded flame-cage. The blue bead flares and dies, and the little cage clatters apart on the step. The next cage scuttles forward over its fellow's bones and rakes your side with its claws for 4 damage. You are at 9 of 14 hit points. Behind it the Lamp Foreman shuffles, still shut out by the narrow stair mouth, its lamp-head throbbing, its hammer scraping the black floor.
+
+One of the small lights is down, and Tamsin and Orrick are still chained and unmoving beyond the pillars. It is your turn. What does Brakka do?
+
+
+>>>>>> round 16, the player: I swing my longsword at the flame-cage in front of me, trying to crack its ribcage. If I drop below 6 HP I'll use Second Wind.
+
+  [fight: Round 4, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 1 (AC 13): 1d20+4 = 1d20 [8] + 4 = 12]
+  [fight: Brakka Ironvein's Longsword at Flame-cage 1: a miss]
+  [fight: Round 4, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 5, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 13/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [7] + 4 = 11]
+  [fight: Flame-cage 1's Shortsword at Brakka Ironvein: a miss]
+
+Your swing glances off a bone rib and skitters away without a mark. The flame-cage darts in and claws at you in return, and misses. The Foreman looms behind it, silent, its lamp-head flickering. Its hammer is useless until the cage in front of it drops.
+
+You are at 9 of 14 hit points, with Second Wind ready. It is your turn. What does Brakka do?
+
+
+>>>>>> round 17, the player: I swing my longsword at the flame-cage in front of me again, putting my weight behind it. I'm still at 9 HP, so Second Wind stays in reserve for now.
+
+  [fight: Round 5, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 1 (AC 13): 1d20+4 = 1d20 [13] + 4 = 17]
+  [dice Brakka Ironvein's Longsword at Flame-cage 1: damage (slashing): 1d8+4 = 1d8 [3] + 4 = 7]
+  [fight: Flame-cage 1 took 7: HP 13 → 6]
+  [fight: Round 5, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 6, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 6/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [18] + 4 = 22]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [6] + 2 = 8]
+  [sheet: took 8 damage: HP 9 → 1]
+
+Your longsword cracks into the flame-cage's ribs, and the blue flame inside it shrinks and sputters. But the cage lunges in return and its claws rip under your shield and across your side for 8 damage. You are down to 1 of your 14 hit points. The pain makes your vision pulse. The Foreman looms behind the cage, silent and waiting.
+
+Second Wind is ready, and the wounded cage is in front of you. It is your turn. What does Brakka do?
+
+
+>>>>>> round 18, the player: I'm at 1 HP, so I use Second Wind as my bonus action first. Then I swing my longsword at the wounded flame-cage to finish it.
+
+  [fight: Round 6, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [sheet: dice Brakka's Second Wind healing: 1d10+1 = 1d10 [2] + 1 = 3; healed 3: HP 1 → 4; Second Wind: 0/1 (Brakka Ironvein has used its bonus action: no more bonus actions this turn.)]
+  [dice Brakka's longsword attack vs Flame-cage 1 (AC 13): 1d20+4 = 1d20 [7] + 4 = 11 (Brakka Ironvein has used its action: no more actions this turn.)]
+  [fight: Round 6, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 7, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 6/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [3] + 4 = 7]
+  [fight: Flame-cage 1's Shortsword at Brakka Ironvein: a miss]
+
+You gasp a prayer and the Anvil Father's strength steadies you. Second Wind heals you for 3, and you are at 4 of 14 hit points. You swing hard at the cage, but the blow is turned by a bone rib and goes wide. The flame-cage claws at you in return and misses, scraping the rim of your shield. Behind it the Foreman stands patiently, its lamp-head pulsing.
+
+You are at 4 hit points and Second Wind is spent. The cage in front of you is wounded and nearly out of fire. It is your turn. What does Brakka do?
+
+
+>>>>>> round 19, the player: I swing my longsword at the wounded flame-cage again to snuff it out. If things go badly, I'll back up the stair toward Dorrin and fight in the gallery mouth rather than die here.
+
+  [fight: Round 7, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at Flame-cage 1 (AC 13): 1d20+4 = 1d20 [8] + 4 = 12]
+  [fight: Brakka Ironvein's Longsword at Flame-cage 1: a miss]
+  [fight: Round 7, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 8, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 6/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18): 1d20+4 = 1d20 [15] + 4 = 19]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein: damage (piercing): 1d6+2 = 1d6 [6] + 2 = 8]
+  [sheet: took 8 damage: HP 4 → 0; at 0 HP: unconscious; make death saving throws on each of their turns]
+  [fight: Round 8, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka's death saving throw (DC 10): 1d20 = 1d20 [15] = 15]
+  [sheet: death save successes: 1/3]
+  [fight: Round 8, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 9, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 6/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18; advantage: Brakka Ironvein unconscious): 1d20+4 (advantage) = 1d20 [10, 12]→12 + 4 = 16]
+  [fight: Flame-cage 1's Shortsword at Brakka Ironvein: a miss]
+  [fight: Round 9, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka's death saving throw (DC 10): 1d20 = 1d20 [4] = 4]
+  [sheet: death save failures: 1/3]
+  [fight: Round 9, now: Lamp Foreman. Lamp Foreman (initiative -1): HP 22/22, AC 8 Lamp Foreman's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [fight: Round 10, now: Flame-cage 1. Flame-cage 1 (initiative 6): HP 6/13, AC 13 Flame-cage 1's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein (AC 18; advantage: Brakka Ironvein unconscious): 1d20+4 (advantage) = 1d20 [16, 15]→16 + 4 = 20]
+  [dice Flame-cage 1's Shortsword at Brakka Ironvein: damage (piercing) (critical hit): 2d6+2 = 2d6 [2, 1] + 2 = 5]
+  [sheet: took 5 damage at 0 HP: two death save failures (critical hit); three death save failures: the character dies]
+
+Your swing goes wide again. The flame-cage's claws drive through the gap in your mail for 8 damage, and your four remaining hit points are gone. You drop onto the cold stair at 0 hit points, and the lantern light swims above you.
+
+The Anvil Father's hand holds you for a while. Your first death save succeeds (15), and the cage's next stab at you misses. Your second fails (4). Then the cage's claw finds you again, a critical hit, and the blow counts as two more failures. That makes three.
+
+Brakka Ironvein is dead.
+
+Up in the gallery Dorrin hears the fight go quiet. He waits with the pick in his shaking hands, and the blue light creeps up the stair behind the silence. Tamsin and old Orrick still lie chained on their slabs, and sunrise will still come to Greyhollow.
+
+The story does not have to end here. If you like, we can make a new character, who will come into the same world, with the town, the mine, the missing miners and the clock still running. Or you can go back to before a line of yours and play on from there, changing a choice. Which would you like?
+
+
+>>>>>> round 20, the player: That was a hard fight, and Brakka went down holding the stair. I'd like to make a new character who comes into the same world: another fighter, maybe someone from the town who heard the Prior's call after Brakka didn't return. Since Brakka's story ended, I'll roll up the new fighter and carry on with the same clock running.
+
+DM: Before we start, does Brakka's body, shield and longsword still lie at the foot of the stair, and does Dorrin still have the miner's pick?
+
+  [fight: Fight over after 10 round(s). 1 minute of fighting; now Day 1, 6:28:24 PM.]
+  [ability scores rolled: 4d6 [4, 3, 3, 3] drop 3 = 10; 4d6 [6, 4, 3, 2] drop 2 = 13; 4d6 [6, 4, 3, 1] drop 1 = 13; 4d6 [6, 5, 4, 2] drop 2 = 15; 4d6 [6, 5, 3, 2] drop 2 = 14; 4d6 [5, 4, 2, 1] drop 1 = 11. Scores: [10, 13, 13, 15, 14, 11]]
+  [notebook: created an entry for Death of Brakka Ironvein; added 3 relationships to Death of Brakka Ironvein]
+
+Yes, Brakka's body, shield and longsword still lie at the foot of the stair, and Dorrin still holds the miner's pick, hiding behind his prop in the gallery above. The mine is quiet, the clock is running, and the town will brick up the entrance at sunrise.
+
+Let's build your new fighter, someone from Greyhollow who answers the Prior's call. I rolled six scores for you to place: 15, 14, 13, 13, 11 and 10. Assign them to Strength, Dexterity, Constitution, Intelligence, Wisdom and Charisma however you like.
+
+Then tell me:
+1. Race, from the SRD list (human, dwarf, elf, halfling, half-orc, gnome, half-elf, tiefling, dragonborn).
+2. Fighting style (Archery, Defense, Dueling, Great Weapon Fighting, Protection or Two-Weapon Fighting) and two skills from the fighter list.
+3. Starting gear, either chain mail or leather armor with a longbow, and a martial weapon with a shield or two martial weapons, and so on.
+4. A name, and a few lines about who they are and why Greyhollow is home.
+
+Tell me your choices and I'll put the sheet together for your yes.
+  [conversation shortened: the DM's summary of turns 0 to 15, then turns 16 to 20]
