@@ -113,6 +113,38 @@ def from_chat(reply: dict[str, Any]) -> dict[str, Any]:
                       "output_tokens": use.get("completion_tokens") or 0}}
 
 
+def assemble(text: str) -> dict[str, Any]:
+    """A streamed answer (server-sent events of chat-completions chunks) as the one reply a plain call would give.
+    The model's thinking (`reasoning_content`) is left out; the text, the tool calls and the usage are put together."""
+    reply: dict[str, Any] = {"id": "", "model": "", "usage": None}
+    content, calls, finish = "", {}, None
+    for line in text.splitlines():
+        if not line.startswith("data:") or line[5:].strip() in ("", "[DONE]"):
+            continue
+        try:
+            chunk = json.loads(line[5:])
+        except ValueError:
+            continue
+        if "error" in chunk and not chunk.get("choices"):
+            raise model.Failed(str(chunk["error"])[:300])
+        reply["id"], reply["model"] = chunk.get("id") or reply["id"], chunk.get("model") or reply["model"]
+        reply["usage"] = chunk.get("usage") or reply["usage"]
+        for ch in chunk.get("choices") or []:
+            delta = ch.get("delta") or {}
+            content += delta.get("content") or ""
+            for c in delta.get("tool_calls") or []:
+                t = calls.setdefault(c.get("index", 0), {"id": "", "type": "function", "function": {"name": "", "arguments": ""}})
+                t["id"] = c.get("id") or t["id"]
+                t["function"]["name"] += (c.get("function") or {}).get("name") or ""
+                t["function"]["arguments"] += (c.get("function") or {}).get("arguments") or ""
+            finish = ch.get("finish_reason") or finish
+    message: dict[str, Any] = {"role": "assistant", "content": content}
+    if calls:
+        message["tool_calls"] = [calls[i] for i in sorted(calls)]
+    reply["choices"] = [{"index": 0, "message": message, "finish_reason": finish}]
+    return reply
+
+
 def _post(body: dict[str, Any]) -> tuple[int, str]:
     """One HTTP call: (status, text). Status 0 when there was no answer at all."""
     req = urllib.request.Request(
@@ -129,12 +161,13 @@ def _post(body: dict[str, Any]) -> tuple[int, str]:
 
 async def send(request: dict[str, Any]) -> dict[str, Any]:
     """model.send for a gateway model: the Anthropic-style request, and the reply as an Anthropic-style dict."""
-    body = to_chat(request)
+    body = to_chat(request) | {"stream": True, "stream_options": {"include_usage": True}}
+    # streamed: a model that thinks for a while before it writes (Qwen) keeps the gateway's no-answer timeout from firing
     for attempt in range(3):
         status, text = await asyncio.to_thread(_post, body)
         if status == 200:
             try:
-                return from_chat(json.loads(text))
+                return from_chat(assemble(text) if text.lstrip().startswith(("data:", ":")) else json.loads(text))
             except ValueError as e:
                 raise model.Failed(f"the gateway's reply isn't JSON: {text[:300]}") from e
         if status not in (0, *RETRY) or attempt == 2:
