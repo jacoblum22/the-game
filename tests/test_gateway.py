@@ -146,3 +146,13 @@ def test_the_dm_loop_runs_on_a_gateway_model(monkeypatch: Any, tmp_path: Path) -
     assert sent[1]["messages"][-1]["content"].startswith("dice ")
     again = play.Game(json.loads((tmp_path / "save.json").read_text(encoding="utf-8")), tmp_path / "save.json")
     assert again.messages == g.messages and again.model == "ali/qwen3.7-plus"
+
+
+def test_a_reply_in_a_set_shape_asks_for_json_mode() -> None:
+    schema = {"type": "object", "properties": {"problems": {"type": "array"}}}
+    body = gateway.to_chat({"model": "zai/glm-5.3", "max_tokens": 10, "system": "Check.", "messages": [{"role": "user", "content": "x"}],
+                            "output_config": {"effort": "low", "format": {"type": "json_schema", "schema": schema}}})
+    assert body["response_format"] == {"type": "json_object"}
+    assert body["messages"][0]["content"].startswith("Check.") and json.dumps(schema) in body["messages"][0]["content"]
+    plain = gateway.to_chat({"model": "zai/glm-5.3", "max_tokens": 10, "messages": [{"role": "user", "content": "x"}]})
+    assert "response_format" not in plain
