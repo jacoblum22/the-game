@@ -69,6 +69,8 @@ def rider(desc: str) -> str:
     return hit.strip() if re.search(r"[A-Za-z]{3,}", t) else ""
 
 
+CREATURE_TYPES = ("aberration", "beast", "celestial", "construct", "dragon", "elemental", "fey", "fiend", "giant",
+                  "humanoid", "monstrosity", "ooze", "plant", "undead")
 SIZES = ("Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan")
 _EFFECT = r"knocked prone|poisoned|frightened|blinded|deafened|paralyzed|stunned|charmed|restrained|incapacitated"
 
@@ -87,10 +89,14 @@ def rider_plan(text: str) -> dict[str, Any] | None:
                   r"(?:\.|$)", rest)
     if z and z.end() >= len(rest) - 1:
         plan["at_zero"], rest = z[0].strip(), rest[:z.start()]
-    x = re.match(r"If the target is (?:a creature(?: other than an undead or a construct)?|a (\w+) or smaller "
+    x = re.match(r"If the target is (?:a creature(?: other than ([^,]+))?|a (\w+) or smaller "
                  r"creature|(\w+) or smaller), (?:it|the target) ", rest)
     if x:
-        plan["size"], rest = x[1] or x[2], "it " + rest[x.end():]
+        if x[1]:  # "a creature other than an elf or undead": who it doesn't work on
+            plan["not"] = [re.sub(r"^an? ", "", w.strip()) for w in re.split(r",? or |, ", x[1])]
+        if x[2] or x[3]:
+            plan["size"] = x[2] or x[3]
+        rest = "it " + rest[x.end():]
     elif rest.startswith("If"):
         return None
     x = re.fullmatch(rf"(?:it|[Tt]he target) must succeed on a DC (\d+) (\w+) saving throw or (?:be |become )?"
@@ -568,6 +574,12 @@ class Turns:
             t["name"] = self.name_of(t.get("name", ""))
         started = bool(turns) and not pend and i >= 0 and order[i]["name"] == turns[0].get("name") \
             and (order[i]["pc"] or not order[i].get("used"))  # its turn was started with next_turn
+        # the PC's turn sent first when it comes next: the code starts it, so it needs no next_turn call of its own
+        # (Jake, 2026-11-01: a call spent on next_turn every round, and one refused when it was left out)
+        auto = bool(turns) and not pend and not started and order[(i + 1) % len(order)]["pc"] \
+            and order[(i + 1) % len(order)]["name"] == turns[0].get("name")
+        if auto:
+            i, started = (i + 1) % len(order), True
         for k, t in enumerate(turns):
             self.check(t, pc_now=k == 0 and started and order[i]["pc"])
             if k == 0 and started:
@@ -589,6 +601,8 @@ class Turns:
             else:
                 self.queue = list(turns)
                 self.down = [w for w, s in self.party().items() if s["hp"]["current"] <= 0]
+                if auto:
+                    self.log("fight: " + self.g.advance_turn())
             k = 0
             while self.queue:
                 t = self.queue[0]
@@ -621,7 +635,11 @@ class Turns:
             # DM called next_turn again and skipped it (a replay, 2026-10-19).
             if self.g.fight:
                 nxt = self.g.fight["order"][(self.g.fight["turn"] + 1) % len(self.g.fight["order"])]
-                if nxt["pc"] or nxt.get("companion"):
+                if nxt["pc"]:
+                    self.lines.append(f"Next is {nxt['name']}'s turn (the PC's): once the player has said what they do, "
+                                      "send it first in creature_turns, which starts it; start it with next_turn only "
+                                      "when they do something else first.")
+                elif nxt.get("companion"):
                     self.lines.append(f"Next is {nxt['name']}'s turn: start it with next_turn.")
         except Stop as e:
             self.g.fight["pending"] = self.p | {"queue": self.queue, "down": self.down}
@@ -950,6 +968,19 @@ class Turns:
         """Resolve a rider (rider_plan) on a party member: the save rolled from the sheet, the effect applied."""
         s = self.member(target)
         first, who = s["name"].split()[0], ({} if s is self.g.sheet else {"who": target})
+        race = str(s.get("race", "")).casefold()
+        for kind in plan.get("not", []):
+            if kind in CREATURE_TYPES:
+                continue  # a party member is a humanoid
+            if re.search(rf"\bhalf-{re.escape(kind)}\b", race):  # a half-elf against "other than an elf": the DM rules
+                self.p["why"] = f"{label}: what its hit does beyond the damage"
+                raise Stop(f"STOPPED: {c['name']}'s {w['name']} hit {target}, a {s.get('race')}, and on a hit its stat "
+                           f"block says: \"{w['rider']}\" Only the damage was applied. Rule whether it works on "
+                           f"{first} and resolve it by the rules (roll any save with roll), then call creature_turns "
+                           "with resume: the turns you sent go on from here.")
+            if re.search(rf"\b{re.escape(kind)}\b", race):
+                self.log(f"fight: {label}: {first} is {'an' if kind[0] in 'aeiou' else 'a'} {kind}, so nothing more")
+                return
         if plan.get("size") and SIZES.index(s.get("size", "Medium")) > SIZES.index(plan["size"].capitalize()):
             self.log(f"fight: {label}: {first} is too big for what follows ({plan['size']} or smaller only)")
             return

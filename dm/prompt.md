@@ -99,7 +99,8 @@ play every other character, call for checks, run fights by the rules, and keep t
   as surprise) in the same call as `add_combatants`.
 - Run the fight strictly in initiative order. The PC's turn and the turns after it go through `creature_turns`:
   when the player has said what they do on their turn, send the PC's turn first (`pc`, their attacks as they said
-  them, with `smite` where they said they smite; resolve any other action with the other tools first), then look at
+  them, with `smite` where they said they smite; this starts their turn, so no `next_turn` before it; if they do
+  anything else first, start their turn with `next_turn` and resolve that with the other tools first), then look at
   the tracker as it will be, decide each creature's and companion's action from its situation (a companion's as
   themselves), and send every turn up to the PC's next one in one call: its attacks and targets, whom it moves away
   from, whom it attacks instead if its target drops, and the reactions creatures and companions take, on the move or

@@ -170,6 +170,14 @@ class Game:
                                 "own: leave out spend_slot, concentration_start and rests")
             slot, conc, clock, lines = m.cast(self.sheet if i is None else self.companions[i], self.clock, spell)
             a |= {"spend_slot": slot, "concentration_start": conc}
+        if a.get("use_resource") == "Second Wind":  # the code rolls its healing (Jake, 2026-11-01: a call saved)
+            if a.get("heal"):
+                raise m.Refused("Second Wind rolls its own healing (1d10 + fighter level): leave out heal")
+            s = self.sheet if i is None else self.companions[i]
+            if (s.get("resources", {}).get("Second Wind") or {}).get("left", 0) > 0:  # else change_pc refuses it
+                r = m.roll(f"1d10+{s['level']}")
+                a["heal"] = r["total"]
+                lines.append("dice " + m.roll_text(r, f"{s['name'].split()[0]}'s Second Wind healing"))
         if not spell or any(a.values()):
             lines.append(self._change_member(i, a))
         if spell:  # a cast comes without a rest, so the clock is only the cast's
@@ -423,7 +431,8 @@ class Game:
                   "spend_slot": {"type": "integer", "minimum": 1, "maximum": 9, "description": "a spell slot spent "
                                  "without casting a spell, e.g. Divine Smite; for a spell use cast"},
                   "restore_slot": {"type": "integer", "minimum": 1, "maximum": 9},
-                  "use_resource": {"type": "string", "description": "a feature name exactly as on the sheet, e.g. Second Wind"},
+                  "use_resource": {"type": "string", "description": "a feature name exactly as on the sheet, e.g. "
+                                   "Second Wind (rolls and applies its own healing)"},
                   "restore_resource": {"type": "string"},
                   "resource_amount": {"type": "integer", "minimum": 1,
                                       "description": "how much of a pool to use or restore (e.g. Lay on Hands HP); default 1"},
@@ -635,8 +644,8 @@ class Game:
               "applies resistances (stat block, sheet, Rage) and damage, concentration saves, and riders whose save the "
               "stat block spells out (prone, poisoned, half poison damage, grapples). Send every turn from the next "
               "one up to the PC's, in initiative order; the code starts them (no next_turn). On the PC's turn, once "
-              "the player has said it, send theirs first (pc: their attacks, smite where they smite; anything else "
-              "they do resolved with the other tools first), then the rest. Write reactions where they happen: an "
+              "the player has said it, send theirs first (pc: their attacks, smite where they smite; this starts their "
+              "turn: no next_turn, unless they do anything else first, resolved with the other tools), then the rest. Write reactions where they happen: an "
               "opportunity attack on the move (leaves_reach_of), a companion's on the attack it answers (reactions); "
               "none is taken unwritten, but Parry when it turns a hit into a miss. A dropped target goes to the next "
               "of or_targets, else the attack isn't made. It STOPS for the PC's reactions (ask the player), a rider "

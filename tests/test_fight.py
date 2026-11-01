@@ -196,8 +196,8 @@ def test_companion_turn_refusals(tmp_path: Path, monkeypatch: Any) -> None:
     with pytest.raises(m.Refused, match="death save"):
         turns(g, {"turns": [{"name": mate, "attacks": [{"attack": "Rapier", "target": "Goblin 1"}]}]})
     g.companions[0]["hp"]["current"] = 10
-    turns(g, {"turns": [{"name": mate, "note": "hides"}, {"name": "Goblin 1", "note": "waits"}]})
-    with pytest.raises(m.Refused, match="is the PC"):
+    turns(g, {"turns": [{"name": mate, "note": "hides"}]})
+    with pytest.raises(m.Refused, match="is the PC"):  # the goblin's turn comes first
         turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": "Longsword", "target": "Goblin 1"}]}]})
 
 
@@ -353,11 +353,29 @@ def test_rider_condition_with_a_timer_and_a_size_limit(tmp_path: Path, monkeypat
     assert "too big" in out and "grappled" not in g.sheet["conditions"] and g.sheet["hp"]["current"] == 14 - 11
 
 
-def test_rider_the_code_cant_resolve_stops(tmp_path: Path, monkeypatch: Any) -> None:
-    """The ghoul's paralysis (not for elves) is the DM's; so is what the spider's poison does to a target it drops."""
+def test_rider_for_creatures_other_than_some(tmp_path: Path, monkeypatch: Any) -> None:
+    """The ghoul's paralysis ("a creature other than an elf or undead"): the code rolls the dwarf's save; an elf isn't
+    affected; for a half-elf the DM rules."""
+    claws = {"turns": [{"name": "Ghoul", "attacks": [{"attack": "Claws", "target": "pc"}]}]}
+    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1, 2], [("Ghoul", "Ghoul", 15)])
+    out = turns(g, claws)
+    assert "STOPPED" not in out and not g.dice.rolls and "Constitution save against Ghoul's Claws" in out
+    assert "paralyzed" in g.sheet["conditions"] and g.sheet["hp"]["current"] == 14 - 4 and ": failed" in out
+    assert "repeats the Constitution save (DC 10) at the end of each of their turns" in out
     g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1], [("Ghoul", "Ghoul", 15)])
-    out = turns(g, {"turns": [{"name": "Ghoul", "attacks": [{"attack": "Claws", "target": g.sheet["name"]}]}]})
-    assert "STOPPED: Ghoul's Claws hit" in out and g.sheet["hp"]["current"] == 14 - 4
+    g.sheet["race"] = "High Elf"
+    out = turns(g, claws)
+    assert "STOPPED" not in out and not g.dice.rolls and "is an elf, so nothing more" in out and not g.sheet["conditions"]
+    g = game(tmp_path, monkeypatch, "fighter", [15, 1, 1], [("Ghoul", "Ghoul", 15)])
+    g.sheet["race"] = "Half-Elf"
+    out = turns(g, claws)
+    assert "STOPPED: Ghoul's Claws hit Brakka Ironvein, a Half-Elf" in out and not g.sheet["conditions"]
+    assert fight.rider_plan("If the target is a creature other than an undead, it must succeed on a DC 11 Constitution "
+                            "saving throw or be paralyzed for 1 minute.")["not"] == ["undead"]
+
+
+def test_rider_the_code_cant_resolve_stops(tmp_path: Path, monkeypatch: Any) -> None:
+    """What the spider's poison does to a target it drops is the DM's."""
     g = game(tmp_path, monkeypatch, "fighter", [15, 5, 2, 1, 1], [("Spider", "Giant Spider", 15)],
              mates=[("wizard", 12)])
     wiz = g.companions[0]
@@ -415,8 +433,19 @@ def test_the_pc_turn_goes_first(tmp_path: Path, monkeypatch: Any) -> None:
     out = turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": w, "target": "Goblin 1"}]},
                               {"name": "Goblin 1", "attacks": [{"attack": "Scimitar", "target": "pc"}]}]})
     assert "STOPPED" not in out and m._find(g.fight, "Goblin 1")["hp"] < 30 and "a miss" in out
+    # the PC's turn again, sent when it comes next: the code starts it (no next_turn call of its own)
+    g.dice.rolls += [2]
+    out = turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": w, "target": "Goblin 1"}]}]})
+    assert out.startswith("fight: Round 2, now: Brakka Ironvein.") and "a miss" in out and g.fight["round"] == 2
+    assert g.fight["order"][g.fight["turn"]]["pc"] and "Next is Goblin 1's turn" not in out
+
+
+def test_the_pc_turn_is_refused_when_it_isnt_next(tmp_path: Path, monkeypatch: Any) -> None:
+    g = game(tmp_path, monkeypatch, "fighter", [], [("Goblin 1", "Goblin", 15), ("Goblin 2", "Goblin", 12)])
+    turns(g, {"turns": [{"name": "Goblin 1", "note": "waits"}]})
     with pytest.raises(m.Refused, match="their turn goes first"):
-        turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": w, "target": "Goblin 1"}]}]})
+        turns(g, {"turns": [{"name": "pc", "attacks": [{"attack": "Longsword", "target": "Goblin 1"}]}]})
+    assert g.fight["order"][g.fight["turn"]]["name"] == "Goblin 1" and g.fight["round"] == 1
 
 
 def test_divine_smite_on_a_hit(tmp_path: Path, monkeypatch: Any) -> None:
@@ -454,3 +483,24 @@ def test_fight_start_fills_in(tmp_path: Path, monkeypatch: Any) -> None:
     gob = m._find(g.fight, "Goblin 1")
     assert gob["hp"] == 7 and gob["ac"] == 15 and gob["initiative"] == 9 + 2
     assert any(e["text"].startswith("dice Brakka's initiative") for e in g.transcript if e["kind"] == "tool")
+
+
+def test_second_wind_rolls_and_heals(tmp_path: Path, monkeypatch: Any) -> None:
+    """Spending Second Wind rolls 1d10 + fighter level and heals by it, in the one change_pc call."""
+    import asyncio
+    g = game(tmp_path, monkeypatch, "fighter", [7], [("Goblin 1", "Goblin", 15)])
+    g.fight["turn"] = -1
+    g.fight, _ = m.next_turn(g.fight)  # the PC's turn
+    g.sheet["hp"]["current"] = 3
+    tools = {t.name: t.handler for t in g.tools()}
+
+    def call(**a: Any) -> tuple[str, bool]:
+        res = asyncio.run(tools["change_pc"](a))
+        return res["content"][0]["text"], bool(res.get("is_error"))
+    text, err = call(use_resource="Second Wind", heal=5)
+    assert err and "rolls its own healing" in text and g.sheet["hp"]["current"] == 3
+    text, err = call(use_resource="Second Wind", uses="bonus action")
+    assert not err and "Second Wind healing: 1d10+1 = 1d10 [7] + 1 = 8" in text and "HP 3 → 11" in text
+    assert g.sheet["resources"]["Second Wind"]["left"] == 0 and "bonus action" in m._find(g.fight, g.sheet["name"])["used"]
+    text, err = call(use_resource="Second Wind")
+    assert err and g.sheet["hp"]["current"] == 11 and not g.dice.rolls
