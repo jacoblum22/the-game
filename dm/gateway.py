@@ -185,9 +185,10 @@ async def check_checker(name: str) -> None:
     checker can read (`py -3 -m dm.gateway --checker <model>`)?"""
     from dm import check
     check.CHECK_MODEL = name
-    state = ("NOTEBOOK:\n- Warden Ansa keeps the granary key. The granary holds 40 sacks of barley.\n\n"
-             "EARLIER PLAY:\nDM: The warden shows you the granary: forty sacks of barley stand in rows.\n\n"
-             "NEW REPLY:\nYou count the sacks again and find only twelve in the granary, as the warden said.")
+    state = ("NOTEBOOK (the DM's notes, as they were before the new reply)\nWarden Ansa keeps the granary key. The granary holds "
+             "40 sacks of barley.\n\nEARLIER PLAY (the last 5 turns, word for word)\nDM: The warden shows you the granary: "
+             "forty sacks of barley stand in rows.\n\nNEW REPLY\nYou count the sacks again and find only twelve in the "
+             "granary, as the warden said.")
     answer = await check.ask_model("api", check.SYSTEM, state)
     print(f"\n== {name} (checker)\nanswer: {json.dumps(answer)[:600]}\nkept: {check.kept(answer, state)}")
 
