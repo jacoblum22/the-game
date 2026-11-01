@@ -180,7 +180,26 @@ async def check(name: str) -> None:
     print(f"call 3 (same as 2): usage={third['usage']}")
 
 
+async def check_checker(name: str) -> None:
+    """One call of the game's continuity checker on this model, with a plain clash planted: is the answer JSON the
+    checker can read (`py -3 -m dm.gateway --checker <model>`)?"""
+    from dm import check
+    check.CHECK_MODEL = name
+    state = ("NOTEBOOK:\n- Warden Ansa keeps the granary key. The granary holds 40 sacks of barley.\n\n"
+             "EARLIER PLAY:\nDM: The warden shows you the granary: forty sacks of barley stand in rows.\n\n"
+             "NEW REPLY:\nYou count the sacks again and find only twelve in the granary, as the warden said.")
+    answer = await check.ask_model("api", check.SYSTEM, state)
+    print(f"\n== {name} (checker)\nanswer: {json.dumps(answer)[:600]}\nkept: {check.kept(answer, state)}")
+
+
 if __name__ == "__main__":
+    if sys.argv[1:2] == ["--checker"]:
+        for n in sys.argv[2:] or ["ali/qwen3.7-plus"]:
+            try:
+                asyncio.run(check_checker(n))
+            except (model.Failed, ValueError, StopIteration) as e:
+                print(f"\n== {n} (checker)\nFAILED: {type(e).__name__}: {e}")
+        sys.exit()
     for n in sys.argv[1:] or ["ali/qwen3.7-plus", "zai/glm-5.3"]:
         try:
             asyncio.run(check(n))
