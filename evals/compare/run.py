@@ -1,7 +1,7 @@
 """One 20-round test game for the model comparison (Jake, 2026-11-01): a new game with the ready-made fighter, the DM on
 the model given (Claude, or a model behind the gateway: dm/gateway.py), and a Sonnet player typing the lines. Every
-model gets the same character, the same player brief and the same code. The continuity checker is off, so the
-DMs are compared as they are. Every model call is logged with its tokens, so the cost is known afterwards.
+model gets the same character, the same player brief and the same code. The continuity checker is on, and runs on the same
+model as the DM, so the whole pipeline is compared. Every model call is logged with its tokens, so the cost is known afterwards.
 
     py -3 evals/compare/run.py <tag> <model> [<rounds, default 20>]
     e.g.  run.py sonnet claude-sonnet-5-5 | run.py qwen ali/qwen3.7-plus | run.py glm zai/glm-5.3
@@ -73,13 +73,19 @@ def cost(usage: dict[str, int], name: str) -> float:
             + usage.get("cache_creation_input_tokens", 0) * w + usage.get("output_tokens", 0) * o) / 1e6
 
 
+def dm_count(out: Path, tag: str) -> int:
+    """The DM's model calls so far (not the player's, not the checker's)."""
+    return sum(json.loads(line)["role"] == "dm" for line in open(out / f"{tag}.calls.jsonl", encoding="utf-8"))
+
+
 async def play_game(tag: str, dm_model: str, rounds: int, out: Path = OUT) -> dict[str, Any]:
     out.mkdir(parents=True, exist_ok=True)
     calls = open(out / f"{tag}.calls.jsonl", "w", encoding="utf-8")
-    real_send = model.send
+    real_send, real_check_model = model.send, check.CHECK_MODEL
 
     async def logged(request: dict[str, Any]) -> dict[str, Any]:
-        role = "player" if str(request.get("system", "")).startswith("You are a human player") else "dm"
+        sys_ = str(request.get("system", ""))
+        role = "player" if sys_.startswith("You are a human player") else "check" if sys_ == check.SYSTEM else "dm"
         t0 = time.time()
         reply = await real_send(request)
         calls.write(json.dumps({"role": role, "model": request["model"], "seconds": round(time.time() - t0, 1),
@@ -87,7 +93,8 @@ async def play_game(tag: str, dm_model: str, rounds: int, out: Path = OUT) -> di
         calls.flush()
         return reply
     model.send = logged
-    check.ENABLED = False
+    check.ENABLED = True  # the whole pipeline, the continuity checker included, on the same model as the DM (Jake)
+    check.CHECK_MODEL = dm_model
     play.SAVES = out
     history: list[dict[str, Any]] = []
 
@@ -113,10 +120,10 @@ async def play_game(tag: str, dm_model: str, rounds: int, out: Path = OUT) -> di
                 said = shown(g.transcript[seen:])
                 line = await player_line(said)
                 print(f"\n\n>>>>>> round {n}, the player: {line}\n", flush=True)
-                seen, n_calls, t0 = len(g.transcript), sum(1 for _ in open(out / f"{tag}.calls.jsonl")), time.time()
+                seen, n_calls, t0 = len(g.transcript), dm_count(out, tag), time.time()
                 await s.line(line)
                 new = g.transcript[seen:]
-                dm_calls = sum(1 for _ in open(out / f"{tag}.calls.jsonl")) - n_calls
+                dm_calls = dm_count(out, tag) - n_calls
                 rounds_out.append({
                     "round": n, "seconds": round(time.time() - t0, 1), "dm_calls": dm_calls,
                     "refused": sum(e["kind"] == "refused" for e in new), "failed": sum(e["kind"] == "failed" for e in new),
@@ -132,7 +139,7 @@ async def play_game(tag: str, dm_model: str, rounds: int, out: Path = OUT) -> di
     finally:
         await s.close()
         calls.close()
-        model.send = real_send
+        model.send, check.CHECK_MODEL = real_send, real_check_model
     return summary(tag, dm_model, rounds_out, out)
 
 

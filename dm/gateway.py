@@ -71,6 +71,14 @@ def to_chat(request: dict[str, Any]) -> dict[str, Any]:
     if request.get("tools"):
         body["tools"] = [{"type": "function", "function": {"name": t["name"], "description": t.get("description", ""),
                                                            "parameters": t["input_schema"]}} for t in request["tools"]]
+    if schema := ((request.get("output_config") or {}).get("format") or {}).get("schema"):
+        # a reply in a set shape (the checker's): JSON mode, and the shape told in words, as not every model takes a schema
+        body["response_format"] = {"type": "json_object"}
+        note = "Reply with only a JSON object that matches this JSON schema, nothing else:\n" + json.dumps(schema)
+        if msgs and msgs[0]["role"] == "system":
+            msgs[0] = {"role": "system", "content": msgs[0]["content"] + "\n\n" + note}
+        else:
+            msgs.insert(0, {"role": "system", "content": note})
     if extra := os.environ.get("DM_GATEWAY_PARAMS"):
         body |= json.loads(extra)
     return body
