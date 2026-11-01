@@ -3,6 +3,8 @@
 The conversation is a plain list of API messages that the game keeps in its save, so nothing lives anywhere else.
 In the terminal the call goes through Anthropic's Python library, with the key from the ANTHROPIC_API_KEY
 environment variable; the browser page has no such library and puts its own call in `send` (dm/browser.py).
+A model name with a slash in it (`ali/qwen3.7-plus`) is not Claude: its call goes through an OpenAI-style
+gateway (dm/gateway.py).
 """
 
 from __future__ import annotations
@@ -45,6 +47,9 @@ def client() -> Any:
 
 
 async def _send(request: dict[str, Any]) -> dict[str, Any]:
+    if "/" in request["model"]:  # `ali/qwen3.7-plus`: a model behind an OpenAI-style gateway, not Claude (dm/gateway.py)
+        from dm import gateway
+        return await gateway.send(request)
     import anthropic
     try:
         reply = await client().messages.create(**request)
