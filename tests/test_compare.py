@@ -20,7 +20,7 @@ def test_a_short_game(monkeypatch: Any, tmp_path: Path) -> None:
 
     async def fake(request: dict[str, Any]) -> dict[str, Any]:
         player = request["system"].startswith("You are a human player")
-        checker = request["system"] == check.SYSTEM
+        checker = request["system"].startswith(check.SYSTEM)
         seen.append(("player" if player else "check" if checker else "dm", request["model"]))
         text = "I look around the cavern." if player else '{"problems": []}' if checker else WHOLE
         return {"content": [{"type": "text", "text": text}], "stop_reason": "end_turn",
