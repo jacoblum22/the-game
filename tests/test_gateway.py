@@ -156,3 +156,27 @@ def test_a_reply_in_a_set_shape_asks_for_json_mode() -> None:
     assert body["messages"][0]["content"].startswith("Check.") and json.dumps(schema) in body["messages"][0]["content"]
     plain = gateway.to_chat({"model": "zai/glm-5.3", "max_tokens": 10, "messages": [{"role": "user", "content": "x"}]})
     assert "response_format" not in plain
+
+
+def test_a_streamed_answer_is_put_together() -> None:
+    sse = "\n".join("data: " + json.dumps(c) for c in [
+        {"id": "x", "model": "m", "choices": [{"delta": {"reasoning_content": "hmm"}}]},
+        {"choices": [{"delta": {"content": "You roll "}}]},
+        {"choices": [{"delta": {"tool_calls": [{"index": 0, "id": "t1", "function": {"name": "roll", "arguments": "{\"dice\":"}}]}}]},
+        {"choices": [{"delta": {"tool_calls": [{"index": 0, "function": {"arguments": "\"1d20\"}"}}]}, "finish_reason": "tool_calls"}]},
+        {"choices": [], "usage": {"prompt_tokens": 100, "completion_tokens": 7, "prompt_tokens_details": {"cached_tokens": 60}}}]) + "\ndata: [DONE]\n"
+    out = gateway.from_chat(gateway.assemble(sse))
+    assert out["stop_reason"] == "tool_use" and out["content"][0] == {"type": "text", "text": "You roll "}
+    assert out["content"][1]["input"] == {"dice": "1d20"} and out["content"][1]["id"] == "t1"
+    assert out["usage"] == {"input_tokens": 40, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 60, "output_tokens": 7}
+
+
+def test_send_asks_for_a_stream_and_reads_one(monkeypatch: pytest.MonkeyPatch) -> None:
+    sent: list[dict[str, Any]] = []
+
+    def post(body: dict[str, Any]) -> tuple[int, str]:
+        sent.append(body)
+        return 200, "data: " + json.dumps({"choices": [{"delta": {"content": "Hi."}, "finish_reason": "stop"}]}) + "\n\ndata: [DONE]\n"
+    monkeypatch.setattr(gateway, "_post", post)
+    out = asyncio.run(gateway.send({"model": "ali/q", "max_tokens": 5, "messages": [{"role": "user", "content": "x"}]}))
+    assert sent[0]["stream"] is True and out["content"] == [{"type": "text", "text": "Hi."}] and out["stop_reason"] == "end_turn"
