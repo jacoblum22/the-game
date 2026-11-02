@@ -1,0 +1,29 @@
+{
+ "tag": "qwen2",
+ "model": "ali/qwen3.7-plus",
+ "rounds": 20,
+ "totals": {
+  "dm": {
+   "calls": 100,
+   "input": 717522,
+   "cache_read": 2475776,
+   "cache_write": 0,
+   "output": 178847,
+   "usd": 0.5328044800000001
+  },
+  "player": {
+   "calls": 20,
+   "input": 80,
+   "cache_read": 166231,
+   "cache_write": 17815,
+   "output": 2390,
+   "usd": 0.1119431
+  }
+ },
+ "dm_calls_per_round_median": 4.0,
+ "refused": 9,
+ "failed": 1,
+ "stubs": 11,
+ "dm_usd_per_round": 0.0266,
+ "all_usd_per_round": 0.0322
+}
