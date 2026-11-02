@@ -1,0 +1,48 @@
+{
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 140.5,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1003,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "route",
+    "timeline",
+    "timeline",
+    "timeline",
+    "timeline",
+    "place"
+   ]
+  },
+  {
+   "round": 2,
+   "seconds": 65.0,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1028,
+   "tools": [
+    "place"
+   ]
+  },
+  {
+   "round": 3,
+   "seconds": 82.5,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 806,
+   "tools": [
+    "place"
+   ]
+  }
+ ]
+}

@@ -1,26 +1,328 @@
-Brakka Ironvein, Hill Dwarf fighter 1, acolyte background. Saving to C:\Users\Nelly\Documents\the-game\evals\compare\out\brakka-20261101-170522.json. /sheet shows your sheet, /back lets you go back, /quit exits.
-  [time: time set: Day 1, 5:00 PM; today is the 18th of Frost, 814]
-  [notebook: created an entry for Brakka Ironvein; added 4 relationships to Brakka Ironvein]
-  [notebook: created an entry for Greyhollow; added 3 relationships to Greyhollow]
-  [notebook: created an entry for the Temple of the Anvil Father; added 3 relationships to the Temple of the Anvil Father]
+Brakka Ironvein, Hill Dwarf fighter 1, acolyte background. Saving to C:\Users\Nelly\Documents\the-game\evals\compare\out\brakka-20261101-192638.json. /sheet shows your sheet, /back lets you go back, /quit exits.
+  [notebook: created an entry for Brakka Ironvein; added 1 relationship to Brakka Ironvein]
+  [notebook: created an entry for Greyhollow; added 2 relationships to Greyhollow]
+  [notebook: created an entry for the Reach; added 1 relationship to the Reach]
+  [notebook: created an entry for the mine; added 2 relationships to the mine]
+  [notebook: created an entry for the north workings; added 2 relationships to the north workings]
+  [notebook: created an entry for Temple of the Anvil Father; added 2 relationships to Temple of the Anvil Father]
   [notebook: created an entry for the Anvil Father; added 1 relationship to the Anvil Father]
   [notebook: created an entry for Hessa; added 2 relationships to Hessa]
-  [notebook: created an entry for the old north workings; added 3 relationships to the old north workings]
-  [notebook: created an entry for the mine mouth; added 3 relationships to the mine mouth]
-  [notebook: created an entry for the three missing miners; added 2 relationships to the three missing miners]
-  [notebook: created an entry for the fourth man; added 3 relationships to the fourth man]
+  [notebook: created an entry for the three missing miners; added 1 relationship to the three missing miners]
+  [notebook: created an entry for the fourth man; added 1 relationship to the fourth man]
   [notebook: created an entry for the town council; added 2 relationships to the town council]
-  [notebook: created an entry for the walking lights; added 1 relationship to the walking lights]
-  [notebook: created an entry for the sealing of the old north workings; added 1 relationship to the sealing of the old north workings]
-  [notebook: created an entry for the disappearance of the three miners; added 1 relationship to the disappearance of the three miners]
-  [notebook: created an entry for the death of the fourth man; added 1 relationship to the death of the fourth man]
-  [notebook: created an entry for the temple lantern; added 1 relationship to the temple lantern]
-  [notebook: created an entry for Search the old north workings; added 2 relationships to Search the old north workings]
+  [notebook: created an entry for the sealing of the north workings; added 1 relationship to the sealing of the north workings]
+  [notebook: created an entry for the disappearance of the miners; added 1 relationship to the disappearance of the miners]
+  [notebook: created an entry for the fourth man's death; added 1 relationship to the fourth man's death]
+  [time: time set: Day 1, 5:00 PM; today is the 14th of Frost, 841]
 
-The Anvil Father's people say the mountain is a forge and Greyhollow is its hearth. The town is cut into the cold flank of the peak, its houses and smithies stacked along a switchback road, and everything in it smells of coal smoke, iron dust, and snowmelt. Brakka Ironvein has kept the temple gate there for six years, an acolyte who learned to hold a sword as readily as a censer.
+Greyhollow clings to the slope of the mountains the townsfolk call the Reach, high above the tree line, where the wind never quite stops. Everything in the town lives off the mine, and the mine was good to them — until three days ago.
 
-Three days ago three miners broke the seal on the old north workings and went down, and none came back. Last night a fourth man climbed out alone, raving about lights that walked, and died before dawn. At sunrise tomorrow the town council will brick the entrance shut again, and whatever is down there will be walled in with the dark.
+Brakka Ironvein knows this spot as well as anyone. For six years he kept watch at the Temple of the Anvil Father, the god of forge and pick, and he has stood before this same tunnel on colder nights than this. But tonight is different. The old north workings, sealed a generation ago, have swallowed three miners, and last night they spat back a fourth man who babbled of lights that walk and was dead by dawn.
 
-Now the sun hangs low and cold behind the peaks. Brakka stands at the mine mouth, a borrowed temple lantern in one hand. The old timbers of the entrance lean like rotten teeth, and the chain that once barred the doors has been cut and hangs in a loop. Cold air pours up out of the dark, smelling of wet stone and old iron. Somewhere below, water drips.
+Now it is late afternoon, and the sun has already slipped behind the peaks. The mouth of the mine yawns black before him. Hessa, the old prior, pressed the temple's hooded lantern into his hand and gave him one charge: go down before sunrise, and bring back whoever can still be brought back. At dawn the council means to brick this entrance shut, missing miners or not.
 
-What do you do?
+The lantern hangs unlit from his fist. The tunnel mouth waits.
+
+
+>>>>>> round 1, the player: I check my gear first: shield strapped tight, sword loose in its scabbard. Then I light Hessa's lantern and step into the tunnel, keeping an eye out for fresh boot prints or dropped tools near the entrance, anything that shows where the three miners went.
+
+  [dice Brakka's Wisdom (Perception) check to spot tracks and signs near the mine entrance: 1d20+4 = 1d20 [7] + 4 = 11]
+  [time: 5 minutes later: Day 1, 5:05 PM; timer Hooded lantern (borrowed): 6 hours]
+
+He straps the shield tight, eases the sword in its scabbard, and works the lantern's shutter open. A spark from the tinderbox catches the wick, and warm light spills down the tunnel: a broad, timber-framed gallery running straight into the mountain, rusted rails for the ore carts set into the floor. The place smells of cold stone and old coal dust.
+
+The floor near the mouth is a churn of footprints, trampled flat by the search parties who have been in and out for three days, and he cannot pick the three miners' boots out of that crowd. Farther in, though, where the trampling thins, one set of prints shows clearer than the rest: a single man's boots, scuffed and uneven, the strides sometimes long, sometimes dragging, leading back toward the entrance — the fourth man's last walk up out of the dark.
+
+Beyond the reach of the light, the gallery runs on into blackness and splits.
+
+
+>>>>>> round 2, the player: I follow the fourth man's trail backward into the mine, holding the lantern high and my shield ready, watching for any blood or dropped gear along the way. When I reach the split, I'll check which branch his prints come from.
+
+  [dice Brakka's Wisdom (Perception) check for blood, dropped gear or signs along the fourth man's trail: 1d20+4 = 1d20 [14] + 4 = 18]
+  [time: 10 minutes later: Day 1, 5:15 PM]
+
+Lantern held high, shield ready, he walks backward down the fourth man's trail, away from the mouth. The gallery slopes gently downward, its timber props leaning with age, and the clean print of one boot after another leads him on.
+
+It does not take long to see the man did not come up whole. Dark drops lie on the stone floor, dried to black — scattered at first, then more steadily — and there is a handprint smeared on the wall at shoulder height, where he paused to lean. A little farther on, a miner's pick lies where it was dropped, its haft smeared dark.
+
+The trail carries him to the split. The right-hand branch climbs slightly, its rails bright with use: the active workings. The left-hand branch runs level a way and then down into older, darker timbers, and it is from there that the bloody boot prints come, one dragging stride after another.
+
+
+>>>>>> round 3, the player: I pick up the bloodied pick to look it over for anything odd, then take the left branch, following the prints deeper into the older timbers. I keep the lantern high and my shield ready, and I'll stop to listen every few dozen paces.
+
+  [dice Brakka's Wisdom (Perception) check, listening as he follows the trail deeper into the old workings: 1d20+4 = 1d20 [13] + 4 = 17]
+  [sheet: gained 1 × Miner's pick]
+  [notebook: added 1 relationship to the north workings]
+  [time: 15 minutes later: Day 1, 5:30 PM]
+
+The pick is plain iron and ash, its head worn smooth by years of work. The dark smear is blood, dried and flaking, left where a torn hand last gripped it — the same hand as the print on the wall. Nothing else is odd about it.
+
+He takes the left branch and follows the prints down. The timbers grow older and more crooked, the rails long rusted away to red powder, and the air turns cold and stale, with no movement in it but his own. Each time he halts to listen, the silence closes in around him, heavy as water. Once or twice he catches something: far ahead, faint and irregular, a dry scrape, like something heavy dragged over stone — and then it stops, as if whatever makes it is listening too.
+
+The tunnel ends at a wall of fitted stone and squared timber: the old seal across the north workings. It has been broken open, a rough hole knocked through near the floor, its edges snapped inward. The bloody boot prints pass straight through it into the dark.
+
+
+>>>>>> round 4, the player: I crouch at the hole and check how the seal was broken: were the timbers smashed from outside or pushed from within? I'll shutter the lantern halfway, listen a moment, then squeeze through shield first with my sword drawn.
+
+  [dice Brakka's Intelligence (History) check with Stonecunning to read how the seal was breached: 1d20+3 = 1d20 [19] + 3 = 22]
+  [dice Brakka's Wisdom (Perception) check, listening at the breach: 1d20+4 = 1d20 [20] + 4 = 24 (natural 20)]
+  [notebook: created an entry for Bring back the miners; added 3 relationships to Bring back the miners]
+  [notebook: added 1 relationship to the north workings]
+  [time: 5 minutes later: Day 1, 5:35 PM]
+
+Kneeling at the hole, he reads the break the way he would read a cracked seam in stone. The seal was not smashed from this side. The splinters of timber and the chips of stone lie scattered on the mine side of the wall, and the fractures in the blocks run from the workings outward. Whatever opened this hole came through from within — and the break is fresh, the raw wood pale and the stone dust still bright, no more than a few days old.
+
+He lowers the lantern's hood until only a dim circle of light clings to his feet, and holds still. In the silence he hears it plainly now: the scrape, a dragging rhythm somewhere far down the workings — and beneath it a thread of sound that makes his breath catch. A man's voice, low and hoarse, too far off for the words, rising and falling like someone muttering to himself. It comes from ahead and to the left.
+
+Then he works himself through the hole, shield first, sword already drawn, and comes up on the far side into air that is cold and old and still, into a darkness that drinks the little light.
+
+
+>>>>>> round 5, the player: I stay low and still just inside the breach, let my eyes adjust, then open the lantern shutter a crack to see what lies around me. If the way is clear, I creep toward that muttering voice, ahead and to the left, keeping my shield up and my steps quiet.
+
+  [dice Brakka's Dexterity (Stealth) check, creeping through the old workings (disadvantage from chain mail): 1d20 (disadvantage) = 1d20 [20, 19]→19 = 19]
+  [time: 5 minutes later: Day 1, 5:40 PM]
+
+On the far side, the old workings open into a low, broad gallery. His dwarf eyes, long at home in the dark, pick out the shapes even before the lantern: squared timbers leaning like tired old men, a rusted ore cart tipped on its side, a thick drift of black dust that has lain undisturbed for a generation. The lantern's cracked shutter throws only a thin sliver of light ahead of him.
+
+He moves quietly, the mail muffled under his steady tread, shield up, sword ready, and follows the voice. Step by step it resolves out of the dark — a man's voice, cracked and dry, repeating the same words over and over like a man too tired to stop talking: "...don't follow the light... don't follow the light..."
+
+And then, at the far end of the gallery where it bends, he sees it. A pale light, greenish-white and cold, drifting slowly in the air — no lamp, no flame, just a hovering glow that bobs a little as it moves. The voice comes from somewhere just beyond it.
+
+
+>>>>>> round 6, the player: I stop and stay in the shadow of a leaning timber, shutter the lantern fully, and watch the light for a moment to see how it moves and whether it is drawn to anything. Then I whisper toward the voice, low and steady: "Friend, I'm from Greyhollow, sent by Prior Hessa. Are you one of the miners?" I keep my shield up and don't step toward the light.
+
+  [notebook: created an entry for Durn Rask; added 2 relationships to Durn Rask]
+  [notebook: created an entry for the walking light; added 2 relationships to the walking light]
+  [notebook: added 1 relationship to the three missing miners]
+  [time: 2 minutes later: Day 1, 5:42 PM]
+
+He shuts the lantern down to nothing and lets the dark take him. His dwarf eyes make the gallery out in gray, and against it the pale light stands out like a cold star. He watches it a long moment: it does not drift aimlessly. It circles, slow and patient as a fish, around something just past the bend — bobbing, dimming, brightening again — and it pays his stillness no mind. It is not drawn to him. It is waiting on something.
+
+His whisper goes out into the silence. The muttering stops. For a heartbeat there is nothing, and then a voice comes back, hoarse and cracked and almost disbelieving.
+
+"Greyhollow? Hessa sent you?" A wet cough. "Anvil Father be praised. Name's Durn. Durn Rask. There were three of us." Another cough, and something like a sob pushed down. "The others are gone — it led them off, one by one, down the old drift. Don't follow it, friend, whatever it shows you. It's been circling me three days, waiting."
+
+As Durn speaks, the light goes still. Then it drifts a little way toward the sound of Brakka's voice, brightening as it comes, and stops just short of the bend, hovering there like it is listening.
+
+
+>>>>>> round 7, the player: "Easy, Durn. I'm Brakka Ironvein, and I'm coming to get you out. Can you walk, and is there anything between you and me besides that light?" I keep my shield up and my eyes off the glow, watching the floor and Durn's voice instead, and I wait for his answer before I move.
+
+  [notebook: created an entry for Arris; added 2 relationships to Arris]
+  [notebook: created an entry for Keld; added 2 relationships to Keld]
+  [notebook: created an entry for the old winze; added 2 relationships to the old winze]
+  [time: 1 minute later: Day 1, 5:43 PM]
+
+"Easy, Durn." The words seem to steady the man on the other side of the bend. There is a shaky breath, then he answers.
+
+"Can't walk," Durn says at last. "Left leg's broke. That light showed us a seam — silver, bright as running water — down a drift that weren't on any map. The floor gave way under Arris. I went for him, and it gave way under me too." He stops to breathe, ragged. "There's a hole past this bend, a straight drop — the old winze. Arris and Keld are at the bottom of it. I caught a timber and dragged myself back here." Another breath. "So between you and me, friend: that light, and the edge of the hole. Don't trust the floor, and don't watch the light. It shows you things you want."
+
+At the bend, the pale glow still hangs, motionless now, brightening and dimming like slow breathing, waiting to see which way this goes.
+
+
+>>>>>> round 8, the player: "Understood, Durn. Are Arris and Keld alive down there, did you hear them after the fall?" While I wait, I crouch and test the floor ahead with the butt of the miner's pick, keeping my eyes on the stone and off the light, and I look for a safe path along the wall toward him.
+
+  [dice Brakka's Wisdom (Survival) check to find a safe path along the wall toward Durn, testing the floor: 1d20+2 = 1d20 [8] + 2 = 10]
+  [time: 1 minute later: Day 1, 5:44 PM]
+
+"I called down till I had no voice left," Durn says quietly. "There was a moan, once, right after — then nothing. That's three days gone. No man lives at the bottom of a winze that long. Arris and Keld are gone."
+
+The pick rings dull against the center of the floor — hollow, ready to go. Near the bend the floor is already gone, a ragged black mouth in the stone where the old winze drops away out of sight. Along the left wall the stone sounds truer under the pick, and the timber props stand closer together there, but the wood is old and powder-white, and Brakka cannot be certain it will bear his weight in mail. It is the only way forward, though: the hole spans the middle of the gallery, and Durn lies against the far wall, just past the bend, on the other side of it.
+
+Over the mouth of the winze the pale light hangs, patient as ever, brightening and dimming like slow breath.
+
+
+>>>>>> round 9, the player: "I'm sorry about Arris and Keld, Durn. Hold on, I'm coming to you." I take the lantern off my belt and loop the rope or strap if I have one around the sturdiest timber prop for a tether; if not, I test each prop with the pick before I trust it, then ease along the left wall one step at a time with my shield on my back and my free hand on the stone, eyes never on the light.
+
+  [dice Brakka's Dexterity (Acrobatics) check, edging along the weakened floor to Durn: 1d20 = 1d20 [7] = 7]
+
+The tether is set — the rope looped around the stoutest of the old timbers and drawn snug. He shrugs the shield onto his back, sets his free hand to the cold stone, and steps out along the wall, keeping his eyes on the rock and the floor and anything at all but the light.
+
+He has gone perhaps ten careful paces when the floor lies to him. A timber groans, the stone under his foot crumbles like old biscuit, and the world drops out from beneath him. The rope snaps taut with a violence that slams him into the wall and drives the breath from his chest. He hangs, spinning slowly, over the black mouth of the winze, the rope biting the prop above him.
+
+"Brakka!" Durn's voice cracks out of the dark. "Brakka, you still there?"
+
+And the light comes drifting toward him. It swells as it nears, until the whole shaft is full of that cold greenish glow, and then it stops just out of arm's reach, hanging there, watching him dangle — bright and patient and terribly interested.
+
+
+>>>>>> round 10, the player: "Still here, Durn! Don't talk, just hold tight." I squeeze my eyes shut against the glow, grab the rope with both hands, and start hauling myself up hand over hand, pressing my boots against the wall to climb back toward the timber prop.
+
+  [dice Brakka's Strength (Athletics) check to haul himself up the rope: 1d20+4 = 1d20 [18] + 4 = 22]
+  [sheet: AC now 16 (shield slung on back)]
+  [notebook: added 1 relationship to the walking light]
+  [time: 1 minute later: Day 1, 5:45 PM]
+
+He keeps his eyes shut tight against the glow, takes the rope in both hands, and hauls. Hand over hand, boots braced against the stone, the mail dragging at his shoulders — but he is a dwarf, and the rock is his, and he climbs. As he rises, a voice comes out of the shaft below him, thin and far and wrong: "Brakka... help me... I'm still down here... don't leave me like the others..."
+
+It sounds like a man. It sounds like it might once have been Keld, or Arris. But it is too calm for a dying man, and too patient, and it keeps time with the light that presses at his closed eyes.
+
+He pulls himself over the lip and onto solid stone, back beside the timber prop, breathing hard. The voice falls silent. The light drifts back from him, hanging over the mouth of the winze, between him and Durn.
+
+"Brakka." Durn's own voice, cracked and urgent, from the far side. "That weren't my voice. Don't listen to it."
+
+
+>>>>>> round 11, the player: "I know, Durn. That wasn't a man down there." I stay low against the wall, eyes on the stone, and call out, "Is there another way around the winze, or a timber or beam long enough to bridge it? Otherwise I'll cross with the rope, testing every step."
+
+  [time: 1 minute later: Day 1, 5:46 PM]
+
+"No way around," Durn calls back. "This drift dead-ends behind me — solid rock. We followed that light into a blind pocket, and then the floor went out from under us." He coughs, then goes on. "The floor's gone clean across the gallery, all but a ledge against the wall where I'm lying — a yard wide at most, but it's sound stone. Runs back to the bend. And there's a roof beam come down, long enough to span the hole at its narrowest — but it's old, half-eaten with rot. I won't swear it'd hold a dwarf in mail."
+
+The pale light still hangs over the mouth of the winze, between them, brightening and dimming in its slow rhythm, as patient as a thing with all the time in the world.
+
+
+>>>>>> round 12, the player: "Thanks, Durn. I'll try the beam, but not in full mail and not without the rope." I shrug off my shield and pack, tie the rope firmly around my waist with the other end still anchored to the timber prop, and test the fallen beam with the pick before I put any weight on it, keeping my eyes on the wood and never on the light.
+
+  [dice Brakka's Wisdom (Survival) check, probing the fallen roof beam for rot before trusting it: 1d20+2 = 1d20 [20] + 2 = 22 (natural 20)]
+  [time: 2 minutes later: Day 1, 5:48 PM]
+  [notebook: added 1 relationship to the old winze]
+
+He shrugs off the shield and the pack and sets them against the wall, ties the rope snug about his waist, and goes to the fallen beam, tapping it with the pick the way a man sounds a cracked stone.
+
+The pick tells him the truth in the same breath Durn warned it might: the beam is rotten through the middle, a soft, mealy core beneath a sound-looking rind. Put his weight on it and it would have folded and dropped him into the shaft. He leaves it lie.
+
+But the sounding does him a second service. Working along the lip of the winze with his eyes on the stone, he finds the shaft's mouth narrows sharply at the bend itself — a gap of barely five feet, where the floor still bears the old pick-marks and rings solid under his probe. A dwarf could clear that at a bound, even in mail.
+
+And there, as his lantern-light slides down the shaft's wall, he sees it: a glint, cold and clean, not the green of the wisp but the honest white of metal — silver, running in a seam down the rock. The light showed the miners no lie. It showed them a true thing, and used it to walk them to the edge.
+
+
+>>>>>> round 13, the player: "Durn, the beam's rotten through, so I'm leaving it. The hole narrows to about five feet at the bend, and I can jump that with the rope on me." I back up for a short run, keep my eyes on the stone at the far lip and never on the light, and leap the gap.
+
+  [dice Brakka's initiative: 1d20+0 = 1d20 [11] + 0 = 11]
+  [dice the walking light's initiative: 1d20+9 = 1d20 [17] + 9 = 26]
+  [fight: Fight started. Order: the walking light (26), Brakka Ironvein (11). Nobody has had a turn yet: next_turn starts the first one.]
+  [fight: Round 1, now: the walking light. the walking light (initiative 26): HP 22/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [11] + 4 = 15]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+Braced against the solid stone, he takes two quick steps and leaps. Five feet is nothing to a dwarf with a run at it; he clears the gap and lands square on the far ledge, near enough now to make out Durn's huddled shape against the wall.
+
+But the light does not wait. It blazes up — a cold, furious white-green that fills the whole gallery — and comes at him with a sound like a gale through old timbers. A bolt of lightning cracks out of it, bright and deafening, and passes so close the hair stands on his arms; it smashes into the stone at his side, and the smell of scorched rock rolls over him.
+
+The thing hangs in the air before him now, not three feet off, its light roiling. Behind him, Durn lets out a strangled cry.
+  [conversation shortened: the DM's summary of turns 0 to 8, then turns 9 to 13]
+
+
+>>>>>> round 14, the player: I'm on the ledge with my shield still against the wall back across the gap, so I fight with what I have. I plant myself between Durn and the light, squint to keep from staring into the glow, and swing my sword at it. "Stay behind me, Durn!"
+
+  [fight: Round 1, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [8] + 4 = 12]
+  [fight: Brakka Ironvein's Longsword at the walking light: a miss]
+  [fight: Round 2, now: the walking light. the walking light (initiative 26): HP 22/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [6] + 4 = 10]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+Brakka sets himself between the light and the huddled miner and swings, squinting against the glare. The blade cuts a clean arc — and passes through the thing as if through standing water, meeting a queer cold resistance and no flesh at all. The light ripples around the steel, unbothered, and its glow flares to answer him.
+
+Another bolt of lightning cracks out of it, close enough to make the dark leap, and smashes into the stone beyond him. The gallery stinks of scorched rock. The thing hangs before him, patient and furious at once, its light seething.
+
+Durn's breath rasps behind him. "It won't bleed, Brakka! It ain't a body — it's a light what feeds!"
+
+The thing drifts a half-step back, its glow brightening and dimming, watching him over the black mouth of the winze.
+
+
+>>>>>> round 15, the player: "Then I'll hit it harder, Durn!" I step in and swing again, aiming right at the heart of the glow, and if I have Second Wind or Action Surge to spare, I'll use them when I need them. "Keep your head down!"
+
+  [fight: Round 2, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [18] + 4 = 22]
+  [dice Brakka Ironvein's Longsword at the walking light: damage (slashing): 1d8+4 = 1d8 [3] + 4 = 7]
+  [fight: the walking light is resistant to slashing: 7 -> 3]
+  [fight: the walking light took 3: HP 22 → 19]
+  [fight: Round 3, now: the walking light. the walking light (initiative 26): HP 19/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [4] + 4 = 8]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+This time the blade bites. Brakka drives the steel into the very heart of the glow and feels it catch on something that is not air — a cold, yielding resistance, like striking a pillar of frost. The light shrieks, a sound like wind keening through a crack in the rock, and recoils from him, its glow stuttering and dimming to a sickly green for a heartbeat before flaring back, angrier.
+
+It answers with another bolt, but the stroke is wild; lightning shatters stone a yard wide of him, and the thing sways in the air, its light no longer so steady.
+
+"It felt that!" Durn croaks. "Whatever it is, it felt that, Brakka!"
+
+The light hangs before him over the black mouth of the winze, roiling, and for the first time it seems to hesitate — drawn back a little, as if weighing the dwarf's steel against its hunger.
+
+
+>>>>>> round 16, the player: "Keep talking to me, Durn, it's hurting! Let's finish it." I press in and swing at the heart of the glow again, keeping my squint and my feet on the sound stone of the ledge, and I use Action Surge for a second strike if it's still up.
+
+  [fight: Round 3, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [8] + 4 = 12]
+  [fight: Brakka Ironvein's Longsword at the walking light: a miss]
+  [fight: Round 4, now: the walking light. the walking light (initiative 26): HP 19/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [19] + 4 = 23]
+  [dice the walking light's Shock at Brakka Ironvein: damage (lightning): 2d8 = 2d8 [2, 6] = 8]
+  [sheet: took 8 damage: HP 14 → 6]
+
+Brakka's stroke goes wide — the light flits aside faster than the steel can follow — and in the same breath it lunges.
+
+The bolt takes him full in the chest. It is not a burn so much as a blow; it slams through the mail like a hammer of white fire, and the world whites out for a heartbeat. His teeth snap together, the taste of copper floods his mouth, and he staggers back a step, boots scraping on the very lip of the winze. Smoke curls from the scorched rings of his mail. His heart hammers against his ribs as if trying to break free.
+
+The light hangs over him, blazing now, feeding on his hurt. Behind him, Durn shouts something he cannot make out past the ringing in his ears.
+
+Brakka's grip on the sword is white-knuckled. He can feel the cold of the shaft at his heels, and the thing is rising to strike again.
+
+
+>>>>>> round 17, the player: I'm at 6 HP, so I use Second Wind first to get some steel back in me, then step forward off the lip of the winze and swing at the heart of the glow. If it's still standing after that, I'll Action Surge for another strike and finish it. "Not today, you cold thing!"
+
+  [sheet: dice Brakka's Second Wind healing: 1d10+1 = 1d10 [2] + 1 = 3; healed 3: HP 6 → 9; Second Wind: 0/1 (the walking light has used its bonus action: no more bonus actions this turn.)]
+  [fight: Round 4, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [6] + 4 = 10]
+  [fight: Brakka Ironvein's Longsword at the walking light: a miss]
+  [fight: Round 5, now: the walking light. the walking light (initiative 26): HP 19/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [12] + 4 = 16]
+  [dice the walking light's Shock at Brakka Ironvein: damage (lightning): 2d8 = 2d8 [1, 1] = 2]
+  [sheet: took 2 damage: HP 9 → 7]
+
+Brakka plants his feet and swings, but the light dances aside again — it is terribly quick, and his steel finds only cold air where the thing's heart should be. It answers with a bolt, but the stroke is weak, a pale crackle that skitters across his scorched mail and stings rather than slams. He shakes it off and keeps his feet.
+
+The thing hangs over the lip of the shaft, its light pulsing like something breathing. It has drawn back a little now, and the gallery is full of the smell of burnt air and old stone.
+
+One thing, Brakka: Action Surge is not yet yours — that surge of fury is learned by fighters with more years of hard training than you have behind you. For now it is one stroke at a time, and the light is quick.
+
+"Brakka!" Durn's voice, hoarse with fear. "It's tiring! Look at it — it's tiring, I swear it!"
+
+
+>>>>>> round 18, the player: "I hear you, Durn, one stroke at a time then." I keep my squint, hold my ground on the sound ledge, and swing at the heart of the glow again. "Stay low and keep talking to me!"
+
+  [fight: Round 5, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [15] + 4 = 19]
+  [dice Brakka Ironvein's Longsword at the walking light: damage (slashing): 1d8+4 = 1d8 [7] + 4 = 11]
+  [fight: the walking light is resistant to slashing: 11 -> 5]
+  [fight: the walking light took 5: HP 19 → 14]
+  [fight: Round 6, now: the walking light. the walking light (initiative 26): HP 14/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [5] + 4 = 9]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+The stroke lands true. Brakka drives the blade through the heart of the glow and feels that cold resistance give way, like splitting a frozen log. The light recoils with a shriek that sets the timbers humming, its glow guttering from white-green to a thin, sickly ember — and for one long moment the thing hangs there, small and shrunk and plainly hurt.
+
+It lashes out in answer, but the bolt goes wide, shattering stone high on the wall and showering dust down over them. The thing is drifting now, not so steady in the air, its light sputtering like a lamp running low on oil.
+
+"It's weakening!" Durn crows from behind him. "By the Father's anvil, Brakka, it's weakening — press it, dwarf, press it now!"
+
+
+>>>>>> round 19, the player: "Right, Durn, here it comes!" I step in and swing hard at the heart of that guttering glow, keeping my squint and my feet on the sound stone. "Go out, you cold thing!"
+
+  [fight: Round 6, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [2] + 4 = 6]
+  [fight: Brakka Ironvein's Longsword at the walking light: a miss]
+  [fight: Round 7, now: the walking light. the walking light (initiative 26): HP 14/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [10] + 4 = 14]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+The swing goes wide — the light flits sideways at the last instant, and Brakka's blade rings off the stone of the wall, jarring his arm to the shoulder. In the same breath the thing spits a bolt, but it too goes astray, crackling past him and dying against the far timbers in a shower of sparks.
+
+The light sways in the air before him, guttering low and then flaring, low and then flaring, like a failing heart. It is wounded now, its radiance thin, but it has not gone out, and its patience — that terrible patience — has curdled into something like hate.
+
+It hangs there over the black mouth of the winze, and waits for him to move.
+
+
+>>>>>> round 20, the player: "Not done yet, Durn." I keep my squint, hold the sound ledge, and swing at the heart of the guttering glow again. "Come on, you cold thing, burn out!"
+
+  [fight: Round 7, now: Brakka Ironvein. Brakka Ironvein's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice Brakka Ironvein's Longsword at the walking light (AC 19): 1d20+4 = 1d20 [13] + 4 = 17]
+  [fight: Brakka Ironvein's Longsword at the walking light: a miss]
+  [fight: Round 8, now: the walking light. the walking light (initiative 26): HP 14/22, AC 19 the walking light's turn: one action, one bonus action if a feature or spell gives one, its movement, one free object interaction; its reaction is back.]
+  [dice the walking light's Shock at Brakka Ironvein (AC 16): 1d20+4 = 1d20 [7] + 4 = 11]
+  [fight: the walking light's Shock at Brakka Ironvein: a miss]
+
+The blade passes so close it shears a thread of light from the thing's edge — the glow ripples and flinches, and for a heartbeat Brakka is sure he has it — but the stroke comes up just short, and the light reforms a handspan beyond the steel.
+
+Its answer is wild, a bolt that cracks into the floor at his feet and sends chips of stone skipping past his ankles. The thing is frantic now, its light boiling and thinning by turns, and still it will not break.
+
+Brakka's breath rasps in his throat. His arms are heavy with the mail, and the thing hangs there, fast as a thought, wearing him down one heartbeat at a time.
