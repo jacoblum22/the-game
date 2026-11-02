@@ -1,0 +1,21 @@
+{
+ "tag": "dsoff",
+ "model": "ds/deepseek-v4-pro",
+ "rounds": 0,
+ "totals": {
+  "dm": {
+   "calls": 5,
+   "input": 1541,
+   "cache_read": 125440,
+   "cache_write": 0,
+   "output": 14259,
+   "usd": 0.013530384999999999
+  }
+ },
+ "dm_calls_per_round_median": 0,
+ "refused": 0,
+ "failed": 0,
+ "stubs": 0,
+ "dm_usd_per_round": 0.0135,
+ "all_usd_per_round": 0.0135
+}

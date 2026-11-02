@@ -1,0 +1,2 @@
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 45.1, "usage": {"input_tokens": 15327, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 0, "output_tokens": 4953}, "stop": "tool_use"}
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 5.6, "usage": {"input_tokens": 529, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 20224, "output_tokens": 323}, "stop": "tool_use"}

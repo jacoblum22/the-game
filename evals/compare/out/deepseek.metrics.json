@@ -1,0 +1,21 @@
+{
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 294.3,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 1,
+   "reply_chars": 966,
+   "tools": [
+    "lookup",
+    "lookup",
+    "lookup",
+    "lookup",
+    "place",
+    "place"
+   ]
+  }
+ ]
+}

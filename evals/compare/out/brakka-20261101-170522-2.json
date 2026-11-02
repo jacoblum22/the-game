@@ -1,0 +1,197 @@
+{
+ "sheet": {
+  "name": "Brakka Ironvein",
+  "summary": "Hill Dwarf fighter 1, acolyte background",
+  "opening": "Brakka Ironvein served six years as a guard at the Temple of the Anvil Father in Greyhollow, a mining town cut into a cold mountainside. Three days ago three miners went down into the old north workings, which were sealed a generation ago, and none came back. Last night a fourth man came up out of the dark alone, babbling about lights that walk, then died before dawn. The town council will brick up the mine entrance at sunrise tomorrow, missing miners or not. The temple's prior, an old dwarf named Hessa, has asked Brakka to go down before then and bring back whoever can still be brought back. It is late afternoon, and Brakka stands at the mine mouth with a lantern borrowed from the temple.",
+  "level": 1,
+  "race": "Hill Dwarf",
+  "class": "Fighter",
+  "subclass": null,
+  "background": "Acolyte",
+  "alignment": "",
+  "personality": "",
+  "appearance": "",
+  "ac": 18,
+  "ac_note": "Chain Mail 16 + shield 2; disadvantage on Stealth",
+  "ac_now": null,
+  "speed": "25 ft",
+  "size": "Medium",
+  "scores": {
+   "STR": 15,
+   "DEX": 10,
+   "CON": 16,
+   "INT": 8,
+   "WIS": 14,
+   "CHA": 12
+  },
+  "abilities": {
+   "STR": "15 (+2)",
+   "DEX": "10 (+0)",
+   "CON": "16 (+3)",
+   "INT": "8 (-1)",
+   "WIS": "14 (+2)",
+   "CHA": "12 (+1)"
+  },
+  "proficiency_bonus": 2,
+  "saving_throws": "STR +4*, DEX +0, CON +5*, INT -1, WIS +2, CHA +1 (* proficient)",
+  "skills": "Acrobatics +0, Animal Handling +2, Arcana -1, Athletics +4*, Deception +1, History -1, Insight +4*, Intimidation +1, Investigation -1, Medicine +2, Nature -1, Perception +4*, Performance +1, Persuasion +1, Religion +1*, Sleight of Hand +0, Stealth +0, Survival +2 (* proficient, ** expertise)",
+  "passive_perception": 14,
+  "senses": "darkvision 60 ft",
+  "languages": "Common, Dwarvish, Giant, Goblin",
+  "proficiencies": "All armor, Battleaxes, Handaxes, Light hammers, Martial Weapons, Shields, Simple Weapons, Smith's Tools, Warhammers",
+  "attacks": [
+   "Longsword: +4 to hit, 1d8+4 slashing (Dueling +2 included: one-handed, no other weapon); 1d10+2 two-handed (versatile)",
+   "Crossbow, light: +2 to hit, 1d8 piercing; range 80/320 (ammunition, loading, two-handed)",
+   "Unarmed strike: +4 to hit, 3 bludgeoning"
+  ],
+  "features": [
+   "Darkvision: You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You cannot discern color in darkness, only shades of gray.",
+   "Dwarven Resilience: You have advantage on saving throws against poison, and you have resistance against poison damage.",
+   "Stonecunning: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+   "Dwarven Combat Training: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+   "Tool Proficiency: You gain proficiency with the artisan's tools of your choice: smith's tools, brewer's supplies, or mason's tools.",
+   "Dwarven Toughness: Your hit point maximum increases by 1, and it increases by 1 every time you gain a level.",
+   "Fighting Style: You adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again. CHOSEN: Fighting Style: Dueling.",
+   "Second Wind: You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level. Once you use this feature, you must finish a short or long rest before you can use it again.",
+   "Fighting Style: Dueling: When you are wielding a melee weapon in one hand and no other weapons, you gain a +2 bonus to damage rolls with that weapon.",
+   "Shelter of the Faithful (Acolyte): As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle. You might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple."
+  ],
+  "hp": {
+   "max": 14,
+   "current": 14,
+   "temp": 0
+  },
+  "hit_dice": {
+   "die": "d10",
+   "max": 1,
+   "left": 1
+  },
+  "resources": {
+   "Second Wind": {
+    "max": 1,
+    "left": 1,
+    "recharge": "short"
+   }
+  },
+  "conditions": [],
+  "death_saves": {
+   "successes": 0,
+   "failures": 0
+  },
+  "xp": 0,
+  "coins_cp": 1500,
+  "items": {
+   "Chain Mail": 1,
+   "Longsword": 1,
+   "Shield": 1,
+   "Crossbow, light": 1,
+   "Crossbow bolts": 20,
+   "Backpack": 1,
+   "Bedroll": 1,
+   "Mess kit": 1,
+   "Tinderbox": 1,
+   "Torch": 10,
+   "Rations (1 day)": 10,
+   "Waterskin": 1,
+   "Hempen rope (50 ft)": 1,
+   "Holy symbol of the Anvil Father": 1,
+   "Prayer book": 1,
+   "Stick of incense": 5,
+   "Vestments": 1,
+   "Common clothes": 1,
+   "Belt pouch": 1,
+   "Hooded lantern (borrowed)": 1
+  },
+  "build": {
+   "choices": {
+    "name": "Brakka Ironvein",
+    "race": "dwarf",
+    "class": "fighter",
+    "ability_method": "standard_array",
+    "base_scores": {
+     "STR": 15,
+     "DEX": 10,
+     "CON": 14,
+     "INT": 8,
+     "WIS": 13,
+     "CHA": 12
+    },
+    "choices": {
+     "trait.tool-proficiency": [
+      "Smith's Tools"
+     ],
+     "class.proficiencies.1": [
+      "Athletics",
+      "Perception"
+     ],
+     "feature.fighter-fighting-style": [
+      "Dueling"
+     ],
+     "class.equipment.1": [
+      "a"
+     ],
+     "class.equipment.2": [
+      {
+       "option": "a",
+       "picks": [
+        "Longsword"
+       ]
+      }
+     ],
+     "class.equipment.3": [
+      "a"
+     ],
+     "class.equipment.4": [
+      "b"
+     ],
+     "background.languages": [
+      "Giant",
+      "Goblin"
+     ],
+     "background.equipment.1": [
+      "Amulet"
+     ],
+     "background.equipment.prayer": [
+      "Prayer book"
+     ]
+    }
+   },
+   "rolled": null,
+   "levels": []
+  }
+ },
+ "companions": [],
+ "fight": null,
+ "clock": {
+  "now": null,
+  "timers": {}
+ },
+ "model": "ds/deepseek-v4-pro-none",
+ "transcript": [
+  {
+   "kind": "failed",
+   "text": "503: Structurally heavy chat request capacity is busy; retry shortly."
+  }
+ ],
+ "lore": {
+  "entries": {},
+  "relationships": [],
+  "next_id": 1,
+  "shown": {}
+ },
+ "backend": "api",
+ "story": [],
+ "snapshots": [],
+ "past_pcs": [],
+ "messages": [
+  {
+   "role": "user",
+   "content": [
+    {
+     "type": "text",
+     "text": "[Status now]\nTime: not set (set it with change_time)\nHP 14/14 · AC 18 · hit dice 1/1 d10 · XP 0/300\nFeatures: Second Wind 1/1 (short rest)\nConditions: none\nMoney: 15 gp\nItems: Chain Mail, Longsword, Shield, Crossbow, light, Crossbow bolts ×20, Backpack, Bedroll, Mess kit, Tinderbox, Torch ×10, Rations (1 day) ×10, Waterskin, Hempen rope (50 ft), Holy symbol of the Anvil Father, Prayer book, Stick of incense ×5, Vestments, Common clothes, Belt pouch, Hooded lantern (borrowed)\nNo fight is on.\n\n[Turn 0]\nRecord new names and facts in your notebook with write_lore as you say them (hidden from the player); look things up with lore and recall before you state something you said earlier.\n\n[Rules] Follow the SRD rules to the letter, every step of every procedure. Never go from memory: before you use a spell (cantrips too), a creature's stat block, a condition, a feature, a trait or a rules section, its exact SRD text must already be in this conversation from a lookup. If it isn't, look it up first. Rolls and lookups first; then one last message of calls together: `reply` with your whole reply, and the clock, notebook and sheet calls that record it.\n\n[Start] Begin the session. Begin with a short introduction before the first scene: a few sentences on the world and region, who the character is and how they came to be here. Keep the past exactly as it was settled. Introduce anything new to the player as new, saying what it is before treating it as known, so it can't be taken for something from the past. Then open the scene and ask what Brakka does."
+    }
+   ]
+  }
+ ]
+}

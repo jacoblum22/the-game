@@ -1,0 +1,5 @@
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 77.5, "usage": {"input_tokens": 46, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 15360, "output_tokens": 8691}, "stop": "tool_use"}
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 26.4, "usage": {"input_tokens": 883, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 24064, "output_tokens": 2875}, "stop": "tool_use"}
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 10.9, "usage": {"input_tokens": 254, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 27776, "output_tokens": 830}, "stop": "tool_use"}
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 6.9, "usage": {"input_tokens": 97, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 28800, "output_tokens": 561}, "stop": "tool_use"}
+{"role": "dm", "model": "ds/deepseek-v4-pro", "seconds": 16.7, "usage": {"input_tokens": 261, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 29440, "output_tokens": 1302}, "stop": "tool_use"}

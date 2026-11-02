@@ -1,0 +1,21 @@
+{
+ "tag": "dslow",
+ "model": "ds/deepseek-v4-pro-low",
+ "rounds": 0,
+ "totals": {
+  "dm": {
+   "calls": 1,
+   "input": 46,
+   "cache_read": 15360,
+   "cache_write": 0,
+   "output": 16033,
+   "usd": 0.0
+  }
+ },
+ "dm_calls_per_round_median": 0,
+ "refused": 0,
+ "failed": 0,
+ "stubs": 0,
+ "dm_usd_per_round": 0.0,
+ "all_usd_per_round": 0.0
+}
