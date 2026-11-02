@@ -8,6 +8,7 @@ keeps its conversation as Anthropic messages.
     DM_GATEWAY_URL     the gateway's /v1 address (default http://localhost:20128/v1, OmniRoute's)
     DM_GATEWAY_KEY     the gateway's API key (sent as a Bearer token)
     DM_GATEWAY_PARAMS  optional JSON merged into each request body, for a provider's own switches
+    DM_GATEWAY_CHECK_PARAMS  the same, merged on top for the continuity checker's requests only
                        (for example {"reasoning_effort": "medium"}); none are sent by default
 
 Left out on the way: `thinking`, `output_config` and `cache_control` (Anthropic's own), and the model's thinking blocks in
@@ -84,6 +85,8 @@ def to_chat(request: dict[str, Any]) -> dict[str, Any]:
             msgs.insert(0, {"role": "system", "content": note})
     if extra := os.environ.get("DM_GATEWAY_PARAMS"):
         body |= json.loads(extra)
+    if schema and (extra := os.environ.get("DM_GATEWAY_CHECK_PARAMS")):
+        body |= json.loads(extra)  # the checker's own settings (e.g. how long to think), on top of the DM's
     return body
 
 
