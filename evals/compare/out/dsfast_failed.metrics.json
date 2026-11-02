@@ -1,0 +1,55 @@
+{
+ "summary": {
+  "tag": "dsfast",
+  "model": "ds/deepseek-v4-pro",
+  "rounds": 3,
+  "totals": {
+   "player": {
+    "calls": 3,
+    "input": 1192,
+    "cache_read": 0,
+    "cache_write": 0,
+    "output": 218,
+    "usd": 0.004564
+   }
+  },
+  "dm_calls_per_round_median": 0,
+  "refused": 0,
+  "failed": 3,
+  "stubs": 0,
+  "dm_usd_per_round": 0.0,
+  "all_usd_per_round": 0.0015
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 2.3,
+   "dm_calls": 0,
+   "refused": 0,
+   "failed": 1,
+   "stubs": 0,
+   "reply_chars": 0,
+   "tools": []
+  },
+  {
+   "round": 2,
+   "seconds": 2.1,
+   "dm_calls": 0,
+   "refused": 0,
+   "failed": 1,
+   "stubs": 0,
+   "reply_chars": 0,
+   "tools": []
+  },
+  {
+   "round": 3,
+   "seconds": 2.1,
+   "dm_calls": 0,
+   "refused": 0,
+   "failed": 1,
+   "stubs": 0,
+   "reply_chars": 0,
+   "tools": []
+  }
+ ]
+}

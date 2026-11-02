@@ -1,0 +1,37 @@
+{
+ "tag": "dsfast",
+ "model": "ds/deepseek-v4-pro",
+ "rounds": 20,
+ "totals": {
+  "dm": {
+   "calls": 82,
+   "input": 25820,
+   "cache_read": 2804864,
+   "cache_write": 0,
+   "output": 24739,
+   "usd": 0.042922261999999996
+  },
+  "player": {
+   "calls": 20,
+   "input": 80,
+   "cache_read": 121898,
+   "cache_write": 12860,
+   "output": 2448,
+   "usd": 0.0882698
+  },
+  "check": {
+   "calls": 20,
+   "input": 47265,
+   "cache_read": 20480,
+   "cache_write": 0,
+   "output": 358,
+   "usd": 0.020945974999999995
+  }
+ },
+ "dm_calls_per_round_median": 3.0,
+ "refused": 4,
+ "failed": 0,
+ "stubs": 7,
+ "dm_usd_per_round": 0.0021,
+ "all_usd_per_round": 0.0076
+}
