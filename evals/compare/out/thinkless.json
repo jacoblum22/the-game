@@ -1,0 +1,321 @@
+[
+ {
+  "round": 4,
+  "turn": 4,
+  "original_seconds": 87.6,
+  "line": "I crouch at the hole and check how the seal was broken: were the timbers smashed from outside or pushed from within? I'll shutter the lantern halfway, listen a moment, then squeeze through shield first with my sword drawn.",
+  "A": {
+   "dm_calls": 3,
+   "dm_seconds": 811.0,
+   "slowest_call": 778.0,
+   "thinking_chars": 7099,
+   "output_tokens": 2079,
+   "reply_chars": 1201,
+   "tools": [
+    "write_lore",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "He kneels at the hole and studies the break. The answer is plain once he looks for it: the squared timbers are splintered at their ends, and every snapped point leans inward, toward the workings. Whoever went through came from this side, the town side, and forced their way in — no one broke out. The"
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 27.8,
+   "slowest_call": 17.7,
+   "thinking_chars": 4218,
+   "output_tokens": 1279,
+   "reply_chars": 1080,
+   "tools": [],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "The seal is old work, but the breaking is plain to read. The timbers were struck from this side — the splinters point inward, snapped toward the depths, and the stones are chipped on the near face. Whoever made the hole stood where he stands now and battered their way down into the workings. The hol"
+  }
+ },
+ {
+  "round": 6,
+  "turn": 6,
+  "original_seconds": 118.6,
+  "line": "I stop and stay in the shadow of a leaning timber, shutter the lantern fully, and watch the light for a moment to see how it moves and whether it is drawn to anything. Then I whisper toward the voice, low and steady: \"Friend, I'm from Greyhollow, sent by Prior Hessa. Are you one of the miners?\" I keep my shield up and don't step toward the light.",
+  "A": {
+   "dm_calls": 6,
+   "dm_seconds": 61.5,
+   "slowest_call": 20.3,
+   "thinking_chars": 8773,
+   "output_tokens": 3147,
+   "reply_chars": 1393,
+   "tools": [
+    "lookup",
+    "lore",
+    "write_lore",
+    "write_lore",
+    "lore",
+    "write_lore",
+    "write_lore",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "The shutter clicks shut, and the dark closes in, broken only by that cold greenish light some forty feet down the gallery. Brakka watches it from the shadow of a leaning timber.\n\nIt moves like nothing with feet or wings. It drifts, bobbing faintly, sometimes pausing as if to listen, sometimes slidin"
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 37.9,
+   "slowest_call": 26.7,
+   "thinking_chars": 7118,
+   "output_tokens": 2267,
+   "reply_chars": 1067,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "Brakka presses into the shadow of a leaning timber and shuts the lantern down to nothing. In the sudden dark his dwarf eyes adjust, and the cold green-white glow stands out all the sharper against the black.\n\nIt drifts without any obvious path, bobbing a hand's width up and down, sliding along the f"
+  }
+ },
+ {
+  "round": 10,
+  "turn": 10,
+  "original_seconds": 205.7,
+  "line": "\"Still here, Durn! Don't talk, just hold tight.\" I squeeze my eyes shut against the glow, grab the rope with both hands, and start hauling myself up hand over hand, pressing my boots against the wall to climb back toward the timber prop.",
+  "A": {
+   "dm_calls": 4,
+   "dm_seconds": 65.8,
+   "slowest_call": 32.1,
+   "thinking_chars": 14923,
+   "output_tokens": 4310,
+   "reply_chars": 1225,
+   "tools": [],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "He squeezes his eyes shut and sets to work. Hand over hand, boots braced against the crumbling wall, he climbs. The rope is old but sound, and his dwarf arms remember the pick and the hammer; each pull carries him a foot higher, and the spinning stops as his weight steadies against the stone. The co"
+  },
+  "B": {
+   "dm_calls": 3,
+   "dm_seconds": 21.9,
+   "slowest_call": 8.7,
+   "thinking_chars": 1418,
+   "output_tokens": 866,
+   "reply_chars": 1109,
+   "tools": [
+    "write_lore",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "He squeezes his eyes shut and hauls. Hand over hand, boots scraping for purchase on the crumbling stone, he climbs against the rope's slow spin, and the cold glow presses at his shut eyelids like the light of a winter morning through the lid of sleep. The rope creaks; the prop groans above him; but "
+  }
+ },
+ {
+  "round": 13,
+  "turn": 13,
+  "original_seconds": 207.3,
+  "line": "\"Durn, the beam's rotten through, so I'm leaving it. The hole narrows to about five feet at the bend, and I can jump that with the rope on me.\" I back up for a short run, keep my eyes on the stone at the far lip and never on the light, and leap the gap.",
+  "A": {
+   "dm_calls": 3,
+   "dm_seconds": 34.3,
+   "slowest_call": 13.5,
+   "thinking_chars": 5189,
+   "output_tokens": 1737,
+   "reply_chars": 1064,
+   "tools": [
+    "lookup",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "He backs up as far as the ledge allows, three short strides, eyes fixed on the far lip of stone, and springs. The mail drags at him for one heartbeat, then the floor is under his boots again — sound stone, the old pick-marks rough beneath his soles. The green light presses at the edge of his sight, "
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 14.1,
+   "slowest_call": 8.7,
+   "thinking_chars": 697,
+   "output_tokens": 436,
+   "reply_chars": 820,
+   "tools": [
+    "lookup"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "He takes a short run along the wall, eyes fixed on the stone at the far lip, and leaps. The gap is nothing to legs like his — fifteen feet would be within his reach, and this is five. He lands on the sound ledge beyond the shaft, mail jangling once, and the rope plays out slack behind him.\n\nFor the "
+  }
+ },
+ {
+  "round": 1,
+  "turn": 1,
+  "original_seconds": 61.8,
+  "line": "I check my gear first: shield strapped tight, sword loose in its scabbard. Then I light Hessa's lantern and step into the tunnel, keeping an eye out for fresh boot prints or dropped tools near the entrance, anything that shows where the three miners went.",
+  "A": {
+   "dm_calls": 4,
+   "dm_seconds": 37.4,
+   "slowest_call": 13.7,
+   "thinking_chars": 4947,
+   "output_tokens": 1853,
+   "reply_chars": 1000,
+   "tools": [
+    "lookup",
+    "lookup",
+    "route",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "Brakka checks himself over by habit — shield strap cinched, sword easy in its sheath — then strikes the lantern. The wick catches, and warm light spills out before him and picks up the walls of the shaft: rough-cut stone, old timber props gone grey with dust.\n\nHe steps in. The floor just inside the "
+  },
+  "B": {
+   "dm_calls": 4,
+   "dm_seconds": 33.5,
+   "slowest_call": 13.5,
+   "thinking_chars": 3719,
+   "output_tokens": 1468,
+   "reply_chars": 903,
+   "tools": [
+    "lookup",
+    "lookup",
+    "route"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "The wick catches, and the hooded lantern blooms to life, pushing a warm pool of light out across the floor of the tunnel. The wind from the mountainside dies at the mouth, and beyond it the air is still and cold and smells of old stone and damp dust.\n\nYou move the light low and slow across the floor"
+  }
+ },
+ {
+  "round": 8,
+  "turn": 8,
+  "original_seconds": 53.3,
+  "line": "\"Understood, Durn. Are Arris and Keld alive down there, did you hear them after the fall?\" While I wait, I crouch and test the floor ahead with the butt of the miner's pick, keeping my eyes on the stone and off the light, and I look for a safe path along the wall toward him.",
+  "A": {
+   "dm_calls": 3,
+   "dm_seconds": 34.6,
+   "slowest_call": 15.9,
+   "thinking_chars": 4445,
+   "output_tokens": 1603,
+   "reply_chars": 1278,
+   "tools": [
+    "route",
+    "write_lore"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "Durn is quiet a moment, and when he answers his voice is flatter than before. \"I heard Keld call out. After the fall, for a while — half the first night. I called back, but I couldn't reach him, and the light hung over the hole the whole time, so I didn't dare crawl near it.\" A breath, then: \"By mor"
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 28.1,
+   "slowest_call": 17.8,
+   "thinking_chars": 4233,
+   "output_tokens": 1490,
+   "reply_chars": 1061,
+   "tools": [
+    "route",
+    "place"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "\"Alive?\" Durn's voice cracks on the word. \"I don't know, friend. I don't know. When the floor gave, I heard them — Arris cried out as he went, and Keld called up for a long while after, asking was I living, saying he'd broke something. His voice came up the shaft for the best part of a day.\" A long,"
+  }
+ },
+ {
+  "round": 15,
+  "turn": 15,
+  "original_seconds": 32.7,
+  "line": "\"Then I'll hit it harder, Durn!\" I step in and swing again, aiming right at the heart of the glow, and if I have Second Wind or Action Surge to spare, I'll use them when I need them. \"Keep your head down!\"",
+  "A": {
+   "dm_calls": 2,
+   "dm_seconds": 23.0,
+   "slowest_call": 15.0,
+   "thinking_chars": 3380,
+   "output_tokens": 1160,
+   "reply_chars": 709,
+   "tools": [
+    "creature_turns"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "Again the blade cleaves through the light and finds nothing — only that wrong, water-cold resistance, no flesh, no bone, the thing rippling around the steel like it finds the blow amusing.\n\nThis time it answers in earnest. A lance of white-green lightning leaps from its heart and takes him full in t"
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 74.8,
+   "slowest_call": 65.3,
+   "thinking_chars": 19592,
+   "output_tokens": 5766,
+   "reply_chars": 784,
+   "tools": [
+    "creature_turns"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "Brakka drives in with all his strength, and this time the steel is true — it shears through the very edge of the glow, and the light gutters and twists aside like a flame in a wind. A hair's breadth more and it would have taken the thing at its heart. Cold, spent light ripples along the blade.\n\nThe "
+  }
+ },
+ {
+  "round": 20,
+  "turn": 20,
+  "original_seconds": 18.4,
+  "line": "\"Not done yet, Durn.\" I keep my squint, hold the sound ledge, and swing at the heart of the guttering glow again. \"Come on, you cold thing, burn out!\"",
+  "A": {
+   "dm_calls": 2,
+   "dm_seconds": 17.0,
+   "slowest_call": 11.4,
+   "thinking_chars": 1367,
+   "output_tokens": 706,
+   "reply_chars": 724,
+   "tools": [
+    "creature_turns"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "The blade bites again. Brakka's stroke shears through the light's core and the thing recoils, its glow snapping down to a dim green coal that barely lights the walls. It shrieks — a thin, ragged sound now, not the keening of before — and its answering bolt is a feeble sputter that never reaches him."
+  },
+  "B": {
+   "dm_calls": 2,
+   "dm_seconds": 14.7,
+   "slowest_call": 7.9,
+   "thinking_chars": 352,
+   "output_tokens": 442,
+   "reply_chars": 665,
+   "tools": [
+    "creature_turns"
+   ],
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "leak_hint": false,
+   "reply_head": "The blade bites again — not deep, but enough. The thing shudders as the steel passes through it, and its light drops so low that for a heartbeat the gallery is nearly dark, only the faint green of it reflected in the black stone. It lashes out weakly, and the bolt dies a yard from Brakka's face, a d"
+  }
+ }
+]
