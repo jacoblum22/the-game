@@ -197,3 +197,13 @@ def test_a_models_reasoning_goes_back_only_when_asked(monkeypatch: pytest.Monkey
     sse = "data: " + json.dumps({"choices": [{"delta": {"reasoning_content": "a"}}]}) + "\ndata: " + json.dumps(
         {"choices": [{"delta": {"reasoning_content": "b", "content": "Hi"}, "finish_reason": "stop"}]}) + "\n"
     assert gateway.assemble(sse)["choices"][0]["message"]["reasoning_content"] == "ab"
+
+
+def test_the_checker_can_have_its_own_params(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DM_GATEWAY_PARAMS", json.dumps({"reasoning_effort": "low", "top_k": 5}))
+    monkeypatch.setenv("DM_GATEWAY_CHECK_PARAMS", json.dumps({"reasoning_effort": "none"}))
+    plain = gateway.to_chat({"model": "ds/x", "max_tokens": 5, "messages": [{"role": "user", "content": "x"}]})
+    assert plain["reasoning_effort"] == "low" and plain["top_k"] == 5
+    checker = gateway.to_chat({"model": "ds/x", "max_tokens": 5, "messages": [{"role": "user", "content": "x"}],
+                               "output_config": {"format": {"type": "json_schema", "schema": {"type": "object"}}}})
+    assert checker["reasoning_effort"] == "none" and checker["top_k"] == 5
