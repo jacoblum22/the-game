@@ -180,3 +180,20 @@ def test_send_asks_for_a_stream_and_reads_one(monkeypatch: pytest.MonkeyPatch) -
     monkeypatch.setattr(gateway, "_post", post)
     out = asyncio.run(gateway.send({"model": "ali/q", "max_tokens": 5, "messages": [{"role": "user", "content": "x"}]}))
     assert sent[0]["stream"] is True and out["content"] == [{"type": "text", "text": "Hi."}] and out["stop_reason"] == "end_turn"
+
+
+def test_a_models_reasoning_goes_back_only_when_asked(monkeypatch: pytest.MonkeyPatch) -> None:
+    reply = {"id": "c", "model": "m", "choices": [{"index": 0, "finish_reason": "stop", "message": {
+        "role": "assistant", "content": "Done.", "reasoning_content": "hmm, think"}}], "usage": {}}
+    assert [b["type"] for b in gateway.from_chat(reply)["content"]] == ["text"]
+    monkeypatch.setenv("DM_GATEWAY_PASS_REASONING", "1")
+    got = gateway.from_chat(reply)["content"]
+    assert [b["type"] for b in got] == ["thinking", "text"] and got[0]["thinking"] == "hmm, think"
+    req = {"model": "deepseek/deepseek-v4-pro", "max_tokens": 5, "messages": [
+        {"role": "user", "content": "x"}, {"role": "assistant", "content": got}, {"role": "user", "content": "y"}]}
+    assert gateway.to_chat(req)["messages"][1]["reasoning_content"] == "hmm, think"
+    monkeypatch.delenv("DM_GATEWAY_PASS_REASONING")
+    assert "reasoning_content" not in gateway.to_chat(req)["messages"][1]
+    sse = "data: " + json.dumps({"choices": [{"delta": {"reasoning_content": "a"}}]}) + "\ndata: " + json.dumps(
+        {"choices": [{"delta": {"reasoning_content": "b", "content": "Hi"}, "finish_reason": "stop"}]}) + "\n"
+    assert gateway.assemble(sse)["choices"][0]["message"]["reasoning_content"] == "ab"

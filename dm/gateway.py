@@ -54,9 +54,12 @@ def to_chat(request: dict[str, Any]) -> dict[str, Any]:
                       "function": {"name": b["name"], "arguments": json.dumps(b["input"])}}
                      for b in blocks if b["type"] == "tool_use"]
             out: dict[str, Any] = {"role": "assistant", "content": _text([b for b in blocks if b["type"] == "text"])}
+            if os.environ.get("DM_GATEWAY_PASS_REASONING") and (why := "".join(
+                    b.get("thinking", "") for b in blocks if b["type"] == "thinking")):
+                out["reasoning_content"] = why  # DeepSeek: with tools, its thinking must go back in every later request
             if calls:
                 out["tool_calls"] = calls
-            msgs.append(out)  # thinking blocks are dropped: they belong to the model that wrote them
+            msgs.append(out)  # thinking blocks are dropped (they belong to the model that wrote them), unless DM_GATEWAY_PASS_REASONING is set
             continue
         if isinstance(content, str):
             msgs.append({"role": "user", "content": content})
@@ -92,6 +95,8 @@ def from_chat(reply: dict[str, Any]) -> dict[str, Any]:
     except (KeyError, IndexError, TypeError) as e:
         raise model.Failed(f"the gateway's reply has no message: {str(reply)[:300]}") from e
     content: list[dict[str, Any]] = []
+    if os.environ.get("DM_GATEWAY_PASS_REASONING") and (message.get("reasoning_content") or "").strip():
+        content.append({"type": "thinking", "thinking": message["reasoning_content"], "signature": ""})
     if (message.get("content") or "").strip():
         content.append({"type": "text", "text": message["content"]})
     for c in message.get("tool_calls") or []:
@@ -115,9 +120,9 @@ def from_chat(reply: dict[str, Any]) -> dict[str, Any]:
 
 def assemble(text: str) -> dict[str, Any]:
     """A streamed answer (server-sent events of chat-completions chunks) as the one reply a plain call would give.
-    The model's thinking (`reasoning_content`) is left out; the text, the tool calls and the usage are put together."""
+    The model's thinking (`reasoning_content`) is kept in the message for from_chat to use or drop; the text, the tool calls and the usage are put together."""
     reply: dict[str, Any] = {"id": "", "model": "", "usage": None}
-    content, calls, finish = "", {}, None
+    content, reasoning, calls, finish = "", "", {}, None
     for line in text.splitlines():
         if not line.startswith("data:") or line[5:].strip() in ("", "[DONE]"):
             continue
@@ -132,6 +137,7 @@ def assemble(text: str) -> dict[str, Any]:
         for ch in chunk.get("choices") or []:
             delta = ch.get("delta") or {}
             content += delta.get("content") or ""
+            reasoning += delta.get("reasoning_content") or ""
             for c in delta.get("tool_calls") or []:
                 t = calls.setdefault(c.get("index", 0), {"id": "", "type": "function", "function": {"name": "", "arguments": ""}})
                 t["id"] = c.get("id") or t["id"]
@@ -139,6 +145,8 @@ def assemble(text: str) -> dict[str, Any]:
                 t["function"]["arguments"] += (c.get("function") or {}).get("arguments") or ""
             finish = ch.get("finish_reason") or finish
     message: dict[str, Any] = {"role": "assistant", "content": content}
+    if reasoning:
+        message["reasoning_content"] = reasoning
     if calls:
         message["tool_calls"] = [calls[i] for i in sorted(calls)]
     reply["choices"] = [{"index": 0, "message": message, "finish_reason": finish}]
