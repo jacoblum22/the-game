@@ -33,8 +33,8 @@ PLAYER_MODEL = "claude-sonnet-5-5"
 # a bill; the token counts in <tag>.calls.jsonl are the facts.
 PRICES = {"claude-sonnet-5-5": (2.0, 0.10, 4.0, 10.0),  # cache write: the 1-hour kind, which the DM asks for
           "ali/qwen3.7-plus": (0.32, 0.03, 0.32, 1.28),  # no cache-write line is reported: written tokens count as input
-          "zai/glm-5.3": (1.40, 0.26, 1.40, 4.40),
-          "ds/deepseek-v4-pro": (0.435, 0.003625, 0.435, 0.87)}  # DeepSeek's own list price (the 75% cut made permanent, 2026-05)  # Z.AI's own price; other hosts of the open model charge less
+          "zai/glm-5.3": (1.40, 0.26, 1.40, 4.40),  # Z.AI's own price; other hosts of the open model charge less
+          "ds/deepseek-v4-pro": (0.435, 0.003625, 0.435, 0.87)}  # DeepSeek's own list price (the 75% cut made permanent, 2026-05)
 
 PLAYER = """You are a human player in a solo D&D 5e game (2014 rules) run by a DM. {style}
 Each message you get is what the DM just said (with any dice or game lines in brackets). Reply with only your next
