@@ -156,14 +156,43 @@ def assemble(text: str) -> dict[str, Any]:
     return reply
 
 
-def _post(body: dict[str, Any]) -> tuple[int, str]:
-    """One HTTP call: (status, text). Status 0 when there was no answer at all."""
+CUT = -1  # _post's status when it gave up on a call whose thinking ran past the cap (and sent nothing yet)
+CHARS_PER_TOKEN = 4  # a rough count of the thinking, for the cap
+
+
+def think_cap() -> int:
+    """DM_GATEWAY_THINK_CAP: the most thinking tokens a call may use before it is dropped and sent again. 0 = no cap."""
+    try:
+        return max(int(os.environ.get("DM_GATEWAY_THINK_CAP", "0") or 0), 0)
+    except ValueError:
+        return 0
+
+
+def _post(body: dict[str, Any], cap: int = 0) -> tuple[int, str]:
+    """One HTTP call: (status, text). Status 0 when there was no answer at all. cap: if the stream's thinking passes this
+    many tokens before any text or tool call has begun, the connection is closed and the status is CUT."""
     req = urllib.request.Request(
         os.environ.get("DM_GATEWAY_URL", URL).rstrip("/") + "/chat/completions", data=json.dumps(body).encode(),
         headers={"Content-Type": "application/json", "Authorization": "Bearer " + os.environ.get("DM_GATEWAY_KEY", "")})
     try:
         with urllib.request.urlopen(req, timeout=600) as r:
-            return r.status, r.read().decode("utf-8")
+            lines, thought, begun = [], 0, False
+            for raw in r:  # line by line, so a long think can be seen as it happens
+                line = raw.decode("utf-8", "replace")
+                lines.append(line)
+                if not cap or not line.startswith("data:"):
+                    continue
+                try:
+                    chunk = json.loads(line[5:])
+                except ValueError:
+                    continue
+                for ch in chunk.get("choices") or []:
+                    delta = ch.get("delta") or {}
+                    begun = begun or bool(delta.get("content") or delta.get("tool_calls"))
+                    thought += len(delta.get("reasoning_content") or "")
+                if thought > cap * CHARS_PER_TOKEN and not begun:
+                    return CUT, ""
+            return r.status, "".join(lines)
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8", "replace")
     except (urllib.error.URLError, TimeoutError, OSError) as e:
@@ -174,8 +203,15 @@ async def send(request: dict[str, Any]) -> dict[str, Any]:
     """model.send for a gateway model: the Anthropic-style request, and the reply as an Anthropic-style dict."""
     body = to_chat(request) | {"stream": True, "stream_options": {"include_usage": True}}
     # streamed: a model that thinks for a while before it writes (Qwen) keeps the gateway's no-answer timeout from firing
-    for attempt in range(3):
-        status, text = await asyncio.to_thread(_post, body)
+    cap, cuts, attempt = think_cap(), 0, 0
+    while True:
+        status, text = await asyncio.to_thread(_post, body, cap) if cap else await asyncio.to_thread(_post, body)
+        if status == CUT:  # thought too long: the same request again (a stall is a one-off, so the next try is usually quick)
+            cuts += 1
+            if cuts >= 2:
+                cap = 0  # twice is enough: the next try is let run
+            print(f"[gateway: thinking passed {think_cap()} tokens; asking again]", file=sys.stderr)
+            continue
         if status == 200:
             try:
                 return from_chat(assemble(text) if text.lstrip().startswith(("data:", ":")) else json.loads(text))
@@ -188,7 +224,7 @@ async def send(request: dict[str, Any]) -> dict[str, Any]:
                 why = text[:300]
             raise model.Failed(f"{status}: {why}" if status else why)
         await asyncio.sleep(2 * 2 ** attempt)
-    raise AssertionError
+        attempt += 1
 
 
 # ---- the small check: `py -3.12 -m dm.gateway <model> ...` ----------------------------------------------------------

@@ -207,3 +207,64 @@ def test_the_checker_can_have_its_own_params(monkeypatch: pytest.MonkeyPatch) ->
     checker = gateway.to_chat({"model": "ds/x", "max_tokens": 5, "messages": [{"role": "user", "content": "x"}],
                                "output_config": {"format": {"type": "json_schema", "schema": {"type": "object"}}}})
     assert checker["reasoning_effort"] == "none" and checker["top_k"] == 5
+
+
+def _chunks(think: str, then: str = "") -> str:
+    out = [{"choices": [{"delta": {"reasoning_content": t}}]} for t in think]
+    if then:
+        out.append({"choices": [{"delta": {"content": then}, "finish_reason": "stop"}]})
+    return "".join(f"data: {json.dumps(c)}\n\n" for c in out) + "data: [DONE]\n\n"
+
+
+class _Stream:
+    """What urlopen gives: a status and lines to iterate; counts how many lines were read."""
+    def __init__(self, text: str) -> None:
+        self.status, self.lines, self.read = 200, text.splitlines(keepends=True), 0
+    def __enter__(self) -> "_Stream":
+        return self
+    def __exit__(self, *a: Any) -> None:
+        return None
+    def __iter__(self) -> Any:
+        for line in self.lines:
+            self.read += 1
+            yield line.encode()
+
+
+def test_post_drops_a_call_whose_thinking_runs_past_the_cap(monkeypatch: pytest.MonkeyPatch) -> None:
+    s = _Stream(_chunks(["x" * 40] * 50, "done"))
+    monkeypatch.setattr(gateway.urllib.request, "urlopen", lambda req, timeout=0: s)
+    assert gateway._post({}, cap=100) == (gateway.CUT, "")  # 100 tokens = 400 characters
+    assert s.read < len(s.lines) // 2  # stopped reading early
+    s = _Stream(_chunks(["x" * 40] * 50, "done"))
+    monkeypatch.setattr(gateway.urllib.request, "urlopen", lambda req, timeout=0: s)
+    assert gateway._post({}, cap=0)[0] == 200  # no cap: read it all
+
+
+def test_the_cap_does_not_cut_once_the_text_has_begun(monkeypatch: pytest.MonkeyPatch) -> None:
+    text = _chunks(["x" * 40] * 5, "the reply") + _chunks(["x" * 4000])
+    monkeypatch.setattr(gateway.urllib.request, "urlopen", lambda req, timeout=0: _Stream(text))
+    assert gateway._post({}, cap=100)[0] == 200
+
+
+def test_send_asks_again_after_a_cut_and_lets_the_third_try_run(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("DM_GATEWAY_THINK_CAP", "1500")
+    good = _chunks(["hm"], "ok")
+    calls: list[int] = []
+    answers = [(gateway.CUT, ""), (gateway.CUT, ""), (200, good)]
+    def post(body: Any, cap: int = 0) -> tuple[int, str]:
+        calls.append(cap)
+        return answers.pop(0)
+    monkeypatch.setattr(gateway, "_post", post)
+    out = asyncio.run(gateway.send({"model": "ds/x", "max_tokens": 10, "messages": [{"role": "user", "content": "hi"}]}))
+    assert calls == [1500, 1500, 0] and out["content"][-1]["text"] == "ok"
+
+
+def test_without_the_setting_nothing_is_capped(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("DM_GATEWAY_THINK_CAP", raising=False)
+    seen: list[Any] = []
+    def post(body: Any, *cap: int) -> tuple[int, str]:
+        seen.append(cap)
+        return 200, _chunks([], "ok")
+    monkeypatch.setattr(gateway, "_post", post)
+    asyncio.run(gateway.send({"model": "ds/x", "max_tokens": 10, "messages": [{"role": "user", "content": "hi"}]}))
+    assert seen == [()]
