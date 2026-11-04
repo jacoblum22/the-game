@@ -1,0 +1,37 @@
+{
+ "tag": "dslow2",
+ "model": "ds/deepseek-v4-pro",
+ "rounds": 20,
+ "totals": {
+  "dm": {
+   "calls": 50,
+   "input": 47020,
+   "cache_read": 2122112,
+   "cache_write": 0,
+   "output": 94035,
+   "usd": 0.10995680599999998
+  },
+  "player": {
+   "calls": 20,
+   "input": 80,
+   "cache_read": 130069,
+   "cache_write": 13741,
+   "output": 1625,
+   "usd": 0.0843809
+  },
+  "check": {
+   "calls": 20,
+   "input": 56799,
+   "cache_read": 20480,
+   "cache_write": 0,
+   "output": 334,
+   "usd": 0.025072385
+  }
+ },
+ "dm_calls_per_round_median": 2.0,
+ "refused": 0,
+ "failed": 0,
+ "stubs": 0,
+ "dm_usd_per_round": 0.0055,
+ "all_usd_per_round": 0.011
+}
