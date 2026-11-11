@@ -1158,6 +1158,11 @@ CUT_SHORT_ASK = ("[Not from the player] Your turn stopped before you wrote your 
                  "the game's lines since their last message. Send your full reply to it now with `reply`.")
 
 
+def real_reply(held: list[str]) -> int:
+    """The index of the reply among the text held: the last piece of full length (FULL_REPLY), else the last piece."""
+    return next((k for k in range(len(held) - 1, -1, -1) if len(held[k]) >= FULL_REPLY), len(held) - 1)
+
+
 async def turn(game: Game | Creation, text: str) -> None:
     held: list[str] = []
     mark = [0]  # the transcript's length when text was last held
@@ -1230,36 +1235,48 @@ async def turn(game: Game | Creation, text: str) -> None:
             held[:], game.reply_len = [], 0
             failed = await ask(game, STUB_ASK.format(stub), said)
         player = next((e["text"] for e in reversed(game.transcript) if e["kind"] == "player"), "")
-        sent = held[-1] if held else ""  # the reply as the DM's conversation has it
+        i = real_reply(held)  # the reply itself: a short line after it (a note on the turn) is not what is checked
+        sent = held[i] if held else ""  # the reply as the DM's conversation has it
         trimmed = ""
         if held:
-            held[-1], trimmed = branch.without_stat_line(held[-1], player)
+            held[i], trimmed = branch.without_stat_line(held[i], player)
         if held and not failed and check.ENABLED and game.written() and any(e["kind"] == "player" for e in game.transcript):  # not the opening
             try:
-                problems, _ = await check.check(game.backend, lore_before, game.transcript, held[-1], party=party,
+                problems, _ = await check.check(game.backend, lore_before, game.transcript, held[i], party=party,
                                                 clock=game.clock)
             except (model.Failed, ValueError, KeyError, StopIteration) as e:
                 problems = []
                 game.log("check", f"the continuity check failed: {e}")  # kept in the save, never shown
-            back, texts = check.sort(problems, held[-1], bool(game.fight))
+            back, texts = check.sort(problems, held[i], bool(game.fight))
             for p in texts:
-                held[-1] = held[-1].replace(p["quote"], p["replacement"], 1)
+                held[i] = held[i].replace(p["quote"], p["replacement"], 1)
             if problems:
                 game.log("check", json.dumps({"problems": problems, "to the DM": len(back)}, ensure_ascii=False))
             if back:
                 before = list(held)
                 game.reply_len, game.late, game.replied = 0, False, False
+                held.clear()
+                drafts: list[str] = []
+
+                def said_again(t: str) -> None:
+                    # plain text while the reply is written again: a draft. What the player gets is the reply tool's
+                    # text, or else the last full draft; never the old reply, a copy of the new one, or a note on the turn.
+                    (game.log("hidden", t) if game.late else drafts.append(t))
                 again = await ask(game, check.HAND_BACK.format(
-                    what="a clash" if len(back) == 1 else "clashes", problems=check.describe(problems)), said)
-                if again or not game.written():  # no new reply: the one we have goes out
+                    what="a clash" if len(back) == 1 else "clashes", problems=check.describe(problems)), said_again)
+                full = [d for d in drafts if len(d) >= FULL_REPLY]
+                if again or not (game.replied or full):  # no new reply: the one we have goes out
                     if again:
                         game.log("failed", again)
                     held[:] = before
                 else:
-                    sent = held[-1]
-                    held[-1], trimmed = branch.without_stat_line(held[-1], player)
-        if held and held[-1] != sent:
-            edits.append((sent, held[-1]))
+                    if not game.replied:
+                        held[:] = [full[-1]]
+                    i = len(held) - 1
+                    sent = held[i]
+                    held[i], trimmed = branch.without_stat_line(held[i], player)
+        if held and held[i] != sent:
+            edits.append((sent, held[i]))
         for t in held:
             print("\n" + t)
             game.log("dm", t)

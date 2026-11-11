@@ -237,3 +237,39 @@ def test_the_checker_reads_the_routes_between_places_the_reply_names() -> None:
     asyncio.run(check.check("api", lore, t, "The Ford Chapel is two hours up the road from Greywater.", ask))
     assert seen[0].endswith(check.ROUTES_NOTE)
     assert "ROUTES" not in check.context(lore, t, "Nothing here.")
+
+
+def test_a_hand_back_answered_in_text_then_the_reply_tool_shows_one_reply(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(topics=["time"], severity=4, quote="leaves at noon", earlier_quote="The foreman says the barge"))
+    big = LONG * 3  # full length: written as text it would fill the reply, and the old code then refused the reply tool
+    fixed = big.replace("noon", "dawn")
+    note = "(Your reply has already been shown to the player as written, the turn stands.)"
+    # a model that writes the rewrite as text and then calls reply with it, and comments on the turn after
+    script = [say(big), reply(text(fixed), use("r2", "reply", text=fixed), stop="tool_use"), reply(text(note))]
+    fake, said, g = play_turn(monkeypatch, tmp_path, script, ps)
+    shown = [e["text"] for e in g.transcript if e["kind"] == "dm"][1:]  # [0] is the seeded earlier reply
+    assert shown == [fixed] and sum(fixed in x for x in said) == 1 and "turn stands" not in " ".join(said)
+    assert not any("REFUSED" in json.dumps(m) for m in g.messages)  # the reply tool took it
+
+
+def test_a_hand_back_answered_only_in_text_shows_the_last_full_draft(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(topics=["time"], severity=4, quote="leaves at noon", earlier_quote="The foreman says the barge"))
+    big = LONG + " " + LONG * 2  # full length: a draft shorter than FULL_REPLY is not taken for the reply
+    fixed = big.replace("noon", "dawn")
+    script = [say(big), reply(text(fixed), text("(Done: the turn stands.)"))]
+    fake, said, g = play_turn(monkeypatch, tmp_path, script, ps)
+    assert [e["text"] for e in g.transcript if e["kind"] == "dm"][1:] == [fixed]
+    assert "noon" not in " ".join(said) and "turn stands" not in " ".join(said)
+
+
+BIG = LONG * 3
+
+
+def test_the_checker_reads_the_reply_not_a_note_after_it(monkeypatch: Any, tmp_path: Path) -> None:
+    ps = answer(problem(quote="The barge leaves at noon, friend.", replacement="The barge leaves at dawn, friend.",
+                        earlier_quote="The foreman says the barge"))
+    fake, said, g = play_turn(monkeypatch, tmp_path, [reply(text(BIG), text("(a note)"))], ps)
+    state = [e for e in g.transcript if e["kind"] == "check"]
+    assert state  # the problem found in the reply was acted on: the fix is in the reply, not in the note
+    shown = [e["text"] for e in g.transcript if e["kind"] == "dm"][1:]
+    assert "leaves at dawn" in shown[0] and shown[1] == "(a note)"
