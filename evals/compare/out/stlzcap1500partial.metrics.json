@@ -1,0 +1,149 @@
+{
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 16.2,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1424,
+   "tools": [
+    "lookup"
+   ]
+  },
+  {
+   "round": 2,
+   "seconds": 84.0,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1436,
+   "tools": [
+    "dismiss_warning",
+    "write_lore"
+   ]
+  },
+  {
+   "round": 3,
+   "seconds": 51.7,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1780,
+   "tools": [
+    "lookup",
+    "write_lore",
+    "write_lore",
+    "write_lore"
+   ]
+  },
+  {
+   "round": 4,
+   "seconds": 31.9,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1226,
+   "tools": [
+    "write_lore"
+   ]
+  },
+  {
+   "round": 5,
+   "seconds": 28.5,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1295,
+   "tools": [
+    "write_lore"
+   ]
+  },
+  {
+   "round": 6,
+   "seconds": 56.7,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1818,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore"
+   ]
+  },
+  {
+   "round": 7,
+   "seconds": 29.4,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1228,
+   "tools": [
+    "route"
+   ]
+  },
+  {
+   "round": 8,
+   "seconds": 28.9,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1498,
+   "tools": [
+    "write_lore"
+   ]
+  },
+  {
+   "round": 9,
+   "seconds": 36.9,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1426,
+   "tools": []
+  },
+  {
+   "round": 10,
+   "seconds": 51.4,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1294,
+   "tools": [
+    "dismiss_warning",
+    "write_lore"
+   ]
+  },
+  {
+   "round": 11,
+   "seconds": 57.9,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1600,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "route"
+   ]
+  }
+ ]
+}
