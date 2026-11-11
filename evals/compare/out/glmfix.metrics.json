@@ -1,0 +1,348 @@
+{
+ "summary": {
+  "tag": "glmfix",
+  "model": "zai-org/GLM-5.3",
+  "rounds": 20,
+  "totals": {
+   "dm": {
+    "calls": 90,
+    "input": 27530,
+    "cache_read": 3702976,
+    "cache_write": 0,
+    "output": 31522,
+    "usd": 0.0,
+    "estimated_calls": 0
+   },
+   "player": {
+    "calls": 20,
+    "input": 80,
+    "cache_read": 173057,
+    "cache_write": 19376,
+    "output": 2261,
+    "usd": 0.11757969999999998,
+    "estimated_calls": 0
+   },
+   "check": {
+    "calls": 20,
+    "input": 79641,
+    "cache_read": 19776,
+    "cache_write": 0,
+    "output": 13674,
+    "usd": 0.0,
+    "estimated_calls": 0
+   }
+  },
+  "dm_calls_per_round_median": 4.0,
+  "refused": 10,
+  "failed": 0,
+  "stubs": 0,
+  "dm_usd_per_round": 0.0,
+  "all_usd_per_round": 0.0059
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "seconds": 5.5,
+   "dm_calls": 3,
+   "refused": 1,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1510,
+   "tools": [
+    "route",
+    "timeline",
+    "timeline",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 2,
+   "seconds": 4.9,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1791,
+   "tools": [
+    "place"
+   ]
+  },
+  {
+   "round": 3,
+   "seconds": 4.6,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1810,
+   "tools": [
+    "place"
+   ]
+  },
+  {
+   "round": 4,
+   "seconds": 6.8,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2034,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 5,
+   "seconds": 5.3,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1559,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "timeline",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 6,
+   "seconds": 11.0,
+   "dm_calls": 6,
+   "refused": 6,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 712,
+   "tools": [
+    "lookup"
+   ]
+  },
+  {
+   "round": 7,
+   "seconds": 10.3,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1095,
+   "tools": [
+    "lookup",
+    "lookup",
+    "creature_turns",
+    "creature_turns",
+    "place"
+   ]
+  },
+  {
+   "round": 8,
+   "seconds": 8.8,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1566,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 9,
+   "seconds": 18.0,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1779,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 10,
+   "seconds": 12.4,
+   "dm_calls": 6,
+   "refused": 1,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1622,
+   "tools": [
+    "dismiss_name",
+    "creature_turns",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 11,
+   "seconds": 9.3,
+   "dm_calls": 5,
+   "refused": 1,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1727,
+   "tools": [
+    "creature_turns",
+    "place"
+   ]
+  },
+  {
+   "round": 12,
+   "seconds": 42.8,
+   "dm_calls": 16,
+   "refused": 1,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2360,
+   "tools": [
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "creature_turns",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 13,
+   "seconds": 16.3,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2481,
+   "tools": [
+    "write_lore",
+    "route",
+    "write_lore",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 14,
+   "seconds": 12.7,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2713,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "place",
+    "place"
+   ]
+  },
+  {
+   "round": 15,
+   "seconds": 6.9,
+   "dm_calls": 2,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1926,
+   "tools": [
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 16,
+   "seconds": 10.6,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2293,
+   "tools": [
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 17,
+   "seconds": 13.0,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1747,
+   "tools": [
+    "dismiss_name",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 18,
+   "seconds": 13.6,
+   "dm_calls": 5,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2212,
+   "tools": [
+    "write_lore",
+    "route",
+    "travel",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 19,
+   "seconds": 9.7,
+   "dm_calls": 3,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 1961,
+   "tools": [
+    "dismiss_name",
+    "dismiss_warning",
+    "timeline",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "place"
+   ]
+  },
+  {
+   "round": 20,
+   "seconds": 12.7,
+   "dm_calls": 4,
+   "refused": 0,
+   "failed": 0,
+   "stubs": 0,
+   "reply_chars": 2394,
+   "tools": [
+    "route",
+    "route",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "write_lore",
+    "place"
+   ]
+  }
+ ]
+}
